@@ -406,6 +406,13 @@ projects[workbench_moderation][version] = "1.3"
 projects[workbench_moderation][type] = "module"
 projects[workbench_moderation][subdir] = "contrib"
 
+projects[workbench_moderation_notes][version] = "1.x-dev"
+projects[workbench_moderation_notes][type] = "module"
+projects[workbench_moderation_notes][subdir] = "contrib"
+projects[workbench_moderation_notes][download][type] = "git"
+projects[workbench_moderation_notes][download][revision] = "8e5e6f4"
+projects[workbench_moderation_notes][download][branch] = "7.x-1.x"
+
 projects[xautoload][version] = "2.7"
 projects[xautoload][type] = "module"
 projects[xautoload][subdir] = "contrib"
