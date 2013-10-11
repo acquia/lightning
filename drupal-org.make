@@ -339,12 +339,8 @@ projects[media][version] = "2.x-dev"
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
-projects[media][download][revision] = "fbdaf45"
+projects[media][download][revision] = "5839787"
 projects[media][download][branch] = "7.x-2.x"
-; File display featues exports stuck in overridden state and php warnings are
-; thrown
-; https://drupal.org/node/2071073
-projects[media][patch][2071073] = "http://drupal.org/files/media-warnings-creating-default-object-from-emtpy-value-2071073-1.patch"
 
 projects[media_youtube][version] = "2.x-dev"
 projects[media_youtube][type] = "module"
