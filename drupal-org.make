@@ -430,16 +430,16 @@ projects[migrate_extras][subdir] = "contrib"
 
 ; Libraries
 libraries[backbone][download][type] = "get"
-libraries[backbone][download][url] = "https://github.com/documentcloud/backbone/archive/1.0.0.zip"
+libraries[backbone][download][url] = "http://documentcloud.github.io/backbone/backbone-min.js"
 
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.2/ckeditor_4.2_standard.zip"
 
-libraries[jquery.cycle][download][type] = "get"
-libraries[jquery.cycle][download][url] = "http://malsup.github.com/jquery.cycle.all.js"
-
 libraries[json2][download][type] = "get"
 libraries[json2][download][url] = "https://github.com/douglascrockford/JSON-js/blob/master/json2.js"
+
+libraries[jsonpath][download][type] = "get"
+libraries[jsonpath][download][url] = "https://jsonpath.googlecode.com/files/jsonpath-0.8.1.php"
 
 libraries[respondjs][download][type] = "get"
 libraries[respondjs][download][url] = "https://github.com/scottjehl/Respond/tarball/master"
@@ -448,7 +448,7 @@ libraries[timeago][download][type] = "get"
 libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.3.0/jquery.timeago.js"
 
 libraries[underscore][download][type] = "get"
-libraries[underscore][download][url] = "https://github.com/documentcloud/underscore/archive/1.4.4.zip"
+libraries[underscore][download][url] = "http://documentcloud.github.io/underscore/underscore-min.js"
 
 ; Themes
 projects[demonstratie][version] = "1.x-dev"
