@@ -390,6 +390,10 @@ projects[revision_scheduler][subdir] = "contrib"
 projects[revision_scheduler][download][type] = "git"
 projects[revision_scheduler][download][revision] = "ab04410"
 projects[revision_scheduler][download][branch] = "7.x-1.x"
+; Notice: Undefined index: path i
+; revision_scheduler_preprocess_menu_local_action()
+; http://drupal.org/node/1564348
+projects[revision_scheduler][download][branch] = "http://drupal.org/files/fixes-notice-issue-1564348.patch"
 
 projects[workbench][version] = "1.x-dev"
 projects[workbench][type] = "module"
