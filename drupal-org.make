@@ -279,11 +279,11 @@ projects[ckeditor][version] = "1.x-dev"
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
 projects[ckeditor][download][type] = "git"
-projects[ckeditor][download][revision] = "5f705e2"
+projects[ckeditor][download][revision] = "57245a9"
 projects[ckeditor][download][branch] = "7.x-1.x"
 ; Integration with Media 2.x
 ; http://drupal.org/node/1504696
-projects[ckeditor][patch][1504696] = "http://drupal.org/files/ckeditor_1504696_58.patch"
+projects[ckeditor][patch][1504696] = "http://drupal.org/files/ckeditor_1504696_67.patch"
 
 projects[collections][version] = "1.x-dev"
 projects[collections][type] = "module"
