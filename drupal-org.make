@@ -364,14 +364,14 @@ projects[sps][version] = "1.x-dev"
 projects[sps][type] = "module"
 projects[sps][subdir] = "contrib"
 projects[sps][download][type] = "git"
-projects[sps][download][revision] = "e647f47"
+projects[sps][download][revision] = "76e89f4"
 projects[sps][download][branch] = "7.x-1.x"
 ; UX improvements on page level IIB
 ; http://drupal.org/node/1733490
 projects[sps][patch][1733490] = "http://drupal.org/files/sps-css-cleanup-1733490-3.patch"
 ; SPS should not prevent other modules that use Entity API from working
 ; http://drupal.org/node/1934130
-projects[sps][patch][1934130] = "http://drupal.org/files/sps-1934130-3.patch"
+projects[sps][patch][1934130] = "http://drupal.org/files/sps-1934130-11.patch"
 
 projects[timeago][version] = "2.x-dev"
 projects[timeago][type] = "module"
