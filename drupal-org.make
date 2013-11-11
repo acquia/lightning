@@ -154,6 +154,17 @@ projects[colorbox][version] = "2.4"
 projects[colorbox][type] = "module"
 projects[colorbox][subdir] = "contrib"
 
+projects[entityreference][version] = "1.x-dev"
+projects[entityreference][type] = "module"
+projects[entityreference][subdir] = "contrib"
+projects[entityreference][download][type] = "git"
+projects[entityreference][download][revision] = "1c176da"
+projects[entityreference][download][branch] = "7.x-1.x"
+
+projects[entityreference_prepopulate][version] = "1.3"
+projects[entityreference_prepopulate][type] = "module"
+projects[entityreference_prepopulate][subdir] = "contrib"
+
 projects[fape][version] = "1.x-dev"
 projects[fape][type] = "module"
 projects[fape][subdir] = "contrib"
@@ -309,17 +320,6 @@ projects[edit][patch][1994256] = "http://drupal.org/files/edit-navbar-button-199
 ; Global Text in Views
 ; http://drupal.org/node/2015295
 projects[edit][patch][2015295] = "http://drupal.org/files/edit-views-psuedo-fields-2015295-6.patch"
-
-projects[entityreference][version] = "1.x-dev"
-projects[entityreference][type] = "module"
-projects[entityreference][subdir] = "contrib"
-projects[entityreference][download][type] = "git"
-projects[entityreference][download][revision] = "1c176da"
-projects[entityreference][download][branch] = "7.x-1.x"
-
-projects[entityreference_prepopulate][version] = "1.3"
-projects[entityreference_prepopulate][type] = "module"
-projects[entityreference_prepopulate][subdir] = "contrib"
 
 projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
