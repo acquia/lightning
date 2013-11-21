@@ -4,7 +4,7 @@
 api = 2
 core = 7.x
 projects[drupal][type] = core
-projects[drupal][version] = 7.23
+projects[drupal][version] = 7.24
 
 ; CORE PATCHES
 
@@ -16,16 +16,8 @@ projects[drupal][patch][] = "http://drupal.org/files/drupal-7.x-allow_profile_ch
 ; Load multiple revisions at once - http://drupal.org/node/1730874
 projects[drupal][patch][] = http://drupal.org/files/1730874_0.patch
 
-; Commerce
-; Registry rebuild should not parse the same file twice in the same request
-; http://drupal.org/node/1470656#comment-6047132
-projects[drupal][patch][] = "http://drupal.org/files/drupal-1470656-14.patch"
-; drupal_add_js() is missing the 'browsers' option
-; http://drupal.org/node/865536
-projects[drupal][patch][] = "http://drupal.org/files/drupal-865536-204.patch"
-
 ; Permissions/Features
 ; user_role_grant_permissions() throws PDOException when used for a disabled
 ; module's permission or with non-existent permissions
-; http://drupal.org/node/737816#comment-6978566
+; http://drupal.org/comment/7285420#comment-7285420
 projects[drupal][patch][] = "http://drupal.org/files/drupal-fix_pdoexception_grant_permissions-737816-36-do-not-test.patch"
