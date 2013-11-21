@@ -294,7 +294,7 @@ projects[ckeditor][download][revision] = "57245a9"
 projects[ckeditor][download][branch] = "7.x-1.x"
 ; Integration with Media 2.x
 ; http://drupal.org/node/1504696
-projects[ckeditor][patch][1504696] = "http://drupal.org/files/ckeditor_1504696_67.patch"
+projects[ckeditor][patch][1504696] = "https://drupal.org/files/issues/ckeditor_1504696_77.patch"
 
 projects[collections][version] = "1.x-dev"
 projects[collections][type] = "module"
