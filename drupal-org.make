@@ -54,14 +54,11 @@ projects[libraries][version] = "2.1"
 projects[libraries][type] = "module"
 projects[libraries][subdir] = "contrib"
 
-projects[link][version] = "1.x-dev"
+projects[link][version] = "1.2"
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
-projects[link][download][type] = "git"
-projects[link][download][revision] = "6ae1ff0"
-projects[link][download][branch] = "7.x-1.x"
 
-projects[module_filter][version] = "1.7"
+projects[module_filter][version] = "2.0-alpha1"
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
 
@@ -94,40 +91,17 @@ projects[role_export][version] = "1.0"
 projects[role_export][type] = "module"
 projects[role_export][subdir] = "contrib"
 
-projects[rules][version] = "2.3"
+projects[rules][version] = "2.6"
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
 
-projects[token][version] = "1.4"
+projects[token][version] = "1.5"
 projects[token][type] = "module"
 projects[token][subdir] = "contrib"
 
 projects[strongarm][version] = "2.0"
 projects[strongarm][type] = "module"
 projects[strongarm][subdir] = "contrib"
-
-projects[views][version] = "3.7"
-projects[views][type] = "module"
-projects[views][subdir] = "contrib"
-
-projects[views_autocomplete_filters][version] = "1.0-beta2"
-projects[views_autocomplete_filters][type] = "module"
-projects[views_autocomplete_filters][subdir] = "contrib"
-
-projects[views_field_view][version] = "1.x-dev"
-projects[views_field_view][type] = "module"
-projects[views_field_view][subdir] = "contrib"
-projects[views_field_view][download][type] = "git"
-projects[views_field_view][download][revision] = "db93080"
-projects[views_field_view][download][branch] = "7.x-1.x"
-
-projects[views_bulk_operations][version] = "3.1"
-projects[views_bulk_operations][type] = "module"
-projects[views_bulk_operations][subdir] = "contrib"
-
-projects[views_load_more][version] = "1.1"
-projects[views_load_more][type] = "module"
-projects[views_load_more][subdir] = "contrib"
 
 ; Assemble
 projects[assemble][version] = "1.0"
@@ -275,7 +249,30 @@ projects[taxonomy_entity_index][version] = "1.0-beta6"
 projects[taxonomy_entity_index][type] = "module"
 projects[taxonomy_entity_index][subdir] = "contrib"
 
-projects[webform][version] = "3.19"
+projects[views][version] = "3.7"
+projects[views][type] = "module"
+projects[views][subdir] = "contrib"
+
+projects[views_autocomplete_filters][version] = "1.0-beta2"
+projects[views_autocomplete_filters][type] = "module"
+projects[views_autocomplete_filters][subdir] = "contrib"
+
+projects[views_field_view][version] = "1.x-dev"
+projects[views_field_view][type] = "module"
+projects[views_field_view][subdir] = "contrib"
+projects[views_field_view][download][type] = "git"
+projects[views_field_view][download][revision] = "db93080"
+projects[views_field_view][download][branch] = "7.x-1.x"
+
+projects[views_bulk_operations][version] = "3.1"
+projects[views_bulk_operations][type] = "module"
+projects[views_bulk_operations][subdir] = "contrib"
+
+projects[views_load_more][version] = "1.1"
+projects[views_load_more][type] = "module"
+projects[views_load_more][subdir] = "contrib"
+
+projects[webform][version] = "4.0-beta1"
 projects[webform][type] = "module"
 projects[webform][subdir] = "contrib"
 
