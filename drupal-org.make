@@ -108,7 +108,7 @@ projects[assemble][version] = "1.0"
 projects[assemble][type] = "module"
 projects[assemble][subdir] = "contrib"
 projects[assemble][download][type] = "git"
-projects[assemble][download][revision] = "bda7029"
+projects[assemble][download][revision] = "7fca673"
 projects[assemble][download][branch] = "7.x-1.x"
 
 projects[bean][version] = "1.x-dev"
@@ -230,11 +230,11 @@ projects[panopoly_widgets][version] = "1.x-dev"
 projects[panopoly_widgets][type] = "module"
 projects[panopoly_widgets][subdir] = "contrib"
 projects[panopoly_widgets][download][type] = "git"
-projects[panopoly_widgets][download][revision] = "15c8dce"
+projects[panopoly_widgets][download][revision] = "8d921b8"
 projects[panopoly_widgets][download][branch] = "7.x-1.x"
 ; Use Panopoly Widgets in Demo Framework
 ; http://drupal.org/node/1949710
-projects[panopoly_widgets][patch][1949710] = "http://drupal.org/files/panopoly_widgets-demo-framework-1949710-10.patch"
+projects[panopoly_widgets][patch][1949710] = "http://drupal.org/files/issues/panopoly_widgets-demo-framework-1949710-11.patch"
 
 projects[picture][version] = "1.x-dev"
 projects[picture][type] = "module"
@@ -283,7 +283,7 @@ projects[curate][version] = "1.0"
 projects[curate][type] = "module"
 projects[curate][subdir] = "contrib"
 projects[curate][download][type] = "git"
-projects[curate][download][revision] = "679deb0"
+projects[curate][download][revision] = "75069e9"
 projects[curate][download][branch] = "7.x-1.x"
 
 projects[ckeditor][version] = "1.x-dev"
@@ -294,7 +294,7 @@ projects[ckeditor][download][revision] = "57245a9"
 projects[ckeditor][download][branch] = "7.x-1.x"
 ; Integration with Media 2.x
 ; http://drupal.org/node/1504696
-projects[ckeditor][patch][1504696] = "https://drupal.org/files/issues/ckeditor_1504696_77.patch"
+projects[ckeditor][patch][1504696] = "http://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-1504696-120.patch"
 
 projects[collections][version] = "1.x-dev"
 projects[collections][type] = "module"
@@ -350,22 +350,21 @@ projects[media][version] = "2.x-dev"
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
-projects[media][download][revision] = "814c34e"
+projects[media][download][revision] = "a84bd30"
 projects[media][download][branch] = "7.x-2.x"
+; Integration with CKEditor module
+; http://drupal.org/node/1504696
+projects[media][patch][1504696] = "http://drupal.org/files/issues/media-add-ckeditor-support-1504696-120.patch"
 
 projects[media_youtube][version] = "2.x-dev"
 projects[media_youtube][type] = "module"
 projects[media_youtube][subdir] = "contrib"
 projects[media_youtube][download][type] = "git"
-projects[media_youtube][download][revision] = "acff0f6"
+projects[media_youtube][download][revision] = "ca46aba"
 projects[media_youtube][download][branch] = "7.x-2.x"
-
-projects[media_vimeo][version] = "2.x-dev"
-projects[media_vimeo][type] = "module"
-projects[media_vimeo][subdir] = "contrib"
-projects[media_vimeo][download][type] = "git"
-projects[media_vimeo][download][revision] = "26b2eee"
-projects[media_vimeo][download][branch] = "7.x-2.x"
+; media_access() is deceprated and will be removed
+; https://drupal.org/node/1823376
+projects[media_youtube][patch][1823376] = "http://drupal.org/files/issues/provide-access-wrapper-1823376-6.patch"
 
 projects[nra][version] = "1.0-alpha2"
 projects[nra][type] = "module"
