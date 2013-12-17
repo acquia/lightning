@@ -295,6 +295,9 @@ projects[ckeditor][download][branch] = "7.x-1.x"
 ; Integration with Media 2.x
 ; http://drupal.org/node/1504696
 projects[ckeditor][patch][1504696] = "http://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-1504696-120.patch"
+; External plugin declarations are redundant.
+; https://drupal.org/comment/8284591#comment-8284591
+projects[ckeditor][patch][2158741] = "http://drupal.org/files/issues/ckeditor-remove-external-plugin-declarations-1-alt.patch"
 
 projects[collections][version] = "1.x-dev"
 projects[collections][type] = "module"
@@ -342,7 +345,7 @@ projects[iib][download][branch] = "7.x-1.x"
 ; http://drupal.org/node/1737036
 projects[iib][patch][1737036] = "http://drupal.org/files/iib-entity-css-1737036-18.patch"
 
-projects[linkit][version] = "2.6"
+projects[linkit][version] = "3.1"
 projects[linkit][type] = "module"
 projects[linkit][subdir] = "contrib"
 
