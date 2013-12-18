@@ -344,11 +344,8 @@ projects[media][version] = "2.x-dev"
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
-projects[media][download][revision] = "a84bd30"
+projects[media][download][revision] = "c3cda2b"
 projects[media][download][branch] = "7.x-2.x"
-; Integration with CKEditor module
-; http://drupal.org/node/1504696
-projects[media][patch][1504696] = "http://drupal.org/files/issues/media-add-ckeditor-support-1504696-120.patch"
 
 projects[media_youtube][version] = "2.x-dev"
 projects[media_youtube][type] = "module"
