@@ -66,11 +66,11 @@ projects[navbar][version] = "1.x-dev"
 projects[navbar][type] = "module"
 projects[navbar][subdir] = "contrib"
 projects[navbar][download][type] = "git"
-projects[navbar][download][revision] = "dd542e1"
+projects[navbar][download][revision] = "ce2f6e4"
 projects[navbar][download][branch] = "7.x-1.x"
 ; Menu icons for contrib modules
 ; http://drupal.org/node/1954912
-projects[navbar][patch][1954912] = "http://drupal.org/files/navbar-contrib-icons-1954912-6.patch"
+projects[navbar][patch][1954912] = "http://drupal.org/files/issues/navbar-contrib-icons-1954912-20.patch"
 
 projects[pathauto][version] = "1.2"
 projects[pathauto][type] = "module"
@@ -84,7 +84,7 @@ projects[responsive_preview][version] = "1.x-dev"
 projects[responsive_preview][type] = "module"
 projects[responsive_preview][subdir] = "contrib"
 projects[responsive_preview][download][type] = "git"
-projects[responsive_preview][download][revision] = "94cdec7"
+projects[responsive_preview][download][revision] = "1f1a88e"
 projects[responsive_preview][download][branch] = "7.x-1.x"
 
 projects[role_export][version] = "1.0"
@@ -309,7 +309,7 @@ projects[edit][download][revision] = "cf62974"
 projects[edit][download][branch] = "7.x-1.x"
 ; Backport of Edit button for navbar
 ; http://drupal.org/node/1994256
-projects[edit][patch][1994256] = "http://drupal.org/files/edit-navbar-button-1994256-15.patch"
+projects[edit][patch][1994256] = "http://drupal.org/files/issues/edit-navbar-button-1994256-21.patch"
 ; Edit Module fails for "psudeo" fields provided via Relationship or Appended
 ; Global Text in Views
 ; http://drupal.org/node/2015295
@@ -334,7 +334,7 @@ projects[iib][download][revision] = "17a55eb"
 projects[iib][download][branch] = "7.x-1.x"
 ; UX Improvements
 ; http://drupal.org/node/1737036
-projects[iib][patch][1737036] = "http://drupal.org/files/iib-entity-css-1737036-18.patch"
+projects[iib][patch][1737036] = "http://drupal.org/files/issues/ux-improv-1737036-40.patch"
 
 projects[linkit][version] = "3.1"
 projects[linkit][type] = "module"
@@ -435,7 +435,7 @@ projects[migrate_extras][subdir] = "contrib"
 
 ; Libraries
 libraries[backbone][download][type] = "get"
-libraries[backbone][download][url] = "http://documentcloud.github.io/backbone/backbone-min.js"
+libraries[backbone][download][url] = "https://github.com/documentcloud/backbone/archive/1.0.0.zip"
 
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.1/ckeditor_4.3.1_standard.zip"
@@ -446,6 +446,9 @@ libraries[json2][download][url] = "https://github.com/douglascrockford/JSON-js/b
 libraries[jsonpath][download][type] = "get"
 libraries[jsonpath][download][url] = "https://jsonpath.googlecode.com/files/jsonpath-0.8.1.php"
 
+libraries[modernizr][download][type] = "get"
+libraries[modernizr][download][url] = "https://github.com/Modernizr/Modernizr/archive/master.zip"
+
 libraries[respondjs][download][type] = "get"
 libraries[respondjs][download][url] = "https://github.com/scottjehl/Respond/tarball/master"
 
@@ -453,7 +456,7 @@ libraries[timeago][download][type] = "get"
 libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.3.0/jquery.timeago.js"
 
 libraries[underscore][download][type] = "get"
-libraries[underscore][download][url] = "http://documentcloud.github.io/underscore/underscore-min.js"
+libraries[underscore][download][url] = "https://github.com/documentcloud/backbone/archive/1.0.0.zip"
 
 ; Themes
 projects[demonstratie][version] = "1.x-dev"
