@@ -447,7 +447,7 @@ libraries[jsonpath][download][type] = "get"
 libraries[jsonpath][download][url] = "https://jsonpath.googlecode.com/files/jsonpath-0.8.1.php"
 
 libraries[modernizr][download][type] = "get"
-libraries[modernizr][download][url] = "https://github.com/Modernizr/Modernizr/archive/master.zip"
+libraries[modernizr][download][url] = "https://github.com/Modernizr/Modernizr/archive/v2.7.1.zip"
 
 libraries[respondjs][download][type] = "get"
 libraries[respondjs][download][url] = "https://github.com/scottjehl/Respond/tarball/master"
@@ -456,7 +456,7 @@ libraries[timeago][download][type] = "get"
 libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.3.0/jquery.timeago.js"
 
 libraries[underscore][download][type] = "get"
-libraries[underscore][download][url] = "https://github.com/documentcloud/backbone/archive/1.0.0.zip"
+libraries[underscore][download][url] = "https://github.com/documentcloud/underscore/archive/1.4.4.zip"
 
 ; Themes
 projects[demonstratie][version] = "1.x-dev"
