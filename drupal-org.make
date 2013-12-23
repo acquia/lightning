@@ -173,6 +173,13 @@ projects[layout][version] = "1.0-alpha6"
 projects[layout][type] = "module"
 projects[layout][subdir] = "contrib"
 
+projects[magic_beans][version] = "1.x-dev"
+projects[magic_beans][type] = "module"
+projects[magic_beans][subdir] = "contrib"
+projects[magic_beans][download][type] = "git"
+projects[magic_beans][download][revision] = "d93330a"
+projects[magic_beans][download][branch] = "7.x-1.x"
+
 projects[metatag][version] = "1.0-beta5"
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
