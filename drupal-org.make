@@ -58,7 +58,7 @@ projects[link][version] = "1.2"
 projects[link][type] = "module"
 projects[link][subdir] = "contrib"
 
-projects[module_filter][version] = "2.0-alpha1"
+projects[module_filter][version] = "2.0-alpha2"
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
 
@@ -84,7 +84,7 @@ projects[responsive_preview][version] = "1.x-dev"
 projects[responsive_preview][type] = "module"
 projects[responsive_preview][subdir] = "contrib"
 projects[responsive_preview][download][type] = "git"
-projects[responsive_preview][download][revision] = "1f1a88e"
+projects[responsive_preview][download][revision] = "0829c01"
 projects[responsive_preview][download][branch] = "7.x-1.x"
 
 projects[role_export][version] = "1.0"
@@ -442,7 +442,7 @@ projects[migrate_extras][subdir] = "contrib"
 
 ; Libraries
 libraries[backbone][download][type] = "get"
-libraries[backbone][download][url] = "https://github.com/documentcloud/backbone/archive/1.0.0.zip"
+libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.1.0.zip"
 
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.1/ckeditor_4.3.1_standard.zip"
@@ -463,7 +463,7 @@ libraries[timeago][download][type] = "get"
 libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.3.0/jquery.timeago.js"
 
 libraries[underscore][download][type] = "get"
-libraries[underscore][download][url] = "https://github.com/documentcloud/underscore/archive/1.4.4.zip"
+libraries[underscore][download][url] = "https://github.com/jashkenas/underscore/archive/1.5.2.zip"
 
 ; Themes
 projects[demonstratie][version] = "1.x-dev"
