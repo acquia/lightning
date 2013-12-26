@@ -368,6 +368,13 @@ projects[nra][version] = "1.0-alpha2"
 projects[nra][type] = "module"
 projects[nra][subdir] = "contrib"
 
+projects[nra_workbench_moderation][version] = "1.x-dev"
+projects[nra_workbench_moderation][type] = "module"
+projects[nra_workbench_moderation][subdir] = "contrib"
+projects[nra_workbench_moderation][download][type] = "git"
+projects[nra_workbench_moderation][download][revision] = "9f17009"
+projects[nra_workbench_moderation][download][branch] = "7.x-1.x"
+
 projects[sps][version] = "1.x-dev"
 projects[sps][type] = "module"
 projects[sps][subdir] = "contrib"
