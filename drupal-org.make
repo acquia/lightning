@@ -374,6 +374,9 @@ projects[nra_workbench_moderation][subdir] = "contrib"
 projects[nra_workbench_moderation][download][type] = "git"
 projects[nra_workbench_moderation][download][revision] = "9f17009"
 projects[nra_workbench_moderation][download][branch] = "7.x-1.x"
+; Errors when 'Status' column is built for new/unpublished items in NRA
+; http://drupal.org/node/2163175
+projects[nra_workbench_moderation][patch][2163175] = "http://drupal.org/files/issues/nra_workbench_moderation-no-published-state-2163175-1.patch"
 
 projects[sps][version] = "1.x-dev"
 projects[sps][type] = "module"
