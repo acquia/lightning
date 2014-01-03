@@ -353,6 +353,9 @@ projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
 projects[media][download][revision] = "c3cda2b"
 projects[media][download][branch] = "7.x-2.x"
+; Improve UX for Media Bulk Upload submodule's multiform page
+; http://drupal.org/node/2166623
+projects[media][patch][2166623] = "http://drupal.org/files/issues/media_bulk_upload-improve-multiform-0.patch"
 
 projects[media_youtube][version] = "2.x-dev"
 projects[media_youtube][type] = "module"
@@ -363,6 +366,10 @@ projects[media_youtube][download][branch] = "7.x-2.x"
 ; media_access() is deceprated and will be removed
 ; https://drupal.org/node/1823376
 projects[media_youtube][patch][1823376] = "http://drupal.org/files/issues/provide-access-wrapper-1823376-6.patch"
+
+projects[multiform][version] = "1.0"
+projects[multiform][type] = "module"
+projects[multiform][subdir] = "contrib"
 
 projects[nra][version] = "1.0-alpha2"
 projects[nra][type] = "module"
@@ -377,6 +384,10 @@ projects[nra_workbench_moderation][download][branch] = "7.x-1.x"
 ; Errors when 'Status' column is built for new/unpublished items in NRA
 ; http://drupal.org/node/2163175
 projects[nra_workbench_moderation][patch][2163175] = "http://drupal.org/files/issues/nra_workbench_moderation-no-published-state-2163175-1.patch"
+
+projects[plupload][version] = "1.3"
+projects[plupload][type] = "module"
+projects[plupload][subdir] = "contrib"
 
 projects[sps][version] = "1.x-dev"
 projects[sps][type] = "module"
