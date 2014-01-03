@@ -477,6 +477,9 @@ libraries[jsonpath][download][url] = "https://jsonpath.googlecode.com/files/json
 libraries[modernizr][download][type] = "get"
 libraries[modernizr][download][url] = "https://github.com/Modernizr/Modernizr/archive/v2.7.1.zip"
 
+libraries[plupload][download][type] = "get"
+libraries[plupload][download][url] = "https://github.com/moxiecode/plupload/archive/v2.0.0.zip"
+
 libraries[respondjs][download][type] = "get"
 libraries[respondjs][download][url] = "https://github.com/scottjehl/Respond/tarball/master"
 
