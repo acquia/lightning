@@ -66,7 +66,7 @@ projects[navbar][version] = "1.x-dev"
 projects[navbar][type] = "module"
 projects[navbar][subdir] = "contrib"
 projects[navbar][download][type] = "git"
-projects[navbar][download][revision] = "ce2f6e4"
+projects[navbar][download][revision] = "bd3389b"
 projects[navbar][download][branch] = "7.x-1.x"
 ; Menu icons for contrib modules
 ; http://drupal.org/node/1954912
@@ -80,12 +80,9 @@ projects[pm_existing_pages][version] = "1.4"
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
 
-projects[responsive_preview][version] = "1.x-dev"
+projects[responsive_preview][version] = "1.0"
 projects[responsive_preview][type] = "module"
 projects[responsive_preview][subdir] = "contrib"
-projects[responsive_preview][download][type] = "git"
-projects[responsive_preview][download][revision] = "0829c01"
-projects[responsive_preview][download][branch] = "7.x-1.x"
 
 projects[role_export][version] = "1.0"
 projects[role_export][type] = "module"
@@ -294,7 +291,7 @@ projects[ckeditor][download][branch] = "7.x-1.x"
 ; http://drupal.org/node/1504696
 projects[ckeditor][patch][1504696] = "http://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-1504696-120.patch"
 ; External plugin declarations are redundant.
-; https://drupal.org/comment/8284591#comment-8284591
+; http://drupal.org/comment/8284591#comment-8284591
 projects[ckeditor][patch][2158741] = "http://drupal.org/files/issues/ckeditor-remove-external-plugin-declarations-1-alt.patch"
 
 projects[collections][version] = "1.x-dev"
@@ -316,7 +313,7 @@ projects[edit][download][revision] = "cf62974"
 projects[edit][download][branch] = "7.x-1.x"
 ; Backport of Edit button for navbar
 ; http://drupal.org/node/1994256
-projects[edit][patch][1994256] = "http://drupal.org/files/issues/edit-navbar-button-1994256-21.patch"
+projects[edit][patch][1994256] = "http://drupal.org/files/issues/edit-navbar-button-1994256-22.patch"
 ; Edit Module fails for "psudeo" fields provided via Relationship or Appended
 ; Global Text in Views
 ; http://drupal.org/node/2015295
@@ -341,7 +338,7 @@ projects[iib][download][revision] = "17a55eb"
 projects[iib][download][branch] = "7.x-1.x"
 ; UX Improvements
 ; http://drupal.org/node/1737036
-projects[iib][patch][1737036] = "http://drupal.org/files/issues/ux-improv-1737036-40.patch"
+projects[iib][patch][1737036] = "http://drupal.org/files/issues/iib-navbar-1737036-43.patch"
 
 projects[linkit][version] = "3.1"
 projects[linkit][type] = "module"
@@ -364,7 +361,7 @@ projects[media_youtube][download][type] = "git"
 projects[media_youtube][download][revision] = "ca46aba"
 projects[media_youtube][download][branch] = "7.x-2.x"
 ; media_access() is deceprated and will be removed
-; https://drupal.org/node/1823376
+; http://drupal.org/node/1823376
 projects[media_youtube][patch][1823376] = "http://drupal.org/files/issues/provide-access-wrapper-1823376-6.patch"
 
 projects[multiform][version] = "1.0"

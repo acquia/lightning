@@ -391,4 +391,9 @@ function lightning_install() {
   variable_set('jquery_update_jquery_cdn', 'none');
   variable_set('jquery_update_jquery_version', '1.7');
 
+  // Use the source version of Modernizr since the build process can't produce
+  // a minified version from the library.
+  $variants = variable_get('navbar_libraries_variants', array());
+  $variants['modernizr'] = 'source';
+  variable_set('navbar_libraries_variants', $variants);
 }
