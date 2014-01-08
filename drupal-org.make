@@ -142,6 +142,8 @@ projects[fape][subdir] = "contrib"
 projects[fape][download][type] = "git"
 projects[fape][download][revision] = "1143ee2"
 projects[fape][download][branch] = "7.x-1.x"
+; Call to field_access passing field name rather than full field structure
+; http://drupal.org/node/1846156
 projects[fape][patch][1846156] = "http://drupal.org/files/fape-1846156-5.patch"
 
 projects[field_group][version] = "1.x-dev"
