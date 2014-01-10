@@ -35,7 +35,7 @@ projects[diff][version] = "3.2"
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 
-projects[entity][version] = "1.2"
+projects[entity][version] = "1.3"
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
 
