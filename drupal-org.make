@@ -9,13 +9,8 @@ projects[ctools][version] = "1.x-dev"
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
 projects[ctools][download][type] = "git"
-projects[ctools][download][revision] = "e81da7a"
+projects[ctools][download][revision] = "0362518"
 projects[ctools][download][branch] = "7.x-1.x"
-; Introduce UUIDs onto panes & displays for
-; better exportability & features compatibility
-; (ctools patch from panels queue)
-; http://drupal.org/node/1277908#comment-7216356
-projects[ctools][patch][1277908] = "http://drupal.org/files/ctools-uuids_for_exported_objects-1277908-118.patch"
 ; Update the token replacements in ctools to work against a fully rendered page.
 ; http://drupal.org/node/955070#comment-7751253
 projects[ctools][patch][955070] = "http://drupal.org/files/ctools-fix_token_processing-955070-5.patch"
@@ -193,12 +188,8 @@ projects[panels][version] = "3.x-dev"
 projects[panels][type] = "module"
 projects[panels][subdir] = "contrib"
 projects[panels][download][type] = "git"
-projects[panels][download][revision] = "2bb470e"
+projects[panels][download][revision] = "f253afb"
 projects[panels][download][branch] = "7.x-3.x"
-; Introduce UUIDs onto panes & displays for better 
-; exportability & features compatibility
-; http://drupal.org/node/1277908#comment-6771122
-projects[panels][patch][1179034_1277908] = "http://drupal.org/files/panels-1179034-41_____panels-uuids-127790-100__-80.patch"
 
 projects[panopoly_images][version] = "1.x-dev"
 projects[panopoly_images][type] = "module"
@@ -249,9 +240,12 @@ projects[taxonomy_entity_index][version] = "1.0-beta6"
 projects[taxonomy_entity_index][type] = "module"
 projects[taxonomy_entity_index][subdir] = "contrib"
 
-projects[views][version] = "3.7"
+projects[views][version] = "3.x-dev"
 projects[views][type] = "module"
 projects[views][subdir] = "contrib"
+projects[views][download][type] = "git"
+projects[views][download][revision] = "41112ab"
+projects[views][download][branch] = "7.x-3.x"
 
 projects[views_autocomplete_filters][version] = "1.0-beta2"
 projects[views_autocomplete_filters][type] = "module"
