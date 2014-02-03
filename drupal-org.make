@@ -486,7 +486,7 @@ libraries[respondjs][download][type] = "get"
 libraries[respondjs][download][url] = "https://github.com/scottjehl/Respond/tarball/master"
 
 libraries[timeago][download][type] = "get"
-libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.3.0/jquery.timeago.js"
+libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.3.1/jquery.timeago.js"
 
 libraries[underscore][download][type] = "get"
 libraries[underscore][download][url] = "https://github.com/jashkenas/underscore/archive/1.5.2.zip"
