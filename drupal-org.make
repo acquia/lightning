@@ -119,6 +119,9 @@ projects[bean_tax][download][branch] = "7.x-2.x"
 projects[colorbox][version] = "2.4"
 projects[colorbox][type] = "module"
 projects[colorbox][subdir] = "contrib"
+projects[colorbox][download][type] = "git"
+projects[colorbox][download][revision] = "ce90f5d"
+projects[colorbox][download][branch] = "7.x-1.x"
 
 projects[entityreference][version] = "1.x-dev"
 projects[entityreference][type] = "module"
@@ -460,6 +463,9 @@ libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/arch
 
 libraries[ckeditor][download][type] = "get"
 libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.1/ckeditor_4.3.1_standard.zip"
+
+libraries[colorbox][download][type] = "get"
+libraries[colorbox][download][url] = "https://github.com/jackmoore/colorbox/archive/master.zip"
 
 libraries[json2][download][type] = "get"
 libraries[json2][download][url] = "https://github.com/douglascrockford/JSON-js/blob/master/json2.js"
