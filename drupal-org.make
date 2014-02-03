@@ -96,7 +96,7 @@ projects[strongarm][type] = "module"
 projects[strongarm][subdir] = "contrib"
 
 ; Assemble
-projects[assemble][version] = "1.0"
+projects[assemble][version] = "1.x-dev"
 projects[assemble][type] = "module"
 projects[assemble][subdir] = "contrib"
 projects[assemble][download][type] = "git"
@@ -116,7 +116,7 @@ projects[bean_tax][download][type] = "git"
 projects[bean_tax][download][revision] = "3cbc63a"
 projects[bean_tax][download][branch] = "7.x-2.x"
 
-projects[colorbox][version] = "2.4"
+projects[colorbox][version] = "2.x-dev"
 projects[colorbox][type] = "module"
 projects[colorbox][subdir] = "contrib"
 projects[colorbox][download][type] = "git"
@@ -130,7 +130,7 @@ projects[entityreference][download][type] = "git"
 projects[entityreference][download][revision] = "1c176da"
 projects[entityreference][download][branch] = "7.x-1.x"
 
-projects[entityreference_prepopulate][version] = "1.3"
+projects[entityreference_prepopulate][version] = "1.4"
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
 
@@ -274,7 +274,7 @@ projects[webform][type] = "module"
 projects[webform][subdir] = "contrib"
 
 ; Curate
-projects[curate][version] = "1.0"
+projects[curate][version] = "1.x-dev"
 projects[curate][type] = "module"
 projects[curate][subdir] = "contrib"
 projects[curate][download][type] = "git"
@@ -300,7 +300,7 @@ projects[collections][download][type] = "git"
 projects[collections][download][revision] = "b4e8212"
 projects[collections][download][branch] = "7.x-1.x"
 
-projects[date][version] = "2.6"
+projects[date][version] = "2.7"
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
 
@@ -443,7 +443,7 @@ projects[xautoload][type] = "module"
 projects[xautoload][subdir] = "contrib"
 
 ; Import
-projects[import][version] = "1.0"
+projects[import][version] = "1.x-dev"
 projects[import][type] = "module"
 projects[import][subdir] = "contrib"
 projects[import][download][type] = "git"
