@@ -171,7 +171,7 @@ projects[magic_beans][version] = "1.x-dev"
 projects[magic_beans][type] = "module"
 projects[magic_beans][subdir] = "contrib"
 projects[magic_beans][download][type] = "git"
-projects[magic_beans][download][revision] = "d93330a"
+projects[magic_beans][download][revision] = "6c5d19e"
 projects[magic_beans][download][branch] = "7.x-1.x"
 
 projects[metatag][version] = "1.0-beta5"
