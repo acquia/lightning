@@ -319,8 +319,11 @@ projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
 projects[file_entity][download][type] = "git"
-projects[file_entity][download][revision] = "7b9d082"
+projects[file_entity][download][revision] = "3661d8b"
 projects[file_entity][download][branch] = "7.x-2.x"
+; Default file entities are not exportable by features (Sibling Issue)
+; http://drupal.org/node/2192391
+projects[file_entity][patch][2192391] = "http://drupal.org/files/issues/file_entity_remove_file_display-2192391-01.patch"
 
 projects[file_entity_link][version] = "1.0-alpha3"
 projects[file_entity_link][type] = "module"
@@ -349,6 +352,9 @@ projects[media][download][branch] = "7.x-2.x"
 ; Improve UX for Media Thumbnail and Media Bulk Upload's multiform page 
 ; http://drupal.org/node/2166623
 projects[media][patch][2166623] = "http://drupal.org/files/issues/media_bulk_upload-improve-multiform-2166623-2.patch"
+; Default file entities are not exportable by features
+; http://drupal.org/node/2104193
+projects[media][patch][2104193] = "http://drupal.org/files/issues/media_remove_file_display_alter-2104193-23.patch"
 
 projects[media_youtube][version] = "2.x-dev"
 projects[media_youtube][type] = "module"
