@@ -120,6 +120,13 @@ projects[colorbox][download][type] = "git"
 projects[colorbox][download][revision] = "ce90f5d"
 projects[colorbox][download][branch] = "7.x-1.x"
 
+projects[context_admin][version] = "1.x-dev"
+projects[context_admin][type] = "module"
+projects[context_admin][subdir] = "contrib"
+projects[context_admin][download][type] = "git"
+projects[context_admin][download][revision] = "15a8390"
+projects[context_admin][download][branch] = "7.x-1.x"
+
 projects[entityreference][version] = "1.x-dev"
 projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"
