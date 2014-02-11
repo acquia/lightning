@@ -191,13 +191,6 @@ projects[panels][download][type] = "git"
 projects[panels][download][revision] = "f253afb"
 projects[panels][download][branch] = "7.x-3.x"
 
-projects[panopoly_images][version] = "1.x-dev"
-projects[panopoly_images][type] = "module"
-projects[panopoly_images][subdir] = "contrib"
-projects[panopoly_images][download][type] = "git"
-projects[panopoly_images][download][revision] = "4d92f71"
-projects[panopoly_images][download][branch] = "7.x-1.x"
-
 projects[panopoly_magic][version] = "1.x-dev"
 projects[panopoly_magic][type] = "module"
 projects[panopoly_magic][subdir] = "contrib"
@@ -223,7 +216,7 @@ projects[panopoly_widgets][download][revision] = "5555e30"
 projects[panopoly_widgets][download][branch] = "7.x-1.x"
 ; Use Panopoly Widgets in Demo Framework
 ; http://drupal.org/node/1949710
-projects[panopoly_widgets][patch][1949710] = "http://drupal.org/files/issues/panopoly_widgets-demo-framework-1949710-12.patch"
+projects[panopoly_widgets][patch][1949710] = "http://drupal.org/files/issues/panopoly_widgets-demo-framework-1949710-14.patch"
 
 projects[picture][version] = "1.x-dev"
 projects[picture][type] = "module"
