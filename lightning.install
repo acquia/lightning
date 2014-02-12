@@ -397,3 +397,64 @@ function lightning_install() {
   $variants['modernizr'] = 'source';
   variable_set('navbar_libraries_variants', $variants);
 }
+
+/**
+ * Implements hook_install_tasks_alter().
+ */
+function lightning_install_tasks_alter(&$tasks, $install_state) {
+  global $install_state;
+
+  // Skip profile selection step.
+  $tasks['install_select_profile']['display'] = FALSE;
+
+  // Skip language selection install step and default language to English.
+  $tasks['install_select_locale']['display'] = FALSE;
+  $tasks['install_select_locale']['run'] = INSTALL_TASK_SKIP;
+  $install_state['parameters']['locale'] = 'en';
+
+  // Override "install_finished" task.
+  $tasks['install_finished']['function'] = 'lightning_install_finished';
+}
+
+/**
+ * Override of install_finished().
+ */
+function lightning_install_finished(&$install_state) {
+  // Flush all caches to ensure that any full bootstraps during the installer
+  // do not leave stale cached data, and that any content types or other items
+  // registered by the installation profile are registered correctly.
+  drupal_flush_all_caches();
+
+  // Remember the profile which was used.
+  variable_set('install_profile', drupal_get_profile());
+
+  // Installation profiles are always loaded last
+  db_update('system')
+    ->fields(array('weight' => 1000))
+    ->condition('type', 'module')
+    ->condition('name', drupal_get_profile())
+    ->execute();
+
+  // Cache a fully-built schema.
+  drupal_get_schema(NULL, TRUE);
+
+  // Run cron to populate update status tables (if available) so that users
+  // will be warned if they've installed an out of date Drupal version.
+  // Will also trigger indexing of profile-supplied content or feeds.
+  drupal_cron_run();
+
+  // Clear & rebuild Features key caches.
+  features_get_info(NULL, NULL, TRUE);
+  features_rebuild();
+
+  // Revert all Features (cleanup install).
+  features_revert();
+
+  // Remove all non-error messages.
+  $messages = array('completed', 'status', 'warning');
+  foreach ($messages as $message) {
+    drupal_get_messages($message, TRUE);
+  }
+
+}
+
