@@ -38,7 +38,7 @@ projects[features][version] = "2.x-dev"
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 projects[features][download][type] = "git"
-projects[features][download][revision] = "a338503"
+projects[features][download][revision] = "78772d5"
 projects[features][download][branch] = "7.x-2.x"
 
 projects[jquery_update][version] = "2.3"
@@ -131,7 +131,7 @@ projects[entityreference][version] = "1.x-dev"
 projects[entityreference][type] = "module"
 projects[entityreference][subdir] = "contrib"
 projects[entityreference][download][type] = "git"
-projects[entityreference][download][revision] = "1c176da"
+projects[entityreference][download][revision] = "dc4196b"
 projects[entityreference][download][branch] = "7.x-1.x"
 
 projects[entityreference_prepopulate][version] = "1.4"
@@ -401,17 +401,6 @@ projects[sps][patch][1733490] = "http://drupal.org/files/sps-css-cleanup-1733490
 ; http://drupal.org/node/1934130
 projects[sps][patch][1934130] = "http://drupal.org/files/sps-1934130-11.patch"
 
-projects[timeago][version] = "2.x-dev"
-projects[timeago][type] = "module"
-projects[timeago][subdir] = "contrib"
-projects[timeago][download][type] = "git"
-projects[timeago][download][url] = "http://git.drupal.org/project/timeago.git"
-projects[timeago][download][branch] = "7.x-2.x"
-projects[timeago][download][revision] = "768ea66"
-; Provide a dedicated date type
-; http://drupal.org/node/1427226
-projects[timeago][patch][1427226] = "http://drupal.org/files/1427226-timeago-date-type.patch"
-
 projects[revision_scheduler][version] = "1.x-dev"
 projects[revision_scheduler][type] = "module"
 projects[revision_scheduler][subdir] = "contrib"
@@ -487,9 +476,6 @@ libraries[plupload][patch][1903850] = "http://drupal.org/files/issues/plupload-1
 
 libraries[respondjs][download][type] = "get"
 libraries[respondjs][download][url] = "https://github.com/scottjehl/Respond/tarball/master"
-
-libraries[timeago][download][type] = "get"
-libraries[timeago][download][url] = "https://raw.github.com/rmm5t/jquery-timeago/v1.3.1/jquery.timeago.js"
 
 libraries[underscore][download][type] = "get"
 libraries[underscore][download][url] = "https://github.com/jashkenas/underscore/archive/1.5.2.zip"
