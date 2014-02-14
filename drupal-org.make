@@ -102,6 +102,10 @@ projects[assemble][subdir] = "contrib"
 projects[assemble][download][type] = "git"
 projects[assemble][download][branch] = "7.x-1.x"
 
+projects[better_formats][version] = "1.0-beta1"
+projects[better_formats][type] = "module"
+projects[better_formats][subdir] = "contrib"
+
 projects[bean][version] = "1.x-dev"
 projects[bean][type] = "module"
 projects[bean][subdir] = "contrib"
@@ -215,16 +219,6 @@ projects[panopoly_theme][download][branch] = "7.x-1.x"
 ; http://drupal.org/node/1904766
 projects[panopoly_theme][patch][1904766] = "http://drupal.org/files/panopoly_theme-makefile-free-1904766-5.patch"
 
-projects[panopoly_widgets][version] = "1.x-dev"
-projects[panopoly_widgets][type] = "module"
-projects[panopoly_widgets][subdir] = "contrib"
-projects[panopoly_widgets][download][type] = "git"
-projects[panopoly_widgets][download][revision] = "5555e30"
-projects[panopoly_widgets][download][branch] = "7.x-1.x"
-; Use Panopoly Widgets in Demo Framework
-; http://drupal.org/node/1949710
-projects[panopoly_widgets][patch][1949710] = "http://drupal.org/files/issues/panopoly_widgets-demo-framework-1949710-14.patch"
-
 projects[picture][version] = "1.x-dev"
 projects[picture][type] = "module"
 projects[picture][subdir] = "contrib"
@@ -235,6 +229,10 @@ projects[picture][download][branch] = "7.x-1.x"
 projects[respondjs][version] = "1.1"
 projects[respondjs][type] = "module"
 projects[respondjs][subdir] = "contrib"
+
+projects[simple_gmap][version] = "1.2"
+projects[simple_gmap][type] = "module"
+projects[simple_gmap][subdir] = "contrib"
 
 projects[taxonomy_entity_index][version] = "1.0-beta7"
 projects[taxonomy_entity_index][type] = "module"
