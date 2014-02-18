@@ -303,8 +303,15 @@ projects[edit][version] = "1.x-dev"
 projects[edit][type] = "module"
 projects[edit][subdir] = "contrib"
 projects[edit][download][type] = "git"
-projects[edit][download][revision] = "2648a9e"
+projects[edit][download][revision] = "cf62974"
 projects[edit][download][branch] = "7.x-1.x"
+; Backport of Edit button for navbar
+; http://drupal.org/node/1994256
+projects[edit][patch][1994256] = "http://drupal.org/files/issues/edit-navbar-button-1994256-22.patch"
+; Edit Module fails for "psudeo" fields provided via Relationship or Appended
+; Global Text in Views
+; http://drupal.org/node/2015295
+projects[edit][patch][2015295] = "http://drupal.org/files/edit-views-psuedo-fields-2015295-6.patch"
 
 projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
