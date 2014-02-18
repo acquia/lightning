@@ -303,15 +303,8 @@ projects[edit][version] = "1.x-dev"
 projects[edit][type] = "module"
 projects[edit][subdir] = "contrib"
 projects[edit][download][type] = "git"
-projects[edit][download][revision] = "cf62974"
+projects[edit][download][revision] = "2648a9e"
 projects[edit][download][branch] = "7.x-1.x"
-; Backport of Edit button for navbar
-; http://drupal.org/node/1994256
-projects[edit][patch][1994256] = "http://drupal.org/files/issues/edit-navbar-button-1994256-22.patch"
-; Edit Module fails for "psudeo" fields provided via Relationship or Appended
-; Global Text in Views
-; http://drupal.org/node/2015295
-projects[edit][patch][2015295] = "http://drupal.org/files/edit-views-psuedo-fields-2015295-6.patch"
 
 projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
@@ -345,7 +338,7 @@ projects[media][version] = "2.x-dev"
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
-projects[media][download][revision] = "0d39e26"
+projects[media][download][revision] = "6e9c99b"
 projects[media][download][branch] = "7.x-2.x"
 ; Improve UX for Media Thumbnail and Media Bulk Upload's multiform page 
 ; http://drupal.org/node/2166623
@@ -358,11 +351,8 @@ projects[media_youtube][version] = "2.x-dev"
 projects[media_youtube][type] = "module"
 projects[media_youtube][subdir] = "contrib"
 projects[media_youtube][download][type] = "git"
-projects[media_youtube][download][revision] = "ca46aba"
+projects[media_youtube][download][revision] = "fb6f652"
 projects[media_youtube][download][branch] = "7.x-2.x"
-; media_access() is deceprated and will be removed
-; http://drupal.org/node/1823376
-projects[media_youtube][patch][1823376] = "http://drupal.org/files/issues/provide-access-wrapper-1823376-6.patch"
 
 projects[multiform][version] = "1.0"
 projects[multiform][type] = "module"
@@ -452,7 +442,7 @@ libraries[backbone][download][type] = "get"
 libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.1.0.zip"
 
 libraries[ckeditor][download][type] = "get"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor/CKEditor/CKEditor%204.3.1/ckeditor_4.3.1_standard.zip"
+libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor%20for%20Drupal/edit/ckeditor_4.3.2_edit.zip"
 
 libraries[colorbox][download][type] = "get"
 libraries[colorbox][download][url] = "https://github.com/jackmoore/colorbox/archive/master.zip"
