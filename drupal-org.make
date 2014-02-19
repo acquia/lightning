@@ -327,6 +327,10 @@ projects[file_entity_link][version] = "1.0-alpha3"
 projects[file_entity_link][type] = "module"
 projects[file_entity_link][subdir] = "contrib"
 
+projects[focal_point][version] = "1.0-alpha1"
+projects[focal_point][type] = "module"
+projects[focal_point][subdir] = "contrib"
+
 projects[iib][version] = "1.x-dev"
 projects[iib][type] = "module"
 projects[iib][subdir] = "contrib"
