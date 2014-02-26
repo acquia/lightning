@@ -30,9 +30,12 @@ projects[diff][version] = "3.2"
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 
-projects[entity][version] = "1.3"
+projects[entity][version] = "1.x-dev"
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
+projects[entity][download][type] = "git"
+projects[entity][download][revision] = "d9baed7"
+projects[entity][download][branch] = "7.x-1.x"
 
 projects[features][version] = "2.x-dev"
 projects[features][type] = "module"
