@@ -229,10 +229,6 @@ projects[picture][download][type] = "git"
 projects[picture][download][revision] = "3d9fe6c"
 projects[picture][download][branch] = "7.x-1.x"
 
-projects[respondjs][version] = "1.1"
-projects[respondjs][type] = "module"
-projects[respondjs][subdir] = "contrib"
-
 projects[simple_gmap][version] = "1.2"
 projects[simple_gmap][type] = "module"
 projects[simple_gmap][subdir] = "contrib"
@@ -475,9 +471,6 @@ libraries[plupload][download][url] = "https://github.com/moxiecode/plupload/arch
 ; Remove plupload library examples folder for Drupal distribution
 ; http://drupal.org/node/1903850
 libraries[plupload][patch][1903850] = "http://drupal.org/files/issues/plupload-1_5_8-rm_examples-1903850-16.patch"
-
-libraries[respondjs][download][type] = "get"
-libraries[respondjs][download][url] = "https://github.com/scottjehl/Respond/tarball/master"
 
 libraries[underscore][download][type] = "get"
 libraries[underscore][download][url] = "https://github.com/jashkenas/underscore/archive/1.5.2.zip"
