@@ -30,9 +30,15 @@ projects[diff][version] = "3.2"
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 
-projects[ember_support][version] = "1.0-alpha0"
+projects[ember_support][version] = "1.x-dev"
 projects[ember_support][type] = "module"
 projects[ember_support][subdir] = "contrib"
+projects[ember_support][download][type] = "git"
+projects[ember_support][download][branch] = "7.x-1.x"
+
+projects[escape_admin][version] = "1.0"
+projects[escape_admin][type] = "module"
+projects[escape_admin][subdir] = "contrib"
 
 projects[entity][version] = "1.x-dev"
 projects[entity][type] = "module"
@@ -355,14 +361,14 @@ projects[media][version] = "2.x-dev"
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
-projects[media][download][revision] = "6e9c99b"
+projects[media][download][revision] = "7fdafec"
 projects[media][download][branch] = "7.x-2.x"
 ; Improve UX for Media Thumbnail and Media Bulk Upload's multiform page 
 ; http://drupal.org/node/2166623
 projects[media][patch][2166623] = "http://drupal.org/files/issues/media_bulk_upload-improve-multiform-2166623-2.patch"
 ; Default file entities are not exportable by features
 ; http://drupal.org/node/2104193
-projects[media][patch][2104193] = "http://drupal.org/files/issues/media_remove_file_display_alter-2104193-23.patch"
+projects[media][patch][2104193] = "http://drupal.org/files/issues/media_remove_file_display_alter-2104193-62.patch"
 
 projects[media_youtube][version] = "2.x-dev"
 projects[media_youtube][type] = "module"
