@@ -210,7 +210,7 @@ projects[panels][download][revision] = "8059bda"
 projects[panels][download][branch] = "7.x-3.x"
 ; Add classes to Add Content links in Panels modal
 ; http://drupal.org/node/2209799
-projects[panels][patch][2209799] = "http://drupal.org/files/issues/panels-add-content-link-subtype-class-0.patch"
+projects[panels][patch][2209799] = "http://drupal.org/files/issues/panels-add-content-link-subtype-class-2209799-2.patch"
 
 projects[panopoly_magic][version] = "1.x-dev"
 projects[panopoly_magic][type] = "module"
