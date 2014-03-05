@@ -30,6 +30,10 @@ projects[diff][version] = "3.2"
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 
+projects[ember_support][version] = "1.0-alpha0"
+projects[ember_support][type] = "module"
+projects[ember_support][subdir] = "contrib"
+
 projects[entity][version] = "1.x-dev"
 projects[entity][type] = "module"
 projects[entity][subdir] = "contrib"
