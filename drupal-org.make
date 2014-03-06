@@ -42,9 +42,9 @@ projects[escape_admin][subdir] = "contrib"
 projects[escape_admin][download][type] = "git"
 projects[escape_admin][download][revision] = "32a1e62"
 projects[escape_admin][download][branch] = "7.x-1.x"
-; Hide "Back to site" button in Navbar for non-admin pages
-; http://drupal.org/node/2211689
-projects[escape_admin][patch][2211689] = "http://drupal.org/files/issues/escape_admin-hide-back-to-site-non-admin-paths-0.patch"
+; Cleanup Escape Admin to be better than D8 counterpart
+; http://drupal.org/node/2212369
+projects[escape_admin][patch][2212369] = "http://drupal.org/files/issues/files/issues/escape_admin-cleanuo-use-sessions-0.patch"
 
 projects[entity][version] = "1.x-dev"
 projects[entity][type] = "module"
