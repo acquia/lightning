@@ -36,9 +36,15 @@ projects[ember_support][subdir] = "contrib"
 projects[ember_support][download][type] = "git"
 projects[ember_support][download][branch] = "7.x-1.x"
 
-projects[escape_admin][version] = "1.0"
+projects[escape_admin][version] = "1.x-dev"
 projects[escape_admin][type] = "module"
 projects[escape_admin][subdir] = "contrib"
+projects[escape_admin][download][type] = "git"
+projects[escape_admin][download][revision] = "32a1e62"
+projects[escape_admin][download][branch] = "7.x-1.x"
+; Hide "Back to site" button in Navbar for non-admin pages
+; http://drupal.org/node/2211689
+projects[escape_admin][patch][2211689] = "http://drupal.org/files/issues/escape_admin-hide-back-to-site-non-admin-paths-0.patch"
 
 projects[entity][version] = "1.x-dev"
 projects[entity][type] = "module"
