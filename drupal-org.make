@@ -30,11 +30,9 @@ projects[diff][version] = "3.2"
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 
-projects[ember_support][version] = "1.x-dev"
+projects[ember_support][version] = "1.0-alpha1"
 projects[ember_support][type] = "module"
 projects[ember_support][subdir] = "contrib"
-projects[ember_support][download][type] = "git"
-projects[ember_support][download][branch] = "7.x-1.x"
 
 projects[escape_admin][version] = "1.x-dev"
 projects[escape_admin][type] = "module"
