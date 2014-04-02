@@ -318,13 +318,9 @@ projects[edit][subdir] = "contrib"
 projects[edit][download][type] = "git"
 projects[edit][download][revision] = "cf62974"
 projects[edit][download][branch] = "7.x-1.x"
-; Backport of Edit button for navbar
-; http://drupal.org/node/1994256
-projects[edit][patch][1994256] = "http://drupal.org/files/issues/edit-navbar-button-1994256-22.patch"
-; Edit Module fails for "psudeo" fields provided via Relationship or Appended
-; Global Text in Views
-; http://drupal.org/node/2015295
-projects[edit][patch][2015295] = "http://drupal.org/files/edit-views-psuedo-fields-2015295-6.patch"
+; Special version of Edit module used for demos
+; http://drupal.org/node/2224885
+projects[edit][patch][2224885] = "http://drupal.org/files/issues/edit_demo-framework-2224885-1.patch"
 
 projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
