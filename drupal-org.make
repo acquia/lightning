@@ -374,6 +374,13 @@ projects[media_youtube][download][type] = "git"
 projects[media_youtube][download][revision] = "fb6f652"
 projects[media_youtube][download][branch] = "7.x-2.x"
 
+projects[media_preview_slider][version] = "1.x-dev"
+projects[media_preview_slider][type] = "module"
+projects[media_preview_slider][subdir] = "contrib"
+projects[media_preview_slider][download][type] = "git"
+projects[media_preview_slider][download][branch] = "7.x-1.x"
+projects[media_preview_slider][download][url] = "http://git.drupal.org/sandbox/Brian14/2222597.git"
+
 projects[multiform][version] = "1.0"
 projects[multiform][type] = "module"
 projects[multiform][subdir] = "contrib"
