@@ -297,9 +297,6 @@ projects[ckeditor][download][branch] = "7.x-1.x"
 ; CKEditor accomodate latest Media changes
 ; http://drupal.org/node/2159403
 projects[ckeditor][patch][2159403] = "http://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-53.patch"
-; External plugin declarations are redundant.
-; http://drupal.org/node/2158741
-projects[ckeditor][patch][2158741] = "http://drupal.org/files/issues/ckeditor-remove-external-plugin-declarations-8-alt.patch"
 
 projects[collections][version] = "1.x-dev"
 projects[collections][type] = "module"
