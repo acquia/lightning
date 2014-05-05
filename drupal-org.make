@@ -292,7 +292,7 @@ projects[ckeditor][version] = "1.x-dev"
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
 projects[ckeditor][download][type] = "git"
-projects[ckeditor][download][revision] = "bfa0909"
+projects[ckeditor][download][revision] = "7fedb6f"
 projects[ckeditor][download][branch] = "7.x-1.x"
 ; CKEditor accomodate latest Media changes
 ; http://drupal.org/node/2159403
