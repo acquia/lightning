@@ -296,9 +296,9 @@ projects[ckeditor][download][revision] = "bfa0909"
 projects[ckeditor][download][branch] = "7.x-1.x"
 ; CKEditor accomodate latest Media changes
 ; http://drupal.org/node/2159403
-projects[ckeditor][patch][1504696] = "http://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-2159403-20_0.patch"
+projects[ckeditor][patch][2159403] = "http://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-53.patch"
 ; External plugin declarations are redundant.
-; http://drupal.org/comment/8284591
+; http://drupal.org/node/2158741
 projects[ckeditor][patch][2158741] = "http://drupal.org/files/issues/ckeditor-remove-external-plugin-declarations-8-alt.patch"
 
 projects[collections][version] = "1.x-dev"
@@ -358,7 +358,7 @@ projects[media][version] = "2.x-dev"
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
-projects[media][download][revision] = "9583d89"
+projects[media][download][revision] = "e8f9228"
 projects[media][download][branch] = "7.x-2.x"
 ; Improve UX for Media Thumbnail and Media Bulk Upload's multiform page 
 ; http://drupal.org/node/2166623
@@ -371,7 +371,7 @@ projects[media_youtube][version] = "2.x-dev"
 projects[media_youtube][type] = "module"
 projects[media_youtube][subdir] = "contrib"
 projects[media_youtube][download][type] = "git"
-projects[media_youtube][download][revision] = "fb6f652"
+projects[media_youtube][download][revision] = "187283f"
 projects[media_youtube][download][branch] = "7.x-2.x"
 
 projects[media_preview_slider][version] = "1.x-dev"
