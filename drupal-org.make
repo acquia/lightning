@@ -313,11 +313,11 @@ projects[edit][version] = "1.x-dev"
 projects[edit][type] = "module"
 projects[edit][subdir] = "contrib"
 projects[edit][download][type] = "git"
-projects[edit][download][revision] = "cf62974"
+projects[edit][download][revision] = "2648a9e"
 projects[edit][download][branch] = "7.x-1.x"
-; Special version of Edit module used for demos
-; http://drupal.org/node/2224885
-projects[edit][patch][2224885] = "http://drupal.org/files/issues/edit_demo-framework-2224885-1.patch"
+; Panelizer support (use Panels' render pipeline...)
+; http://drupal.org/node/1889798
+projects[edit][patch][1889798] = "http://drupal.org/files/issues/edit_panelizer-1889798-22.patch"
 
 projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
