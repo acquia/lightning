@@ -89,9 +89,12 @@ projects[pm_existing_pages][version] = "1.4"
 projects[pm_existing_pages][type] = "module"
 projects[pm_existing_pages][subdir] = "contrib"
 
-projects[responsive_preview][version] = "1.0"
+projects[responsive_preview][version] = "1.x-dev"
 projects[responsive_preview][type] = "module"
 projects[responsive_preview][subdir] = "contrib"
+projects[responsive_preview][download][type] = "git"
+projects[responsive_preview][download][revision] = "0b68679"
+projects[responsive_preview][download][branch] = "7.x-1.x"
 
 projects[role_export][version] = "1.0"
 projects[role_export][type] = "module"
@@ -323,11 +326,8 @@ projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
 projects[file_entity][download][type] = "git"
-projects[file_entity][download][revision] = "3661d8b"
+projects[file_entity][download][revision] = "13fa2b0"
 projects[file_entity][download][branch] = "7.x-2.x"
-; Default file entities are not exportable by features (Sibling Issue)
-; http://drupal.org/node/2192391
-projects[file_entity][patch][2192391] = "http://drupal.org/files/issues/file_entity_remove_file_display-2192391-01.patch"
 
 projects[file_entity_link][version] = "1.0-alpha3"
 projects[file_entity_link][type] = "module"
@@ -461,9 +461,6 @@ projects[migrate_extras][subdir] = "contrib"
 ; Libraries
 libraries[backbone][download][type] = "get"
 libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/archive/1.1.0.zip"
-
-libraries[ckeditor][download][type] = "get"
-libraries[ckeditor][download][url] = "http://download.cksource.com/CKEditor%20for%20Drupal/edit/ckeditor_4.3.2_edit.zip"
 
 libraries[colorbox][download][type] = "get"
 libraries[colorbox][download][url] = "https://github.com/jackmoore/colorbox/archive/master.zip"
