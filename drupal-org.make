@@ -280,7 +280,7 @@ projects[views_load_more][version] = "1.1"
 projects[views_load_more][type] = "module"
 projects[views_load_more][subdir] = "contrib"
 
-projects[webform][version] = "4.0-beta1"
+projects[webform][version] = "4.0-rc3"
 projects[webform][type] = "module"
 projects[webform][subdir] = "contrib"
 
@@ -439,7 +439,7 @@ projects[workbench_moderation_notes][download][type] = "git"
 projects[workbench_moderation_notes][download][revision] = "8e5e6f4"
 projects[workbench_moderation_notes][download][branch] = "7.x-1.x"
 
-projects[xautoload][version] = "2.7"
+projects[xautoload][version] = "4.5"
 projects[xautoload][type] = "module"
 projects[xautoload][subdir] = "contrib"
 
