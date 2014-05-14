@@ -320,7 +320,7 @@ projects[edit][download][revision] = "2648a9e"
 projects[edit][download][branch] = "7.x-1.x"
 ; Panelizer support (use Panels' render pipeline...)
 ; http://drupal.org/node/1889798
-projects[edit][patch][1889798] = "http://drupal.org/files/issues/edit_panelizer-1889798-22.patch"
+projects[edit][patch][1889798] = "http://drupal.org/files/issues/edit_panelizer-1889798-30.patch"
 
 projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
