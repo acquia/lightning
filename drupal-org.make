@@ -397,6 +397,10 @@ projects[plupload][version] = "1.3"
 projects[plupload][type] = "module"
 projects[plupload][subdir] = "contrib"
 
+projects[quickedit_tab][version] = "1.x-dev"
+projects[quickedit_tab][type] = "module"
+projects[quickedit_tab][subdir] = "contrib"
+
 projects[sps][version] = "1.x-dev"
 projects[sps][type] = "module"
 projects[sps][subdir] = "contrib"
