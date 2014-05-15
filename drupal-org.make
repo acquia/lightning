@@ -401,6 +401,17 @@ projects[quickedit_tab][version] = "1.x-dev"
 projects[quickedit_tab][type] = "module"
 projects[quickedit_tab][subdir] = "contrib"
 
+projects[revision_scheduler][version] = "1.x-dev"
+projects[revision_scheduler][type] = "module"
+projects[revision_scheduler][subdir] = "contrib"
+projects[revision_scheduler][download][type] = "git"
+projects[revision_scheduler][download][revision] = "ab04410"
+projects[revision_scheduler][download][branch] = "7.x-1.x"
+; Notice: Undefined index: path in 
+; revision_scheduler_preprocess_menu_local_action()
+; http://drupal.org/node/1564348
+projects[revision_scheduler][patch][1564348] = "http://drupal.org/files/fixes-notice-issue-1564348.patch"
+
 projects[sps][version] = "1.x-dev"
 projects[sps][type] = "module"
 projects[sps][subdir] = "contrib"
@@ -413,17 +424,6 @@ projects[sps][patch][1733490] = "http://drupal.org/files/sps-css-cleanup-1733490
 ; SPS should not prevent other modules that use Entity API from working
 ; http://drupal.org/node/1934130
 projects[sps][patch][1934130] = "http://drupal.org/files/sps-1934130-11.patch"
-
-projects[revision_scheduler][version] = "1.x-dev"
-projects[revision_scheduler][type] = "module"
-projects[revision_scheduler][subdir] = "contrib"
-projects[revision_scheduler][download][type] = "git"
-projects[revision_scheduler][download][revision] = "ab04410"
-projects[revision_scheduler][download][branch] = "7.x-1.x"
-; Notice: Undefined index: path in 
-; revision_scheduler_preprocess_menu_local_action()
-; http://drupal.org/node/1564348
-projects[revision_scheduler][patch][1564348] = "http://drupal.org/files/fixes-notice-issue-1564348.patch"
 
 projects[workbench][version] = "1.x-dev"
 projects[workbench][type] = "module"
