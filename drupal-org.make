@@ -18,9 +18,6 @@ projects[ctools][patch][955070] = "http://drupal.org/files/ctools-fix_token_proc
 projects[demonstratie_panels][version] = "1.x-dev"
 projects[demonstratie_panels][type] = "module"
 projects[demonstratie_panels][subdir] = "contrib"
-projects[demonstratie_panels][download][type] = "git"
-projects[demonstratie_panels][download][revision] = "9566cbd"
-projects[demonstratie_panels][download][branch] = "7.x-1.x"
 
 projects[devel][version] = "1.3"
 projects[devel][type] = "module"
