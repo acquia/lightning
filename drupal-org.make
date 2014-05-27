@@ -323,7 +323,7 @@ projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
 projects[file_entity][download][type] = "git"
-projects[file_entity][download][revision] = "45ddbb7"
+projects[file_entity][download][revision] = "6a15501"
 projects[file_entity][download][branch] = "7.x-2.x"
 
 projects[file_entity_link][version] = "1.0-alpha3"
@@ -352,7 +352,7 @@ projects[media][version] = "2.x-dev"
 projects[media][type] = "module"
 projects[media][subdir] = "contrib"
 projects[media][download][type] = "git"
-projects[media][download][revision] = "9b170ab"
+projects[media][download][revision] = "06936c0"
 projects[media][download][branch] = "7.x-2.x"
 ; Improve UX for Media Thumbnail and Media Bulk Upload's multiform page 
 ; http://drupal.org/node/2166623
@@ -394,7 +394,7 @@ projects[plupload][version] = "1.3"
 projects[plupload][type] = "module"
 projects[plupload][subdir] = "contrib"
 
-projects[quickedit_tab][version] = "1.x-dev"
+projects[quickedit_tab][version] = "1.0"
 projects[quickedit_tab][type] = "module"
 projects[quickedit_tab][subdir] = "contrib"
 
