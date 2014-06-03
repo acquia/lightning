@@ -309,16 +309,6 @@ projects[date][version] = "2.7"
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
 
-projects[edit][version] = "1.x-dev"
-projects[edit][type] = "module"
-projects[edit][subdir] = "contrib"
-projects[edit][download][type] = "git"
-projects[edit][download][revision] = "2648a9e"
-projects[edit][download][branch] = "7.x-1.x"
-; Panelizer support (use Panels' render pipeline...)
-; http://drupal.org/node/1889798
-projects[edit][patch][1889798] = "http://drupal.org/files/issues/edit_panelizer-1889798-30.patch"
-
 projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
@@ -393,6 +383,13 @@ projects[nra_workbench_moderation][patch][2163175] = "http://drupal.org/files/is
 projects[plupload][version] = "1.3"
 projects[plupload][type] = "module"
 projects[plupload][subdir] = "contrib"
+
+projects[quickedit][version] = "1.x-dev"
+projects[quickedit][type] = "module"
+projects[quickedit][subdir] = "contrib"
+projects[quickedit][download][type] = "git"
+projects[quickedit][download][revision] = "2e64ede"
+projects[quickedit][download][branch] = "7.x-1.x"
 
 projects[quickedit_tab][version] = "1.x-dev"
 projects[quickedit_tab][type] = "module"
