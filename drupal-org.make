@@ -493,3 +493,10 @@ projects[ember][type] = "theme"
 projects[ember][subdir] = "contrib"
 projects[ember][download][type] = "git"
 projects[ember][download][branch] = "7.x-2.x"
+
+projects[zurb_foundation][version] = "5.x-dev"
+projects[zurb_foundation][type] = "theme"
+projects[zurb_foundation][subdir] = "contrib"
+projects[zurb_foundation][download][type] = "git"
+projects[zurb_foundation][download][branch] = "7.x-5.x"
+
