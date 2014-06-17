@@ -156,7 +156,7 @@ projects[entityreference_prepopulate][version] = "1.4"
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
 
-projects[fape][version] = "7.x-1.2"
+projects[fape][version] = "1.2"
 projects[fape][type] = "module"
 projects[fape][subdir] = "contrib"
 
