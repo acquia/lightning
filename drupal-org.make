@@ -9,11 +9,8 @@ projects[ctools][version] = "1.x-dev"
 projects[ctools][type] = "module"
 projects[ctools][subdir] = "contrib"
 projects[ctools][download][type] = "git"
-projects[ctools][download][revision] = "6e034cb"
+projects[ctools][download][revision] = "9097155"
 projects[ctools][download][branch] = "7.x-1.x"
-; Update the token replacements in ctools to work against a fully rendered page.
-; http://drupal.org/node/955070#comment-7751253
-projects[ctools][patch][955070] = "http://drupal.org/files/ctools-fix_token_processing-955070-5.patch"
 
 projects[demonstratie_panels][version] = "1.x-dev"
 projects[demonstratie_panels][type] = "module"
