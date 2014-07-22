@@ -175,14 +175,6 @@ projects[gridbuilder][version] = "1.0-alpha2"
 projects[gridbuilder][type] = "module"
 projects[gridbuilder][subdir] = "contrib"
 
-projects[json2][version] = "1.1"
-projects[json2][type] = "module"
-projects[json2][subdir] = "contrib"
-
-projects[layout][version] = "1.0-alpha6"
-projects[layout][type] = "module"
-projects[layout][subdir] = "contrib"
-
 projects[magic_beans][version] = "1.x-dev"
 projects[magic_beans][type] = "module"
 projects[magic_beans][subdir] = "contrib"
@@ -446,9 +438,6 @@ libraries[backbone][download][url] = "https://github.com/jashkenas/backbone/arch
 
 libraries[colorbox][download][type] = "get"
 libraries[colorbox][download][url] = "https://github.com/jackmoore/colorbox/archive/master.zip"
-
-libraries[json2][download][type] = "get"
-libraries[json2][download][url] = "https://github.com/douglascrockford/JSON-js/blob/master/json2.js"
 
 libraries[jsonpath][download][type] = "get"
 libraries[jsonpath][download][url] = "https://jsonpath.googlecode.com/files/jsonpath-0.8.1.php"
