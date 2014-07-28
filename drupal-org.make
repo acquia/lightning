@@ -408,9 +408,15 @@ projects[workbench][download][type] = "git"
 projects[workbench][download][revision] = "6856e4a"
 projects[workbench][download][branch] = "7.x-1.x"
 
-projects[workbench_moderation][version] = "1.3"
+projects[workbench_moderation][version] = "1.x-dev"
 projects[workbench_moderation][type] = "module"
 projects[workbench_moderation][subdir] = "contrib"
+projects[workbench_moderation][download][type] = "git"
+projects[workbench_moderation][download][revision] = "b38ac3e"
+projects[workbench_moderation][download][branch] = "7.x-1.x"
+; Panelizer is incompatible with moderation
+; http://www.drupal.org/node/1402860
+projects[workbench_moderation][patch][1402860] = "http://drupal.org/files/issues/workbench_moderation-panelizer_revisions-1402860-44_0.patch"
 
 projects[workbench_moderation_notes][version] = "1.x-dev"
 projects[workbench_moderation_notes][type] = "module"
