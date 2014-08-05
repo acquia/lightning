@@ -87,8 +87,11 @@ projects[responsive_preview][version] = "1.x-dev"
 projects[responsive_preview][type] = "module"
 projects[responsive_preview][subdir] = "contrib"
 projects[responsive_preview][download][type] = "git"
-projects[responsive_preview][download][revision] = "0b68679"
+projects[responsive_preview][download][revision] = "d741779"
 projects[responsive_preview][download][branch] = "7.x-1.x"
+; Before js processing, the phone image incorrectly positioned.
+; https://drupal.org/node/2276789
+projects[responsive_preview][patch][2276789] = "http://drupal.org/files/issues/responsive_preview-phone_image_incorrectly_positioned-2276789-2.patch"
 
 projects[role_export][version] = "1.0"
 projects[role_export][type] = "module"
@@ -312,7 +315,7 @@ projects[iib][download][revision] = "17a55eb"
 projects[iib][download][branch] = "7.x-1.x"
 ; Integrate IIB with the Navbar module and improve Toolbar integration
 ; http://drupal.org/node/1737036
-projects[iib][patch][1737036] = "http://drupal.org/files/issues/iib-navbar-toolbar-1737036-46.patch"
+projects[iib][patch][1737036] = "http://drupal.org/files/issues/iib-navbar-toolbar-1737036-47.patch"
 
 projects[linkit][version] = "3.1"
 projects[linkit][type] = "module"
