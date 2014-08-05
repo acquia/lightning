@@ -303,6 +303,10 @@ projects[file_entity_link][version] = "1.0-alpha3"
 projects[file_entity_link][type] = "module"
 projects[file_entity_link][subdir] = "contrib"
 
+projects[file_image_formatters][version] = "1.1"
+projects[file_image_formatters][type] = "module"
+projects[file_image_formatters][subdir] = "contrib"
+
 projects[focal_point][version] = "1.0-alpha1"
 projects[focal_point][type] = "module"
 projects[focal_point][subdir] = "contrib"
