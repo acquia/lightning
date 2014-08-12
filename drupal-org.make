@@ -1,7 +1,7 @@
 api = 2
 core = 7.x
 
-projects[breakpoints][version] = "1.1"
+projects[breakpoints][version] = "1.3"
 projects[breakpoints][type] = "module"
 projects[breakpoints][subdir] = "contrib"
 
@@ -49,7 +49,7 @@ projects[features][download][type] = "git"
 projects[features][download][revision] = "78772d5"
 projects[features][download][branch] = "7.x-2.x"
 
-projects[jquery_update][version] = "2.3"
+projects[jquery_update][version] = "2.4"
 projects[jquery_update][type] = "module"
 projects[jquery_update][subdir] = "contrib"
 
@@ -100,7 +100,7 @@ projects[role_export][version] = "1.0"
 projects[role_export][type] = "module"
 projects[role_export][subdir] = "contrib"
 
-projects[rules][version] = "2.6"
+projects[rules][version] = "2.7"
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"
 
@@ -155,7 +155,7 @@ projects[entityreference][download][type] = "git"
 projects[entityreference][download][revision] = "dc4196b"
 projects[entityreference][download][branch] = "7.x-1.x"
 
-projects[entityreference_prepopulate][version] = "1.4"
+projects[entityreference_prepopulate][version] = "1.5"
 projects[entityreference_prepopulate][type] = "module"
 projects[entityreference_prepopulate][subdir] = "contrib"
 
@@ -188,7 +188,7 @@ projects[magic_beans][download][type] = "git"
 projects[magic_beans][download][revision] = "6c5d19e"
 projects[magic_beans][download][branch] = "7.x-1.x"
 
-projects[metatag][version] = "1.0-beta5"
+projects[metatag][version] = "1.0-rc2"
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
 
@@ -255,7 +255,7 @@ projects[views_field_view][download][type] = "git"
 projects[views_field_view][download][revision] = "db93080"
 projects[views_field_view][download][branch] = "7.x-1.x"
 
-projects[views_bulk_operations][version] = "3.1"
+projects[views_bulk_operations][version] = "3.2"
 projects[views_bulk_operations][type] = "module"
 projects[views_bulk_operations][subdir] = "contrib"
 
@@ -263,7 +263,7 @@ projects[views_load_more][version] = "1.1"
 projects[views_load_more][type] = "module"
 projects[views_load_more][subdir] = "contrib"
 
-projects[webform][version] = "4.0-rc3"
+projects[webform][version] = "4.0-rc5"
 projects[webform][type] = "module"
 projects[webform][subdir] = "contrib"
 
@@ -291,7 +291,7 @@ projects[collections][download][type] = "git"
 projects[collections][download][revision] = "b4e8212"
 projects[collections][download][branch] = "7.x-1.x"
 
-projects[date][version] = "2.7"
+projects[date][version] = "2.8"
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
 
@@ -310,7 +310,7 @@ projects[file_image_formatters][version] = "1.1"
 projects[file_image_formatters][type] = "module"
 projects[file_image_formatters][subdir] = "contrib"
 
-projects[focal_point][version] = "1.0-alpha1"
+projects[focal_point][version] = "1.0-beta1"
 projects[focal_point][type] = "module"
 projects[focal_point][subdir] = "contrib"
 
@@ -352,7 +352,7 @@ projects[media_preview_slider][download][type] = "git"
 projects[media_preview_slider][download][branch] = "7.x-1.x"
 projects[media_preview_slider][download][url] = "http://git.drupal.org/sandbox/Brian14/2222597.git"
 
-projects[multiform][version] = "1.0"
+projects[multiform][version] = "1.1"
 projects[multiform][type] = "module"
 projects[multiform][subdir] = "contrib"
 
@@ -370,7 +370,7 @@ projects[nra_workbench_moderation][download][branch] = "7.x-1.x"
 ; http://drupal.org/node/2163175
 projects[nra_workbench_moderation][patch][2163175] = "http://drupal.org/files/issues/nra_workbench_moderation-no-published-state-2163175-1.patch"
 
-projects[plupload][version] = "1.3"
+projects[plupload][version] = "1.6"
 projects[plupload][type] = "module"
 projects[plupload][subdir] = "contrib"
 
