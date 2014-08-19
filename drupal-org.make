@@ -280,11 +280,11 @@ projects[ckeditor][version] = "1.x-dev"
 projects[ckeditor][type] = "module"
 projects[ckeditor][subdir] = "contrib"
 projects[ckeditor][download][type] = "git"
-projects[ckeditor][download][revision] = "7fedb6f"
+projects[ckeditor][download][revision] = "b0de255"
 projects[ckeditor][download][branch] = "7.x-1.x"
 ; CKEditor accomodate latest Media changes
 ; http://drupal.org/node/2159403
-projects[ckeditor][patch][2159403] = "http://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-53.patch"
+projects[ckeditor][patch][2159403] = "http://drupal.org/files/issues/ckeditor-accomodate-latest-media-changes-81.patch"
 
 projects[collections][version] = "1.x-dev"
 projects[collections][type] = "module"
