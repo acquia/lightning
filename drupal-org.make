@@ -383,14 +383,8 @@ projects[quickedit][version] = "1.x-dev"
 projects[quickedit][type] = "module"
 projects[quickedit][subdir] = "contrib"
 projects[quickedit][download][type] = "git"
-projects[quickedit][download][revision] = "2e64ede"
+projects[quickedit][download][revision] = "feb4c9d"
 projects[quickedit][download][branch] = "7.x-1.x"
-; Missing View mode argument when Quick Editing for fields in Panelizer
-; http://drupal.org/node/2280233
-projects[quickedit][patch][2280233] = "http://drupal.org/files/issues/quickedit-panelizer-2280233-3_0.patch"
-; Delete field models fails due to incorrect defintion
-; https://drupal.org/node/2309841
-projects[quickedit][patch][2309841] = "http://drupal.org/files/issues/quickedit-collections-field-models-0.patch"
 
 projects[quickedit_tab][version] = "1.x-dev"
 projects[quickedit_tab][type] = "module"
