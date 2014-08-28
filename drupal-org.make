@@ -48,7 +48,7 @@ projects[features][version] = "2.x-dev"
 projects[features][type] = "module"
 projects[features][subdir] = "contrib"
 projects[features][download][type] = "git"
-projects[features][download][revision] = "78772d5"
+projects[features][download][revision] = "9f4ecc7"
 projects[features][download][branch] = "7.x-2.x"
 
 projects[jquery_update][version] = "2.4"
