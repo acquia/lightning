@@ -324,7 +324,7 @@ projects[iib][download][revision] = "17a55eb"
 projects[iib][download][branch] = "7.x-1.x"
 ; Integrate IIB with the Navbar module and improve Toolbar integration
 ; http://drupal.org/node/1737036
-projects[iib][patch][1737036] = "http://drupal.org/files/issues/iib-navbar-toolbar-1737036-47.patch"
+projects[iib][patch][1737036] = "http://drupal.org/files/issues/iib-navbar-toolbar-1737036-50.patch"
 
 projects[linkit][version] = "3.1"
 projects[linkit][type] = "module"
