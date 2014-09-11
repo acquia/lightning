@@ -383,11 +383,8 @@ projects[quickedit][version] = "1.x-dev"
 projects[quickedit][type] = "module"
 projects[quickedit][subdir] = "contrib"
 projects[quickedit][download][type] = "git"
-projects[quickedit][download][revision] = "262bec8"
+projects[quickedit][download][revision] = "28a314d"
 projects[quickedit][download][branch] = "7.x-1.x"
-; Incorrect call to field_access()
-; http://drupal.org/node/2326627
-projects[quickedit][patch][2326627] = "http://drupal.org/files/issues/quickedit-2326627-3-incorrect-call-to-field-access.patch"
 
 projects[quickedit_tab][version] = "1.x-dev"
 projects[quickedit_tab][type] = "module"
