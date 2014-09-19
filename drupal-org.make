@@ -435,7 +435,7 @@ projects[workbench_moderation_buttons][download][revision] = "5ee2a30"
 projects[workbench_moderation_buttons][download][branch] = "7.x-1.x"
 ; Remove Current State button, change Save button to show current state value
 ; http://drupal.org/node/2338863
-projects[workbench_moderation_buttons][patch][2338863] = "http://drupal.org/files/issues/workbench-moderation-buttons-2338863-2327553-1.patch"
+projects[workbench_moderation_buttons][patch][2338863] = "http://drupal.org/files/issues/workbench-moderation-buttons-2338863-4.patch"
 
 projects[workbench_moderation_notes][version] = "1.x-dev"
 projects[workbench_moderation_notes][type] = "module"
