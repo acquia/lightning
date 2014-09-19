@@ -427,6 +427,16 @@ projects[workbench_moderation][download][branch] = "7.x-1.x"
 ; http://www.drupal.org/node/1402860
 projects[workbench_moderation][patch][1402860] = "http://drupal.org/files/issues/workbench_moderation-panelizer_revisions-1402860-44_0.patch"
 
+projects[workbench_moderation_buttons][version] = "1.x-dev"
+projects[workbench_moderation_buttons][type] = "module"
+projects[workbench_moderation_buttons][subdir] = "contrib"
+projects[workbench_moderation_buttons][download][type] = "git"
+projects[workbench_moderation_buttons][download][revision] = "5ee2a30"
+projects[workbench_moderation_buttons][download][branch] = "7.x-1.x"
+; Remove Current State button, change Save button to show current state value
+; http://drupal.org/node/2338863
+projects[workbench_moderation_buttons][patch][2338863] = "http://drupal.org/files/issues/workbench-moderation-buttons-2338863-2327553-1.patch"
+
 projects[workbench_moderation_notes][version] = "1.x-dev"
 projects[workbench_moderation_notes][type] = "module"
 projects[workbench_moderation_notes][subdir] = "contrib"
