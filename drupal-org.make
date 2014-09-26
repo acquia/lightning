@@ -197,11 +197,8 @@ projects[metatag][subdir] = "contrib"
 projects[panelizer][version] = "3.x-dev"
 projects[panelizer][subdir] = "contrib"
 projects[panelizer][download][type] = "git"
-projects[panelizer][download][revision] = "cea2a1a"
+projects[panelizer][download][revision] = "c8fb90b"
 projects[panelizer][download][branch] = "7.x-3.x"
-; Option to update entity displays when default choice changed
-; http://drupal.org/node/2332997
-projects[panelizer][patch][2332997] = "http://drupal.org/files/issues/panelizer-n2332997-7.patch"
 
 projects[panels][version] = "3.x-dev"
 projects[panels][type] = "module"
