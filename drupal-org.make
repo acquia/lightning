@@ -164,6 +164,16 @@ projects[fieldable_panels_panes][download][type] = "git"
 projects[fieldable_panels_panes][download][revision] = "b9628af"
 projects[fieldable_panels_panes][download][branch] = "7.x-1.x"
 
+projects[form_builder][version] = "1.x-dev"
+projects[form_builder][type] = "module"
+projects[form_builder][subdir] = "contrib"
+projects[form_builder][download][type] = "git"
+projects[form_builder][download][revision] = "3d904df"
+projects[form_builder][download][branch] = "7.x-1.x"
+; The form editing part rolls to hide, can not be edited
+; http://drupal.org/node/1987332
+projects[form_builder][patch][1987332] = "http://drupal.org/files/rolls-past-editing-form-1987332-4.patch"
+
 projects[magic_beans][version] = "1.x-dev"
 projects[magic_beans][type] = "module"
 projects[magic_beans][subdir] = "contrib"
@@ -249,6 +259,14 @@ projects[views_load_more][subdir] = "contrib"
 projects[webform][version] = "4.0-rc5"
 projects[webform][type] = "module"
 projects[webform][subdir] = "contrib"
+
+projects[webform_alt_ui][version] = "1.x-dev"
+projects[webform_alt_ui][type] = "module"
+projects[webform_alt_ui][subdir] = "contrib"
+projects[webform_alt_ui][download][type] = "git"
+projects[webform_alt_ui][download][revision] = "0cfa6d0"
+projects[webform_alt_ui][download][branch] = "master"
+projects[webform_alt_ui][patch][2022773] = "http://drupal.org/files/webform_alt_ui-form_builder_compat-2022773-3.patch"
 
 ; Curate
 projects[curate][version] = "1.x-dev"
