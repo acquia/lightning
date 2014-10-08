@@ -59,10 +59,6 @@ projects[libraries][version] = "2.2"
 projects[libraries][type] = "module"
 projects[libraries][subdir] = "contrib"
 
-projects[link][version] = "1.2"
-projects[link][type] = "module"
-projects[link][subdir] = "contrib"
-
 projects[module_filter][version] = "2.0-alpha2"
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
@@ -150,17 +146,6 @@ projects[context_admin][download][type] = "git"
 projects[context_admin][download][revision] = "15a8390"
 projects[context_admin][download][branch] = "7.x-1.x"
 
-projects[entityreference][version] = "1.x-dev"
-projects[entityreference][type] = "module"
-projects[entityreference][subdir] = "contrib"
-projects[entityreference][download][type] = "git"
-projects[entityreference][download][revision] = "dc4196b"
-projects[entityreference][download][branch] = "7.x-1.x"
-
-projects[entityreference_prepopulate][version] = "1.5"
-projects[entityreference_prepopulate][type] = "module"
-projects[entityreference_prepopulate][subdir] = "contrib"
-
 projects[fape][version] = "1.2"
 projects[fape][type] = "module"
 projects[fape][subdir] = "contrib"
@@ -178,10 +163,6 @@ projects[fieldable_panels_panes][subdir] = "contrib"
 projects[fieldable_panels_panes][download][type] = "git"
 projects[fieldable_panels_panes][download][revision] = "b9628af"
 projects[fieldable_panels_panes][download][branch] = "7.x-1.x"
-
-projects[gridbuilder][version] = "1.0-alpha2"
-projects[gridbuilder][type] = "module"
-projects[gridbuilder][subdir] = "contrib"
 
 projects[magic_beans][version] = "1.x-dev"
 projects[magic_beans][type] = "module"
@@ -297,6 +278,17 @@ projects[date][version] = "2.8"
 projects[date][type] = "module"
 projects[date][subdir] = "contrib"
 
+projects[entityreference][version] = "1.x-dev"
+projects[entityreference][type] = "module"
+projects[entityreference][subdir] = "contrib"
+projects[entityreference][download][type] = "git"
+projects[entityreference][download][revision] = "dc4196b"
+projects[entityreference][download][branch] = "7.x-1.x"
+
+projects[entityreference_prepopulate][version] = "1.5"
+projects[entityreference_prepopulate][type] = "module"
+projects[entityreference_prepopulate][subdir] = "contrib"
+
 projects[file_entity][version] = "2.x-dev"
 projects[file_entity][type] = "module"
 projects[file_entity][subdir] = "contrib"
@@ -325,6 +317,10 @@ projects[iib][download][branch] = "7.x-1.x"
 ; Integrate IIB with the Navbar module and improve Toolbar integration
 ; http://drupal.org/node/1737036
 projects[iib][patch][1737036] = "http://drupal.org/files/issues/iib-navbar-toolbar-1737036-51.patch"
+
+projects[link][version] = "1.2"
+projects[link][type] = "module"
+projects[link][subdir] = "contrib"
 
 projects[linkit][version] = "3.1"
 projects[linkit][type] = "module"
