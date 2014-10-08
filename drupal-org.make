@@ -185,6 +185,13 @@ projects[metatag][version] = "1.0-rc2"
 projects[metatag][type] = "module"
 projects[metatag][subdir] = "contrib"
 
+projects[options_element][version] = "1.x-dev"
+projects[options_element][type] = "module"
+projects[options_element][subdir] = "contrib"
+projects[options_element][download][type] = "git"
+projects[options_element][download][revision] = "33fa8a7"
+projects[options_element][download][branch] = "git"
+
 projects[panelizer][version] = "3.x-dev"
 projects[panelizer][subdir] = "contrib"
 projects[panelizer][download][type] = "git"
@@ -229,6 +236,16 @@ projects[simple_gmap][subdir] = "contrib"
 projects[taxonomy_entity_index][version] = "1.0-beta7"
 projects[taxonomy_entity_index][type] = "module"
 projects[taxonomy_entity_index][subdir] = "contrib"
+
+projects[ux_elements][version] = "1.x-dev"
+projects[ux_elements][type] = "module"
+projects[ux_elements][subdir] = "contrib"
+projects[ux_elements][download][type] = "git"
+projects[ux_elements][download][revision] = "87cdc5d"
+projects[ux_elements][download][branch] = "master"
+; PHP Fatal error: Cannot redeclare form_process_horizontal_tabs()
+; http://drupal.org/node/1224568
+projects[ux_elements][patch][1224568] = "http://drupal.org/files/issues/1224568-ux_elements_redeclare.patch"
 
 projects[views][version] = "3.x-dev"
 projects[views][type] = "module"
