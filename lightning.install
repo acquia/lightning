@@ -14,11 +14,11 @@
  */
 function lightning_install() {
   // Enable default theme.
-  theme_enable(array('demonstratie_core'));
-  variable_set('theme_default', 'demonstratie_core');
+  theme_enable(array('zurb_foundation'));
+  variable_set('theme_default', 'zurb_foundation');
 
   // Enable some standard blocks.
-  $default_theme = variable_get('theme_default', 'demonstratie_core');
+  $default_theme = variable_get('theme_default', 'zurb_foundation');
   $admin_theme = 'ember';
   $blocks = array(
     array(
