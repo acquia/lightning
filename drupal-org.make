@@ -68,7 +68,6 @@ projects[migrate_extras][version] = "2.5"
 projects[migrate_extras][type] = "module"
 projects[migrate_extras][subdir] = "contrib"
 
-
 ; Themes
 projects[demonstratie][version] = "1.x-dev"
 projects[demonstratie][type] = "theme"
