@@ -30,13 +30,6 @@ projects[diff][version] = "3.2"
 projects[diff][type] = "module"
 projects[diff][subdir] = "contrib"
 
-projects[escape_admin][version] = "1.x-dev"
-projects[escape_admin][type] = "module"
-projects[escape_admin][subdir] = "contrib"
-projects[escape_admin][download][type] = "git"
-projects[escape_admin][download][revision] = "ecd3f58"
-projects[escape_admin][download][branch] = "7.x-1.x"
-
 projects[module_filter][version] = "2.0-alpha2"
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
