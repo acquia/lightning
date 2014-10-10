@@ -1,0 +1,33 @@
+language: php
+php:
+  - 5.4
+  - hhvm
+
+mysql:
+  database: drupal
+  username: root
+  encoding: utf8
+
+before_script:
+ - printf 'sendmail_path = /bin/true' > xx-php.ini
+ - phpenv config-add xx-php.ini
+ - pyrus channel-discover pear.drush.org
+ - pyrus install drush/drush
+ - phpenv rehash
+ - drush make --concurrency=5 build-lightning.make lightning
+ - cd lightning
+ - drush si lightning --db-url=mysql://root:@localhost/drupal --yes
+ - drush cc all
+ - drush runserver --server=builtin 8080 &
+ - sleep 4
+
+script: drush pmi curate assemble --uri=http://127.0.0.1:8080
+
+matrix:
+  allow_failures:
+    - php: hhvm
+
+notifications:
+  slack:
+    rooms:
+      - acquia:KkTwsMNJshR8hV4VvPbZs2J8#lightning
