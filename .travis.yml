@@ -18,11 +18,14 @@ before_script:
  - drush make --concurrency=5 build-lightning.make lightning
  - cd lightning
  - drush si lightning --db-url=mysql://root:@localhost/drupal --yes
+ - echo '$base_url = "http://127.0.0.1:8080";' >> sites/default/settings.php
+ - drush en composer_manager -y
+ - drush en behatrunner -y
  - drush cc all
  - drush runserver --server=builtin 8080 &
  - sleep 4
 
-script: drush pmi curate assemble --uri=http://127.0.0.1:8080
+script: drush brun --uri=http://127.0.0.1:8080 --verbose
 
 matrix:
   allow_failures:
