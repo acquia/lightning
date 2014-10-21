@@ -1,7 +1,7 @@
 language: php
+
 php:
   - 5.4
-  - hhvm
 
 mysql:
   database: drupal
@@ -9,9 +9,7 @@ mysql:
   encoding: utf8
 
 before_script:
- - if [[ "$TRAVIS_PHP_VERSION" != hhvm* ]]; then echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini; fi
- # hhvm ignores sendmail_path and hhvm.mail.sendmail_path settings presently...
- - if [[ "$TRAVIS_PHP_VERSION" == hhvm* ]]; then sudo ln -s /bin/true /usr/local/bin/sendmail; fi
+ - echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
  - composer global require drush/drush:6.*
  - export PATH="$HOME/.composer/vendor/bin:$PATH"
  - phpenv rehash
@@ -19,17 +17,11 @@ before_script:
  - cd lightning
  - drush si lightning --db-url=mysql://root:@localhost/drupal --yes
  - echo '$base_url = "http://127.0.0.1:8080";' >> sites/default/settings.php
- - drush en composer_manager -y
- - drush en behatrunner -y
  - drush cc all
  - drush runserver --server=builtin 8080 &
  - sleep 4
 
-script: drush brun --uri=http://127.0.0.1:8080 --verbose
-
-matrix:
-  allow_failures:
-    - php: hhvm
+script: drush status --uri=http://127.0.0.1:8080 --verbose
 
 notifications:
   slack:
