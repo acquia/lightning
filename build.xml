@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Lightning" default="build">
+
+  <property file="build.properties" description="Local build configuration overrides"/>
+
+  <property name="builddir" value="${basedir}/build"/>
+  <property name="composer" value="${builddir}/composer.phar"/>
+
+  <target name="build" depends="install" description="Run drush make and drush site-install"/>
+
+  <target name="clean" description="Clean build artifacts">
+    <delete dir="${builddir}"/>
+  </target>
+
+  <target name="clean-docroot">
+    <chmod dir="${basedir}/docroot/sites/${sites.subdir}" perm="755"/>
+    <delete dir="${basedir}/docroot"/>
+  </target>
+
+  <target name="clean-vendor">
+    <delete dir="${basedir}/composer.lock"/>
+    <delete dir="${basedir}/vendor"/>
+  </target>
+
+  <target name="clean-src" depends="clean-docroot,clean-vendor" description="Clean source code"/>
+
+  <target name="clean-all" depends="clean,clean-src" description="Clean build artifacts and source code"/>
+
+  <target name="php-check">
+    <condition property="php" value="php">
+      <not>
+        <isset property="${php}"/>
+      </not>
+    </condition>
+  </target>
+
+  <target name="rsync-check">
+    <condition property="rsync" value="rsync">
+      <not>
+        <isset property="${rsync}"/>
+      </not>
+    </condition>
+  </target>
+
+  <target name="prepare">
+    <mkdir dir="${builddir}" />
+    <mkdir dir="${builddir}/logs" />
+  </target>
+
+  <target name="composer-check" depends="prepare">
+    <available file="${composer}" property="composer.present"/>
+  </target>
+
+  <target name="composer-download" depends="composer-check" unless="composer.present">
+    <property name="composer.noselfupdate" value="true"/>
+    <get src="https://getcomposer.org/composer.phar" dest="${composer}"/>
+  </target>
+
+  <target name="composer-selfupdate" depends="php-check,composer-download" unless="composer.noselfupdate">
+    <exec executable="${php}">
+      <arg value="${composer}"/>
+      <arg value="self-update"/>
+      <arg value="--quiet"/>
+    </exec>
+  </target>
+
+  <target name="composer" depends="composer-selfupdate" unless="composer.noupdate" description="Run composer update">
+    <exec executable="${php}">
+      <arg value="${composer}"/>
+      <arg value="update"/>
+    </exec>
+  </target>
+
+  <target name="drush-check" depends="prepare">
+    <condition property="drush.present">
+      <or>
+        <available file="${builddir}/vendor/bin/drush"/>
+        <isset property="${drush}"/>
+      </or>
+    </condition>
+    <!-- Set Composer path to build directory if executable is not set -->
+    <condition property="drush" value="${builddir}/vendor/bin/drush">
+      <not>
+        <isset property="${drush}"/>
+      </not>
+    </condition>
+  </target>
+
+  <target name="drush-download" depends="composer-selfupdate,drush-check" unless="drush.present">
+    <exec executable="${php}">
+      <arg value="${composer}"/>
+      <arg value="--working-dir=${builddir}"/>
+      <arg value="require"/>
+      <arg value="drush/drush:~6.0"/>
+    </exec>
+  </target>
+
+  <target name="drush-make" depends="rsync-check,drush-download" unless="drush.nomake" description="Run drush make">
+    <delete dir="${builddir}/docroot"/>
+    <!-- Run drush make into ./build/drupal -->
+    <exec executable="${drush}">
+      <env key="DRUSH_PHP" value="${php}"/>
+      <arg value="make"/>
+      <arg value="--nocolor"/>
+      <arg value="${basedir}/${drush.makefile}"/>
+      <arg value="${builddir}/docroot"/>
+    </exec>
+    <!-- Rsync the build into ./docroot -->
+    <exec executable="${rsync}">
+      <arg value="-aqc"/>
+      <arg value="--delete"/>
+      <arg value="--exclude=sites/*/settings*.php"/>
+      <arg value="--exclude=sites/*/files"/>
+      <arg value="${builddir}/docroot/"/>
+      <arg value="${basedir}/docroot"/>
+    </exec>
+  </target>
+
+  <target name="install" depends="drush-make" unless="drush.noinstall" description="Run drush site-install">
+    <exec executable="${drush}" dir="${basedir}/docroot">
+      <env key="DRUSH_PHP" value="${php}"/>
+      <arg value="site-install"/>
+      <arg value="-y"/>
+      <arg value="--nocolor"/>
+      <arg value="--db-url=${db.url}"/>
+      <arg value="--site-name=${site.name}"/>
+      <arg value="--site-mail=${site.mail}"/>
+      <arg value="--account-name=${account.name}"/>
+      <arg value="--account-pass=${account.pass}"/>
+      <arg value="--account-mail=${account.mail}"/>
+      <arg value="--sites-subdir=${sites.subdir}"/>
+      <arg value="${drupal.profile}"/>
+    </exec>
+  </target>
+
+  <target name="uninstall" depends="drush-check" description="Run drush sql-drop">
+    <exec executable="${drush}" dir="${basedir}/docroot">
+      <env key="DRUSH_PHP" value="${php}"/>
+      <arg value="sql-drop"/>
+      <arg value="-y"/>
+      <arg value="--nocolor"/>
+      <arg value="--db-url=${db.url}"/>
+    </exec>
+  </target>
+
+</project>

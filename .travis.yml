@@ -1,29 +1,66 @@
 language: php
 
+cache:
+  bundler: true
+  apt: true
+  directories:
+    - vendor
+
 php:
-  - 5.4
+  - 5.5
 
 mysql:
   database: drupal
   username: root
   encoding: utf8
 
-before_script:
- - echo 'sendmail_path = /bin/true' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini;
- - composer global require drush/drush:6.*
- - export PATH="$HOME/.composer/vendor/bin:$PATH"
- - phpenv rehash
- - drush make --concurrency=5 build-lightning.make lightning
- - cd lightning
- - drush si lightning --db-url=mysql://root:@localhost/drupal --yes
- - echo '$base_url = "http://127.0.0.1:8080";' >> sites/default/settings.php
- - drush cc all
- - drush runserver --server=builtin 8080 &
- - sleep 4
+install:
+  # Run environmental updates
+  - sudo apt-get update > /dev/null
+  # Update composer
+  - composer selfupdate
+  # Configure MySQL for Drupal
+  - mysql -e 'SET GLOBAL wait_timeout = 5400;'
+  - mysql -e "SHOW VARIABLES LIKE 'wait_timeout'"
+  # Configure php.ini settings
+  - echo 'max_execution_time = 120' >> drupal.php.ini;
+  - echo 'sendmail_path = /bin/true' >> drupal.php.ini;
+  - phpenv config-add drupal.php.ini
+  - phpenv rehash
+  # Install Drush 6
+  - composer global require drush/drush:6.*
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  # Build out the profile
+  - drush make --concurrency=5 build-lightning.make lightning
+  - cd lightning
 
-script: drush status --uri=http://127.0.0.1:8080 --verbose
+before_script:
+  # Install Drupal
+  - drush si lightning --db-url=mysql://root:@localhost/drupal -yvd
+  # Disable dblog to reduce MySQL load
+  - drush dis dblog -yvd
+  # Enable Composer Manager and BehatRunner
+  - drush en composer_manager -yvd
+  - drush en behatrunner -l http://127.0.0.1:8080 -yvd
+  # Clear caches
+  - drush cc all
+  # Run the lightweight http server
+  - drush runserver --server=builtin 8080 &
+  - sleep 4
+
+script:
+  # Run any module provided Behat tests
+  - drush brun -l http://127.0.0.1:8080 -vd
 
 notifications:
   slack:
     rooms:
       - acquia:KkTwsMNJshR8hV4VvPbZs2J8#lightning
+
+matrix:
+  fast_finish: true
+
+after_failure:
+  - sudo chmod -Rv 777 build/logs/*
+  - bundle install --without development
+  - travis-artifacts upload --path build/logs --target-path artifacts/$TRAVIS_BUILD_ID/$TRAVIS_JOB_ID
