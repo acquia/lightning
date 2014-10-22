@@ -40,12 +40,12 @@ install:
 
 before_script:
   # Install Drupal
-  - drush si lightning --db-url=mysql://root:@localhost/drupal -yvd
+  - drush si lightning --db-url=mysql://root:@localhost/drupal -y
   # Disable dblog to reduce MySQL load
   - drush dis dblog -yvd
   # Enable Composer Manager and BehatRunner
-  - drush en composer_manager -yvd
-  - drush en behatrunner -l http://127.0.0.1:8080 -yvd
+  - drush en composer_manager -y
+  - drush en behatrunner -l http://127.0.0.1:8080 -y
   # Clear caches
   - drush cc all
   # Run the lightweight http server
@@ -54,7 +54,7 @@ before_script:
 
 script:
   # Run any module provided Behat tests
-  - drush brun -l http://127.0.0.1:8080 -vd
+  - drush brun -l http://127.0.0.1:8080 -v
 
 notifications:
   slack:
