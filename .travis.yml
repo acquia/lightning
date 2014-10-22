@@ -30,9 +30,13 @@ install:
   # Install Drush 6
   - composer global require drush/drush:6.*
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  # Build the profile
-  - drush make --concurrency=5 build-lightning.make lightning
-  - cd lightning
+  # Build the profile, preserving current state
+  - cd ..
+  - drush make --concurrency=5 lightning/drupal-org-core.make drupal -y
+  - mkdir drupal/profiles/lightning
+  - cp -R lightning/* drupal/profiles/lightning/.
+  - cd drupal
+  - drush make --concurrency=5 profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning -y
 
 before_script:
   # Install Drupal
