@@ -30,6 +30,8 @@ install:
   # Install Drush 6
   - composer global require drush/drush:6.*
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  # Download Drush Composer extension
+  - git clone --branch 8.x-1.x http://git.drupal.org/project/composer.git ~/.drush/composer
   # Build the profile, preserving current state
   - cd ..
   - drush make --concurrency=5 lightning/drupal-org-core.make drupal -y
@@ -47,7 +49,7 @@ before_script:
   - drush vset composer_manager_autobuild_file 0
   - drush vset composer_manager_autobuild_packages 0
   - drush en composer_manager -y
-  - drush composer-manager install -y --prefer-source
+  - drush composer-manager install -n --prefer-source
   # Enable BehatRunner, dependencies loading from cache
   - drush vset composer_manager_autobuild_file 1
   - drush vset composer_manager_autobuild_packages 1
