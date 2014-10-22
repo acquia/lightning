@@ -47,7 +47,7 @@ before_script:
   - drush vset composer_manager_autobuild_file 0
   - drush vset composer_manager_autobuild_packages 0
   - drush en composer_manager -y
-  - drush composer-manager install -n --prefer-source
+  - drush composer-manager install -y --prefer-source
   # Enable BehatRunner, dependencies loading from cache
   - drush vset composer_manager_autobuild_file 1
   - drush vset composer_manager_autobuild_packages 1
