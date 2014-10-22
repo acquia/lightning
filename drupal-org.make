@@ -34,10 +34,6 @@ projects[module_filter][version] = "2.0-alpha2"
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
 
-projects[pathauto][version] = "1.2"
-projects[pathauto][type] = "module"
-projects[pathauto][subdir] = "contrib"
-
 projects[rules][version] = "2.7"
 projects[rules][type] = "module"
 projects[rules][subdir] = "contrib"

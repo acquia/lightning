@@ -30,7 +30,7 @@ install:
   # Install Drush 6
   - composer global require drush/drush:6.*
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  # Build out the profile
+  # Build the profile
   - drush make --concurrency=5 build-lightning.make lightning
   - cd lightning
 
