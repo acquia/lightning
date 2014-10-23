@@ -34,14 +34,6 @@ projects[module_filter][version] = "2.0-alpha2"
 projects[module_filter][type] = "module"
 projects[module_filter][subdir] = "contrib"
 
-projects[rules][version] = "2.7"
-projects[rules][type] = "module"
-projects[rules][subdir] = "contrib"
-
-projects[token][version] = "1.5"
-projects[token][type] = "module"
-projects[token][subdir] = "contrib"
-
 ; Import
 projects[import][version] = "1.x-dev"
 projects[import][type] = "module"
