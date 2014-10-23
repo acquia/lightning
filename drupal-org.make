@@ -21,19 +21,6 @@ projects[curate][subdir] = "contrib"
 projects[curate][download][type] = "git"
 projects[curate][download][branch] = "7.x-1.x"
 
-; Profile Modules
-projects[devel][version] = "1.3"
-projects[devel][type] = "module"
-projects[devel][subdir] = "contrib"
-
-projects[diff][version] = "3.2"
-projects[diff][type] = "module"
-projects[diff][subdir] = "contrib"
-
-projects[module_filter][version] = "2.0-alpha2"
-projects[module_filter][type] = "module"
-projects[module_filter][subdir] = "contrib"
-
 ; Import
 projects[import][version] = "1.x-dev"
 projects[import][type] = "module"
@@ -48,6 +35,15 @@ projects[migrate][subdir] = "contrib"
 projects[migrate_extras][version] = "2.5"
 projects[migrate_extras][type] = "module"
 projects[migrate_extras][subdir] = "contrib"
+
+; Optional Modules
+projects[devel][version] = "1.3"
+projects[devel][type] = "module"
+projects[devel][subdir] = "contrib"
+
+projects[diff][version] = "3.2"
+projects[diff][type] = "module"
+projects[diff][subdir] = "contrib"
 
 ; Themes
 projects[ember][version] = "2.x-dev"
