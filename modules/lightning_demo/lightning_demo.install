@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * Installation routines for lightning_demo.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function lightning_demo_install() {
+  // Array describing the panes and html content used on the homepage.
+  $fpp = array( 
+    'hero' => array(
+      'title' => 'Homepage hero',
+      'bundle' => 'raw_html',
+      'category' => 'Reusable HTML',
+      'reusable' => true,
+      'uuid' => '488b6c63-7818-4759-bbc0-66fab0d0552c',
+      'field_raw_html' => array (
+        'und' => array (
+          0 => array (
+            'value' => '<div class="hero-bg"><div class="hero-logo"></div></div>',
+            'format' => 'raw_html',
+          ),
+        ),
+      ),
+    ),
+    'welcome' => array(
+      'title' => 'Welcome',
+      'bundle' => 'raw_html',
+      'category' => 'Reusable HTML',
+      'reusable' => true,
+      'uuid' => 'fa7f808f-8821-4661-8742-962d94673b90',
+      'field_raw_html' => array (
+        'und' => array (
+          0 => array (
+            'value' => '<h1>Welcome to a faster, feature-rich <span class="blue">Drupal</span>.</h1>Acquia curates and maintains this "best of Drupal" distributon to accelerate your development and site launches. Providing a lightweight framework for quickly building robust working solutions in Drupal, Lightning is the recipe for delivering on your customer\'s visions.',
+            'format' => 'raw_html',
+          ),
+        ),
+      ),
+    ),
+   'learn-more' => array(
+      'title' => 'Learn more about Lightning:',
+      'bundle' => 'raw_html',
+      'category' => 'Reusable HTML',
+      'reusable' => true,
+      'uuid' => 'aa75e692-20a4-4ffd-b8b0-f6b8544e76d7',
+      'field_raw_html' => array (
+        'und' => array (
+          0 => array (
+            'value' => '<a class="feature editors" href="lightning#editors">Content Editor Focused</a><a class="feature workflows" href="lightning#workflows">Editorial Workflows</a><a class="feature layout" href="lightning#layout">Flexible Layout Control</a><a class="feature preview" href="lightning#preview">Advanced Content Preview</a>',
+            'format' => 'raw_html',
+          ),
+        ),
+      ),
+    ),
+  );
+  // Create the Fieldable Panels Panes for the homepage.
+  foreach ($fpp as $pane) {
+    $fpp_entity = fieldable_panels_panes_create($pane);
+    fieldable_panels_panes_save($fpp_entity);
+  }
+  // Set the Lightning site homepage.
+  variable_set('site_frontpage', 'home');
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function lightning_demo_uninstall() {
+  // List of demo Fieldable Panels Panes UUIDs.
+  $fpp_uuids = array(
+    '488b6c63-7818-4759-bbc0-66fab0d0552c',
+    'fa7f808f-8821-4661-8742-962d94673b90',
+    'aa75e692-20a4-4ffd-b8b0-f6b8544e76d7',
+  );
+  // Remove the demo FPP based on UUID.
+  foreach ($fpp_uuids as $uuid) {
+    db_delete('fieldable_panels_panes')->condition('uuid', $uuid)->execute();
+  }
+  // Return the default homepage.
+  variable_set('site_frontpage', 'node');
+}
+
