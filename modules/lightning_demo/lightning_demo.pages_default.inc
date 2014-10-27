@@ -136,7 +136,15 @@ function lightning_demo_default_page_manager_pages() {
     );
     $pane->cache = array();
     $pane->style = array(
-      'settings' => NULL,
+      'settings' => array(
+        'title' => 'hidden',
+        'hero' => 'default',
+        'layouts' => 'default',
+        'styles' => 'default',
+        'color_schemes' => 'default',
+        'button_styles' => 'default',
+      ),
+      'style' => 'demonstratie_panels_styles',
     );
     $pane->css = array();
     $pane->extras = array();
