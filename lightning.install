@@ -199,5 +199,14 @@ function lightning_install_finished(&$install_state) {
     drupal_get_messages($message, TRUE);
   }
 
+  // Finish installation.
+  if (!drupal_is_cli()) {
+    // Redirect UI-based install to the site homepage.
+    drupal_goto(variable_get('site_frontpage', ''));
+  }
+  else {
+    // Display a success message for Drush-based install.
+    drupal_set_message("Lightning Installed");
+  }
 }
 
