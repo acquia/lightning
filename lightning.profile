@@ -30,7 +30,7 @@ function lightning_form_install_configure_form_alter(&$form, $form_state) {
     '#type' => 'checkboxes',
     '#title' => 'Enable Extensions',
     '#description' => 'Optionally install extra features',
-    '#options' => array('lightning_demo' => 'Demo Content', 'devel' => 'Developer Tools'),
+    '#options' => array('lightning_demo' => 'Demo Content', 'lightning_devel' => 'Developer Tools'),
     '#weight' => 0,
   );
 
