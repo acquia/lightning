@@ -5,3 +5,16 @@
  */
 
 include_once 'lightning_demo.features.inc';
+
+/**
+ * Implements hook_behat_info().
+ */
+function lightning_demo_behat_info() {
+  $info = array(
+    'paths' => array(
+      'features' => 'features',
+    ),
+  );
+  return $info;
+}
+
