@@ -36,15 +36,6 @@ projects[migrate_extras][version] = "2.5"
 projects[migrate_extras][type] = "module"
 projects[migrate_extras][subdir] = "contrib"
 
-; Optional Modules
-projects[devel][version] = "1.3"
-projects[devel][type] = "module"
-projects[devel][subdir] = "contrib"
-
-projects[diff][version] = "3.2"
-projects[diff][type] = "module"
-projects[diff][subdir] = "contrib"
-
 ; Themes
 projects[ember][version] = "2.x-dev"
 projects[ember][type] = "theme"
