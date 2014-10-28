@@ -61,6 +61,8 @@ before_script:
   - sleep 4
 
 script:
+  # Enable the Lightning Demo
+  - drush en lightning_demo -y
   # Run any module provided Behat tests
   - drush brun -l http://127.0.0.1:8080 -v
 
