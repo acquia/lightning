@@ -9,7 +9,7 @@
  * Implements hook_install().
  */
 function lightning_demo_install() {
-  // Array describing the panes and html content used on the homepage.
+  // Describe the panes and html content used on the homepage.
   $fpp = array( 
     'hero' => array(
       'title' => 'Homepage hero',
@@ -57,13 +57,18 @@ function lightning_demo_install() {
       ),
     ),
   );
+
   // Create the Fieldable Panels Panes for the homepage.
   foreach ($fpp as $pane) {
     $fpp_entity = fieldable_panels_panes_create($pane);
     fieldable_panels_panes_save($fpp_entity);
   }
+
   // Set the Lightning site homepage.
   variable_set('site_frontpage', 'home');
+
+  // Rebuild menu links.
+  variable_set('menu_rebuild_needed', TRUE);
 }
 
 /**
@@ -76,10 +81,12 @@ function lightning_demo_uninstall() {
     'fa7f808f-8821-4661-8742-962d94673b90',
     'aa75e692-20a4-4ffd-b8b0-f6b8544e76d7',
   );
+
   // Remove the demo FPP based on UUID.
   foreach ($fpp_uuids as $uuid) {
     db_delete('fieldable_panels_panes')->condition('uuid', $uuid)->execute();
   }
+
   // Return the default homepage.
   variable_set('site_frontpage', 'node');
 }
