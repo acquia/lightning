@@ -1,0 +1,31 @@
+//form override fix from the framework 
+form {margin:0;}
+
+//fix broke IPE from styles in the framework 
+.panels-ipe-linkbar li {
+	list-style:none;
+	display:inline;
+}
+
+// hide non useful buttons on the hompeage when logged in 
+#navbar-administration.navbar-oriented .navbar-bar {z-index:10000}
+.panels-ipe .button-group {
+	position:fixed;
+	z-index:15;
+	bottom:0;
+
+	li {
+		float:none;
+		a.button.small {
+			padding:10px; margin-bottom:2px; min-width:110px;
+		}
+	}
+}
+
+//hero
+
+.hero-bg {
+	background:url(../images/hero-bg.png) repeat;
+	min-height:445px;
+
+}
