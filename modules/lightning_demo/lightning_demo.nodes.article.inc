@@ -18,7 +18,6 @@ class LightningDemoNodesArticle extends ImportBaseNodes {
 
     // Path
     $this->addFieldMapping('path', 'path');
-    $this->addFieldMapping('pathauto', 'pathauto')->defaultValue(0);
    
     // Workbench
     $this->addFieldMapping('workbench_moderation_state_new', 'workbench_moderation_state_new')->defaultValue('published');
