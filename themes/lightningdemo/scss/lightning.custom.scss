@@ -1,3 +1,8 @@
+
+body, h1, h2, h3, h4, h5, h6 p li {
+	font-family:$body-font-family;
+}
+
 //form override fix from the framework 
 form {margin:0;}
 
@@ -5,6 +10,13 @@ form {margin:0;}
 .panels-ipe-linkbar li {
 	list-style:none;
 	display:inline;
+}
+
+a {
+	color:$primary-color;
+	&:hover {
+		color:$primary-alt;
+	}
 }
 
 // hide non useful buttons on the hompeage when logged in 
@@ -26,6 +38,61 @@ form {margin:0;}
 
 .hero-bg {
 	background:url(../images/hero-bg.png) repeat;
-	min-height:445px;
+	height:445px;
+	@media #{$small-only} {height:385px;}
+	position:relative;
+	width:100%;
 
+	.banner-content-wrap {
+
+		padding-top:50px;
+
+		@media #{$small-only} {padding-top:10px;}
+
+		.hero-logo {
+			color:$primary-color;
+			font-size:4.4em;
+			@media #{$small-only} {font-size:3.3em;}
+			font-family:$body-font-family;
+			font-weight:bold;
+			margin:0 auto;
+			position:relative;
+			text-align: center;
+
+			&:before {
+				content:url(../images/lightning-logo.png);
+				position:relative;
+  				left:-10px;
+  				top:40px;
+  				@media #{$small-only} {
+  					top:10px
+  				}
+			}
+		}
+
+		.hero-ribbon {
+			background:url(../images/ribbin.png) no-repeat center center;
+			background-size: contain;
+			margin-top:2em;
+			text-align: center;
+			color:#fff;
+			line-height:4em;
+			width:100%;
+			font-size:1.3em;
+			@media #{$small-only} {font-size:.9em;}
+		}
+
+		.powered-by-acquia {
+			color:$secondary-color;
+			font-size:.8em;
+
+			span {display:none;}
+
+			&:after {
+				content: url(../images/acquia-logo.png);
+				position:relative;
+				top:10px;
+			}
+		}
+	}
 }
