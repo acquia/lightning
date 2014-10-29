@@ -18,3 +18,17 @@ function lightning_demo_behat_info() {
   return $info;
 }
 
+/**
+ * Implements hook_migrate_api().
+ */
+function lightning_demo_migrate_api() {
+  $api = array(
+    'api' => 2,
+    'migrations' => array(
+      'LightningDemoNodesArticle' => array('class_name' => 'LightningDemoNodesArticle'),
+    ),
+  );
+  return $api;
+}
+
+

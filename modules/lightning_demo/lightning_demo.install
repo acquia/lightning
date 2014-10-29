@@ -72,6 +72,30 @@ function lightning_demo_install() {
 }
 
 /**
+  * Implements hook_enable()
+  */
+function lightning_demo_enable() {
+  // Get list of modules implementing Migrate API.
+  migrate_get_module_apis();
+  // Set up migration.
+  $migration = Migration::getInstance('LightningDemoNodesArticle');
+  // Import nodes.
+  $migration->processImport();
+}
+
+/**
+ * Implements hook_disable().
+ */
+function lightning_demo_disable() {
+  // Get list of modules implementing Migrate API.
+  migrate_get_module_apis();
+  // Set up migration.
+  $migration = Migration::getInstance('LightningDemoNodesArticle');
+  // Roll back nodes.
+  $migration->processRollback();
+}
+
+/**
  * Implements hook_uninstall().
  */
 function lightning_demo_uninstall() {
