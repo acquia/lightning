@@ -1,0 +1,34 @@
+// Non-modular or client styles for .l-header region.
+
+.top-bar {
+	background:$primary-color;
+	height:$topbar-height;
+	line-height:$topbar-height;
+	
+	section li:not(.has-form) a:not(.button) {
+		line-height:$topbar-height;
+		background:$primary-color;
+
+		&:hover {
+			background:$primary-alt;
+		}
+	}
+	.logo, .name {
+		display: table-cell;
+ 		text-align: center;
+  		vertical-align:middle;
+  		line-height:$topbar-height;
+	}
+
+	.title-area {
+		display:table;
+		margin:0 10px;
+		float:left;
+	}
+
+	.name h1 a {
+		font-size:1.2em;
+		line-height: $topbar-height;
+		padding: 0 5px;
+	}
+}
