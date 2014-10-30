@@ -94,6 +94,36 @@ function lightning_demo_default_page_manager_pages() {
     $display->content['new-df16443f-30be-497b-aa4c-4d5298cefc2b'] = $pane;
     $display->panels['primary_features'][0] = 'new-df16443f-30be-497b-aa4c-4d5298cefc2b';
     $pane = new stdClass();
+    $pane->pid = 'new-431ff984-2bd9-4678-bf11-ebfa61b70d3e';
+    $pane->panel = 'primary_supplements';
+    $pane->type = 'fieldable_panels_pane';
+    $fpid = db_select("fieldable_panels_panes", "id")->fields("id", array("fpid"))->condition("uuid", "2fcfb76d-b1bc-44f4-aae9-cc747c5c2310")->execute()->fetchField();
+    $pane->subtype = 'fpid:' . $fpid;
+    $pane->shown = TRUE;
+    $pane->access = array();
+    $pane->configuration = array(
+      'view_mode' => 'Full',
+    );
+    $pane->cache = array();
+    $pane->style = array(
+      'settings' => array(
+        'title' => 'hidden',
+        'hero' => 'default',
+        'layouts' => 'default',
+        'styles' => 'default',
+        'color_schemes' => 'default',
+        'button_styles' => 'default',
+      ),
+      'style' => 'demonstratie_panels_styles',
+    );
+    $pane->css = array();
+    $pane->extras = array();
+    $pane->position = 0;
+    $pane->locks = array();
+    $pane->uuid = '431ff984-2bd9-4678-bf11-ebfa61b70d3e';
+    $display->content['new-431ff984-2bd9-4678-bf11-ebfa61b70d3e'] = $pane;
+    $display->panels['primary_supplements'][0] = 'new-431ff984-2bd9-4678-bf11-ebfa61b70d3e';
+    $pane = new stdClass();
     $pane->pid = 'new-5055dd4c-61d6-47b2-a1d3-083196d011e2';
     $pane->panel = 'quaternary_features';
     $pane->type = 'fieldable_panels_pane';
