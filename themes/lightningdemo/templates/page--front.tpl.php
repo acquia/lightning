@@ -113,8 +113,8 @@
     <!--/.l-help -->
   <?php endif; ?>
 
-  <main role="main" class="row l-main">
-    <div class="<?php print $main_grid; ?> main columns">
+  <main role="main" class="l-main">
+    <div class="main">
       <?php if (!empty($page['highlighted'])): ?>
         <div class="highlight panel callout">
           <?php print render($page['highlighted']); ?>
