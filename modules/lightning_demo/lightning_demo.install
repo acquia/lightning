@@ -41,6 +41,21 @@ function lightning_demo_install() {
         ),
       ),
     ),
+    'tabs' => array(
+      'title' => 'Homepage Tabs',
+      'bundle' => 'raw_html',
+      'category' => 'Reusable HTML',
+      'reusable' => true,
+      'uuid' => '2fcfb76d-b1bc-44f4-aae9-cc747c5c2310',
+      'field_raw_html' => array (
+        'und' => array (
+          0 => array (
+            'value' => '<div class="lightning-tabs"><dl class="tabs row" data-tab><dd class="active columns large-4"><a href="#panel1">Lightning Fast</a></dd><dd class="columns large-4"><a href="#panel2">Feature Rich</a></dd><dd class="columns large-4"><a href="#panel3">Powered By Drupal</a></dd></dl><div class="tabs-content"><div class="content active" id="panel1"><p>This is the first panel of the basic tab example. This is the first panel of the basic tab example.</p></div><div class="content" id="panel2"><p>This is the second panel of the basic tab example. This is the second panel of the basic tab example.</p></div><div class="content" id="panel3"><p>This is the third panel of the basic tab example. This is the third panel of the basic tab example.</p></div></div></div>',
+            'format' => 'raw_html',
+          ),
+        ),
+      ),
+    ),
    'learn-more' => array(
       'title' => 'Learn more',
       'bundle' => 'raw_html',
@@ -103,6 +118,7 @@ function lightning_demo_uninstall() {
   $fpp_uuids = array(
     '488b6c63-7818-4759-bbc0-66fab0d0552c',
     'fa7f808f-8821-4661-8742-962d94673b90',
+    '2fcfb76d-b1bc-44f4-aae9-cc747c5c2310',
     'aa75e692-20a4-4ffd-b8b0-f6b8544e76d7',
   );
 
