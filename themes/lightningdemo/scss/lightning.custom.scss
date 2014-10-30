@@ -1,6 +1,9 @@
 
 body, h1, h2, h3, h4, h5, h6 p li {
 	font-family:$body-font-family;
+	color:$secondary-color;
+	font-weight:400;
+	font-style:normal;
 }
 
 //form override fix from the framework 
@@ -38,14 +41,15 @@ a {
 
 .hero-bg {
 	background:url(../images/hero-bg.png) repeat;
-	height:445px;
-	@media #{$small-only} {height:385px;}
+	height:rem-calc(445px);
+	@media #{$small-only} {height:rem-calc(385px);}
 	position:relative;
 	width:100%;
+	margin-bottom:rem-calc(30px);
 
 	.banner-content-wrap {
 
-		padding-top:50px;
+		padding-top:rem-calc(50px);
 
 		@media #{$small-only} {padding-top:10px;}
 
@@ -53,8 +57,7 @@ a {
 			color:$primary-color;
 			font-size:4.4em;
 			@media #{$small-only} {font-size:3.3em;}
-			font-family:$body-font-family;
-			font-weight:bold;
+			font-weight:700;
 			margin:0 auto;
 			position:relative;
 			text-align: center;
@@ -73,9 +76,9 @@ a {
 		.hero-ribbon {
 			background:url(../images/ribbon.png) no-repeat center center;
 			background-size: contain;
-			margin-top:1.5em;
+			margin-top:rem-calc(30px);
 			text-align: center;
-			color:#fff;
+			color:$dark-bg;
 			line-height:4em;
 			width:100%;
 			font-size:1.3em;
@@ -91,7 +94,7 @@ a {
 			&:after {
 				content: url(../images/acquia-logo.png);
 				position:relative;
-				top:10px;
+				top:rem-calc(10px);
 			}
 		}
 	}
