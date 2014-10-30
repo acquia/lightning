@@ -58,7 +58,7 @@ before_script:
   - drush cc all
   # Run the lightweight http server
   - drush runserver --server=builtin 8080 &
-  - sleep 4
+  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do sleep 0.2; done
 
 script:
   # Enable the Lightning Demo
