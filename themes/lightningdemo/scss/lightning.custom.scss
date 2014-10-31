@@ -1,3 +1,27 @@
+@include keyframes(bolt) {
+	 0%, 15%, 17%, 19%, 21%, 100% {
+	 background:#fff;
+	}
+	 16%, 18%, 20% {
+	 background:yellow;
+	}
+}
+
+@include keyframes(bounce) {
+	0%, 20%, 50%, 80%, 100% {
+    @include transform(translateY(-2));
+  }
+	40% {
+    @include transform(translateY(6px));
+  }
+	60% {
+    @include transform(translateY(3px));
+  }
+  	70% {
+  	@include transform(translateY(5px));
+  	}
+}
+
 h1, h2, h3, h4, h5, h6 {font-weight:200;}
 
 //form override fix from the framework 
@@ -8,21 +32,18 @@ form {margin:0;}
 	list-style:none;
 	display:inline;
 }
-
 a {
 	color:$primary-color;
 	&:hover {
 		color:$primary-alt;
 	}
 }
-
 // hide non useful buttons on the hompeage when logged in 
 #navbar-administration.navbar-oriented .navbar-bar {z-index:10000}
 .panels-ipe .button-group {
 	position:fixed;
 	z-index:15;
 	bottom:0;
-
 	li {
 		float:none;
 		a.button.small {
@@ -32,7 +53,6 @@ a {
 }
 
 //hero
-
 .hero-bg {
 	background:url(../images/hero-bg.png) repeat;
 	height:rem-calc(445px);
@@ -56,14 +76,39 @@ a {
 			position:relative;
 			text-align: center;
 
+			span {
+			
+			position:relative;
+			
 			&:before {
-				content:url(../images/lightning-logo.png);
+				content:url(../images/lightning-logo-alt.png);
 				position:relative;
   				left:-10px;
   				top:30px;
   				@media #{$small-only} {
-  					top:10px
+  					top:10px;
   				}
+			}
+
+			&:hover:after {
+				@include animation(bounce .5s infinite);
+				background:yellow;
+			}
+
+			&:after {
+					content:url(../images/bolt.png);
+						position:absolute;
+  						left:30px;
+  						top:0px;
+  						background:$dark-bg;
+                       @include animation(bolt 12s infinite);
+
+                        height:80px;
+
+  					@media #{$small-only} {
+  					top:-40px
+  					}
+				}
 			}
 		}
 
@@ -89,19 +134,16 @@ a {
 				content: url(../images/acquia-logo.png);
 				position:relative;
 				top:rem-calc(10px);
+
 			}
 		}
 	}
 }
-
 // intro text 
-
 .intro-text h1{
 	text-align:center;
 }
-
 //tabs 
-
 .lightning-tabs.row {
 
 	margin-top: rem-calc(20px);
@@ -109,11 +151,8 @@ a {
 	dl.tabs {
 		border-bottom:1px solid $primary-color;
 		padding-bottom:1px;
-		//margin-top:-2px;
-
 		dd {
 			&.active {
-
 				background:$primary-color;
 				&:after {
 					@media #{$large-up} {
@@ -121,64 +160,90 @@ a {
 					position:absolute;
 					bottom:-16px;
 					left:50%;
+					}
 				}
-				}
-
 				a {
 					background:$primary-color;
 					color:$dark-bg;
+					padding:rem-calc(16px);
 				}
 			}
-
 			a {
 				background:$dark-bg;
 				color:$secondary-color;
 				text-align:center;
 				font-size:rem-calc(20px);
-
 			}
 		}
 	}
 }
-
 //bottom lightning features
 .feature-links {
 
 	h2 {
 		font-size:1.5em;
+		margin-bottom:1em;
+		border-bottom:1px solid $primary-color;
 	}
-
 	li {
-
 		text-align: center;
+		padding:0;
+		padding-top:rem-calc(5px);
+
+		a {
+			font-size:rem-calc(30px);
+			color:$secondary-color;
+			font-weight:100;
+			display:block;
+
+				&:hover {
+					color:$primary-color;
+				}
+
+
+		&:hover:after {
+			content:url(../images/go-arrow.png);
+			position:absolute;
+			display: inline-block;
+			vertical-align: middle;
+			cursor: pointer;
+		}
+
+			&:before {
+			display: inline-block;
+  			height: 100%;
+  			vertical-align: middle;
+  			margin-right:rem-calc(15px);
+			}
+
+			@media #{$small-only} {
+				font-size:rem-calc(16px);
+			}
+		}
 
 		a.editors {
+
 			&:before {
 				content:url(../images/edit.png);
 			}
 		}
-
 		a.workflows {
 			&:before {
 				content:url(../images/flow.png);
 			}
 		}
-
 		a.preview {
 			&:before {
 				content:url(../images/preview.png);
 			}
 		}
-
 		a.layout {
 			&:before {
 				content:url(../images/layout.png);
 			}
 		}
 	}
-
 }
-
 .l-footer.panel {
 	margin-bottom:0;
 }
