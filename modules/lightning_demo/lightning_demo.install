@@ -96,7 +96,7 @@ function lightning_demo_enable() {
   $migration = Migration::getInstance('LightningDemoNodesArticle');
   $migration->processImport();
   // Set up Image file migration and import.
-  $this->addFieldMapping('body:format')->defaultValue('filtered_html');
+  $migration = Migration::getInstance('LightningDemoFilesImage');
   $migration->processImport();
 }
 
