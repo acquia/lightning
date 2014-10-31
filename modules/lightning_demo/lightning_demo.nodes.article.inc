@@ -16,6 +16,9 @@ class LightningDemoNodesArticle extends ImportBaseNodes {
     $this->source = new MigrateSourceCSV($import_path . 'lightning_demo.nodes.article.csv', $this->csvcolumns(), array('header_rows' => 1));
     $this->destination = new MigrateDestinationNode('article');
 
+    // Set body:format
+    $this->addFieldMapping('body:format')->defaultValue('full_html');
+
     // Path
     $this->addFieldMapping('path', 'path');
    
