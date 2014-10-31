@@ -1,10 +1,4 @@
-
-body, h1, h2, h3, h4, h5, h6 p li {
-	font-family:$body-font-family;
-	color:$secondary-color;
-	font-weight:400;
-	font-style:normal;
-}
+h1, h2, h3, h4, h5, h6 {font-weight:200;}
 
 //form override fix from the framework 
 form {margin:0;}
@@ -98,4 +92,93 @@ a {
 			}
 		}
 	}
+}
+
+// intro text 
+
+.intro-text h1{
+	text-align:center;
+}
+
+//tabs 
+
+.lightning-tabs.row {
+
+	margin-top: rem-calc(20px);
+
+	dl.tabs {
+		border-bottom:1px solid $primary-color;
+		padding-bottom:1px;
+		//margin-top:-2px;
+
+		dd {
+			&.active {
+
+				background:$primary-color;
+				&:after {
+					@media #{$large-up} {
+					content: url(../images/tab-active.png);
+					position:absolute;
+					bottom:-16px;
+					left:50%;
+				}
+				}
+
+				a {
+					background:$primary-color;
+					color:$dark-bg;
+				}
+			}
+
+			a {
+				background:$dark-bg;
+				color:$secondary-color;
+				text-align:center;
+				font-size:rem-calc(20px);
+
+			}
+		}
+	}
+}
+
+//bottom lightning features
+.feature-links {
+
+	h2 {
+		font-size:1.5em;
+	}
+
+	li {
+
+		text-align: center;
+
+		a.editors {
+			&:before {
+				content:url(../images/edit.png);
+			}
+		}
+
+		a.workflows {
+			&:before {
+				content:url(../images/flow.png);
+			}
+		}
+
+		a.preview {
+			&:before {
+				content:url(../images/preview.png);
+			}
+		}
+
+		a.layout {
+			&:before {
+				content:url(../images/layout.png);
+			}
+		}
+	}
+
+}
+
+.l-footer.panel {
+	margin-bottom:0;
 }
