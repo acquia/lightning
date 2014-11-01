@@ -54,7 +54,7 @@ a {
 
 //hero
 .hero-bg {
-	background:url(../images/hero-bg.png) repeat;
+	background:url(../images/hero-bg-alt.png) repeat;
 	height:rem-calc(445px);
 	@media #{$small-only} {height:rem-calc(385px);}
 	position:relative;
@@ -182,6 +182,9 @@ a {
 
 	h2 {
 		font-size:1.5em;
+		@media #{$small-only} {
+			font-size:1.2em;
+		}
 		margin-bottom:1em;
 		border-bottom:1px solid $primary-color;
 	}
