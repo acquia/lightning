@@ -20,23 +20,34 @@
   		line-height:$topbar-height;
 	}
 
-	.logo {
-		img &:hover {
-			background: yellow;
-		}
-	}
-
-	.title-area {
-		display:table;
-		margin:0 10px;
-		float:left;
-	}
-
 	.name h1 a {
 		font-size:1.2em;
 		line-height: $topbar-height;
 		padding: 0 5px;
 		font-weight:normal;
 		letter-spacing: 1px;
+	}
+
+	.toggle-topbar.menu-icon a {
+		height:$topbar-height;
+		line-height: $topbar-height;
+		padding:0;
+	}
+
+    ul li>a {
+    	padding-top:0;
+    	padding-bottom:0;
+    }
+
+
+}
+
+
+
+.top-bar.expanded {
+	background:$primary-alt;
+
+	.title-area {
+		background: $primary-alt;
 	}
 }
