@@ -15,6 +15,7 @@
             <li class="name"><h1><a href="/">Lightning</h1></li>
             <li class="toggle-topbar menu-icon"><a href="#"><span><?php print $top_bar_menu_text; ?></span></a></li>
           </ul>
+          </nav>
 
           <section class="top-bar-section">
             <?php if ($top_bar_main_menu) :?>
