@@ -13,8 +13,9 @@
           <ul class="title-area">
             <li class="logo"><?php if ($linked_logo): print $linked_logo; endif; ?></li>
             <li class="name"><h1><a href="/">Lightning</h1></li>
+            <li class="toggle-topbar menu-icon"><a href="#"><span><?php print $top_bar_menu_text; ?></span></a></li>
           </ul>
-          <div><li class="toggle-topbar menu-icon"><a href="#"><span><?php print $top_bar_menu_text; ?></span></a></li></div>
+
           <section class="top-bar-section">
             <?php if ($top_bar_main_menu) :?>
               <?php print $top_bar_main_menu; ?>
