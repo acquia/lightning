@@ -123,7 +123,7 @@
 
       <a id="main-content"></a>
 
-      <?php if ($breadcrumb): print $breadcrumb; endif; ?>
+<!--       <?php// if ($breadcrumb): print $breadcrumb; endif; ?> -->
 
       <?php if ($title && !$is_front): ?>
         <?php print render($title_prefix); ?>
@@ -205,6 +205,7 @@
 
   <!--.l-footer-->
   <footer class="l-footer panel" role="contentinfo">
+    <div class="row">
     <?php if (!empty($page['footer'])): ?>
       <div class="footer large-12 columns">
         <?php print render($page['footer']); ?>
@@ -216,6 +217,7 @@
         &copy; <?php print date('Y') . ' ' . check_plain($site_name) . ' ' . t('All rights reserved.'); ?>
       </div>
     <?php endif; ?>
+    </div>
   </footer>
   <!--/.footer-->
 
