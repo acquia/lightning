@@ -15,8 +15,6 @@
             <li class="name"><h1><a href="/">Lightning</h1></li>
             <li class="toggle-topbar menu-icon"><a href="#"><span><?php print $top_bar_menu_text; ?></span></a></li>
           </ul>
-          </nav>
-
           <section class="top-bar-section">
             <?php if ($top_bar_main_menu) :?>
               <?php print $top_bar_main_menu; ?>
@@ -115,7 +113,17 @@
     <!--/.l-help -->
   <?php endif; ?>
 
-  <main role="main" class="row l-main">
+  <main role="main" class="l-main">
+    <div class="main-title-area">
+    <div class="row">
+     <?php if ($title && !$is_front): ?>
+        <?php print render($title_prefix); ?>
+        <h1 id="page-title" class="title"><?php print $title; ?></h1>
+        <?php print render($title_suffix); ?>
+      <?php endif; ?>
+      </div>
+      </div>
+  <div class="row">
     <div class="<?php print $main_grid; ?> main columns">
       <?php if (!empty($page['highlighted'])): ?>
         <div class="highlight panel callout">
@@ -124,14 +132,6 @@
       <?php endif; ?>
 
       <a id="main-content"></a>
-
-<!--       <?php// if ($breadcrumb): print $breadcrumb; endif; ?> -->
-
-      <?php if ($title && !$is_front): ?>
-        <?php print render($title_prefix); ?>
-        <h1 id="page-title" class="title"><?php print $title; ?></h1>
-        <?php print render($title_suffix); ?>
-      <?php endif; ?>
 
       <?php if (!empty($tabs)): ?>
         <?php print render($tabs); ?>
@@ -159,6 +159,7 @@
         <?php print render($page['sidebar_second']); ?>
       </aside>
     <?php endif; ?>
+    </div>
   </main>
   <!--/.main-->
 
