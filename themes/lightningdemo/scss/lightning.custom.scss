@@ -13,6 +13,45 @@ overflow: hidden;
 height: 90%;
 }
 
+.button {
+	background:$primary-color;
+}
+
+.left-off-canvas-menu {
+	background:$secondary-color;
+	.button-group {
+		li {
+
+			&:first-child .button{
+				margin-top:rem-calc(10px);
+			}
+
+			.button {
+
+				margin:rem-calc(5px 10px);
+				width:rem-calc(225px);
+			}
+		}
+	}
+
+	.workbench-info-block {
+		background: #e7e7e7;
+		list-style: none;
+		padding: 0.25em 0.5em 0.25em 0.5em;
+		margin:rem-calc(10px 15px 10px 10px);
+		border:2px solid $primary-color;
+		font-size:rem-calc(14px);
+		color: #333;
+		line-height: rem-calc(25px);
+		}
+}
+
+.move-right a.exit-off-canvas {
+	@include box-shadow(none);
+}
+
+.activestate {font-style:italic;}
+
 //fix broke IPE from styles in the framework 
 .panels-ipe-linkbar li {
 	list-style:none;
