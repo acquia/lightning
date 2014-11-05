@@ -36,6 +36,9 @@ function lightning_demo_migrate_api() {
  * Implements hook_block_info_alter().
  */
 function lightning_demo_block_info_alter(&$blocks, $theme, $code_blocks) {
-  // Move Workbench block off canvas
-  $blocks['workbench']['block']['region'] = 'offcanvas';
+  if ($theme == 'lightningdemo') {
+    // Move Workbench block off canvas
+    $blocks['workbench']['block']['region'] = 'offcanvas';
+  }
 }
+
