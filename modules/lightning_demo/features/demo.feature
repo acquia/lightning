@@ -18,3 +18,7 @@ Feature: Lightning Demo
     And I should see "Preview"
     When I follow "Editors"
     Then I should see "Lightning Capabilities"
+    And I should see "Content Editor Focused"
+    And I should see "Editorial Workflows"
+    And I should see "Flexible Layout Control"
+    And I should see "Advanced Content Preview"
