@@ -123,29 +123,57 @@
       <?php endif; ?>
       </div>
       </div>
-  <div class="row">
-    <div class="<?php print $main_grid; ?> main columns">
-      <?php if (!empty($page['highlighted'])): ?>
-        <div class="highlight panel callout">
-          <?php print render($page['highlighted']); ?>
+
+    <?php if (!empty($page['offcanvas'])): ?>
+    <!--/.l-off canvas -->
+      <section class="off-canvas-wrap">
+        <div class="inner-wrap">
+        <a class="left-off-canvas-toggle tiny button" href="#" >Moderate <?php print $node->type; ?><br /><span class="activestate"></span></a>
+        <aside class="left-off-canvas-menu">
+              <?php if (!empty($tabs)): ?>
+              <?php print render($tabs); ?>
+              <?php if (!empty($tabs2)): print render($tabs2); endif; ?>
+            <?php endif; ?>
+
+            <?php if ($action_links): ?>
+              <ul class="action-links">
+                <?php print render($action_links); ?>
+              </ul>
+            <?php endif; ?>
+              <?php print render($page['offcanvas']); ?>
+        </aside>
+          <div class="row">
+            <div class="<?php print $main_grid; ?> main columns">
+              <?php if (!empty($page['highlighted'])): ?>
+                <div class="highlight panel callout">
+                  <?php print render($page['highlighted']); ?>
+                </div>
+              <?php endif; ?>
+
+        <a id="main-content"></a>
+
+            <?php print render($page['content']); ?>
+                     <a class="exit-off-canvas"></a>
+            </div>
+          </section>
+    <!--/.l-off canvas -->
         </div>
-      <?php endif; ?>
+      <?php else: ?>
 
-      <a id="main-content"></a>
+         <div class="row">
+            <div class="<?php print $main_grid; ?> main columns">
+              <?php if (!empty($page['highlighted'])): ?>
+                <div class="highlight panel callout">
+                  <?php print render($page['highlighted']); ?>
+                </div>
+              <?php endif; ?>
 
-      <?php if (!empty($tabs)): ?>
-        <?php print render($tabs); ?>
-        <?php if (!empty($tabs2)): print render($tabs2); endif; ?>
-      <?php endif; ?>
+        <a id="main-content"></a>
 
-      <?php if ($action_links): ?>
-        <ul class="action-links">
-          <?php print render($action_links); ?>
-        </ul>
-      <?php endif; ?>
+            <?php print render($page['content']); ?>
+            </div>
+  <?php endif ?>
 
-      <?php print render($page['content']); ?>
-    </div>
     <!--/.main region -->
 
     <?php if (!empty($page['sidebar_first'])): ?>
