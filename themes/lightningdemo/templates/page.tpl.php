@@ -123,12 +123,12 @@
       <?php endif; ?>
       </div>
       </div>
-
+<!-- special moderate layout for when workbench is enabled on a content type -->
     <?php if (!empty($page['offcanvas'])): ?>
     <!--/.l-off canvas -->
       <section class="off-canvas-wrap">
         <div class="inner-wrap">
-        <a class="left-off-canvas-toggle tiny button" href="#" >Moderate <?php print $node->type; ?><br /><span class="activestate"></span></a>
+        <a class="left-off-canvas-toggle tiny button" href="#" >Moderate <?php if (($node->type) != null) { ?><?php print $node->type; ?><?php } ?><br /><span class="activestate"></span></a>
         <aside class="left-off-canvas-menu">
               <?php if (!empty($tabs)): ?>
               <?php print render($tabs); ?>
@@ -142,6 +142,7 @@
             <?php endif; ?>
               <?php print render($page['offcanvas']); ?>
         </aside>
+        <!-- print main section of site special for moderate layout so that off cavas slide works -->
           <div class="row">
             <div class="<?php print $main_grid; ?> main columns">
               <?php if (!empty($page['highlighted'])): ?>
@@ -151,7 +152,6 @@
               <?php endif; ?>
 
         <a id="main-content"></a>
-
             <?php print render($page['content']); ?>
                      <a class="exit-off-canvas"></a>
             </div>
@@ -159,7 +159,9 @@
     <!--/.l-off canvas -->
         </div>
       <?php else: ?>
+    <!-- special moderate layout -->
 
+      <!-- normal moderate tabs and main section of site -->
          <div class="row">
             <div class="<?php print $main_grid; ?> main columns">
               <?php if (!empty($page['highlighted'])): ?>
@@ -168,8 +170,18 @@
                 </div>
               <?php endif; ?>
 
-        <a id="main-content"></a>
+          <?php if (!empty($tabs)): ?>
+              <?php print render($tabs); ?>
+              <?php if (!empty($tabs2)): print render($tabs2); endif; ?>
+            <?php endif; ?>
 
+            <?php if ($action_links): ?>
+              <ul class="action-links">
+                <?php print render($action_links); ?>
+              </ul>
+            <?php endif; ?>
+
+        <a id="main-content"></a>
             <?php print render($page['content']); ?>
             </div>
   <?php endif ?>
