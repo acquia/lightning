@@ -1,5 +1,4 @@
-; A separate drupal-org-core.make file makes it so we can apply core patches
-; if we need to.
+; A separate drupal-org-core.make file for core patches.
 
 api = 2
 core = 7.x
