@@ -6,7 +6,7 @@ Feature: Lightning Demo
     And I am on the homepage
     Then I should see "Lightning"
     And I should see "A fast and feature-rich Drupal distributon"
-    And I should see "Powered by Acquia"
+    And I should see "Curated by Acquia"
     And I should see "Welcome to a faster, feature-rich Drupal."
     And I should see "Learn more about Lightning's Capabilities"
     And I should see "Lightning Fast"
