@@ -1,79 +1,56 @@
 language: php
-
 cache:
   bundler: true
   apt: true
   directories:
-    - /home/travis/.composer/cache 
+  - /home/travis/.composer/cache
 php:
-  - 5.5
-
+- 5.5
 mysql:
   database: drupal
   username: root
   encoding: utf8
-
 install:
-  # Run environmental updates
-  - sudo apt-get update > /dev/null
-  # Update composer
-  - composer selfupdate
-  # Configure MySQL for Drupal
-  - mysql -e 'SET GLOBAL wait_timeout = 5400;'
-  - mysql -e "SHOW VARIABLES LIKE 'wait_timeout'"
-  # Configure php.ini settings
-  - echo 'max_execution_time = 120' >> drupal.php.ini;
-  - echo 'sendmail_path = /bin/true' >> drupal.php.ini;
-  - phpenv config-add drupal.php.ini
-  - phpenv rehash
-  # Install Drush 6
-  - composer global require drush/drush:6.*
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  # Download Drush Composer extension
-  - git clone --branch 8.x-1.x http://git.drupal.org/project/composer.git ~/.drush/composer
-  # Build the profile, preserving current state
-  - cd ..
-  - drush make --concurrency=5 lightning/drupal-org-core.make drupal -y
-  - mkdir drupal/profiles/lightning
-  - cp -R lightning/* drupal/profiles/lightning/.
-  - cd drupal
-  - drush make --concurrency=5 profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning -y
-
+- sudo apt-get update > /dev/null
+- composer selfupdate
+- mysql -e 'SET GLOBAL wait_timeout = 5400;'
+- mysql -e "SHOW VARIABLES LIKE 'wait_timeout'"
+- echo 'max_execution_time = 120' >> drupal.php.ini;
+- echo 'sendmail_path = /bin/true' >> drupal.php.ini;
+- phpenv config-add drupal.php.ini
+- phpenv rehash
+- composer global require drush/drush:6.*
+- export PATH="$HOME/.composer/vendor/bin:$PATH"
+- git clone --branch 8.x-1.x http://git.drupal.org/project/composer.git ~/.drush/composer
+- cd ..
+- drush make --concurrency=5 lightning/drupal-org-core.make drupal -y
+- mkdir drupal/profiles/lightning
+- cp -R lightning/* drupal/profiles/lightning/.
+- cd drupal
+- drush make --concurrency=5 profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning
+  -y
 before_script:
-  # Install Drupal
-  - drush si lightning --db-url=mysql://root:@localhost/drupal -y
-  # Disable dblog to reduce MySQL load
-  - drush dis dblog -y
-  # Enable Composer Manager, updating dependencies via source
-  - drush vset composer_manager_autobuild_file 0
-  - drush vset composer_manager_autobuild_packages 0
-  - drush en composer_manager -y
-  - drush composer-manager install -n --prefer-source
-  # Enable BehatRunner, dependencies loading from cache
-  - drush vset composer_manager_autobuild_file 1
-  - drush vset composer_manager_autobuild_packages 1
-  - drush en behatrunner -l http://127.0.0.1:8080 -y
-  # Clear caches
-  - drush cc all
-  # Run the lightweight http server
-  - drush runserver --server=builtin 8080 &
-  - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do sleep 0.2; done
-
+- drush si lightning --db-url=mysql://root:@localhost/drupal -y
+- drush dis dblog -y
+- drush vset composer_manager_autobuild_file 0
+- drush vset composer_manager_autobuild_packages 0
+- drush en composer_manager -y
+- drush composer-manager install -n --prefer-source
+- drush vset composer_manager_autobuild_file 1
+- drush vset composer_manager_autobuild_packages 1
+- drush en behatrunner -l http://127.0.0.1:8080 -y
+- drush cc all
+- drush runserver --server=builtin 8080 &
+- until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do sleep 0.2; done
 script:
-  # Enable the Lightning Demo
-  - drush le lightning_demo
-  # Run any module provided Behat tests
-  - drush brun -l http://127.0.0.1:8080 -v
-
+- drush le lightning_demo
+- drush brun -l http://127.0.0.1:8080 -v
 notifications:
   slack:
-    rooms:
-      - acquia:KkTwsMNJshR8hV4VvPbZs2J8#lightning
-
+    secure: NAQnMZDvgREnE9sztobPZAI28ee1xh6YP1IHxTSm5TEeVGK6P7wkOCDuNXHC2RfISet+QpYszWckHXa8juJrg1QK34fXYUSVAQueHSgXrResAXuMWtL3m7eviLLk9c+giw6Qr3/UtRNvhWDyTl3nDxMr6G+RoGkwwjWTVMK6PWY=
 matrix:
   fast_finish: true
-
 after_failure:
-  - sudo chmod -Rv 777 build/logs/*
-  - bundle install --without development
-  - travis-artifacts upload --path build/logs --target-path artifacts/$TRAVIS_BUILD_ID/$TRAVIS_JOB_ID
+- sudo chmod -Rv 777 build/logs/*
+- bundle install --without development
+- travis-artifacts upload --path build/logs --target-path artifacts/$TRAVIS_BUILD_ID/$TRAVIS_JOB_ID
