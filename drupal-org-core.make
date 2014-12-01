@@ -15,6 +15,10 @@ projects[drupal][patch][] = "http://drupal.org/files/drupal-7.x-allow_profile_ch
 ; http://drupal.org/node/1730874
 projects[drupal][patch][] = http://drupal.org/files/1730874_0.patch
 
+; Registry rebuild should not parse the same file twice in the same request
+; http://drupal.org/node/1470656
+projects[drupal][patch][] = "http://drupal.org/files/drupal-1470656-14.patch"
+
 ; user_role_grant_permissions() throws PDOException when used for a disabled
 ; module's permission or with non-existent permissions
 ; http://drupal.org/comment/7285420#comment-7285420
