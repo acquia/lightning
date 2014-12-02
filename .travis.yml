@@ -2,6 +2,7 @@ language: php
 cache:
   bundler: true
   apt: true
+  composer: true
   directories:
   - /home/travis/.composer/cache
 php:
@@ -27,8 +28,7 @@ install:
 - mkdir drupal/profiles/lightning
 - cp -R lightning/* drupal/profiles/lightning/.
 - cd drupal
-- drush make --concurrency=5 profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning
-  -y
+- drush make --concurrency=5 profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning -y
 before_script:
 - drush si lightning --db-url=mysql://root:@localhost/drupal -y
 - drush dis dblog -y
