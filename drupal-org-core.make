@@ -23,3 +23,7 @@ projects[drupal][patch][] = "http://drupal.org/files/drupal-1470656-14.patch"
 ; module's permission or with non-existent permissions
 ; http://drupal.org/comment/7285420#comment-7285420
 projects[drupal][patch][] = "http://drupal.org/files/drupal-fix_pdoexception_grant_permissions-737816-36-do-not-test.patch"
+
+; image_get_info always populates file_size, even if already set.
+; http://drupal.org/node/2289493
+projects[drupal][patch][] = "http://drupal.org/files/issues/drupal-2289493-3-image_get_info-filesize-D7.patch"
