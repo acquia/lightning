@@ -28,7 +28,7 @@ projects[import][subdir] = "contrib"
 projects[import][download][type] = "git"
 projects[import][download][branch] = "7.x-1.x"
 
-projects[migrate][version] = "2.5"
+projects[migrate][version] = "2.6"
 projects[migrate][type] = "module"
 projects[migrate][subdir] = "contrib"
 
