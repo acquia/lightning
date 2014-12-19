@@ -91,28 +91,34 @@ function lightning_demo_install() {
   * Implements hook_enable()
   */
 function lightning_demo_enable() {
+  // Define migrations.
+  $machine_names = array('LightningDemoNodesArticle', 'LightningDemoFilesImage');
   // Get list of modules implementing Migrate API.
   migrate_get_module_apis();
-  // Set up Article node migration and import.
-  $migration = Migration::getInstance('LightningDemoNodesArticle');
-  $migration->processImport();
-  // Set up Image file migration and import.
-  $migration = Migration::getInstance('LightningDemoFilesImage');
-  $migration->processImport();
+  // Register the migrations.
+  migrate_static_registration($machine_names);
+  // Set up migration and import.
+  foreach ($machine_names as $instance) {
+    $migration = Migration::getInstance($instance);
+    $migration->processImport();
+  }
 }
 
 /**
  * Implements hook_disable().
  */
 function lightning_demo_disable() {
+  // Define migrations.
+  $machine_names = array('LightningDemoNodesArticle', 'LightningDemoFilesImage');
   // Get list of modules implementing Migrate API.
   migrate_get_module_apis();
-  // Set up Article node migration and rollback.
-  $migration = Migration::getInstance('LightningDemoNodesArticle');
-  $migration->processRollback();
-  // Set up Image file migration and rollback.
-  $migration = Migration::getInstance('LightningDemoFilesImage');
-  $migration->processRollback();
+  // Register the migrations.
+  migrate_static_registration($machine_names);
+  // Set up migration and rollback.
+  foreach ($machine_names as $instance) {
+    $migration = Migration::getInstance('LightningDemoNodesArticle');
+    $migration->processRollback();
+  }
 }
 
 /**
