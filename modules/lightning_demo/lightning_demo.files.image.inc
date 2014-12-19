@@ -6,8 +6,8 @@
  */
 
 class LightningDemoFilesImage extends Migration {
-  public function __construct($arguments = array()) {
-    parent::__construct($arguments = array());
+  public function __construct($arguments) {
+    parent::__construct($arguments);
     $this->map = new MigrateSQLMap($this->machineName,
       array(
         'image' => array(

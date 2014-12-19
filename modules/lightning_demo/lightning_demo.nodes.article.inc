@@ -7,8 +7,8 @@
 
 class LightningDemoNodesArticle extends ImportBaseNodes {
 
-  public function __construct($arguments = array()) {
-    parent::__construct($arguments = array());
+  public function __construct($arguments) {
+    parent::__construct($arguments);
     $this->description = t('Import Lightning Demo pages');
     $import_path = drupal_get_path('module', 'lightning_demo') . '/import/';
 
