@@ -44,7 +44,9 @@ function lightning_form_install_configure_form_alter(&$form, $form_state) {
 function lightning_extensions_enable($form_id, &$form_state) {
   $values = $form_state['values'];
   if (isset($values['extensions'])) {
-    module_enable($values['extensions']);
+    foreach ($values['extensions'] as $module) {
+      module_enable(array($module), TRUE);
+    }
   }
 }
 
