@@ -27,3 +27,8 @@ projects[drupal][patch][] = "http://drupal.org/files/drupal-fix_pdoexception_gra
 ; image_get_info always populates file_size, even if already set.
 ; http://drupal.org/node/2289493
 projects[drupal][patch][] = "http://drupal.org/files/issues/drupal-2289493-3-image_get_info-filesize-D7.patch"
+
+; Remove all occurences of sourceMappingURL and sourceURL
+; when JS files are aggregated
+; http://drupal.org/node/2400287
+projects[drupal][patch][] = "http://drupal.org/files/issues/Issue-2400287-by-hass-Remove-JS-source-and-source-map-D7_0.patch"
