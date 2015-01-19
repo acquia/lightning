@@ -67,7 +67,8 @@ function lightning_demo_default_page_manager_pages() {
     $pane->pid = 'new-df16443f-30be-497b-aa4c-4d5298cefc2b';
     $pane->panel = 'primary_features';
     $pane->type = 'fieldable_panels_pane';
-    $pane->subtype = 'uuid:488b6c63-7818-4759-bbc0-66fab0d0552c';
+    $fpid = db_select("fieldable_panels_panes", "id")->fields("id", array("fpid"))->condition("uuid", "488b6c63-7818-4759-bbc0-66fab0d0552c")->execute()->fetchField();
+    $pane->subtype = 'fpid:' . $fpid;
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -96,7 +97,8 @@ function lightning_demo_default_page_manager_pages() {
     $pane->pid = 'new-431ff984-2bd9-4678-bf11-ebfa61b70d3e';
     $pane->panel = 'primary_supplements';
     $pane->type = 'fieldable_panels_pane';
-    $pane->subtype = 'uuid:2fcfb76d-b1bc-44f4-aae9-cc747c5c2310';
+    $fpid = db_select("fieldable_panels_panes", "id")->fields("id", array("fpid"))->condition("uuid", "2fcfb76d-b1bc-44f4-aae9-cc747c5c2310")->execute()->fetchField();
+    $pane->subtype = 'fpid:' . $fpid;
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -125,7 +127,8 @@ function lightning_demo_default_page_manager_pages() {
     $pane->pid = 'new-5055dd4c-61d6-47b2-a1d3-083196d011e2';
     $pane->panel = 'quaternary_features';
     $pane->type = 'fieldable_panels_pane';
-    $pane->subtype = 'uuid:fa7f808f-8821-4661-8742-962d94673b90';
+    $fpid = db_select("fieldable_panels_panes", "id")->fields("id", array("fpid"))->condition("uuid", "fa7f808f-8821-4661-8742-962d94673b90")->execute()->fetchField();
+    $pane->subtype = 'fpid:' . $fpid;
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
@@ -154,7 +157,8 @@ function lightning_demo_default_page_manager_pages() {
     $pane->pid = 'new-5d585a57-825a-4a94-a67e-f0e10885298d';
     $pane->panel = 'secondary_supplements';
     $pane->type = 'fieldable_panels_pane';
-    $pane->subtype = 'uuid:aa75e692-20a4-4ffd-b8b0-f6b8544e76d7';
+    $fpid = db_select("fieldable_panels_panes", "id")->fields("id", array("fpid"))->condition("uuid", "aa75e692-20a4-4ffd-b8b0-f6b8544e76d7")->execute()->fetchField();
+    $pane->subtype = 'fpid:' . $fpid;
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
