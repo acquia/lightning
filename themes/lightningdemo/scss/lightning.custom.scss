@@ -1,352 +1,346 @@
-h1, h2, h3, h4, h5, h6 {font-weight:200;}
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 200;
+}
 
-//form override fix from the framework 
-form {margin:0;}
+//form override fix from the framework
+form {
+  margin: 0;
+}
 
 .clearing-close {
-	top:70px;
+  top: 70px;
+}
+
+//set the NavBar module font in the tray so all the items fit horizontally at 1400px
+#navbar-administration {
+  .navbar-tray a {
+    font-size: rem-calc(13px);
+  }
+  .navbar-tray-horizontal > .navbar-lining {
+    padding-right: 3em;
+  }
 }
 
 .clearing-assembled .clearing-container .visible-img {
-background: #333;
-overflow: hidden;
-height: 90%;
+  background: #333;
+  overflow: hidden;
+  height: 90%;
 }
 
 .button {
-	background:$primary-color;
+  background: $primary-color;
 }
 
 .left-off-canvas-menu {
-	background:$secondary-color;
-	.button-group {
-		li {
-
-			&:first-child .button{
-				margin-top:rem-calc(10px);
-			}
-
-			.button {
-
-				margin:rem-calc(5px 10px);
-				width:rem-calc(225px);
-			}
-		}
-	}
-
-	.workbench-info-block {
-		background: #e7e7e7;
-		list-style: none;
-		padding: 0.25em 0.5em 0.25em 0.5em;
-		margin:rem-calc(10px 15px 10px 10px);
-		border:2px solid $primary-color;
-		font-size:rem-calc(14px);
-		color: #333;
-		line-height: rem-calc(25px);
-		}
+  background: $secondary-color;
+  .button-group {
+    li {
+      &:first-child .button {
+        margin-top: rem-calc(10px);
+      }
+      .button {
+        margin: rem-calc(5px 10px);
+        width: rem-calc(225px);
+      }
+    }
+  }
+  .workbench-info-block {
+    background: #e7e7e7;
+    list-style: none;
+    padding: 0.25em 0.5em 0.25em 0.5em;
+    margin: rem-calc(10px 15px 10px 10px);
+    border: 2px solid $primary-color;
+    font-size: rem-calc(14px);
+    color: #333;
+    line-height: rem-calc(25px);
+  }
 }
 
 .move-right a.exit-off-canvas {
-	@include box-shadow(none);
+  @include box-shadow(none);
 }
 
 .left-off-canvas-toggle {
-	text-align:left;
-	font-size:rem-calc(14px)!important;
-	padding-left:rem-calc(45px)!important;
-
-	&:before {
-    content:url(../images/moderate.png);
-    position:absolute;
-    top:rem-calc(15px);
-    left:rem-calc(10px);
-
+  text-align: left;
+  font-size: rem-calc(14px) !important;
+  padding-left: rem-calc(45px) !important;
+  &:before {
+    content: url(../images/moderate.png);
+    position: absolute;
+    top: rem-calc(15px);
+    left: rem-calc(10px);
+  }
+  span {
+    font-size: rem-calc(12px);
+  }
 }
 
-	span {
-		font-size:rem-calc(12px);
-	}
-
+.activestate {
+  font-style: italic;
 }
 
-.activestate {font-style:italic;}
-
-//fix broke IPE from styles in the framework 
+//fix broke IPE from styles in the framework
 .panels-ipe-linkbar li {
-	list-style:none;
-	display:inline;
+  list-style: none;
+  display: inline;
 }
+
 a {
-	color:$primary-color;
-	&:hover {
-		color:$primary-alt;
-	}
+  color: $primary-color;
+  &:hover {
+    color: $primary-alt;
+  }
 }
-// hide non useful buttons on the hompeage when logged in 
-#navbar-administration.navbar-oriented .navbar-bar {z-index:10000}
+
+// hide non useful buttons on the hompeage when logged in
+#navbar-administration.navbar-oriented .navbar-bar {
+  z-index: 10000;
+}
+
 .panels-ipe .button-group {
-	position:fixed;
-	z-index:15;
-	bottom:0;
-	li {
-		float:none;
-		a.button.small {
-			padding:10px; margin-bottom:2px; min-width:110px;
-		}
-	}
+  position: fixed;
+  z-index: 15;
+  bottom: 0;
+  li {
+    float: none;
+    a.button.small {
+      padding: 10px;
+      margin-bottom: 2px;
+      min-width: 110px;
+    }
+  }
 }
 
 //hero
 .hero-bg {
-	background:url(../images/hero-bg.png) repeat;
-	height:rem-calc(400px);
-	@media #{$small-only} {height:rem-calc(385px);}
-	position:relative;
-	width:100%;
-	margin-bottom:rem-calc(30px);
-
-	.banner-content-wrap {
-
-		padding-top:rem-calc(25px);
-
-		@media #{$small-only} {padding-top:10px;}
-
-		.hero-logo {
-			color:$primary-color;
-			font-size:4.4em;
-			@media #{$small-only} {font-size:3.3em;}
-			font-weight:700;
-			margin:0 auto;
-			position:relative;
-			text-align: center;
-
-			span {
-			
-			position:relative;
-			
-			&:before {
-				content:url(../images/lightning-logo-alt.png);
-				position:relative;
-  				left:-10px;
-  				top:30px;
-  				@media #{$small-only} {
-  					top:10px;
-  				}
-			}
-
-			&:after {
-					content:url(../images/bolt.png);
-						position:absolute;
-  						left:30px;
-  						top:0px;
-  						background:$dark-bg;
-                        height:80px;
-
-  					@media #{$small-only} {
-  					top:-40px
-  					}
-				}
-			}
-		}
-
-		.hero-ribbon {
-			background:url(../images/ribbon.png) no-repeat center center;
-			background-size: contain;
-			margin-top:rem-calc(30px);
-			text-align: center;
-			color:$dark-bg;
-			line-height:4em;
-			width:100%;
-			font-size:1.3em;
-			@media #{$small-only} {font-size:.9em;}
-		}
-
-		.curated-by-acquia {
-			color:$secondary-color;
-			font-size:.8em;
-
-			span {display:none;}
-
-			&:after {
-				content: url(../images/acquia-logo.png);
-				position:relative;
-				top:rem-calc(10px);
-
-			}
-		}
-	}
+  background: url(../images/hero-bg.png) repeat;
+  height: rem-calc(400px);
+  @media #{$small-only} {
+    height: rem-calc(385px);
+  }
+  position: relative;
+  width: 100%;
+  margin-bottom: rem-calc(30px);
+  .banner-content-wrap {
+    padding-top: rem-calc(25px);
+    @media #{$small-only} {
+      padding-top: 10px;
+    }
+    .hero-logo {
+      color: $primary-color;
+      font-size: 4.4em;
+      @media #{$small-only} {
+        font-size: 3.3em;
+      }
+      font-weight: 700;
+      margin: 0 auto;
+      position: relative;
+      text-align: center;
+      span {
+        position: relative;
+        &:before {
+          content: url(../images/lightning-logo-alt.png);
+          position: relative;
+          left: -10px;
+          top: 30px;
+          @media #{$small-only} {
+            top: 10px;
+          }
+        }
+        &:after {
+          content: url(../images/bolt.png);
+          position: absolute;
+          left: 30px;
+          top: 0px;
+          background: $dark-bg;
+          height: 80px;
+          @media #{$small-only} {
+            top: -40px;
+          }
+        }
+      }
+    }
+    .hero-ribbon {
+      background: url(../images/ribbon.png) no-repeat center center;
+      background-size: contain;
+      margin-top: rem-calc(30px);
+      text-align: center;
+      color: $dark-bg;
+      line-height: 4em;
+      width: 100%;
+      font-size: 1.3em;
+      @media #{$small-only} {
+        font-size: .9em;
+      }
+    }
+    .curated-by-acquia {
+      color: $secondary-color;
+      font-size: .8em;
+      span {
+        display: none;
+      }
+      &:after {
+        content: url(../images/acquia-logo.png);
+        position: relative;
+        top: rem-calc(10px);
+      }
+    }
+  }
 }
-// intro text 
-.intro-text h1{
-	text-align:center;
+
+// intro text
+.intro-text h1 {
+  text-align: center;
 }
-//tabs 
+
+//tabs
 .lightning-tabs.row {
-
-	margin-top: rem-calc(30px);
-
-	dl.tabs {
-		border-bottom:1px solid $primary-color;
-		padding-bottom:1px;
-		dd {
-			&.active {
-				background:$primary-color;
-				&:after {
-					@media #{$large-up} {
-					content: url(../images/tab-active.png);
-					position:absolute;
-					bottom:-16px;
-					left:50%;
-					}
-				}
-				a {
-					background:$primary-color;
-					color:$dark-bg;
-					padding:rem-calc(16px);
-				}
-			}
-			a {
-				background:$dark-bg;
-				color:$secondary-color;
-				text-align:center;
-				font-size:rem-calc(20px);
-			}
-		}
-	}
+  margin-top: rem-calc(30px);
+  dl.tabs {
+    border-bottom: 1px solid $primary-color;
+    padding-bottom: 1px;
+    dd {
+      &.active {
+        background: $primary-color;
+        &:after {
+          @media #{$large-up} {
+            content: url(../images/tab-active.png);
+            position: absolute;
+            bottom: -16px;
+            left: 50%;
+          }
+        }
+        a {
+          background: $primary-color;
+          color: $dark-bg;
+          padding: rem-calc(16px);
+        }
+      }
+      a {
+        background: $dark-bg;
+        color: $secondary-color;
+        text-align: center;
+        font-size: rem-calc(20px);
+      }
+    }
+  }
 }
+
 //bottom lightning features
 .feature-links {
-
-	h2 {
-		font-size:1.5em;
-		@media #{$small-only} {
-			font-size:1.2em;
-		}
-		margin-bottom:1em;
-		border-bottom:1px solid $primary-color;
-	}
-	li {
-		text-align: center;
-		padding:0;
-		padding-top:rem-calc(5px);
-
-		a {
-			font-size:rem-calc(30px);
-			color:$secondary-color;
-			font-weight:100;
-			display:block;
-
-				&:hover {
-					color:$primary-color;
-				}
-
-
-		&:hover:after {
-			content:url(../images/go-arrow.png);
-			position:absolute;
-			display: inline-block;
-			vertical-align: middle;
-			cursor: pointer;
-		}
-
-			&:before {
-			display: inline-block;
-  			height: 100%;
-  			vertical-align: middle;
-  			margin-right:rem-calc(15px);
-			}
-
-			@media #{$small-only} {
-				font-size:rem-calc(16px);
-			}
-		}
-
-		a.editors {
-
-			&:before {
-				content:url(../images/edit.png);
-			}
-		}
-		a.workflows {
-			&:before {
-				content:url(../images/flow.png);
-			}
-		}
-		a.preview {
-			&:before {
-				content:url(../images/preview.png);
-			}
-		}
-		a.layout {
-			&:before {
-				content:url(../images/layout.png);
-			}
-		}
-	}
+  h2 {
+    font-size: 1.5em;
+    @media #{$small-only} {
+      font-size: 1.2em;
+    }
+    margin-bottom: 1em;
+    border-bottom: 1px solid $primary-color;
+  }
+  li {
+    text-align: center;
+    padding: 0;
+    padding-top: rem-calc(5px);
+    a {
+      font-size: rem-calc(30px);
+      color: $secondary-color;
+      font-weight: 100;
+      display: block;
+      &:hover {
+        color: $primary-color;
+      }
+      &:hover:after {
+        content: url(../images/go-arrow.png);
+        position: absolute;
+        display: inline-block;
+        vertical-align: middle;
+        cursor: pointer;
+      }
+      &:before {
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: rem-calc(15px);
+      }
+      @media #{$small-only} {
+        font-size: rem-calc(16px);
+      }
+    }
+    a.editors {
+      &:before {
+        content: url(../images/edit.png);
+      }
+    }
+    a.workflows {
+      &:before {
+        content: url(../images/flow.png);
+      }
+    }
+    a.preview {
+      &:before {
+        content: url(../images/preview.png);
+      }
+    }
+    a.layout {
+      &:before {
+        content: url(../images/layout.png);
+      }
+    }
+  }
 }
 
 .l-main {
-		margin-bottom:rem-calc(40px);
+  margin-bottom: rem-calc(40px);
 }
 
 .l-footer.panel {
-	margin-bottom:0;
-	padding-top:rem-calc(20px);
-	padding-bottom:rem-calc(20px);
+  margin-bottom: 0;
+  padding-top: rem-calc(20px);
+  padding-bottom: rem-calc(20px);
 }
 
-//secondary page 
+//secondary page
 
 .main-title-area {
-	background:#efefef;
-	padding-top:rem-calc(20px);
-	padding-bottom:rem-calc(20px);
-	margin-bottom:rem-calc(20px);
-	padding-left:rem-calc(15px);
-
-	h1 {
-		font-weight:100;
-	}
+  background: #efefef;
+  padding-top: rem-calc(20px);
+  padding-bottom: rem-calc(20px);
+  margin-bottom: rem-calc(20px);
+  padding-left: rem-calc(15px);
+  h1 {
+    font-weight: 100;
+  }
 }
 
 .alternate-left.row {
-
-	margin-bottom:30px;
-	border-bottom:1px solid $primary-color;
-
-	h2 {
-		@media #{$small-only} {
-			font-size:rem-calc(26px);
-			text-align: center;
-			margin-top:rem-calc(15px);
-		}	
-
-	}
-	.clearing-thumbs {
-		margin-top:10px;
-	}
+  margin-bottom: 30px;
+  border-bottom: 1px solid $primary-color;
+  h2 {
+    @media #{$small-only} {
+      font-size: rem-calc(26px);
+      text-align: center;
+      margin-top: rem-calc(15px);
+    }
+  }
+  .clearing-thumbs {
+    margin-top: 10px;
+  }
 }
 
 .alternate-right.row {
-
-	margin-bottom:30px;
-	border-bottom:1px solid $primary-color;
-
-	h2 {
-		@media #{$small-only} {
-			font-size:rem-calc(26px);
-			text-align: center;
-			margin-top:rem-calc(15px);
-		}
-	}
-
-		.clearing-thumbs {
-		margin-top:10px;
-
-	}
-	
+  margin-bottom: 30px;
+  border-bottom: 1px solid $primary-color;
+  h2 {
+    @media #{$small-only} {
+      font-size: rem-calc(26px);
+      text-align: center;
+      margin-top: rem-calc(15px);
+    }
+  }
+  .clearing-thumbs {
+    margin-top: 10px;
+  }
 }
 
 .row.last {
-	border-bottom:none;
+  border-bottom: none;
 }
