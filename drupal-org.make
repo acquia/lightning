@@ -21,21 +21,6 @@ projects[curate][subdir] = "contrib"
 projects[curate][download][type] = "git"
 projects[curate][download][branch] = "7.x-1.x"
 
-; Import
-projects[import][version] = "1.x-dev"
-projects[import][type] = "module"
-projects[import][subdir] = "contrib"
-projects[import][download][type] = "git"
-projects[import][download][branch] = "7.x-1.x"
-
-projects[migrate][version] = "2.6"
-projects[migrate][type] = "module"
-projects[migrate][subdir] = "contrib"
-
-projects[migrate_extras][version] = "2.5"
-projects[migrate_extras][type] = "module"
-projects[migrate_extras][subdir] = "contrib"
-
 ; Themes
 projects[ember][version] = "2.x-dev"
 projects[ember][type] = "theme"
