@@ -110,7 +110,7 @@ function lightning_demo_disable() {
   foreach ($machine_names as $instance) {
     // Register the migration.
     migrate_static_registration(array($instance));
-    $migration = Migration::getInstance('LightningDemoNodesArticle');
+    $migration = Migration::getInstance($instance);
     $migration->processRollback();
   }
 }
