@@ -2,7 +2,6 @@
 /**
  * @file
  * Install, update and uninstall functions for Lightning.
- *
  */
 
 /**
@@ -14,12 +13,23 @@
  */
 function lightning_install() {
   // Enable default theme.
-  theme_enable(array('lightningdemo'));
-  variable_set('theme_default', 'lightningdemo');
+  $theme = 'lightningdemo';
+  theme_enable(array($theme));
+  variable_set('theme_default', $theme);
+
+  // Enable admin theme.
+  $admin_theme = 'ember';
+  theme_enable(array($admin_theme))
+  variable_set('admin_theme', $admin_theme);
+
+  // Use admin theme when editing nodes.
+  variable_set('node_admin_theme', '1');
+
+  // Disable bartik and seven.
+  theme_disable(array('bartik', 'seven'));
 
   // Enable some standard blocks.
-  $default_theme = variable_get('theme_default', 'lightningdemo');
-  $admin_theme = 'ember';
+  $default_theme = variable_get('theme_default', $theme);
   $blocks = array(
     array(
       'module' => 'system',
@@ -95,30 +105,6 @@ function lightning_install() {
   db_insert('users_roles')
     ->fields(array('uid' => 1, 'rid' => $admin_role->rid))
     ->execute();
-
-  // Enable Ember theme.
-  db_update('system')
-    ->fields(array('status' => 1))
-    ->condition('type', 'theme')
-    ->condition('name', 'ember')
-    ->execute();
-
-  // Set admin theme to Ember.
-  variable_set('admin_theme', 'ember');
-
-  // Use admin theme when editing nodes.
-  variable_set('node_admin_theme', '1');
-
-  // Set jQuery to version 1.7.
-  variable_set('jquery_update_compression_type', 'min');
-  variable_set('jquery_update_jquery_cdn', 'none');
-  variable_set('jquery_update_jquery_version', '1.7');
-
-  // Use the source version of Modernizr since the build process can't produce
-  // a minified version from the library.
-  $variants = variable_get('navbar_libraries_variants', array());
-  $variants['modernizr'] = 'source';
-  variable_set('navbar_libraries_variants', $variants);
 }
 
 /**
