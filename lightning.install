@@ -158,6 +158,7 @@ function lightning_install_finished(&$install_state) {
 
   // Rebuild all Default Config (permissions cleanup).
   defaultconfig_rebuild_all();
+  node_access_rebuild(TRUE);
 
   // Remove all non-error messages.
   $messages = array('completed', 'status', 'warning');
