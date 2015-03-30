@@ -102,7 +102,7 @@ function lightning_demo_default_page_manager_pages() {
     $pane->shown = TRUE;
     $pane->access = array();
     $pane->configuration = array(
-      'view_mode' => 'Full',
+      'view_mode' => 'full',
     );
     $pane->cache = array();
     $pane->style = array(
