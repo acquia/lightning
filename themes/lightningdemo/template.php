@@ -44,3 +44,21 @@ function lightningdemo_menu_local_tasks(&$variables) {
 
   return $output;
 }
+
+/**
+ * Implements hook_node_view().
+ */
+function lightningdemo_preprocess_page(&$variables) {
+  if (isset($variables['node'])) {
+    // Get the processed workbench messages
+    $messages = workbench_moderation_set_message();
+    // Add a setting for the current node status
+    if ($messages && $messages[0]['label'] == 'Revision state') {
+      $variables['activestate'] = $messages[0]['message'];
+    }
+    // Maybe this node doesn't have workbench enabled
+    else {
+      $variables['activestate'] = $variables['node']->status == NODE_PUBLISHED ? 'Published' : 'Unpublished';
+    }
+  }
+}
