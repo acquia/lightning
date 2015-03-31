@@ -128,7 +128,7 @@
     <!--/.l-off canvas -->
       <section class="off-canvas-wrap">
         <div class="inner-wrap">
-        <a class="left-off-canvas-toggle tiny button" href="#" >Moderate <?php if (($node->type) != null) { ?><?php print $node->type; ?><?php } ?><br /><span class="activestate"><?php if (isset($activestate)) print '(Currently Viewing: ' . $activestate . ')' ?></span></a>
+        <a class="left-off-canvas-toggle tiny button" href="#" >Moderate <?php if (($node->type) != null) { ?><?php print node_type_get_name($node->type); ?><?php } ?><br /><span class="activestate"><?php if (isset($activestate)) print '(Currently Viewing: ' . $activestate . ')' ?></span></a>
         <aside class="left-off-canvas-menu">
               <?php if (!empty($tabs)): ?>
               <?php print render($tabs); ?>
