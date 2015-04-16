@@ -31,7 +31,6 @@ install:
 - drush make --concurrency=5 profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning -y
 before_script:
 - drush si lightning --db-url=mysql://root:@localhost/drupal -y
-- drush dis dblog -y
 - drush vset composer_manager_autobuild_file 0
 - drush vset composer_manager_autobuild_packages 0
 - drush en composer_manager -y
