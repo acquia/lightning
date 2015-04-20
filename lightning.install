@@ -159,8 +159,8 @@ function lightning_install_finished(&$install_state) {
   // Rebuild all Default Config (permissions cleanup).
   defaultconfig_rebuild_all();
 
-  // Remove all non-error messages.
-  $messages = array('completed', 'status', 'warning');
+  // Remove install messages.
+  $messages = array('completed', 'status', 'warning', 'error');
   foreach ($messages as $message) {
     drupal_get_messages($message, TRUE);
   }
