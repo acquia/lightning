@@ -153,11 +153,11 @@ function lightning_install_finished(&$install_state) {
   features_get_info(NULL, NULL, TRUE);
   features_rebuild();
 
+  // Rebuild all Default Config (cleanup install).
+  defaultconfig_rebuild_all();
+
   // Revert all Features (cleanup install).
   features_revert();
-
-  // Rebuild all Default Config (permissions cleanup).
-  defaultconfig_rebuild_all();
 
   // Remove install messages.
   $messages = array('completed', 'status', 'warning', 'error');
