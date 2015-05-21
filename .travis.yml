@@ -31,25 +31,13 @@ install:
 - drush make --concurrency=5 profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning -y
 before_script:
 - drush si lightning --db-url=mysql://root:@localhost/drupal -y
-- drush vset composer_manager_autobuild_file 0
-- drush vset composer_manager_autobuild_packages 0
-- drush en composer_manager -y
-- travis_wait drush composer-manager install -n --prefer-source
-- drush vset composer_manager_autobuild_file 1
-- drush vset composer_manager_autobuild_packages 1
-- travis_wait drush en behatrunner -l http://127.0.0.1:8080 -y
 - drush cc all
 - drush runserver --server=builtin 8080 &
 - until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do sleep 0.2; done
 script:
 - drush le lightning_demo
-- drush brun -l http://127.0.0.1:8080 -v
 notifications:
   slack:
     secure: NAQnMZDvgREnE9sztobPZAI28ee1xh6YP1IHxTSm5TEeVGK6P7wkOCDuNXHC2RfISet+QpYszWckHXa8juJrg1QK34fXYUSVAQueHSgXrResAXuMWtL3m7eviLLk9c+giw6Qr3/UtRNvhWDyTl3nDxMr6G+RoGkwwjWTVMK6PWY=
 matrix:
   fast_finish: true
-after_failure:
-- sudo chmod -Rv 777 build/logs/*
-- bundle install --without development
-- travis-artifacts upload --path build/logs --target-path artifacts/$TRAVIS_BUILD_ID/$TRAVIS_JOB_ID
