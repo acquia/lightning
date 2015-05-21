@@ -22,7 +22,7 @@ install:
 - phpenv rehash
 - composer global require drush/drush:6.*
 - export PATH="$HOME/.composer/vendor/bin:$PATH"
-- git clone --branch 8.x-1.x git@github.com:drupalprojects/composer.git ~/.drush/composer
+- git clone --branch 8.x-1.x http://git.drupal.org/project/composer.git ~/.drush/composer
 - cd ..
 - drush make --concurrency=5 lightning/drupal-org-core.make drupal -y
 - mkdir drupal/profiles/lightning
