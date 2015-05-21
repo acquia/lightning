@@ -1,5 +1,6 @@
 lightning
 =========
+[![Build Status](https://travis-ci.org/acquia/lightning.svg?branch=7.x-1.x)](https://travis-ci.org/acquia/lightning)
 
 A dynamic and fast CMS built on Drupal.
 
