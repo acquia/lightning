@@ -9,17 +9,13 @@ projects[lightning_features][download][type] = "git"
 projects[lightning_features][download][branch] = "7.x-1.x"
 
 ; Lightning Manifests
-projects[assemble][version] = "1.x-dev"
+projects[assemble][version] = "1.0-alpha1"
 projects[assemble][type] = "module"
 projects[assemble][subdir] = "contrib"
-projects[assemble][download][type] = "git"
-projects[assemble][download][branch] = "7.x-1.x"
 
-projects[curate][version] = "1.x-dev"
+projects[curate][version] = "1.0-alpha1"
 projects[curate][type] = "module"
 projects[curate][subdir] = "contrib"
-projects[curate][download][type] = "git"
-projects[curate][download][branch] = "7.x-1.x"
 
 ; Themes
 projects[ember][version] = "2.x-dev"
