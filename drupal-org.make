@@ -9,11 +9,9 @@ projects[lightning_features][download][type] = "git"
 projects[lightning_features][download][branch] = "7.x-1.x"
 
 ; Lightning Manifests
-projects[assemble][version] = "1.0-alpha1"
 projects[assemble][type] = "module"
 projects[assemble][subdir] = "contrib"
 
-projects[curate][version] = "1.0-alpha1"
 projects[curate][type] = "module"
 projects[curate][subdir] = "contrib"
 
