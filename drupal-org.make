@@ -15,6 +15,14 @@ projects[assemble][subdir] = "contrib"
 projects[curate][type] = "module"
 projects[curate][subdir] = "contrib"
 
+; Distro Update
+projects[distro_update][version] = "1.x-dev"
+projects[distro_update][type] = "module"
+projects[distro_update][subdir] = "contrib"
+projects[distro_update][download][type] = "git"
+projects[distro_update][download][revision] = "f5ab9fe"
+projects[distro_update][download][branch] = "7.x-1.x"
+
 ; Themes
 projects[ember][version] = "2.x-dev"
 projects[ember][type] = "theme"
