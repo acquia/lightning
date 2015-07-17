@@ -11,8 +11,8 @@ mysql:
   database: drupal
   username: root
   encoding: utf8
+sudo: false
 install:
-- sudo apt-get update > /dev/null
 - composer selfupdate
 - mysql -e 'SET GLOBAL wait_timeout = 5400;'
 - mysql -e "SHOW VARIABLES LIKE 'wait_timeout'"
