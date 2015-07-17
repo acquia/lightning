@@ -32,8 +32,7 @@ install:
 before_script:
 - drush si lightning --db-url=mysql://root:@localhost/drupal -y
 - drush cc all
-- drush runserver --server=builtin 8080 &
-- until netstat -an 2>/dev/null | grep '8080.*LISTEN'; do sleep 0.2; done
+- drush runserver --server=builtin 8080 &>/dev/null &
 script:
 - drush le lightning_demo
 matrix:
