@@ -20,7 +20,7 @@ install:
 - echo 'sendmail_path = /bin/true' >> drupal.php.ini;
 - phpenv config-add drupal.php.ini
 - phpenv rehash
-- composer global require drush/drush:6.*
+- composer global require drush/drush:dev-master
 - export PATH="$HOME/.composer/vendor/bin:$PATH"
 - git clone --branch 8.x-1.x http://git.drupal.org/project/composer.git ~/.drush/composer
 - cd ..
