@@ -40,6 +40,12 @@ function lightning_install() {
   ));
   $shortcut->save();
 
+  // Set the default and admin theme
+  \Drupal::configFactory()->getEditable('system.theme')
+    ->set('default', 'bartik')
+    ->set('admin', 'seven')
+    ->save(TRUE);
+
   // Enable the admin theme.
   \Drupal::configFactory()->getEditable('node.settings')->set('use_admin_theme', TRUE)->save(TRUE);
 }
