@@ -1,0 +1,46 @@
+<?php
+/**
+ * @file
+ * Install, update and uninstall functions for the Lightning installation
+ * profile.
+ */
+
+use Drupal\user\Entity\User;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_install().
+ *
+ * Perform actions to set up the site for Lightning Profile.
+ *
+ * @see system_install()
+ */
+function lightning_install() {
+  // Set front page to "node".
+  \Drupal::configFactory()->getEditable('system.site')->set('page.fornt', '/node')->save(TRUE);
+
+  // Restrict user registration to admin role creation
+  $user_settings = \Drupal::configFactory()->getEditable('user.settings');
+  $user_settings->set('register', USER_REGISTER_ADMINISTRATORS_ONLY)->save(TRUE);
+
+  // Assign user 1 the "administrator" role.
+  $user = User::load(1);
+  $user->roles[] = 'administrator';
+  $user->save();
+
+  // Allow authenticated users to use shortcuts.
+  user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, array('access shortcuts'));
+
+  // Populate the default shortcut set.
+  $shortcut = entity_create('shortcut', array(
+    'shortcut_set' => 'default',
+    'title' => t('Add content'),
+    'weight' => -20,
+    'link' => array('uri' => 'internal:/node/add'),
+  ));
+  $shortcut->save();
+
+  // Enable the admin theme.
+  \Drupal::configFactory()->getEditable('node.settings')->set('use_admin_theme', TRUE)->save(TRUE);
+}
+
