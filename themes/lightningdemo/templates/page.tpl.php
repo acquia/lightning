@@ -256,10 +256,13 @@
     <?php endif; ?>
 
     <?php if ($site_name) :?>
-      <div class="copyright large-12 columns">
+      <div class="copyright large-8 columns">
         &copy; <?php print date('Y') . ' ' . check_plain($site_name) . ' ' . t('All rights reserved.'); ?>
       </div>
     <?php endif; ?>
+    <?php if ($logged_in == FALSE): ?>
+      <a class="right clearfix" href="/user">Login</a>
+    <?php endif ?>
     </div>
   </footer>
   <!--/.footer-->
