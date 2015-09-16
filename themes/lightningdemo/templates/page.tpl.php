@@ -255,7 +255,7 @@
       </div>
     <?php endif; ?>
 
-    <?php if ($site_name) :?>
+    <?php if ($site_name): ?>
       <div class="copyright large-8 columns">
         &copy; <?php print date('Y') . ' ' . check_plain($site_name) . ' ' . t('All rights reserved.'); ?>
       </div>
