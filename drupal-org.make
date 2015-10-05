@@ -46,5 +46,8 @@ projects[lightning_features][download][type] = "git"
 projects[lightning_features][download][branch] = "8.x-1.x"
 
 ; Themes
-projects[zurb_foundation][version] = "5.x-dev"
-
+;projects[zurb-foundation][version] = "5.x-dev"
+;projects[zurb-foundation][type] = "theme"
+;projects[zurb-foundation][subdir] = "contrib"
+;projects[zurb-foundation][download][type] = "git"
+;projects[zurb-foundation][download][branch] = "8.x-5.x"
