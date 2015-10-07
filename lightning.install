@@ -42,11 +42,8 @@ function lightning_install() {
 
   // Set the default and admin theme
   \Drupal::configFactory()->getEditable('system.theme')
-    ->set('default', 'bartik')
-    ->set('admin', 'seven')
-    ->save(TRUE);
-  \Drupal::configFactory()->getEditable('system.theme')
     ->set('default', 'lightningdemo')
+    ->set('admin', 'seven')
     ->save(TRUE);
 
   // Enable the admin theme.
