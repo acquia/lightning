@@ -27,6 +27,8 @@ install:
   # MySQL Options
   - mysql -e 'SET GLOBAL wait_timeout = 5400;'
   - mysql -e "SHOW VARIABLES LIKE 'wait_timeout'"
+
+  # PHP conf tweaks
   - echo 'max_execution_time = 120' >> drupal.php.ini;
   - echo 'sendmail_path = /bin/true' >> drupal.php.ini;
   - phpenv config-add drupal.php.ini
@@ -43,8 +45,8 @@ before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - mv ../tests ./tests
   - cd tests
-  - bash tests-setup.sh
   - touch behat.local.yml
+  - bash tests-setup.sh
 
 script:
   - bin/behat
