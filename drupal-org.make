@@ -14,11 +14,21 @@ projects[ctools][subdir] = "contrib"
 projects[diff][version] = "1.x-dev"
 projects[diff][subdir] = "contrib"
 
-projects[embed][version] = "1.x-dev"
-projects[embed][subdir] = "contrib"
+projects[embed][type] = module
+projects[embed][download][type] = git
+projects[embed][download][revision] = 9b8d1ac3967883d4ede6066fd6ec14469cdc3c32
+projects[embed][download][branch] = 8.x-1.x
 
-projects[entity_embed][version] = "1.x-dev"
-projects[entity_embed][subdir] = "contrib"
+projects[entity_embed][type] = module
+projects[entity_embed][download][type] = git
+projects[entity_embed][download][revision] = 3f7b654b3277f9165ba66f2cde3f7fca12e105f3
+projects[entity_embed][download][branch] = 8.x-1.x
+
+projects[entity_browser][type] = module
+projects[entity_browser][download][type] = git
+projects[entity_browser][download][revision] = eedb97fc709fa775e4bf10be7304a78ed7cc0938
+projects[entity_browser][download][branch] = 8.x-1.x
+
 
 projects[features][version] = "3.0-alpha3"
 projects[features][subdir] = "contrib"
