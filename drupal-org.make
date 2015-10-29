@@ -26,7 +26,7 @@ projects[entity_embed][download][branch] = 8.x-1.x
 
 projects[entity_browser][type] = module
 projects[entity_browser][download][type] = git
-projects[entity_browser][download][revision] = eedb97fc709fa775e4bf10be7304a78ed7cc0938
+projects[entity_browser][download][revision] = f286c4318d8b44b56b89b2011450806e005d0d8c
 projects[entity_browser][download][branch] = 8.x-1.x
 
 
