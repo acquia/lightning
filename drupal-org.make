@@ -1,7 +1,8 @@
 api = 2
 core = 8.x
 
-; Modules
+; Media - These modules will only be enabled if the associated Lightning Media
+; module is enabled.
 projects[embed][type] = module
 projects[embed][download][type] = git
 projects[embed][download][revision] = 9b8d1ac3967883d4ede6066fd6ec14469cdc3c32
@@ -26,7 +27,20 @@ projects[file_browser][download][revision] = 7522f37806993900465617d36506692722c
 projects[file_browser][download][branch] = 8.x-1.x
 projects[file_browser][subdir] = "contrib/media"
 
+; Layout - These modules will only be enabled if the associated Lightning Layout
+; module is enabled.
+
+; Preview - These modules will only be enabled if the associated Lightning
+; Preview module is enabled.
+
+; Workflow - These modules will only be enabled if the associated Lightning
+; Workflow module is enabled.
+
+; Other Modules - these modules provide general expected functionality or
+; enhancements not directly related to Lightning Core Features.
+
 ; Themes
 projects[zurb_foundation][version] = "5.x-dev"
 projects[zurb_foundation][type] = "theme"
 projects[zurb_foundation[subdir] = "contrib"
+
