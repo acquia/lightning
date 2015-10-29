@@ -7,27 +7,16 @@
 include_once 'lightning_demo.features.inc';
 
 /**
- * Implements hook_behat_info().
- */
-function lightning_demo_behat_info() {
-  $info = array(
-    'paths' => array(
-      'features' => 'features',
-    ),
-  );
-  return $info;
-}
-
-/**
  * Implements hook_migrate_api().
  */
 function lightning_demo_migrate_api() {
   $api = array(
     'api' => 2,
     'migrations' => array(
-      'LightningDemoFilesImage' => array('class_name' => 'LightningDemoFilesImage'),
-      'LightningDemoNodesArticle' => array('class_name' => 'LightningDemoNodesArticle'),
-      'LightningDemoUsers' => array('class_name' => 'LightningDemoUsers'),
+      'LightningDemoFilesImage' => array('class_name' => 'LightningDemoFilesImage', 'group_name' => 'lightning_demo'),
+      'LightningDemoNodesArticle' => array('class_name' => 'LightningDemoNodesArticle', 'group_name' => 'lightning_demo'),
+      'LightningDemoUsers' => array('class_name' => 'LightningDemoUsers', 'group_name' => 'lightning_demo'),
+      'LightningDemoHTMLFPP' => array('class_name' => 'LightningDemoHTMLFPP', 'group_name' => 'lightning_demo'),
     ),
   );
   return $api;
