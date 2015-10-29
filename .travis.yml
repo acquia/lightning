@@ -46,7 +46,7 @@ before_script:
   - mv ../tests ./tests
   - cd tests
   - touch behat.local.yml
-  - bash tests-setup.sh
+  - composer install
 
 script:
   - bin/behat

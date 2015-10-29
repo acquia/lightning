@@ -8,8 +8,8 @@
     # with the path to your local install.
     cp behat.local.example.yml
 
-    # Run the setup script
-    bash tests-setup.sh
+    # Run the Composer Install
+    composer install
 
     # Run the tests
     bin/behat --profile=dev
