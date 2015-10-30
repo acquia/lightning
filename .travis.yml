@@ -35,7 +35,7 @@ install:
   - phpenv rehash
 
   # Build drupal + lightning from makefile
-  - drush make --concurrency=5 build-lightning.make drupal -y
+  - drush make --concurrency=5 build-lightning.make.yml drupal -y
 
   # Install lightning
   - cd drupal

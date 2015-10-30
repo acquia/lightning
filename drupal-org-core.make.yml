@@ -1,0 +1,10 @@
+# A separate drupal-org-core.make file for core patches
+api: 2
+core: 8.x
+projects:
+  drupal:
+    type: core
+    version: 8.0.0-rc2
+    patch:
+      # Allow install profiles to change the system requirements
+      - https://www.drupal.org/files/issues/1772316-34.patch
