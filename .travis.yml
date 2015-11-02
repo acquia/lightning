@@ -54,8 +54,8 @@ script:
   
 after_success:
   - eval "$(ssh-agent -s)"
-  - chmod 600 .travis/deploy_key.pem
-  - ssh-add .travis/deploy_key.pem
+  - chmod 600 travis.pem
+  - ssh-add travis.pem
   - git remote add dev lightning8x@svn-4747.devcloud.hosting.acquia.com:lightning8x.git
   - git push dev
 
