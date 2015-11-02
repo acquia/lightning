@@ -36,10 +36,10 @@ install:
   - phpenv rehash
 
   # Build drupal + lightning from makefile
-  - drush make --concurrency=5 build-lightning.make.yml drupal -y
+  - drush make --concurrency=5 build-lightning.make.yml docroot -y
 
   # Install lightning
-  - cd drupal
+  - cd docroot
   - drush si lightning --db-url=mysql://root:@localhost/drupal -y
 
 before_script:
@@ -51,7 +51,7 @@ before_script:
 
 script:
   - bin/behat
-  
+
 after_success:
   - eval "$(ssh-agent -s)"
   - chmod 600 travis.pem
