@@ -59,6 +59,8 @@ after_success:
   - chmod 600 travis_insecure.pem
   - ssh-add travis_insecure.pem
   - git remote add dev lightning8x@svn-4747.devcloud.hosting.acquia.com:lightning8x.git
+  - git add docroot
+  - git commit -a -m "Travis CI (build $TRAVIS_BUILD_NUMBER, job $TRAVIS_JOB_NUMBER)"
   - git push dev
   - ssh lightning8x.dev@free-4772.devcloud.hosting.acquia.com rm -rf dev/sites/default/files/*
   - drush --alias-path=./build @lightning8x.dev si lightning --site-name="Lightning" --account-name=admin --account-pass=presales -y -v
