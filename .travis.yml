@@ -55,6 +55,7 @@ script:
   - bin/behat
 
 after_success:
+  - cd ..
   - eval "$(ssh-agent -s)"
   - chmod 600 travis_insecure.pem
   - ssh-add travis_insecure.pem
