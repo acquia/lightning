@@ -44,6 +44,7 @@ install:
 
 before_script:
   - echo -e "Host svn-4747.devcloud.hosting.acquia.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - echo -e "Host svn-4747.devcloud.hosting.acquia.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - mv ../tests ./tests
   - cd tests
@@ -59,7 +60,7 @@ after_success:
   - ssh-add travis_insecure.pem
   - git remote add dev lightning8x@svn-4747.devcloud.hosting.acquia.com:lightning8x.git
   - git push dev
-  - yes "yes" | ssh lightning8x.dev@free-4772.devcloud.hosting.acquia.com rm -rf dev/sites/default/files/*
+  - ssh lightning8x.dev@free-4772.devcloud.hosting.acquia.com rm -rf dev/sites/default/files/*
   - drush --alias-path=./build @lightning8x.dev si lightning --site-name="Lightning" --account-name=admin --account-pass=presales -y -v
   - drush --alias-path=./build @lightning8x.dev le lightning_demo
 
