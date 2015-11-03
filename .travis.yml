@@ -59,6 +59,9 @@ after_success:
   - eval "$(ssh-agent -s)"
   - chmod 600 travis_insecure.pem
   - ssh-add travis_insecure.pem
+  - git config --global user.email "adam.hoenich@acquia.com"
+  - git config --global user.name "Adam Hoenich"
+  - git config --global push.default matching
   - git remote add dev lightning8x@svn-4747.devcloud.hosting.acquia.com:lightning8x.git
   - git add docroot
   - git commit -a -m "Travis CI (build $TRAVIS_BUILD_NUMBER, job $TRAVIS_JOB_NUMBER)"
