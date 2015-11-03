@@ -3,7 +3,7 @@ cache:
   bundler: true
   apt: true
 php:
-- 5.5
+  - 5.5
 
 mysql:
   database: drupal
@@ -14,6 +14,7 @@ before_install:
   - sudo apt-get update > /dev/null
   - composer self-update
   - composer --version
+  # - openssl aes-256-cbc -K $encrypted_77819a49fdcc_key -iv $encrypted_77819a49fdcc_iv -in travis.pem.enc -out travis.pem -d
 
 install:
   # add composer's global bin directory to the path
@@ -35,13 +36,15 @@ install:
   - phpenv rehash
 
   # Build drupal + lightning from makefile
-  - drush make --concurrency=5 build-lightning.make.yml drupal -y
+  - drush make --concurrency=5 build-lightning.make.yml docroot -y
 
   # Install lightning
-  - cd drupal
+  - cd docroot
   - drush si lightning --db-url=mysql://root:@localhost/drupal -y
 
 before_script:
+  - echo -e "Host svn-4747.devcloud.hosting.acquia.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+  - echo -e "Host free-4772.devcloud.hosting.acquia.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - mv ../tests ./tests
   - cd tests
@@ -50,6 +53,19 @@ before_script:
 
 script:
   - bin/behat
+
+after_success:
+  - cd ..
+  - eval "$(ssh-agent -s)"
+  - chmod 600 travis_insecure.pem
+  - ssh-add travis_insecure.pem
+  - git remote add dev lightning8x@svn-4747.devcloud.hosting.acquia.com:lightning8x.git
+  - git add docroot
+  - git commit -a -m "Travis CI (build $TRAVIS_BUILD_NUMBER, job $TRAVIS_JOB_NUMBER)"
+  - git push dev
+  - ssh lightning8x.dev@free-4772.devcloud.hosting.acquia.com rm -rf dev/sites/default/files/*
+  - drush --alias-path=./build @lightning8x.dev si lightning --site-name="Lightning" --account-name=admin --account-pass=presales -y -v
+  - drush --alias-path=./build @lightning8x.dev le lightning_demo
 
 notifications:
   slack:
