@@ -43,6 +43,7 @@ install:
   - drush si lightning --db-url=mysql://root:@localhost/drupal -y
 
 before_script:
+  - echo -e "Host svn-4747.devcloud.hosting.acquia.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - mv ../tests ./tests
   - cd tests
@@ -56,8 +57,6 @@ after_success:
   - eval "$(ssh-agent -s)"
   - chmod 600 travis_insecure.pem
   - ssh-add travis_insecure.pem
-  - echo "Host 50.16.63.24" >> ~/.ssh/config
-  - echo "  StrictHostKeyChecking no" >> ~/.ssh/config
   - git remote add dev lightning8x@svn-4747.devcloud.hosting.acquia.com:lightning8x.git
   - git push dev
   - yes "yes" | ssh lightning8x.dev@free-4772.devcloud.hosting.acquia.com rm -rf dev/sites/default/files/*
