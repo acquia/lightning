@@ -1,4 +1,4 @@
-name: Lightning Demo
+name: Lightning Demo - Foundation sub-theme
 description: "Custom sub-theme, inherits from the Foundation base theme read <a href=\"http://foundation.zurb.com/docs/index.php\">framework documentation</a>"
 core: 8.x
 type: theme
@@ -7,10 +7,9 @@ base theme: zurb_foundation
 # Image appears on admin/appearance
 # screenshot: images/screenshot.jpg
 
-# Uncomment these lines and change "STARTER" to your theme name if you
-# need to add custom CSS or JS
-#libraries:
-# - STARTER/global
+# Uncomment these lines if you need to add custom CSS or JS
+libraries:
+ - lightningdemo/global
 
 # Regions are output in the page.html.twig
 
@@ -27,6 +26,8 @@ regions:
   footer_first: 'Footer first column'
   footer_middle: 'Footer middle column'
   footer_last: 'Footer last column'
+  left_off_canvas: 'Left off canvas'
+  right_off_canvas: 'Right off canvas'
 regions_hidden:
   page_top: 'Page Top'
   page_bottom: 'Page bottom'

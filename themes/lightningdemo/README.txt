@@ -71,6 +71,13 @@ template.php THEMENAME_preprocess_html function.
     admin/appearance and click the "Enable and set default" link next to your
     new sub-theme.
 
+ 6. Install and run Compass to compile stylessheets
+
+    To write custom SASS, you'll need to install Compass. Instructions for doing
+    so can be found here: http://compass-style.org/install/
+
+    Once installed, you should be able to run "compass watch" and compile your SASS
+    includes into CSS.
 
 Optional steps:
 
