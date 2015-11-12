@@ -1,10 +1,17 @@
 name: Lightning Media
 type: module
-description: 'Provides install and configuration for great media authoring experiences.'
+description: Slick media handling for Lightning. So cool you'll make the A/C jealous.
 core: 8.x
-package: lightning
+package: Lightning
 dependencies:
-  - embed
   - entity_embed
-  - entity_browser
-  - file_browser
+  - media_entity
+  - media_entity_image
+  # These next four are temporary dependencies until individual media_entity packages
+  # provide sane defaults separate from media_pinkeye.
+  - media_entity_instagram
+  - media_pinkeye
+  - media_entity_slideshow
+  - media_entity_twitter
+  - rest
+  - serialization
