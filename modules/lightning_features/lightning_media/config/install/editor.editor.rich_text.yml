@@ -2,10 +2,10 @@ langcode: en
 status: true
 dependencies:
   config:
-    - filter.format.basic_html
+    - filter.format.rich_text
   module:
     - ckeditor
-format: basic_html
+format: rich_text
 editor: ckeditor
 settings:
   toolbar:
@@ -16,6 +16,11 @@ settings:
           items:
             - Bold
             - Italic
+            - Strike
+            - Superscript
+            - Subscript
+            - '-'
+            - RemoveFormat
         -
           name: Linking
           items:
@@ -31,6 +36,10 @@ settings:
           items:
             - Blockquote
             - DrupalImage
+            - Table
+            - HorizontalRule
+            - node
+            - media_library
         -
           name: 'Block Formatting'
           items:
@@ -38,6 +47,7 @@ settings:
         -
           name: Tools
           items:
+            - ShowBlocks
             - Source
   plugins:
     stylescombo:
@@ -48,5 +58,5 @@ image_upload:
   directory: inline-images
   max_size: ''
   max_dimensions:
-    width: 0
-    height: 0
+    width: null
+    height: null
