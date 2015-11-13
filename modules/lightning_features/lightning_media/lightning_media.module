@@ -1,0 +1,16 @@
+<?php
+
+/**
+ * Implements hook_theme().
+ */
+function lightning_media_theme() {
+  return array(
+    'drupal_entity' => array(
+      'render element' => 'element',
+    ),
+  );
+}
+
+function template_preprocess_drupal_entity(array &$variables) {
+  template_preprocess_container($variables);
+}
