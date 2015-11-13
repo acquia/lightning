@@ -3,6 +3,7 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.library_thumbnail
+    - embed.button.media_library
   module:
     - image
     - media_entity
@@ -520,7 +521,20 @@ display:
           granularity: second
       header: {  }
       footer: {  }
-      empty: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          tokenize: false
+          content:
+            value: '<p>No media items found.</p>'
+            format: rich_text
+          plugin_id: text
       relationships: {  }
       arguments: {  }
       display_extenders: {  }
