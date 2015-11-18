@@ -60,18 +60,27 @@ projects:
       url: https://github.com/drupal-media/media_entity_image.git
       revision: 0b06c2f6c62e6518d39fd71798f82f4ccd3b52d8
 
-  # Layout. These modules will only be enabled if the associated Lightning Layout module
-  # is enabled.
+  # Layout. These modules will only be enabled if the associated Lightning
+  # Layout module is enabled.
   # ---
-  # Preview. These modules will only be enabled if the associated Lightning Preview module
-  # is enabled.
+  # Preview. These modules will only be enabled if the associated Lightning
+  # Preview module is enabled.
   # ---
-  # Workflow. These modules will only be enabled if the associated Lightning Workflow 
-  # module is enabled.
+  # Workflow. These modules will only be enabled if the associated Lightning
+  # Workflow module is enabled.
   # ---
-  # Other Modules. Tese modules provide general expected functionality or enhancements not
-  # directly related to Lightning Core Features.
-  # ---
+  # Other Modules. Tese modules provide general expected functionality or
+  # enhancements not directly related to Lightning Core Features.
+  ctools:
+    type: module
+    version: 3.0-alpha19
+  acquia_connector:
+    type: module
+    download:
+      type: git
+      branch: 8.x-1.x
+      revision: dc718a3c941a983a3c13b64695a167eed866b4f0
+
   # Themes
   zurb_foundation:
     version: 5.0-beta1
