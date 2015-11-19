@@ -21,15 +21,12 @@ projects[distro_update][type] = "module"
 projects[distro_update][subdir] = "contrib"
 
 ; Themes
-projects[ember][version] = "2.x-dev"
+projects[ember][version] = "2.0-alpha4"
 projects[ember][type] = "theme"
 projects[ember][subdir] = "contrib"
-projects[ember][download][type] = "git"
-projects[ember][download][branch] = "7.x-2.x"
 
 projects[zurb-foundation][version] = "5.x-dev"
 projects[zurb-foundation][type] = "theme"
 projects[zurb-foundation][subdir] = "contrib"
 projects[zurb-foundation][download][type] = "git"
-projects[zurb-foundation][download][revision] = "d4c28f1"
 projects[zurb-foundation][download][branch] = "7.x-5.x"
