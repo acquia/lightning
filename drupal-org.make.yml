@@ -69,20 +69,18 @@ projects:
   # Workflow. These modules will only be enabled if the associated Lightning
   # Workflow module is enabled.
   # ---
-  # Other Modules. Tese modules provide general expected functionality or
+  # Other Modules. These modules provide general expected functionality or
   # enhancements not directly related to Lightning Core Features.
   ctools:
     type: module
-    version: 3.0-alpha19
+    download:
+      type: git
+      branch: 8.x-3.x
+      revision: 74330f697697d03aac8feb13329c0f31072b99c4
   acquia_connector:
     type: module
     download:
       type: git
       branch: 8.x-1.x
-      revision: dc718a3c941a983a3c13b64695a167eed866b4f0
+      revision: 302fc469eb860892fc90403b5d758eb50a715f77
 
-  # Themes
-  zurb_foundation:
-    version: 5.0-beta1
-    type: theme
-    subdir: contrib
