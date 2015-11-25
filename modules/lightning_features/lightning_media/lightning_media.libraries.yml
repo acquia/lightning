@@ -1,0 +1,33 @@
+backbone.collectionView:
+  version: 1.0.0
+  js:
+    '/libraries/backbone.collectionView/dist/backbone.collectionView.min.js':
+      minified: true
+  dependencies:
+    - core/backbone
+
+dropzone.js:
+  version: 4.2.0
+  js:
+    '/libraries/dropzone/dist/min/dropzone.min.js':
+      minified: true
+  css:
+    component:
+      '/libraries/dropzone/dist/min/dropzone.min.css':
+        minified: true
+
+media_library:
+  version: VERSION
+  js:
+    'js/Backend.js': {}
+    'js/DrupalEntity.js': {}
+    'js/EntityGrid.js': {}
+    'js/MediaLibrary.js': {}
+    'js/Uploader.js': {}
+  css:
+    component:
+      'css/library.css': {}
+  dependencies:
+    - core/jquery.ui.tabs
+    - lightning_media/dropzone.js
+    - lightning_media/backbone.collectionView

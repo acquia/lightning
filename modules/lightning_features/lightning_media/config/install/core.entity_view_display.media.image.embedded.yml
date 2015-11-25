@@ -1,0 +1,32 @@
+uuid: 52579bba-569e-497d-9400-b3fe7c6a752c
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.embedded
+    - field.field.media.image.category
+    - field.field.media.image.field_media_in_library
+    - field.field.media.image.image
+    - media_entity.bundle.image
+  module:
+    - image
+id: media.image.embedded
+targetEntityType: media
+bundle: image
+mode: embedded
+content:
+  thumbnail:
+    type: image
+    weight: 1
+    label: hidden
+    settings:
+      image_style: ''
+      image_link: ''
+    third_party_settings: {  }
+hidden:
+  category: true
+  created: true
+  field_media_in_library: true
+  image: true
+  name: true
+  uid: true
