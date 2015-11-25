@@ -1,0 +1,91 @@
+@import "compass/utilities/general/clearfix";
+@import "compass/css3";
+
+.media-library {
+  .ui-dialog &.ui-dialog-content.ui-widget-content {
+    padding: 0;
+  }
+
+  &.ui-tabs {
+    .ui-tabs-nav {
+      padding: 0;
+    }
+
+    .ui-tabs-panel {
+      @include clearfix();
+    }
+  }
+
+  #library {
+    padding: 0;
+
+    ul.collection-list {
+      padding: 0;
+      margin: 8px;
+      list-style: none;
+      @include display-flex();
+      @include flex-wrap(wrap);
+      @include align-items(center);
+
+      li {
+        width: 25%;
+
+        drupal-entity {
+          padding: 8px;
+          display: block;
+
+          img {
+            max-width: 100%;
+            display: block;
+            height: auto;
+          }
+        }
+
+        &.selected drupal-entity {
+          background-color: greenyellow;
+        }
+      }
+    }
+  }
+
+  header, footer {
+    background-color: #e5e5e5;
+    padding: 1em;
+
+    input, select {
+      margin-right: .5em;
+    }
+  }
+
+  .dropzone {
+    width: 48%;
+    padding: 0;
+    float: left;
+
+    .dz-preview {
+      margin: 0;
+      min-height: 0;
+
+      &:hover .dz-image img {
+        @include transform(none);
+        @include filter(none);
+      }
+
+      .dz-image {
+        width: auto;
+        height: auto;
+        overflow: visible;
+
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+      }
+    }
+  }
+
+  #upload footer {
+    float: right;
+    width: 45%;
+  }
+}
