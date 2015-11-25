@@ -57,21 +57,39 @@
       this.render();
     },
 
+    randomId: function () {
+      var text = '';
+      for (var i = 0; i < 8; i++) {
+        text += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.charAt(Math.floor(Math.random() * 52));
+      }
+      return text;
+    },
+
     render: function () {
-      var nav = document.createElement('ul'), t;
+      var nav = document.createElement('ul');
 
-      this.library.$el.attr('id', 'library').appendTo(this.el);
-      $('<li><a href="#library">' + Drupal.t('Library') + '</a></li>').appendTo(nav);
+      this.library.$el
+        .addClass('library')
+        .prop('id', this.randomId())
+        .appendTo(this.el);
 
-      this.upload.$el.attr('id', 'upload').appendTo(this.el);
-      $('<li><a href="#upload">' + Drupal.t('Upload') + '</a></li>').appendTo(nav);
+      $('<li><a href="#' + this.library.el.id + '">' + Drupal.t('Library') + '</a></li>')
+        .appendTo(nav);
+
+      this.upload.$el
+        .addClass('upload')
+        .prop('id', this.randomId())
+        .appendTo(this.el);
+
+      $('<li><a href="#' + this.upload.el.id + '">' + Drupal.t('Upload') + '</a></li>')
+        .appendTo(nav);
 
       this.$el.prepend(nav).tabs({
         activate: this.onTabActivate.bind(this),
         create: this.onTabCreate.bind(this),
         show: 400
       });
-    },
+    }
 
   });
 
