@@ -5,8 +5,6 @@
 
     widget: null,
 
-    widgets: [],
-
     events: {
       'dialogclose': 'onDialogClose'
     },
