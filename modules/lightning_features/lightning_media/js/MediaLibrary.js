@@ -13,18 +13,29 @@
       class: 'media-library'
     },
 
+    getActiveWidget: function (element) {
+      switch (true) {
+        case element === this.library.el:
+          return this.library;
+        case element === this.upload.el:
+          return this.upload;
+        default:
+          break;
+      }
+    },
+
     /**
      * Event triggered when a tab is chosen.
      */
     onTabActivate: function (event, ui) {
-      this.widget = this[ui.newPanel.prop('id')];
+      this.widget = this.getActiveWidget(ui.newPanel.get(0));
     },
 
     /**
      * Event triggered when the jQuery UI tab set is created.
      */
     onTabCreate: function (event, ui) {
-      this.widget = this[ui.panel.prop('id')];
+      this.widget = this.getActiveWidget(ui.panel.get(0));
     },
 
     /**
@@ -57,21 +68,39 @@
       this.render();
     },
 
+    randomId: function () {
+      var text = '';
+      for (var i = 0; i < 8; i++) {
+        text += 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.charAt(Math.floor(Math.random() * 52));
+      }
+      return text;
+    },
+
     render: function () {
-      var nav = document.createElement('ul'), t;
+      var nav = document.createElement('ul');
 
-      this.library.$el.attr('id', 'library').appendTo(this.el);
-      $('<li><a href="#library">' + Drupal.t('Library') + '</a></li>').appendTo(nav);
+      this.library.$el
+        .addClass('library')
+        .prop('id', this.randomId())
+        .appendTo(this.el);
 
-      this.upload.$el.attr('id', 'upload').appendTo(this.el);
-      $('<li><a href="#upload">' + Drupal.t('Upload') + '</a></li>').appendTo(nav);
+      $('<li><a href="#' + this.library.el.id + '">' + Drupal.t('Library') + '</a></li>')
+        .appendTo(nav);
+
+      this.upload.$el
+        .addClass('upload')
+        .prop('id', this.randomId())
+        .appendTo(this.el);
+
+      $('<li><a href="#' + this.upload.el.id + '">' + Drupal.t('Upload') + '</a></li>')
+        .appendTo(nav);
 
       this.$el.prepend(nav).tabs({
         activate: this.onTabActivate.bind(this),
         create: this.onTabCreate.bind(this),
         show: 400
       });
-    },
+    }
 
   });
 
