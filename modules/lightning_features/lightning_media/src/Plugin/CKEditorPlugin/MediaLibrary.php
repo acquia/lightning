@@ -71,6 +71,16 @@ class MediaLibrary extends EmbedCKEditorPluginBase {
   /**
    * {@inheritdoc}
    */
+  public function getLibraries(Editor $editor) {
+    return [
+      'lightning_media/backbone.facetr',
+      'lightning_media/media_library',
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFile() {
     return $this->moduleHandler->getModule('lightning_media')->getPath() . '/js/media_library.js';
   }
