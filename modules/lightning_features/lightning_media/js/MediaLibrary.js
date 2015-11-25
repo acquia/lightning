@@ -5,6 +5,8 @@
 
     widget: null,
 
+    widgets: [],
+
     events: {
       'dialogclose': 'onDialogClose'
     },
@@ -13,18 +15,29 @@
       class: 'media-library'
     },
 
+    getActiveWidget: function (element) {
+      switch (true) {
+        case element === this.library.el:
+          return this.library;
+        case element === this.upload.el:
+          return this.upload;
+        default:
+          break;
+      }
+    },
+
     /**
      * Event triggered when a tab is chosen.
      */
     onTabActivate: function (event, ui) {
-      this.widget = this[ui.newPanel.prop('id')];
+      this.widget = this.getActiveWidget(ui.newPanel.get(0));
     },
 
     /**
      * Event triggered when the jQuery UI tab set is created.
      */
     onTabCreate: function (event, ui) {
-      this.widget = this[ui.panel.prop('id')];
+      this.widget = this.getActiveWidget(ui.panel.get(0));
     },
 
     /**
