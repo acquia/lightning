@@ -1,0 +1,23 @@
+lightning.media.upload_create:
+  path: '/lightning/upload'
+  defaults:
+    _controller: '\Drupal\lightning_media\Controller\UploadController::upload'
+  requirements:
+    _permission: 'dropzone upload files'
+  methods: ['POST']
+
+lightning.media.upload_delete:
+  path: '/lightning/upload/{file}'
+  defaults:
+    _controller: '\Drupal\lightning_media\Controller\UploadController::cancel'
+  requirements:
+    _permission: 'dropzone upload files'
+  methods: ['DELETE']
+
+lightning.media.upload_save:
+  path: '/lightning/upload/{file}'
+  defaults:
+    _controller: '\Drupal\lightning_media\Controller\UploadController::save'
+  requirements:
+    _permission: 'dropzone upload files'
+  methods: ['PUT']
