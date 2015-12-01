@@ -35,6 +35,7 @@ install:
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
+  - echo "projects:{lightning:{download:{branch: $TRAVIS_BRANCH, url: https://github.com/$TRAVIS_REPO_SLUG.git}}}" >> env.yml
   # Build drupal + lightning from makefile
   - drush make --concurrency=5 build-lightning.make.yml docroot -y
 
