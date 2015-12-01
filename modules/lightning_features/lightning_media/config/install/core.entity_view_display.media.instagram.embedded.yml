@@ -7,43 +7,23 @@ dependencies:
     - field.field.media.instagram.field_media_in_library
     - media_entity.bundle.instagram
   module:
-    - image
-    - user
+    - media_entity_instagram
 id: media.instagram.embedded
 targetEntityType: media
 bundle: instagram
 mode: embedded
 content:
-  created:
-    label: hidden
-    type: timestamp
+  embed_code:
+    type: instagram_embed
     weight: 0
-    settings:
-      date_format: medium
-      custom_date_format: ''
-      timezone: ''
-    third_party_settings: {  }
-  name:
-    label: hidden
-    type: string
-    weight: -5
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-  thumbnail:
-    type: image
-    weight: 1
     label: hidden
     settings:
-      image_style: thumbnail
-      image_link: ''
-    third_party_settings: {  }
-  uid:
-    label: hidden
-    type: author
-    weight: 0
-    settings: {  }
+      width: '480'
+      height: '640'
     third_party_settings: {  }
 hidden:
-  embed_code: true
+  created: true
   field_media_in_library: true
+  name: true
+  thumbnail: true
+  uid: true
