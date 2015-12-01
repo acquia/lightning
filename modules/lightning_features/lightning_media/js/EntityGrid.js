@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 (function ($, Drupal, Backbone) {
-=======
-(function (Drupal, Backbone) {
->>>>>>> origin/8.x-1.x
   "use strict";
 
   window.EntityGrid = Backbone.View.extend({
@@ -10,7 +6,6 @@
     searchTimeoutId: -1,
 
     events: {
-<<<<<<< HEAD
       'appear footer': 'onFooterAppear',
       'keyup header input[type = "search"]': 'onSearch'
     },
@@ -19,11 +14,6 @@
       this.backend.fetchMore();
     },
 
-=======
-      'keyup header input[type = "search"]': 'onSearch'
-    },
-
->>>>>>> origin/8.x-1.x
     /**
      * Event triggered when the search field is changed.
      */
@@ -56,10 +46,7 @@
       this.el.appendChild(this.header);
       this.innerView.render();
       this.el.appendChild(this.innerView.el);
-<<<<<<< HEAD
       $('<footer />').css({ height: 0, padding: 0 }).appear().appendTo(this.el);
-=======
->>>>>>> origin/8.x-1.x
     },
 
     finalize: function () {
@@ -72,8 +59,4 @@
 
   });
 
-<<<<<<< HEAD
 })(jQuery, Drupal, Backbone);
-=======
-})(Drupal, Backbone);
->>>>>>> origin/8.x-1.x
