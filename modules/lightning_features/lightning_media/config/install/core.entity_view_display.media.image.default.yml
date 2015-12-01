@@ -2,16 +2,15 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.media.embedded
     - field.field.media.image.field_media_in_library
     - field.field.media.image.image
     - media_entity.bundle.image
   module:
     - image
-id: media.image.embedded
+id: media.image.default
 targetEntityType: media
 bundle: image
-mode: embedded
+mode: default
 content:
   image:
     type: image

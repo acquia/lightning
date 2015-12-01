@@ -2,28 +2,28 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.media.embedded
-    - field.field.media.image.field_media_in_library
-    - field.field.media.image.image
-    - media_entity.bundle.image
+    - core.entity_view_mode.media.media_library
+    - field.field.media.tweet.embed_code
+    - field.field.media.tweet.field_media_in_library
+    - media_entity.bundle.tweet
   module:
     - image
-id: media.image.embedded
+id: media.tweet.media_library
 targetEntityType: media
-bundle: image
-mode: embedded
+bundle: tweet
+mode: media_library
 content:
-  image:
+  thumbnail:
     type: image
     weight: 0
     label: hidden
     settings:
-      image_style: ''
+      image_style: medium
       image_link: ''
     third_party_settings: {  }
 hidden:
   created: true
+  embed_code: true
   field_media_in_library: true
   name: true
-  thumbnail: true
   uid: true

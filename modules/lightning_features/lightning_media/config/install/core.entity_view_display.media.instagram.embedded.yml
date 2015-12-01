@@ -3,23 +3,23 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.embedded
-    - field.field.media.image.field_media_in_library
-    - field.field.media.image.image
-    - media_entity.bundle.image
+    - field.field.media.instagram.embed_code
+    - field.field.media.instagram.field_media_in_library
+    - media_entity.bundle.instagram
   module:
-    - image
-id: media.image.embedded
+    - media_entity_instagram
+id: media.instagram.embedded
 targetEntityType: media
-bundle: image
+bundle: instagram
 mode: embedded
 content:
-  image:
-    type: image
+  embed_code:
+    type: instagram_embed
     weight: 0
     label: hidden
     settings:
-      image_style: ''
-      image_link: ''
+      width: '480'
+      height: '640'
     third_party_settings: {  }
 hidden:
   created: true

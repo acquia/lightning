@@ -2,28 +2,28 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.media.embedded
+    - core.entity_view_mode.media.media_library
     - field.field.media.image.field_media_in_library
     - field.field.media.image.image
     - media_entity.bundle.image
   module:
     - image
-id: media.image.embedded
+id: media.image.media_library
 targetEntityType: media
 bundle: image
-mode: embedded
+mode: media_library
 content:
-  image:
+  thumbnail:
     type: image
-    weight: 0
+    weight: 1
     label: hidden
     settings:
-      image_style: ''
+      image_style: medium
       image_link: ''
     third_party_settings: {  }
 hidden:
   created: true
   field_media_in_library: true
+  image: true
   name: true
-  thumbnail: true
   uid: true

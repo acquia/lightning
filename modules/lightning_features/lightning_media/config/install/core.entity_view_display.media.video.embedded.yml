@@ -3,23 +3,19 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.embedded
-    - field.field.media.image.field_media_in_library
-    - field.field.media.image.image
-    - media_entity.bundle.image
-  module:
-    - image
-id: media.image.embedded
+    - field.field.media.video.embed_code
+    - field.field.media.video.field_media_in_library
+    - media_entity.bundle.video
+id: media.video.embedded
 targetEntityType: media
-bundle: image
+bundle: video
 mode: embedded
 content:
-  image:
-    type: image
+  embed_code:
+    type: basic_string
     weight: 0
     label: hidden
-    settings:
-      image_style: ''
-      image_link: ''
+    settings: {  }
     third_party_settings: {  }
 hidden:
   created: true

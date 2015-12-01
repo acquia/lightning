@@ -16,6 +16,13 @@ dropzone.js:
       '/libraries/dropzone/dist/min/dropzone.min.css':
         minified: true
 
+jquery.appear:
+  version: 0.3.6
+  js:
+    '/libraries/jquery.appear/jquery.appear.js': {}
+  dependencies:
+    - core/jquery
+
 media_library:
   version: VERSION
   js:
@@ -29,5 +36,6 @@ media_library:
       'css/library.css': {}
   dependencies:
     - core/jquery.ui.tabs
-    - lightning_media/dropzone.js
     - lightning_media/backbone.collectionView
+    - lightning_media/dropzone.js
+    - lightning_media/jquery.appear
