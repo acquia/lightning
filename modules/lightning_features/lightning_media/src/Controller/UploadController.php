@@ -13,6 +13,10 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Image\ImageFactory;
 use Drupal\Core\Render\RendererInterface;
+<<<<<<< HEAD
+=======
+use Drupal\Core\Session\AccountInterface;
+>>>>>>> origin/8.x-1.x
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\file\FileInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -69,15 +73,28 @@ class UploadController extends ControllerBase {
    *   The media entity storage controller.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
+<<<<<<< HEAD
+=======
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The currently logged in user.
+>>>>>>> origin/8.x-1.x
    * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
    *   The transliteration service.
    * @param \Drupal\Core\Image\ImageFactory
    *   The image factory service.
    */
+<<<<<<< HEAD
   public function __construct(EntityStorageInterface $file_storage, EntityStorageInterface $media_storage, RendererInterface $renderer, TransliterationInterface $transliteration, ImageFactory $image_factory) {
     $this->fileStorage = $file_storage;
     $this->mediaStorage = $media_storage;
     $this->renderer = $renderer;
+=======
+  public function __construct(EntityStorageInterface $file_storage, EntityStorageInterface $media_storage, RendererInterface $renderer, AccountInterface $current_user, TransliterationInterface $transliteration, ImageFactory $image_factory) {
+    $this->fileStorage = $file_storage;
+    $this->mediaStorage = $media_storage;
+    $this->renderer = $renderer;
+    $this->currentUser = $current_user;
+>>>>>>> origin/8.x-1.x
     $this->transliteration = $transliteration;
     $this->imageFactory = $image_factory;
   }

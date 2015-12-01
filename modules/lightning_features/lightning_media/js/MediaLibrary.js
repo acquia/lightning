@@ -5,8 +5,11 @@
 
     widget: null,
 
+<<<<<<< HEAD
     widgets: [],
 
+=======
+>>>>>>> origin/8.x-1.x
     events: {
       'dialogclose': 'onDialogClose'
     },
@@ -59,7 +62,11 @@
     initialize: function () {
       this.library = new EntityGrid({
         backend:
+<<<<<<< HEAD
         new MediaLibraryBackend([], { baseUrl: Drupal.url('media-library') })
+=======
+          new MediaLibraryBackend([], { baseUrl: Drupal.url('media-library') })
+>>>>>>> origin/8.x-1.x
       });
 
       this.upload = new Uploader({
@@ -82,6 +89,7 @@
       var nav = document.createElement('ul');
 
       this.library.$el
+<<<<<<< HEAD
       .addClass('library')
       .prop('id', this.randomId())
       .appendTo(this.el);
@@ -96,6 +104,22 @@
 
       $('<li><a href="#' + this.upload.el.id + '">' + Drupal.t('Upload') + '</a></li>')
       .appendTo(nav);
+=======
+        .addClass('library')
+        .prop('id', this.randomId())
+        .appendTo(this.el);
+
+      $('<li><a href="#' + this.library.el.id + '">' + Drupal.t('Library') + '</a></li>')
+        .appendTo(nav);
+
+      this.upload.$el
+        .addClass('upload')
+        .prop('id', this.randomId())
+        .appendTo(this.el);
+
+      $('<li><a href="#' + this.upload.el.id + '">' + Drupal.t('Upload') + '</a></li>')
+        .appendTo(nav);
+>>>>>>> origin/8.x-1.x
 
       this.$el.prepend(nav).tabs({
         activate: this.onTabActivate.bind(this),
