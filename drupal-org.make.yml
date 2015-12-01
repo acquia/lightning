@@ -59,12 +59,9 @@ projects:
       branch: 8.x-1.x
       url: https://github.com/drupal-media/media_entity_image.git
       revision: 0b06c2f6c62e6518d39fd71798f82f4ccd3b52d8
-
   # Layout. These modules will only be enabled if the associated Lightning Layout module
   # is enabled.
   # ---
-  ctools:
-    type: module
   layout_plugin:
     type: module
   # Page Manager may no longer be needed once other tools are ported to Drupal 8.
@@ -72,17 +69,23 @@ projects:
     type: module
   panels:
     type: module
-  # Preview. These modules will only be enabled if the associated Lightning Preview module
-  # is enabled.
+  # Preview. These modules will only be enabled if the associated Lightning
+  # Preview module is enabled.
   # ---
-  # Workflow. These modules will only be enabled if the associated Lightning Workflow
-  # module is enabled.
+  # Workflow. These modules will only be enabled if the associated Lightning
+  # Workflow module is enabled.
   # ---
-  # Other Modules. Tese modules provide general expected functionality or enhancements not
-  # directly related to Lightning Core Features.
-  # ---
-  # Themes
-  zurb_foundation:
-    version: 5.0-beta1
-    type: theme
-    subdir: contrib
+  # Other Modules. These modules provide general expected functionality or
+  # enhancements not directly related to Lightning Core Features.
+  ctools:
+    type: module
+    download:
+      type: git
+      branch: 8.x-3.x
+      revision: 74330f697697d03aac8feb13329c0f31072b99c4
+  acquia_connector:
+    type: module
+    download:
+      type: git
+      branch: 8.x-1.x
+      revision: 302fc469eb860892fc90403b5d758eb50a715f77
