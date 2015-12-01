@@ -56,9 +56,7 @@
       this.dropzone = new Dropzone(dzElement, {
         acceptedFiles: 'image/*',
         addRemoveLinks: true,
-        // @TODO: For whatever reason, these strings are not showing up
-        // in the dropzone by default.
-        dictDefaultMessage: Drupal.t('Drop an image here to upload'),
+        dictDefaultMessage: Drupal.t('Click or drag and drop an image here to upload it.'),
         dictFallbackMessage: Drupal.t('Click here to upload an image'),
         maxFiles: 1,
         thumbnailHeight: null,

@@ -1,4 +1,4 @@
-(function (Drupal, Backbone) {
+(function ($, Drupal, Backbone) {
   "use strict";
 
   window.EntityGrid = Backbone.View.extend({
@@ -6,7 +6,12 @@
     searchTimeoutId: -1,
 
     events: {
+      'appear footer': 'onFooterAppear',
       'keyup header input[type = "search"]': 'onSearch'
+    },
+
+    onFooterAppear: function () {
+      this.backend.fetchMore();
     },
 
     /**
@@ -41,6 +46,7 @@
       this.el.appendChild(this.header);
       this.innerView.render();
       this.el.appendChild(this.innerView.el);
+      $('<footer />').css({ height: 0, padding: 0 }).appear().appendTo(this.el);
     },
 
     finalize: function () {
@@ -53,4 +59,4 @@
 
   });
 
-})(Drupal, Backbone);
+})(jQuery, Drupal, Backbone);
