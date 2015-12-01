@@ -4,7 +4,7 @@
 
 @api
   Scenario: Creating an image
-    Given I am logged in as a user with the "administer media" permission
+    Given I am logged in as a user with the "create media" permission
     When I visit "/media/add"
     And I click "Image"
     Then I should see "Image"
