@@ -8,7 +8,14 @@
 
   &.ui-tabs {
     .ui-tabs-nav {
-      padding: 0;
+      margin: .5em 0 0 0;
+      padding: 0 0 0 .5em;
+
+      .ui-state-active {
+        border-radius: 12px 12px 0 0;
+        background-color: #e5e5e5;
+        border: none;
+      }
     }
 
     .ui-tabs-panel {
@@ -61,13 +68,13 @@
   }
 
   .dropzone {
-    width: 48%;
     padding: 0;
-    float: left;
 
     .dz-preview {
-      margin: 0;
+      display: block;
       min-height: 0;
+      width: 40%;
+      margin: 0 auto;
 
       &:hover .dz-image img {
         @include transform(none);
@@ -85,10 +92,5 @@
         }
       }
     }
-  }
-
-  .upload footer {
-    float: right;
-    width: 45%;
   }
 }
