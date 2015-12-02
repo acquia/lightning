@@ -177,6 +177,7 @@ class UploadController extends ControllerBase {
       'uid' => $file->getOwnerId(),
       'status' => TRUE,
       'thumbnail' => $file->id(),
+      'image' => $file->id(),
       'field_media_in_library' => TRUE,
     ]);
     $this->mediaStorage->save($media);
