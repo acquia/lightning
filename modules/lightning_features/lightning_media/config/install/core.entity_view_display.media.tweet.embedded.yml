@@ -6,13 +6,15 @@ dependencies:
     - field.field.media.tweet.embed_code
     - field.field.media.tweet.field_media_in_library
     - media_entity.bundle.tweet
+  module:
+    - media_entity_twitter
 id: media.tweet.embedded
 targetEntityType: media
 bundle: tweet
 mode: embedded
 content:
   embed_code:
-    type: basic_string
+    type: twitter_embed
     weight: 0
     label: hidden
     settings: {  }
