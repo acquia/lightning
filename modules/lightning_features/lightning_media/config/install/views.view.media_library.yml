@@ -80,7 +80,7 @@ display:
           field: name
           relationship: none
           group_type: group
-          admin_label: label
+          admin_label: ''
           label: ''
           exclude: false
           alter:
@@ -143,7 +143,7 @@ display:
           field: bundle
           relationship: none
           group_type: group
-          admin_label: bundle
+          admin_label: ''
           label: ''
           exclude: false
           alter:
@@ -202,79 +202,13 @@ display:
           entity_type: media
           entity_field: bundle
           plugin_id: field
-        mid:
-          id: mid
-          table: media
-          field: mid
-          relationship: none
-          group_type: group
-          admin_label: id
-          label: ''
-          exclude: false
-          alter:
-            alter_text: false
-            text: ''
-            make_link: false
-            path: ''
-            absolute: false
-            external: false
-            replace_spaces: false
-            path_case: none
-            trim_whitespace: false
-            alt: ''
-            rel: ''
-            link_class: ''
-            prefix: ''
-            suffix: ''
-            target: ''
-            nl2br: false
-            max_length: 0
-            word_boundary: true
-            ellipsis: true
-            more_link: false
-            more_link_text: ''
-            more_link_path: ''
-            strip_tags: false
-            trim: false
-            preserve_tags: ''
-            html: false
-          element_type: ''
-          element_class: ''
-          element_label_type: ''
-          element_label_class: ''
-          element_label_colon: false
-          element_wrapper_type: ''
-          element_wrapper_class: ''
-          element_default_classes: true
-          empty: ''
-          hide_empty: false
-          empty_zero: false
-          hide_alter_empty: true
-          click_sort_column: value
-          type: number_integer
-          settings:
-            thousand_separator: ''
-            prefix_suffix: true
-          group_column: value
-          group_columns: {  }
-          group_rows: true
-          delta_limit: 0
-          delta_offset: 0
-          delta_reversed: false
-          delta_first_last: false
-          multi_type: separator
-          separator: ', '
-          field_api_classes: false
-          entity_type: media
-          entity_field: mid
-          plugin_id: field
         thumbnail__target_id:
           id: thumbnail__target_id
           table: media_field_data
           field: thumbnail__target_id
           relationship: none
           group_type: group
-          admin_label: thumbnail
+          admin_label: ''
           label: ''
           exclude: false
           alter:
@@ -340,7 +274,7 @@ display:
           field: uuid
           relationship: none
           group_type: group
-          admin_label: uuid
+          admin_label: ''
           label: ''
           exclude: false
           alter:
@@ -405,7 +339,7 @@ display:
           field: nothing
           relationship: none
           group_type: group
-          admin_label: entity_type
+          admin_label: 'Entity Type'
           label: ''
           exclude: false
           alter:
@@ -454,7 +388,7 @@ display:
           field: uid
           relationship: none
           group_type: group
-          admin_label: uid
+          admin_label: ''
           label: ''
           exclude: false
           alter:
@@ -513,6 +447,72 @@ display:
           entity_type: media
           entity_field: uid
           plugin_id: field
+        mid:
+          id: mid
+          table: media_field_data
+          field: mid
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: false
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          click_sort_column: value
+          type: number_integer
+          settings:
+            thousand_separator: ''
+            prefix_suffix: false
+          group_column: value
+          group_columns: {  }
+          group_rows: true
+          delta_limit: 0
+          delta_offset: 0
+          delta_reversed: false
+          delta_first_last: false
+          multi_type: separator
+          separator: ', '
+          field_api_classes: false
+          entity_type: media
+          entity_field: mid
+          plugin_id: field
       filters:
         status:
           value: true
@@ -563,47 +563,6 @@ display:
           entity_type: media
           entity_field: name
           plugin_id: string
-        bundle:
-          id: bundle
-          table: media
-          field: bundle
-          relationship: none
-          group_type: group
-          admin_label: ''
-          operator: in
-          value: {  }
-          group: 1
-          exposed: true
-          expose:
-            operator_id: bundle_op
-            label: Bundle
-            description: ''
-            use_operator: false
-            operator: bundle_op
-            identifier: bundle
-            required: false
-            remember: false
-            multiple: false
-            remember_roles:
-              authenticated: authenticated
-              anonymous: '0'
-              administrator: '0'
-            reduce: false
-          is_grouped: false
-          group_info:
-            label: ''
-            description: ''
-            identifier: ''
-            optional: true
-            widget: select
-            multiple: false
-            remember: false
-            default_group: All
-            default_group_multiple: {  }
-            group_items: {  }
-          entity_type: media
-          entity_field: bundle
-          plugin_id: bundle
         field_media_in_library_value:
           id: field_media_in_library_value
           table: media__field_media_in_library
@@ -736,6 +695,6 @@ display:
         - 'languages:language_interface'
         - request_format
         - url
+        - url.query_args
         - user.permissions
       tags: {  }
-
