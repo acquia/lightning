@@ -1,0 +1,60 @@
+<?php
+/**
+ * @file Contains install hook for the Lightning Media Demo Content Module.
+ */
+
+use Drupal\media_entity\Entity\Media;
+
+/**
+ * Implements hook_install().
+ *
+ * Creates some demo content of the various media bundles that come with
+ * Lightning Media.
+ */
+function lightning_media_democontent_install() {
+  // Create an Instagram entity.
+  $instagram_values = [
+    'bundle' => 'instagram',
+    'uid' => 1,
+    'status' => 1,
+    'name' => 'Celebr8D8',
+    'embed_code' => [
+      'value' => '<blockquote class="instagram-media" data-instgrm-captioned data-instgrm-version="6" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);"><div style="padding:8px;"> <div style=" background:#F8F8F8; line-height:0; margin-top:40px; padding:50.0% 0; text-align:center; width:100%;"> <div style=" background:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACwAAAAsCAMAAAApWqozAAAAGFBMVEUiIiI9PT0eHh4gIB4hIBkcHBwcHBwcHBydr+JQAAAACHRSTlMABA4YHyQsM5jtaMwAAADfSURBVDjL7ZVBEgMhCAQBAf//42xcNbpAqakcM0ftUmFAAIBE81IqBJdS3lS6zs3bIpB9WED3YYXFPmHRfT8sgyrCP1x8uEUxLMzNWElFOYCV6mHWWwMzdPEKHlhLw7NWJqkHc4uIZphavDzA2JPzUDsBZziNae2S6owH8xPmX8G7zzgKEOPUoYHvGz1TBCxMkd3kwNVbU0gKHkx+iZILf77IofhrY1nYFnB/lQPb79drWOyJVa/DAvg9B/rLB4cC+Nqgdz/TvBbBnr6GBReqn/nRmDgaQEej7WhonozjF+Y2I/fZou/qAAAAAElFTkSuQmCC); display:block; height:44px; margin:0 auto -44px; position:relative; top:-22px; width:44px;"></div></div> <p style=" margin:8px 0 0 0; padding:0 4px;"> <a href="https://www.instagram.com/p/-Ph6HzvrEl/" style=" color:#000; font-family:Arial,sans-serif; font-size:14px; font-style:normal; font-weight:normal; line-height:17px; text-decoration:none; word-wrap:break-word;" target="_blank">Starting to celebrate a little early! We can&#39;t wait to #celebr8d8 #drupal8 #acquia</a></p> <p style=" color:#c9c8cd; font-family:Arial,sans-serif; font-size:14px; line-height:17px; margin-bottom:0; margin-top:8px; overflow:hidden; padding:8px 0 7px; text-align:center; text-overflow:ellipsis; white-space:nowrap;">A photo posted by Hannah Corey (@hannahcorey) on <time style=" font-family:Arial,sans-serif; font-size:14px; line-height:17px;" datetime="2015-11-18T22:18:21+00:00">Nov 18, 2015 at 2:18pm PST</time></p></div></blockquote>
+<script async defer src="//platform.instagram.com/en_US/embeds.js"></script>',
+    ],
+    'field_media_in_library' => [
+      'value' => 1,
+    ]
+  ];
+  $instagram_entity = Media::create($instagram_values)->save();
+
+  // Create a Twitter entity.
+  $twitter_values = [
+    'bundle' => 'tweet',
+    'uid' => 1,
+    'status' => 1,
+    'name' => 'Database Admins',
+    'embed_code' => [
+      'value' => 'https://twitter.com/webchick/status/672110599497617408'
+    ],
+    'field_media_in_library' => [
+      'value' => 1,
+    ]
+  ];
+  $twitter_entity = Media::create($twitter_values)->save();
+
+  // Create a Video entity.
+  $video_values = [
+    'bundle' => 'video',
+    'uid' => 1,
+    'status' => 1,
+    'name' => 'Introduction to Drupal 8',
+    'embed_code' => [
+      'value' => '<iframe width="560" height="315" src="https://www.youtube.com/embed/ktCgVopf7D0" frameborder="0" allowfullscreen></iframe>'
+    ],
+    'field_media_in_library' => [
+      'value' => 1,
+    ]
+  ];
+  $twitter_entity = Media::create($video_values)->save();
+}
