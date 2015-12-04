@@ -37,8 +37,8 @@ install:
 
   # Generate the file containing build-specific overrides for drush make.
   - ./env.sh
-  # Build drupal + lightning from makefile
-  - drush make --concurrency=5 build-lightning.make.yml docroot -y
+  # Build drupal + lightning from makefile, with overrides in env.yml
+  - drush make --includes=env.yml --concurrency=5 build-lightning.make.yml docroot -y
 
   # Install lightning
   - cd docroot
