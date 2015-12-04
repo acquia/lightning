@@ -5,6 +5,10 @@
 
     searchTimeoutId: -1,
 
+    attributes: {
+      class: 'library'
+    },
+
     events: {
       'appear footer': 'onFooterAppear',
       'keyup header input[type = "search"]': 'onSearch'
