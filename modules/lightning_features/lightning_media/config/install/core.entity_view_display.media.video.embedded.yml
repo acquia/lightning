@@ -6,13 +6,15 @@ dependencies:
     - field.field.media.video.embed_code
     - field.field.media.video.field_media_in_library
     - media_entity.bundle.video
+  module:
+    - media_entity_embeddable_video
 id: media.video.embedded
 targetEntityType: media
 bundle: video
 mode: embedded
 content:
   embed_code:
-    type: basic_string
+    type: video
     weight: 0
     label: hidden
     settings: {  }
