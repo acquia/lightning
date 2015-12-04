@@ -19,7 +19,11 @@
       this.el.setAttribute('data-entity-id', this.model.id);
       this.el.setAttribute('data-entity-label', this.model.get('label'));
       this.el.setAttribute('data-entity-uuid', this.model.get('uuid'));
+
       this.el.innerHTML = this.model.get('thumbnail');
+      if (this.model.get('bundle') !== 'Image') {
+        this.el.innerHTML += '<div>' + this.model.get('label') + '</div>';
+      }
     }
 
   });
