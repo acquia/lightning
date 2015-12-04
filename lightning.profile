@@ -81,8 +81,8 @@ function lightning_extensions_validate($form, &$form_state) {
  * Enable requested Lightning extensions and demo content.
  */
 function lightning_extensions_enable($form_id, &$form_state) {
-  $feature_values = array_filter($form_state->getValue('extensions'));
-  $demo_values = array_filter($form_state->getValue('democontent'));
+  $features = array_filter($form_state->getValue('extensions'));
+  $demos = array_filter($form_state->getValue('democontent'));
   $enable = array_merge($features, $demos);
   if (isset($enable)) {
     \Drupal::service('module_installer')->install($enable, TRUE);
