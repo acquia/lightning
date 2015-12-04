@@ -80,7 +80,6 @@
       var nav = document.createElement('ul');
 
       this.library.$el
-        .addClass('library')
         .prop('id', this.randomId())
         .appendTo(this.el);
 
@@ -88,7 +87,6 @@
         .appendTo(nav);
 
       this.upload.$el
-        .addClass('upload')
         .prop('id', this.randomId())
         .appendTo(this.el);
 

@@ -3,6 +3,10 @@
 
   window.Uploader = Backbone.View.extend({
 
+    attributes: {
+      class: 'upload'
+    },
+
     /**
      * The uploaded file entity, as returned from the server.
      */
