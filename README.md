@@ -9,3 +9,8 @@ This installation profile is a base example that ships with an optional demo and
 Use http://github.com/acquia/lightning-features in your new projects.
 
 For more info visit: http://drupal.org/project/lightning
+
+Docs: https://www.drupal.org/node/2472867
+
+Acquia provides a nightly build service of the Lightning distro including demo content.
+Visit: http://j.mp/download-lightning
