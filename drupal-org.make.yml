@@ -55,7 +55,38 @@ projects:
 
   # Layout. These modules will only be enabled if the associated Lightning
   # Layout module is enabled.
-  # ---
+  ctools:
+    type: module
+    download:
+      type: git
+      branch: 8.x-3.x
+      revision: f82fcba8e6b9e29ec77c158dfe62d8a406d712af
+    subdir: contrib/layout
+  layout_plugin:
+    type: module
+    download:
+      type: git
+      branch: 8.x-1.x
+      revision: a989e4dff1c17ccbca5ff9169edf3f7a7de856af
+    subdir: contrib/layout
+  panels:
+    type: module
+    download:
+      type: git
+      branch: 8.x-3.x
+      revision: a5015828dc77720f6684a22178c9361ff0389f2e
+    subdir: contrib/layout
+    patch:
+      # Add Panels IPE
+      2600634: https://www.drupal.org/files/issues/panels-ipe-2600634-21.patch
+  page_manager:
+    type: module
+    download:
+      type: git
+      branch: 8.x-1.x
+      revision: ab058973d350b0db510fe305e92f52f722b8ece8
+    subdir: contrib/layout
+
   # Preview. These modules will only be enabled if the associated Lightning
   # Preview module is enabled.
   # ---
@@ -64,13 +95,6 @@ projects:
   # ---
   # Other Modules. These modules provide general expected functionality or
   # enhancements not directly related to Lightning Core Features.
-  ctools:
-    type: module
-    download:
-      type: git
-      branch: 8.x-3.x
-      revision: 74330f697697d03aac8feb13329c0f31072b99c4
-    subdir: contrib
   acquia_connector:
     type: module
     download:
