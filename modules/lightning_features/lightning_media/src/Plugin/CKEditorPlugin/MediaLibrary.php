@@ -75,6 +75,7 @@ class MediaLibrary extends EmbedCKEditorPluginBase {
     return [
       'lightning_media/backbone.facetr',
       'lightning_media/media_library',
+      'media_entity_twitter/integration',
     ];
   }
 
