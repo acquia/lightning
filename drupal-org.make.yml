@@ -102,4 +102,14 @@ projects:
       branch: 8.x-1.x
       revision: 302fc469eb860892fc90403b5d758eb50a715f77
     subdir: contrib
+  metatag:
+    type: module
+    download:
+      type: git
+      branch: 8.x-1.x
+      revision: 357e7d7e44782ad5e26fbfa602645300e885c7b6
+    subdir: contrib
+    patch:
+      # Global config via entities
+      2563639: https://www.drupal.org/files/issues/2563639-70-metatag-add-global-defaults.patch
 
