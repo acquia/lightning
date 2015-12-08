@@ -5,7 +5,7 @@
 @api
   Scenario: Creating a video
     Given I am logged in as a user with the "create media" permission
-    When I visit "/admin/structure/media/add"
+    When I visit "/media/add"
     And I click "Video"
     Then I should see "Video"
     And I should see "Save to my media library"
