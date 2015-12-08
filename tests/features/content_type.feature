@@ -1,6 +1,7 @@
+@lightning @content_types
 @api @lightning @content_types
   Feature: Lightning Content Types
-    Makes sure that the article, basic page and landing page content types are present.
+    Makes sure that the article content type was created during installation.
 
   Scenario: Make sure that the content types provided by Lightning at installation are present.
     Given I am logged in as a user with the "administrator" role
