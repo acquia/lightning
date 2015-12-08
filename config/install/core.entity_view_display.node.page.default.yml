@@ -3,8 +3,10 @@ status: true
 dependencies:
   config:
     - field.field.node.page.body
+    - field.field.node.page.field_meta_tags
     - node.type.page
   module:
+    - metatag
     - text
     - user
 id: node.page.default
@@ -15,9 +17,17 @@ content:
   body:
     label: hidden
     type: text_default
-    weight: 100
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+  field_meta_tags:
+    type: metatag_empty_formatter
+    weight: 2
+    label: above
     settings: {  }
     third_party_settings: {  }
   links:
-    weight: 101
+    weight: 1
+    settings: {  }
+    third_party_settings: {  }
 hidden: {  }
