@@ -32,27 +32,23 @@
       list-style: none;
       @include display-flex();
       @include flex-wrap(wrap);
-      @include align-items(center);
+      @include align-items(flex-start);
       overflow-x: hidden;
       overflow-y: scroll;
       max-height: 20em;
 
       li {
-        width: 25%;
+        width: calc(25% - 16px);
+        border: 8px solid transparent;
 
-        drupal-entity {
-          padding: 8px;
-          display: block;
-
-          img {
-            max-width: 100%;
-            display: block;
-            height: auto;
-          }
+        &.selected {
+          border-color: greenyellow;
         }
 
-        &.selected drupal-entity {
-          background-color: greenyellow;
+        img {
+          max-width: 100%;
+          display: block;
+          height: auto;
         }
       }
     }

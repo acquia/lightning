@@ -1,29 +1,37 @@
-(function ($, Drupal, Backbone) {
+(function ($, Drupal, _, Backbone) {
   "use strict";
 
-  window.EntityGrid = Backbone.View.extend({
+  var Thumbnail = Backbone.View.extend({
 
-    searchTimeoutId: -1,
+    initialize: function (options) {
+      this.model = options.model;
+    },
+
+    render: function () {
+      this.el.innerHTML = this.model.get('thumbnail');
+      if (this.model.get('bundle').toLowerCase() !== 'image') {
+        this.el.innerHTML += '<div>' + this.model.get('label') + '</div>';
+      }
+    }
+
+  });
+
+  window.EntityGrid = Backbone.View.extend({
 
     attributes: {
       class: 'library'
     },
 
     events: {
-      'appear footer': 'onFooterAppear',
-      'keyup header input[type = "search"]': 'onSearch'
-    },
 
-    onFooterAppear: function () {
-      this.backend.fetchMore();
-    },
+      'appear footer': function () {
+          this.backend.fetchMore();
+      },
 
-    /**
-     * Event triggered when the search field is changed.
-     */
-    onSearch: function (event) {
-      clearTimeout(this.searchTimeoutId);
-      this.searchTimeoutId = setTimeout(function () { this.backend.search(event.target.value); }.bind(this), 400);
+      'keyup input[type = "search"]': _.debounce(function (event) {
+        this.backend.search(event.target.value);
+      }, 400)
+
     },
 
     initialize: function (options) {
@@ -39,7 +47,7 @@
         collection: this.backend,
         el: document.createElement('ul'),
         emptyListCaption: Drupal.t('There are no items to display.'),
-        modelView: DrupalEntity
+        modelView: Thumbnail
       });
 
       this.render();
@@ -54,13 +62,9 @@
     },
 
     finalize: function () {
-      // NOP. This is for interface conformance with Uploader.
-    },
-
-    getEmbedCode: function () {
-      return this.innerView.getSelectedModel({ by: 'view' }).$el.clone().empty().prop('outerHTML');
+      return Promise.resolve(this.innerView.getSelectedModel());
     }
 
   });
 
-})(jQuery, Drupal, Backbone);
+})(jQuery, Drupal, _, Backbone);

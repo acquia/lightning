@@ -39,18 +39,9 @@
     },
 
     /**
-     * Event triggered when an uploaded file is saved as a media entity
-     * by the upload widget.
-     */
-    onUploadSave: function (response) {
-      this.library.backend.unshift(new Backbone.Model(response));
-    },
-
-    /**
      * Event triggered when a jQuery UI dialog box is closed.
      */
     onDialogClose: function () {
-      this.widget.finalize();
       this.$el.tabs('option', 'active', 0);
     },
 
@@ -63,7 +54,9 @@
       this.upload = new Uploader({
         url: Drupal.url('lightning/upload')
       });
-      this.listenTo(this.upload, 'save', this.onUploadSave);
+      this.listenTo(this.upload.model, 'sync', function (model) {
+        this.library.backend.unshift(model);
+      });
 
       this.render();
     },
