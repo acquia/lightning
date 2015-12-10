@@ -19,13 +19,14 @@ module.exports = function(config) {
       'node_modules/underscore/underscore.js',
       'node_modules/backbone/backbone.js',
       'node_modules/dropzone/dist/dropzone.js',
+      'node_modules/es6-promise/dist/es6-promise.js',
       'node_modules/sinon/pkg/sinon.js',
-      'tests/Drupal.js',
-      'Backend.js',
-      'EntityGrid.js',
-      'MediaLibrary.js',
-      'Uploader.js',
-      'tests/*Test.js'
+      'Drupal.js',
+      '../../js/Backend.js',
+      '../../js/EntityGrid.js',
+      '../../js/MediaLibrary.js',
+      '../../js/Uploader.js',
+      '*Spec.js'
     ],
 
 

@@ -38,8 +38,16 @@ describe('Upload widget', function () {
     model = widget.model;
     dropzone = widget.dz;
 
-    // POSTing to the upload URL will always return {id: 1} -- great success!
-    server.respondWith('POST', '/upload', [200, {'Content-Type': 'application/json'}, '{"id":1}']);
+    // Set up server responses.
+    server.respondWith('POST', '/upload', [
+      200, {'Content-Type': 'application/json'}, '{"id":1}'
+    ]);
+    server.respondWith('DELETE', '/upload/1', [
+      200, {'Content-Type': 'application/json'}, '{}'
+    ]);
+    server.respondWith('PUT', '/upload/1', [
+      200, {'Content-Type': 'application/json'}, '{"id":2}'
+    ]);
   });
 
   afterEach(function () {
@@ -51,29 +59,52 @@ describe('Upload widget', function () {
     dropzone.on('success', function () {
       expect(model.id).toBe(1);
     })
-    .addFile({
-      name: 'foobar.jpg',
-      type: 'image/jpeg'
-    });
+    .addFile({ type: 'image/jpeg' });
     // Normally this is done automatically, but for some reason it doesn't
     // happen when I call addFile().
     dropzone.processQueue();
   });
 
   it('should try to delete an upload when a file is removed', function () {
-    server.respondWith('DELETE', '/upload/1', function (request) {
-      expect(request).toBeTruthy();
-      request.respond(200, {'Content-Type': 'application/json'}, '{}');
-    });
+    spyOn(model, 'destroy').and.callThrough();
+    spyOn(model, 'clear');
 
     dropzone.on('success', function (file) {
-      // Immediately remove the file to trigger a DELETE request.
       this.removeFile(file);
+      expect(model.destroy).toHaveBeenCalled();
+      expect(model.clear).toHaveBeenCalled();
     })
-    .addFile({
-      name: 'foobar.jpg',
-      type: 'image/jpeg'
-    });
+    .addFile({ type: 'image/jpeg' });
+    // See the previous spec.
+    dropzone.processQueue();
+  });
+
+  it('should not save the model unless asked', function (done) {
+    spyOn(model, 'save');
+
+    dropzone.on('success', function () {
+      widget.finalizeModel().then(function () {
+        expect(model.save).not.toHaveBeenCalled();
+      })
+      .then(done);
+    })
+    .addFile({ type: 'image/jpeg' });
+    // See the previous spec.
+    dropzone.processQueue();
+  });
+
+  it('should save the model if asked', function (done) {
+    spyOn(model, 'save').and.callThrough();
+
+    dropzone.on('success', function () {
+      widget.toLibrary.checked = true;
+      widget.finalizeModel().then(function () {
+        expect(model.save).toHaveBeenCalled();
+        expect(model.id).toBe(2);
+      })
+      .then(done);
+    })
+    .addFile({ type: 'image/jpeg' });
     // See the previous spec.
     dropzone.processQueue();
   });
