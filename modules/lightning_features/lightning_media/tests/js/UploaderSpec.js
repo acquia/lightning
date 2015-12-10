@@ -82,8 +82,8 @@ describe('Upload widget', function () {
     dropzone.on('success', function () {
       widget.finalizeModel().then(function () {
         expect(model.save).not.toHaveBeenCalled();
+        done();
       })
-      .then(done);
     })
     .addFile({ type: 'image/jpeg' });
   });
@@ -93,11 +93,12 @@ describe('Upload widget', function () {
 
     dropzone.on('success', function () {
       widget.toLibrary.checked = true;
+
       widget.finalizeModel().then(function () {
         expect(model.save).toHaveBeenCalled();
         expect(model.id).toBe(2);
+        done();
       })
-      .then(done);
     })
     .addFile({ type: 'image/jpeg' });
   });
