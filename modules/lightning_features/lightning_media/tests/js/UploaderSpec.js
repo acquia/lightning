@@ -55,17 +55,15 @@ describe('Upload widget', function () {
     server.restore();
   });
 
-  it('should update the model on successful upload', function () {
+  it('should update the model on successful upload', function (done) {
     dropzone.on('success', function () {
       expect(model.id).toBe(1);
+      done();
     })
     .addFile({ type: 'image/jpeg' });
-    // Normally this is done automatically, but for some reason it doesn't
-    // happen when I call addFile().
-    dropzone.processQueue();
   });
 
-  it('should try to delete an upload when a file is removed', function () {
+  it('should try to delete an upload when a file is removed', function (done) {
     spyOn(model, 'destroy').and.callThrough();
     spyOn(model, 'clear');
 
@@ -73,10 +71,9 @@ describe('Upload widget', function () {
       this.removeFile(file);
       expect(model.destroy).toHaveBeenCalled();
       expect(model.clear).toHaveBeenCalled();
+      done();
     })
     .addFile({ type: 'image/jpeg' });
-    // See the previous spec.
-    dropzone.processQueue();
   });
 
   it('should not save the model unless asked', function (done) {
@@ -89,8 +86,6 @@ describe('Upload widget', function () {
       .then(done);
     })
     .addFile({ type: 'image/jpeg' });
-    // See the previous spec.
-    dropzone.processQueue();
   });
 
   it('should save the model if asked', function (done) {
@@ -105,8 +100,6 @@ describe('Upload widget', function () {
       .then(done);
     })
     .addFile({ type: 'image/jpeg' });
-    // See the previous spec.
-    dropzone.processQueue();
   });
 
 });
