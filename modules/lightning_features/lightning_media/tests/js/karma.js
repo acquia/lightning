@@ -16,7 +16,12 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'node_modules/jquery/dist/jquery.js',
+      // Newer versions of Node install dependencies into node_modules, but older versions
+      // install dependencies into node_modules/DEPENDENT_PACKAGE/node_modules. So we need
+      // to account for both possibilities here, since Travis CI uses older versions of
+      // Node.
       'node_modules/underscore/underscore.js',
+      'node_modules/backbone/node_modules/underscore/underscore.js',
       'node_modules/backbone/backbone.js',
       'node_modules/dropzone/dist/dropzone.js',
       'node_modules/es6-promise/dist/es6-promise.js',
