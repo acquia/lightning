@@ -1,4 +1,4 @@
-# This file was automatically generated from build-lightning.make.yml. Do not edit, or Krampus will get you!
+; This file was automatically generated from build-lightning.make.yml. Do not edit, or Krampus will get you!
 api = 2
 core = 8.x
 includes[] = drupal-org-core.make
