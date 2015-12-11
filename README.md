@@ -17,11 +17,11 @@ justified each addition from there.
 
 ## Current version
 
-Alpha1 is an early release of a subset of the planned features for Media. It is
+Alpha2 is an early release of a subset of the planned features for Media. It is
 not stable and there will be no upgrade path. There is also very limited support
 for creating landing pages through Page Manager and Panels IPE.
 
-**Lightning Alpha1 is a Media-only release. The other functional areas will be
+**Lightning Alpha2 is a Media-only release. The other functional areas will be
 released in subsequent Alphas or Betas.**
 
 ### Media
