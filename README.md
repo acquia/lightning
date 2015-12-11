@@ -17,11 +17,11 @@ justified each addition from there.
 
 ## Current version
 
-Alpha2 is an early release of a subset of the planned features for Media. It is
+Alpha1 is an early release of a subset of the planned features for Media. It is
 not stable and there will be no upgrade path. There is also very limited support
 for creating landing pages through Page Manager and Panels IPE.
 
-**Lightning Alpha2 is a Media-only release. The other functional areas will be
+**Lightning Alpha1 is a Media-only release. The other functional areas will be
 released in subsequent Alphas or Betas.**
 
 ### Media
@@ -55,7 +55,7 @@ releasing Beta 1:
 
 The roadmap is subject to change, but our projected schedule is:
 
-* 4th Week in December: Alpha2 containing basic Layout support
+* 4th Week in December: Alpha1 containing basic Layout support
 * End of QTR 4: Beta1 with Media and Layout
 * Late January: Beta2 with Workflows and Scheduling
 * Late February: Full Layout Support
