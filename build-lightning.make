@@ -1,0 +1,23 @@
+# This file was automatically generated from build-lightning.make.yml. Do not edit, or Krampus will get you!
+api = 2
+core = 8.x
+includes[][0] = drupal-org-core.make.yml
+projects[lightning][type] = profile
+projects[lightning][download][type] = git
+projects[lightning][download][branch] = 8.x-1.x
+libraries[backbone.collectionView][type] = library
+libraries[backbone.collectionView][directory_name] = backbone.collectionView
+libraries[backbone.collectionView][download][type] = get
+libraries[backbone.collectionView][download][url] = https://github.com/rotundasoftware/backbone.collectionView/archive/master.zip
+libraries[dropzone.js][type] = library
+libraries[dropzone.js][directory_name] = dropzone
+libraries[dropzone.js][download][type] = get
+libraries[dropzone.js][download][url] = https://github.com/enyo/dropzone/archive/master.zip
+libraries[es6-promise][type] = library
+libraries[es6-promise][directory_name] = es6-promise
+libraries[es6-promise][download][type] = get
+libraries[es6-promise][download][url] = https://github.com/jakearchibald/es6-promise/archive/master.zip
+libraries[jquery.appear][type] = library
+libraries[jquery.appear][directory_name] = jquery.appear
+libraries[jquery.appear][download][type] = get
+libraries[jquery.appear][download][url] = https://github.com/morr/jquery.appear/archive/master.zip
