@@ -1,22 +1,41 @@
 #!/usr/bin/env php
 <?php
 
+function is_assoc(array $in) {
+  return ! is_numeric(implode('', array_keys($in)));
+}
+
+function key_string(array $keys) {
+  $head = reset($keys);
+  if (sizeof($keys) > 1) {
+    return $head . '[' . implode('][', array_slice($keys, 1)) . ']';
+  }
+  else {
+    return $head;
+  }
+}
+
 function to_ini_format(array $in, array $keys = []) {
   $out = array();
 
   foreach ($in as $key => $value) {
+    $keys[] = $key;
+
     if (is_array($value)) {
-      $out = array_merge($out, to_ini_format($value, array_merge($keys, [$key])));
-    }
-    else {
-      if ($keys) {
-        $key_string = reset($keys) . '[' . implode('][', array_slice($keys, 1)) . '][' . $key . ']';
+      if (is_assoc($value)) {
+        $out = array_merge($out, to_ini_format($value, $keys));
       }
       else {
-        $key_string = $key;
+        foreach ($value as $j) {
+          $out[] = key_string($keys) . '[] = ' . $j;
+        }
       }
-      $out[] = "$key_string = $value";
     }
+    else {
+      $out[] = key_string($keys) . ' = ' . $value;
+    }
+
+    array_pop($keys);
   }
 
   return $out;
@@ -27,6 +46,11 @@ foreach ($files as $file) {
   $parsed = yaml_parse_file($file);
   $out = fopen(basename($file, '.yml'), 'w');
   fwrite($out, "# This file was automatically generated from $file. Do not edit, or Krampus will get you!\n");
+
+  if (isset($parsed['includes'])) {
+    $parsed['includes'] = array_map(function($include) { return basename($include, '.yml'); }, $parsed['includes']);
+  }
+
   foreach (to_ini_format($parsed) as $line) {
     fwrite($out, "$line\n");
   }
