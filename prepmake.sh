@@ -45,7 +45,6 @@ $files = glob('*.make.yml');
 foreach ($files as $file) {
   $parsed = yaml_parse_file($file);
   $out = fopen(basename($file, '.yml'), 'w');
-  fwrite($out, "; This file was automatically generated from $file. Do not edit, or Krampus will get you!\n");
 
   if (isset($parsed['includes'])) {
     $parsed['includes'] = array_map(function($include) { return basename($include, '.yml'); }, $parsed['includes']);

@@ -1,4 +1,3 @@
-; This file was automatically generated from drupal-org.make.yml. Do not edit, or Krampus will get you!
 api = 2
 core = 8.x
 projects[embed][type] = module
