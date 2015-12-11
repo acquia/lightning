@@ -9,6 +9,12 @@ configuration, Lightning aims to target four functional areas:
 * Media
 * Workflow
 
+You'll notice that Lightning appears very sparse out of the box. This is by
+design. We want to empower editorial teams and enable developers to jump-start
+their site builds. That means that a developer should never have to undo
+something that Lightning has done. So we started with a blank slate and
+justified each addition from there.
+
 ## Current version
 
 Alpha1 is an early release of a subset of the planned features for Media. It is
@@ -44,6 +50,20 @@ releasing Beta 1:
 * Ability to resize media and crop image media
 * Embed code paste area within the media widget
 * Support for audio assets (SoundCloud, etc.)
+
+## Project Roadmap
+
+The roadmap is subject to change, but our projected schedule is:
+
+* 4th Week in December: Alpha2 containing basic Layout support
+* End of QTR 4: Beta1 with Media and Layout
+* Late January: Beta2 with Workflows and Scheduling
+* Late February: Full Layout Support
+* Late March: Tagged release
+
+You can also look for general enhancements along the way like OOTB Pathauto with
+sane defaults and preconfigured roles and permissions that we think the majority
+of site builds will use.
 
 ## Running Tests
 
