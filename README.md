@@ -11,28 +11,28 @@ configuration, Lightning aims to target four functional areas:
 
 ## Current version
 
-Alpha 1 is an early release of a subset of the planned features for Media. It is
+Alpha1 is an early release of a subset of the planned features for Media. It is
 not stable and there will be no upgrade path. There is also very limited support
 for creating landing pages through Page Manager and Panels IPE.
 
 **Lightning Alpha1 is a Media-only release. The other functional areas will be
-released in subsequent Alphas or Betas**
+released in subsequent Alphas or Betas.**
 
 ### Media
 
 The current version of media includes the following functionality:
 
 * A preconfigured Text Format (Rich Text) with CKEditor WYSIWYG.
-* A media button (indicated by a star - for now) within the WYSIWYG that
+* A media button (indicated by a star -- for now) within the WYSIWYG that
   launches a custom media widget.
 * The ability to place media into the text area and have it fully embedded as it
-  will appear in the live entity with the following support:
+  will appear in the live entity. The following media types are supported:
   * Tweets
   * Instagram Posts
   * YouTube Videos
   * Images
-* Drag and Drop Image Uploads
-* Ability to create new media through the media library (media/add)
+* Drag-and-drop image uploads
+* Ability to create new media through the media library (/media/add)
 
 #### Short-term media roadmap
 
@@ -43,7 +43,7 @@ releasing Beta 1:
   float
 * Ability to resize media and crop image media
 * Embed code paste area within the media widget
-* Support for audio assets
+* Support for audio assets (SoundCloud, etc.)
 
 ## Running Tests
 
@@ -57,7 +57,7 @@ releasing Beta 1:
     # with the path to your local install.
     cp behat.local.example.yml
 
-    # Run the Composer Install
+    # Install dependencies with Composer.
     composer install
 
     # Run the tests
@@ -65,8 +65,7 @@ releasing Beta 1:
 
 ### Jasmine Media Tests
 
-    # NPM Required.
-    # From /prfiles/lightning/modules/lightning_features/lightning_media/tests/js;
-    npm install
-    npm test
+    # Requires Node.js and NPM.
+    # From /profiles/lightning/modules/lightning_features/lightning_media/tests/js;
+    npm install && npm test
 
