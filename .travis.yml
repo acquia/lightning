@@ -66,7 +66,7 @@ script:
   - bin/behat
   - cd ../../modules/lightning_features/lightning_media/tests/js
   # TODO: The install step should go into before_script.
-  - npm install
+  - npm install > /dev/null
   - npm test
 
 notifications:
