@@ -13,7 +13,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Image\ImageFactory;
 use Drupal\Core\Render\RendererInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
 use Drupal\file\FileInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -70,18 +69,15 @@ class UploadController extends ControllerBase {
    *   The media entity storage controller.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
-   * @param \Drupal\Core\Session\AccountInterface $current_user
-   *   The currently logged in user.
    * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
    *   The transliteration service.
    * @param \Drupal\Core\Image\ImageFactory
    *   The image factory service.
    */
-  public function __construct(EntityStorageInterface $file_storage, EntityStorageInterface $media_storage, RendererInterface $renderer, AccountInterface $current_user, TransliterationInterface $transliteration, ImageFactory $image_factory) {
+  public function __construct(EntityStorageInterface $file_storage, EntityStorageInterface $media_storage, RendererInterface $renderer, TransliterationInterface $transliteration, ImageFactory $image_factory) {
     $this->fileStorage = $file_storage;
     $this->mediaStorage = $media_storage;
     $this->renderer = $renderer;
-    $this->currentUser = $current_user;
     $this->transliteration = $transliteration;
     $this->imageFactory = $image_factory;
   }
@@ -94,7 +90,6 @@ class UploadController extends ControllerBase {
       $container->get('entity_type.manager')->getStorage('file'),
       $container->get('entity_type.manager')->getStorage('media'),
       $container->get('renderer'),
-      $container->get('current_user'),
       $container->get('transliteration'),
       $container->get('image.factory')
     );
@@ -182,6 +177,7 @@ class UploadController extends ControllerBase {
       'uid' => $file->getOwnerId(),
       'status' => TRUE,
       'thumbnail' => $file->id(),
+      'image' => $file->id(),
       'field_media_in_library' => TRUE,
     ]);
     $this->mediaStorage->save($media);

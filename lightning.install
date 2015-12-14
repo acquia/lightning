@@ -7,6 +7,7 @@
 
 use Drupal\user\Entity\User;
 use Drupal\user\RoleInterface;
+use Drupal\shortcut\Entity\Shortcut;
 
 /**
  * Implements hook_install().
@@ -32,13 +33,22 @@ function lightning_install() {
   user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, array('access shortcuts'));
 
   // Populate the default shortcut set.
-  $shortcut = entity_create('shortcut', array(
-    'shortcut_set' => 'default',
-    'title' => t('Add content'),
-    'weight' => -20,
-    'link' => array('uri' => 'internal:/node/add'),
-  ));
-  $shortcut->save();
+  $content_library_link = Shortcut::create(
+    [
+      'shortcut_set' => 'default',
+      'title' => t('Content library'),
+      'weight' => 1,
+      'link' => array('uri' => 'internal:/admin/content'),
+    ]
+  )->save();
+  $media_library_link = Shortcut::create(
+    [
+      'shortcut_set' => 'default',
+      'title' => t('Media library'),
+      'weight' => 2,
+      'link' => array('uri' => 'internal:/admin/content/media'),
+    ]
+  )->save();
 
   // Set the default and admin theme
   \Drupal::configFactory()->getEditable('system.theme')

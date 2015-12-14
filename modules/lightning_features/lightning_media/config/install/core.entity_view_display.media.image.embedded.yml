@@ -3,7 +3,6 @@ status: true
 dependencies:
   config:
     - core.entity_view_mode.media.embedded
-    - field.field.media.image.category
     - field.field.media.image.field_media_in_library
     - field.field.media.image.image
     - media_entity.bundle.image
@@ -14,18 +13,17 @@ targetEntityType: media
 bundle: image
 mode: embedded
 content:
-  thumbnail:
+  image:
     type: image
-    weight: 1
+    weight: 0
     label: hidden
     settings:
       image_style: ''
       image_link: ''
     third_party_settings: {  }
 hidden:
-  category: true
   created: true
   field_media_in_library: true
-  image: true
   name: true
+  thumbnail: true
   uid: true

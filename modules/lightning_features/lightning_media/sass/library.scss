@@ -8,7 +8,14 @@
 
   &.ui-tabs {
     .ui-tabs-nav {
-      padding: 0;
+      margin: .5em 0 0 0;
+      padding: 0 0 0 .5em;
+
+      .ui-state-active {
+        border-radius: 12px 12px 0 0;
+        background-color: #e5e5e5;
+        border: none;
+      }
     }
 
     .ui-tabs-panel {
@@ -25,24 +32,23 @@
       list-style: none;
       @include display-flex();
       @include flex-wrap(wrap);
-      @include align-items(center);
+      @include align-items(flex-start);
+      overflow-x: hidden;
+      overflow-y: scroll;
+      max-height: 20em;
 
       li {
-        width: 25%;
+        width: calc(25% - 16px);
+        border: 8px solid transparent;
 
-        drupal-entity {
-          padding: 8px;
-          display: block;
-
-          img {
-            max-width: 100%;
-            display: block;
-            height: auto;
-          }
+        &.selected {
+          border-color: greenyellow;
         }
 
-        &.selected drupal-entity {
-          background-color: greenyellow;
+        img {
+          max-width: 100%;
+          display: block;
+          height: auto;
         }
       }
     }
@@ -58,13 +64,13 @@
   }
 
   .dropzone {
-    width: 48%;
     padding: 0;
-    float: left;
 
     .dz-preview {
-      margin: 0;
+      display: block;
       min-height: 0;
+      width: 40%;
+      margin: 0 auto;
 
       &:hover .dz-image img {
         @include transform(none);
@@ -82,10 +88,5 @@
         }
       }
     }
-  }
-
-  .upload footer {
-    float: right;
-    width: 45%;
   }
 }

@@ -16,11 +16,23 @@ dropzone.js:
       '/libraries/dropzone/dist/min/dropzone.min.css':
         minified: true
 
+es6-promise:
+  version: 3.0.2
+  js:
+    '/libraries/es6-promise/dist/es6-promise.min.js':
+      minified: true
+
+jquery.appear:
+  version: 0.3.6
+  js:
+    '/libraries/jquery.appear/jquery.appear.js': {}
+  dependencies:
+    - core/jquery
+
 media_library:
   version: VERSION
   js:
     'js/Backend.js': {}
-    'js/DrupalEntity.js': {}
     'js/EntityGrid.js': {}
     'js/MediaLibrary.js': {}
     'js/Uploader.js': {}
@@ -29,5 +41,7 @@ media_library:
       'css/library.css': {}
   dependencies:
     - core/jquery.ui.tabs
-    - lightning_media/dropzone.js
     - lightning_media/backbone.collectionView
+    - lightning_media/dropzone.js
+    - lightning_media/es6-promise
+    - lightning_media/jquery.appear

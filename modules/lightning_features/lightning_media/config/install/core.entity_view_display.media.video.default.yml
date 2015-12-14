@@ -1,0 +1,26 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.media.video.embed_code
+    - field.field.media.video.field_media_in_library
+    - media_entity.bundle.video
+  module:
+    - media_entity_embeddable_video
+id: media.video.default
+targetEntityType: media
+bundle: video
+mode: default
+content:
+  embed_code:
+    type: video
+    weight: 1
+    label: hidden
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_media_in_library: true
+  name: true
+  thumbnail: true
+  uid: true

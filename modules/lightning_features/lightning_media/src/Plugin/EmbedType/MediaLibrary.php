@@ -9,7 +9,6 @@ namespace Drupal\lightning_media\Plugin\EmbedType;
 
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\embed\EmbedType\EmbedTypeBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -39,13 +38,10 @@ class MediaLibrary extends EmbedTypeBase implements ContainerFactoryPluginInterf
    *   The plugin definition.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module_handler service.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $translator
-   *   The string translation service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, ModuleHandlerInterface $module_handler, TranslationInterface $translator) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, ModuleHandlerInterface $module_handler) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->moduleHandler = $module_handler;
-    $this->stringTranslation = $translator;
   }
 
   /**
@@ -56,8 +52,7 @@ class MediaLibrary extends EmbedTypeBase implements ContainerFactoryPluginInterf
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('module_handler'),
-      $container->get('string_translation')
+      $container->get('module_handler')
     );
   }
 
