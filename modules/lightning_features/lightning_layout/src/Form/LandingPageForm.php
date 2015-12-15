@@ -38,10 +38,15 @@ class LandingPageForm extends FormBase {
       '#required' => TRUE,
       '#default_value' => $form_state->getValue('path'),
     ];
-    $form['submit'] = [
+    $form['actions'] = [
+      '#type' => 'actions',
+    ];
+    $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Create'),
     ];
+    $form['#attached']['library'][] = 'lightning_layout/landing_page_form';
+
     return $form;
   }
 
