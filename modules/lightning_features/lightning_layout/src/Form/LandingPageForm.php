@@ -12,6 +12,7 @@ use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\Core\Url;
+use Drupal\layout_plugin\Plugin\Layout\LayoutPluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class LandingPageForm extends FormBase {
@@ -27,18 +28,26 @@ class LandingPageForm extends FormBase {
   protected $pageVariantStorage;
 
   /**
+   * @var \Drupal\layout_plugin\Plugin\Layout\LayoutPluginManagerInterface
+   */
+  protected $layoutPluginManager;
+
+  /**
    * LandingPageForm constructor.
    *
    * @param \Drupal\Core\Entity\EntityStorageInterface $page_storage
-   *   Storage handler for page entities.
+   *   Entity storage handler for pages.
    * @param \Drupal\Core\Entity\EntityStorageInterface $page_variant_storage
-   *   Storage handler for page_variant entities.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface|NULL $translator
+   *   Entity storage handler for page variants.
+   * @param \Drupal\layout_plugin\Plugin\Layout\LayoutPluginManagerInterface
+   *   The layout plugin manager.
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $translator
    *   (optional) String translation service.
    */
-  public function __construct(EntityStorageInterface $page_storage, EntityStorageInterface $page_variant_storage, TranslationInterface $translator = NULL) {
+  public function __construct(EntityStorageInterface $page_storage, EntityStorageInterface $page_variant_storage, LayoutPluginManagerInterface $layout_plugin_manager, TranslationInterface $translator = NULL) {
     $this->pageStorage = $page_storage;
     $this->pageVariantStorage = $page_variant_storage;
+    $this->layoutPluginManager = $layout_plugin_manager;
     $this->stringTranslation = $translator;
   }
 
@@ -49,6 +58,7 @@ class LandingPageForm extends FormBase {
     return new static(
       $container->get('entity_type.manager')->getStorage('page'),
       $container->get('entity_type.manager')->getStorage('page_variant'),
+      $container->get('plugin.manager.layout_plugin'),
       $container->get('string_translation')
     );
   }
@@ -76,12 +86,19 @@ class LandingPageForm extends FormBase {
       '#required' => TRUE,
       '#default_value' => $form_state->getValue('path'),
     ];
-    $form['actions'] = [
-      '#type' => 'actions',
+    $form['layout'] = [
+      '#type' => 'select',
+      '#title' => $this->t('Layout'),
+      '#required' => TRUE,
+      '#default_value' => $form_state->getValue('layout'),
+      '#options' => $this->layoutPluginManager->getLayoutOptions(),
     ];
-    $form['actions']['submit'] = [
-      '#type' => 'submit',
-      '#value' => $this->t('Create'),
+    $form['actions'] = [
+      'submit' => [
+        '#type' => 'submit',
+        '#value' => $this->t('Create'),
+      ],
+      '#type' => 'actions',
     ];
     $form['#attached']['library'][] = 'lightning_layout/landing_page_form';
 
@@ -109,7 +126,7 @@ class LandingPageForm extends FormBase {
       'page' => $page->id(),
       'variant' => 'panels_variant',
       'variant_settings' => [
-        'layout' => 'onecol',
+        'layout' => $form_state->getValue('layout'),
         // Always use Panels IPE to edit the page's layout and content.
         'builder' => 'in_place_editor',
       ],
