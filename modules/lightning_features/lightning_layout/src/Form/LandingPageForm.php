@@ -129,6 +129,8 @@ class LandingPageForm extends FormBase {
         'layout' => $form_state->getValue('layout'),
         // Always use Panels IPE to edit the page's layout and content.
         'builder' => 'ipe',
+        // The user-facing title of the page.
+        'page_title' => $page->label(),
       ],
     ]);
     $this->pageVariantStorage->save($variant);
