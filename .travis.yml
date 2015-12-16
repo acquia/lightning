@@ -13,6 +13,7 @@ mysql:
   encoding: utf8
 
 before_install:
+  - phpenv config-rm xdebug.ini
   - composer self-update
   - composer --version
 
