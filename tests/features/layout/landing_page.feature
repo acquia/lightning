@@ -1,0 +1,13 @@
+@lightning @lightning_media
+  Feature: A simple form to create landing pages.
+
+    @api
+    Scenario: Creating a landing page
+      Given I am logged in as a user with the "administer pages" permission
+      When I visit "/admin/structure/landing-page"
+      And I enter "Foobar" for "Title"
+      And I enter "/foobar" for "Path"
+      And I select "Single column" from "Layout"
+      And I press the "Create" button
+      Then I should be on "/foobar"
+      And I should see "Foobar"
