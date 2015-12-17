@@ -10,4 +10,5 @@
       And I select "Single column" from "Layout"
       And I press the "Create" button
       Then I should be on "/foobar"
+      And the response status code should be 200
       And I should see "Foobar"
