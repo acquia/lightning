@@ -46,19 +46,8 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    * @Then the :instance_id WYSIWYG editor should contain :text
    */
   public function wysiwygEditorShouldContain($instance_id, $text) {
-    // The JavaScript return value is passed back by Selenium, but Mink's
-    // Selenium2 driver doesn't return it (they're literally missing a return
-    // keyword in executeScript() -- that's all!). So, to get around this,
-    // we need to directly call the appropriate method on the WebDriver wrapper.
     $html = $this->getSession()
-      ->getDriver()
-      // This method only exists on Mink's Selenium2 driver. But what kind of
-      // loony would try to test a WYSIWYG without Selenium?
-      ->getWebDriverSession()
-      ->execute([
-        'script' => "return CKEDITOR.instances['$instance_id'].getData()",
-        'args' => [],
-      ]);
+      ->evaluateScript("return CKEDITOR.instances['$instance_id'].getData()");
 
     if (strpos($html, $text) === FALSE) {
       throw new \Exception("WYSIWYG editor $instance_id did not contain text $text.");
