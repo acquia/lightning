@@ -16,41 +16,59 @@ use Behat\Behat\Tester\Exception\PendingException;
 class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext {
 
   /**
-   * Fills in WYSIWYG editor with specified ID.
+   * Asserts that a CKEditor instance exists.
    *
-   * @param string $text
-   *   The text (or HTML) to insert into the WYSIWYG.
-   * @param string $instance_id
+   * @param string $id
    *   The editor's instance ID in CKEDITOR.instances.
    *
-   * @When I fill in :text in WYSIWYG editor :instance_id
+   * @throws \Exception if the editor does not exist.
+   *
+   * @Given CKEditor :id exists
+   * @Then CKEditor :id should exist
    */
-  public function iFillInInWYSIWYGEditor($text, $instance_id)
-  {
-    $this->getSession()
-      ->executeScript("CKEDITOR.instances['$instance_id'].insertHtml('$text')");
+  public function ckeditorShouldExist($id) {
+    $exists = $this->getSession()
+      ->evaluateScript("CKEDITOR.instances.hasOwnProperty('$id');");
+
+    if (! $exists) {
+      throw new \Exception("CKEditor '$id' does not exist.");
+    }
   }
 
   /**
-   * Asserts that a WYSIWYG editor's data contains a snippet of text.
+   * Puts text or HTML into a CKEditor instance.
    *
-   * @param string $instance_id
+   * @param string $text
+   *   The text (or HTML) to insert into the editor.
+   * @param string $id
+   *   The editor's instance ID in CKEDITOR.instances.
+   *
+   * @When I put :text into CKEditor :id
+   */
+  public function iPutTextIntoCkeditor($text, $id)
+  {
+    $this->getSession()
+      ->executeScript("CKEDITOR.instances['$id'].insertHtml('$text');");
+  }
+
+  /**
+   * Asserts that a CKEditor instances's data contains a snippet of text.
+   *
+   * @param string $id
    *   The editor's instance ID in CKEDITOR.instances.
    * @param string $text
    *   The text (or HTML) snippet to look for.
    *
    * @throws \Exception if the editor doesn't contain the specified text.
    *
-   * @Then WYSIWYG editor :instance_id should contain :text
-   * @Then the WYSIWYG editor :instance_id should contain :text
-   * @Then the :instance_id WYSIWYG editor should contain :text
+   * @Then CKEditor :id should contain :text
    */
-  public function wysiwygEditorShouldContain($instance_id, $text) {
+  public function ckeditorShouldContain($id, $text) {
     $html = $this->getSession()
-      ->evaluateScript("return CKEDITOR.instances['$instance_id'].getData()");
+      ->evaluateScript("CKEDITOR.instances['$id'].getData();");
 
     if (strpos($html, $text) === FALSE) {
-      throw new \Exception("WYSIWYG editor $instance_id did not contain text $text.");
+      throw new \Exception("CKEditor $id did not contain '$text''.");
     }
   }
 
