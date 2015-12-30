@@ -17,12 +17,8 @@ justified each addition from there.
 
 ## Current version
 
-Alpha4 is an early release of a subset of the planned features for Media. It is
-not stable and there will be no upgrade path. There is also very limited support
-for creating landing pages through Page Manager and Panels IPE.
-
-**Lightning Alpha4 is a Media-only release. The other functional areas will be
-released in subsequent Alphas or Betas.**
+This is an early release of a subset of the planned features for Media and
+Layout. It is not stable and there will be no upgrade path.
 
 ### Media
 
@@ -42,7 +38,7 @@ The current version of media includes the following functionality:
 
 #### Short-term media roadmap
 
-We hope to make the following enhancements to the Media Feature prior to
+We hope to make the following enhancements to the Media Feature soon after
 releasing Beta 1:
 
 * Ability to float media left or right, display inline, or display block with no
@@ -51,13 +47,19 @@ releasing Beta 1:
 * Embed code paste area within the media widget
 * Support for audio assets (SoundCloud, etc.)
 
+### Layout
+
+Lightning provides the ability to create a landing page through a custom form
+wizard that uses Page Manager and Panels + Panels IPE. Two layouts are provided
+by defaults (via Panels) and others can be added through the Layout Plugin or
+contrib such as Radix Layouts.
+
 ## Project Roadmap
 
 The roadmap is subject to change, but our projected schedule is:
 
-* 4th Week in December: Alpha4 containing basic Layout support
 * End of QTR 4: Beta1 with Media and Layout
-* Late January: Beta2 with Workflows and Scheduling
+* Early February: Beta2 with Workflows and Scheduling
 * Late February: Full Layout Support
 * Late March: Tagged release
 
