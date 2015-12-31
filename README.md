@@ -18,7 +18,7 @@ justified each addition from there.
 ## Current version
 
 This is an early release of a subset of the planned features for Media and
-Layout. It is not stable and there will be no upgrade path.
+Layout.
 
 ### Media
 
