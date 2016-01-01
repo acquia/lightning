@@ -30,6 +30,7 @@ projects[media_entity_twitter][download][type] = git
 projects[media_entity_twitter][download][branch] = 8.x-1.x
 projects[media_entity_twitter][download][revision] = 179e19e159f7df2172316030fc7c110b6f0d3efd
 projects[media_entity_twitter][subdir] = contrib/media
+projects[media_entity_twitter][patch][] = https://www.drupal.org/files/issues/jquery-and-drupal-dependencies-2643014-2.patch
 projects[media_entity_image][type] = module
 projects[media_entity_image][download][type] = git
 projects[media_entity_image][download][branch] = 8.x-1.x
