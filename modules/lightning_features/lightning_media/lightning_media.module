@@ -5,7 +5,7 @@
  */
 function lightning_media_library_info_alter(array &$libraries, $extension) {
   if ($extension == 'lightning_media') {
-    $root = \Drupal::root() . \Drupal::moduleHandler()->getModule('lightning')->getPath();
+    $root = '/' . \Drupal::moduleHandler()->getModule('lightning')->getPath();
 
     foreach ($libraries as $key => $library) {
       if ($key == 'media_library') {
