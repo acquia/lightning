@@ -21,6 +21,10 @@ default:
         alias: self
       drupal:
         drupal_root: "../"
+      subcontexts:
+        paths:
+          - "features/bootstrap"
+        autoload: false
 imports:
   - behat.local.yml
 
