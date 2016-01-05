@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function lightning_media_library_info_alter(array &$libraries, $extension) {
+  if ($extension == 'lightning_media') {
+    $root = \Drupal::root() . \Drupal::moduleHandler()->getModule('lightning')->getPath();
+
+    foreach ($libraries as $key => $library) {
+      if ($key == 'media_library') {
+        continue;
+      }
+
+      foreach ($library['js'] as $path => $info) {
+        $libraries[$key]['js'][$root . '/' . $path] = $info;
+        unset($libraries[$key]['js'][$path]);
+      }
+
+      foreach ($library['css'] as $group => $files) {
+        foreach ($files as $path => $info) {
+          $libraries[$key]['css'][$group][$root . '/' . $path] = $info;
+          unset($libraries[$key]['css'][$group][$path]);
+        }
+      }
+    }
+  }
+}
