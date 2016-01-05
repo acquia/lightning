@@ -52,7 +52,7 @@ before_script:
   - cd tests
   - touch behat.local.yml
   - composer install
-  - phantomjs --webdriver=4444
+  - phantomjs --webdriver=4444 > /dev/null &
 
 script:
   - bin/behat
