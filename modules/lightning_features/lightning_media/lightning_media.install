@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function lightning_media_install() {
+  user_role_grant_permissions('anonymous', ['view media']);
+  user_role_grant_permissions('authenticated', ['view media']);
+}
