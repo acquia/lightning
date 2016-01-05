@@ -2,6 +2,11 @@ language: php
 cache:
   bundler: true
   apt: true
+  directories:
+  - "$HOME/.composer/cache"
+  - "$HOME/.drush/cache"
+  - "$HOME/.npm"
+  - "vendor"
 php:
   - 5.5
 
@@ -16,6 +21,8 @@ before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update
   - composer --version
+  # Clear drush release history cache, to pick up new releases.
+  - rm -f ~/.drush/cache/download/*---updates.drupal.org-release-history-*
 
 install:
   # add composer's global bin directory to the path
