@@ -108,4 +108,12 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
       ->evaluateScript("CKEDITOR.instances['$id'].execCommand('$command');");
   }
 
+  /**
+   * @When /^wait (\d+) seconds?$/
+   */
+  public function waitSeconds($seconds)
+  {
+    $this->getSession()->wait(1000*$seconds);
+  }
+
 }
