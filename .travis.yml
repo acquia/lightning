@@ -1,38 +1,157 @@
 language: php
-cache:
-  bundler: true
-  apt: true
+
 php:
-- 5.5
+  - 5.4
+
 mysql:
   database: drupal
   username: root
   encoding: utf8
-sudo: false
-install:
-- composer self-update
-- composer --version
-- mysql -e 'SET GLOBAL wait_timeout = 5400;'
-- mysql -e "SHOW VARIABLES LIKE 'wait_timeout'"
-- echo 'max_execution_time = 120' >> drupal.php.ini;
-- echo 'sendmail_path = /bin/true' >> drupal.php.ini;
-- phpenv config-add drupal.php.ini
-- phpenv rehash
-- composer global require drush/drush:7.*
-- export PATH="$HOME/.composer/vendor/bin:$PATH"
-- cd ..
-- drush make --concurrency=5 lightning/drupal-org-core.make drupal -y
-- mkdir drupal/profiles/lightning
-- cp -R lightning/* drupal/profiles/lightning/.
-- cd drupal
-- drush make --concurrency=5 profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning  -y
-- drush si lightning --db-url=mysql://root:@localhost/drupal -y
-before_script:
-- drush runserver --server=builtin 8080 &>/dev/null &
-script:
-- drush le lightning_demo
-notifications:
-  slack:
-    secure: TdpsXHDERsAzIGHgzgdodKrz+Tlr0oaHz8REaYKASH3l55/fEw3OA2F7iuLTtyeN9wUmBbm3m1TfvMRdVwxYvEX0XIEW4eN8cJJZGjSjsGjuqh5N/842ou9Fn3hxpJZLw4eNrZeY4DtzNWIi2+rBIjWYBGNYlJxh0NLOYVrpZLZi+44yQ4aWUx0hXXK4H+1bb87FHCOtGd7fvkuEGAJxKBJ2VMiVpc7jP4acLhRdu8Wv0A7OxAoTZwOPZekB9K73N/FLbDZf2xlD/Oachyvbt43r4FuBuMO6kNE0+HoOt09E6F9LfsHKHeZ3WRRgZMi9KN/LUU3N/N5AulPcIkCmccaI6C/UwvRfHYTsdAP2qA7eRmLoy1VsGcm0DCVVRCE5eL2ydjm3sP/t/WxTSXtUHV2nPAhx9vk4FlZeskDWbnyaNQ+uCtN3ekhl7amrSxGWydJPiM+cETr8xogsQZHrCH9F67Nzohrlh+YL9XzqROsop2vJbu5dONxOivriYu2EBe+i+78uEi/BK0YGNxDO8Ix/kB5f9Bmbo5g5weOsnRYzDCG1JMiAkPwKP1zn9pS13CIBfS5utgzSzWljCgZPRtPVmAztEs6ITqVQbOiuRYu3mSA+KsyFuB4I5/pm+h1Vh9h1kS89Hs2ftrkYboMkqzQBrYo1Jru6CRxnKb8OCFY=
+
+env:
+  - UPGRADE=none
+  - UPGRADE=7.x-1.0-alpha4
+  - UPGRADE=7.x-1.0-alpha3
+  - UPGRADE=7.x-1.0-alpha2
+  - UPGRADE=7.x-1.0-alpha1
+
 matrix:
   fast_finish: true
+  allow_failures:
+  - UPGRADE=7.x-1.0-alpha4
+  - UPGRADE=7.x-1.0-alpha3
+  - UPGRADE=7.x-1.0-alpha2
+  - UPGRADE=7.x-1.0-alpha1
+
+install:
+  # Add the Google Chrome packages.
+  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+  - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+  - sudo apt-get update > /dev/null
+
+  # Create a database for our Drupal site.
+  - "mysql -e 'create database drupal;'"
+
+  # Install the latest Drush 6.
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - composer global require --no-interaction --prefer-source drush/drush:6.*@dev
+
+  # Install Drupal.org drush.
+  - drush dl -y drupalorg_drush-7.x-1.x-dev --destination=$HOME/.drush
+  - drush cc drush
+
+  # Build Behat dependencies
+  - cd ./tests/behat
+  - composer install --prefer-source --no-interaction
+  - cd ../../../
+
+  # Rename the repository folder to 'lightning' (to accommodate different repository names).
+  - REPO_NAME=`basename $TRAVIS_REPO_SLUG`
+  - if [[ "$REPO_NAME" != lightning ]]; then mv $REPO_NAME lightning; fi
+
+  # Build Codebase
+  - mkdir profiles
+  - mv lightning profiles/
+  - mkdir drupal
+  - mv profiles drupal/
+
+  # Build the current branch.
+  - cd drupal
+  - drush make --yes profiles/lightning/drupal-org-core.make --prepare-install
+  - drush make --yes profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning
+  - mkdir sites/default/private
+  - mkdir sites/default/private/files
+  - mkdir sites/default/private/temp
+  - cd ../
+
+  # Verify that all the .make files will work on Drupal.org.
+  - drush verify-makefile drupal/profiles/lightning/drupal-org.make
+
+  # Download an old version to test upgrading from.
+  - if [[ "$UPGRADE" != none ]]; then drush dl lightning-$UPGRADE; fi
+
+  # Setup files
+  - sudo chmod -R 777 drupal/sites/all
+
+  # Setup display for Selenium
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 5
+
+  # Get Chrome and ChromeDriver
+  - sudo apt-get install google-chrome-stable
+  - wget http://chromedriver.storage.googleapis.com/2.9/chromedriver_linux64.zip
+  - unzip -a chromedriver_linux64.zip
+
+  # Insane hack from jsdevel:
+  #   https://github.com/jsdevel/travis-debugging/blob/master/shim.bash
+  # This allows chrome-sandbox to work in side of OpenVZ, because I can't
+  # figure out how to start chrome with --no-sandbox.
+  - export CHROME_SANDBOX=/opt/google/chrome/chrome-sandbox
+  - sudo rm -f $CHROME_SANDBOX
+  - sudo wget https://googledrive.com/host/0B5VlNZ_Rvdw6NTJoZDBSVy1ZdkE -O $CHROME_SANDBOX
+  - sudo chown root:root $CHROME_SANDBOX; sudo chmod 4755 $CHROME_SANDBOX
+  - sudo md5sum $CHROME_SANDBOX
+
+  # Get Selenium
+  - wget http://selenium-release.storage.googleapis.com/2.42/selenium-server-standalone-2.42.1.jar
+  - java -jar selenium-server-standalone-2.42.1.jar > /dev/null 2>&1 &
+  - sleep 5
+
+  # Disable sendmail
+  - echo sendmail_path=`which true` >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+  # Enable APC
+  - echo "extension=apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "apc.shm_size=256M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+  # Increase the MySQL connection timeout on the PHP end.
+  - echo "mysql.connect_timeout=3000" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - echo "default_socket_timeout=3000" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+
+  # Increase the MySQL server timeout and packet size.
+  - mysql -e "SET GLOBAL wait_timeout = 36000;"
+  - mysql -e "SET GLOBAL max_allowed_packet = 33554432;"
+
+before_script:
+
+  # Do the site install (either the current revision or old for the upgrade).
+  - if [[ "$UPGRADE" == none ]]; then cd drupal; else cd lightning-$UPGRADE; fi
+  - drush si lightning --db-url=mysql://root:@127.0.0.1/drupal --account-name=admin --account-pass=admin --account-mail=admin@test.com --site-mail=noreply@test.com --site-name="Lightning" --yes
+
+  # Configure the private and temporary file systems.
+  - drush vset -y file_private_path "sites/default/private/files"
+  - drush vset -y file_temporary_path "sites/default/private/temp"
+
+  # Enabled the demo content.
+  - drush le lightning_demo
+
+  - cd ../drupal
+
+  # If we're an upgrade test, run the upgrade process.
+  - if [[ "$UPGRADE" != none ]]; then cp -a ../lightning-$UPGRADE/sites/default/* sites/default/ && drush updb --yes; fi
+
+  - drush runserver --server=builtin 8888 > /dev/null 2>&1 &
+  - SERVER_PID=$!
+  - sleep 3
+  - cd profiles/lightning/tests/behat
+
+  # Make the Travis tests repos agnostic by injecting drupal_root with BEHAT_PARAMS
+  - BUILD_OWNER=`dirname $TRAVIS_BUILD_DIR`
+  - export BEHAT_PARAMS="extensions[Drupal\\DrupalExtension\\Extension][drupal][drupal_root]=$BUILD_OWNER/drupal"
+
+script:
+
+  # If this isn't an upgrade, we test if any features are overridden.
+  - if [[ "$UPGRADE" == none ]]; then bash ../../scripts/check-overridden.sh; fi
+
+  # First, run all the tests in Firefox.
+  - ./bin/behat --config behat.travis.yml
+
+  # Then run some Chrome-only tests.
+  - ./bin/behat --config behat.travis.yml -p chrome
+
+after_script:
+
+  # Stop the webserver so that it's not still running when MySQL is stopped.
+  - kill $SERVER_PID

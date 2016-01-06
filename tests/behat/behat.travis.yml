@@ -1,0 +1,52 @@
+default:
+  paths:
+    features: 'features'
+  filters:
+    tags: "~@chrome"
+  extensions:
+    Behat\MinkExtension\Extension:
+      goutte: ~
+      selenium2: ~
+      base_url: http://127.0.0.1:8888
+      files_path: ../../
+    Drupal\DrupalExtension\Extension:
+      text:
+        username_field: 'Username'
+        password_field: 'Password'
+      blackbox: ~
+      drush:
+        alias: self
+      # This will be setup by .travis.yml like so:
+      # export BEHAT_PARAMS="extensions[Drupal\\DrupalExtension\\Extension][drupal][drupal_root]=$DRUPAL_ROOT"
+      #drupal:
+      #  drupal_root: "/path/to/drupal/root"
+      region_map:
+        # CTools / Panels
+        CTools modal: "#modalContent"
+        # Lightning Demo
+        Header: ".l-header"
+        Off Canvas: ".off-canvas-wrap"
+        Help: ".l-help"
+        Highlighted: ".highlight"
+        Featured: ".l-featured"
+        Content: ".l-main"
+        Left Sidebar: ".sidebar-first"
+        Right Sidebar: ".sidebar-second"
+        Callout one: ".triptych-first"
+        Callout two: ".triptych-middle"
+        Callout three: ".triptych-last"
+        Footer one: ".footer-first"
+        Footer two: ".footer-second"
+        Footer three: ".footer-third"
+        Footer four: ".footer-fourth"
+        Footer: ".l-footer"
+
+# Setup for Google Chrome only tests.
+chrome:
+  filters:
+    tags: "@chrome"
+  extensions:
+    Behat\MinkExtension\Extension:
+      selenium2:
+        browser: chrome
+        capabilities: {"browser": "chrome", "browserName": "chrome", "browserVersion": "ANY", "version": "ANY"}
