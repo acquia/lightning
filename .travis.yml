@@ -2,6 +2,11 @@ language: php
 cache:
   bundler: true
   apt: true
+  directories:
+  - "$HOME/.composer/cache"
+  - "$HOME/.drush/cache"
+  - "$HOME/.npm"
+  - "vendor"
 php:
   - 5.5
 
@@ -16,6 +21,8 @@ before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update
   - composer --version
+  # Clear drush release history cache, to pick up new releases.
+  - rm -f ~/.drush/cache/download/*---updates.drupal.org-release-history-*
 
 install:
   # add composer's global bin directory to the path
@@ -36,17 +43,21 @@ install:
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
-  # - echo "projects:{lightning:{download:{branch: $TRAVIS_BRANCH, url: https://github.com/$TRAVIS_REPO_SLUG.git}}}" >> env.yml
   # Build drupal + lightning from makefile
   - drush make --concurrency=5 build-lightning.make docroot -y
+  # Rebuild dependencies from the make file contained in the repo (not the one
+  # pulled from D.O)
+  - drush make drupal-org.make.yml docroot/profiles/lightning --no-core -y
+  # Copy the install profile and Lightning-specific modules in the repo, since drupal.org
+  # (which is used by drush make) is probably not as current.
+  - cp -f lightning.* docroot/profiles/lightning
+  - cp -R -f modules/lightning_features docroot/profiles/lightning/modules
 
   # Install lightning
   - cd docroot
   - drush si lightning --db-url=mysql://root:@localhost/drupal -y
 
 before_script:
-  - echo -e "Host svn-4747.devcloud.hosting.acquia.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
-  - echo -e "Host free-4772.devcloud.hosting.acquia.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - mv ../tests ./tests
   - cd tests
@@ -64,7 +75,7 @@ before_script:
   - sleep 5
 
 script:
-  - bin/behat
+  - bin/behat --strict
   - cd ../../modules/lightning_features/lightning_media/tests/js
   # TODO: The install step should go into before_script.
   - npm install > /dev/null
