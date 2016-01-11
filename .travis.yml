@@ -10,6 +10,7 @@ mysql:
 
 env:
   - UPGRADE=none
+  - UPGRADE=7.x-1.0-beta1
   - UPGRADE=7.x-1.0-alpha4
   - UPGRADE=7.x-1.0-alpha3
   - UPGRADE=7.x-1.0-alpha2
@@ -18,6 +19,7 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
+  - UPGRADE=7.x-1.0-beta1
   - UPGRADE=7.x-1.0-alpha4
   - UPGRADE=7.x-1.0-alpha3
   - UPGRADE=7.x-1.0-alpha2
