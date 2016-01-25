@@ -105,11 +105,32 @@ class LandingPageForm extends FormBase {
     return $form;
   }
 
+  protected function getPath(FormStateInterface $form_state) {
+    return ltrim(strToLower($form_state->getValue('path')), '/');
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validateForm(array &$form, FormStateInterface $form_state) {
+    $path = '/' . $this->getPath($form_state);
+
+    $pages = $this->pageStorage->loadByProperties([
+      'path' => $path,
+    ]);
+    if ($pages) {
+      $message = $this->t('A landing page already exists at @path.', [
+        '@path' => $path,
+      ]);
+      $form_state->setError($form['path'], $message);
+    }
+  }
+
   /**
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $path = ltrim(strToLower($form_state->getValue('path')), '/');
+    $path = $this->getPath($form_state);
 
     /** @var \Drupal\page_manager\PageInterface $page */
     $page = $this->pageStorage->create([
