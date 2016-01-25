@@ -1,0 +1,38 @@
+{
+  "name": "drupal/lightning",
+  "description": "The intent of Lightning is to provide a lightweight framework for building working solutions in Drupal.",
+  "type": "drupal-profile",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packagist.drupal-composer.org"
+    }
+  ],
+  "require": {
+    "composer/installers": "^1.0.20",
+    "cweagans/composer-patches": "~1.0",
+    "drupal/embed": "8.1.x-dev#26265b5437bb0f1dcb916a6a1169d53382a23646",
+    "drupal/entity_embed": "8.1.x-dev#9760c0a790bccb30d7e15815fdfa6d1794453d3a",
+    "drupal/media_entity": "8.1.x-dev#f8decb81965037b05c51ce8c16eae8c37256e7a0",
+    "drupal/media_entity_embeddable_video": "8.1.x-dev#f7e51c2cccd875e1fd09d018c11fd50c93a71507",
+    "drupal/media_entity_instagram": "8.1.x-dev#75e41cbae35f260fa0e3e76f90562e26b4dc162d",
+    "drupal/media_entity_twitter": "8.1.x-dev#179e19e159f7df2172316030fc7c110b6f0d3efd",
+    "drupal/media_entity_image": "8.1.x-dev#f17384aeba3c8c00bbc57bfa8fa68529992873ce",
+    "drupal/ctools": "8.3.x-dev#e27c2663027a4f90dffb39f7fd6ed8a92e5d61d4",
+    "drupal/layout_plugin": "8.1.x-dev#993c829961b5b304a0094d7cd33f014edccf859e",
+    "drupal/panels": "8.3.0-alpha20",
+    "drupal/page_manager": "8.1.x-dev#3f15c87fec006e78954bb3e984cb80afeea4f5b2",
+    "drupal/acquia_connector": "8.1.x-dev#302fc469eb860892fc90403b5d758eb50a715f77",
+    "drupal/metatag": "8.1.0-beta3",
+    "drupal/core": "8.*"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "extra": {
+    "patches": {
+      "drupal/ctools": {
+        "Customize views block settings on each block instance": "https://www.drupal.org/files/issues/2607594-20.patch"
+      }
+    }
+  }
+}
