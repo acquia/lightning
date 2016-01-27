@@ -91,3 +91,50 @@ of site builds will use.
     # From /profiles/lightning/modules/lightning_features/lightning_media/tests/js;
     npm install && npm test
 
+## Quick install
+
+Run `./build.sh` to use drush make to build the distribution and copy the most up to date versions of the lightning modules into the site.
+
+This will create a `/docroot`.
+
+### Setup Drupal
+
+You will then need to perform a normal Drupal 8 install.
+
+First, create a database.
+
+#### Option A: Use the script to create necessary files
+
+`./build-local-settings.php`
+
+The following default DB connection is added to `docroot/sites/default/settings.local.php` and can be updates as needed.
+
+```
+$databases['default']['default'] = [
+ 'driver' => 'mysql',
+ 'database' => 'lightning',
+ 'username' => 'root',
+ 'password' => 'password',
+ 'host' => 'localhost',
+ 'collation' => 'utf8mb4_general_ci',
+];
+```
+
+#### Option B: Manually install files
+
+Create `docroot/sites/default/settings.php` and `docroot/sites/default/services.yml`.
+
+Create a `docroot/sites/default/files` directory. Set the permissions on this directory so that the webserver can read it.
+
+For example, `chmod -R 777 docroot/sites/default/files`
+
+### Install site
+
+#### Option A: Drush
+
+`cd docroot`  
+`drush si lightning`
+
+#### Option B: Manual
+
+Open the browser to `[your-local-site]/install.php`
