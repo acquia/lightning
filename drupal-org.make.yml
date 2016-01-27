@@ -83,6 +83,13 @@ projects:
   # ---
   # Workflow. These modules will only be enabled if the associated Lightning
   # Workflow module is enabled.
+  workbench_moderation:
+    type: module
+    download:
+      type: git
+      branch: 8.x-1.x
+      revision: 89ff94fbd86ed5d8dbfb77d8e548ef42ec6f42e4
+    subdir: contrib/workflow
   # ---
   # Other Modules. These modules provide general expected functionality or
   # enhancements not directly related to Lightning Core Features.
@@ -96,6 +103,10 @@ projects:
   metatag:
     type: module
     version: 1.0-beta3
+    subdir: contrib
+  services:
+    type: module
+    version: 4.0-alpha3
     subdir: contrib
 
 libraries:

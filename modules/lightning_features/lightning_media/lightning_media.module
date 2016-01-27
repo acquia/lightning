@@ -1,0 +1,49 @@
+<?php
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\services\ServiceEndpointInterface;
+use Drupal\views\ViewEntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function lightning_media_service_endpoint_access(ServiceEndpointInterface $endpoint, $operation, AccountInterface $account) {
+  // Not even user 1 can edit the lightning_media endpoint. It belongs to us.
+  return $endpoint->id() == 'lightning_media' ? AccessResult::forbidden() : AccessResult::neutral();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_access().
+ */
+function lightning_media_view_access(ViewEntityInterface $view, $operation, AccountInterface $account) {
+  // Not even user 1 can edit the media_library view. It belongs to us.
+  return $view->id() == 'media_library' ? AccessResult::forbidden() : AccessResult::neutral();
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function lightning_media_library_info_alter(array &$libraries, $extension) {
+  if ($extension == 'lightning_media') {
+    $root = '/' . \Drupal::moduleHandler()->getModule('lightning')->getPath();
+
+    foreach ($libraries as $key => $library) {
+      if ($key == 'media_library') {
+        continue;
+      }
+
+      foreach ($library['js'] as $path => $info) {
+        $libraries[$key]['js'][$root . '/' . $path] = $info;
+        unset($libraries[$key]['js'][$path]);
+      }
+
+      foreach ($library['css'] as $group => $files) {
+        foreach ($files as $path => $info) {
+          $libraries[$key]['css'][$group][$root . '/' . $path] = $info;
+          unset($libraries[$key]['css'][$group][$path]);
+        }
+      }
+    }
+  }
+}

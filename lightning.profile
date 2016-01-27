@@ -31,10 +31,12 @@ function lightning_form_install_configure_form_alter(&$form, FormStateInterface 
     '#description' => 'You can choose to disable some of Lightning\'s functionality above. However, it is not recommended.',
     '#options' => [
       'lightning_media' => 'Lightning Media',
-      'lightning_layout' => 'Lightning Layout'
+      'lightning_layout' => 'Lightning Layout',
+      'lightning_workflow' => 'Lightning Workflow',
     ],
-    '#default_value' => ['lightning_media', 'lightning_layout'],
   ];
+  // All our extensions are checked by default.
+  $form['lightning']['extensions']['#default_value'] = array_keys($form['lightning']['extensions']['#options']);
 
   // Detail container for the demo content checkboxes.
   //

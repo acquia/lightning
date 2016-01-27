@@ -32,12 +32,12 @@
       list-style: none;
       @include display-flex();
       @include flex-wrap(wrap);
-      @include align-items(flex-start);
       overflow-x: hidden;
       overflow-y: scroll;
       max-height: 20em;
 
       li {
+        overflow: hidden;
         width: calc(25% - 16px);
         border: 8px solid transparent;
 
@@ -46,9 +46,10 @@
         }
 
         img {
-          max-width: 100%;
+          margin: 0 auto;
           display: block;
-          height: auto;
+          height: 10em;
+          width: auto;
         }
       }
     }
@@ -87,6 +88,14 @@
           height: auto;
         }
       }
+    }
+  }
+
+  .embed-code {
+    textarea {
+      width: 100%;
+      min-height: 4em;
+      font-size: 150%;
     }
   }
 }

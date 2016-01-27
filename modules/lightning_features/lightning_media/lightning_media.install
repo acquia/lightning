@@ -1,0 +1,34 @@
+<?php
+
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\InstallStorage;
+use Drupal\services\Entity\ServiceEndpoint;
+use Drupal\views\Entity\View;
+
+/**
+ * Implements hook_install().
+ */
+function lightning_media_install() {
+  user_role_grant_permissions('anonymous', ['view media']);
+  user_role_grant_permissions('authenticated', ['view media']);
+}
+
+/**
+ * Updates the media_library view, installs Services module, and creates the
+ * lightning_media service endpoint.
+ */
+function lightning_media_update_8001() {
+  if (! \Drupal::moduleHandler()->moduleExists('services')) {
+    \Drupal::service('module_installer')->install(['services']);
+  }
+
+  $dir = \Drupal::moduleHandler()->getModule('lightning_media')->getPath();
+  $storage = new FileStorage($dir . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY);
+  $values = $storage->read('services.service_endpoint.lightning_media');
+  ServiceEndpoint::create($values)->save();
+
+  // Update the media_library view by deleting and re-creating it.
+  View::load('media_library')->delete();
+  $values = $storage->read('views.view.media_library');
+  View::create($values)->save();
+}
