@@ -1,0 +1,47 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
+use Drupal\views\ViewExecutable;
+use Drupal\workbench_moderation\Entity\ModerationState;
+use Drupal\workbench_moderation\Entity\ModerationStateTransition;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state) {
+  if ($form_state->getStorage()['view']->storage->id() == 'content') {
+    if (isset($form['moderation_state'])) {
+      $form['moderation_state'] = [
+        '#type' => 'select',
+        '#title' => $form['moderation_state']['#title'],
+        '#options' => [
+          '' => \Drupal::translation()->translate('- any -'),
+        ],
+      ];
+      /** @var \Drupal\workbench_moderation\ModerationStateInterface $state */
+      foreach (ModerationState::loadMultiple() as $state) {
+        $form['moderation_state']['#options'][$state->id()] = $state->label();
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_views_pre_render().
+ */
+function lightning_workflow_views_pre_render(ViewExecutable $view) {
+  if ($view->storage->id() == 'moderation_history') {
+    foreach ($view->result as $index => $row) {
+      $entity = $row->_entity;
+
+      if (empty($previous) || $previous->moderation_state->target_id != $entity->moderation_state->target_id) {
+        $previous = $entity;
+      }
+      else {
+        unset($view->result[$index]);
+        $view->total_rows--;
+      }
+    }
+  }
+}
