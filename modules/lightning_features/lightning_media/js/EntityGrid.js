@@ -77,6 +77,8 @@
     },
 
     render: function () {
+      // The CSS ID is applied for testing purposes.
+      this.bundleFilter.id = 'lightning-media-bundle';
       $(this.header).append([this.search, this.bundleFilter]).appendTo(this.el);
       this.innerView.render();
       this.el.appendChild(this.innerView.el);
