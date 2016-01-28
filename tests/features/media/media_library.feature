@@ -7,6 +7,7 @@ Feature: Media library CKEditor widget
     When I go to "node/add/page"
     And wait 1 second
     And I execute the "media_library" command in CKEditor "edit-body-0-value"
+    And wait 3 seconds
     Then I should see "Media Library"
     And the element ".media-library .library ul.collection-view" should exist
 
