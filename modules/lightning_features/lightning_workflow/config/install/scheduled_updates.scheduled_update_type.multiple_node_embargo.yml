@@ -1,0 +1,15 @@
+langcode: en
+status: true
+dependencies: {  }
+id: multiple_node_embargo
+label: 'Publish multiple nodes at a certain time'
+update_entity_type: node
+reference_type: 1
+field_map:
+  field_moderation_state_1: moderation_state
+update_runner:
+  id: default
+  after_run: DELETE
+  invalid_update_behavior: REQUEUE
+  create_revisions: BUNDLE_DEFAULT
+  update_user: USER_UPDATE_RUNNER

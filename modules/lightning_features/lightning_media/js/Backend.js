@@ -36,6 +36,18 @@
 
       this.queryString.page = 0;
       this.doReset();
+    },
+
+    filterByBundle: function (bundle) {
+      if (bundle) {
+        this.queryString.bundle = bundle;
+      }
+      else {
+        delete this.queryString.bundle;
+      }
+
+      this.queryString.page = 0;
+      this.doReset();
     }
 
   });

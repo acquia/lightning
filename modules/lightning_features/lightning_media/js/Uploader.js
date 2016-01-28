@@ -66,21 +66,6 @@
         .appendTo(this.el);
     },
 
-    finalizeModel: function () {
-      var model = this.model;
-
-      if (this.toLibrary.checked) {
-        return model.save().then(function (response) {
-          model.set(response);
-        });
-      }
-      else {
-        // No need to sync the model to the server, but return a promise for
-        // consistency's sake.
-        return Promise.resolve(model);
-      }
-    },
-
     finalize: function () {
       if (this.model.id) {
         var self = this;
@@ -88,7 +73,7 @@
         // Stop listening to removedfile events until the model is finalized.
         this.dz.off('removedfile', this.onUploadRemove).removeAllFiles();
 
-        return this.finalizeModel().then(function () {
+        return (this.toLibrary.checked ? this.model.save() : Promise.resolve(this.model)).then(function () {
           self.toLibrary.checked = false;
           $(self.footer).hide();
 

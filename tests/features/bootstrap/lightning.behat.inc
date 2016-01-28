@@ -116,4 +116,11 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     $this->getSession()->wait(1000*$seconds);
   }
 
+  /**
+   * @Then the element :selector should exist
+   */
+  public function theElementShouldExist($selector) {
+    $this->assertSession()->elementExists('css', $selector);
+  }
+
 }

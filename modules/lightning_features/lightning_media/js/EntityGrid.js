@@ -9,9 +9,6 @@
 
     render: function () {
       this.el.innerHTML = this.model.get('thumbnail');
-      if (this.model.get('bundle').toLowerCase() !== 'image') {
-        this.el.innerHTML += '<div>' + this.model.get('label') + '</div>';
-      }
     }
 
   });
@@ -30,7 +27,12 @@
 
       'keyup input[type = "search"]': _.debounce(function (event) {
         this.backend.search(event.target.value);
-      }, 400)
+      }, 400),
+
+      'change select': function (e) {
+        var index = e.target.selectedIndex;
+        this.backend.filterByBundle(index > 0 ? e.target.options[e.target.selectedIndex].value : null);
+      }
 
     },
 
@@ -40,6 +42,27 @@
       this.search = document.createElement('input');
       this.search.type = 'search';
       this.search.placeholder = Drupal.t('Search');
+
+      this.bundleFilter = document.createElement('select');
+      var all_option = document.createElement('option');
+      all_option.text = Drupal.t('- all -');
+      this.bundleFilter.add(all_option);
+
+      var self = this;
+      $.ajax({
+        headers: {
+          Accept: 'application/json'
+        },
+        url: Drupal.url('lightning/media/media_bundle')
+      })
+      .then(function (data) {
+        for (var id in data) {
+          var option = document.createElement('option');
+          option.value = id;
+          option.text = data[id];
+          self.bundleFilter.add(option);
+        }
+      });
 
       this.header = document.createElement('header');
 
@@ -54,8 +77,9 @@
     },
 
     render: function () {
-      this.header.appendChild(this.search);
-      this.el.appendChild(this.header);
+      // The CSS ID is applied for testing purposes.
+      this.bundleFilter.id = 'lightning-media-bundle';
+      $(this.header).append([this.search, this.bundleFilter]).appendTo(this.el);
       this.innerView.render();
       this.el.appendChild(this.innerView.el);
       $('<footer />').css({ height: 0, padding: 0 }).appear().appendTo(this.el);

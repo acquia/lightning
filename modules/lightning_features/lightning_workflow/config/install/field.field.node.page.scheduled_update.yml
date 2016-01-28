@@ -1,0 +1,23 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.scheduled_update
+    - node.type.page
+    - scheduled_updates.scheduled_update_type.node_embargo
+id: node.page.scheduled_update
+field_name: scheduled_update
+entity_type: node
+bundle: page
+label: 'Scheduled Update'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler_settings:
+    target_bundles:
+      - node_embargo
+  handler: 'default:scheduled_update'
+field_type: entity_reference

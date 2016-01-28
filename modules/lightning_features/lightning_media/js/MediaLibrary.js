@@ -19,6 +19,8 @@
           return this.library;
         case element === this.upload.el:
           return this.upload;
+        case element === this.embedCode.el:
+          return this.embedCode;
         default:
           break;
       }
@@ -39,6 +41,19 @@
     },
 
     /**
+     * Sync event callback. This is invoked when a model has been saved to the
+     * server, but BEFORE any additional callbacks attached to the jQXHR promise
+     * have run.
+     */
+    addToLibrary: function (model, response) {
+      // The backend collection will not accept models already in the
+      // collection (as determined by model ID). Passing the response will
+      // automatically create a plain Backbone.Model in the collection with
+      // those attributes.
+      this.library.backend.unshift(response);
+    },
+
+    /**
      * Event triggered when a jQuery UI dialog box is closed.
      */
     onDialogClose: function () {
@@ -48,15 +63,18 @@
     initialize: function () {
       this.library = new EntityGrid({
         backend:
-          new MediaLibraryBackend([], { baseUrl: Drupal.url('media-library') })
+          new MediaLibraryBackend([], { baseUrl: Drupal.url('lightning/media/library') })
       });
 
       this.upload = new Uploader({
         url: Drupal.url('lightning/upload')
       });
-      this.listenTo(this.upload.model, 'sync', function (model) {
-        this.library.backend.unshift(model);
+      this.listenTo(this.upload.model, 'sync', this.addToLibrary);
+
+      this.embedCode = new EmbedCode({
+        url: Drupal.url('lightning/embed-code')
       });
+      this.listenTo(this.embedCode.model, 'sync', this.addToLibrary);
 
       this.render();
     },
@@ -69,22 +87,18 @@
       return text;
     },
 
+    addTab: function (element, title) {
+      element.id = this.randomId();
+      this.el.appendChild(element);
+      return $('<li><a href="#' + element.id + '">' + Drupal.t(title) + '</a></li>');
+    },
+
     render: function () {
       var nav = document.createElement('ul');
 
-      this.library.$el
-        .prop('id', this.randomId())
-        .appendTo(this.el);
-
-      $('<li><a href="#' + this.library.el.id + '">' + Drupal.t('Library') + '</a></li>')
-        .appendTo(nav);
-
-      this.upload.$el
-        .prop('id', this.randomId())
-        .appendTo(this.el);
-
-      $('<li><a href="#' + this.upload.el.id + '">' + Drupal.t('Upload') + '</a></li>')
-        .appendTo(nav);
+      this.addTab(this.library.el, 'Library').appendTo(nav);
+      this.addTab(this.upload.el, 'Create Image').appendTo(nav);
+      this.addTab(this.embedCode.el, 'Create Embed').appendTo(nav);
 
       this.$el.prepend(nav).tabs({
         activate: this.onTabActivate.bind(this),

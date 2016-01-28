@@ -80,7 +80,7 @@ describe('Upload widget', function () {
     spyOn(model, 'save');
 
     dropzone.on('success', function () {
-      widget.finalizeModel().then(function () {
+      widget.finalize().then(function () {
         expect(model.save).not.toHaveBeenCalled();
         done();
       })
@@ -94,9 +94,13 @@ describe('Upload widget', function () {
     dropzone.on('success', function () {
       widget.toLibrary.checked = true;
 
-      widget.finalizeModel().then(function () {
+      widget.finalize().then(function (output) {
         expect(model.save).toHaveBeenCalled();
-        expect(model.id).toBe(2);
+        // The promise returned from finalize() is resolved with a *clone* of
+        // the original model -- the original model itself is cleared out,
+        // and since model is a reference to the original model, model.id
+        // will be undefined. output is the clone.
+        expect(output.id).toBe(2);
         done();
       })
     })

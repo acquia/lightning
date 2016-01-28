@@ -5,3 +5,7 @@ projects:
   drupal:
     type: core
     version: 8.0.2
+    patch:
+      # Drupal.Ajax.execute() will return its underlying Deferred object.
+      # This patch is alerady in Drupal 8.1.x.
+      2637194: https://www.drupal.org/files/issues/2637194-12.patch

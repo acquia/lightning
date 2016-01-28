@@ -8,13 +8,12 @@
 namespace Drupal\lightning_media\Controller;
 
 use Drupal\Component\Transliteration\TransliterationInterface;
-use Drupal\Core\Controller\ControllerBase;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityStorageInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Image\ImageFactory;
 use Drupal\Core\Render\RendererInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\StreamWrapper\PublicStream;
-use Drupal\file\FileInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -23,7 +22,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * Handles uploads done directly from the CKEditor-integrated media library.
  */
-class UploadController extends ControllerBase {
+class UploadController extends EntityCrudController {
 
   /**
    * The file entity storage handler.
@@ -38,13 +37,6 @@ class UploadController extends ControllerBase {
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $mediaStorage;
-
-  /**
-   * The renderer service.
-   *
-   * @var \Drupal\Core\Render\RendererInterface
-   */
-  protected $renderer;
 
   /**
    * The transliteration service.
@@ -63,10 +55,10 @@ class UploadController extends ControllerBase {
   /**
    * UploadController constructor.
    *
-   * @param \Drupal\Core\Entity\EntityStorageInterface $file_storage
-   *   The file entity storage controller.
-   * @param \Drupal\Core\Entity\EntityStorageInterface $media_storage
-   *   The media entity storage controller.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param \Drupal\Core\Session\AccountInterface $current_user
+   *   The currently logged-in user.
    * @param \Drupal\Core\Render\RendererInterface $renderer
    *   The renderer service.
    * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
@@ -74,10 +66,11 @@ class UploadController extends ControllerBase {
    * @param \Drupal\Core\Image\ImageFactory
    *   The image factory service.
    */
-  public function __construct(EntityStorageInterface $file_storage, EntityStorageInterface $media_storage, RendererInterface $renderer, TransliterationInterface $transliteration, ImageFactory $image_factory) {
-    $this->fileStorage = $file_storage;
-    $this->mediaStorage = $media_storage;
-    $this->renderer = $renderer;
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, RendererInterface $renderer, TransliterationInterface $transliteration, ImageFactory $image_factory) {
+    parent::__construct($entity_type_manager, $current_user, $renderer);
+
+    $this->fileStorage = $this->entityTypeManager()->getStorage('file');
+    $this->mediaStorage = $this->entityTypeManager()->getStorage('media');
     $this->transliteration = $transliteration;
     $this->imageFactory = $image_factory;
   }
@@ -87,8 +80,8 @@ class UploadController extends ControllerBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('entity_type.manager')->getStorage('file'),
-      $container->get('entity_type.manager')->getStorage('media'),
+      $container->get('entity_type.manager'),
+      $container->get('current_user'),
       $container->get('renderer'),
       $container->get('transliteration'),
       $container->get('image.factory')
@@ -96,19 +89,9 @@ class UploadController extends ControllerBase {
   }
 
   /**
-   * Handles an uploaded file.
-   *
-   * The uploaded file is saved to the public files directory and wrapped by
-   * a media entity.
-   *
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The request.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   An object containing all the information needed to generate embed code
-   *   for the media entity.
+   * {@inheritdoc}
    */
-  public function upload(Request $request) {
+  public function post(Request $request) {
     $response = new JsonResponse();
 
     // Try to get the uploaded file from the request.
@@ -145,15 +128,9 @@ class UploadController extends ControllerBase {
   }
 
   /**
-   * "Cancels" an upload by deleting its associated file entity.
-   *
-   * @param \Drupal\file\FileInterface $file
-   *   The file entity to be deleted.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   The response (currently empty).
+   * {@inheritdoc}
    */
-  public function cancel(FileInterface $file) {
+  public function delete(EntityInterface $file) {
     $file->delete();
     // No need to return anything in the response: the server will produce a
     // 500 error if anything goes wrong when deleting the entity.
@@ -161,15 +138,9 @@ class UploadController extends ControllerBase {
   }
 
   /**
-   * Saves an uploaded file entity as a media item.
-   *
-   * @param \Drupal\file\FileInterface $file
-   *   The uploaded file entity.
-   *
-   * @return \Symfony\Component\HttpFoundation\JsonResponse
-   *   The ID of the newly created media entity.
+   * {@inheritdoc}
    */
-  public function save(FileInterface $file) {
+  public function put(EntityInterface $file) {
     /** @var \Drupal\media_entity\MediaInterface $media */
     $media = $this->mediaStorage->create([
       'bundle' => 'image',
@@ -183,21 +154,12 @@ class UploadController extends ControllerBase {
     $this->mediaStorage->save($media);
 
     $response = $this->getEntityResponseData($media);
+
     $thumbnail = $media->thumbnail->view();
     $thumbnail['#label_display'] = 'hidden';
     $response['thumbnail'] = $this->renderer->render($thumbnail);
 
     return new JsonResponse($response);
-  }
-
-  protected function getEntityResponseData(EntityInterface $entity) {
-    return [
-      'entity_type' => $entity->getEntityTypeId(),
-      'bundle' => $entity->bundle(),
-      'id' => $entity->id(),
-      'uuid' => $entity->uuid(),
-      'label' => $entity->label(),
-    ];
   }
 
 }
