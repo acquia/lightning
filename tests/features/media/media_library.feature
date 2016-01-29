@@ -9,7 +9,6 @@ Feature: Media library CKEditor widget
     And I execute the "media_library" command in CKEditor "edit-body-0-value"
     And wait 3 seconds
     Then I should see "Media Library"
-    And the element ".media-library .library ul.collection-view" should exist
 
   @javascript
   Scenario: Filtering the media library by media type
