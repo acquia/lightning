@@ -12,6 +12,10 @@ php:
 
 sudo: false
 
+addons:
+  # Selenium tests are run against Firefox, so use the latest version.
+  firefox: latest
+
 mysql:
   database: drupal
   username: root
