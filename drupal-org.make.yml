@@ -43,11 +43,8 @@ projects:
     download:
       type: git
       branch: 8.x-1.x
-      revision: 179e19e159f7df2172316030fc7c110b6f0d3efd
+      revision: 495e6771065ccc05c4f39a23a43fad50c8f99a23
     subdir: contrib/media
-    patch:
-      # JQuery and Drupal.js Dependencies
-      2643014: https://www.drupal.org/files/issues/jquery-and-drupal-dependencies-2643014-2.patch
   media_entity_image:
     type: module
     download:
@@ -64,7 +61,7 @@ projects:
     subdir: contrib/layout
     patch:
       # Customize views block settings on each block instance
-      2607594: https://www.drupal.org/files/issues/2607594-40.patch
+      2607594: https://www.drupal.org/files/issues/2607594-46.patch
   layout_plugin:
     type: module
     version: 1.0-alpha22
@@ -91,6 +88,9 @@ projects:
     type: module
     version: 1.0-alpha2
     subdir: contrib/workflow
+    patch:
+      # Deleting a moderated node causes a fatal error
+      2657914: https://www.drupal.org/files/issues/deleting_a_moderated-2657914-12.patch
   # ---
   # Other Modules. These modules provide general expected functionality or
   # enhancements not directly related to Lightning Core Features.
@@ -139,3 +139,4 @@ libraries:
     download:
       type: get
       url: https://github.com/morr/jquery.appear/archive/master.zip
+
