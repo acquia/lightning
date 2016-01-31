@@ -38,7 +38,6 @@ projects[media_entity_image][subdir] = contrib/media
 projects[ctools][type] = module
 projects[ctools][version] = 3.0-alpha21
 projects[ctools][subdir] = contrib/layout
-projects[ctools][patch][] = https://www.drupal.org/files/issues/2607594-46.patch
 projects[layout_plugin][type] = module
 projects[layout_plugin][version] = 1.0-alpha22
 projects[layout_plugin][subdir] = contrib/layout
