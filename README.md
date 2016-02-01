@@ -17,8 +17,8 @@ justified each addition from there.
 
 ## Current version
 
-This is an early release of a subset of the planned features for Media, Layout and
-Workflow.
+This is an early release of a subset of the planned features for Media, Layout
+and Workflow.
 
 ### Media
 
@@ -35,8 +35,8 @@ The current version of media includes the following functionality:
   * Images
 * Drag-and-drop image uploads
 * Ability to create new media through the media library (/media/add)
-* Ability to embed tweets, Instagrams, and YouTube videos directly into CKEditor from an
-  embed code
+* Ability to embed tweets, Instagrams, and YouTube videos directly into CKEditor
+  from an embed code
 
 #### Short-term media roadmap
 
@@ -56,12 +56,12 @@ contrib such as Radix Layouts.
 
 ### Workflow
 
-Lightning includes tools for building organization-specific content workflows. Out of the
-box, Lightning gives you the ability to manage content in one of four workflow states
-(archived, draft, needs review, and published). You can create as many additional states
-as you like and define transitions between them. It's also possible to schedule content
-(either a single node or many at once) to be transitioned between states at a specific
-future date and time.
+Lightning includes tools for building organization-specific content workflows.
+Out of the box, Lightning gives you the ability to manage content in one of four
+workflow states (archived, draft, needs review, and published). You can create
+as many additional states as you like and define transitions between them. It's
+also possible to schedule content (either a single node or many at once) to be
+transitioned between states at a specific future date and time.
 
 ## Project Roadmap
 
@@ -73,17 +73,6 @@ The roadmap is subject to change, but our projected schedule is:
 You can also look for general enhancements along the way like OOTB Pathauto with
 sane defaults and preconfigured roles and permissions that we think the majority
 of site builds will use.
-
-## Updating Lightning
-
-**Never use ```drush pm-update``` to update Lightning!!** Lightning includes specific, vetted, pre-tested versions of modules, and occasionally patches for those modules (and Drupal core). ```drush pm-update``` will totally disregard all of that and may break your site.
-
-To update Lightning safely:
-
-1. Download the latest version of Lightning from https://www.drupal.org/project/lightning and extract it.
-2. In your Lightning site, delete the entire ```profiles/lightning``` directory.
-3. Copy the ```profiles/lightning``` directory from your freshly downloaded version of Lightning into your site.
-4. Visit ```update.php``` or run ```drush updb``` to perform any necessary database updates.
 
 ## Running Tests
 
