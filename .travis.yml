@@ -48,14 +48,11 @@ install:
   - phpenv rehash
 
   # Build drupal + lightning from makefile
-  - drush make --concurrency=5 build-lightning.make docroot -y
-  # Rebuild dependencies from the makefile contained in the repo (not the one pulled from
-  # drupal.org)
-  - drush make -y --no-core drupal-org.make.yml docroot/profiles/lightning
-  # Copy the install profile and Lightning-specific modules in the repo, since drupal.org
-  # (which is used by drush make) is probably not as current.
-  - cp -f lightning.* docroot/profiles/lightning
-  - cp -R -f modules/lightning_features docroot/profiles/lightning/modules
+  - drush make --concurrency=5 drupal-org-core.make docroot -y
+  - mkdir docroot/profiles/lightning
+  - shopt -s extglob
+  - cp -r !(docroot) docroot/profiles/lightning
+  - drush make -y --no-core docroot/profiles/lightning/drupal-org.make docroot/profiles/lightning
 
   # Install lightning
   - cd docroot
