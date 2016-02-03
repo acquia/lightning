@@ -67,7 +67,7 @@ before_script:
   - phantomjs --webdriver=4444 > /dev/null &
 
 script:
-  - phpcs --standard=$HOME/.composer/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=*/libraries/* $TRAVIS_BUILD_DIR/docroot/profiles/lightning
+  - phpcs --standard=$HOME/.composer/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=*/libraries/*,*/contrib/* $TRAVIS_BUILD_DIR/docroot/profiles/lightning
   - bin/behat --strict
   - cd ../../modules/lightning_features/lightning_media/tests/js
   # TODO: The install step should go into before_script.
