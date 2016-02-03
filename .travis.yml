@@ -12,10 +12,6 @@ php:
 
 sudo: false
 
-addons:
-  # Selenium tests are run against Firefox, so use the latest version.
-  firefox: latest
-
 mysql:
   database: drupal
   username: root
@@ -64,16 +60,10 @@ before_script:
   - cd tests
   - touch behat.local.yml
   - composer install
-  # Download Selenium server.
-  - wget -q http://goo.gl/PJUZfa -O selenium-server.jar
   # Initialize xvfb (see https://docs.travis-ci.com/user/gui-and-headless-browsers)
   - "export DISPLAY=:99.0"
   - "sh -e /etc/init.d/xvfb start"
-  # Give xvfb time to start.
-  - sleep 3
-  # Start Selenium server in the background.
-  - java -jar selenium-server.jar > /dev/null &
-  - sleep 5
+  - phantomjs --webdriver=4444 > /dev/null &
 
 script:
   - bin/behat --strict
