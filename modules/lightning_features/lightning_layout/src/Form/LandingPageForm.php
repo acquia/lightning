@@ -15,19 +15,28 @@ use Drupal\Core\Url;
 use Drupal\layout_plugin\Plugin\Layout\LayoutPluginManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Defines a form for normal people to create landing pages.
+ */
 class LandingPageForm extends FormBase {
 
   /**
+   * The page entity storage handler.
+   *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $pageStorage;
 
   /**
+   * The page variant entity storage handler.
+   *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $pageVariantStorage;
 
   /**
+   * The layout plugin manager.
+   *
    * @var \Drupal\layout_plugin\Plugin\Layout\LayoutPluginManagerInterface
    */
   protected $layoutPluginManager;
@@ -39,7 +48,7 @@ class LandingPageForm extends FormBase {
    *   Entity storage handler for pages.
    * @param \Drupal\Core\Entity\EntityStorageInterface $page_variant_storage
    *   Entity storage handler for page variants.
-   * @param \Drupal\layout_plugin\Plugin\Layout\LayoutPluginManagerInterface
+   * @param \Drupal\layout_plugin\Plugin\Layout\LayoutPluginManagerInterface $layout_plugin_manager
    *   The layout plugin manager.
    * @param \Drupal\Core\StringTranslation\TranslationInterface $translator
    *   (optional) String translation service.
@@ -105,8 +114,17 @@ class LandingPageForm extends FormBase {
     return $form;
   }
 
+  /**
+   * Returns the normalized path of the landing page.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The form state.
+   *
+   * @return string
+   *   The path of the landing page, without a leading slash.
+   */
   protected function getPath(FormStateInterface $form_state) {
-    return ltrim(strToLower($form_state->getValue('path')), '/');
+    return ltrim(strtolower($form_state->getValue('path')), '/');
   }
 
   /**

@@ -59,6 +59,8 @@ class UploadControllerTest extends UnitTestCase {
   }
 
   /**
+   * Tests a POST request with no accompanying file upload.
+   *
    * @covers ::upload
    */
   public function testUploadPostNoFile() {
@@ -69,19 +71,26 @@ class UploadControllerTest extends UnitTestCase {
   }
 
   /**
+   * Tests a POST request with an accompanying file upload.
+   *
    * @covers ::upload
    */
   public function testUploadPostFile() {
+    // @TODO
   }
 
 }
 
-/** Legacy functions which have not yet been refactored into services. **/
-
+/**
+ * Test version of file_destination().
+ */
 function file_destination($uri) {
   return $uri;
 }
 
+/**
+ * Test version of file_uri_target().
+ */
 function file_uri_target($uri) {
   return str_replace('public://', NULL, $uri);
 }

@@ -11,8 +11,10 @@ use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
 
 /**
- * A variant of the core Image formatter which skips image style processing for
- * SVG images.
+ * SVG-aware variant of the core Image formatter.
+ *
+ * This formatter disables image style processing for SVG images. All other
+ * image formats are passed along to the core image formatter.
  *
  * @FieldFormatter(
  *   id = "image_svg",

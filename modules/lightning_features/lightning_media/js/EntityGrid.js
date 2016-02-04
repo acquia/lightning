@@ -1,3 +1,8 @@
+/**
+ * @file
+ * A widget for choosing an existing media item from the library.
+ */
+
 (function ($, Drupal, _, Backbone) {
   "use strict";
 
@@ -48,21 +53,21 @@
       all_option.text = Drupal.t('- all -');
       this.bundleFilter.add(all_option);
 
-      var self = this;
-      $.ajax({
+      var self = this, ajax_options = {
         headers: {
           Accept: 'application/json'
         },
         url: Drupal.url('lightning/media/media_bundle')
-      })
-      .then(function (data) {
-        for (var id in data) {
-          var option = document.createElement('option');
-          option.value = id;
-          option.text = data[id];
-          self.bundleFilter.add(option);
-        }
-      });
+      };
+      $.ajax(ajax_options)
+        .then(function (data) {
+          for (var id in data) {
+            var option = document.createElement('option');
+            option.value = id;
+            option.text = data[id];
+            self.bundleFilter.add(option);
+          }
+        });
 
       this.header = document.createElement('header');
 

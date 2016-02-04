@@ -139,8 +139,10 @@ class EmbedCodeController extends EntityCrudController {
   }
 
   /**
-   * Checks if a string is a valid video embed code (i.e., can be handled by
-   * one of Media Entity Embeddable Video's providers).
+   * Checks if a string is a valid video embed code.
+   *
+   * The input is considered a valid video embed code if it can be handled by
+   * one of Media Entity Embeddable Video's providers.
    *
    * @param string $embed_code
    *   The embed code to check.
@@ -159,6 +161,7 @@ class EmbedCodeController extends EntityCrudController {
    *   The embed code to check.
    *
    * @return bool
+   *   TRUE if the input is a valid Twitter embed code, FALSE otherwise.
    */
   protected function isTweet($embed_code) {
     return $this->validateStringAs($embed_code, 'TweetEmbedCode');
@@ -171,6 +174,7 @@ class EmbedCodeController extends EntityCrudController {
    *   The embed code to check.
    *
    * @return bool
+   *   TRUE if the input is a valid Instagram embed code, FALSE otherwise.
    */
   protected function isInstagram($embed_code) {
     return $this->validateStringAs($embed_code, 'InstagramEmbedCode');
@@ -185,6 +189,7 @@ class EmbedCodeController extends EntityCrudController {
    *   The constraint's plugin ID.
    *
    * @return bool
+   *   TRUE if the input is valid, FALSE otherwise.
    */
   protected function validateStringAs($string, $constraint) {
     $definition = $this->typedDataManager->createDataDefinition('string');

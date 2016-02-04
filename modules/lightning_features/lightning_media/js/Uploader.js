@@ -1,3 +1,8 @@
+/**
+ * @file
+ * A widget for uploading images by drag-and-drop interaction.
+ */
+
 (function ($, Drupal, Backbone, Dropzone) {
   "use strict";
 

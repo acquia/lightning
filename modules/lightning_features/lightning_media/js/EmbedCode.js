@@ -1,3 +1,8 @@
+/**
+ * @file
+ * A widget to create media entities from embed codes.
+ */
+
 (function ($, Backbone, _, Drupal, drupalSettings) {
   "use strict";
 
@@ -21,27 +26,31 @@
 
         var embed_code = event.target.value;
         if (embed_code) {
-          Drupal.ajax({
+          var ajax_options = {
             url: this.model.url(),
             submit: {
               embed_code: embed_code
             }
-          })
-          .execute()
-          .then(function (response) {
-            preview.innerHTML = response.preview;
-            Drupal.attachBehaviors(preview, drupalSettings);
+          };
+          Drupal.ajax(ajax_options)
+            .execute()
+            .then(function (response) {
+              preview.innerHTML = response.preview;
+              Drupal.attachBehaviors(preview, drupalSettings);
 
-            self.model.set(response);
-            $(self.footer).show();
-          });
+              self.model.set(response);
+              $(self.footer).show();
+            });
         }
         else {
           this.model.destroy({ success: onDestroy });
         }
       },
 
-      'keyup textarea': _.debounce(function (e) { $(e.target).change() }, 600)
+      'keyup textarea': _.debounce(function (e) {
+        $(e.target).change()
+      }
+      , 600)
 
     },
 
@@ -59,12 +68,12 @@
       this.$el.append('<div class="preview" />');
 
       $('<label />')
-      .html(Drupal.t('Save this to my media library'))
-      .prepend(this.toLibrary)
-      .appendTo(this.footer)
-      .parent()
-      .hide()
-      .appendTo(this.el);
+        .html(Drupal.t('Save this to my media library'))
+        .prepend(this.toLibrary)
+        .appendTo(this.footer)
+        .parent()
+        .hide()
+        .appendTo(this.el);
     },
 
     reset: function () {
@@ -80,7 +89,7 @@
     },
 
     finalize: function () {
-      var reset = this.reset.bind(this);
+      var reset = $.proxy(this, 'reset');
       return this.toLibrary.checked ? this.model.save().then(reset) : Promise.resolve(reset());
     }
 

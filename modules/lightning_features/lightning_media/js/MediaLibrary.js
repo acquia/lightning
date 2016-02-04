@@ -1,3 +1,8 @@
+/**
+ * @file
+ * Main ("app") view of the CKEditor-integrated media library.
+ */
+
 (function ($, Drupal, Backbone) {
   "use strict";
 
@@ -17,10 +22,13 @@
       switch (true) {
         case element === this.library.el:
           return this.library;
+
         case element === this.upload.el:
           return this.upload;
+
         case element === this.embedCode.el:
           return this.embedCode;
+
         default:
           break;
       }
@@ -41,9 +49,10 @@
     },
 
     /**
-     * Sync event callback. This is invoked when a model has been saved to the
-     * server, but BEFORE any additional callbacks attached to the jQXHR promise
-     * have run.
+     * Sync event callback.
+     *
+     * This is invoked when a model has been saved to the server, but BEFORE
+     * any additional callbacks attached to the jQXHR promise have run.
      */
     addToLibrary: function (model, response) {
       // The backend collection will not accept models already in the
@@ -101,8 +110,8 @@
       this.addTab(this.embedCode.el, 'Create Embed').appendTo(nav);
 
       this.$el.prepend(nav).tabs({
-        activate: this.onTabActivate.bind(this),
-        create: this.onTabCreate.bind(this),
+        activate: $.proxy(this, 'onTabActivate'),
+        create: $.proxy(this, 'onTabCreate'),
         show: 400
       });
     }

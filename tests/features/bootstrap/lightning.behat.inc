@@ -1,11 +1,11 @@
 <?php
 
 /**
+ * @file
  * Contains \LightningSubContext.
  */
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Behat\Tester\Exception\PendingException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 
@@ -15,16 +15,22 @@ use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 class LightningSubContext extends DrupalSubContextBase implements DrupalSubContextInterface {
 
   /**
+   * The Drupal context.
+   *
    * @var \Drupal\DrupalExtension\Context\DrupalContext
    */
   protected $drupalContext;
 
   /**
+   * The Mink context.
+   *
    * @var \Drupal\DrupalExtension\Context\MinkContext
    */
   protected $minkContext;
 
   /**
+   * Pre-scenario hook.
+   *
    * @BeforeScenario
    */
   public function gatherContexts(BeforeScenarioScope $scope) {
@@ -41,16 +47,18 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    * @param string $id
    *   The editor's instance ID in CKEDITOR.instances.
    *
-   * @throws \Exception if the editor does not exist.
+   * @throws \Exception
+   *   If the specified CKEditor instance does not exist.
    *
    * @Given CKEditor :id exists
+   *
    * @Then CKEditor :id should exist
    */
   public function ckeditorShouldExist($id) {
     $exists = $this->getSession()
       ->evaluateScript("CKEDITOR.instances.hasOwnProperty('$id');");
 
-    if (! $exists) {
+    if ($exists == FALSE) {
       throw new \Exception("CKEditor '$id' does not exist.");
     }
   }
@@ -65,8 +73,7 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    *
    * @When I put :text into CKEditor :id
    */
-  public function iPutTextIntoCkeditor($text, $id)
-  {
+  public function iPutTextIntoCkeditor($text, $id) {
     $this->getSession()
       ->executeScript("CKEDITOR.instances['$id'].insertHtml('$text');");
   }
@@ -79,7 +86,8 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    * @param string $text
    *   The text (or HTML) snippet to look for.
    *
-   * @throws \Exception if the editor doesn't contain the specified text.
+   * @throws \Exception
+   *   If the editor doesn't contain the specified text.
    *
    * @Then CKEditor :id should contain :text
    */
@@ -102,21 +110,23 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    *
    * @When I execute the :command command in CKEditor :id
    */
-  public function iExecuteTheCommandInCkeditor($command, $id)
-  {
+  public function iExecuteTheCommandInCkeditor($command, $id) {
     $this->getSession()
       ->evaluateScript("CKEDITOR.instances['$id'].execCommand('$command');");
   }
 
   /**
+   * Sleeps for a certain number of seconds.
+   *
    * @When /^wait (\d+) seconds?$/
    */
-  public function waitSeconds($seconds)
-  {
-    $this->getSession()->wait(1000*$seconds);
+  public function waitSeconds($seconds) {
+    $this->getSession()->wait(1000 * $seconds);
   }
 
   /**
+   * Asserts that an element, specified by CSS selector, exists.
+   *
    * @Then the element :selector should exist
    */
   public function theElementShouldExist($selector) {

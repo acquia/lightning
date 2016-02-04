@@ -1,4 +1,5 @@
 /**
+ * @file
  * Exposes a testing version of the global Drupal object.
  */
 

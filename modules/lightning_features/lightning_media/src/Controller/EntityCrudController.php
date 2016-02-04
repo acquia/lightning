@@ -61,6 +61,7 @@ abstract class EntityCrudController extends ControllerBase {
    *   The incoming request.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   The response.
    */
   abstract public function post(Request $request);
 
@@ -71,6 +72,7 @@ abstract class EntityCrudController extends ControllerBase {
    *   The entity to be saved.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   The response.
    */
   abstract public function put(EntityInterface $entity);
 
@@ -81,6 +83,7 @@ abstract class EntityCrudController extends ControllerBase {
    *   The entity to be deleted.
    *
    * @return \Symfony\Component\HttpFoundation\JsonResponse
+   *   The response.
    */
   abstract public function delete(EntityInterface $entity);
 

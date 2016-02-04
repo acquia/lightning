@@ -63,7 +63,7 @@ class UploadController extends EntityCrudController {
    *   The renderer service.
    * @param \Drupal\Component\Transliteration\TransliterationInterface $transliteration
    *   The transliteration service.
-   * @param \Drupal\Core\Image\ImageFactory
+   * @param \Drupal\Core\Image\ImageFactory $image_factory
    *   The image factory service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, RendererInterface $renderer, TransliterationInterface $transliteration, ImageFactory $image_factory) {

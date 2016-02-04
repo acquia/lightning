@@ -16,15 +16,19 @@ use Drupal\embed\EmbedCKEditorPluginBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
+ * Defines the media_library plugin for CKEditor.
+ *
  * @CKEditorPlugin(
  *   id = "media_library",
  *   label = @Translation("Media Library"),
  *   embed_type_id = "media_library"
-  * )
+ * )
  */
 class MediaLibrary extends EmbedCKEditorPluginBase {
 
   /**
+   * The module handler service.
+   *
    * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
   protected $moduleHandler;

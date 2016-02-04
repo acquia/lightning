@@ -1,3 +1,8 @@
+/**
+ * @file
+ * JavaScript for the simplified landing page creation form.
+ */
+
 (function ($, _, Drupal) {
   "use strict";
 

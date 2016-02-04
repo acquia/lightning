@@ -13,6 +13,8 @@ use Drupal\embed\EmbedType\EmbedTypeBase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
+ * Embed type supporting a CKEditor-integrated media library.
+ *
  * @EmbedType(
  *   id = "media_library",
  *   label = @Translation("Media Library")

@@ -1,3 +1,8 @@
+/**
+ * @file
+ * A collection with extra methods for use with the EntityGrid widget.
+ */
+
 (function ($, Backbone) {
   "use strict";
 
