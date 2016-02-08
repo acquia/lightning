@@ -1,25 +1,29 @@
 default:
-  paths:
-    features: 'features'
-  filters:
-    tags: "~@chrome"
+  suites:
+    default:
+      paths: 
+        features: 'features'
+      filters:
+        tags: "~@chrome"
+      contexts:
+        - FeatureContext
+        - Drupal\DrupalExtension\Context\DrupalContext
+        - Drupal\DrupalExtension\Context\MinkContext
+        - Drupal\DrupalExtension\Context\MarkupContext
+        - Drupal\DrupalExtension\Context\DrushContext
   extensions:
-    Behat\MinkExtension\Extension:
+    Behat\MinkExtension:
       goutte: ~
       selenium2: ~
-      base_url: http://127.0.0.1:8888
-      files_path: ../../
-    Drupal\DrupalExtension\Extension:
-      text:
-        username_field: 'Username'
-        password_field: 'Password'
+      #base_url: http://mydrupalsite.com
+      #files_path: './profiles/lightning/tests'
+    Drupal\DrupalExtension:
       blackbox: ~
-      drush:
-        alias: self
-      # This will be setup by .travis.yml like so:
-      # export BEHAT_PARAMS="extensions[Drupal\\DrupalExtension\\Extension][drupal][drupal_root]=$DRUPAL_ROOT"
+      #drush:
+      #  root: '/path/to/drupal/root'
       #drupal:
-      #  drupal_root: "/path/to/drupal/root"
+      #  drupal_root: '/path/to/drupal/root'
+      api_driver: 'drupal'
       region_map:
         # CTools / Panels
         CTools modal: "#modalContent"
@@ -43,10 +47,12 @@ default:
 
 # Setup for Google Chrome only tests.
 chrome:
-  filters:
-    tags: "@chrome"
+  suites:
+    default:
+      filters:
+        tags: "@chrome"
   extensions:
-    Behat\MinkExtension\Extension:
+    Behat\MinkExtension:
       selenium2:
         browser: chrome
         capabilities: {"browser": "chrome", "browserName": "chrome", "browserVersion": "ANY", "version": "ANY"}

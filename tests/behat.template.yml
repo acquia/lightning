@@ -1,0 +1,22 @@
+imports:
+    - behat.common.yml
+
+default:
+  extensions:
+    Behat\MinkExtension:
+      # Set 'base_url' to the URL to view your Drupal site.
+      # For example: http://mydrupalsite.com
+      base_url: '@BASE_URL@'
+      files_path: './profiles/lightning/tests'
+    Drupal\DrupalExtension:
+      drush:
+        # Set 'root' to the full path to your Drupal code base.
+        # For example: '/var/www/drupal'
+        root: '@DRUPAL_ROOT@'
+      drupal:
+        # Same as 'root' above!
+        drupal_root: '@DRUPAL_ROOT@'
+      # Look in the profile modules directory and pull in module subcontexts.
+      subcontexts:
+        paths:
+          - "./profiles/lightning"
