@@ -54,7 +54,7 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    *
    * @Then CKEditor :id should exist
    */
-  public function ckeditorShouldExist($id) {
+  public function ckEditorShouldExist($id) {
     $exists = $this->getSession()
       ->evaluateScript("CKEDITOR.instances.hasOwnProperty('$id');");
 
@@ -73,13 +73,13 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    *
    * @When I put :text into CKEditor :id
    */
-  public function iPutTextIntoCkeditor($text, $id) {
+  public function iPutTextIntoCkEditor($text, $id) {
     $this->getSession()
       ->executeScript("CKEDITOR.instances['$id'].insertHtml('$text');");
   }
 
   /**
-   * Asserts that a CKEditor instances's data contains a snippet of text.
+   * Asserts that a CKEditor's content contains a snippet of text.
    *
    * @param string $id
    *   The editor's instance ID in CKEDITOR.instances.
@@ -91,13 +91,47 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    *
    * @Then CKEditor :id should contain :text
    */
-  public function ckeditorShouldContain($id, $text) {
-    $html = $this->getSession()
-      ->evaluateScript("CKEDITOR.instances['$id'].getData();");
+  public function ckEditorShouldContain($id, $text) {
+    $html = $this->getCkEditorContent($id);
 
-    if (strpos($html, $text) === FALSE) {
+    if (strpos($html, $text) == FALSE) {
       throw new \Exception("CKEditor $id did not contain '$text''.");
     }
+  }
+
+  /**
+   * Assert that a CKEditor's content matches a regular expression.
+   *
+   * @param string $id
+   *   The editor's instance ID in CKEDITOR.instances.
+   * @param string $expression
+   *   The regular expression to match.
+   *
+   * @throws \Exception
+   *   If the expression does not match.
+   *
+   * @Then CKEditor :id should match :expression
+   */
+  public function ckEditorShouldMatch($id, $expression) {
+    $html = $this->getCkEditorContent($id);
+
+    if (preg_match($expression, $html) == 0) {
+      throw new \Exception("CKEditor $id did not match '$expression'.");
+    }
+  }
+
+  /**
+   * Gets the content of a CKEditor instance.
+   *
+   * @param string $id
+   *   The editor instance ID in CKEDITOR.instances.
+   *
+   * @return string
+   *   The HTML content of the editor.
+   */
+  protected function getCkEditorContent($id) {
+    return $this->getSession()
+      ->evaluateScript("CKEDITOR.instances['$id'].getData();");
   }
 
   /**
@@ -118,7 +152,10 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   /**
    * Sleeps for a certain number of seconds.
    *
-   * @When /^wait (\d+) seconds?$/
+   * @When wait :seconds seconds
+   * @When wait :second second
+   * @When I wait :seconds seconds
+   * @When I wait :seconds second
    */
   public function waitSeconds($seconds) {
     $this->getSession()->wait(1000 * $seconds);

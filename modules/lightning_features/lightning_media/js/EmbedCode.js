@@ -64,7 +64,11 @@
     },
 
     render: function () {
-      $('<textarea />').attr('placeholder', Drupal.t('Enter a URL or embed code...')).appendTo(this.el);
+      $('<textarea />')
+        .attr('placeholder', Drupal.t('Enter a URL or embed code...'))
+        // This is only here so functional tests can get to it.
+        .attr('name', 'embed_code')
+        .appendTo(this.el);
       this.$el.append('<div class="preview" />');
 
       $('<label />')
