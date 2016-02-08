@@ -93,6 +93,8 @@ env:
     #- DRUPAL_TI_RUNNERS="phpunit simpletest behat"
   matrix:
     - UPGRADE=none
+    - UPGRADE=7.x-1.0-beta3
+    - UPGRADE=7.x-1.0-beta2
     - UPGRADE=7.x-1.0-beta1
     - UPGRADE=7.x-1.0-alpha4
     - UPGRADE=7.x-1.0-alpha3
@@ -112,6 +114,8 @@ mysql:
 
 before_install:
   - composer self-update
+  # Add the oauth token to prevent GitHub timeouts.
+  - git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
   - composer global require "lionsad/drupal_ti:dev-master"
   - drupal-ti before_install
 
@@ -126,3 +130,8 @@ script:
 
 after_script:
   - drupal-ti after_script
+
+# For now, don't test 8.x
+branches:
+  except:
+    - 8.x-1.x
