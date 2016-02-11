@@ -34,6 +34,17 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     $this->minkContext = $environment->getContext('Drupal\DrupalExtension\Context\MinkContext');
   }
 
+  /**
+   * For javascript enabled scenarios, always wait for AJAX for matching steps.
+   *
+   * @AfterStep @javascript
+   */
+  public function afterJavascriptStep($event) {
+    $text = $event->getStep()->getText();
+    if (preg_match('/(execute|enter|press|click|submit|select|go to)/i', $text)) {
+      $this->iWaitForAjaxToFinish();
+    }
+  }
 
   /**
    * Asserts that a CKEditor instance exists.
