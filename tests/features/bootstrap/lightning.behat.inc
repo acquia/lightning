@@ -170,4 +170,42 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     $this->assertSession()->elementExists('css', $selector);
   }
 
+  /**
+   * Visits a random entity of a specific type and bundle.
+   *
+   * @param string $entity_type
+   *   The entity type ID.
+   * @param string $bundle
+   *   The bundle ID.
+   *
+   * @When I visit a :entity_type entity of type :bundle
+   */
+  public function visitEntity($entity_type, $bundle) {
+    if ($this->getDriver()->isBootstrapped()) {
+      $bundle_key = \Drupal::entityTypeManager()
+        ->getDefinition($entity_type)
+        ->getKey('bundle');
+
+      $entities = \Drupal::entityQuery($entity_type)
+        ->condition($bundle_key, $bundle)
+        ->execute();
+
+      if ($entities) {
+        $path = \Drupal::entityTypeManager()
+          ->getStorage($entity_type)
+          ->load(reset($entities))
+          ->toUrl()
+          ->getInternalPath();
+
+        $this->visitPath($path);
+      }
+      else {
+        throw new \UnexpectedValueException('No ' . $entity_type . ' entities found.');
+      }
+    }
+    else {
+      throw new \RuntimeException('Drupal is not bootstrapped.');
+    }
+  }
+
 }

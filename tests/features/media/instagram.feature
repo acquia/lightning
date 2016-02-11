@@ -13,5 +13,5 @@ Feature: Instagram media assets
   @api
   Scenario: Viewing an Instagram post as an anonymous user
     Given I am an anonymous user
-    When I visit "/media/1"
+    When I visit a media entity of type instagram
     Then I should get a 200 HTTP response

@@ -13,5 +13,5 @@ Feature: Twitter media assets
   @api
   Scenario: Viewing a tweet as an anonymous user
     Given I am an anonymous user
-    When I visit "/media/2"
+    When I visit a media entity of type tweet
     Then I should get a 200 HTTP response

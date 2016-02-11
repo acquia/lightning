@@ -2,8 +2,11 @@ langcode: und
 status: true
 dependencies:
   module:
+    - file
     - image
     - media_entity
+_core:
+  default_config_hash: VfhFnWEoSd9wWyLD7JB5YHAGDaVtgR0lJU26JaUdvi8
 id: media.image
 field_name: image
 entity_type: media
@@ -19,10 +22,10 @@ settings:
   target_type: file
   display_field: false
   display_default: false
-  target_bundle: null
 module: image
 locked: false
 cardinality: 1
 translatable: true
 indexes: {  }
 persist_with_no_fields: false
+custom_storage: false

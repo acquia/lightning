@@ -13,7 +13,7 @@ Feature: Video media assets
   @api
   Scenario: Viewing a video as an anonymous user
     Given I am an anonymous user
-    When I visit "/media/3"
+    When I visit a media entity of type video
     Then I should get a 200 HTTP response
 
   @api @javascript
