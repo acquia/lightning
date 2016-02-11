@@ -1,4 +1,4 @@
-@api @lightning @media @javascript
+@api @lightning @media @javascript @ckeditor
 Feature: Media library CKEditor widget
 
   Scenario: Opening the media library

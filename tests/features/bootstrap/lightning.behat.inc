@@ -35,14 +35,17 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   }
 
   /**
-   * For javascript enabled scenarios, always wait for AJAX for matching steps.
+   * Verify that CKEditor is loaded.
    *
-   * @AfterStep @javascript
+   * For scenarios tagged with @ckeditor and @javascript, this fires after every
+   * step matching the preg_match().
+   *
+   * @AfterStep @javascript @ckeditor
    */
-  public function afterJavascriptStep($event) {
+  public function iWaitForCkeditorToLoad($event) {
     $text = $event->getStep()->getText();
     if (preg_match('/(execute|enter|press|click|submit|select|go to)/i', $text)) {
-      $this->iWaitForAjaxToFinish();
+      $this->getSession()->wait(5000, '(CKEDITOR.status == \'loaded\'');
     }
   }
 
