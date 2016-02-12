@@ -1,6 +1,6 @@
 lightning
 =========
-[![Build Status](https://travis-ci.org/acquia/lightning.svg?branch=7.x-1.x)](https://travis-ci.org/acquia/lightning)
+[![Travis build status](https://img.shields.io/travis/acquia/lightning/7.x-1.x.svg)](https://travis-ci.org/acquia/lightning) [![Scrutinizer code quality](https://img.shields.io/scrutinizer/g/acquia/lightning/7.x-1.x.svg)](https://scrutinizer-ci.com/g/acquia/lightning)
 
 A dynamic and fast CMS built on Drupal. Lightning provides page building tools, editorial workflows, media management and site preview tools.
 
