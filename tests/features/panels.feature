@@ -6,9 +6,6 @@ Feature: Panel layouts
     Given I am on "/"
     Then I should see "Lightning" in the "Content" region
       And I should see "A fast and feature-rich Drupal distributon" in the "Content" region
-  Scenario: Footer
-    Given I am on "/"
-    Then I should see "© 2016 Lightning All rights reserved." in the "Footer" region
 
   @api
   Scenario: Main page content
