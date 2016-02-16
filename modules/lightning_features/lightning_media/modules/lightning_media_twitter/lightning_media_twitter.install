@@ -1,0 +1,21 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function lightning_media_twitter_install() {
+  if (lightning_demo_content()) {
+    \Drupal::entityTypeManager()->getStorage('media')->create([
+      'bundle' => 'tweet',
+      'uid' => 1,
+      'status' => 1,
+      'name' => 'Database Admins',
+      'embed_code' => [
+        'value' => 'https://twitter.com/webchick/status/672110599497617408'
+      ],
+      'field_media_in_library' => [
+        'value' => 1,
+      ]
+    ])->save();
+  }
+}

@@ -1,0 +1,32 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.media_library
+    - field.field.media.video.embed_code
+    - field.field.media.video.field_media_in_library
+    - image.style.medium
+    - media_entity.bundle.video
+  module:
+    - image
+_core:
+  default_config_hash: 2S17ImNrujIZgl9pM2DphFWcYb9OiC8704S9WgjKIZE
+id: media.video.media_library
+targetEntityType: media
+bundle: video
+mode: media_library
+content:
+  thumbnail:
+    type: image
+    weight: 0
+    label: above
+    settings:
+      image_style: medium
+      image_link: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  embed_code: true
+  field_media_in_library: true
+  name: true
+  uid: true

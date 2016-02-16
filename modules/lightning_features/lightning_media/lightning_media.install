@@ -32,3 +32,20 @@ function lightning_media_update_8001() {
   $values = $storage->read('views.view.media_library');
   View::create($values)->save();
 }
+
+/**
+ * Activates Lightning Media sub-features.
+ */
+function lightning_media_update_8002() {
+  $installer = \Drupal::service('module_installer');
+
+  if (! \Drupal::moduleHandler()->moduleExists('features')) {
+    $installer->install(['features']);
+  }
+  $installer->install([
+    'lightning_media_image',
+    'lightning_media_instagram',
+    'lightning_media_twitter',
+    'lightning_media_video',
+  ]);
+}

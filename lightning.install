@@ -11,6 +11,15 @@ use Drupal\user\RoleInterface;
 use Drupal\shortcut\Entity\Shortcut;
 
 /**
+ * Returns whether demo content was or should be installed.
+ *
+ * @return bool
+ */
+function lightning_demo_content() {
+  return (boolean) \Drupal::state()->get('lightning.demo_content');
+}
+
+/**
  * Implements hook_install().
  *
  * Perform actions to set up the site for Lightning Profile.

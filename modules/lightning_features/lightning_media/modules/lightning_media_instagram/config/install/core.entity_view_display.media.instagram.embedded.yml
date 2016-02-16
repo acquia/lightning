@@ -1,0 +1,31 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.embedded
+    - field.field.media.instagram.embed_code
+    - field.field.media.instagram.field_media_in_library
+    - media_entity.bundle.instagram
+  module:
+    - media_entity_instagram
+_core:
+  default_config_hash: KP1d3vs52bLS3MhKydiSY09ElhpB6v4NIBoedbz1sNM
+id: media.instagram.embedded
+targetEntityType: media
+bundle: instagram
+mode: embedded
+content:
+  embed_code:
+    type: instagram_embed
+    weight: 0
+    label: hidden
+    settings:
+      width: '480'
+      height: '640'
+    third_party_settings: {  }
+hidden:
+  created: true
+  field_media_in_library: true
+  name: true
+  thumbnail: true
+  uid: true
