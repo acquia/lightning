@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function lightning_layout_install() {
+  /** @var \Drupal\panelizer\PanelizerInterface $panelizer */
+  $panelizer = \Drupal::service('panelizer');
+
+  $panelizer->setPanelizerSettings('node', 'page', 'default', [
+    'enable' => TRUE,
+    'custom' => TRUE,
+  ]);
+
+  $displays = $panelizer->getDefaultPanelsDisplays('node', 'page', 'default');
+  if ($displays) {
+    $panelizer->setDefaultPanelsDisplay('default', 'node', 'page', 'default', $displays['default']);
+  }
+}
