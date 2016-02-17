@@ -1,0 +1,17 @@
+imports:
+  - behat.common.yml
+
+default:
+  extensions:
+    Behat\MinkExtension:
+      base_url: "$DRUPAL_TI_WEBSERVER_URL:$DRUPAL_TI_WEBSERVER_PORT/"
+      files_path: "$DRUPAL_TI_BEHAT_DIR"
+    Drupal\DrupalExtension:
+      drush:
+        root: "$DRUPAL_TI_DRUPAL_DIR"
+      drupal:
+        drupal_root: "$DRUPAL_TI_DRUPAL_DIR"
+      # Look in the profile modules directory and pull in module subcontexts.
+      subcontexts:
+        paths:
+          - "./profiles/lightning"

@@ -1,163 +1,137 @@
+# @file
+# .travis.yml - Drupal for Travis CI Integration
+#
+# Template provided by https://github.com/LionsAd/drupal_ti.
+#
+# Based for simpletest upon:
+#   https://github.com/sonnym/travis-ci-drupal-module-example
+
 language: php
+
+sudo: false
 
 php:
   - 5.4
 
-mysql:
-  database: drupal
-  username: root
-  encoding: utf8
-
-env:
-  - UPGRADE=none
-  - UPGRADE=7.x-1.0-beta3
-  - UPGRADE=7.x-1.0-beta2
-  - UPGRADE=7.x-1.0-beta1
-  - UPGRADE=7.x-1.0-alpha4
-  - UPGRADE=7.x-1.0-alpha3
-  - UPGRADE=7.x-1.0-alpha2
-  - UPGRADE=7.x-1.0-alpha1
-
 matrix:
   fast_finish: true
   allow_failures:
-  - UPGRADE=7.x-1.0-beta3
-  - UPGRADE=7.x-1.0-beta2
-  - UPGRADE=7.x-1.0-beta1
-  - UPGRADE=7.x-1.0-alpha4
-  - UPGRADE=7.x-1.0-alpha3
-  - UPGRADE=7.x-1.0-alpha2
-  - UPGRADE=7.x-1.0-alpha1
+    - php: 7
+    - php: hhvm
+  include:
+    - php: "5.5"
+      env: UPGRADE=none
+    - php: "5.6"
+      env: UPGRADE=none
+
+env:
+  global:
+    # add composer's global bin directory to the path
+    # see: https://github.com/drush-ops/drush#install---composer
+    - PATH="$PATH:$HOME/.composer/vendor/bin"
+
+    # Configuration variables.
+    - DRUPAL_TI_DISTRIBUTION_NAME="lightning"
+    #- DRUPAL_TI_MODULE_NAME="[[[FILL THIS OUT]]]"
+    #- DRUPAL_TI_SIMPLETEST_GROUP="[[[FILL THIS OUT]]]"
+
+    # Define runners and environment vars to include before and after the
+    # main runners / environment vars.
+    #- DRUPAL_TI_SCRIPT_DIR_BEFORE="./.drupal_ti/before"
+    - DRUPAL_TI_SCRIPT_DIR_AFTER="./.drupal-ti"
+
+    # The environment to use, supported are: drupal-7, drupal-8
+    - DRUPAL_TI_ENVIRONMENT="drupal-7"
+
+    # Drupal specific variables.
+    - DRUPAL_TI_DB="drupal_travis_db"
+    - DRUPAL_TI_DB_URL="mysql://root:@127.0.0.1/drupal_travis_db"
+    # Note: Do not add a trailing slash here.
+    - DRUPAL_TI_WEBSERVER_URL="http://127.0.0.1"
+    - DRUPAL_TI_WEBSERVER_PORT="8888"
+
+    # Simpletest specific commandline arguments, the DRUPAL_TI_SIMPLETEST_GROUP is appended at the end.
+    - DRUPAL_TI_SIMPLETEST_ARGS="--verbose --color --concurrency 4 --url $DRUPAL_TI_WEBSERVER_URL:$DRUPAL_TI_WEBSERVER_PORT"
+
+    # === Behat specific variables.
+    # This is relative to $TRAVIS_BUILD_DIR
+    - DRUPAL_TI_BEHAT_DIR="./profiles/lightning/tests"
+    # These arguments are passed to the bin/behat command.
+    - DRUPAL_TI_BEHAT_ARGS=""
+    # Specify the filename of the behat.yml with the $DRUPAL_TI_DRUPAL_DIR variables.
+    # @todo This is ignored right now.
+    - DRUPAL_TI_BEHAT_YML="behat.travis.yml.dist"
+    # This is used to setup Xvfb.
+    - DRUPAL_TI_BEHAT_SCREENSIZE_COLOR="1024x768x24"
+    # The version of selenium that should be used.
+    - DRUPAL_TI_BEHAT_SELENIUM_VERSION="2.47.1"
+    - DRUPAL_TI_BEHAT_DRIVER="selenium"
+    # We use both chrome and firefox, but this makes chromedriver available.
+    - DRUPAL_TI_BEHAT_BROWSER="chrome"
+
+    # PHPUnit specific commandline arguments.
+    - DRUPAL_TI_PHPUNIT_ARGS=""
+
+    # Code coverage via coveralls.io
+    - DRUPAL_TI_COVERAGE="satooshi/php-coveralls:0.6.*"
+    # This needs to match your .coveralls.yml file.
+    - DRUPAL_TI_COVERAGE_FILE="build/logs/clover.xml"
+
+    # Debug options
+    #- DRUPAL_TI_DEBUG="-x -v"
+    # Set to "all" to output all files, set to e.g. "xvfb selenium" or "selenium",
+    # etc. to only output those channels.
+    #- DRUPAL_TI_DEBUG_FILE_OUTPUT="xvfb selenium webserver"
+
+    # Use a custom runner for now.
+    # @todo Move functionality back upstream.
+    - DRUPAL_TI_RUNNERS="lightning-behat"
+    # [[[ SELECT ANY OR MORE OPTIONS ]]]
+    #- DRUPAL_TI_RUNNERS="phpunit"
+    #- DRUPAL_TI_RUNNERS="simpletest"
+    #- DRUPAL_TI_RUNNERS="behat"
+    #- DRUPAL_TI_RUNNERS="phpunit simpletest behat"
+  matrix:
+    - UPGRADE=none
+    - UPGRADE=7.x-1.0-beta3
+    - UPGRADE=7.x-1.0-beta2
+    - UPGRADE=7.x-1.0-beta1
+    - UPGRADE=7.x-1.0-alpha4
+    - UPGRADE=7.x-1.0-alpha3
+    - UPGRADE=7.x-1.0-alpha2
+    - UPGRADE=7.x-1.0-alpha1
+
+# Cache Composer & Drush directories.
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.drush/cache
+
+mysql:
+  database: drupal_travis_db
+  username: root
+  encoding: utf8
+
+before_install:
+  - composer self-update
+  # Add the oauth token to prevent GitHub timeouts.
+  - git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
+  - composer global require "lionsad/drupal_ti:dev-master"
+  - drupal-ti before_install
 
 install:
-  # Add the Google Chrome packages.
-  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  - sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-  - sudo apt-get update > /dev/null
-
-  # Create a database for our Drupal site.
-  - "mysql -e 'create database drupal;'"
-
-  # Install the latest Drush 6.
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - composer global require --no-interaction --prefer-source drush/drush:6.*@dev
-
-  # Install Drupal.org drush.
-  - drush dl -y drupalorg_drush-7.x-1.x-dev --destination=$HOME/.drush
-  - drush cc drush
-
-  # Build Behat dependencies
-  - cd ./tests/behat
-  - composer install --prefer-source --no-interaction
-  - cd ../../../
-
-  # Rename the repository folder to 'lightning' (to accommodate different repository names).
-  - REPO_NAME=`basename $TRAVIS_REPO_SLUG`
-  - if [[ "$REPO_NAME" != lightning ]]; then mv $REPO_NAME lightning; fi
-
-  # Build Codebase
-  - mkdir profiles
-  - mv lightning profiles/
-  - mkdir drupal
-  - mv profiles drupal/
-
-  # Build the current branch.
-  - cd drupal
-  - drush make --yes profiles/lightning/drupal-org-core.make --prepare-install
-  - drush make --yes profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning
-  - mkdir sites/default/private
-  - mkdir sites/default/private/files
-  - mkdir sites/default/private/temp
-  - cd ../
-
-  # Verify that all the .make files will work on Drupal.org.
-  - drush verify-makefile drupal/profiles/lightning/drupal-org.make
-
-  # Download an old version to test upgrading from.
-  - if [[ "$UPGRADE" != none ]]; then drush dl lightning-$UPGRADE; fi
-
-  # Setup files
-  - sudo chmod -R 777 drupal/sites/all
-
-  # Setup display for Selenium
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
-  - sleep 5
-
-  # Get Chrome and ChromeDriver
-  - sudo apt-get install google-chrome-stable
-  - wget http://chromedriver.storage.googleapis.com/2.9/chromedriver_linux64.zip
-  - unzip -a chromedriver_linux64.zip
-
-  # Insane hack from jsdevel:
-  #   https://github.com/jsdevel/travis-debugging/blob/master/shim.bash
-  # This allows chrome-sandbox to work in side of OpenVZ, because I can't
-  # figure out how to start chrome with --no-sandbox.
-  - export CHROME_SANDBOX=/opt/google/chrome/chrome-sandbox
-  - sudo rm -f $CHROME_SANDBOX
-  - sudo wget https://googledrive.com/host/0B5VlNZ_Rvdw6NTJoZDBSVy1ZdkE -O $CHROME_SANDBOX
-  - sudo chown root:root $CHROME_SANDBOX; sudo chmod 4755 $CHROME_SANDBOX
-  - sudo md5sum $CHROME_SANDBOX
-
-  # Get Selenium
-  - wget http://selenium-release.storage.googleapis.com/2.42/selenium-server-standalone-2.42.1.jar
-  - java -jar selenium-server-standalone-2.42.1.jar > /dev/null 2>&1 &
-  - sleep 5
-
-  # Disable sendmail
-  - echo sendmail_path=`which true` >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-
-  # Enable APC
-  - echo "extension=apc.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "apc.shm_size=256M" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-
-  # Increase the MySQL connection timeout on the PHP end.
-  - echo "mysql.connect_timeout=3000" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-  - echo "default_socket_timeout=3000" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-
-  # Increase the MySQL server timeout and packet size.
-  - mysql -e "SET GLOBAL wait_timeout = 36000;"
-  - mysql -e "SET GLOBAL max_allowed_packet = 33554432;"
+  - drupal-ti install
 
 before_script:
-
-  # Do the site install (either the current revision or old for the upgrade).
-  - if [[ "$UPGRADE" == none ]]; then cd drupal; else cd lightning-$UPGRADE; fi
-  - drush si lightning --db-url=mysql://root:@127.0.0.1/drupal --account-name=admin --account-pass=admin --account-mail=admin@test.com --site-mail=noreply@test.com --site-name="Lightning" --yes
-
-  # Configure the private and temporary file systems.
-  - drush vset -y file_private_path "sites/default/private/files"
-  - drush vset -y file_temporary_path "sites/default/private/temp"
-
-  # Enabled the demo content.
-  - drush le lightning_demo
-
-  - cd ../drupal
-
-  # If we're an upgrade test, run the upgrade process.
-  - if [[ "$UPGRADE" != none ]]; then cp -a ../lightning-$UPGRADE/sites/default/* sites/default/ && drush updb --yes; fi
-
-  - drush runserver --server=builtin 8888 > /dev/null 2>&1 &
-  - SERVER_PID=$!
-  - sleep 3
-  - cd profiles/lightning/tests/behat
-
-  # Make the Travis tests repos agnostic by injecting drupal_root with BEHAT_PARAMS
-  - BUILD_OWNER=`dirname $TRAVIS_BUILD_DIR`
-  - export BEHAT_PARAMS="extensions[Drupal\\DrupalExtension\\Extension][drupal][drupal_root]=$BUILD_OWNER/drupal"
+  - drupal-ti before_script
 
 script:
-
-  # If this isn't an upgrade, we test if any features are overridden.
-  - if [[ "$UPGRADE" == none ]]; then bash ../../scripts/check-overridden.sh; fi
-
-  # First, run all the tests in Firefox.
-  - ./bin/behat --config behat.travis.yml
-
-  # Then run some Chrome-only tests.
-  - ./bin/behat --config behat.travis.yml -p chrome
+  - drupal-ti script
 
 after_script:
+  - drupal-ti after_script
 
-  # Stop the webserver so that it's not still running when MySQL is stopped.
-  - kill $SERVER_PID
+# For now, don't test 8.x
+branches:
+  except:
+    - 8.x-1.x

@@ -8,12 +8,12 @@ LIGHTNING_FEATURES="lightning_admin lightning_article lightning_base lightning_b
 # TODO: We should make sure that 'diff' is downloaded first!
 $DRUSH $DRUSH_ARGS en -y diff
 
-OVERRIDDEN=0
+# Notify which features are overridden.
 for lightning_feature in $LIGHTNING_FEATURES; do
   echo "Checking $lightning_feature..."
   if $DRUSH $DRUSH_ARGS features-diff $lightning_feature 2>&1 | grep -v 'Feature is in its default state'; then
-    OVERRIDDEN=1
+    echo "$lightning_feature is overridden."
   fi
 done
 
-exit $OVERRIDDEN
+exit 0
