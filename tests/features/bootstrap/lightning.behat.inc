@@ -208,4 +208,27 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     }
   }
 
+  /**
+   * Deletes the URL alias provided.
+   *
+   * @param string $path_alias
+   *   The alias to delete (this is the alias entered by the user or generated
+   *   by pathauto, not the system path)
+   *
+   * @Then I cleanup the :path_alias alias
+   */
+  public function cleanupTheAlias($path_alias) {
+    if ($this->getDriver()->isBootstrapped()) {
+      $system_path = \Drupal::service('path.alias_manager')->getPathByAlias($path_alias, null);
+      if ($system_path == $path_alias) {
+        throw new \RuntimeException('Path alias `' . $path_alias . '` not found.');
+      }
+      \Drupal::service('path.alias_storage')->delete(array('source' => $system_path));
+    }
+    else {
+      throw new \RuntimeException('Drupal is not bootstrapped.');
+    }
+  }
+
 }
+
