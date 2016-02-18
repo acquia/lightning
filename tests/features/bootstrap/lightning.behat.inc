@@ -40,6 +40,20 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     $this->minkContext = $environment->getContext('Drupal\DrupalExtension\Context\MinkContext');
   }
 
+  /**
+   * Verify that CKEditor is loaded.
+   *
+   * For scenarios tagged with @ckeditor and @javascript, this fires after every
+   * step matching the preg_match().
+   *
+   * @AfterStep @javascript @ckeditor
+   */
+  public function iWaitForCkeditorToLoad($event) {
+    $text = $event->getStep()->getText();
+    if (preg_match('/(execute|enter|press|click|submit|select|go to)/i', $text)) {
+      $this->getSession()->wait(5000, '(CKEDITOR.status == \'loaded\'');
+    }
+  }
 
   /**
    * Asserts that a CKEditor instance exists.
