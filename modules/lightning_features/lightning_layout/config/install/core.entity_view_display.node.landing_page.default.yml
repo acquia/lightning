@@ -1,0 +1,36 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.landing_page.panelizer
+    - node.type.landing_page
+  module:
+    - panelizer
+    - user
+third_party_settings:
+  panelizer:
+    enable: true
+    custom: true
+    displays:
+      default:
+        blocks: {  }
+        id: panels_variant
+        label: ''
+        weight: 0
+        layout: onecol
+        layout_settings: {  }
+        page_title: '[node:title]'
+        storage_type: ''
+        storage_id: ''
+        builder: ipe
+id: node.landing_page.default
+targetEntityType: node
+bundle: landing_page
+mode: default
+content:
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  panelizer: true

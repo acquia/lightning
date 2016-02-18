@@ -1,7 +1,6 @@
-@api @lightning @media
+@api @lightning @media @javascript
 Feature: Media library CKEditor widget
 
-  @javascript
   Scenario: Opening the media library
     Given I am logged in as a user with the "administrator" role
     When I go to "node/add/page"
@@ -10,7 +9,6 @@ Feature: Media library CKEditor widget
     And wait 3 seconds
     Then I should see "Media Library"
 
-  @javascript
   Scenario: Filtering the media library by media type
     Given I am logged in as a user with the "administrator" role
     When I go to "/node/add/page"

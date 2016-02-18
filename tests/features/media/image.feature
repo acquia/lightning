@@ -1,8 +1,7 @@
-@lightning @lightning_media
+@lightning @lightning_media @api
   Feature: Image media assets
     A media asset representing a locally hosted image.
 
-@api
   Scenario: Creating an image
     Given I am logged in as a user with the "create media" permission
     When I visit "/media/add"

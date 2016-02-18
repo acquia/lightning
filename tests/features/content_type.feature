@@ -6,6 +6,7 @@
     Given I am logged in as a user with the "administrator" role
     When I visit "/admin/structure/types"
     Then I should see "Basic page"
+    And I should see "Landing Page"
 
   @javascript
   Scenario: Ensure that the WYSIWYG editor is present.
