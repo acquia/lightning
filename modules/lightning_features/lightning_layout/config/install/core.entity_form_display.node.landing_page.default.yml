@@ -2,9 +2,14 @@ langcode: en
 status: true
 dependencies:
   config:
+    - field.field.node.landing_page.field_meta_tags
+    - field.field.node.landing_page.panelizer
     - node.type.landing_page
   module:
+    - metatag
     - path
+_core:
+  default_config_hash: y9v0WjDRAKPOqP4lBm739G3HsXWiuAb6bEibCizFrEE
 id: node.landing_page.default
 targetEntityType: node
 bundle: landing_page
@@ -15,6 +20,11 @@ content:
     weight: 2
     settings: {  }
     third_party_settings: {  }
+  field_meta_tags:
+    weight: 26
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_firehose
   path:
     type: path
     weight: 3
@@ -36,5 +46,6 @@ content:
       placeholder: ''
     third_party_settings: {  }
 hidden:
+  panelizer: true
   promote: true
   sticky: true
