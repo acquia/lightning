@@ -6,6 +6,7 @@
  */
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 
@@ -227,6 +228,29 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     }
     else {
       throw new \RuntimeException('Drupal is not bootstrapped.');
+    }
+  }
+
+  /**
+   * Clicks an arbitrary element, found by CSS selector.
+   *
+   * @param string $selector
+   *   The CSS selector.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   If the specified element is not present on the page.
+   *
+   * @When I click the :selector element
+   */
+  public function clickElementBySelector($selector) {
+    $session = $this->getSession();
+
+    $element = $session->getPage()->find('css', $selector);
+    if ($element) {
+      $element->click();
+    }
+    else {
+      throw new ElementNotFoundException($session, 'element', 'css', $selector);
     }
   }
 
