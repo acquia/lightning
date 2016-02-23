@@ -22,14 +22,12 @@ function lightning_media_update_8001() {
     \Drupal::service('module_installer')->install(['services']);
   }
 
-  $dir = \Drupal::moduleHandler()->getModule('lightning_media')->getPath();
-  $storage = new FileStorage($dir . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY);
-  $values = $storage->read('services.service_endpoint.lightning_media');
+  $values = lightning_read_config('services.service_endpoint.lightning_media', 'lightning_media');
   ServiceEndpoint::create($values)->save();
 
   // Update the media_library view by deleting and re-creating it.
   View::load('media_library')->delete();
-  $values = $storage->read('views.view.media_library');
+  $values = lightning_read_config('views.view.media_library', 'lightning_media');
   View::create($values)->save();
 }
 

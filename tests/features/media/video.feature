@@ -18,14 +18,14 @@ Feature: Video media assets
   Scenario: Creating a video in CKEditor from an embed code
     Given I am logged in as a user with the "administrator" role
     When I go to "/node/add/page"
-    And wait 3 seconds
+    And I wait for AJAX to finish
     And I execute the "media_library" command in CKEditor "edit-body-0-value"
-    And I wait 3 seconds
+    And I wait for AJAX to finish
     And I click "Create Embed"
     And I enter "https://www.youtube.com/watch?v=DyFYUKBEZAg" for "embed_code"
     # Wait for the server to turn the embed code into an entity.
-    And I wait 3 seconds
+    And I wait for AJAX to finish
     And I press "Place"
     # Wait for the embed to complete.
-    And I wait 5 seconds
+    And I wait for AJAX to finish
     Then CKEditor "edit-body-0-value" should match "/data-entity-id=.?[0-9]+.?/"

@@ -53,6 +53,7 @@ projects:
     version: 3.0-beta4
     subdir: contrib/layout
     patch:
+      # Allow other modules to disable the IPE based on custom logic
       2667754: https://www.drupal.org/files/issues/2667754-3.patch
   page_manager:
     type: module
@@ -77,7 +78,10 @@ projects:
     version: 1.0-beta1
     subdir: contrib/workflow
     patch:
+      # Provide logical access control for when IPE should be applied to moderated nodes
       2668006: https://www.drupal.org/files/issues/2668006-2.patch
+      # Anonymous able to see "View" and "Latest Version" tabs
+      2672122: https://www.drupal.org/files/issues/anonymous_able_to_see-2672122-11.patch
   # ---
   # Other Modules. These modules provide general expected functionality or
   # enhancements not directly related to Lightning Core Features.
@@ -98,7 +102,7 @@ projects:
     subdir: contrib
   inline_entity_form:
     type: module
-    version: 1.0-alpha3
+    version: 1.0-alpha4
     subdir: contrib
   metatag:
     type: module

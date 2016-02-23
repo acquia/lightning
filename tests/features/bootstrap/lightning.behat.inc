@@ -151,18 +151,6 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   }
 
   /**
-   * Sleeps for a certain number of seconds.
-   *
-   * @When wait :seconds seconds
-   * @When wait :second second
-   * @When I wait :seconds seconds
-   * @When I wait :seconds second
-   */
-  public function waitSeconds($seconds) {
-    $this->getSession()->wait(1000 * $seconds);
-  }
-
-  /**
    * Asserts that an element, specified by CSS selector, exists.
    *
    * @Then the element :selector should exist

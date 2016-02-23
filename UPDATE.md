@@ -49,3 +49,7 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
 * Enable the ```view media``` permission for the ```anonymous``` and
   ```authenticated``` user roles.
 * Install the Lightning Workflow module.
+
+### Beta 2 to Beta 3
+
+There are no manual update steps for Beta 2 to Beta 3 updates.

@@ -1,13 +1,7 @@
 # Drupal Lightning
 
 Lightning's mission is to enable developers to create great authoring
-experiences and empower editorial teams. Through custom modules and
-configuration, Lightning aims to target four functional areas:
-
-* Layout
-* Preview
-* Media
-* Workflow
+experiences and empower editorial teams.
 
 You'll notice that Lightning appears very sparse out of the box. This is by
 design. We want to empower editorial teams and enable developers to jump-start
@@ -15,12 +9,10 @@ their site builds. That means that a developer should never have to undo
 something that Lightning has done. So we started with a blank slate and
 justified each addition from there.
 
-## Current version
+Through custom modules and configuration, Lightning aims to target four
+functional areas:
 
-This is an early release of a subset of the planned features for Media, Layout
-and Workflow.
-
-### Media
+## Media
 
 The current version of media includes the following functionality:
 
@@ -38,27 +30,21 @@ The current version of media includes the following functionality:
 * Ability to embed tweets, Instagrams, and YouTube videos directly into CKEditor
   from an embed code
 
-#### Short-term media roadmap
+## Layout
 
-We hope to make the following enhancements to the Media feature:
+As of beta 3, Lightning includes the Panelizer module, which allows you to
+configure the layout of any content type using a drag-and-drop interface
+(Panels IPE). Lightning also includes a content type called Landing Page for
+you to create landing pages with their own one-off layouts and content.
 
-* Ability to float media left or right, display inline, or display block with no
-  float
-* Ability to resize media and crop image media
-* Support for audio assets (SoundCloud, etc.)
+Two layouts are provided out of the box by Panels. You can create your own
+layouts (see the Layout Plugin module) or install a contributed library of
+layouts like Radix Layouts.
 
-### Layout
-
-Lightning provides the ability to create a landing page through a custom form
-wizard that uses Page Manager and Panels + Panels IPE. Two layouts are provided
-by defaults (via Panels) and others can be added through the Layout Plugin or
-contrib such as Radix Layouts.
-
-### Workflow
-
+## Workflow
 Lightning includes tools for building organization-specific content workflows.
 Out of the box, Lightning gives you the ability to manage content in one of four
-workflow states (archived, draft, needs review, and published). You can create
+workflow states (draft, needs review, published, and archived). You can create
 as many additional states as you like and define transitions between them. It's
 also possible to schedule content (either a single node or many at once) to be
 transitioned between states at a specific future date and time.
@@ -67,12 +53,31 @@ transitioned between states at a specific future date and time.
 
 The roadmap is subject to change, but our projected schedule is:
 
-* Late February 2016: Full Layout Support
-* Late March 2016: Tagged release
+* Late March 2016:
+  * Release Candidate
+  * Ability to set bundle-level layouts from the node type display page
+  * Preconfigured, responsibility-based roles
+  * Workflow UX improvements
+* QTR2 2016
+  * Workspace support (Election Night Scenario)
+  * Remote replication (store workspaces on external apps)
+* Further
+  * Point in time preview
+  * Personalization
 
 You can also look for general enhancements along the way like OOTB Pathauto with
 sane defaults and preconfigured roles and permissions that we think the majority
 of site builds will use.
+
+## Resources
+
+You can find general best practices documentation inside the `help` directory of
+each Lightning "base" module (currently lightning_media/help,
+lightning_layout/help, and lightning_workflow/help). Integration with the
+Advanced Help module is planned.
+
+Please file issues in the D.O issue queue:  
+https://www.drupal.org/project/issues/lightning
 
 ## Running Tests
 

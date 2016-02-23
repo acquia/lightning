@@ -6,6 +6,10 @@
  * profile.
  */
 
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\user\Entity\User;
 use Drupal\user\RoleInterface;
 use Drupal\shortcut\Entity\Shortcut;
@@ -470,9 +474,49 @@ function lightning_install() {
 }
 
 /**
- * Deletes the `Create Landing Page` toolbar shortcut.
+ * Reads a stored config file from a module's config/install directory.
+ *
+ * @param string $id
+ *   The config ID.
+ * @param string $module
+ *   (optional) The module to search. Defaults to 'lightning' (not technically
+ *   a module, but profiles are treated like modules by the install system).
+ *
+ * @return array
+ *   The config data.
+ */
+function lightning_read_config($id, $module = 'lightning') {
+  // Keep the FileStorage in case we need it.
+  static $storage;
+  if (empty($storage)) {
+    $dir = \Drupal::service('module_handler')->getModule($module)->getPath();
+    $storage = new FileStorage($dir . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY);
+  }
+  return $storage->read($id);
+}
+
+/**
+ * Installs the body field on the basic block_content type and deletes the
+ * Create landing page shortcut.
  */
 function lightning_update_8001() {
+  $field = FieldConfig::load('block_content.basic.body');
+  if (empty($field)) {
+    $values = lightning_read_config('field.field.block_content.basic.body');
+    FieldConfig::create($values)->save();
+
+    EntityViewDisplay::load('block_content.basic.default')
+      ->setComponent('body', [
+        'type' => 'text_default',
+        'weight' => 0,
+        'label' => 'hidden',
+        'settings' => [],
+        'third_party_settings' => [],
+      ])
+      ->save();
+  }
+
+  // Deletes the `Create Landing Page` toolbar shortcut.
   $properties = ['link__uri' => 'internal:/admin/structure/landing-page'];
   $shortcuts = \Drupal::entityTypeManager()->getStorage('shortcut')->loadByProperties($properties);
   foreach ($shortcuts as $shortcut) {

@@ -1,0 +1,9 @@
+<?php
+
+/**
+ * Installs Panelizer and default configuration for landing page content type.
+ */
+function lightning_layout_update_8001() {
+  \Drupal::service('module_installer')->install(['panelizer']);
+  \Drupal::service('config.installer')->installDefaultConfig('module', 'lightning_layout');
+}
