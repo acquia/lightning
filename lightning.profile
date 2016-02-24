@@ -50,6 +50,15 @@ function lightning_form_install_configure_form_alter(array &$form, FormStateInte
 }
 
 /**
+ * Returns whether demo content was or should be installed.
+ *
+ * @return bool
+ */
+function lightning_demo_content() {
+  return \Drupal::state()->get('lightning.demo_content', FALSE);
+}
+
+/**
  * Enable requested Lightning extensions and demo content.
  */
 function lightning_extensions_enable($form_id, FormStateInterface $form_state) {
