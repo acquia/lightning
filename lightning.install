@@ -496,15 +496,21 @@ function lightning_update_8001() {
     $values = lightning_read_config('field.field.block_content.basic.body');
     FieldConfig::create($values)->save();
 
-    EntityViewDisplay::load('block_content.basic.default')
-      ->setComponent('body', [
+    $display = EntityViewDisplay::load('block_content.basic.default');
+    if ($display) {
+      /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display */
+      $display->setComponent('body', [
         'type' => 'text_default',
         'weight' => 0,
         'label' => 'hidden',
         'settings' => [],
         'third_party_settings' => [],
-      ])
-      ->save();
+      ])->save();
+    }
+    else {
+      $values = lightning_read_config('core.entity_view_display.block_content.basic.default');
+      EntityViewDisplay::create($values)->save();
+    }
   }
 
   // Deletes the `Create Landing Page` toolbar shortcut.
