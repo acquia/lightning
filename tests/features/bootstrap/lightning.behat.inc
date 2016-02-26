@@ -278,4 +278,32 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     $this->minkContext->pressButton('Save');
   }
 
+  /**
+   * Scrolls an element into the viewport.
+   *
+   * @param string $selector
+   *   The element's CSS selector.
+   *
+   * @When I scroll to the :selector element
+   */
+  public function scrollToElement($selector) {
+    $this->getSession()
+      ->executeScript('document.querySelector("' . addslashes($selector) . '").scrollIntoView()');
+  }
+
+  /**
+   * Expands a drop button.
+   *
+   * @param string $selector
+   *   The data-drupal-selector attribute of the drop button.
+   *
+   * @When I expand the :selector drop button
+   */
+  public function expandDropButton($selector) {
+    $selector = 'ul.dropbutton[data-drupal-selector="' . $selector . '"]';
+    $this->scrollToElement($selector);
+    $this->clickElementBySelector($selector . ' li.dropbutton-toggle');
+    $this->scrollToElement($selector);
+  }
+
 }

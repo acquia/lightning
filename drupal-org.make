@@ -44,6 +44,7 @@ projects[panelizer][subdir] = contrib/layout
 projects[scheduled_updates][type] = module
 projects[scheduled_updates][version] = 1.0-alpha5
 projects[scheduled_updates][subdir] = contrib/workflow
+projects[scheduled_updates][patch][] = https://www.drupal.org/files/issues/schedule_updates-save_type-2674874-2.patch
 projects[workbench_moderation][type] = module
 projects[workbench_moderation][version] = 1.0-beta1
 projects[workbench_moderation][subdir] = contrib/workflow

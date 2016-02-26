@@ -44,12 +44,21 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+### Beta 2 to Beta 3
+
+* Scheduled updates to content are broken by Lightning's content moderation
+  functionality. Beta 3 includes a workaround out-of-the-box which is NOT
+  applied by the update. To implement the fix manually:
+  * Go to *Configuration > Scheduled Updates Overview > Scheduled Update Types*
+  * Edit the **Publish single node at certain time** update type
+  * Under "Update Runner Settings", select **Latest Revision** from the
+    "Update Runner" field
+  * Under "Advanced Runner Options", select **The owner of the update.** from the
+    "Run update as" field
+  * Press Save
+
 ### Beta 1 to Beta 2
 
 * Enable the ```view media``` permission for the ```anonymous``` and
   ```authenticated``` user roles.
 * Install the Lightning Workflow module.
-
-### Beta 2 to Beta 3
-
-There are no manual update steps for Beta 2 to Beta 3 updates.

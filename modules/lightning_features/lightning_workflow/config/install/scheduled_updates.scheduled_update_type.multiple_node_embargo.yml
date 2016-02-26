@@ -2,16 +2,17 @@ langcode: en
 status: true
 dependencies: {  }
 _core:
-  default_config_hash: _1R8Y2PkOowfL0s4FB-zgpsU9_TnBa90PPf1k5p3YAE
+  default_config_hash: bsDvum-J70OIROUKs71tIZHm8tVkLQGImNDr4THMbx0
 id: multiple_node_embargo
 label: 'Publish multiple nodes at a certain time'
 update_entity_type: node
-update_types_supported: {  }
+update_types_supported:
+  - embedded
 field_map:
   field_moderation_state_1: moderation_state
 update_runner:
-  id: default
+  id: latest_revision
   after_run: DELETE
-  invalid_update_behavior: REQUEUE
+  invalid_update_behavior: DELETE
   create_revisions: BUNDLE_DEFAULT
-  update_user: USER_UPDATE_RUNNER
+  update_user: USER_UPDATE_OWNER
