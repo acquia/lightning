@@ -487,10 +487,11 @@ function lightning_read_config($id, $module = 'lightning') {
 }
 
 /**
- * Installs the body field on the basic block_content type and deletes the
+ * Install the body field on the basic block_content type and delete the
  * Create landing page shortcut.
  */
 function lightning_update_8001() {
+  // Install the body field on the basic block_content type
   $field = FieldConfig::load('block_content.basic.body');
   if (empty($field)) {
     $values = lightning_read_config('field.field.block_content.basic.body');
@@ -513,11 +514,14 @@ function lightning_update_8001() {
     }
   }
 
-  // Deletes the `Create Landing Page` toolbar shortcut.
+  // Delete the `Create Landing Page` toolbar shortcut.
   $properties = ['link__uri' => 'internal:/admin/structure/landing-page'];
   $shortcuts = \Drupal::entityTypeManager()->getStorage('shortcut')->loadByProperties($properties);
   foreach ($shortcuts as $shortcut) {
     $shortcut->delete();
   }
+
+  // Uninstall the Media Demo Content module.
+  \Drupal::service('module_installer')->uninstall(array('lightning_media_democontent'));
 }
 
