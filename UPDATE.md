@@ -44,6 +44,9 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+### Beta 3 to Beta 4
+Beta 4 is a Drupal Core update only release. There are no changes to Lightning.
+
 ### Beta 2 to Beta 3
 
 * Scheduled updates to content are broken by Lightning's content moderation

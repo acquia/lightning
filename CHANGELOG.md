@@ -1,3 +1,6 @@
+## Beta 4
+* Updates Drupal Core to 8.0.5.
+
 ## Beta 3
 * Panelizer is now included with Lightning as a dependency of the Layout
   component.
