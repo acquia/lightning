@@ -11,18 +11,19 @@ language: php
 sudo: false
 
 php:
-  - 5.4
+  - 5.6
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: 7
-    - php: hhvm
-  include:
-    - php: "5.5"
-      env: UPGRADE=none
-    - php: "5.6"
-      env: UPGRADE=none
+#  Disable additional tests to reduce job count.
+#  allow_failures:
+#    - php: 7
+#    - php: hhvm
+#  include:
+#    - php: "5.5"
+#      env: UPGRADE=none
+#    - php: "5.4"
+#      env: UPGRADE=none
 
 env:
   global:
@@ -133,7 +134,11 @@ script:
 after_script:
   - drupal-ti after_script
 
-# For now, don't test 8.x
+after_failure:
+  - tests/vendor/lakion/mink-debug-extension/travis/tools/upload-textfiles "tests/build/*.log"
+  - tests/vendor/lakion/mink-debug-extension/travis/tools/upload-screenshots "tests/build/*.png"
+
+# For now, don't test 8.x-2.x.
 branches:
   except:
-    - 8.x-1.x
+    - 8.x-2.x
