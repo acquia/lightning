@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\services\ServiceEndpointInterface;
 use Drupal\views\ViewEntityInterface;
@@ -45,5 +46,20 @@ function lightning_media_library_info_alter(array &$libraries, $extension) {
         }
       }
     }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_media_form_entity_embed_dialog_alter(array &$form, FormStateInterface $form_state) {
+  list ($editor, $embed_button) = $form_state->getBuildInfo()['args'];
+
+  /** @var \Drupal\embed\EmbedButtonInterface $embed_button */
+  if ($embed_button->id() == 'media_library') {
+    if (isset($form['actions']['back'])) {
+      $form['actions']['back']['#access'] = FALSE;
+    }
+    $form['attributes']['data-entity-embed-display']['#access'] = FALSE;
   }
 }

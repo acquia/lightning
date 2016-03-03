@@ -53,8 +53,10 @@
                     el.setAttribute('data-entity-id', model.id);
                     el.setAttribute('data-entity-label', model.get('label'));
                     el.setAttribute('data-entity-uuid', model.get('uuid'));
+                    el.style.display = 'inline-block';
 
                     editor.insertHtml(el.outerHTML);
+                    editor.execCommand('editdrupalentity');
                   }
                 });
                 $(this).dialog('close');
