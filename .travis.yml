@@ -61,7 +61,7 @@ before_script:
   - cd tests
   - touch behat.local.yml
   - composer install
-  - phantomjs --webdriver=4444 > /dev/null &
+  - ./bin/phantomjs --webdriver=4444 > /dev/null &
 
 script:
   - phpcs --standard=$HOME/.composer/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=docroot,*.css,*/karma.js $TRAVIS_BUILD_DIR

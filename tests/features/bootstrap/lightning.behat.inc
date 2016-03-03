@@ -7,6 +7,7 @@
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 
@@ -235,6 +236,12 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
 
     $element = $session->getPage()->find('css', $selector);
     if ($element) {
+      try {
+        $this->scrollToElement($selector);
+      }
+      catch (UnsupportedDriverActionException $e) {
+        // Don't worry about it.
+      }
       $element->click();
     }
     else {
@@ -301,9 +308,43 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    */
   public function expandDropButton($selector) {
     $selector = 'ul.dropbutton[data-drupal-selector="' . $selector . '"]';
-    $this->scrollToElement($selector);
     $this->clickElementBySelector($selector . ' li.dropbutton-toggle');
     $this->scrollToElement($selector);
+  }
+
+  /**
+   * Waits a while, for debugging.
+   *
+   * @param int $seconds
+   *   How long to wait.
+   *
+   * @When I wait :seconds seconds
+   */
+  public function wait($seconds) {
+    sleep($seconds);
+  }
+
+  /**
+   * Maximizes the window (probably for debugging purposes).
+   *
+   * @When I maximize the window
+   */
+  public function maximize() {
+    $this->getSession()->getDriver()->maximizeWindow();
+  }
+
+  /**
+   * Takes a screenshot for debugging purposes.
+   *
+   * @param string $filename
+   *   The name of the screenshot file.
+   *
+   * @When I take a screenshot named :filename
+   */
+  public function takeScreenshot($filename) {
+    $screenshot = $this->getSession()->getDriver()->getScreenshot();
+    // If this file is in tests/features/bootstrap, the screenshot be in tests.
+    file_put_contents(__DIR__ . '../../' . $filename . '.png', $screenshot);
   }
 
 }
