@@ -1,0 +1,10 @@
+default:
+  extensions:
+    Behat\MinkExtension:
+      # If necessary, change this to the actual URL of your Lightning site.
+      base_url: 'http://127.0.0.1:8080'
+    Drupal\DrupalExtension:
+      drupal:
+        # This assumes that we're running Behat from within
+        # DRUPAL_ROOT/profiles/lightning.
+        drupal_root: '../../'

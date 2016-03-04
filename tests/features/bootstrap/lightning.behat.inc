@@ -6,7 +6,6 @@
  */
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
-use Behat\Gherkin\Node\TableNode;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
@@ -223,17 +222,17 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    *
    * @param string $path_alias
    *   The alias to delete (this is the alias entered by the user or generated
-   *   by pathauto, not the system path)
+   *   by pathauto, not the system path).
    *
    * @Then I cleanup the :path_alias alias
    */
   public function cleanupTheAlias($path_alias) {
     if ($this->getDriver()->isBootstrapped()) {
-      $system_path = \Drupal::service('path.alias_manager')->getPathByAlias($path_alias, null);
+      $system_path = \Drupal::service('path.alias_manager')->getPathByAlias($path_alias, NULL);
       if ($system_path == $path_alias) {
         throw new \RuntimeException('Path alias `' . $path_alias . '` not found.');
       }
-      \Drupal::service('path.alias_storage')->delete(array('source' => $system_path));
+      \Drupal::service('path.alias_storage')->delete(['source' => $system_path]);
     }
     else {
       throw new \RuntimeException('Drupal is not bootstrapped.');
@@ -277,6 +276,7 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    *
    * @Given I have applied Panelizer to the :bundle node type
    * @Given I have panelized the :bundle node type
+   *
    * @When I apply Panelizer to the :bundle node type
    * @When I panelize the :bundle node type
    */
@@ -295,6 +295,7 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    *
    * @Given I have removed Panelizer from the :bundle node type
    * @Given I have unpanelized the :bundle node type
+   *
    * @When I remove Panelizer from the :bundle node type
    * @When I unpanelize the :bundle node type
    */
@@ -314,10 +315,11 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    * @Given I have created a :id content type
    * @Given I have a :id content type
    * @Given a :id content type
+   *
    * @When I create a :id content type
    */
   public function createContentType($id) {
-    if (! in_array($id, $this->contentTypes)) {
+    if (!in_array($id, $this->contentTypes)) {
       $this->visitPath('/admin/structure/types/add');
 
       $form = $this->getSession()->getPage()->find('css', '[data-drupal-selector="node-type-add-form"]');

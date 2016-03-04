@@ -57,16 +57,14 @@ install:
 
 before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
-  - mv ../tests ./tests
-  - cd tests
-  - touch behat.local.yml
+  - cd profiles/lightning
   - composer install
   - ./bin/phantomjs --webdriver=4444 > /dev/null &
 
 script:
   - phpcs --standard=$HOME/.composer/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=docroot,*.css,*/karma.js $TRAVIS_BUILD_DIR
-  - bin/behat --strict
-  - cd ../../modules/lightning_features/lightning_media/tests/js
+  - ./bin/behat --strict
+  - cd ./modules/lightning_features/lightning_media/tests/js
   # TODO: The install step should go into before_script.
   - npm install > /dev/null
   - npm test
@@ -77,4 +75,3 @@ notifications:
 
 matrix:
   fast_finish: true
-

@@ -2,6 +2,21 @@
     "name": "drupal/lightning",
     "description": "The best of Drupal, curated by Acquia",
     "type": "drupal-profile",
-    "license": "GPL-2.0+"
+    "license": "GPL-2.0+",
+    "require-dev": {
+        "drupal/drupal-extension": "^3.1",
+        "guzzlehttp/guzzle": "^6.1",
+        "jakoch/phantomjs-installer": "1.9.8"
+    },
+    "config": {
+        "bin-dir": "bin/"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ],
+        "post-update-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ]
+    }
 }
-
