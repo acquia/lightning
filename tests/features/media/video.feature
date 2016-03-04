@@ -3,14 +3,18 @@ Feature: Video media assets
   A media asset representing an externally hosted video.
 
   Scenario: Creating a video
-    Given I am logged in as a user with the "create media" permission
+    Given I am logged in as a user with the "media_creator" role
     When I visit "/media/add"
     And I click "Video"
     Then I should see "Video"
     And I should see "Save to my media library"
 
   Scenario: Viewing a video as an anonymous user
-    Given I am an anonymous user
+    Given video media from embed code:
+    """
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/ktCgVopf7D0" frameborder="0" allowfullscreen></iframe>
+    """
+    And I am an anonymous user
     When I visit a media entity of type video
     Then I should get a 200 HTTP response
 

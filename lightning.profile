@@ -39,32 +39,13 @@ function lightning_form_install_configure_form_alter(array &$form, FormStateInte
   // All our extensions are checked by default.
   $form['lightning']['extensions']['#default_value'] = array_keys($form['lightning']['extensions']['#options']);
 
-  $form['lightning']['demo_content'] = [
-    '#type' => 'checkbox',
-    '#title' => t('Install demo content'),
-    '#default_value' => TRUE,
-    '#weight' => 2,
-  ];
-
   $form['#submit'][] = 'lightning_extensions_enable';
-}
-
-/**
- * Returns whether demo content was or should be installed.
- *
- * @return bool
- */
-function lightning_demo_content() {
-  return \Drupal::state()->get('lightning.demo_content', FALSE);
 }
 
 /**
  * Enable requested Lightning extensions and demo content.
  */
 function lightning_extensions_enable($form_id, FormStateInterface $form_state) {
-  // Set a flag if we need to install demo content.
-  \Drupal::state()->set('lightning.demo_content', $form_state->getValue('demo_content'));
-
   $features = array_filter($form_state->getValue('extensions'));
   if ($features) {
     if (in_array('lightning_media', $features)) {

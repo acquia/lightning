@@ -1,8 +1,7 @@
 <?php
 
-use Drupal\Core\Config\FileStorage;
-use Drupal\Core\Config\InstallStorage;
 use Drupal\services\Entity\ServiceEndpoint;
+use Drupal\user\Entity\Role;
 use Drupal\views\Entity\View;
 
 /**
@@ -11,6 +10,9 @@ use Drupal\views\Entity\View;
 function lightning_media_install() {
   user_role_grant_permissions('anonymous', ['view media']);
   user_role_grant_permissions('authenticated', ['view media']);
+
+  // Grant the content_creator role access to the rich_text filter format.
+  lightning_media_update_8004();
 }
 
 /**
@@ -46,4 +48,44 @@ function lightning_media_update_8002() {
     'lightning_media_twitter',
     'lightning_media_video',
   ]);
+}
+
+/**
+ * Creates the Media Creator and Media Manager roles.
+ */
+function lightning_media_update_8003() {
+  $role = Role::load('media_creator');
+  if (empty($role)) {
+    $values = lightning_read_config('user.role.media_creator', 'lightning_media');
+    Role::create($values)->save();
+  }
+
+  $role = Role::load('media_manager');
+  if (empty($role)) {
+    $values = lightning_read_config('user.role.media_manager', 'lightning_media');
+    Role::create($values)->save();
+  }
+}
+
+/**
+ * Grants the content_creator and content_manager roles access to the rich_text
+ * text format.
+ */
+function lightning_media_update_8004() {
+  $permissions = ['use text format rich_text'];
+  user_role_grant_permissions('content_creator', $permissions);
+  user_role_grant_permissions('content_manager', $permissions);
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function lightning_media_update_dependencies() {
+  return [
+    'lightning_media' => [
+      8004 => [
+        'lightning' => 8002,
+      ],
+    ],
+  ];
 }

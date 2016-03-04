@@ -6,7 +6,10 @@
  */
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Gherkin\Node\TableNode;
+use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
@@ -29,6 +32,20 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    * @var \Drupal\DrupalExtension\Context\MinkContext
    */
   protected $minkContext;
+
+  /**
+   * Content type IDs created during a scenario.
+   *
+   * @var string[]
+   */
+  protected $contentTypes = [];
+
+  /**
+   * Media entities created during a scenario.
+   *
+   * @var integer[]
+   */
+  protected $media = [];
 
   /**
    * Pre-scenario hook.
@@ -154,6 +171,9 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   /**
    * Asserts that an element, specified by CSS selector, exists.
    *
+   * @param string $selector
+   *   The CSS selector to search for.
+   *
    * @Then the element :selector should exist
    */
   public function theElementShouldExist($selector) {
@@ -261,7 +281,7 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    * @When I panelize the :bundle node type
    */
   public function panelize($bundle) {
-    $this->visitPath("admin/structure/types/manage/$bundle/display");
+    $this->minkContext->assertAtPath("admin/structure/types/manage/$bundle/display");
     $this->minkContext->checkOption('panelizer[enable]');
     $this->minkContext->checkOption('panelizer[custom]');
     $this->minkContext->pressButton('Save');
@@ -279,10 +299,165 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    * @When I unpanelize the :bundle node type
    */
   public function unpanelize($bundle) {
-    $this->visitPath("admin/structure/types/manage/$bundle/display");
+    $this->minkContext->assertAtPath("admin/structure/types/manage/$bundle/display");
     $this->minkContext->uncheckOption('panelizer[enable]');
     $this->minkContext->uncheckOption('panelizer[custom]');
     $this->minkContext->pressButton('Save');
+  }
+
+  /**
+   * Creates a content type.
+   *
+   * @param string $id
+   *   The content type ID.
+   *
+   * @Given I have created a :id content type
+   * @Given I have a :id content type
+   * @Given a :id content type
+   * @When I create a :id content type
+   */
+  public function createContentType($id) {
+    if (! in_array($id, $this->contentTypes)) {
+      $this->visitPath('/admin/structure/types/add');
+
+      $form = $this->getSession()->getPage()->find('css', '[data-drupal-selector="node-type-add-form"]');
+      $form->findField('name')->setValue($id);
+      $form->findField('type')->setValue($id);
+      $form->submit();
+    }
+  }
+
+  /**
+   * Cleans up content types created during a scenario.
+   *
+   * @AfterScenario
+   */
+  public function cleanContentTypes() {
+    foreach ($this->contentTypes as $type) {
+      $this->visitPath('/admin/structure/types/manage/' . $type . '/delete');
+
+      // If we can't access the page, don't bother. We did our due diligence.
+      if ($this->getSession()->getStatusCode() == 200) {
+        $this->minkContext->pressButton('Delete');
+      }
+    }
+  }
+
+  /**
+   * Asserts that a role as a set of permissions.
+   *
+   * @param string $rid
+   *   The role ID.
+   * @param \Behat\Gherkin\Node\PyStringNode $permissions
+   *   The permissions to check for.
+   *
+   * @Then the :role role should have permissions:
+   * @Then the :role role should have permission to:
+   */
+  public function assertPermissions($rid, PyStringNode $permissions) {
+    foreach ($permissions->getStrings() as $permission) {
+      $this->assertPermission($rid, $permission);
+    }
+  }
+
+  /**
+   * Asserts that a role does NOT have a set of permissions.
+   *
+   * @param string $rid
+   *   The role ID.
+   * @param \Behat\Gherkin\Node\PyStringNode $permissions
+   *   The permissions to check for.
+   *
+   * @Then the :role role should not have permissions:
+   * @Then the :role role should not have permission to:
+   */
+  public function assertNoPermissions($rid, PyStringNode $permissions) {
+    foreach ($permissions->getStrings() as $permission) {
+      $this->assertNoPermission($rid, $permission);
+    }
+  }
+
+  /**
+   * Asserts that a role has a specific permission.
+   *
+   * @param string $rid
+   *   The role ID.
+   * @param string $permission
+   *   The permission to check for.
+   *
+   * @Given the :role role has the :permission permission
+   * @Given the :role role has permission to :permission
+   *
+   * @Then the :role role should have the :permission permission
+   * @Then the :role role should have permission to :permission
+   */
+  public function assertPermission($rid, $permission) {
+    $this->minkContext->assertAtPath('/admin/people/permissions/' . $rid);
+    $this->assertSession()->checkboxChecked($rid . '[' . $permission . ']');
+  }
+
+  /**
+   * Asserts that a role does not have a specific permission.
+   *
+   * @param string $rid
+   *   The role ID.
+   * @param string $permission
+   *   The permission to check for.
+   *
+   * @Given the :role role does not have the :permission permission
+   * @Given the :role role does not have permission to :permission
+   *
+   * @Then the :role role should not have the :permission permission
+   * @Then the :role role should not have permission to :permission
+   */
+  public function assertNoPermission($rid, $permission) {
+    $this->minkContext->assertAtPath('/admin/people/permissions/' . $rid);
+
+    $field = $rid . '[' . $permission . ']';
+    try {
+      $this->assertSession()->fieldNotExists($field);
+    }
+    catch (ExpectationException $e) {
+      $this->assertSession()->checkboxNotChecked($field);
+    }
+  }
+
+  /**
+   * Creates a media asset from an embed code.
+   *
+   * @param string $bundle
+   *   The media bundle ID.
+   * @param \Behat\Gherkin\Node\PyStringNode $embed_code
+   *   The embed code.
+   *
+   * @Given :bundle media from embed code:
+   *
+   * @When I create :bundle media from embed code:
+   */
+  public function createMediaFromEmbedCode($bundle, PyStringNode $embed_code) {
+    $entity = \Drupal::entityTypeManager()
+      ->getStorage('media')
+      ->create([
+        'bundle' => $bundle,
+        'name' => $this->getRandom()->string(),
+        'embed_code' => (string) $embed_code,
+        'field_media_in_library' => TRUE,
+        'status' => TRUE,
+      ]);
+    $entity->save();
+    array_push($this->media, $entity);
+  }
+
+  /**
+   * Cleans up any media entities created during a scenario.
+   *
+   * @AfterScenario
+   */
+  public function cleanMedia() {
+    /** @var \Drupal\media_entity\MediaInterface $media */
+    foreach ($this->media as $media) {
+      $media->delete();
+    }
   }
 
   /**
