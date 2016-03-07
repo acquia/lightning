@@ -10,7 +10,7 @@ use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\user\Entity\Role;
+use Drupal\node\Entity\NodeType;
 use Drupal\user\Entity\User;
 use Drupal\user\RoleInterface;
 use Drupal\shortcut\Entity\Shortcut;
@@ -527,18 +527,10 @@ function lightning_update_8001() {
 }
 
 /**
- * Creates the Content Creator user role.
+ * Creates roles for editing content types.
  */
 function lightning_update_8002() {
-  $role = Role::load('content_creator');
-  if (empty($role)) {
-    $values = lightning_read_config('user.role.content_creator');
-    Role::create($values)->save();
-  }
-
-  $role = Role::load('content_manager');
-  if (empty($role)) {
-    $values = lightning_read_config('user.role.content_manager');
-    Role::create($values)->save();
+  foreach (NodeType::loadMultiple() as $node_type) {
+    lightning_node_type_insert($node_type);
   }
 }

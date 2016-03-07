@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\services\Entity\ServiceEndpoint;
+use Drupal\node\Entity\NodeType;
 use Drupal\user\Entity\Role;
 use Drupal\views\Entity\View;
 
@@ -68,13 +69,16 @@ function lightning_media_update_8003() {
 }
 
 /**
- * Grants the content_creator and content_manager roles access to the rich_text
- * text format.
+ * Grants the content-related roles access to the rich_text input roles.
  */
 function lightning_media_update_8004() {
   $permissions = ['use text format rich_text'];
-  user_role_grant_permissions('content_creator', $permissions);
-  user_role_grant_permissions('content_manager', $permissions);
+
+  /** @var \Drupal\node\NodeTypeInterface $node_type */
+  foreach (NodeType::loadMultiple() as $node_type) {
+    user_role_grant_permissions($node_type->id() . '_creator', $permissions);
+    user_role_grant_permissions($node_type->id() . '_reviewer', $permissions);
+  }
 }
 
 /**

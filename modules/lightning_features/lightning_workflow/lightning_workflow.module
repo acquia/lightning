@@ -2,9 +2,38 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\node\NodeTypeInterface;
+use Drupal\user\Entity\Role;
 use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
-use Drupal\workbench_moderation\Entity\ModerationStateTransition;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
+  /** @var \Drupal\user\RoleInterface $role */
+  $role = Role::load($node_type->id() . '_creator');
+  if ($role) {
+    $role
+      ->grantPermission('view any unpublished content')
+      ->grantPermission('use draft_draft transition')
+      ->grantPermission('use draft_needs_review transition')
+      ->grantPermission('use needs_review_needs_review transition')
+      ->grantPermission('view latest version')
+      ->save();
+  }
+
+  $role = Role::load($node_type->id() . '_reviewer');
+  if ($role) {
+    $role
+      // @TODO: Not sure if this role should have draft_published access...
+      ->grantPermission('use draft_published transition')
+      ->grantPermission('use needs_review_draft transition')
+      ->grantPermission('use needs_review_published transition')
+      ->grantPermission('use published_published transition')
+      ->save();
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().

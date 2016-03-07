@@ -2,7 +2,7 @@
 Feature: Panelizer
 
   Scenario: Panelizer is enabled for landing pages
-    Given I am logged in as a user with the "administer nodes,access panels in-place editing,administer panelizer node landing_page content" permissions
+    Given I am logged in as a user with the landing_page_creator role
     And landing_page content:
       | title  | path    |
       | Foobar | /foobar |

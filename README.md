@@ -83,23 +83,15 @@ https://www.drupal.org/project/issues/lightning
 
 ### Behat
 
-    # Move the tests folder into docroot and switch into that folder.
-    # From docroot:
-    mv profiles/lightning/tests tests && cd tests
-
-    # Copy the behat.local.example.yml to behat.local.yml and replace BASE_PATH
-    # with the path to your local install.
-    cp behat.local.example.yml
-
-    # Install dependencies with Composer.
+    mv profiles/lightning
     composer install
+    bin/behat
 
-    # Run the tests
-    bin/behat --profile=dev
+If necessary, edit behat.local.yml to match your environment. Generally you
+will not need to do this.
 
 ### Jasmine Media Tests
 
     # Requires Node.js and NPM.
     # From /profiles/lightning/modules/lightning_features/lightning_media/tests/js;
     npm install && npm test
-

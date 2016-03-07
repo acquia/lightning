@@ -7,6 +7,7 @@
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\PyStringNode;
+use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
@@ -326,6 +327,7 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
       $form->findField('name')->setValue($id);
       $form->findField('type')->setValue($id);
       $form->submit();
+      array_push($this->contentTypes, $id);
     }
   }
 
@@ -451,6 +453,43 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   }
 
   /**
+   * Creates media entities.
+   *
+   * @param \Behat\Gherkin\Node\TableNode $table
+   *   A table of entity values.
+   *
+   * @Given media:
+   */
+  public function givenMedia(TableNode $table) {
+    foreach ($table as $row) {
+      // @TODO: Figure out why \Drupal::currentUser()->id() is 0. Then ditch
+      // this hack.
+      $row['uid'] = $this->getUserIdFromDrupalContext();
+
+      $entity = \Drupal::entityTypeManager()->getStorage('media')->create($row);
+      $entity->save();
+      array_push($this->media, $entity);
+    }
+  }
+
+  /**
+   * Returns the uid of the currently logged-in user from the DrupalContext.
+   *
+   * Under certain circumstances (which I don't understand yet),
+   * \Drupal::currentUser() is anonymous even after logging in! If that's the
+   * case, we can pull the uid right out of the DrupalContext using reflection.
+   * This is a naughty hack and should eventually be removed.
+   *
+   * @return int
+   *   The ID of the logged-in user, according to the Drupal context.
+   */
+  protected function getUserIdFromDrupalContext() {
+    $property = (new \ReflectionObject($this->drupalContext))->getProperty('user');
+    $property->setAccessible(TRUE);
+    return $property->getValue($this->drupalContext)->uid;
+  }
+
+  /**
    * Cleans up any media entities created during a scenario.
    *
    * @AfterScenario
@@ -522,6 +561,23 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     $screenshot = $this->getSession()->getDriver()->getScreenshot();
     // If this file is in tests/features/bootstrap, the screenshot be in tests.
     file_put_contents(__DIR__ . '../../' . $filename . '.png', $screenshot);
+  }
+
+  /**
+   * Asserts that a button is not present on the page.
+   *
+   * @param string $button
+   *   The label of the button.
+   *
+   * @Then I should not see the :button button
+   */
+  public function assertNotButton($button) {
+    try {
+      $this->minkContext->assertButton($button);
+    }
+    catch (\Exception $e) {
+      // If the assertion failed, the button does not exist and all is well.
+    }
   }
 
 }
