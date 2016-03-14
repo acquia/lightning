@@ -2,7 +2,7 @@
 Feature: Media library CKEditor widget
 
   Scenario: Opening the media library
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the page_creator role
     When I go to "node/add/page"
     And I wait for AJAX to finish
     And I execute the "media_library" command in CKEditor "edit-body-0-value"
@@ -10,7 +10,7 @@ Feature: Media library CKEditor widget
     Then I should see "Media Library"
 
   Scenario: Filtering the media library by media type
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the page_creator role
     And video media from embed code:
       """
       https://www.youtube.com/watch?v=MTRbm570AHk
@@ -24,7 +24,7 @@ Feature: Media library CKEditor widget
     Then I should see "There are no items to display."
 
   Scenario: Displaying the entity embed dialog box when placing a media entity
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the page_creator role
     And video media from embed code:
       """
       https://www.youtube.com/watch?v=sGUNPMPrxvA

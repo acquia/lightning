@@ -3,7 +3,7 @@ Feature: Instagram media assets
   A media asset representing an Instagram post.
 
   Scenario: Creating an Instagram media entity
-    Given I am logged in as a user with the "media_creator" role
+    Given I am logged in as a user with the media_creator role
     When I visit "/media/add"
     And I click "Instagram"
     Then I should see "Instagram post"

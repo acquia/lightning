@@ -3,7 +3,7 @@ Feature: Video media assets
   A media asset representing an externally hosted video.
 
   Scenario: Creating a video
-    Given I am logged in as a user with the "media_creator" role
+    Given I am logged in as a user with the media_creator role
     When I visit "/media/add"
     And I click "Video"
     Then I should see "Video"
@@ -20,7 +20,7 @@ Feature: Video media assets
 
   @javascript
   Scenario: Creating a video in CKEditor from an embed code
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the page_creator,media_creator roles
     When I go to "/node/add/page"
     And I wait for AJAX to finish
     And I execute the "media_library" command in CKEditor "edit-body-0-value"

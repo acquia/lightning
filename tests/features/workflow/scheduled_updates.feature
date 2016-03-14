@@ -3,7 +3,7 @@ Feature: Scheduled updates to content
 
   @javascript
   Scenario: Publishing a node that is scheduled to be published in the past
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the administrator role
     And page content:
       | title  | path    | moderation_state |
       | Foobar | /foobar | draft            |
