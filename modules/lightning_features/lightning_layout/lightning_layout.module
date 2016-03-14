@@ -8,22 +8,19 @@ use Drupal\user\Entity\Role;
  */
 function lightning_layout_node_type_insert(NodeTypeInterface $node_type) {
   user_role_grant_permissions('layout_manager', [
-    'administer node ' . $node_type->id() . ' defaults',
+    'administer panelizer node ' . $node_type->id() . ' defaults',
   ]);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_delete().
- *
- * @param \Drupal\node\NodeTypeInterface $node_type
- *   The node type being deleted.
  */
 function lightning_layout_node_type_delete(NodeTypeInterface $node_type) {
   /** @var \Drupal\user\RoleInterface $role */
   $role = Role::load('layout_manager');
   if ($role) {
     $role
-      ->revokePermission('administer node ' . $node_type->id() . ' defaults')
+      ->revokePermission('administer panelizer node ' . $node_type->id() . ' defaults')
       ->save();
   }
 }
