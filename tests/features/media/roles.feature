@@ -29,7 +29,20 @@ Feature: Responsibility-based user roles for creating and managing media assets
     And I should see the link "Delete"
 
   @beta5
-  Scenario: Users with the Media Manager role can administer media
-    Given I am logged in as a user with the "administer permissions" permission
-    When I visit "/admin/people/permissions/media_manager"
-    Then the "media_manager[administer media]" checkbox should be checked
+  Scenario: Users with the Media Manager role can edit media created by any other user
+    Given I am logged in as a user with the media_creator role
+    And media:
+      | bundle | name           | embed_code                                  | status |
+      | video  | FunFunFunction | https://www.youtube.com/watch?v=UD2dZw9iHCc | 1      |
+    And users:
+      | name | roles         | pass |
+      | foo  | media_manager | foo  |
+    When I visit "/user/logout"
+    And I visit "/user/login"
+    And I enter "foo" for "Username"
+    And I enter "foo" for "Password"
+    And I press "Log in"
+    And I visit "/admin/content/media"
+    And I click "FunFunFunction"
+    And I click "Edit"
+    Then the response status code should be 200
