@@ -44,5 +44,5 @@ Feature: Responsibility-based user roles for creating and managing media assets
     And I press "Log in"
     And I visit "/admin/content/media"
     And I click "FunFunFunction"
-    And I click "Edit"
-    Then the response status code should be 200
+    Then I should see "Edit"
+    And I should see "Delete"
