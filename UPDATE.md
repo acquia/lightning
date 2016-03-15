@@ -16,18 +16,20 @@ the "Version-specific updates" section of this file.
 
 ## Updating Lightning
 
-**NEVER use ```drush pm-update``` to update Lightning!!** Lightning includes
-specific, vetted, pre-tested versions of modules, and occasionally patches for
-those modules (and Drupal core). ```drush pm-update``` will totally disregard
-all of that and may break your site.
+**NEVER use ```drush pm-update``` or ```drush up``` to update Lightning!**
+Lightning includes specific, vetted, pre-tested versions of modules, and
+occasionally patches for those modules (and Drupal core).
+```drush pm-update``` and ```drush up``` will totally disregard all of that
+and may break your site.
 
 To update Lightning safely:
 
 1. Download the latest version of Lightning from
    https://www.drupal.org/project/lightning and extract it.
-2. In your Lightning site, delete the entire ```profiles/lightning``` directory.
-3. Copy the ```profiles/lightning``` directory from your freshly downloaded
-   version of Lightning into your site.
+2. Replace your ```profiles/lightning``` directory with the one included in the
+   fresh copy of Lightning.
+3. Replace your ```core``` directory with the one included in the fresh copy
+   Lightning.
 4. Visit ```update.php``` or run ```drush updb``` to perform any necessary
    database updates.
 5. Perform any necessary manual version-specific updates (see below).
