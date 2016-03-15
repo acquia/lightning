@@ -3,6 +3,15 @@
 use Drupal\node\NodeTypeInterface;
 use Drupal\user\Entity\Role;
 
+/**
+ * Returns common layout-related permissions for a node type.
+ *
+ * @param \Drupal\node\NodeTypeInterface $node_type
+ *   The node type.
+ *
+ * @return string[]
+ *   The permissions.
+ */
 function _lightning_layout_node_type_permissions(NodeTypeInterface $node_type) {
   return [
     'access panels in-place editing',
