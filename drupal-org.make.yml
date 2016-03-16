@@ -19,7 +19,11 @@ projects:
     subdir: contrib/media
   media_entity:
     type: module
-    version: 1.0-beta2
+    download:
+      type: git
+      branch: 8.x-1.x
+      # need this un-tagged commit to work with IEF alpha5
+      revision: f544c91e4dd8d13653b57519edc53732d8bb138e
     subdir: contrib/media
   media_entity_embeddable_video:
     type: module
@@ -107,11 +111,15 @@ projects:
     subdir: contrib
   inline_entity_form:
     type: module
-    version: 1.0-alpha4
+    version: 1.0-alpha5
     subdir: contrib
   metatag:
     type: module
-    version: 1.0-beta4
+    version: 1.0-beta5
+    subdir: contrib
+  token:
+    type: module
+    version: 1.0-alpha2
     subdir: contrib
   services:
     type: module
