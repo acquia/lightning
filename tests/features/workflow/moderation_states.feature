@@ -27,7 +27,8 @@ Feature: Workflow moderation states
       | Moderation Test 3 | /mod-3 | needs_review     |
     And I visit "/mod-3"
     And I click "Edit draft"
-    And I press "Save and Publish"
+    And I select "Published" from "Moderation state"
+    And I press "Save"
     And I visit "/user/logout"
     And I visit "/mod-3"
     Then the response status code should be 200
@@ -40,7 +41,8 @@ Feature: Workflow moderation states
       | Moderation Test 4 | /mod-4 | published        |
     And I visit "/mod-4"
     And I click "New draft"
-    And I press "Save and Archive"
+    And I select "Archived" from "Moderation state"
+    And I press "Save"
     And I visit "/user/logout"
     And I go to "/mod-4"
     Then the response status code should be 403
@@ -65,4 +67,3 @@ Feature: Workflow moderation states
     And I should not see "Graham Chapman"
     And I should not see "Terry Jones"
     And I should see "Eric Idle"
-

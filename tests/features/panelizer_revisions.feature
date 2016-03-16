@@ -10,7 +10,7 @@ Feature: Showing the Panels IPE interface on the latest content revision only
     When I visit "/foobar"
     And I click "Edit draft"
     And I enter "This is the second revision!" for "body[0][value]"
-    And I press "Save and Create New Draft"
+    And I press "Save"
     And I click "Revisions"
     And I click the "td.revision-current:nth-child(1) a" element
     Then I should see a "#panels-ipe-content" element

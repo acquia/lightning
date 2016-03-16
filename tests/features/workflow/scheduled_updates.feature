@@ -3,7 +3,7 @@ Feature: Scheduled updates to content
 
   @javascript
   Scenario: Publishing a node that is scheduled to be published in the past
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the administrator role
     And page content:
       | title  | path    | moderation_state |
       | Foobar | /foobar | draft            |
@@ -16,8 +16,8 @@ Feature: Scheduled updates to content
     And I select "published" from "scheduled_update[form][inline_entity_form][field_moderation_state]"
     And I press "Create scheduled update"
     And I wait for AJAX to finish
-    And I expand the "edit-save" drop button
-    And I press "Save and Request Review"
+    And I select "Needs Review" from "Moderation state"
+    And I press "Save"
     And I run cron
     And I visit "/user/logout"
     And I visit "/foobar"

@@ -8,6 +8,35 @@ use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_workflow_form_node_form_alter(array &$form, FormStateInterface $form_state) {
+  if (isset($form['moderation_state'])) {
+    // Allow the user to choose the moderation state.
+    $form['moderation_state']['widget'][0]['#access'] = TRUE;
+
+    // Show the original labels of the destination states.
+    foreach (array_keys($form['moderation_state']['widget'][0]['#options']) as $id) {
+      $form['moderation_state']['widget'][0]['#options'][$id] = ModerationState::load($id)->label();
+    }
+
+    // DO NOT rejigger the buttons.
+    array_shift($form['moderation_state']['widget'][0]['#process']);
+
+    // Show the basic 'Save' button, but hide the confusing 'Save as unpublished'
+    // and 'Save and publish' buttons.
+    $form['actions']['submit']['#access'] = TRUE;
+    $form['actions']['publish']['#access'] = $form['actions']['unpublish']['#access'] = FALSE;
+    unset($form['actions']['publish']['#dropbutton'], $form['actions']['unpublish']['#dropbutton']);
+
+    // Workbench Moderation enforces revisions by checking and disabling the
+    // revision checkbox. We don't need to display that.
+    $form['revision']['#type'] = 'hidden';
+    unset($form['revision_log']['#states']['visible'][':input[name="revision"]']);
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
