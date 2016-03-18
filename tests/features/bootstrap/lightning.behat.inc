@@ -580,4 +580,38 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     }
   }
 
+  /**
+   * Fills in an autocompleting entity reference field.
+   *
+   * @param string $entity_type
+   *   The target entity type.
+   * @param string $label
+   *   The target entity's label.
+   * @param string $field
+   *   Entity reference field locator.
+   *
+   * @throws \Exception
+   *   If no entities of the given type, with the given label, are found.
+   *
+   * @When I reference :entity_type :label in :field
+   */
+  public function referenceEntityByLabel($entity_type, $label, $field) {
+    $label_property = \Drupal::entityTypeManager()
+      ->getDefinition($entity_type)
+      ->getKey('label');
+
+    $entities = \Drupal::entityTypeManager()
+      ->getStorage($entity_type)
+      ->loadByProperties([
+        $label_property => $label,
+      ]);
+
+    if ($entities) {
+      $this->minkContext->fillField($field, $label . ' (' . reset($entities)->id() . ')');
+    }
+    else {
+      throw new \Exception("No $entity_type labeled '$label' was found.");
+    }
+  }
+
 }
