@@ -34,7 +34,8 @@ function lightning_node_type_insert(NodeTypeInterface $node_type) {
       '@type' => $node_type->label(),
     ]),
     'permissions' => [
-      // @TODO
+      'edit any ' . $node_type->id() . ' content',
+      'delete any ' . $node_type->id() . ' content',
     ],
   ])->save();
 }

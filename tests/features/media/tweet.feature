@@ -3,7 +3,7 @@ Feature: Twitter media assets
   A media asset representing a tweet.
 
   Scenario: Creating a tweet
-    Given I am logged in as a user with the "media_creator" role
+    Given I am logged in as a user with the media_creator role
     When I visit "/media/add"
     And I click "Tweet"
     Then I should see "Tweet"
