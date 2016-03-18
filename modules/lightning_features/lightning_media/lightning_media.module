@@ -1,10 +1,49 @@
 <?php
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\media_entity\MediaBundleInterface;
 use Drupal\services\ServiceEndpointInterface;
 use Drupal\views\ViewEntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
+  /** @var \Drupal\field\Entity\FieldConfig $field */
+  $field = FieldConfig::create([
+    'field_name' => 'field_media_in_library',
+    'entity_type' => 'media',
+    'bundle' => $bundle->id(),
+  ]);
+
+  $t = \Drupal::translation();
+  $field
+    ->setSetting('on_label', $t->translate('Saved to my media library'))
+    ->setSetting('off_label', $t->translate('Not in my media library'))
+    ->setLabel($t->translate('Save to my media library'))
+    ->setDefaultValue(TRUE)
+    ->save();
+
+  $form_display = EntityFormDisplay::load('media.' . $bundle->id() . '.default');
+  if (empty($form_display)) {
+    $form_display = EntityFormDisplay::create([
+      'targetEntityType' => 'media',
+      'bundle' => $bundle->id(),
+      'mode' => 'default',
+      'status' => TRUE,
+    ]);
+  }
+  $form_display->setComponent('field_media_in_library', [
+    'type' => 'boolean_checkbox',
+    'settings' => [
+      'display_label' => TRUE,
+    ],
+  ])->save();
+}
 
 /**
  * Implements hook_ENTITY_TYPE_access().

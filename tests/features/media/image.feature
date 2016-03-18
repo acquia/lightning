@@ -8,3 +8,4 @@
     And I click "Image"
     Then I should see "Image"
     And I should see "Save to my media library"
+
