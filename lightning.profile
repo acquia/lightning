@@ -6,6 +6,8 @@
  * form.
  */
 
+use Drupal\Core\Config\FileStorage;
+use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\user\Entity\Role;
@@ -105,4 +107,27 @@ function lightning_extensions_enable($form_id, FormStateInterface $form_state) {
     }
     \Drupal::service('module_installer')->install($features);
   }
+}
+
+/**
+ * Reads a stored config file from a module's config/install directory.
+ *
+ * @param string $id
+ *   The config ID.
+ * @param string $module
+ *   (optional) The module to search. Defaults to 'lightning' (not technically
+ *   a module, but profiles are treated like modules by the install system).
+ *
+ * @return array
+ *   The config data.
+ */
+function lightning_read_config($id, $module = 'lightning') {
+  // Statically cache all FileStorage objects, keyed by module.
+  static $storage = [];
+
+  if (empty($storage[$module])) {
+    $dir = \Drupal::service('module_handler')->getModule($module)->getPath();
+    $storage[$module] = new FileStorage($dir . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY);
+  }
+  return $storage[$module]->read($id);
 }
