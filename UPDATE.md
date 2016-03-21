@@ -49,8 +49,9 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
 ### Beta 4 to Beta 5
 
 * Scheduled updates which change several pieces of content at once were broken.
-  The fix is a configuration change, so Lightning does not provide an automated
-  update path. To implement the fix manually:
+  The fix is a change to configuration that is owned by the site, so Lightning
+  does not attempt to make the change automatically. To implement the fix
+  manually:
   * Go to *Configuration > Scheduled Updates Overview > Scheduled Update Types*
   * Edit the **Publish multiple nodes at a certain time** update type
   * Under "Update Runner Settings", select **Default** from the "Update Runner"
@@ -60,6 +61,8 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
 
 ### Beta 3 to Beta 4
 Beta 4 is a Drupal Core update only release. There are no changes to Lightning.
+You must use the version of core packaged with Lightning. See UPDATE.md for more
+information.
 
 ### Beta 2 to Beta 3
 

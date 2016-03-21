@@ -32,10 +32,10 @@ The current version of media includes the following functionality:
 
 ## Layout
 
-As of beta 3, Lightning includes the Panelizer module, which allows you to
-configure the layout of any content type using a drag-and-drop interface
-(Panels IPE). Lightning also includes a content type called Landing Page for
-you to create landing pages with their own one-off layouts and content.
+Lightning includes the Panelizer module, which allows you to configure the
+layout of any content type using a drag-and-drop interface (Panels IPE).
+Lightning also includes a content type called Landing Page for you to create
+landing pages with their own one-off layouts and content.
 
 Two layouts are provided out of the box by Panels. You can create your own
 layouts (see the Layout Plugin module) or install a contributed library of
@@ -53,21 +53,20 @@ transitioned between states at a specific future date and time.
 
 The roadmap is subject to change, but our projected schedule is:
 
-* Late March 2016:
+* End of QTR1:
+  * Composer build and update support
   * Release Candidate
+* April 2016:
   * Ability to set bundle-level layouts from the node type display page
-  * Preconfigured, responsibility-based roles
-  * Workflow UX improvements
 * QTR2 2016
-  * Workspace support (Election Night Scenario)
+  * Workspace Preview System
   * Remote replication (store workspaces on external apps)
+  * Search API integration
 * Further
   * Point in time preview
   * Personalization
 
-You can also look for general enhancements along the way like OOTB Pathauto with
-sane defaults and preconfigured roles and permissions that we think the majority
-of site builds will use.
+You can also look for general enhancements along the way. Please use the [Lightning Issue Queue][issue_queue] for latest information and to request features or bug fixes.
 
 ## Resources
 
@@ -83,7 +82,7 @@ https://www.drupal.org/project/issues/lightning
 
 ### Behat
 
-    mv profiles/lightning
+    cd profiles/lightning
     composer install
     bin/behat
 
@@ -95,3 +94,5 @@ will not need to do this.
     # Requires Node.js and NPM.
     # From /profiles/lightning/modules/lightning_features/lightning_media/tests/js;
     npm install && npm test
+
+[issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
