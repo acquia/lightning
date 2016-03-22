@@ -18,5 +18,26 @@
         "post-update-cmd": [
             "PhantomInstaller\\Installer::installPhantomJS"
         ]
+    },
+    "extra": {
+        "patches": {
+            "drupal/panels": {
+                "2667754": "https://www.drupal.org/files/issues/2667754-3.patch"
+            },
+            "drupal/scheduled_updates": {
+                "2674874": "https://www.drupal.org/files/issues/schedule_updates-save_type-2674874-2.patch"
+            },
+            "drupal/workbench_moderation": {
+                "2668006": "https://www.drupal.org/files/issues/2668006-2.patch",
+                "2672122": "https://www.drupal.org/files/issues/anonymous_able_to_see-2672122-11.patch",
+                "2652158": "https://www.drupal.org/files/issues/allow_a_role_to-2652158-10.patch"
+            },
+            "drupal/core": {
+                "2637194": "https://www.drupal.org/files/issues/2637194-12.patch"
+            }
+        }
+    },
+    "require": {
+        "cweagans/composer-patches": "^1.4"
     }
 }
