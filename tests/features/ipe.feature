@@ -12,11 +12,10 @@ Feature: In-Place Editor with FPP
           And I should see "Moderate Landing Page"
           And I should see "Draft"
       When I follow "Customize this page"
-        Then I should see "Save as custom"
-          And I should see "Cancel"
+        Then I wait for AJAX to finish
       When I follow "Add new pane"
         Then I should see "Add content to"
-      When I follow "Media"
+      When I click "Media" in the "CTools modal" region
         Then I should see "Configure new Media"
           And I should see "Make this reusable"
           And I fill in "title" with "My FPP"
