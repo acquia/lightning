@@ -136,7 +136,7 @@ function drupal_ti_install_drupal() {
         drush le lightning_demo
 
         # Enable optional Lightning Features
-        drush en lighting_breakpoints lightning_letterbox -y
+        drush en lightning_breakpoints lightning_letterbox -y
 
 	# Switch to the Lightning platform built from Git (if we aren't there already).
 	cd ../drupal
