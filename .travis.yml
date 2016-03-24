@@ -117,6 +117,9 @@ mysql:
   encoding: utf8
 
 before_install:
+  # Disable xdebug.
+  - phpenv config-rm xdebug.ini
+  # Update composer.
   - composer self-update
   # Add the oauth token to prevent GitHub timeouts.
   - git config --global github.accesstoken $GITHUB_OAUTH_TOKEN
