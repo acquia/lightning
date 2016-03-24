@@ -320,7 +320,7 @@ class TestSubContext extends RawDrupalContext implements DrupalSubContextInterfa
   public function waitForLivePreview() {
     // Make sure the live preview has triggered by bluring the current focus.
     $this->getSession()->executeScript("document.activeElement.blur()");
-    $this->getSession()->wait(5000, 'typeof jQuery !== "undefined" && jQuery.active === 0 && jQuery("#panopoly-form-widget-preview").length > 0 && !jQuery("#panopoly-form-widget-preview").hasClass("panopoly-magic-loading")');
+    $this->getSession()->wait(5000, 'typeof jQuery !== "undefined" && jQuery.active === 0 && jQuery("#panels-preview-form-widget-preview").length > 0 && !jQuery("#panels-preview-form-widget-preview").hasClass("panels-preview-loading")');
   }
 
   /**
