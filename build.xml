@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Lightning" default="build">
+
+  <property name="drush" value="${project.basedir}/bin/drush" />
+  <property name="composer" value="/usr/local/bin/composer" />
+  <property name="bower" value="/usr/local/bin/bower" />
+  <property name="db.type" value="mysql" />
+  <property name="db.host" value="localhost" />
+  <property name="db.user" value="root" />
+  <property name="db.password" value="" />
+  <property name="db.database" value="lightning" />
+  <property name="db.url" value="${db.type}://${db.user}:${db.password}@${db.host}/${db.database}" />
+  <property name="docroot" value="docroot" />
+  <property name="profile" value="${docroot}/profiles/lightning" />
+
+  <!-- Finds Drush, Composer and Bower. -->
+  <target name="env">
+    <if>
+      <not>
+        <available file="${drush}" />
+      </not>
+      <then>
+        <exec command="which drush" outputProperty="drush" />
+      </then>
+    </if>
+    <exec command="which composer" outputProperty="composer" />
+    <exec command="which bower" outputProperty="bower" />
+  </target>
+
+  <!-- Copies the Lightning profile into the Drupal code base. -->
+  <target name="copy-profile">
+    <copy todir="${profile}">
+      <fileset dir=".">
+        <exclude name="bin/**" />
+        <exclude name="${docroot}/**" />
+        <exclude name="vendor/**" />
+      </fileset>
+    </copy>
+    <!-- If any contributed modules are present, they were copied in by <copy>. -->
+    <if>
+      <available file="modules/contrib" />
+      <then>
+        <delete dir="modules/contrib" />
+      </then>
+    </if>
+  </target>
+
+  <!-- Builds a Lightning code base using Composer. -->
+  <target name="build" depends="env">
+    <composer command="drupal-scaffold" composer="${composer}" />
+
+    <phing phingFile="build.xml" target="copy-profile" />
+
+    <!-- Install front-end dependencies with Bower. -->
+    <exec command="${bower} install" dir="${profile}" />
+  </target>
+
+  <!-- Installs Lightning and sets it up for development. -->
+  <target name="install" depends="env">
+    <exec command="${drush} site-install lightning --yes --account-pass=admin --db-url=${db.url}" dir="${docroot}" />
+    <exec command="${drush} config-set system.performance css.preprocess 0 --yes --format=boolean" dir="${docroot}" />
+    <exec command="${drush} config-set system.performance js.preprocess 0 --yes --format=boolean" dir="${docroot}" />
+  </target>
+
+  <!-- Prepares Lightning for the drupal.org packaging system. -->
+  <target name="package">
+    <!-- Create a symlink to the installed libraries so that Zap can scan them. -->
+    <symlink target="${profile}/libraries" link="libraries" />
+    <exec command="./zap package" />
+    <delete file="libraries" />
+  </target>
+
+  <!-- Builds a Lightning code base from legacy Drush make files. --> 
+  <target name="build-legacy" depends="env">
+    <if>
+      <available file="${docroot}" />
+      <then>
+        <phing phingFile="build.xml" target="package" />
+        <delete dir="${docroot}" />
+      </then>
+    </if>
+
+    <exec command="${drush} make drupal-org-core.make ${docroot} --yes" />
+    <exec command="${drush} make drupal-org.make ${docroot} --no-core --yes" />
+    <exec command="${composer} require drush/drush" dir="${docroot}" />
+
+    <phing phingFile="build.xml" target="copy-profile" />
+
+    <move file="${docroot}/libraries" tofile="${profile}/libraries" />
+    <move file="${docroot}/modules/contrib" tofile="${profile}/modules/contrib" />
+  </target>
+
+  <!-- Destroys the Drupal installation, but leaves the code base intact. -->
+  <target name="uninstall">
+    <chmod file="${docroot}/sites/default" mode="0755" />
+    <delete file="${docroot}/sites/default/settings.php" />
+    <delete dir="${docroot}/sites/default/files" includeemptydirs="true" />
+    <!-- TODO: Delete the database and recreate it? -->
+  </target>
+
+  <!-- Destroys the Lightning instance. -->
+  <target name="destroy">
+    <delete failonerror="true">
+      <fileset dir=".">
+        <include name="bin/**" />
+        <include name="${docroot}/**" />
+        <include name="vendor/**" />
+      </fileset>
+    </delete>
+  </target>
+
+</project>

@@ -6,7 +6,6 @@ cache:
   - "$HOME/.composer/cache"
   - "$HOME/.drush/cache"
   - "$HOME/.npm"
-  - "vendor"
 php:
   - 5.5
 
@@ -21,18 +20,14 @@ before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update
   - composer --version
-  # Clear drush release history cache, to pick up new releases.
-  - rm -f ~/.drush/cache/download/*---updates.drupal.org-release-history-*
 
 install:
-  # add composer's global bin directory to the path
-  # see: https://github.com/drush-ops/drush#install---composer
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  # Add Composer's local bin directory to the PATH so that we will be running
+  # our installed versions of Drush, PHPCS, Behat, PhantomJS, etc.
+  - export PATH="$TRAVIS_BUILD_DIR/bin:$PATH"
 
-  # Install Drush
-  - composer global require drush/drush:dev-master --prefer-source
-  - composer global require drupal/coder:8.* --prefer-source
-  - phpenv rehash
+  # Composer uses Bower to install our front-end dependencies.
+  - npm install -g bower
 
   # MySQL Options
   - mysql -e 'SET GLOBAL wait_timeout = 5400;'
@@ -44,34 +39,25 @@ install:
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
-  # Build drupal + lightning from makefile
-  - drush make --concurrency=5 drupal-org-core.make docroot -y
-  - mkdir docroot/profiles/lightning
-  - shopt -s extglob
-  - cp -r !(docroot) docroot/profiles/lightning
-  - drush make -y --no-core docroot/profiles/lightning/drupal-org.make docroot/profiles/lightning
+  # Let Composer do all the magic!
+  - composer install
 
-  # Install lightning
-  - cd docroot
-  - drush si lightning --db-url=mysql://root:@localhost/drupal -y
+  # Install Lightning.
+  - phing install -Ddb.database=drupal
 
 before_script:
+  - cd docroot
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - cd profiles/lightning
-  - composer install
-  - ./bin/phantomjs --webdriver=4444 > /dev/null &
+  - phantomjs --webdriver=4444 > /dev/null &
 
 script:
-  - phpcs --standard=$HOME/.composer/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=docroot,*.css,*/karma.js $TRAVIS_BUILD_DIR
-  - ./bin/behat --strict
+  - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=*.css,*/karma.js,vendor,docroot,modules/contrib,bin,libraries $TRAVIS_BUILD_DIR
+  - behat --strict
   - cd ./modules/lightning_features/lightning_media/tests/js
   # TODO: The install step should go into before_script.
   - npm install > /dev/null
   - npm test
-
-notifications:
-  slack:
-    secure: XEeN7K2vzyr3CfojGlRbgf8BEaqAoU6kKSGXi8/jTSw1VQ2zW7osTpCnxSBqvLCo+oXUQeA7p3u+w+84SAL1ReWaoY7y3lCf1MHlvIqWJeJOsgOvRlLulqT2bfAsfHhvXSX5C6TOSASs/OND6z6AXCQwX3V83e0eH497P1sprebk1Mcv5B7oAapuwSLo4dDrtIy2CgY2PtsPV1qgSY/eAUyJJ3yyu7P6nB+Ehj8En+dUHkS5lIIXNeAJLXY8H+oDQD1NIxek0mOeIvorh26CmbxY4Bt7j4FnexFKl5bCF/E361PWkQO1DkeE4YdbGGY9O4pZggyPjuGn1ijGSKknpcjir5iG4HcrfsMGjyai4568KJ+n1Jj8Mh8+PdCdWsU2x8hNdPGcxMf2DVV8qWlI3r1FzKPa3BbjPuk+304isDOahkzZJrkFF5rW1ngD1iZt2L20KbavD6TXYpXc9BMbCo2T85pXTfSlm9kw7p+LeNPTqcIPoplaOiRDfJQsGAD+WhXSpOS1P8BzUrlN8bjQmR2wlnyONAJDJm0vQTbx6Ox/BSrr+3zz4QatQOqX7HV7G5RuLGmtJOvTB/uAw34ETkUAbaAgkQYz14Rz2zXOX7E9P+FD4k+2WmK+WjLu/+P5uB0s+4a3L582nl9oZK7afZ2ZYIHxfaVAo/OXFAmfW6E=
 
 matrix:
   fast_finish: true

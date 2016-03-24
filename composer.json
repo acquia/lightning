@@ -3,23 +3,56 @@
     "description": "The best of Drupal, curated by Acquia",
     "type": "drupal-profile",
     "license": "GPL-2.0+",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "require-dev": {
         "drupal/drupal-extension": "^3.1",
         "guzzlehttp/guzzle": "^6.1",
-        "jakoch/phantomjs-installer": "1.9.8"
+        "jakoch/phantomjs-installer": "1.9.8",
+        "behat/behat": "^3.0",
+        "drush/drush": "dev-master",
+        "drupal/coder": "8.*",
+        "symfony/console": "2.*",
+        "phing/phing": "^2.14"
     },
     "config": {
         "bin-dir": "bin/"
     },
     "scripts": {
         "post-install-cmd": [
-            "PhantomInstaller\\Installer::installPhantomJS"
+            "PhantomInstaller\\Installer::installPhantomJS",
+            "./bin/phing"
         ],
         "post-update-cmd": [
-            "PhantomInstaller\\Installer::installPhantomJS"
-        ]
+            "PhantomInstaller\\Installer::installPhantomJS",
+            "./bin/phing"
+        ],
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packagist.drupal-composer.org"
+        }
+    ],
     "extra": {
+        "bower": {
+            "require": {
+                "backbone.collectionView": "1.0.6",
+                "dropzone": "4.3.0",
+                "es6-promise": "3.2.1",
+                "jquery_appear": "0.3.6"
+            },
+            "directory": "libraries"
+        },
+        "installer-paths": {
+            "docroot/core": [
+                "drupal/core"
+            ],
+            "modules/contrib/{$name}": [
+                "type:drupal-module"
+            ]
+        },
         "patches": {
             "drupal/panels": {
                 "2667754": "https://www.drupal.org/files/issues/2667754-3.patch"
@@ -38,6 +71,35 @@
         }
     },
     "require": {
-        "cweagans/composer-patches": "^1.4"
+        "cweagans/composer-patches": "^1.4",
+        "composer/installers": "^1.0",
+        "drupal/core": "8.0.5",
+        "drupal/embed": "dev-8.x-1.x#26265b5437bb0f1dcb916a6a1169d53382a23646",
+        "drupal/entity_embed": "dev-8.x-1.x#0d7e3b65bb268df6088017bfa7688bab8a565967",
+        "drupal/media_entity": "dev-8.x-1.x#f544c91e4dd8d13653b57519edc53732d8bb138e",
+        "drupal/media_entity_embeddable_video": "8.1.0-beta2",
+        "drupal/media_entity_instagram": "8.1.0-beta2",
+        "drupal/media_entity_twitter": "8.1.0-beta2",
+        "drupal/media_entity_image": "8.1.0-beta2",
+        "drupal/ctools": "8.3.0-alpha23",
+        "drupal/layout_plugin": "8.1.0-alpha22",
+        "drupal/panels": "8.3.0-beta4",
+        "drupal/page_manager": "8.1.0-alpha23",
+        "drupal/panelizer": "8.3.0-alpha2",
+        "drupal/scheduled_updates": "8.1.0-alpha5",
+        "drupal/workbench_moderation": "8.1.0-beta1",
+        "drupal/acquia_connector": "dev-8.x-1.x#302fc469eb860892fc90403b5d758eb50a715f77",
+        "drupal/config_update": "8.1.0",
+        "drupal/features": "8.3.0-alpha6",
+        "drupal/inline_entity_form": "8.1.0-alpha5",
+        "drupal/metatag": "8.1.0-beta5",
+        "drupal/token": "8.1.0-alpha2",
+        "drupal/services": "8.4.0-alpha3",
+        "drupal-composer/drupal-scaffold": "^1.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Acquia\\Lightning\\": "src"
+        }
     }
 }
