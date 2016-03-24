@@ -62,7 +62,8 @@ function lightning_build_distribution() {
 	drush make --yes profiles/lightning/drupal-org-core.make --prepare-install
 	drush make --yes profiles/lightning/drupal-org.make --no-core --contrib-destination=profiles/lightning
 	drush dl diff
-	mkdir -p sites/default/private/files
+	mv profiles/lightning/modules/contrib/lightning_features/tests/features/*.feature profiles/lightning/tests/features/.
+        mkdir -p sites/default/private/files
 	mkdir -p sites/default/private/temp
 
 	# Verify that all the .make files will work on Drupal.org.
