@@ -1,7 +1,7 @@
-Feature: In-Place Editor
+Feature: In-Place Editor with FPP
 
   @api @javascript
-  Scenario: Use the IPE on a Landing Page
+  Scenario: Use the IPE to build landing page(s) with FPP.
     Given I am logged in as a user with the "administrator" role
       And "landing_page" content:
         | title |
