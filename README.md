@@ -53,10 +53,6 @@ Community documentation for Lightning is available at https://www.drupal.org/nod
 
 The Lightning project is available at: http://drupal.org/project/lightning
 
-Acquia provides a nightly build service of the Lightning distro including demo content.
-
-Visit: http://j.mp/download-lightning
-
 The features included with Lightning are available for use in your projects or distributions.
 
 Visit: http://github.com/acquia/lightning-features
