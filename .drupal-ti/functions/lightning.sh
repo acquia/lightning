@@ -133,7 +133,10 @@ function drupal_ti_install_drupal() {
 	drush vset -y file_temporary_path "sites/default/private/temp"
 
 	# Enabled the demo content.
-  drush le lightning_demo
+        drush le lightning_demo
+
+        # Enable optional Lightning Features
+        drush en lighting_breakpoints lightning_letterbox -y
 
 	# Switch to the Lightning platform built from Git (if we aren't there already).
 	cd ../drupal
