@@ -141,8 +141,3 @@ after_script:
 after_failure:
   - tests/vendor/lakion/mink-debug-extension/travis/tools/upload-textfiles "tests/build/*.log"
   - tests/vendor/lakion/mink-debug-extension/travis/tools/upload-screenshots "tests/build/*.png"
-
-# For now, don't test 8.x-2.x.
-branches:
-  except:
-    - 8.x-2.x
