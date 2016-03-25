@@ -28,8 +28,6 @@ Feature: In-Place Editor with FPP
           And I should see "Delete"
       When I press "Save as custom"
         Then I should see "My FPP"
-      When I follow "Edit draft"
-        Then I should see "New content: Your draft will be placed in moderation."
       When I follow "Moderate Landing Page"
         Then I should see "View published"
           And I should see "View draft"
