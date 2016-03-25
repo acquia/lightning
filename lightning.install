@@ -499,7 +499,7 @@ function lightning_update_8001() {
   }
 
   // Uninstall the Media Demo Content module.
-  \Drupal::service('module_installer')->uninstall(array('lightning_media_democontent'));
+  \Drupal::service('module_installer')->uninstall(['lightning_media_democontent']);
 }
 
 /**
@@ -509,4 +509,11 @@ function lightning_update_8002() {
   foreach (NodeType::loadMultiple() as $node_type) {
     lightning_node_type_insert($node_type);
   }
+}
+
+/**
+ * Enables the lightning_core module.
+ */
+function lightning_update_8003() {
+  \Drupal::service('module_installer')->install(['lightning_core']);
 }
