@@ -730,12 +730,12 @@ class TestSubContext extends RawDrupalContext implements DrupalSubContextInterfa
   }
 
   /**
-   * Maximize window before doing anything else.
+   * Maximize the browser window.
    *
-   * @BeforeStep
+   * @When I maximize the browser window
    */
-  public function beforeStep() {
-   $this->getSession()->getDriver()->maximizeWindow();
+  public function iMaximizeTheBrowserWindow() {
+    $this->getSession()->getDriver()->maximizeWindow();
   }
 
 }

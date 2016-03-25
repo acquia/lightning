@@ -12,7 +12,7 @@ Feature: In-Place Editor with FPP
           And I should see "Moderate Landing Page"
           And I should see "Draft"
       When I follow "Customize this page"
-        Then I wait for AJAX to finish
+        Then I maximize the browser window
       When I follow "Add new pane"
         Then I should see "Add content to"
       When I click "Media" in the "CTools modal" region
