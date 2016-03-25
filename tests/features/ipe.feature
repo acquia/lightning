@@ -19,15 +19,16 @@ Feature: In-Place Editor with FPP
         Then I should see "Configure new Media"
           And I should see "Make this reusable"
           And I fill in "title" with "My FPP"
-      When I press "Save"
-        Then I should see "My FPP"
+          And I wait for live preview to finish
+        Then I should see "My FPP" in the "CTools modal" region
+      When I press "Save" in the "CTools modal" region
+        Then I should see "My FPP" in the "Content" region
           And I should see "Edit"
           And I should see "Style"
           And I should see "Delete"
-      When I follow "Save as custom"
+      When I press "Save as custom"
         Then I should see "My FPP"
-          And I should see "Customize this page"
-          And I should see "Change Layout" When I follow "Edit draft"
+      When I follow "Edit draft"
         Then I should see "New content: Your draft will be placed in moderation."
       When I follow "Moderate Landing Page"
         Then I should see "View published"
