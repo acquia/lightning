@@ -729,4 +729,13 @@ class TestSubContext extends RawDrupalContext implements DrupalSubContextInterfa
     $this->getSession()->wait(5000, 'jQuery(".panels-choose-layout").length > 0');
   }
 
+  /**
+   * Maximize window before doing anything else.
+   *
+   * @BeforeStep
+   */
+  public function beforeStep() {
+   $this->getSession()->getDriver()->maximizeWindow();
+  }
+
 }
