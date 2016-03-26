@@ -42,3 +42,30 @@ Feature: Panelizer
     And I click "Latest version"
     Then I should see "There are currently"
     And I cleanup the "/foobar" alias
+
+  @javascript
+  Scenario: Quick-editing custom blocks in an IPE layout
+    Given I am logged in as a user with the administrator role
+    And landing_page content:
+      | title  | path    | moderation_state |
+      | Foobar | /foobar | draft            |
+    And block_content entities:
+      | type  | info               | body    | uuid                  |
+      | basic | Here be dragons... | RAWWWR! | test--here-be-dragons |
+    When I visit "/foobar"
+    And I click the "a[title='Place Content']" element
+    And I wait for AJAX to finish
+    And I click the "a.ipe-category[data-category='Custom']" element
+    And I wait for AJAX to finish
+    And I click the "a[data-plugin-id='block_content:test--here-be-dragons']" element
+    And I wait for AJAX to finish
+    And I click the ".ipe-block-plugin-form input[type='submit'][value='Add']" element
+    And I wait for AJAX to finish
+    And I click the "a[title='Save']" element
+    And I wait for AJAX to finish
+    And I click the "a.panelizer-ipe-save-custom" element
+    And I wait for AJAX to finish
+    And I reload the page
+    And I click "Latest version"
+    Then I should see a "div[data-block-plugin-id='block_content:test--here-be-dragons'] ul.contextual-links li.quickedit" element
+    And I cleanup the "/foobar" alias

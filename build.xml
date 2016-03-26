@@ -4,6 +4,7 @@
   <property name="drush" value="${project.basedir}/bin/drush" />
   <property name="composer" value="/usr/local/bin/composer" />
   <property name="bower" value="/usr/local/bin/bower" />
+  <property name="rsync" value="/usr/bin/rsync" />
   <property name="db.type" value="mysql" />
   <property name="db.host" value="localhost" />
   <property name="db.user" value="root" />
@@ -25,34 +26,32 @@
     </if>
     <exec command="which composer" outputProperty="composer" />
     <exec command="which bower" outputProperty="bower" />
+    <exec command="which rsync" outputProperty="rsync" />
   </target>
 
-  <!-- Copies the Lightning profile into the Drupal code base. -->
-  <target name="copy-profile">
-    <copy todir="${profile}">
-      <fileset dir=".">
-        <exclude name="bin/**" />
-        <exclude name="${docroot}/**" />
-        <exclude name="vendor/**" />
-      </fileset>
-    </copy>
-    <!-- If any contributed modules are present, they were copied in by <copy>. -->
-    <if>
-      <available file="modules/contrib" />
-      <then>
-        <delete dir="modules/contrib" />
-      </then>
-    </if>
+  <!-- Syncs the Lightning profile into the Drupal code base. -->
+  <target name="push" depends="env">
+    <!-- Create the destination if it doesn't exist. -->
+    <mkdir dir="${profile}" />
+
+    <!-- rsync the profile, excluding developer flotsam. -->
+    <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},*.make,.travis.yml,vendor" />
+
+    <!-- Contrib modules were copied over by the file sync. -->
+    <delete dir="modules/contrib" />
+
+    <!-- bower.json may have changed, so reinstall front-end dependencies. -->
+    <exec command="${bower} install" dir="${profile}" />
+  </target>
+
+  <target name="pull" depends="env">
+    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" exclude="libraries,modules/contrib" />
   </target>
 
   <!-- Builds a Lightning code base using Composer. -->
   <target name="build" depends="env">
     <composer command="drupal-scaffold" composer="${composer}" />
-
-    <phing phingFile="build.xml" target="copy-profile" />
-
-    <!-- Install front-end dependencies with Bower. -->
-    <exec command="${bower} install" dir="${profile}" />
+    <phing phingFile="build.xml" target="push" />
   </target>
 
   <!-- Installs Lightning and sets it up for development. -->
@@ -84,7 +83,7 @@
     <exec command="${drush} make drupal-org.make ${docroot} --no-core --yes" />
     <exec command="${composer} require drush/drush" dir="${docroot}" />
 
-    <phing phingFile="build.xml" target="copy-profile" />
+    <phing phingFile="build.xml" target="push" />
 
     <move file="${docroot}/libraries" tofile="${profile}/libraries" />
     <move file="${docroot}/modules/contrib" tofile="${profile}/modules/contrib" />
@@ -100,7 +99,7 @@
 
   <!-- Destroys the Lightning instance. -->
   <target name="destroy">
-    <delete failonerror="true">
+    <delete failonerror="true" includeemptydirs="true">
       <fileset dir=".">
         <include name="bin/**" />
         <include name="${docroot}/**" />

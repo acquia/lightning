@@ -11,6 +11,13 @@ use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
+ * Implements template_preprocess_block().
+ */
+function lightning_preprocess_block(array &$variables) {
+  $variables['attributes']['data-block-plugin-id'] = $variables['elements']['#plugin_id'];
+}
+
+/**
  * Implements hook_form_FORM_ID_alter() for install_configure_form().
  *
  * Allows the profile to alter the site configuration form.
