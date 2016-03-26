@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ebaf8afc6ce9a6b5983a3a289fd0e1b7",
-    "content-hash": "6e999f71df6576606ff88d0d17526a9a",
+    "hash": "a0bf42fcd5a9c1ace032cd3c1e240f8a",
+    "content-hash": "30ef4957004e0066b584673e4794e695",
     "packages": [
         {
             "name": "codegyre/robo",
@@ -224,20 +224,20 @@
         },
         {
             "name": "cweagans/composer-patches",
-            "version": "1.4.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/cweagans/composer-patches.git",
-                "reference": "0d75c63b6de66144517a1da9084422b78c2ff251"
+                "url": "https://github.com/phenaproxima/composer-patches.git",
+                "reference": "6821c91a8f1cc9d12875d81efa3f28b01f867595"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cweagans/composer-patches/zipball/0d75c63b6de66144517a1da9084422b78c2ff251",
-                "reference": "0d75c63b6de66144517a1da9084422b78c2ff251",
+                "url": "https://api.github.com/repos/phenaproxima/composer-patches/zipball/6821c91a8f1cc9d12875d81efa3f28b01f867595",
+                "reference": "6821c91a8f1cc9d12875d81efa3f28b01f867595",
                 "shasum": ""
             },
             "require": {
-                "composer-plugin-api": "~1.0",
+                "composer-plugin-api": "^1.0",
                 "php": ">=5.3.0"
             },
             "require-dev": {
@@ -253,7 +253,11 @@
                     "cweagans\\Composer\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "cweagans\\Composer\\Tests\\": "tests"
+                }
+            },
             "license": [
                 "BSD"
             ],
@@ -264,7 +268,10 @@
                 }
             ],
             "description": "Provides a way to patch Composer packages.",
-            "time": "2016-02-29 03:45:02"
+            "support": {
+                "source": "https://github.com/phenaproxima/composer-patches/tree/master"
+            },
+            "time": "2016-03-25 21:30:21"
         },
         {
             "name": "doctrine/annotations",
@@ -5593,6 +5600,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "cweagans/composer-patches": 20,
         "drupal/embed": 20,
         "drupal/entity_embed": 20,
         "drupal/media_entity": 20,
