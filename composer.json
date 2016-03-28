@@ -18,6 +18,12 @@
     "config": {
         "bin-dir": "bin/"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packagist.drupal-composer.org"
+        }
+    ],
     "scripts": {
         "post-install-cmd": [
             "PhantomInstaller\\Installer::installPhantomJS",
@@ -28,16 +34,6 @@
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
     },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://packagist.drupal-composer.org"
-        },
-	{
-	    "type": "vcs",
-	    "url": "https://github.com/phenaproxima/composer-patches"
-	}
-    ],
     "extra": {
         "bower": {
             "require": {
