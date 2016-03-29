@@ -1,0 +1,214 @@
+#!/usr/bin/env php
+<?php
+
+class IniEncoder {
+
+  /**
+   * Serializes an array to legacy make format.
+   *
+   * @param array $input
+   *   The data to serialize.
+   *
+   * @return string
+   *   The serialized data.
+   */
+  public function encode(array $input) {
+    return implode("\n", $this->doEncode($input));
+  }
+
+  /**
+   * Recursively serializes data to legacy make format.
+   *
+   * @param array $input
+   *   The data to serialize.
+   * @param array $keys
+   *   The current key path.
+   *
+   * @return string[]
+   *   The serialized data as a flat array of lines.
+   */
+  protected function doEncode(array $input, array $keys = []) {
+    $output = array();
+
+    foreach ($input as $key => $value) {
+      $keys[] = $key;
+
+      if (is_array($value)) {
+        if ($this->isAssociative($value)) {
+          $output = array_merge($output, $this->doEncode($value, $keys));
+        }
+        else {
+          foreach ($value as $j) {
+            $output[] = $this->keysToString($keys) . '[] = ' . $j;
+          }
+        }
+      }
+      else {
+        $output[] = $this->keysToString($keys) . ' = ' . $value;
+      }
+
+      array_pop($keys);
+    }
+
+    return $output;
+  }
+
+  /**
+   * Transforms an key path to a string.
+   *
+   * @param string[] $keys
+   *   The key path.
+   *
+   * @return string
+   *   The flattened key path.
+   */
+  protected function keysToString(array $keys) {
+    $head = array_shift($keys);
+    if ($keys) {
+      return $head . '[' . implode('][', $keys) . ']';
+    }
+    else {
+      return $head;
+    }
+  }
+
+  /**
+   * Tests if an array is associative.
+   *
+   * @param array $input
+   *   The array to test.
+   *
+   * @return bool
+   *   Whether or not the array has non-numeric keys.
+   */
+  protected function isAssociative(array $input) {
+    $keys = implode('', array_keys($input));
+    return !is_numeric($keys);
+  }
+
+}
+
+class Bower implements \IteratorAggregate {
+
+  /**
+   * The directory where Bower packages are installed.
+   *
+   * @var string
+   *
+   * @see getDirectory()
+   */
+  protected $directory;
+
+  /**
+   * Loops over lock info for all installed dependencies.
+   */
+  public function getIterator() {
+    $info = file_get_contents('bower.json');
+    $info = json_decode($info, TRUE);
+
+    foreach (array_keys($info['dependencies']) as $package) {
+      yield $this->getLockInfo($package);
+    }
+  }
+
+  /**
+   * Returns Bower lock info for a specific package.
+   *
+   * @param string $package
+   *   The name of the package.
+   *
+   * @return array
+   *   The package info.
+   *
+   * @throws \RuntimeException
+   *   If the package is not installed.
+   */
+  public function getLockInfo($package) {
+    $info = $this->getDirectory() . "/$package/.bower.json";
+    if (file_exists($info)) {
+      $info = file_get_contents($info);
+      return json_decode($info, TRUE);
+    }
+    else {
+      throw new \RuntimeException('Package ' . $package . ' is not installed.');
+    }
+  }
+
+  /**
+   * Returns the contents of .bowerrc, if it exists.
+   *
+   * @return array
+   *   The parsed contents of .bowerrc.
+   */
+  protected function getConfig() {
+    if (file_exists('.bowerrc')) {
+      $config = file_get_contents('.bowerrc');
+      return json_decode($config, TRUE);
+    }
+    else {
+      return [];
+    }
+  }
+
+  /**
+   * Returns the directory where Bower dependencies are installed.
+   *
+   * @return string
+   *   The directory where Bower dependencies are installed; defaults to
+   *   bower_components if not set.
+   */
+  public function getDirectory() {
+    if (empty($this->directory)) {
+      $config = $this->getConfig();
+      $this->directory = @($config['directory'] ?: 'bower_components');
+    }
+    return $this->directory;
+  }
+
+}
+
+require_once './vendor/autoload.php';
+
+$encoder = new IniEncoder();
+
+$make = \Symfony\Component\Yaml\Yaml::parse(`./bin/drush make-convert composer.lock`);
+
+// drush make-convert considers non-Drupal Composer dependencies, like Drush,
+// to be libraries. That is totally wrong, so head that off at the pass by
+// destroying any libraries it thinks it's found.
+unset($make['libraries']);
+
+if (isset($make['projects']['drupal'])) {
+  // Always use drupal.org's core repository, or patches will not apply.
+  $make['projects']['drupal']['download']['url'] = 'https://git.drupal.org/project/drupal.git';
+
+  $core = [
+    'core' => '8.x',
+    'api' => 2,
+    'projects' => [
+      'drupal' => $make['projects']['drupal'],
+    ],
+  ];
+  file_put_contents('drupal-org-core.make', $encoder->encode($core));
+  unset($make['projects']['drupal']);
+}
+
+if (file_exists('bower.json')) {
+  $bower = new Bower();
+
+  foreach ($bower as $lib) {
+    $package = $lib['name'];
+
+    $make['libraries'][$package] = [
+      'type' => 'library',
+      'directory_name' => $package,
+      'download' => [
+        'type' => 'git',
+        'url' => $lib['_source'],
+        'tag' => $lib['_resolution']['tag'],
+      ],
+    ];
+  }
+}
+
+file_put_contents('drupal-org.make', $encoder->encode($make));

@@ -65,7 +65,7 @@
   <target name="package">
     <!-- Create a symlink to the installed libraries so that Zap can scan them. -->
     <symlink target="${profile}/libraries" link="libraries" />
-    <exec command="./zap package" />
+    <exec command="./package" />
     <delete file="libraries" />
   </target>
 
