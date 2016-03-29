@@ -45,3 +45,29 @@ Feature: In-Place Editor with FPP
         Then I should not see "View draft"
           And I should not see "Edit draft"
           And I should see "New draft"
+          And I follow "New draft"
+      When I press "Save as Draft"
+        Then I should see "Landing Page Test has been updated."
+          And I should see "Customize this page"
+      When I follow "Customize this page"
+        Then I should see "Edit"
+          And I should see "Style"
+          And I should see "Delete"
+      When I follow "Edit"
+        Then I should see "Configure My FPP" in the "CTools modal" region
+          And I fill in "title" with "My Revision"
+          And I wait for live preview to finish
+        Then I should see "My Revision" in the "CTools modal" region
+     When I press "Save" in the "CTools modal" region
+       Then I should see "My Revision" in the "Content" region
+         And I should not see "My FPP" in the "Content" region  
+     When I press "panels-ipe-save"
+       Then I should see "My Revision"
+     When I follow "Moderate Landing Page"
+       Then I follow "View published"
+         And I should see "My FPP"
+         And I should not see "My Revision"
+     When I follow "Moderate Landing Page"
+       Then I follow "View draft"
+         And I should not see "My FPP"
+         And I should see "My Revision"
