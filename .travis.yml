@@ -26,9 +26,6 @@ install:
   # our installed versions of Drush, PHPCS, Behat, PhantomJS, etc.
   - export PATH="$TRAVIS_BUILD_DIR/bin:$PATH"
 
-  # Composer uses Bower to install our front-end dependencies.
-  - npm install -g bower
-
   # MySQL Options
   - mysql -e 'SET GLOBAL wait_timeout = 5400;'
   - mysql -e "SHOW VARIABLES LIKE 'wait_timeout'"
@@ -48,11 +45,11 @@ install:
 before_script:
   - cd docroot
   - drush runserver --default-server=builtin 8080 &>/dev/null &
-  - cd profiles/lightning
   - phantomjs --webdriver=4444 > /dev/null &
+  - cd profiles/lightning
 
 script:
-  - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=*.css,*/karma.js,vendor,docroot,modules/contrib,bin,libraries $TRAVIS_BUILD_DIR
+  - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,*/karma.js,libraries,modules/contrib .
   - behat --strict
   - cd ./modules/lightning_features/lightning_media/tests/js
   # TODO: The install step should go into before_script.

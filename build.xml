@@ -3,7 +3,7 @@
 
   <property name="drush" value="${project.basedir}/bin/drush" />
   <property name="composer" value="/usr/local/bin/composer" />
-  <property name="bower" value="/usr/local/bin/bower" />
+  <property name="npm" value="/usr/local/bin/npm" />
   <property name="rsync" value="/usr/bin/rsync" />
   <property name="db.type" value="mysql" />
   <property name="db.host" value="localhost" />
@@ -14,18 +14,10 @@
   <property name="docroot" value="docroot" />
   <property name="profile" value="${docroot}/profiles/lightning" />
 
-  <!-- Finds Drush, Composer and Bower. -->
+  <!-- Finds Composer, NPM, and rsync. -->
   <target name="env">
-    <if>
-      <not>
-        <available file="${drush}" />
-      </not>
-      <then>
-        <exec command="which drush" outputProperty="drush" />
-      </then>
-    </if>
     <exec command="which composer" outputProperty="composer" />
-    <exec command="which bower" outputProperty="bower" />
+    <exec command="which npm" outputProperty="npm" />
     <exec command="which rsync" outputProperty="rsync" />
   </target>
 
@@ -34,14 +26,19 @@
     <!-- Create the destination if it doesn't exist. -->
     <mkdir dir="${profile}" />
 
+    <!--
+    bower.json may have changed, so reinstall front-end dependencies using
+    the version of Bower installed locally in node_modules. The 'install'
+    script lives in package.json.
+    -->
+    <exec command="${npm} run install-libraries" passthru="true" />
+
     <!-- rsync the profile, excluding developer flotsam. -->
-    <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},*.make,.travis.yml,vendor" />
+    <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},*.make,node_modules,.travis.yml,vendor" />
 
-    <!-- Contrib modules were copied over by the file sync. -->
+    <!-- JS libraries and contrib modules were copied over by the file sync. -->
+    <delete dir="libraries" />
     <delete dir="modules/contrib" />
-
-    <!-- bower.json may have changed, so reinstall front-end dependencies. -->
-    <exec command="${bower} install" dir="${profile}" />
   </target>
 
   <target name="pull" depends="env">
@@ -63,7 +60,7 @@
 
   <!-- Prepares Lightning for the drupal.org packaging system. -->
   <target name="package">
-    <!-- Create a symlink to the installed libraries so that Zap can scan them. -->
+    <!-- Create a symlink to the installed libraries so that the packaging script can scan 'em. -->
     <symlink target="${profile}/libraries" link="libraries" />
     <exec command="./package" />
     <delete file="libraries" />
@@ -97,12 +94,13 @@
     <!-- TODO: Delete the database and recreate it? -->
   </target>
 
-  <!-- Destroys the Lightning instance. -->
+  <!-- Destroys the installed code base. -->
   <target name="destroy">
     <delete failonerror="true" includeemptydirs="true">
       <fileset dir="." defaultexcludes="false">
         <include name="bin/**" />
         <include name="${docroot}/**" />
+        <include name="node_modules/**" />
         <include name="vendor/**" />
       </fileset>
     </delete>
