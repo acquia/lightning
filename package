@@ -183,10 +183,14 @@ if (isset($make['projects']['drupal'])) {
   $make['projects']['drupal']['download']['url'] = 'https://git.drupal.org/project/drupal.git';
 
   $core = [
-    'core' => '8.x',
     'api' => 2,
+    'core' => '8.x',
     'projects' => [
-      'drupal' => $make['projects']['drupal'],
+      'drupal' => [
+        'type' => 'core',
+        'version' => $make['projects']['drupal']['download']['tag'],
+        'patch' => $make['projects']['drupal']['patch'],
+      ],
     ],
   ];
   file_put_contents('drupal-org-core.make', $encoder->encode($core));
@@ -212,3 +216,4 @@ if (file_exists('bower.json')) {
 }
 
 file_put_contents('drupal-org.make', $encoder->encode($make));
+
