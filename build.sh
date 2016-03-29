@@ -5,8 +5,6 @@ CALLPATH=`dirname $0`
 TARGET=$1
 shift
 
-drush make --concurrency=5 $CALLPATH/$MAKEFILE $TARGET
-
 if [ -d $TARGET ]; then
   yes "yes" | rm -rf $TARGET
 fi
