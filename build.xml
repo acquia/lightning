@@ -16,6 +16,14 @@
 
   <!-- Finds Composer, NPM, and rsync. -->
   <target name="env">
+    <if>
+      <not>
+        <available file="${drush}" />
+      </not>
+      <then>
+        <exec command="which drush" outputProperty="drush" />
+      </then>
+    </if>
     <exec command="which composer" outputProperty="composer" />
     <exec command="which npm" outputProperty="npm" />
     <exec command="which rsync" outputProperty="rsync" />
@@ -37,8 +45,8 @@
     <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},*.make,node_modules,.travis.yml,vendor" />
 
     <!-- JS libraries and contrib modules were copied over by the file sync. -->
-    <delete dir="libraries" />
-    <delete dir="modules/contrib" />
+    <delete dir="libraries" failonerror="true" />
+    <delete dir="modules/contrib" failonerror="true" />
   </target>
 
   <target name="pull" depends="env">
@@ -81,9 +89,6 @@
     <exec command="${composer} require drush/drush" dir="${docroot}" />
 
     <phing phingFile="build.xml" target="push" />
-
-    <move file="${docroot}/libraries" tofile="${profile}/libraries" />
-    <move file="${docroot}/modules/contrib" tofile="${profile}/modules/contrib" />
   </target>
 
   <!-- Destroys the Drupal installation, but leaves the code base intact. -->
