@@ -42,7 +42,7 @@
     <exec command="${npm} run install-libraries" passthru="true" />
 
     <!-- rsync the profile, excluding developer flotsam. -->
-    <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},*.make,node_modules,.travis.yml,vendor" />
+    <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},*.make,node_modules,.travis.yml,vendor" />
 
     <!-- JS libraries and contrib modules were copied over by the file sync. -->
     <delete dir="libraries" failonerror="true" />
@@ -50,7 +50,7 @@
   </target>
 
   <target name="pull" depends="env">
-    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" exclude="libraries,modules/contrib" />
+    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="libraries,modules/contrib" />
   </target>
 
   <!-- Builds a Lightning code base using Composer. -->
