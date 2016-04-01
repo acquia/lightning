@@ -1,3 +1,19 @@
+## Release Candidate 1 (RC1)
+* You can finally create a Lightning-based project entirely with Composer!
+  See the [installer project page](https://github.com/acquia/lightning-project)
+  for more information. (Issue #2693829)
+* It's now possible for Quick Edit to edit content blocks placed in a landing
+  page using Panels IPE. (Issue #2692391)
+* A Lightning Media unit test was missing a @group annotation. (Issue #2695625)
+* Lightning now adds a warning gate to ```drush update```, since Drush's code
+  update mechanisms can destroy a working site. (Issue #2694367)
+* All contributed modules included with Lightning have been moved into a single
+  contrib directory -- no more subfolders for layout modules, media modules, etc.
+  (Issue #2692229)
+* We've adopted a versioning policy that should help bridge the gap between
+  drupal.org (which does not support semantic versioning yet) and Composer. See
+  VERSIONS.md for more information. (Issue #2693897)
+
 ## Beta 5
 * Lightning now automatically provides responsibility-based roles for
   assigning permissions to users. All content types receive their own
