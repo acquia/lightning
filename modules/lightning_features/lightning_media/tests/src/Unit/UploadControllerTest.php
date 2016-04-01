@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @coversDefaultClass \Drupal\lightning_media\Controller\UploadController
- * @package lightning_media
+ * @group lightning_media
  */
 class UploadControllerTest extends UnitTestCase {
 
