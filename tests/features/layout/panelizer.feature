@@ -38,8 +38,6 @@ Feature: Panelizer
     And I click "Save as custom"
     And I wait for AJAX to finish
     And I visit "/foobar"
-    And I click "View"
-    And I click "Latest version"
     Then I should see "There are currently"
     And I cleanup the "/foobar" alias
 
@@ -66,6 +64,5 @@ Feature: Panelizer
     And I click the "a.panelizer-ipe-save-custom" element
     And I wait for AJAX to finish
     And I reload the page
-    And I click "Latest version"
     Then I should see a "div[data-block-plugin-id='block_content:test--here-be-dragons'] ul.contextual-links li.quickedit" element
     And I cleanup the "/foobar" alias
