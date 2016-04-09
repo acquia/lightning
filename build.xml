@@ -65,6 +65,7 @@
     <exec command="${drush} site-install lightning --yes --account-pass=admin --db-url=${db.url}" dir="${docroot}" />
     <exec command="${drush} config-set system.performance css.preprocess 0 --yes --format=boolean" dir="${docroot}" />
     <exec command="${drush} config-set system.performance js.preprocess 0 --yes --format=boolean" dir="${docroot}" />
+    <exec command="${drush} config-set system.logging error_level all --yes" dir="${docroot}" />
   </target>
 
   <!-- Prepares Lightning for the drupal.org packaging system. -->
@@ -75,7 +76,7 @@
     <delete file="libraries" />
   </target>
 
-  <!-- Builds a Lightning code base from legacy Drush make files. --> 
+  <!-- Builds a Lightning code base from legacy Drush make files. -->
   <target name="build-legacy" depends="env">
     <if>
       <available file="${docroot}" property="docroot.exists" />
