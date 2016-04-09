@@ -66,13 +66,15 @@ function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
 
 /**
  * Implements hook_form_FORM_ID_alter().
+ *
+ * Transform the WBM status filter field on /admin/content from a text field to
+ * a select list.
  */
 function lightning_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state) {
   if ($form_state->getStorage()['view']->storage->id() == 'content') {
     if (isset($form['moderation_state'])) {
       $form['moderation_state'] = [
         '#type' => 'select',
-        '#title' => $form['moderation_state']['#title'],
         '#options' => [
           '' => \Drupal::translation()->translate('- any -'),
         ],
