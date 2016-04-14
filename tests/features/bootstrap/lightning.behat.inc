@@ -59,6 +59,35 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     $this->minkContext = $environment->getContext('Drupal\DrupalExtension\Context\MinkContext');
   }
 
+  /**
+   * Truncate the watchdog table so we can check for errors later.
+   *
+   * @BeforeSuite
+   */
+  public static function prepare($event) {
+    db_truncate('watchdog')->execute();
+  }
+
+  /**
+   * Check for PHP notices and errors.
+   *
+   * @AfterScenario
+   */
+  public function afterScenario($event) {
+    $log = db_select('watchdog', 'w')
+      ->fields('w')
+      ->condition('w.type', 'php', '=')
+      ->execute()
+      ->fetchAll();
+    if (!empty($log)) {
+      foreach ($log as $error) {
+        // Make the substitutions easier to read in the log.
+        $error->variables = unserialize($error->variables);
+        print_r($error);
+      }
+      throw new \Exception('PHP errors logged to watchdog in this scenario.');
+    }
+  }
 
   /**
    * Asserts that a CKEditor instance exists.
