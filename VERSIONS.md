@@ -19,8 +19,11 @@ Given the following tag: 8.x-1.23:
 | __3__ | Sprint release between feature releases |
 
 Lightning typically makes a sprint release every four weeks. We'll also use
-sprint releases to package new releases of Drupal Core with Lightning as they
-become available.
+sprint releases to package new minor releases of Drupal Core with Lightning as
+they become available. Drupal Packagist does not allow patch release specificity
+for Drupal core. That is, even if Lightning were to specify `drupal/core:8.0.5`,
+Drupal Packagist would convert that to `drupal/core:~8.0.5` (note the tilde). As
+a result, Lightning will not make releases for Drupal Core Patch Releases.
 
 Lightning release tags are synchronized with releases of Lightning's [Composer-based installer](https://github.com/acquia/lightning-project).
 Since the installer is not distributed on drupal.org, Lightning version 8.x-1.23

@@ -13,12 +13,13 @@
   <property name="db.url" value="${db.type}://${db.user}:${db.password}@${db.host}/${db.database}" />
   <property name="docroot" value="docroot" />
   <property name="profile" value="${docroot}/profiles/lightning" />
+  <property name="site" value="${docroot}/sites/default" />
 
   <!-- Finds Composer, NPM, and rsync. -->
   <target name="env">
     <if>
       <not>
-        <available file="${drush}" />
+        <available file="${drush}" property="drush.exists" />
       </not>
       <then>
         <exec command="which drush" outputProperty="drush" />
@@ -56,7 +57,7 @@
   <!-- Builds a Lightning code base using Composer. -->
   <target name="build" depends="env">
     <composer command="drupal-scaffold" composer="${composer}" />
-    <phing phingFile="build.xml" target="push" />
+    <phingcall target="push" />
   </target>
 
   <!-- Installs Lightning and sets it up for development. -->
@@ -64,6 +65,7 @@
     <exec command="${drush} site-install lightning --yes --account-pass=admin --db-url=${db.url}" dir="${docroot}" />
     <exec command="${drush} config-set system.performance css.preprocess 0 --yes --format=boolean" dir="${docroot}" />
     <exec command="${drush} config-set system.performance js.preprocess 0 --yes --format=boolean" dir="${docroot}" />
+    <exec command="${drush} config-set system.logging error_level all --yes" dir="${docroot}" />
   </target>
 
   <!-- Prepares Lightning for the drupal.org packaging system. -->
@@ -74,12 +76,12 @@
     <delete file="libraries" />
   </target>
 
-  <!-- Builds a Lightning code base from legacy Drush make files. --> 
+  <!-- Builds a Lightning code base from legacy Drush make files. -->
   <target name="build-legacy" depends="env">
     <if>
-      <available file="${docroot}" />
+      <available file="${docroot}" property="docroot.exists" />
       <then>
-        <phing phingFile="build.xml" target="package" />
+        <phingcall target="package" />
         <delete dir="${docroot}" />
       </then>
     </if>
@@ -88,19 +90,28 @@
     <exec command="${drush} make drupal-org.make ${docroot} --no-core --yes" />
     <exec command="${composer} require drush/drush" dir="${docroot}" />
 
-    <phing phingFile="build.xml" target="push" />
+    <phingcall target="push" />
   </target>
 
   <!-- Destroys the Drupal installation, but leaves the code base intact. -->
   <target name="uninstall">
-    <chmod file="${docroot}/sites/default" mode="0755" />
-    <delete file="${docroot}/sites/default/settings.php" />
-    <delete dir="${docroot}/sites/default/files" includeemptydirs="true" />
+    <if>
+      <available file="${site}" property="site.exists" />
+      <then>
+        <chmod file="${site}" mode="0755" />
+        <delete failonerror="true" includeemptydirs="true">
+          <fileset dir="${site}">
+            <include name="settings.php" />
+            <include name="files/**" />
+          </fileset>
+        </delete>
+      </then>
+    </if>
     <!-- TODO: Delete the database and recreate it? -->
   </target>
 
   <!-- Destroys the installed code base. -->
-  <target name="destroy">
+  <target name="destroy" depends="uninstall">
     <delete failonerror="true" includeemptydirs="true">
       <fileset dir="." defaultexcludes="false">
         <include name="bin/**" />
