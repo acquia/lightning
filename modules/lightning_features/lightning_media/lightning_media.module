@@ -102,3 +102,27 @@ function lightning_media_form_entity_embed_dialog_alter(array &$form, FormStateI
     $form['attributes']['data-entity-embed-display']['#access'] = FALSE;
   }
 }
+
+/**
+ * Implements hook_editor_js_settings_alter().
+ *
+ * Merge the buttons in our media library into DrupalEntity_buttons.
+ *
+ * We cannot do this in \Drupal\lightning_media\Plugin\CKEditorPlugin\MediaLibrary::getConfig
+ * because \Drupal\ckeditor\Plugin\Editor\CKEditor::getJSSettings does not merge settings keys.
+ * Entity Embed sets DrupalEntity_buttons key first so ours will not be set.
+ */
+function lightning_media_editor_js_settings_alter(array &$settings) {
+  if (isset($settings['editor']['formats'])) {
+    foreach ($settings['editor']['formats'] as &$format) {
+      $editor_setitngs = &$format['editorSettings'];
+      if (isset($editor_setitngs['mediaLibrary']['buttons'])) {
+        if (!isset($editor_setitngs['DrupalEntity_buttons'])) {
+          $editor_setitngs['DrupalEntity_buttons'] = [];
+        }
+        $editor_setitngs['DrupalEntity_buttons'] += $editor_setitngs['mediaLibrary']['buttons'];
+      }
+    }
+  }
+}
+
