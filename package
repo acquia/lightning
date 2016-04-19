@@ -189,10 +189,12 @@ if (isset($make['projects']['drupal'])) {
       'drupal' => [
         'type' => 'core',
         'version' => $make['projects']['drupal']['download']['tag'],
-        'patch' => $make['projects']['drupal']['patch'],
       ],
     ],
   ];
+  if (isset($make['projects']['drupal']['patch'])) {
+    $core['projects']['drupal']['patch'] = $make['projects']['drupal']['patch'];
+  }
   file_put_contents('drupal-org-core.make', $encoder->encode($core));
   unset($make['projects']['drupal']);
 }

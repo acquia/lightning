@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Drupal\lightning_media\Controller\UploadController.
- */
-
 namespace Drupal\lightning_media\Controller;
 
 use Drupal\Component\Transliteration\TransliterationInterface;

@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Drupal\Tests\lightning_media\Kernel\MediaBundleTest.
- */
-
 namespace Drupal\Tests\lightning_media\Kernel;
 
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;

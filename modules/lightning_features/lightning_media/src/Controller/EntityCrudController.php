@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Drupal\lightning_media\Controller\EntityCrudController.
- */
-
 namespace Drupal\lightning_media\Controller;
 
 use Drupal\Core\Controller\ControllerBase;

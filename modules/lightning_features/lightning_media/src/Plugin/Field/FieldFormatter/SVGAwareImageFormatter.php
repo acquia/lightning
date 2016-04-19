@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Drupal\lightning_media\Plugin\Field\FieldFormatter\SVGAwareImageFormatter.
- */
-
 namespace Drupal\lightning_media\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemListInterface;

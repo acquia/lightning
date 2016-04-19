@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Drupal\lightning_media\Plugin\EmbedType\MediaLibrary.
- */
-
 namespace Drupal\lightning_media\Plugin\EmbedType;
 
 use Drupal\Core\Extension\ModuleHandlerInterface;

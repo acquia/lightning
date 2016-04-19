@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Drupal\Tests\lightning_media\Unit\UploadControllerTest.
- */
-
 namespace Drupal\Tests\lightning_media\Unit;
 
 use Drupal\Component\Transliteration\TransliterationInterface;

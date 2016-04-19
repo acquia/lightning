@@ -41,6 +41,20 @@
             ]
         },
         "patches": {
+            "drupal/entity_embed": {
+                "2708609 - Workaround for button enforcement":
+                "https://www.drupal.org/files/issues/8.x-1.x...balsama_8.x-1.x-2.patch"
+            },
+            "drupal/media_entity": {
+                "Make compatible with IEF alpha4 - alpha2 to f544c91":
+                "https://www.drupal.org/files/issues/media_entity--beta2-to-f544c91.patch"
+            },
+            "drupal/panelizer": {
+                "Generate new UUIDs for displays when switching from default to field storage":
+                "https://www.drupal.org/files/issues/2701349-2.patch",
+                "Explicitly set the Panels IPE URL root when saving in Panelizer":
+                "https://www.drupal.org/files/issues/panelizer-ipe-url-root-handling.patch"
+            },
             "drupal/panels": {
                 "beta4 to 8eba1a0 - quickedit blocks":
                 "https://www.drupal.org/files/issues/panels--beta4-to-8eba1a0.patch",
@@ -49,12 +63,6 @@
                 "Bandaid tempstore patch":
                 "https://www.drupal.org/files/issues/bandaid.patch"
             },
-            "drupal/panelizer": {
-              "Generate new UUIDs for displays when switching from default to field storage":
-              "https://www.drupal.org/files/issues/2701349-2.patch",
-              "Explicitly set the Panels IPE URL root when saving in Panelizer":
-              "https://www.drupal.org/files/issues/panelizer-ipe-url-root-handling.patch"
-            },
             "drupal/scheduled_updates": {
                 "2674874 - Issue saving Schedule Update Type form":
                 "https://www.drupal.org/files/issues/schedule_updates-save_type-2674874-2.patch"
@@ -62,43 +70,35 @@
             "drupal/workbench_moderation": {
                 "2668006 - Provide logical access control for when IPE should be applied to moderated nodes":
                 "https://www.drupal.org/files/issues/2668006-2.patch"
-            },
-            "drupal/core": {
-                "2637194 - Drupal.Ajax.execute() should return underlying Deferred object":
-                "https://www.drupal.org/files/issues/2637194-12.patch"
-            },
-            "drupal/media_entity": {
-                "Make compatible with IEF alpha4 - alpha2 to f544c91":
-                "https://www.drupal.org/files/issues/media_entity--beta2-to-f544c91.patch"
             }
         }
     },
     "require": {
         "cweagans/composer-patches": "dev-master",
         "composer/installers": "^1.0",
-        "drupal/core": "~8.0.6",
-        "drupal/embed": "dev-8.x-1.x",
-        "drupal/entity_embed": "dev-8.x-1.x",
+        "drupal/core": "^8.1.0",
+        "drupal/embed": "8.1.0-rc2",
+        "drupal/entity_embed": "8.1.0-alpha1",
         "drupal/media_entity": "8.1.0-beta2",
         "drupal/media_entity_embeddable_video": "8.1.0-beta2",
         "drupal/media_entity_instagram": "8.1.0-beta2",
         "drupal/media_entity_twitter": "8.1.0-beta2",
         "drupal/media_entity_image": "8.1.0-beta2",
         "drupal/ctools": "8.3.0-alpha25",
-        "drupal/layout_plugin": "8.1.0-alpha22",
         "drupal/panels": "8.3.0-beta4",
         "drupal/page_manager": "8.1.0-alpha23",
         "drupal/panelizer": "8.3.0-alpha2",
         "drupal/scheduled_updates": "8.1.0-alpha5",
-        "drupal/workbench_moderation": "8.1.0-beta2",
-        "drupal/acquia_connector": "8.1.1",
-        "drupal/config_update": "8.1.1",
-        "drupal/features": "8.3.0-beta3",
+        "drupal/workbench_moderation": "8.1.0",
+        "drupal/acquia_connector": "^8.1.1",
+        "drupal/config_update": "^8.1.1",
+        "drupal/features": "^8.3.0",
         "drupal/inline_entity_form": "8.1.0-alpha5",
-        "drupal/metatag": "8.1.0-beta7",
-        "drupal/token": "8.1.0-alpha2",
+        "drupal/metatag": "^8.1.0",
+        "drupal/token": "^8.1.0",
         "drupal/services": "8.4.0-alpha3",
         "drupal-composer/drupal-scaffold": "^1.2",
-        "drush/drush": "dev-master"
+        "drush/drush": "dev-master",
+        "drupal/pathauto": "^8.1.0"
     }
 }

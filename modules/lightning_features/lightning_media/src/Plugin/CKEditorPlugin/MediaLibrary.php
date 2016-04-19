@@ -1,10 +1,4 @@
 <?php
-
-/**
- * @file
- * Contains \Drupal\lightning_media\Plugin\CKEditorPlugin\MediaLibrary.
- */
-
 namespace Drupal\lightning_media\Plugin\CKEditorPlugin;
 
 use Drupal\Component\Utility\Html;

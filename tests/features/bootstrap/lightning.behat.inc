@@ -59,7 +59,6 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     $this->minkContext = $environment->getContext('Drupal\DrupalExtension\Context\MinkContext');
   }
 
-
   /**
    * Asserts that a CKEditor instance exists.
    *
