@@ -21,6 +21,7 @@ projects[entity_embed][type] = module
 projects[entity_embed][download][type] = git
 projects[entity_embed][download][url] = https://git.drupal.org/project/entity_embed.git
 projects[entity_embed][download][tag] = 8.x-1.0-alpha1
+projects[entity_embed][patch][] = https://www.drupal.org/files/issues/8.x-1.x...balsama_8.x-1.x-2.patch
 projects[features][type] = module
 projects[features][download][type] = git
 projects[features][download][url] = https://git.drupal.org/project/features
