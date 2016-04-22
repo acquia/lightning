@@ -79,4 +79,44 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
     }
   }
 
+  /**
+   * Filters the media library to a specific media type.
+   *
+   * @param string $type
+   *   The media type to filter.
+   *
+   * @When I filter the media library by type :type
+   */
+  public function filterLibraryByType($type) {
+    $this->minkContext->selectOption('lightning-media-bundle', 'image');
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
+  /**
+   * Selects an asset from the media library.
+   *
+   * @param int $n
+   *   The one-based index of the asset.
+   *
+   * @When /^I select the (\d+)(?:st|nd|rd|th) asset in the media library$/
+   */
+  public function selectMediaLibraryAsset($n) {
+    /** @var \LightningSubContext $context */
+    $context = $this->getContext('LightningSubContext');
+    $context->clickElementBySelector('.media-library .library ul.collection-view li:nth-child(' . $n . ')');
+  }
+
+  /**
+   * Asserts the presence of the customized Entity Embed dialog box.
+   *
+   * @Then I should see the Entity Embed form
+   */
+  public function assertEntityEmbedDialog() {
+    $assert = $this->assertSession();
+    $assert->elementExists('css', 'form.entity-embed-dialog');
+    // The Back button and display plugin selection should be hidden.
+    $assert->elementNotExists('css', 'form.entity-embed-dialog input[type = "submit"][value = "Back"]');
+    $assert->elementNotExists('css', 'form.entity-embed-dialog select[name = "attributes[data-entity-embed-display]"]');
+  }
+
 }

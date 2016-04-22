@@ -28,13 +28,6 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
   protected $lightning;
 
   /**
-   * Content type IDs that have been panelized during the scenario.
-   *
-   * @var string[]
-   */
-  protected $panelized = [];
-
-  /**
    * Pre-scenario hook.
    *
    * @BeforeScenario
@@ -42,15 +35,6 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
   public function gatherContexts() {
     $this->minkContext = $this->getContext('\Drupal\DrupalExtension\Context\MinkContext');
     $this->lightning = $this->getContext('LightningSubContext');
-  }
-
-  /**
-   * Post-scenario hook.
-   *
-   * @AfterScenario
-   */
-  public function cleanPanelizer() {
-    array_walk($this->panelized, [$this, 'unpanelize']);
   }
 
   /**
@@ -70,8 +54,6 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
     $this->minkContext->checkOption('panelizer[enable]');
     $this->minkContext->checkOption('panelizer[custom]');
     $this->minkContext->pressButton('Save');
-
-    array_push($this->panelized, $bundle);
   }
 
   /**
@@ -91,11 +73,6 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
     $this->minkContext->uncheckOption('panelizer[enable]');
     $this->minkContext->uncheckOption('panelizer[custom]');
     $this->minkContext->pressButton('Save');
-
-    $index = array_search($bundle, $this->panelized);
-    if ($index !== FALSE) {
-      array_splice($this->panelized, $index, 1);
-    }
   }
 
   /**

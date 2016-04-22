@@ -22,6 +22,30 @@ class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextI
   public $entities = [];
 
   /**
+   * The Lightning subcontext.
+   *
+   * @var \LightningSubContext
+   */
+  protected $lightning;
+
+  /**
+   * The Mink context.
+   *
+   * @var \Drupal\DrupalExtension\Context\MinkContext
+   */
+  protected $minkContext;
+
+  /**
+   * Pre-scenario hook.
+   *
+   * @BeforeScenario
+   */
+  public function gatherContexts() {
+    $this->lightning = $this->getContext('LightningSubContext');
+    $this->minkContext = $this->getContext('\Drupal\DrupalExtension\Context\MinkContext');
+  }
+
+  /**
    * Ensures the Drupal driver is bootstrapped.
    *
    * @throws \RuntimeException
@@ -120,6 +144,29 @@ class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextI
     else {
       throw new \UnexpectedValueException("No $entity_type entities found.");
     }
+  }
+
+  /**
+   * Visits the current revision of a node.
+   *
+   * @When I visit the current revision
+   */
+  public function visitCurrentNodeRevision() {
+    $this->minkContext->clickLink('Revisions');
+    $this->lightning->clickElementBySelector('td.revision-current:first-child a');
+  }
+
+  /**
+   * Visits a specific revision of a node.
+   *
+   * @param int $n
+   *   The one-based index of the revision.
+   *
+   * @When /^I visit the (\d+)(?:st|nd|rd|th) revision$/
+   */
+  public function visitNthRevision($n) {
+    $this->minkContext->clickLink('Revisions');
+    $this->lightning->clickElementBySelector('main table tr:nth-child(' . $n . ') td:first-child a');
   }
 
 }
