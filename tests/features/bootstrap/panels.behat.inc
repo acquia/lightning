@@ -5,7 +5,6 @@
  * Contains \PanelsSubContext.
  */
 
-use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 

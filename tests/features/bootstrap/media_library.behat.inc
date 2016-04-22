@@ -46,4 +46,32 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
     $this->minkContext->iWaitForAjaxToFinish();
   }
 
+  /**
+   * Asserts that a jQuery UI dialog box is present.
+   *
+   * @param string $expected_title
+   *   (optional) The expected title of the dialog box.
+   *
+   * @throws \UnexpectedValueException
+   *   If the dialog box's expected title does not match its actual title.
+   *
+   * @Then I should see a dialog box
+   * @Then I should see a dialog box titled :expected_title
+   * @Then I should see a dialog box entitled :expected_title
+   */
+  public function assertDialogBox($expected_title = NULL) {
+    $selector = 'body > .ui-dialog';
+
+    $this->assertSession()->elementExists('css', $selector);
+
+    if ($expected_title) {
+      $actual_title = $this->getSession()
+        ->evaluateScript('jQuery("' . $selector . '").dialog("option", "title")');
+
+      if ($actual_title != $expected_title) {
+        throw new \UnexpectedValueException("Expected dialog box to be titled '$expected_title' but it was '$actual_title'.");
+      }
+    }
+  }
+
 }

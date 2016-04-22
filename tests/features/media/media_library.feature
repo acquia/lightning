@@ -5,7 +5,7 @@ Feature: Media library CKEditor widget
     Given I am logged in as a user with the page_creator role
     When I go to "node/add/page"
     And I open the CKEditor media widget
-    Then I should see "Media Library"
+    Then I should see a dialog box entitled "Media Library"
 
   Scenario: Filtering the media library by media type
     Given I am logged in as a user with the page_creator role
