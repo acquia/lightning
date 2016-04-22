@@ -23,7 +23,7 @@ Feature: Panelizer
     # Click IPE Save
     And I save the layout
     And I visit "/foobar"
-    Then I should see "There are currently"
+    Then I should see a "views_block:who_s_online-who_s_online_block" block
     And I cleanup the "/foobar" alias
 
   @javascript
