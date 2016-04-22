@@ -5,7 +5,7 @@ Feature: Media library CKEditor widget
     Given I am logged in as a user with the page_creator role
     When I go to "node/add/page"
     And I wait for AJAX to finish
-    And I execute the "media_library" command in CKEditor "edit-body-0-value"
+    And I execute the "media_library" command in CKEditor
     And I wait for AJAX to finish
     Then I should see "Media Library"
 
@@ -17,7 +17,7 @@ Feature: Media library CKEditor widget
       """
     When I go to "/node/add/page"
     And I wait for AJAX to finish
-    And I execute the "media_library" command in CKEditor "edit-body-0-value"
+    And I execute the "media_library" command in CKEditor
     And I wait for AJAX to finish
     And I select "image" from "lightning-media-bundle"
     And I wait for AJAX to finish
@@ -31,7 +31,7 @@ Feature: Media library CKEditor widget
       """
     When I go to "/node/add/page"
     And I wait for AJAX to finish
-    And I execute the "media_library" command in CKEditor "edit-body-0-value"
+    And I execute the "media_library" command in CKEditor
     And I wait for AJAX to finish
     And I click the ".media-library .library ul.collection-view li:first-child" element
     And I press "Place"

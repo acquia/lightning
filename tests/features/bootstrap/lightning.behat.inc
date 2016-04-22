@@ -7,7 +7,6 @@
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Gherkin\Node\PyStringNode;
-use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
@@ -34,20 +33,6 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   protected $minkContext;
 
   /**
-   * Content type IDs created during a scenario.
-   *
-   * @var string[]
-   */
-  protected $contentTypes = [];
-
-  /**
-   * Media entities created during a scenario.
-   *
-   * @var integer[]
-   */
-  protected $media = [];
-
-  /**
    * Pre-scenario hook.
    *
    * @BeforeScenario
@@ -60,114 +45,6 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   }
 
   /**
-   * Asserts that a CKEditor instance exists.
-   *
-   * @param string $id
-   *   The editor's instance ID in CKEDITOR.instances.
-   *
-   * @throws \Exception
-   *   If the specified CKEditor instance does not exist.
-   *
-   * @Given CKEditor :id exists
-   *
-   * @Then CKEditor :id should exist
-   */
-  public function ckEditorShouldExist($id) {
-    $exists = $this->getSession()
-      ->evaluateScript("CKEDITOR.instances.hasOwnProperty('$id');");
-
-    if ($exists == FALSE) {
-      throw new \Exception("CKEditor '$id' does not exist.");
-    }
-  }
-
-  /**
-   * Puts text or HTML into a CKEditor instance.
-   *
-   * @param string $text
-   *   The text (or HTML) to insert into the editor.
-   * @param string $id
-   *   The editor's instance ID in CKEDITOR.instances.
-   *
-   * @When I put :text into CKEditor :id
-   */
-  public function iPutTextIntoCkEditor($text, $id) {
-    $this->getSession()
-      ->executeScript("CKEDITOR.instances['$id'].insertHtml('$text');");
-  }
-
-  /**
-   * Asserts that a CKEditor's content contains a snippet of text.
-   *
-   * @param string $id
-   *   The editor's instance ID in CKEDITOR.instances.
-   * @param string $text
-   *   The text (or HTML) snippet to look for.
-   *
-   * @throws \Exception
-   *   If the editor doesn't contain the specified text.
-   *
-   * @Then CKEditor :id should contain :text
-   */
-  public function ckEditorShouldContain($id, $text) {
-    $html = $this->getCkEditorContent($id);
-
-    if (strpos($html, $text) == FALSE) {
-      throw new \Exception("CKEditor $id did not contain '$text''.");
-    }
-  }
-
-  /**
-   * Assert that a CKEditor's content matches a regular expression.
-   *
-   * @param string $id
-   *   The editor's instance ID in CKEDITOR.instances.
-   * @param string $expression
-   *   The regular expression to match.
-   *
-   * @throws \Exception
-   *   If the expression does not match.
-   *
-   * @Then CKEditor :id should match :expression
-   */
-  public function ckEditorShouldMatch($id, $expression) {
-    $html = $this->getCkEditorContent($id);
-
-    if (preg_match($expression, $html) == 0) {
-      throw new \Exception("CKEditor $id did not match '$expression'.");
-    }
-  }
-
-  /**
-   * Gets the content of a CKEditor instance.
-   *
-   * @param string $id
-   *   The editor instance ID in CKEDITOR.instances.
-   *
-   * @return string
-   *   The HTML content of the editor.
-   */
-  protected function getCkEditorContent($id) {
-    return $this->getSession()
-      ->evaluateScript("CKEDITOR.instances['$id'].getData();");
-  }
-
-  /**
-   * Executes a CKEditor command.
-   *
-   * @param string $command
-   *   The command ID, as known to CKEditor's API.
-   * @param string $id
-   *   The editor's instance ID in CKEDITOR.instances.
-   *
-   * @When I execute the :command command in CKEditor :id
-   */
-  public function iExecuteTheCommandInCkeditor($command, $id) {
-    $this->getSession()
-      ->evaluateScript("CKEDITOR.instances['$id'].execCommand('$command');");
-  }
-
-  /**
    * Asserts that an element, specified by CSS selector, exists.
    *
    * @param string $selector
@@ -177,44 +54,6 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    */
   public function theElementShouldExist($selector) {
     $this->assertSession()->elementExists('css', $selector);
-  }
-
-  /**
-   * Visits a random entity of a specific type and bundle.
-   *
-   * @param string $entity_type
-   *   The entity type ID.
-   * @param string $bundle
-   *   The bundle ID.
-   *
-   * @When I visit a :entity_type entity of type :bundle
-   */
-  public function visitEntity($entity_type, $bundle) {
-    if ($this->getDriver()->isBootstrapped()) {
-      $bundle_key = \Drupal::entityTypeManager()
-        ->getDefinition($entity_type)
-        ->getKey('bundle');
-
-      $entities = \Drupal::entityQuery($entity_type)
-        ->condition($bundle_key, $bundle)
-        ->execute();
-
-      if ($entities) {
-        $path = \Drupal::entityTypeManager()
-          ->getStorage($entity_type)
-          ->load(reset($entities))
-          ->toUrl()
-          ->getInternalPath();
-
-        $this->visitPath($path);
-      }
-      else {
-        throw new \UnexpectedValueException('No ' . $entity_type . ' entities found.');
-      }
-    }
-    else {
-      throw new \RuntimeException('Drupal is not bootstrapped.');
-    }
   }
 
   /**
@@ -304,46 +143,6 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     $this->minkContext->uncheckOption('panelizer[enable]');
     $this->minkContext->uncheckOption('panelizer[custom]');
     $this->minkContext->pressButton('Save');
-  }
-
-  /**
-   * Creates a content type.
-   *
-   * @param string $id
-   *   The content type ID.
-   *
-   * @Given I have created a :id content type
-   * @Given I have a :id content type
-   * @Given a :id content type
-   *
-   * @When I create a :id content type
-   */
-  public function createContentType($id) {
-    if (!in_array($id, $this->contentTypes)) {
-      $this->visitPath('/admin/structure/types/add');
-
-      $form = $this->getSession()->getPage()->find('css', '[data-drupal-selector="node-type-add-form"]');
-      $form->findField('name')->setValue($id);
-      $form->findField('type')->setValue($id);
-      $form->submit();
-      array_push($this->contentTypes, $id);
-    }
-  }
-
-  /**
-   * Cleans up content types created during a scenario.
-   *
-   * @AfterScenario
-   */
-  public function cleanContentTypes() {
-    foreach ($this->contentTypes as $type) {
-      $this->visitPath('/admin/structure/types/manage/' . $type . '/delete');
-
-      // If we can't access the page, don't bother. We did our due diligence.
-      if ($this->getSession()->getStatusCode() == 200) {
-        $this->minkContext->pressButton('Delete');
-      }
-    }
   }
 
   /**
@@ -448,56 +247,8 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
         'status' => TRUE,
       ]);
     $entity->save();
-    array_push($this->media, $entity);
-  }
 
-  /**
-   * Creates media entities.
-   *
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   A table of entity values.
-   *
-   * @Given media:
-   */
-  public function givenMedia(TableNode $table) {
-    foreach ($table as $row) {
-      // @TODO: Figure out why \Drupal::currentUser()->id() is 0. Then ditch
-      // this hack.
-      $row['uid'] = $this->getUserIdFromDrupalContext();
-
-      $entity = \Drupal::entityTypeManager()->getStorage('media')->create($row);
-      $entity->save();
-      array_push($this->media, $entity);
-    }
-  }
-
-  /**
-   * Returns the uid of the currently logged-in user from the DrupalContext.
-   *
-   * Under certain circumstances (which I don't understand yet),
-   * \Drupal::currentUser() is anonymous even after logging in! If that's the
-   * case, we can pull the uid right out of the DrupalContext using reflection.
-   * This is a naughty hack and should eventually be removed.
-   *
-   * @return int
-   *   The ID of the logged-in user, according to the Drupal context.
-   */
-  protected function getUserIdFromDrupalContext() {
-    $property = (new \ReflectionObject($this->drupalContext))->getProperty('user');
-    $property->setAccessible(TRUE);
-    return $property->getValue($this->drupalContext)->uid;
-  }
-
-  /**
-   * Cleans up any media entities created during a scenario.
-   *
-   * @AfterScenario
-   */
-  public function cleanMedia() {
-    /** @var \Drupal\media_entity\MediaInterface $media */
-    foreach ($this->media as $media) {
-      $media->delete();
-    }
+    array_push($this->getContext('EntitySubContext')->entities, $entity);
   }
 
   /**

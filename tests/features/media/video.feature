@@ -23,7 +23,7 @@ Feature: Video media assets
     Given I am logged in as a user with the page_creator,media_creator roles
     When I go to "/node/add/page"
     And I wait for AJAX to finish
-    And I execute the "media_library" command in CKEditor "edit-body-0-value"
+    And I execute the "media_library" command in CKEditor
     And I wait for AJAX to finish
     And I click "Create Embed"
     And I enter "https://www.youtube.com/watch?v=DyFYUKBEZAg" for "embed_code"
@@ -32,4 +32,4 @@ Feature: Video media assets
     And I press "Place"
     # Wait for the embed to complete.
     And I wait for AJAX to finish
-    Then CKEditor "edit-body-0-value" should match "/data-entity-id=.?[0-9]+.?/"
+    Then CKEditor should match "/data-entity-id=.?[0-9]+.?/"
