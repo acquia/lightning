@@ -19,16 +19,7 @@ Feature: Panelizer
       | title  | path    | moderation_state |
       | Foobar | /foobar | draft            |
     When I visit "/foobar"
-    # Click on IPE Place Content
-    And I click the "a[title='Place Content']" element
-    # And I click the ".ipe-tabs .ipe-tab:nth-child(2) a" element
-    And I wait for AJAX to finish
-    # Click on IPE Lists (Views)
-    And I click the "a[data-category='Lists (Views)']" element
-    And I wait for AJAX to finish
-    # Add Who's Online Block
-    And I click the "a[data-plugin-id='views_block:who_s_online-who_s_online_block']" element
-    And I wait for AJAX to finish
+    And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
     # Click Add on the block form
     And I click the ".ipe-block-plugin-form .js-form-submit" element
     And I wait for AJAX to finish
@@ -51,12 +42,7 @@ Feature: Panelizer
       | type  | info               | body    | uuid                  |
       | basic | Here be dragons... | RAWWWR! | test--here-be-dragons |
     When I visit "/foobar"
-    And I click the "a[title='Place Content']" element
-    And I wait for AJAX to finish
-    And I click the "a.ipe-category[data-category='Custom']" element
-    And I wait for AJAX to finish
-    And I click the "a[data-plugin-id='block_content:test--here-be-dragons']" element
-    And I wait for AJAX to finish
+    And I place the "block_content:test--here-be-dragons" block from the "Custom" category
     And I click the ".ipe-block-plugin-form input[type='submit'][value='Add']" element
     And I wait for AJAX to finish
     And I click the "a[title='Save']" element
@@ -75,16 +61,7 @@ Feature: Panelizer
       | Layout1 | /layout1 | draft            |
       | Layout2 | /layout2 | draft            |
     When I visit "/layout1"
-    # Click on IPE Place Content
-    And I click the "a[title='Place Content']" element
-    # And I click the ".ipe-tabs .ipe-tab:nth-child(2) a" element
-    And I wait for AJAX to finish
-    # Click on IPE Lists (Views)
-    And I click the "a[data-category='Lists (Views)']" element
-    And I wait for AJAX to finish
-    # Add Who's Online Block
-    And I click the "a[data-plugin-id='views_block:who_s_online-who_s_online_block']" element
-    And I wait for AJAX to finish
+    And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
     # Click Add on the block form
     And I click the ".ipe-block-plugin-form .js-form-submit" element
     And I wait for AJAX to finish
@@ -94,4 +71,3 @@ Feature: Panelizer
     Then I should not see "There are currently"
     And I cleanup the "/layout1" alias
     And I cleanup the "/layout2" alias
-

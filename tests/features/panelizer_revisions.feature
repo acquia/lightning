@@ -18,4 +18,3 @@ Feature: Showing the Panels IPE interface on the latest content revision only
     And I click the "main tr:nth-child(2) td:nth-child(1) a" element
     And I should not see a "#panels-ipe-content" element
     And I cleanup the "/foobar" alias
-    And I unpanelize the page node type

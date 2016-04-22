@@ -108,44 +108,6 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   }
 
   /**
-   * Applies Panelizer to a node type.
-   *
-   * @param string $bundle
-   *   The node type ID.
-   *
-   * @Given I have applied Panelizer to the :bundle node type
-   * @Given I have panelized the :bundle node type
-   *
-   * @When I apply Panelizer to the :bundle node type
-   * @When I panelize the :bundle node type
-   */
-  public function panelize($bundle) {
-    $this->minkContext->assertAtPath("admin/structure/types/manage/$bundle/display");
-    $this->minkContext->checkOption('panelizer[enable]');
-    $this->minkContext->checkOption('panelizer[custom]');
-    $this->minkContext->pressButton('Save');
-  }
-
-  /**
-   * Removes Panelizer from a node type.
-   *
-   * @param string $bundle
-   *   The node type ID.
-   *
-   * @Given I have removed Panelizer from the :bundle node type
-   * @Given I have unpanelized the :bundle node type
-   *
-   * @When I remove Panelizer from the :bundle node type
-   * @When I unpanelize the :bundle node type
-   */
-  public function unpanelize($bundle) {
-    $this->minkContext->assertAtPath("admin/structure/types/manage/$bundle/display");
-    $this->minkContext->uncheckOption('panelizer[enable]');
-    $this->minkContext->uncheckOption('panelizer[custom]');
-    $this->minkContext->pressButton('Save');
-  }
-
-  /**
    * Asserts that a role as a set of permissions.
    *
    * @param string $rid
