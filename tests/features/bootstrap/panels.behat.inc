@@ -5,6 +5,7 @@
  * Contains \PanelsSubContext.
  */
 
+use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 
@@ -21,6 +22,11 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
   protected $minkContext;
 
   /**
+   * @var \LightningSubContext
+   */
+  protected $lightning;
+
+  /**
    * Content type IDs that have been panelized during the scenario.
    *
    * @var string[]
@@ -34,6 +40,7 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
    */
   public function gatherContexts() {
     $this->minkContext = $this->getContext('\Drupal\DrupalExtension\Context\MinkContext');
+    $this->lightning = $this->getContext('LightningSubContext');
   }
 
   /**
@@ -101,17 +108,70 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
    * @When I place the :plugin_id block from the :category category
    */
   public function placeBlock($plugin_id, $category) {
-    /** @var \LightningSubContext $context */
-    $context = $this->getContext('LightningSubContext');
-
-    $context->clickElementBySelector('a[title = "Place Content"]');
+    $this->lightning->clickElementBySelector('a[title = "Place Content"]');
     $this->minkContext->iWaitForAjaxToFinish();
 
-    $context->clickElementBySelector('a[data-category = "' . $category . '"]');
+    $this->lightning->clickElementBySelector('a[data-category = "' . $category . '"]');
     $this->minkContext->iWaitForAjaxToFinish();
 
-    $context->clickElementBySelector('a[data-plugin-id = "' . $plugin_id . '"]');
+    $this->lightning->clickElementBySelector('a[data-plugin-id = "' . $plugin_id . '"]');
     $this->minkContext->iWaitForAjaxToFinish();
+
+//    $this->lightning->clickElementBySelector('.ipe-block-plugin-form input[type = "Submit"][value = "Add"]');
+    $this->lightning->clickElementBySelector('.ipe-block-plugin-form .js-form-submit');
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
+  /**
+   * Saves the current Panels layout as a custom layout.
+   *
+   * @When I save the layout
+   */
+  public function saveCustomLayout() {
+    $this->lightning->clickElementBySelector('a[title = "Save"]');
+    $this->minkContext->iWaitForAjaxToFinish();
+
+    $this->lightning->clickElementBySelector('a.panelizer-ipe-save-custom');
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
+  /**
+   * Asserts that a block with a specific plugin ID is present.
+   *
+   * @param string $plugin_id
+   *   The block plugin ID.
+   *
+   * @return \Behat\Mink\Element\Element
+   *   The block element, if found.
+   *
+   * @throws \Behat\Mink\Exception\ElementNotFoundException
+   *   If the block is not found.
+   *
+   * @Then I should see a :plugin_id block
+   */
+  public function assertBlock($plugin_id) {
+    $this->assertSession()->elementExists('css', 'div[data-block-plugin-id = "' . $plugin_id . '"]');
+  }
+
+  /**
+   * Asserts that a block has contextual links.
+   *
+   * @param string $plugin_id
+   *   The block plugin ID.
+   * @param string $link_class
+   *   (optional) The class for a specific contextual link to assert.
+   *
+   * @Then the :plugin_id block should have contextual links
+   * @Then the :plugin_id block should have a :link_class contextual link
+   * @Then I should see a :plugin_id block with contextual links
+   * @Then I should see a :plugin_id block with a :link_class contextual link
+   */
+  public function assertBlockContextualLinks($plugin_id, $link_class = NULL) {
+    $selector = 'div[data-block-plugin-id = "' . $plugin_id . '"] ul.contextual-links';
+    if ($link_class) {
+      $selector .= ' li.' . $link_class;
+    }
+    $this->assertSession()->elementExists('css', $selector);
   }
 
 }

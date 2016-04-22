@@ -20,14 +20,8 @@ Feature: Panelizer
       | Foobar | /foobar | draft            |
     When I visit "/foobar"
     And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
-    # Click Add on the block form
-    And I click the ".ipe-block-plugin-form .js-form-submit" element
-    And I wait for AJAX to finish
     # Click IPE Save
-    And I click the ".ipe-tabs .ipe-tab:nth-child(4) a" element
-    And I wait for AJAX to finish
-    And I click "Save as custom"
-    And I wait for AJAX to finish
+    And I save the layout
     And I visit "/foobar"
     Then I should see "There are currently"
     And I cleanup the "/foobar" alias
@@ -43,14 +37,9 @@ Feature: Panelizer
       | basic | Here be dragons... | RAWWWR! | test--here-be-dragons |
     When I visit "/foobar"
     And I place the "block_content:test--here-be-dragons" block from the "Custom" category
-    And I click the ".ipe-block-plugin-form input[type='submit'][value='Add']" element
-    And I wait for AJAX to finish
-    And I click the "a[title='Save']" element
-    And I wait for AJAX to finish
-    And I click the "a.panelizer-ipe-save-custom" element
-    And I wait for AJAX to finish
+    And I save the layout
     And I reload the page
-    Then I should see a "div[data-block-plugin-id='block_content:test--here-be-dragons'] ul.contextual-links li.quickedit" element
+    Then I should see a "block_content:test--here-be-dragons" block with a "quickedit" contextual link
     And I cleanup the "/foobar" alias
 
   @javascript
@@ -62,9 +51,6 @@ Feature: Panelizer
       | Layout2 | /layout2 | draft            |
     When I visit "/layout1"
     And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
-    # Click Add on the block form
-    And I click the ".ipe-block-plugin-form .js-form-submit" element
-    And I wait for AJAX to finish
     # And visit the second landing page without saving the layout changes to the first
     And I visit "/layout2"
     # I should not see the block placed by the first landing page
