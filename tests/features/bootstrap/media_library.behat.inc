@@ -88,7 +88,7 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
    * @When I filter the media library by type :type
    */
   public function filterLibraryByType($type) {
-    $this->minkContext->selectOption('lightning-media-bundle', 'image');
+    $this->minkContext->selectOption('lightning-media-bundle', $type);
     $this->minkContext->iWaitForAjaxToFinish();
   }
 

@@ -19,13 +19,6 @@ use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 class LightningSubContext extends DrupalSubContextBase implements DrupalSubContextInterface {
 
   /**
-   * The Drupal context.
-   *
-   * @var \Drupal\DrupalExtension\Context\DrupalContext
-   */
-  protected $drupalContext;
-
-  /**
    * The Mink context.
    *
    * @var \Drupal\DrupalExtension\Context\MinkContext
@@ -40,7 +33,6 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   public function gatherContexts(BeforeScenarioScope $scope) {
     $environment = $scope->getEnvironment();
 
-    $this->drupalContext = $environment->getContext('Drupal\DrupalExtension\Context\DrupalContext');
     $this->minkContext = $environment->getContext('Drupal\DrupalExtension\Context\MinkContext');
   }
 
