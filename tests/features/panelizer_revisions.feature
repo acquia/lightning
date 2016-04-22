@@ -11,11 +11,9 @@ Feature: Showing the Panels IPE interface on the latest content revision only
     And I click "Edit draft"
     And I enter "This is the second revision!" for "body[0][value]"
     And I press "Save"
-    And I click "Revisions"
-    And I click the "td.revision-current:nth-child(1) a" element
+    And I visit the current revision
     Then I should see a "#panels-ipe-content" element
-    And I click "Revisions"
-    And I click the "main tr:nth-child(2) td:nth-child(1) a" element
+    And I visit the 2nd revision
     And I should not see a "#panels-ipe-content" element
     And I cleanup the "/foobar" alias
     And I unpanelize the page node type

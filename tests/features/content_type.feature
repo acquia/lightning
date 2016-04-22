@@ -27,14 +27,18 @@ Feature: Lightning Content Types
 
   Scenario: Automatically creating creator and reviewer roles for a content type
     Given I am logged in as a user with the administrator role
-    When I create a foo content type
+    And node_type entities:
+      | type | name |
+      | foo  | foo  |
     And I visit "/admin/people/roles"
     Then I should see "foo Creator"
     And I should see "foo Reviewer"
 
   Scenario: Automatically deleting creator and manager roles for a content type
     Given I am logged in as a user with the administrator role
-    And a foo content type
+    And node_type entities:
+      | type | name |
+      | foo  | foo  |
     When I visit "/admin/structure/types/manage/foo/delete"
     And I press "Delete"
     And I visit "/admin/people/roles"
