@@ -21,6 +21,8 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
   protected $minkContext;
 
   /**
+   * The Lightning subcontext.
+   *
    * @var \LightningSubContext
    */
   protected $lightning;
@@ -116,7 +118,6 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
     $this->lightning->clickElementBySelector('a[data-plugin-id = "' . $plugin_id . '"]');
     $this->minkContext->iWaitForAjaxToFinish();
 
-//    $this->lightning->clickElementBySelector('.ipe-block-plugin-form input[type = "Submit"][value = "Add"]');
     $this->lightning->clickElementBySelector('.ipe-block-plugin-form .js-form-submit');
     $this->minkContext->iWaitForAjaxToFinish();
   }

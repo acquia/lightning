@@ -28,6 +28,11 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
   protected $ckContext;
 
   /**
+   * Selector targeting the jQuery UI dialog box.
+   */
+  const DIALOG_BOX_SELECTOR = 'body > .ui-dialog';
+
+  /**
    * Pre-scenario hook.
    *
    * @BeforeScenario
@@ -38,6 +43,8 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
   }
 
   /**
+   * Opens the CKEditor media widget.
+   *
    * @When I open the CKEditor media widget
    */
   public function openCkEditorMediaWidget() {
@@ -60,13 +67,11 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
    * @Then I should see a dialog box entitled :expected_title
    */
   public function assertDialogBox($expected_title = NULL) {
-    $selector = 'body > .ui-dialog';
-
-    $this->assertSession()->elementExists('css', $selector);
+    $this->assertSession()->elementExists('css', static::DIALOG_BOX_SELECTOR);
 
     if ($expected_title) {
       $actual_title = $this->getSession()
-        ->evaluateScript('jQuery("' . $selector . '").dialog("option", "title")');
+        ->evaluateScript('jQuery("' . static::DIALOG_BOX_SELECTOR . '").children().eq(1).dialog("option", "title")');
 
       if ($actual_title != $expected_title) {
         throw new \UnexpectedValueException("Expected dialog box to be titled '$expected_title' but it was '$actual_title'.");
