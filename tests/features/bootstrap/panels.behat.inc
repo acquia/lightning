@@ -140,16 +140,22 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
    * @param string $plugin_id
    *   The block plugin ID.
    *
-   * @return \Behat\Mink\Element\Element
-   *   The block element, if found.
-   *
-   * @throws \Behat\Mink\Exception\ElementNotFoundException
-   *   If the block is not found.
-   *
    * @Then I should see a :plugin_id block
    */
   public function assertBlock($plugin_id) {
     $this->assertSession()->elementExists('css', 'div[data-block-plugin-id = "' . $plugin_id . '"]');
+  }
+
+  /**
+   * Asserts that a block with a specific plugin ID is not present.
+   *
+   * @param string $plugin_id
+   *   The block plugin ID.
+   *
+   * @Then I should not see a :plugin_id block
+   */
+  public function assertNotBlock($plugin_id) {
+    $this->assertSession()->elementNotExists('css', 'div[data-block-plugin-id = "' . $plugin_id . '"]');
   }
 
   /**

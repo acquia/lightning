@@ -54,6 +54,6 @@ Feature: Panelizer
     # And visit the second landing page without saving the layout changes to the first
     And I visit "/layout2"
     # I should not see the block placed by the first landing page
-    Then I should not see "There are currently"
+    Then I should not see a "views_block:who_s_online-who_s_online_block" block
     And I cleanup the "/layout1" alias
     And I cleanup the "/layout2" alias
