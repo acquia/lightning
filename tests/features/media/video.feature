@@ -22,9 +22,7 @@ Feature: Video media assets
   Scenario: Creating a video in CKEditor from an embed code
     Given I am logged in as a user with the page_creator,media_creator roles
     When I go to "/node/add/page"
-    And I wait for AJAX to finish
-    And I execute the "media_library" command in CKEditor
-    And I wait for AJAX to finish
+    And I open the CKEditor media widget
     And I click "Create Embed"
     And I enter "https://www.youtube.com/watch?v=DyFYUKBEZAg" for "embed_code"
     # Wait for the server to turn the embed code into an entity.

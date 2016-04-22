@@ -133,6 +133,7 @@ class CkEditorSubContext extends DrupalSubContextBase implements DrupalSubContex
    * Returns the first available CKEditor instance ID.
    *
    * @return string|false
+   *   The first CKEditor instance ID, or FALSE if there are no instances.
    */
   protected function getDefaultEditorId() {
     $instances = $this->getInstances();
@@ -143,6 +144,7 @@ class CkEditorSubContext extends DrupalSubContextBase implements DrupalSubContex
    * Returns a list of all CKEditor instance IDs.
    *
    * @return string[]
+   *   The CKEditor instance IDs.
    */
   protected function getInstances() {
     $instances = $this->getSession()
