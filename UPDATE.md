@@ -54,6 +54,9 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+### RC3 to RC4
+* Add ```<br>``` to the Rich Text filter format's list of allowed HTML tags.
+
 ### RC2 to RC3
 There are no manual update steps for this version.
 
