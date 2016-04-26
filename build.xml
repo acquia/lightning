@@ -43,7 +43,7 @@
     <exec command="${npm} run install-libraries" passthru="true" />
 
     <!-- rsync the profile, excluding developer flotsam. -->
-    <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},*.make,node_modules,.travis.yml,vendor" />
+    <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},karma.conf.js,*.make,node_modules,.travis.yml,vendor" />
 
     <!-- JS libraries and contrib modules were copied over by the file sync. -->
     <delete dir="libraries" failonerror="true" />

@@ -169,4 +169,29 @@ class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextI
     $this->lightning->clickElementBySelector('main table tr:nth-child(' . $n . ') td:first-child a');
   }
 
+  /**
+   * Tracks the latest entities of a given type for post-scenario deletion.
+   *
+   * @param string $entity_type
+   *   The entity type ID.
+   * @param string $sort_field
+   *   (optional) The creation time field to sort on. Defaults to 'created'.
+   * @param int $limit
+   *   (optional) The maximum number of entities to track. Defaults to 1.
+   */
+  public function trackNewest($entity_type, $sort_field = 'created', $limit = 1) {
+    $this->ensureBootstrap();
+
+    $entities = \Drupal::entityQuery($entity_type)
+      ->sort($sort_field, 'DESC')
+      ->range(0, $limit)
+      ->execute();
+
+    $entities = \Drupal::entityTypeManager()
+      ->getStorage($entity_type)
+      ->loadMultiple($entities);
+
+    $this->entities = array_merge($this->entities, $entities);
+  }
+
 }

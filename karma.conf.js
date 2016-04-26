@@ -1,7 +1,15 @@
 // Karma configuration
-// Generated on Wed Dec 09 2015 11:43:20 GMT-0500 (EST)
+// Generated on Tue Mar 29 2016 13:32:10 GMT-0400 (EDT)
 
 module.exports = function(config) {
+  function base (script) {
+    return './docroot/profiles/lightning/' + script;
+  }
+
+  function media (script) {
+    return base('modules/lightning_features/lightning_media/' + script);
+  }
+
   config.set({
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -15,23 +23,20 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'node_modules/jquery/dist/jquery.js',
-      // Newer versions of Node install dependencies into node_modules, but older versions
-      // install dependencies into node_modules/DEPENDENT_PACKAGE/node_modules. So we need
-      // to account for both possibilities here, since Travis CI uses older versions of
-      // Node.
-      'node_modules/underscore/underscore.js',
-      'node_modules/backbone/node_modules/underscore/underscore.js',
-      'node_modules/backbone/backbone.js',
-      'node_modules/dropzone/dist/dropzone.js',
-      'node_modules/es6-promise/dist/es6-promise.js',
+      base('libraries/dropzone/dist/min/dropzone.min.js'),
+      'docroot/core/assets/vendor/jquery/jquery.min.js',
+      'docroot/core/assets/vendor/jquery.ui/ui/core-min.js',
+      'docroot/core/assets/vendor/jquery.ui/ui/widget-min.js',
+      'docroot/core/assets/vendor/jquery.ui/ui/tabs-min.js',
+      'docroot/core/assets/vendor/underscore/underscore-min.js',
+      'docroot/core/assets/vendor/backbone/backbone-min.js',
+      base('libraries/backbone.collectionView/dist/backbone.collectionView.min.js'),
+      'node_modules/jasmine-ajax/lib/mock-ajax.js',
       'node_modules/sinon/pkg/sinon.js',
-      'Drupal.js',
-      '../../js/Backend.js',
-      '../../js/EntityGrid.js',
-      '../../js/MediaLibrary.js',
-      '../../js/Uploader.js',
-      '*Spec.js'
+      media('js/LibraryConnector.js'),
+      media('js/models/*.js'),
+      media('js/views/*.js'),
+      media('js/tests/*.js')
     ],
 
 
@@ -79,7 +84,7 @@ module.exports = function(config) {
     singleRun: false,
 
     // Concurrency level
-    // how many browser should be started simultanous
+    // how many browser should be started simultaneous
     concurrency: Infinity
   })
 }

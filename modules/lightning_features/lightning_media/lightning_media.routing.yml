@@ -23,7 +23,7 @@ lightning.media.upload_save:
   defaults:
     _controller: '\Drupal\lightning_media\Controller\UploadController::put'
   requirements:
-    _permission: 'dropzone upload files'
+    _entity_create_access: 'media'
   options:
     parameters:
       file:

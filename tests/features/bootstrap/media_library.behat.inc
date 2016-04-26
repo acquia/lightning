@@ -28,6 +28,13 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
   protected $ckContext;
 
   /**
+   * The Lightning subcontext.
+   *
+   * @var \LightningSubContext
+   */
+  protected $lightning;
+
+  /**
    * Selector targeting the jQuery UI dialog box.
    */
   const DIALOG_BOX_SELECTOR = 'body > .ui-dialog';
@@ -40,6 +47,7 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
   public function gatherContexts() {
     $this->minkContext = $this->getContext('\Drupal\DrupalExtension\Context\MinkContext');
     $this->ckContext = $this->getContext('CkEditorSubContext');
+    $this->lightning = $this->getContext('LightningSubContext');
   }
 
   /**
@@ -88,7 +96,7 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
    * @When I filter the media library by type :type
    */
   public function filterLibraryByType($type) {
-    $this->minkContext->selectOption('lightning-media-bundle', $type);
+    $this->minkContext->selectOption('__bundle', $type);
     $this->minkContext->iWaitForAjaxToFinish();
   }
 
@@ -101,9 +109,54 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
    * @When /^I select the (\d+)(?:st|nd|rd|th) asset in the media library$/
    */
   public function selectMediaLibraryAsset($n) {
-    /** @var \LightningSubContext $context */
-    $context = $this->getContext('LightningSubContext');
-    $context->clickElementBySelector('.media-library .library ul.collection-view li:nth-child(' . $n . ')');
+    $selector = static::DIALOG_BOX_SELECTOR . ' .library ul.collection-view li:nth-child(' . $n . ')';
+    $this->lightning->clickElementBySelector($selector);
+  }
+
+  /**
+   * Uploads a file to the media library.
+   *
+   * @param string $file
+   *   The file path, relative to ../../files.
+   *
+   * @When I upload :file to my media library
+   */
+  public function upload($file) {
+    $session = $this->getSession();
+    $selector = 'document.getElementById("__dropzone_0")';
+
+    // Force the file upload field to be visible so we can attach the file.
+    $session->executeScript($selector . '.style.position = "static"');
+    $session->executeScript($selector . '.style.visibility = "visible"');
+    $session->executeScript($selector . '.style.width = "auto"');
+    $session->executeScript($selector . '.style.height = "auto"');
+    $this->minkContext->attachFileToField('__dropzone_0', __DIR__ . '/../../files/' . $file);
+
+    // Give the upload a second to start...
+    $session->wait(1000, 'UploadView.xhr > 0');
+    // ...and 10 seconds to complete.
+    $session->wait(10000, 'UploadView.xhr === 0');
+
+    $this->minkContext->iWaitForAjaxToFinish();
+    $this->minkContext->assertCheckBox('Save to my media library');
+  }
+
+  /**
+   * Inserts an embed code into the media widget.
+   *
+   * @param string $embed_code
+   *   The embed code.
+   *
+   * @When I enter the embed code :embed_code
+   */
+  public function useEmbedCode($embed_code) {
+    $this->minkContext->fillField('__embed_code', $embed_code);
+    $this->minkContext->iWaitForAjaxToFinish();
+
+    /** @var \EntitySubContext $context */
+    $context = $this->getContext('EntitySubContext');
+    // Track the created entity so that we don't pollute the test site.
+    $context->trackNewest('media');
   }
 
   /**
@@ -117,6 +170,19 @@ class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubCo
     // The Back button and display plugin selection should be hidden.
     $assert->elementNotExists('css', 'form.entity-embed-dialog input[type = "submit"][value = "Back"]');
     $assert->elementNotExists('css', 'form.entity-embed-dialog select[name = "attributes[data-entity-embed-display]"]');
+  }
+
+  /**
+   * Submits the current tab of the media widget.
+   *
+   * @When I submit the media widget
+   */
+  public function submit() {
+    $this->lightning->takeScreenshot('foo');
+    $selector = static::DIALOG_BOX_SELECTOR . ' > .ui-tabs > div[aria-hidden = "false"] footer button';
+
+    $this->lightning->clickElementBySelector($selector);
+    $this->minkContext->iWaitForAjaxToFinish();
   }
 
 }

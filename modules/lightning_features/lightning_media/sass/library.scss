@@ -1,7 +1,7 @@
 @import "compass/utilities/general/clearfix";
 @import "compass/css3";
 
-.media-library {
+.lightning-media {
   .ui-dialog &.ui-dialog-content.ui-widget-content {
     padding: 0;
   }
@@ -25,6 +25,10 @@
 
   .library {
     padding: 0;
+
+    header div {
+      @include inline-block();
+    }
 
     ul.collection-list {
       padding: 0;
@@ -66,6 +70,9 @@
 
   .dropzone {
     padding: 0;
+    font-size: 200%;
+    background: transparent url('../images/upload.png') no-repeat center;
+    background-size: auto 80%;
 
     .dz-preview {
       display: block;
@@ -91,11 +98,13 @@
     }
   }
 
-  .embed-code {
+  .embed {
     textarea {
       width: 100%;
+      padding: 2%;
       min-height: 4em;
       font-size: 150%;
+      box-sizing: border-box;
     }
   }
 }

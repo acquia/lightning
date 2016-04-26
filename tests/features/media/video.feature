@@ -24,10 +24,6 @@ Feature: Video media assets
     When I go to "/node/add/page"
     And I open the CKEditor media widget
     And I click "Create Embed"
-    And I enter "https://www.youtube.com/watch?v=DyFYUKBEZAg" for "embed_code"
-    # Wait for the server to turn the embed code into an entity.
-    And I wait for AJAX to finish
-    And I press "Place"
-    # Wait for the embed to complete.
-    And I wait for AJAX to finish
+    And I enter the embed code "https://www.youtube.com/watch?v=DyFYUKBEZAg"
+    And I submit the media widget
     Then CKEditor should match "/data-entity-id=.?[0-9]+.?/"

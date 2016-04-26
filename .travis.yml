@@ -46,15 +46,13 @@ before_script:
   - cd docroot
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - phantomjs --webdriver=4444 > /dev/null &
-  - cd profiles/lightning
+  - cd ..
 
 script:
-  - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,*/karma.js,libraries,modules/contrib .
+  - cd docroot/profiles/lightning
+  - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,libraries,modules/contrib .
   - behat --strict
-  - cd ./modules/lightning_features/lightning_media/tests/js
-  # TODO: The install step should go into before_script.
-  - npm install > /dev/null
-  - npm test
+  - cd $TRAVIS_BUILD_DIR && npm test
 
 matrix:
   fast_finish: true

@@ -1,31 +1,18 @@
 {
-  "name": "lightning",
-  "version": "8.1.0-rc1",
-  "description": "The best of Drupal, curated by Acquia.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "karma start --single-run",
     "install-libraries": "npm install && bower install"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/acquia/lightning.git"
-  },
-  "contributors": [
-    {
-      "name": "Adam Hoenich",
-      "email": "adam.hoenich@acquia.com"
-    },
-    {
-      "name": "Adam Balsam",
-      "email": "adam.balsam@acquia.com"
-    }
-  ],
-  "license": "GPL-2.0+",
-  "bugs": {
-    "url": "https://github.com/acquia/lightning/issues"
-  },
-  "homepage": "https://github.com/acquia/lightning#readme",
   "dependencies": {
     "bower": "1.7.x"
+  },
+  "devDependencies": {
+    "jasmine": "^2.4.1",
+    "jasmine-ajax": "^3.2.0",
+    "karma": "^0.13.22",
+    "karma-jasmine": "^0.3.8",
+    "karma-phantomjs-launcher": "^1.0.0",
+    "phantomjs-prebuilt": "^2.1.7",
+    "sinon": "^1.17.3"
   }
 }
