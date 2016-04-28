@@ -12,6 +12,7 @@ projects[lightning_features][download][branch] = "7.x-1.x"
 projects[assemble][type] = "module"
 projects[assemble][subdir] = "contrib"
 
+projects[curate][version] = "1.0"
 projects[curate][type] = "module"
 projects[curate][subdir] = "contrib"
 
