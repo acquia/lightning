@@ -19,7 +19,7 @@ function lightning_form_install_configure_form_alter(&$form, $form_state) {
   // Add 'Lightning' fieldset and options.
   $form['lightning'] = array(
     '#type' => 'fieldset',
-    '#title' => t('Lightning'),
+    '#title' => st('Lightning'),
     '#weight' => -5,
     '#collapsible' => FALSE,
     '#tree' => FALSE,
@@ -28,9 +28,12 @@ function lightning_form_install_configure_form_alter(&$form, $form_state) {
   // Checkbox to enable Lightning options.
   $form['lightning']['extensions'] = array(
     '#type' => 'checkboxes',
-    '#title' => 'Enable Extensions',
-    '#description' => 'Optionally install extra features',
-    '#options' => array('lightning_demo' => 'Demo Content', 'lightning_devel' => 'Developer Tools'),
+    '#title' => st('Enable Extensions'),
+    '#description' => st('Optionally install extra features'),
+    '#options' => array(
+      'lightning_demo' => st('Demo Content'),
+      'lightning_devel' => st('Developer Tools'),
+    ),
     '#weight' => 0,
   );
 
