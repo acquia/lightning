@@ -10,6 +10,14 @@
   CKEDITOR.plugins.add('media_library', {
     requires: 'drupalentity',
 
+    afterInit: function (editor) {
+      _.each(editor.config.mediaLibrary.buttons, function (button) {
+        // Trick Entity Embed into thinking this button was defined by, well,
+        // Entity Embed.
+        editor.config.DrupalEntity_buttons[button.id] = button;
+      });
+    },
+
     beforeInit: function (editor) {
       _.each(editor.config.mediaLibrary.buttons, function (button) {
         editor.ui.addButton(button.id, {
