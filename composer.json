@@ -23,15 +23,14 @@
     ],
     "scripts": {
         "post-install-cmd": [
-            "PhantomInstaller\\Installer::installPhantomJS",
-            "./bin/phing"
-        ],
-        "post-update-cmd": [
-            "./bin/phing push"
+            "PhantomInstaller\\Installer::installPhantomJS"
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
     },
     "extra": {
+        "asset-installer-paths": {
+          "npm-asset-library": "libraries"
+        },
         "installer-paths": {
             "docroot/core": [
                 "drupal/core"
@@ -95,6 +94,11 @@
         "drupal/services": "8.4.0-alpha3",
         "drupal-composer/drupal-scaffold": "^1.2",
         "drush/drush": "dev-master",
-        "drupal/pathauto": "^8.1.0"
+        "drupal/pathauto": "^8.1.0",
+        "fxp/composer-asset-plugin": "~1.1",
+        "npm-asset/bb-collection-view": "1.0.6",
+        "npm-asset/dropzone": "4.3.0",
+        "npm-asset/es6-promise": "3.2.1",
+        "npm-asset/jquery-appear-poetic": "0.3.6"
     }
 }
