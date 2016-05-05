@@ -11,7 +11,11 @@ use Drupal\workbench_moderation\Entity\ModerationState;
  * Implements hook_form_FORM_ID_alter().
  */
 function lightning_workflow_form_node_form_alter(array &$form, FormStateInterface $form_state) {
-  if (isset($form['moderation_state'])) {
+  $form_object = $form_state->getFormObject();
+  /** @var \Drupal\workbench_moderation\ModerationInformation $mod_info */
+  $mod_info = \Drupal::service('workbench_moderation.moderation_information');
+
+  if (isset($form['moderation_state']) && $mod_info->isModeratedEntityForm($form_object)) {
     // Allow the user to choose the moderation state.
     $form['moderation_state']['widget'][0]['#access'] = TRUE;
 
