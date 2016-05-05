@@ -507,7 +507,7 @@ function lightning_update_8001() {
  */
 function lightning_update_8002() {
   foreach (NodeType::loadMultiple() as $node_type) {
-    lightning_node_type_insert($node_type);
+    lightning_core_node_type_insert($node_type);
   }
 }
 
@@ -516,4 +516,32 @@ function lightning_update_8002() {
  */
 function lightning_update_8003() {
   \Drupal::service('module_installer')->install(['lightning_core']);
+}
+
+/**
+ * Enables Entity API.
+ */
+function lightning_update_8004() {
+  require_once __DIR__ . '/.entity-helper.php';
+  \Drupal::service('module_installer')->install(['entity']);
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function lightning_update_dependencies() {
+  return [
+    'lightning' => [
+      // Lightning 8003 must run before Lightning 8002.
+      8002 => [
+        'lightning' => 8003,
+      ],
+    ],
+    'media_entity' => [
+      // Lightning 8004 must run before Media Entity 8002.
+      8002 => [
+        'lightning' => 8004,
+      ],
+    ],
+  ];
 }

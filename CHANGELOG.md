@@ -1,3 +1,14 @@
+## Release Candidate 4 (RC4)
+* Drupal core updated to 8.1.1.
+* Contrib modules updated to latest releases.
+* The CKEditor media library widget was completely refactored. (Issue #2713695)
+* The Rich Text input format now allows BR tags. (Issue #2693793)
+* Under some circumstances, the CKEditor media library widget would trigger an
+  AJAX error. (Issue #2717403)
+* Lightning Layout's README contained incorrect information. (Issue #2711975)
+* Resolved a warning about Options in lightning_workflow_form_node_form_alter
+  (Issue #2703077)
+
 ## Release Candidate 3 (RC3)
 * Update core to 8.1.0
 * Update all contrib modules to their latest releases

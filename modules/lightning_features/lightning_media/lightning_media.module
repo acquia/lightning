@@ -102,3 +102,12 @@ function lightning_media_form_entity_embed_dialog_alter(array &$form, FormStateI
     $form['attributes']['data-entity-embed-display']['#access'] = FALSE;
   }
 }
+
+/**
+ * Implements hook_js_settings_alter().
+ */
+function lightning_media_js_settings_alter(array &$settings, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {
+  if (empty($settings['ajax'])) {
+    $settings['ajax'] = [];
+  }
+}
