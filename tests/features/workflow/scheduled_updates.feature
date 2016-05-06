@@ -22,7 +22,6 @@ Feature: Scheduled updates to content
     And I visit "/user/logout"
     And I visit "/foobar"
     Then I should not see "Access denied"
-    And I cleanup the "/foobar" alias
 
   Scenario: Schedule and execute publication of node through bulk scheduled updates
     Given I am logged in as a user with the administrator role
@@ -39,4 +38,3 @@ Feature: Scheduled updates to content
     And I visit "/user/logout"
     And I visit "/foobar"
     Then I should not see "Access denied"
-    And I cleanup the "/foobar" alias

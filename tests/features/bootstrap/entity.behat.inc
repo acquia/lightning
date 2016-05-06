@@ -6,8 +6,13 @@
  */
 
 use Behat\Gherkin\Node\TableNode;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
+use Drupal\DrupalExtension\Hook\Scope\EntityScope;
+use Drupal\node\Entity\Node;
+use Drupal\taxonomy\Entity\Term;
+use Drupal\user\Entity\User;
 
 /**
  * Subcontext for creating and cleaning up entities of any type.
@@ -15,11 +20,11 @@ use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextInterface {
 
   /**
-   * Entities created during the scenario.
+   * Entities created during the scenario, organized by type.
    *
-   * @var \Drupal\Core\Entity\EntityInterface[]
+   * @var array
    */
-  public $entities = [];
+  protected $entities = [];
 
   /**
    * The Lightning subcontext.
@@ -77,8 +82,58 @@ class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextI
 
       $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->create($row);
       $entity->save();
-      array_push($this->entities, $entity);
+      $this->queueEntity($entity);
     }
+  }
+
+  /**
+   * Queues a node to be deleted at the end of the scenario.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\EntityScope $scope
+   *   The hook scope.
+   *
+   * @afterNodeCreate
+   */
+  public function queueNode(EntityScope $scope) {
+    $node = Node::load($scope->getEntity()->nid);
+    $this->queueEntity($node);
+  }
+
+  /**
+   * Queues a taxonomy term to be deleted at the end of the scenario.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\EntityScope $scope
+   *   The hook scope.
+   *
+   * @afterTermCreate
+   */
+  public function queueTerm(EntityScope $scope) {
+    $term = Term::load($scope->getEntity()->tid);
+    $this->queueEntity($term);
+  }
+
+  /**
+   * Queues a user to be deleted at the end of the scenario.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\EntityScope $scope
+   *   The hook scope.
+   *
+   * @afterUserCreate
+   */
+  public function queueUser(EntityScope $scope) {
+    $user = User::load($scope->getEntity()->uid);
+    $this->queueEntity($user);
+  }
+
+  /**
+   * Queues an entity to be deleted at the end of the scenario.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to queue.
+   */
+  public function queueEntity(EntityInterface $entity) {
+    $entity_type = $entity->getEntityTypeId();
+    $this->entities[$entity_type][] = $entity;
   }
 
   /**
@@ -87,8 +142,18 @@ class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextI
    * @AfterScenario
    */
   public function cleanEntities() {
-    foreach ($this->entities as $entity) {
-      $entity->delete();
+    foreach ($this->entities as $entity_type => $entities) {
+      /** @var \Drupal\Core\Entity\EntityInterface $entity */
+      foreach ($entities as $entity) {
+        // Clean up the entity's alias, if there is one.
+        $path = '/' . $entity->toUrl()->getInternalPath();
+        $alias = \Drupal::service('path.alias_manager')->getAliasByPath($path);
+        if ($alias != $path) {
+          \Drupal::service('path.alias_storage')->delete(['alias' => $alias]);
+        }
+
+        $entity->delete();
+      }
     }
   }
 
@@ -191,7 +256,7 @@ class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextI
       ->getStorage($entity_type)
       ->loadMultiple($entities);
 
-    $this->entities = array_merge($this->entities, $entities);
+    array_walk($entities, [$this, 'queueEntity']);
   }
 
 }

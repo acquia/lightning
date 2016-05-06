@@ -10,7 +10,6 @@ Feature: Panelizer
     Then I should see a "#panels-ipe-content" element
     And I should not see a ".field--name-uid" element
     And I should not see a ".field--name-created" element
-    And I cleanup the "/foobar" alias
 
   @javascript
   Scenario: One-off changes can be made to Landing Pages using the IPE out of the box.
@@ -24,7 +23,6 @@ Feature: Panelizer
     And I save the layout
     And I visit "/foobar"
     Then I should see a "views_block:who_s_online-who_s_online_block" block
-    And I cleanup the "/foobar" alias
 
   @javascript
   Scenario: Quick-editing custom blocks in an IPE layout
@@ -40,7 +38,6 @@ Feature: Panelizer
     And I save the layout
     And I reload the page
     Then I should see a "block_content:test--here-be-dragons" block with a "quickedit" contextual link
-    And I cleanup the "/foobar" alias
 
   @javascript
   Scenario: Editing layouts does not affect other layouts if the user has not saved the edited layout as default
@@ -55,5 +52,3 @@ Feature: Panelizer
     And I visit "/layout2"
     # I should not see the block placed by the first landing page
     Then I should not see a "views_block:who_s_online-who_s_online_block" block
-    And I cleanup the "/layout1" alias
-    And I cleanup the "/layout2" alias

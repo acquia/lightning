@@ -9,7 +9,6 @@ Feature: Workflow moderation states
       | Moderation Test 1 | /mod-1 | needs_review     |
     When I go to "/mod-1"
     Then the response status code should be 403
-    And I cleanup the "/mod-1" alias
 
   Scenario: Users with permission to transition content between moderation states should be able to see content in an unpublished, non-draft state.
     Given I am logged in as a user with the "view any unpublished content" permission
@@ -18,7 +17,6 @@ Feature: Workflow moderation states
       | Moderation Test 2 | /mod-2 | needs_review     |
     When I visit "/mod-2"
     Then the response status code should be 200
-    And I cleanup the "/mod-2" alias
 
   Scenario: Publishing an entity by transitioning it to a published state
     Given I am logged in as a user with the "view any unpublished content,use draft_needs_review transition,use needs_review_published transition,create page content,edit any page content,create url aliases" permissions
@@ -32,7 +30,6 @@ Feature: Workflow moderation states
     And I visit "/user/logout"
     And I visit "/mod-3"
     Then the response status code should be 200
-    And I cleanup the "/mod-3" alias
 
   Scenario: Transitioning published content to an unpublished state
     Given I am logged in as a user with the "use draft_published transition,use published_archived transition,create page content,edit any page content,create url aliases" permissions
@@ -46,7 +43,6 @@ Feature: Workflow moderation states
     And I visit "/user/logout"
     And I go to "/mod-4"
     Then the response status code should be 403
-    And I cleanup the "/mod-4" alias
 
   Scenario: Filtering content by moderation state
     Given I am logged in as a user with the "access content overview" permission

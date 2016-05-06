@@ -15,5 +15,4 @@ Feature: Showing the Panels IPE interface on the latest content revision only
     Then I should see a "#panels-ipe-content" element
     And I visit the 2nd revision
     And I should not see a "#panels-ipe-content" element
-    And I cleanup the "/foobar" alias
     And I unpanelize the page node type
