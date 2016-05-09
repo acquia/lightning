@@ -2,9 +2,11 @@ api = 2
 core = 7.x
 
 ; Lightning Features
-projects[lightning_features][version] = "1.0-beta9"
+projects[lightning_features][version] = "1.x-dev"
 projects[lightning_features][type] = "module"
 projects[lightning_features][subdir] = "contrib"
+projects[lightning_features][download][type] = "git"
+projects[lightning_features][download][branch] = "7.x-1.x"
 
 ; Lightning Manifests
 projects[assemble][type] = "module"
