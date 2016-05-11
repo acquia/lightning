@@ -22,12 +22,12 @@ The current version of media includes the following functionality:
   supported:
   * Tweets
   * Instagram posts
-  * YouTube videos
+  * Videos (YouTube and Vimeo supported out of the box)
   * Images
 * Drag-and-drop image uploads
 * Ability to create new media through the media library (/media/add)
-* Ability to embed tweets, Instagrams, and YouTube videos directly into CKEditor
-  from an embed code
+* Ability to embed tweets, Instagrams, and YouTube/Vimeo videos directly into
+  CKEditor by pasting the video URL
 
 ## Layout
 Lightning includes the Panelizer module, which allows you to configure the

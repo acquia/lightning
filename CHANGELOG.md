@@ -1,3 +1,9 @@
+## Release Candidate 5 (RC5)
+* The Media  Entity Embeddable Video module has been deprecated and is replaced
+  by Video Embed Field in this release. (Issue #2700399)
+* Lightning now ships with the stable release of Drush 9 (currently alpha1).
+  This fixes dependency conflicts with the Lightning installer.
+
 ## Release Candidate 4 (RC4)
 * Drupal core updated to 8.1.1.
 * Contrib modules updated to latest releases.
