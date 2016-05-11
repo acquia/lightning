@@ -1,0 +1,70 @@
+<?php
+
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\media_entity\Entity\MediaBundle;
+use Drupal\video_embed_media\Plugin\MediaEntity\Type\VideoEmbedField;
+
+/**
+ * Installs video_embed_media and updates display settings for videos.
+ */
+function lightning_media_video_update_8001() {
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
+  $module_installer = \Drupal::service('module_installer');
+  // VEF will migrate the video media bundle, but not its display configuration.
+  $module_installer->install(['video_embed_media']);
+
+  // Migrate the form display for the video bundle.
+  /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
+  $form_display = EntityFormDisplay::load('media.video.default');
+  if ($form_display) {
+    $old_component = $form_display->getComponent('embed_code');
+    $form_display
+      ->removeComponent('field_embed_code')
+      ->setComponent(VideoEmbedField::VIDEO_EMBED_FIELD_DEFAULT_NAME, [
+        'type' => 'video_embed_field_textfield',
+        'weight' => $old_component['weight'],
+        'settings' => array(),
+        'third_party_settings' => array(),
+      ])
+      ->save();
+  }
+
+  // Migrate the "live" view displays for the video bundle.
+  foreach (['default', 'embedded'] as $view_display) {
+    /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $view_display */
+    $view_display = EntityViewDisplay::load('media.video.' . $view_display);
+    if ($view_display) {
+      $old_component = $form_display->getComponent('embed_code');
+      $view_display
+        ->removeComponent('field_embed_code')
+        ->setComponent(VideoEmbedField::VIDEO_EMBED_FIELD_DEFAULT_NAME, [
+          'type' => 'video_embed_field_video',
+          'weight' => $old_component['weight'],
+          'label' => $old_component['label'],
+          'settings' => [
+            'responsive' => TRUE,
+            'width' => 854,
+            'height' => 480,
+            'autoplay' => TRUE,
+          ],
+          'third_party_settings' => array(),
+        ])
+        ->save();
+    }
+  }
+
+  // Reconfigure the video media bundle.
+  MediaBundle::load('video')
+    ->set('type_configuration', [
+      'source_field' => VideoEmbedField::VIDEO_EMBED_FIELD_DEFAULT_NAME,
+    ])
+    ->save();
+
+  // Delete the old embed code field.
+  FieldConfig::load('media.video.embed_code')->delete();
+
+  // Don't need MEEV anymore!
+  $module_installer->uninstall(['media_entity_embeddable_video']);
+}

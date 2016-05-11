@@ -10,9 +10,9 @@ Feature: Video media assets
     And I should see "Save to my media library"
 
   Scenario: Viewing a video as an anonymous user
-    Given video media from embed code:
+    Given video from embed code:
     """
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/ktCgVopf7D0" frameborder="0" allowfullscreen></iframe>
+    https://www.youtube.com/watch?v=ktCgVopf7D0
     """
     And I am an anonymous user
     When I visit a media entity of type video

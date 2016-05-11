@@ -2,11 +2,13 @@ langcode: en
 status: true
 dependencies:
   config:
-    - field.field.media.video.embed_code
     - field.field.media.video.field_media_in_library
+    - field.field.media.video.field_media_video_embed_field
     - media_entity.bundle.video
+  module:
+    - video_embed_field
 _core:
-  default_config_hash: TuL6N3UZDVYtnifHWZKegBqm44qHTIKJ1IIqtNPBTpY
+  default_config_hash: e8NYyWWsXE7BVgVLdTEBjI1rcoU5UiqPMx12OyOq0ec
 id: media.video.default
 targetEntityType: media
 bundle: video
@@ -17,18 +19,16 @@ content:
     weight: 4
     settings: {  }
     third_party_settings: {  }
-  embed_code:
-    type: string_textarea
-    weight: 1
-    settings:
-      rows: 5
-      placeholder: ''
-    third_party_settings: {  }
   field_media_in_library:
     type: boolean_checkbox
     weight: 2
     settings:
       display_label: true
+    third_party_settings: {  }
+  field_media_video_embed_field:
+    type: video_embed_field_textfield
+    weight: 1
+    settings: {  }
     third_party_settings: {  }
   name:
     type: string_textfield

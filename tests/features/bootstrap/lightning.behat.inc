@@ -157,24 +157,40 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   }
 
   /**
+   * Creates a video entity from an embed code.
+   *
+   * @param \Behat\Gherkin\Node\PyStringNode $embed_code
+   *   The embed code.
+   *
+   * @Given video from embed code:
+   *
+   * @When I create a video from embed code:
+   */
+  public function videoFromEmbedCode(PyStringNode $embed_code) {
+    $this->createMediaFromEmbedCode('video', $embed_code, 'field_media_video_embed_field');
+  }
+
+  /**
    * Creates a media asset from an embed code.
    *
    * @param string $bundle
    *   The media bundle ID.
    * @param \Behat\Gherkin\Node\PyStringNode $embed_code
    *   The embed code.
+   * @param string $field
+   *   (optional) The embed code field. Defaults to embed_code.
    *
    * @Given :bundle media from embed code:
    *
    * @When I create :bundle media from embed code:
    */
-  public function createMediaFromEmbedCode($bundle, PyStringNode $embed_code) {
+  public function createMediaFromEmbedCode($bundle, PyStringNode $embed_code, $field = 'embed_code') {
     $entity = \Drupal::entityTypeManager()
       ->getStorage('media')
       ->create([
         'bundle' => $bundle,
         'name' => $this->getRandom()->string(),
-        'embed_code' => (string) $embed_code,
+        $field => (string) $embed_code,
         'field_media_in_library' => TRUE,
         'status' => TRUE,
       ]);

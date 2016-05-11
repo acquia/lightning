@@ -10,7 +10,7 @@ use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\TypedData\Plugin\DataType\StringData;
 use Drupal\Core\TypedData\TypedDataManagerInterface;
 use Drupal\media_entity\Entity\Media;
-use Drupal\media_entity_embeddable_video\VideoProviderManager;
+use Drupal\video_embed_field\ProviderManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +37,7 @@ class EmbedCodeController extends EntityCrudController {
   /**
    * The video provider plugin manager.
    *
-   * @var \Drupal\media_entity_embeddable_video\VideoProviderManager
+   * @var \Drupal\video_embed_field\ProviderManagerInterface
    */
   protected $videoProviderManager;
 
@@ -54,10 +54,10 @@ class EmbedCodeController extends EntityCrudController {
    *   The typed data manager.
    * @param \Drupal\Core\Render\AttachmentsResponseProcessorInterface $attachments_processor
    *   The attachments processor for AJAX responses.
-   * @param \Drupal\media_entity_embeddable_video\VideoProviderManager $video_provider_manager
+   * @param \Drupal\video_embed_field\ProviderManagerInterface $video_provider_manager
    *   The video provider plugin manager.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, RendererInterface $renderer, TypedDataManagerInterface $typed_data_manager, AttachmentsResponseProcessorInterface $attachments_processor, VideoProviderManager $video_provider_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user, RendererInterface $renderer, TypedDataManagerInterface $typed_data_manager, AttachmentsResponseProcessorInterface $attachments_processor, ProviderManagerInterface $video_provider_manager) {
     parent::__construct($entity_type_manager, $current_user, $renderer);
     $this->typedDataManager = $typed_data_manager;
     $this->attachmentsProcessor = $attachments_processor;
@@ -74,7 +74,7 @@ class EmbedCodeController extends EntityCrudController {
       $container->get('renderer'),
       $container->get('typed_data_manager'),
       $container->get('ajax_response.attachments_processor'),
-      $container->get('plugin.manager.media_entity_embeddable_video.provider')
+      $container->get('video_embed_field.provider_manager')
     );
   }
 
@@ -87,8 +87,10 @@ class EmbedCodeController extends EntityCrudController {
     if ($request->request->has('embed_code')) {
       $embed_code = $request->request->get('embed_code');
 
+      $field = 'embed_code';
       if ($provider = $this->isVideo($embed_code)) {
         $bundle = 'video';
+        $field = 'field_media_video_embed_field';
       }
       elseif ($this->isTweet($embed_code)) {
         $bundle = 'tweet';
@@ -103,7 +105,7 @@ class EmbedCodeController extends EntityCrudController {
           'name' => 'TODO',
           'uid' => $this->currentUser()->id(),
           'status' => TRUE,
-          'embed_code' => $embed_code,
+          $field => $embed_code,
         ]);
         $entity->save();
 
@@ -136,16 +138,16 @@ class EmbedCodeController extends EntityCrudController {
    * Checks if a string is a valid video embed code.
    *
    * The input is considered a valid video embed code if it can be handled by
-   * one of Media Entity Embeddable Video's providers.
+   * one of Video Embed Fields's providers.
    *
    * @param string $embed_code
    *   The embed code to check.
    *
-   * @return \Drupal\media_entity_embeddable_video\VideoProviderInterface|false
+   * @return \Drupal\video_embed_field\ProviderPluginInterface|bool
    *   The video provider if $embed_code is a valid embed code; FALSE otherwise.
    */
   protected function isVideo($embed_code) {
-    return $this->videoProviderManager->getProviderByEmbedCode($embed_code);
+    return $this->videoProviderManager->loadProviderFromInput($embed_code);
   }
 
   /**

@@ -20,7 +20,7 @@ Feature: Responsibility-based user roles for creating and managing media assets
   Scenario: Creating media as a media creator
     Given I am logged in as a user with the media_creator role
     And media entities:
-      | bundle | name          | embed_code                                  | status |
+      | bundle | name          | field_media_video_embed_field               | status |
       | video  | Steven Wright | https://www.youtube.com/watch?v=9Mz3EWJGGH0 | 1      |
     When I visit "/admin/content/media"
     And I click "Steven Wright"
@@ -32,7 +32,7 @@ Feature: Responsibility-based user roles for creating and managing media assets
   Scenario: Users with the Media Manager role can edit media created by any other user
     Given I am logged in as a user with the media_creator role
     And media entities:
-      | bundle | name           | embed_code                                  | status |
+      | bundle | name           | field_media_video_embed_field               | status |
       | video  | FunFunFunction | https://www.youtube.com/watch?v=UD2dZw9iHCc | 1      |
     And users:
       | name | roles         | pass |

@@ -1,4 +1,4 @@
-@lightning @lightning_media @api
+@lightning @media @api
   Feature: Image media assets
     A media asset representing a locally hosted image.
 

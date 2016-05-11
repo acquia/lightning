@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d3b93f092e6f43cbc40ed2729e9201de",
-    "content-hash": "25503fd32613e48bb2b590396f17b97a",
+    "hash": "799f2574c2e4e9dc7e7f7ca95fe26ab0",
+    "content-hash": "bb7dcee732965031b21836ddfef7e57d",
     "packages": [
         {
             "name": "codegyre/robo",
@@ -1314,41 +1314,6 @@
             "time": "2016-05-01 15:23:10"
         },
         {
-            "name": "drupal/media_entity_embeddable_video",
-            "version": "8.1.0-beta2",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupal.org/project/media_entity_embeddable_video.git",
-                "reference": "f7e51c2cccd875e1fd09d018c11fd50c93a71507"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_entity_embeddable_video-8.x-1.0-beta2.zip",
-                "reference": null,
-                "shasum": null
-            },
-            "require": {
-                "drupal/core": "8.*",
-                "drupal/media_entity": "8.*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-8.x-1.x": "8.1.x-dev"
-                }
-            },
-            "notification-url": "https://packagist.drupal-composer.org/downloads/",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "description": "Media entity embeddable vidoe.",
-            "homepage": "http://drupal.org/project/media_entity_embeddable_video",
-            "keywords": [
-                "Drupal"
-            ],
-            "time": "2015-12-24 15:02:07"
-        },
-        {
             "name": "drupal/media_entity_image",
             "version": "8.1.0",
             "source": {
@@ -1762,6 +1727,52 @@
             "description": "Provides a user interface for the Token API and some missing core tokens.",
             "homepage": "https://www.drupal.org/project/token",
             "time": "2016-01-21 08:02:24"
+        },
+        {
+            "name": "drupal/video_embed_field",
+            "version": "8.1.0-rc8",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/video_embed_field",
+                "reference": "4c01b410084ff35ff3995dba2d3c5dd878544e9e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/video_embed_field-8.x-1.0-rc8.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "drupal/core": "8.*",
+                "drupal/field": "8.*"
+            },
+            "replace": {
+                "drupal/video_embed_media": "self.version",
+                "drupal/video_embed_wysiwyg": "self.version"
+            },
+            "suggest": {
+                "drupal/ckeditor": "Required by drupal/video_embed_wysiwyg",
+                "drupal/core": "Required by drupal/video_embed_media, drupal/video_embed_wysiwyg",
+                "drupal/field": "Required by drupal/video_embed_wysiwyg",
+                "drupal/media_entity": "Required by drupal/video_embed_media"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "package": "Field types",
+                    "version": "8.x-1.x"
+                },
+                "branch-alias": {
+                    "dev-8.x-1.x": "8.1.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.drupal-composer.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "A field type for displaying videos from 3rd party providers such as YouTube and Vimeo.",
+            "homepage": "https://www.drupal.org/project/video_embed_field",
+            "time": "2016-04-29 11:04:49"
         },
         {
             "name": "drupal/workbench_moderation",

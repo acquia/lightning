@@ -9,7 +9,7 @@ Feature: Media library CKEditor widget
 
   Scenario: Filtering the media library by media type
     Given I am logged in as a user with the page_creator role
-    And video media from embed code:
+    And video from embed code:
       """
       https://www.youtube.com/watch?v=MTRbm570AHk
       """
@@ -20,7 +20,7 @@ Feature: Media library CKEditor widget
 
   Scenario: Displaying the entity embed dialog box when placing a media entity
     Given I am logged in as a user with the page_creator role
-    And video media from embed code:
+    And video from embed code:
       """
       https://www.youtube.com/watch?v=sGUNPMPrxvA
       """
