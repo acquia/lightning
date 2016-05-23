@@ -8,6 +8,7 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\media_entity\MediaBundleInterface;
 use Drupal\services\ServiceEndpointInterface;
 use Drupal\views\ViewEntityInterface;
+use Drupal\Core\Extension\ExtensionDiscovery;
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
@@ -66,22 +67,39 @@ function lightning_media_view_access(ViewEntityInterface $view, $operation, Acco
  */
 function lightning_media_library_info_alter(array &$libraries, $extension) {
   if ($extension == 'lightning_media') {
-    $root = '/' . \Drupal::moduleHandler()->getModule('lightning')->getPath();
+    // ModuleHandler::getModule() returns data only for installed
+    // modules. This is fine for installed profiles but not for inherited
+    // profiles (the base profile is not installed).
+    $listing = new ExtensionDiscovery(\Drupal::root());
+    $profiles = $listing->scan('profile');
 
-    foreach ($libraries as $key => $library) {
-      if ($key == 'media_library') {
-        continue;
-      }
+    // Get the path mappings of all profiles.
+    $profile_directories = array_map(function ($profile) {
+      return $profile->getPath();
+    }, $profiles);
 
-      foreach ($library['js'] as $path => $info) {
-        $libraries[$key]['js'][$root . '/' . $path] = $info;
-        unset($libraries[$key]['js'][$path]);
-      }
+    if (isset($profile_directories['lightning'])) {
+      $root = '/' . $profile_directories['lightning'];
 
-      foreach ($library['css'] as $group => $files) {
-        foreach ($files as $path => $info) {
-          $libraries[$key]['css'][$group][$root . '/' . $path] = $info;
-          unset($libraries[$key]['css'][$group][$path]);
+      foreach ($libraries as $key => $library) {
+        if ($key == 'media_library') {
+          continue;
+        }
+
+        if (isset($library['js'])) {
+          foreach ($library['js'] as $path => $info) {
+            $libraries[$key]['js'][$root . '/' . $path] = $info;
+            unset($libraries[$key]['js'][$path]);
+          }
+        }
+
+        if (isset($library['css'])) {
+          foreach ($library['css'] as $group => $files) {
+            foreach ($files as $path => $info) {
+              $libraries[$key]['css'][$group][$root . '/' . $path] = $info;
+              unset($libraries[$key]['css'][$group][$path]);
+            }
+          }
         }
       }
     }
