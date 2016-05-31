@@ -25,6 +25,15 @@ Feature: Lightning Content Types
     When I visit "/block/add"
     Then I should see a "Body" element
 
+  Scenario: Ensure the roles configuration form works
+    Given I am logged in as a user with the administrator role
+    When I visit "/admin/config/system/lightning"
+    And I uncheck the box "content_roles[reviewer]"
+    And I press "Save configuration"
+    Then the response status code should be 200
+    And I check the box "content_roles[reviewer]"
+    And I press "Save configuration"
+
   Scenario: Automatically creating creator and reviewer roles for a content type
     Given I am logged in as a user with the administrator role
     And node_type entities:
