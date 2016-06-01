@@ -18,6 +18,7 @@ Feature: Media library CKEditor widget
     And I filter the media library by type "image"
     Then I should see "There are no items to display."
 
+  @ajax
   Scenario: Displaying the entity embed dialog box when placing a media entity
     Given I am logged in as a user with the page_creator role
     And video from embed code:
