@@ -18,7 +18,7 @@ Feature: Video media assets
     When I visit a media entity of type video
     Then I should get a 200 HTTP response
 
-  @javascript
+  @javascript @ajax
   Scenario: Creating a video in CKEditor from an embed code
     Given I am logged in as a user with the page_creator,media_creator roles
     When I go to "/node/add/page"
