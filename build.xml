@@ -37,8 +37,8 @@
 
     <!--
     bower.json may have changed, so reinstall front-end dependencies using
-    the version of Bower installed locally in node_modules. The 'install'
-    script lives in package.json.
+    the version of Bower installed locally in node_modules. The
+    install-libraries script lives in package.json.
     -->
     <exec command="${npm} run install-libraries" passthru="true" />
 
@@ -46,8 +46,8 @@
     <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},karma.conf.js,*.make,node_modules,.travis.yml,vendor" />
 
     <!-- JS libraries and contrib modules were copied over by the file sync. -->
-    <delete dir="libraries" failonerror="true" />
-    <delete dir="modules/contrib" failonerror="true" />
+    <delete dir="libraries" failonerror="true" quiet="true" />
+    <delete dir="modules/contrib" failonerror="true" quiet="true" />
   </target>
 
   <target name="pull" depends="env">
@@ -56,7 +56,7 @@
 
   <!-- Builds a Lightning code base using Composer. -->
   <target name="build" depends="env">
-    <composer command="drupal-scaffold" composer="${composer}" />
+    <exec command="${composer} drupal-scaffold" />
     <phingcall target="push" />
   </target>
 

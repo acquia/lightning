@@ -9,12 +9,14 @@ Feature: Responsibility-based user roles for creating and managing media assets
     And I should see "Media Manager"
 
   @beta5
-  Scenario: Content creators and reviewers should have access to the rich_text input format
+  Scenario: Content creators have access to the rich_text input format and media browser
     Given I am logged in as a user with the "administer permissions" permission
     When I visit "/admin/people/permissions"
-    # Permissions added by lightning_media #8004
-    Then the "page_creator[use text format rich_text]" checkbox should be checked
-    And the "page_reviewer[use text format rich_text]" checkbox should be checked
+    Then the page_creator role should have permission to:
+      """
+      use text format rich_text
+      access media_browser entity browser pages
+      """
 
   @beta5
   Scenario: Creating media as a media creator

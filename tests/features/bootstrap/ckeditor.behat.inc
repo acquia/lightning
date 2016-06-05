@@ -118,15 +118,18 @@ class CkEditorSubContext extends DrupalSubContextBase implements DrupalSubContex
    *   The command ID, as known to CKEditor's API.
    * @param string $id
    *   (optional) The editor instance ID.
+   * @param mixed $data
+   *   Additional data to pass to the executed command.
    *
    * @When I execute the :command command in CKEditor
    * @When I execute the :command command in CKEditor :id
    */
-  public function execute($command, $id = NULL) {
+  public function execute($command, $id = NULL, $data = NULL) {
     $id = $id ?: $this->getDefaultEditorId();
 
+    $data = json_encode($data);
     $this->getSession()
-      ->evaluateScript("CKEDITOR.instances['$id'].execCommand('$command');");
+      ->evaluateScript("CKEDITOR.instances['$id'].execCommand('$command', $data);");
   }
 
   /**

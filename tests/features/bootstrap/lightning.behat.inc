@@ -314,4 +314,59 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     }
   }
 
+  /**
+   * Asserts the presence of a live preview element.
+   *
+   * @Then I should see a preview
+   */
+  public function assertPreviewElement() {
+    $this->assertSession()->elementExists('css', '#edit-preview article');
+  }
+
+  /**
+   * Assets that a field exists.
+   *
+   * @param string $locator
+   *   The field ID, name, label, or value.
+   *
+   * @Then I should see a :locator field
+   */
+  public function assertFieldExists($locator) {
+    $this->assertSession()->fieldExists($locator);
+  }
+
+  /**
+   * Asserts that we are visiting a media entity.
+   *
+   * @Then I should be visiting a media entity
+   */
+  public function assertVisitingMediaEntity() {
+    $this->assertSession()->addressMatches('/^\/media\/[0-9]+$/');
+
+    try {
+      $this->assertSession()->statusCodeEquals(200);
+    }
+    catch (UnsupportedDriverActionException $e) {
+      // This isn't a critically important assertion, so don't worry about it.
+    }
+  }
+
+  /**
+   * Sets the absolute path to the directory containing uploadable files.
+   *
+   * @BeforeScenario
+   */
+  public function setFilePath() {
+    $this->minkContext->setMinkParameter('files_path', __DIR__ . '/../../files');
+  }
+
+  /**
+   * Switches out of an iframe into the main window.
+   *
+   * @When I switch to the window
+   */
+  public function switchToWindow() {
+    $this->getSession()->switchToWindow();
+  }
+
 }

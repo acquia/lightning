@@ -1,0 +1,15 @@
+services:
+  plugin.manager.lightning_media.bundle_resolver:
+    class: '\Drupal\Core\Plugin\DefaultPluginManager'
+    arguments:
+      - 'Plugin/MediaBundleResolver'
+      - '@container.namespaces'
+      - '@module_handler'
+      - '\Drupal\lightning_media\BundleResolverInterface'
+      - '\Drupal\lightning_media\Annotation\MediaBundleResolver'
+
+  lightning_media.preview.embed_code:
+    class: '\Drupal\lightning_media\PreviewHandler\EmbedCode'
+    arguments:
+      - '@entity_type.manager'
+      - '@string_translation'

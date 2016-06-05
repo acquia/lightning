@@ -243,6 +243,8 @@ class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextI
    *   (optional) The creation time field to sort on. Defaults to 'created'.
    * @param int $limit
    *   (optional) The maximum number of entities to track. Defaults to 1.
+   *
+   * @When I queue the latest :entity_type entity for deletion
    */
   public function trackNewest($entity_type, $sort_field = 'created', $limit = 1) {
     $this->ensureBootstrap();

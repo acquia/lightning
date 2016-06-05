@@ -1,14 +1,17 @@
 <?php
 
-use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\media_entity\MediaBundleInterface;
-use Drupal\services\ServiceEndpointInterface;
-use Drupal\views\ViewEntityInterface;
-use Drupal\Core\Extension\ExtensionDiscovery;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_media_form_entity_browser_media_browser_form_alter(array &$form, FormStateInterface $form_state) {
+  $form['#attached']['library'][] = 'lightning_media/browser.styling';
+}
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
@@ -47,77 +50,17 @@ function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
 }
 
 /**
- * Implements hook_ENTITY_TYPE_access().
- */
-function lightning_media_service_endpoint_access(ServiceEndpointInterface $endpoint, $operation, AccountInterface $account) {
-  // Not even user 1 can edit the lightning_media endpoint. It belongs to us.
-  return $endpoint->id() == 'lightning_media' ? AccessResult::forbidden() : AccessResult::neutral();
-}
-
-/**
- * Implements hook_ENTITY_TYPE_access().
- */
-function lightning_media_view_access(ViewEntityInterface $view, $operation, AccountInterface $account) {
-  // Not even user 1 can edit the media_library view. It belongs to us.
-  return $view->id() == 'media_library' ? AccessResult::forbidden() : AccessResult::neutral();
-}
-
-/**
- * Implements hook_library_info_alter().
- */
-function lightning_media_library_info_alter(array &$libraries, $extension) {
-  if ($extension == 'lightning_media') {
-    // ModuleHandler::getModule() returns data only for installed
-    // modules. This is fine for installed profiles but not for inherited
-    // profiles (the base profile is not installed).
-    $listing = new ExtensionDiscovery(\Drupal::root());
-    $profiles = $listing->scan('profile');
-
-    // Get the path mappings of all profiles.
-    $profile_directories = array_map(function ($profile) {
-      return $profile->getPath();
-    }, $profiles);
-
-    if (isset($profile_directories['lightning'])) {
-      $root = '/' . $profile_directories['lightning'];
-
-      foreach ($libraries as $key => $library) {
-        if ($key == 'media_library') {
-          continue;
-        }
-
-        if (isset($library['js'])) {
-          foreach ($library['js'] as $path => $info) {
-            $libraries[$key]['js'][$root . '/' . $path] = $info;
-            unset($libraries[$key]['js'][$path]);
-          }
-        }
-
-        if (isset($library['css'])) {
-          foreach ($library['css'] as $group => $files) {
-            foreach ($files as $path => $info) {
-              $libraries[$key]['css'][$group][$root . '/' . $path] = $info;
-              unset($libraries[$key]['css'][$group][$path]);
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_form_FORM_ID_alter().
  */
 function lightning_media_form_entity_embed_dialog_alter(array &$form, FormStateInterface $form_state) {
   list ($editor, $embed_button) = $form_state->getBuildInfo()['args'];
 
   /** @var \Drupal\embed\EmbedButtonInterface $embed_button */
-  if ($embed_button->id() == 'media_library') {
-    if (isset($form['actions']['back'])) {
-      $form['actions']['back']['#access'] = FALSE;
+  if ($embed_button->id() == 'media_browser') {
+    $element = &$form['attributes']['data-entity-embed-settings']['view_mode'];
+    if (isset($element['#options']['embedded'])) {
+      $element['#default_value'] = 'embedded';
     }
-    $form['attributes']['data-entity-embed-display']['#access'] = FALSE;
   }
 }
 
@@ -127,5 +70,19 @@ function lightning_media_form_entity_embed_dialog_alter(array &$form, FormStateI
 function lightning_media_js_settings_alter(array &$settings, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {
   if (empty($settings['ajax'])) {
     $settings['ajax'] = [];
+  }
+}
+
+/**
+ * Preprocess function for grid views of the media library.
+ *
+ * @param array $variables
+ *   Template variables.
+ */
+function lightning_media_preprocess_views_view_grid__media(array &$variables) {
+  foreach ($variables['items'] as &$item) {
+    foreach ($item['content'] as &$column) {
+      $column['attributes']['data-selectable'] = 'true';
+    }
   }
 }

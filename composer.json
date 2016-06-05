@@ -42,23 +42,32 @@
             ]
         },
         "patches": {
+            "drupal/entity_browser": {
+                "Tabs wrapper should not apply CSS classes": "https://www.drupal.org/files/issues/2732419-3.patch",
+                "The view widget should support radio buttons": "https://www.drupal.org/files/issues/2738843-2.patch",
+                "The iframe display plugin should not put dashes in the iframe name": "https://www.drupal.org/files/issues/2741237-3.patch"
+            },
+            "drupal/entity_embed": {
+                "Hide Next button during Selection if Entity Browser is enabled": "https://www.drupal.org/files/issues/2656062-8.patch"
+            },
+            "drupal/field_group": {
+                "Field Group not working on node edit inside inline entity form": "https://www.drupal.org/files/issues/field-group-2645570-8.x-1.0-rc4.patch"
+            },
             "drupal/panelizer": {
-                "Generate new UUIDs for displays when switching from default to field storage":
-                "https://www.drupal.org/files/issues/2701349-2.patch",
-                "Explicitly set the Panels IPE URL root when saving in Panelizer":
-                "https://www.drupal.org/files/issues/panelizer-ipe-url-root-handling.patch"
+                "Generate new UUIDs for displays when switching from default to field storage": "https://www.drupal.org/files/issues/2701349-2.patch",
+                "Explicitly set the Panels IPE URL root when saving in Panelizer": "https://www.drupal.org/files/issues/panelizer-ipe-url-root-handling.patch"
             },
             "drupal/panels": {
-                "beta4 to 8eba1a0 - quickedit blocks":
-                "https://www.drupal.org/files/issues/panels--beta4-to-8eba1a0.patch",
-                "2667754 - Allow other modules to disable the IPE based on custom logic":
-                "https://www.drupal.org/files/issues/2667754-3.patch",
-                "Bandaid tempstore patch":
-                "https://www.drupal.org/files/issues/bandaid.patch"
+                "beta4 to 8eba1a0 - quickedit blocks": "https://www.drupal.org/files/issues/panels--beta4-to-8eba1a0.patch",
+                "2667754 - Allow other modules to disable the IPE based on custom logic": "https://www.drupal.org/files/issues/2667754-3.patch",
+                "Bandaid tempstore patch": "https://www.drupal.org/files/issues/bandaid.patch"
             },
             "drupal/scheduled_updates": {
-                "2674874 - Issue saving Schedule Update Type form":
-                "https://www.drupal.org/files/issues/schedule_updates-save_type-2674874-2.patch"
+                "2674874 - Issue saving Schedule Update Type form": "https://www.drupal.org/files/issues/schedule_updates-save_type-2674874-2.patch"
+            },
+            "drupal/views_infinite_scroll": {
+                "View \"No results\" area doesn't appear even view has no results":
+                "https://www.drupal.org/files/issues/no-wrapper-empty-rows-2701881-2.patch"
             },
             "drupal/workbench_moderation": {
                 "2668006 - Provide logical access control for when IPE should be applied to moderated nodes":
@@ -92,9 +101,11 @@
         "drupal/inline_entity_form": "8.1.0-alpha6",
         "drupal/metatag": "^8.1.0",
         "drupal/token": "^8.1.0",
-        "drupal/services": "8.4.0-alpha3",
         "drupal-composer/drupal-scaffold": "^1.2",
         "drupal/pathauto": "^8.1.0",
+        "drupal/entity_browser": "dev-8.x-1.x",
+        "drupal/views_infinite_scroll": "^8.1",
+        "drupal/media_entity_document": "dev-8.x-1.x",
         "drupal/video_embed_field": "8.1.0"
     }
 }

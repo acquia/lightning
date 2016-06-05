@@ -52,7 +52,6 @@ script:
   - cd docroot/profiles/lightning
   - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,libraries,modules/contrib .
   - behat --strict
-  - cd $TRAVIS_BUILD_DIR && npm test
 
 matrix:
   fast_finish: true

@@ -1,7 +1,10 @@
 <?php
 
-use Drupal\services\Entity\ServiceEndpoint;
-use Drupal\node\Entity\NodeType;
+use Drupal\Core\Entity\Entity\EntityFormMode;
+use Drupal\editor\Entity\Editor;
+use Drupal\embed\Entity\EmbedButton;
+use Drupal\entity_browser\Entity\EntityBrowser;
+use Drupal\file\Entity\File;
 use Drupal\user\Entity\Role;
 use Drupal\views\Entity\View;
 
@@ -12,26 +15,35 @@ function lightning_media_install() {
   user_role_grant_permissions('anonymous', ['view media']);
   user_role_grant_permissions('authenticated', ['view media']);
 
-  // Grant the content_creator role access to the rich_text filter format.
-  lightning_media_update_8004();
+  // Set the icon for the media_browser embed button.
+  lightning_media_update_8006();
+
+  // Create the Entity Browser display of the media view.
+  lightning_media_update_8008();
+
+  // Grant the creator content role permission to use the rich_text format and
+  // the media browser.
+  lightning_media_update_8011();
+
+  // Lightning ships with two content types -- page and landing_page. Creator
+  // roles for these content types are generated automatically out of the
+  // box, so grant them permission to use the rich_text format and the media
+  // browser. (Update 8011 does this for roles created in the future).
+  $permissions = [
+    'use text format rich_text',
+    'access media_browser entity browser pages',
+  ];
+  user_role_grant_permissions('page_creator', $permissions);
+  user_role_grant_permissions('landing_page_creator', $permissions);
 }
 
 /**
  * Updates the media_library view, installs Services module, and creates the
- * lightning_media service endpoint.
+ * lightning_media service endpoint. (Removed in Lightning 8.x-1.0-rc6.)
+ *
+ * @deprecated
  */
 function lightning_media_update_8001() {
-  if (! \Drupal::moduleHandler()->moduleExists('services')) {
-    \Drupal::service('module_installer')->install(['services']);
-  }
-
-  $values = lightning_read_config('services.service_endpoint.lightning_media', 'lightning_media');
-  ServiceEndpoint::create($values)->save();
-
-  // Update the media_library view by deleting and re-creating it.
-  View::load('media_library')->delete();
-  $values = lightning_read_config('views.view.media_library', 'lightning_media');
-  View::create($values)->save();
 }
 
 /**
@@ -69,15 +81,562 @@ function lightning_media_update_8003() {
 }
 
 /**
- * Grants the content-related roles access to the rich_text input roles.
+ * Grants the content-related roles access to the rich_text input format.
+ * (Removed in Lightning 8.x-1.0-rc6.)
+ *
+ * @deprecated
  */
 function lightning_media_update_8004() {
-  $permissions = ['use text format rich_text'];
+}
 
-  /** @var \Drupal\node\NodeTypeInterface $node_type */
-  foreach (NodeType::loadMultiple() as $node_type) {
-    user_role_grant_permissions($node_type->id() . '_creator', $permissions);
-    user_role_grant_permissions($node_type->id() . '_reviewer', $permissions);
+/**
+ * Installs the media browser and its embed button.
+ */
+function lightning_media_update_8005() {
+  if (! \Drupal::moduleHandler()->moduleExists('entity_browser')) {
+    \Drupal::service('module_installer')->install(['entity_browser']);
+  }
+
+  $form_mode = lightning_read_config('core.entity_form_mode.media.media_browser', 'lightning_media');
+  EntityFormMode::create($form_mode)->save();
+
+  $browser = lightning_read_config('entity_browser.browser.media_browser', 'lightning_media');
+  EntityBrowser::create($browser)->save();
+
+  $button = lightning_read_config('embed.button.media_browser', 'lightning_media');
+  EmbedButton::create($button)->save();
+}
+
+/**
+ * Sets the icon for the media browser's embed button.
+ */
+function lightning_media_update_8006() {
+  $icon = \Drupal::moduleHandler()->getModule('lightning_media')->getPath() . '/images/star.png';
+  $fs = \Drupal::service('file_system');
+  $destination = file_unmanaged_copy($icon, 'public://' . $fs->basename($icon));
+
+  if ($destination) {
+    $file = File::create(['uri' => $destination]);
+    $file->save();
+
+    EmbedButton::load('media_browser')
+      ->set('icon_uuid', $file->uuid())
+      ->save();
+  }
+}
+
+/**
+ * Deletes the media_library view.
+ */
+function lightning_media_update_8007() {
+  $view = View::load('media_library');
+
+  if ($view) {
+    $view->delete();
+  }
+}
+
+/**
+ * Creates the Entity Browser display of the media view.
+ */
+function lightning_media_update_8008() {
+  $view = View::load('media');
+  // Sanity check.
+  if (empty($view)) {
+    return;
+  }
+
+  // Views Infinite Scroll powers the pager of the EB display.
+  if (! \Drupal::moduleHandler()->moduleExists('views_infinite_scroll')) {
+    \Drupal::service('module_installer')->install(['views_infinite_scroll']);
+  }
+
+  $display_id = $view->addDisplay('entity_browser', 'Browser');
+  $display = &$view->getDisplay($display_id);
+  $display = array_merge($display, array (
+    'display_options' =>
+      array (
+        'display_extenders' =>
+          array (
+          ),
+        'style' =>
+          array (
+            'type' => 'grid',
+            'options' =>
+              array (
+                'grouping' =>
+                  array (
+                  ),
+                'columns' => '4',
+                'automatic_width' => 1,
+                'alignment' => 'horizontal',
+                'col_class_default' => 1,
+                'col_class_custom' => '',
+                'row_class_default' => 1,
+                'row_class_custom' => '',
+              ),
+          ),
+        'defaults' =>
+          array (
+            'style' => false,
+            'row' => false,
+            'fields' => false,
+            'filters' => false,
+            'filter_groups' => false,
+            'empty' => false,
+            'pager' => false,
+            'css_class' => false,
+          ),
+        'row' =>
+          array (
+            'type' => 'fields',
+            'options' =>
+              array (
+              ),
+          ),
+        'fields' =>
+          array (
+            'thumbnail__target_id' =>
+              array (
+                'id' => 'thumbnail__target_id',
+                'table' => 'media_field_data',
+                'field' => 'thumbnail__target_id',
+                'relationship' => 'none',
+                'group_type' => 'group',
+                'admin_label' => '',
+                'label' => '',
+                'exclude' => false,
+                'alter' =>
+                  array (
+                    'alter_text' => false,
+                    'text' => '',
+                    'make_link' => false,
+                    'path' => '',
+                    'absolute' => false,
+                    'external' => false,
+                    'replace_spaces' => false,
+                    'path_case' => 'none',
+                    'trim_whitespace' => false,
+                    'alt' => '',
+                    'rel' => '',
+                    'link_class' => '',
+                    'prefix' => '',
+                    'suffix' => '',
+                    'target' => '',
+                    'nl2br' => false,
+                    'max_length' => 0,
+                    'word_boundary' => true,
+                    'ellipsis' => true,
+                    'more_link' => false,
+                    'more_link_text' => '',
+                    'more_link_path' => '',
+                    'strip_tags' => false,
+                    'trim' => false,
+                    'preserve_tags' => '',
+                    'html' => false,
+                  ),
+                'element_type' => '',
+                'element_class' => '',
+                'element_label_type' => '',
+                'element_label_class' => '',
+                'element_label_colon' => true,
+                'element_wrapper_type' => '',
+                'element_wrapper_class' => '',
+                'element_default_classes' => true,
+                'empty' => '',
+                'hide_empty' => false,
+                'empty_zero' => false,
+                'hide_alter_empty' => true,
+                'click_sort_column' => 'target_id',
+                'type' => 'image',
+                'settings' =>
+                  array (
+                    'image_style' => 'medium',
+                    'image_link' => '',
+                  ),
+                'group_column' => '',
+                'group_columns' =>
+                  array (
+                  ),
+                'group_rows' => true,
+                'delta_limit' => 0,
+                'delta_offset' => 0,
+                'delta_reversed' => false,
+                'delta_first_last' => false,
+                'multi_type' => 'separator',
+                'separator' => ', ',
+                'field_api_classes' => false,
+                'entity_type' => 'media',
+                'entity_field' => 'thumbnail',
+                'plugin_id' => 'field',
+              ),
+            'entity_browser_select' =>
+              array (
+                'id' => 'entity_browser_select',
+                'table' => 'media',
+                'field' => 'entity_browser_select',
+                'relationship' => 'none',
+                'group_type' => 'group',
+                'admin_label' => '',
+                'label' => '',
+                'exclude' => 0,
+                'alter' =>
+                  array (
+                    'alter_text' => 0,
+                    'text' => '',
+                    'make_link' => 0,
+                    'path' => '',
+                    'absolute' => 0,
+                    'external' => 0,
+                    'replace_spaces' => 0,
+                    'path_case' => 'none',
+                    'trim_whitespace' => 0,
+                    'alt' => '',
+                    'rel' => '',
+                    'link_class' => '',
+                    'prefix' => '',
+                    'suffix' => '',
+                    'target' => '',
+                    'nl2br' => 0,
+                    'max_length' => '0',
+                    'word_boundary' => 1,
+                    'ellipsis' => 1,
+                    'more_link' => 0,
+                    'more_link_text' => '',
+                    'more_link_path' => '',
+                    'strip_tags' => 0,
+                    'trim' => 0,
+                    'preserve_tags' => '',
+                    'html' => 0,
+                  ),
+                'element_type' => '',
+                'element_class' => '',
+                'element_label_type' => '',
+                'element_label_class' => '',
+                'element_label_colon' => false,
+                'element_wrapper_type' => '',
+                'element_wrapper_class' => 'visually-hidden',
+                'element_default_classes' => 0,
+                'empty' => '',
+                'hide_empty' => 0,
+                'empty_zero' => 0,
+                'hide_alter_empty' => 1,
+                'selection_type' => 'radio',
+                'entity_type' => 'media',
+                'plugin_id' => 'entity_browser_select',
+              ),
+          ),
+        'filters' =>
+          array (
+            'status' =>
+              array (
+                'id' => 'status',
+                'table' => 'media_field_data',
+                'field' => 'status',
+                'relationship' => 'none',
+                'group_type' => 'group',
+                'admin_label' => '',
+                'operator' => '=',
+                'value' => '1',
+                'group' => 1,
+                'exposed' => false,
+                'expose' =>
+                  array (
+                    'operator_id' => '',
+                    'label' => 'True',
+                    'description' => NULL,
+                    'use_operator' => false,
+                    'operator' => 'status_op',
+                    'identifier' => 'status',
+                    'required' => true,
+                    'remember' => false,
+                    'multiple' => false,
+                    'remember_roles' =>
+                      array (
+                        'authenticated' => 'authenticated',
+                      ),
+                  ),
+                'is_grouped' => true,
+                'group_info' =>
+                  array (
+                    'label' => 'Publishing status',
+                    'description' => '',
+                    'identifier' => 'status',
+                    'optional' => true,
+                    'widget' => 'select',
+                    'multiple' => false,
+                    'remember' => false,
+                    'default_group' => 'All',
+                    'default_group_multiple' =>
+                      array (
+                      ),
+                    'group_items' =>
+                      array (
+                        1 =>
+                          array (
+                            'title' => 'Published',
+                            'operator' => '=',
+                            'value' => '1',
+                          ),
+                        2 =>
+                          array (
+                            'title' => 'Unpublished',
+                            'operator' => '=',
+                            'value' => '0',
+                          ),
+                      ),
+                  ),
+                'plugin_id' => 'boolean',
+                'entity_type' => 'media',
+                'entity_field' => 'status',
+              ),
+            'name' =>
+              array (
+                'id' => 'name',
+                'table' => 'media_field_data',
+                'field' => 'name',
+                'relationship' => 'none',
+                'group_type' => 'group',
+                'admin_label' => '',
+                'operator' => 'contains',
+                'value' => '',
+                'group' => 1,
+                'exposed' => true,
+                'expose' =>
+                  array (
+                    'operator_id' => 'name_op',
+                    'label' => 'Keywords',
+                    'description' => '',
+                    'use_operator' => 0,
+                    'operator' => 'name_op',
+                    'identifier' => 'keywords',
+                    'required' => 0,
+                    'remember' => 0,
+                    'multiple' => false,
+                    'remember_roles' =>
+                      array (
+                        'authenticated' => 'authenticated',
+                        'anonymous' => 0,
+                        'administrator' => 0,
+                        'page_creator' => 0,
+                        'layout_manager' => 0,
+                        'page_reviewer' => 0,
+                        'landing_page_creator' => 0,
+                        'landing_page_reviewer' => 0,
+                        'media_creator' => 0,
+                        'media_manager' => 0,
+                      ),
+                  ),
+                'is_grouped' => false,
+                'group_info' =>
+                  array (
+                    'label' => '',
+                    'description' => '',
+                    'identifier' => '',
+                    'optional' => true,
+                    'widget' => 'select',
+                    'multiple' => false,
+                    'remember' => false,
+                    'default_group' => 'All',
+                    'default_group_multiple' =>
+                      array (
+                      ),
+                    'group_items' =>
+                      array (
+                      ),
+                  ),
+                'entity_type' => 'media',
+                'entity_field' => 'name',
+                'plugin_id' => 'string',
+              ),
+            'bundle' =>
+              array (
+                'id' => 'bundle',
+                'table' => 'media_field_data',
+                'field' => 'bundle',
+                'relationship' => 'none',
+                'group_type' => 'group',
+                'admin_label' => '',
+                'operator' => 'in',
+                'value' =>
+                  array (
+                  ),
+                'group' => 1,
+                'exposed' => true,
+                'expose' =>
+                  array (
+                    'operator_id' => 'bundle_op',
+                    'label' => 'Type',
+                    'description' => '',
+                    'use_operator' => 0,
+                    'operator' => 'bundle_op',
+                    'identifier' => 'type',
+                    'required' => 0,
+                    'remember' => 0,
+                    'multiple' => 0,
+                    'remember_roles' =>
+                      array (
+                        'authenticated' => 'authenticated',
+                        'anonymous' => 0,
+                        'administrator' => 0,
+                        'page_creator' => 0,
+                        'layout_manager' => 0,
+                        'page_reviewer' => 0,
+                        'landing_page_creator' => 0,
+                        'landing_page_reviewer' => 0,
+                        'media_creator' => 0,
+                        'media_manager' => 0,
+                      ),
+                    'reduce' => 0,
+                  ),
+                'is_grouped' => false,
+                'group_info' =>
+                  array (
+                    'label' => '',
+                    'description' => '',
+                    'identifier' => '',
+                    'optional' => true,
+                    'widget' => 'select',
+                    'multiple' => false,
+                    'remember' => false,
+                    'default_group' => 'All',
+                    'default_group_multiple' =>
+                      array (
+                      ),
+                    'group_items' =>
+                      array (
+                      ),
+                  ),
+                'entity_type' => 'media',
+                'entity_field' => 'bundle',
+                'plugin_id' => 'bundle',
+              ),
+          ),
+        'filter_groups' =>
+          array (
+            'operator' => 'AND',
+            'groups' =>
+              array (
+                1 => 'AND',
+              ),
+          ),
+        'empty' =>
+          array (
+            'area_text_custom' =>
+              array (
+                'id' => 'area_text_custom',
+                'table' => 'views',
+                'field' => 'area_text_custom',
+                'relationship' => 'none',
+                'group_type' => 'group',
+                'admin_label' => '',
+                'empty' => true,
+                'tokenize' => 0,
+                'content' => 'There are no media items to display.',
+                'plugin_id' => 'text_custom',
+              ),
+          ),
+        'pager' =>
+          array (
+            'type' => 'infinite_scroll',
+            'options' =>
+              array (
+                'items_per_page' => '0',
+                'offset' => '0',
+                'id' => '0',
+                'total_pages' => '',
+                'tags' =>
+                  array (
+                    'previous' => '‹ Previous',
+                    'next' => 'Next ›',
+                  ),
+                'expose' =>
+                  array (
+                    'items_per_page' => 0,
+                    'items_per_page_label' => 'Items per page',
+                    'items_per_page_options' => '5, 10, 25, 50',
+                    'items_per_page_options_all' => 0,
+                    'items_per_page_options_all_label' => '- All -',
+                    'offset' => 0,
+                    'offset_label' => 'Offset',
+                  ),
+                'views_infinite_scroll' =>
+                  array (
+                    'button_text' => 'Load More',
+                    'automatically_load_content' => 0,
+                  ),
+              ),
+          ),
+        'display_description' => '',
+        'css_class' => 'eb-media',
+      ),
+    'cache_metadata' =>
+      array (
+        'max-age' => -1,
+        'contexts' =>
+          array (
+            0 => 'languages:language_content',
+            1 => 'languages:language_interface',
+            2 => 'url',
+            3 => 'url.query_args',
+            4 => 'user.permissions',
+          ),
+        'tags' =>
+          array (
+          ),
+      ),
+  ));
+  $view->save();
+
+  $browser = EntityBrowser::load('media_browser');
+  $widgets = $browser->get('widgets');
+  if (isset($widgets['134808d9-d854-4a0b-8699-d5eba006b8b7'])) {
+    $widgets['134808d9-d854-4a0b-8699-d5eba006b8b7']['settings']['view_display'] = $display_id;
+    $browser->set('widgets', $widgets);
+    $browser->save();
+  }
+}
+
+/**
+ * Changes the media_library CKEditor button to media_browser.
+ */
+function lightning_media_update_8009() {
+  /** @var \Drupal\editor\EditorInterface $editor */
+  $editor = Editor::load('rich_text');
+  if ($editor) {
+    $settings = $editor->getSettings();
+    foreach ($settings['toolbar']['rows'] as &$row) {
+      foreach ($row as &$group) {
+        $index = array_search('media_library', $group['items']);
+        if ($index !== FALSE) {
+          $group['items'][$index] = 'media_browser';
+        }
+      }
+    }
+    $editor->setSettings($settings)->save();
+  }
+}
+
+/**
+ * Installs document support for Lightning Media.
+ */
+function lightning_media_update_8010() {
+  \Drupal::service('module_installer')->install(['lightning_media_document']);
+}
+
+/**
+ * Grants creator content role access to the rich_text format and media browser.
+ *
+ * @see lightning_media_user_role_presave()
+ */
+function lightning_media_update_8011() {
+  $config = \Drupal::configFactory()->getEditable('lightning_core.settings');
+
+  $content_roles = $config->get('content_roles');
+  if (isset($content_roles['creator'])) {
+    $content_roles['creator']['permissions'][] = 'use text format rich_text';
+    $content_roles['creator']['permissions'][] = 'access media_browser entity browser pages';
+    $config->set('content_roles', $content_roles)->save();
   }
 }
 
@@ -89,6 +648,11 @@ function lightning_media_update_dependencies() {
     'lightning_media' => [
       8004 => [
         'lightning' => 8002,
+      ],
+      8011 => [
+        // 8011 alters the lightning_core.settings config object, which is
+        // created by lightning_core 8001.
+        'lightning_core' => 8001,
       ],
     ],
   ];

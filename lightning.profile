@@ -59,6 +59,7 @@ function lightning_extensions_enable($form_id, FormStateInterface $form_state) {
   if ($features) {
     if (in_array('lightning_media', $features)) {
       $features = array_merge($features, [
+        'lightning_media_document',
         'lightning_media_image',
         'lightning_media_instagram',
         'lightning_media_twitter',

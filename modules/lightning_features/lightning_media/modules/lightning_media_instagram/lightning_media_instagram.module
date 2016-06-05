@@ -1,0 +1,26 @@
+<?php
+
+use Drupal\Core\Form\FormStateInterface;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_media_instagram_form_media_instagram_form_alter(array &$form, FormStateInterface $form_state) {
+  \Drupal::service('lightning_media.preview.embed_code')->alterForm($form, $form_state);
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function lightning_media_instagram_inline_entity_form_entity_form_alter(&$entity_form, FormStateInterface $form_state) {
+  if ($entity_form['#entity_type'] == 'media' && $entity_form['#bundle'] == 'instagram') {
+    \Drupal::service('lightning_media.preview.embed_code')->alterForm($entity_form, $form_state, $entity_form['#entity']);
+  }
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function lightning_media_instagram_entity_extra_field_info() {
+  return \Drupal::service('lightning_media.preview.embed_code')->extraFields('instagram');
+}

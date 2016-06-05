@@ -68,3 +68,11 @@ function lightning_media_video_update_8001() {
   // Don't need MEEV anymore!
   $module_installer->uninstall(['media_entity_embeddable_video']);
 }
+
+/**
+ * Creates the media_browser form display.
+ */
+function lightning_media_video_update_8002() {
+  $display = lightning_read_config('core.entity_form_display.media.video.media_browser', 'lightning_media_video');
+  EntityFormDisplay::create($display)->save();
+}

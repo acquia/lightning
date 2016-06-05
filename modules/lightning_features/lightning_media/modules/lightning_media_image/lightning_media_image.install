@@ -1,0 +1,11 @@
+<?php
+
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+
+/**
+ * Creates the media_browser form display.
+ */
+function lightning_media_image_update_8001() {
+  $display = lightning_read_config('core.entity_form_display.media.image.media_browser', 'lightning_media_image');
+  EntityFormDisplay::create($display)->save();
+}
