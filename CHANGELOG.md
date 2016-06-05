@@ -1,3 +1,15 @@
+## Release Candidate6 (RC6)
+* Lightning Media no longer depends on or references the Lightning profile
+  directly. [#2692419]
+* Site Builders can now choose to opt out of the user roles that Lightning
+  generates per content type. Visit `admin/config/system/lightning` to change
+  this setting. [#2715517]
+* Added build status to README.md. [#2737655]
+* Updated all dependecies to latest releases. [#2737745]
+* The dependency on Drush has been moved to `require-dev`. [#2716657]
+* Lightning Media has been rewritted to take advantage of Entity Browser. [#2726889]
+* Lightning Media now supports documents (txt, pdf, doc, and docx).
+
 ## Release Candidate 5 (RC5)
 * The Media  Entity Embeddable Video module has been deprecated and is replaced
   by Video Embed Field in this release. (Issue #2700399)

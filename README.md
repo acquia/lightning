@@ -61,15 +61,14 @@ by downloading a tarball from our
 ## Project Roadmap
 The roadmap is subject to change, but our projected schedule is:
 
-* April 2016:
-  * Ability to set bundle-level layouts from the node type display page
 * QTR2 2016
+  * Ability to set bundle-level layouts from the node type display page
+* QTR3/4
+  * Point in time preview
+  * Personalization
   * Workspace Preview System
   * Remote replication (store workspaces on external apps)
   * Search API integration
-* Further
-  * Point in time preview
-  * Personalization
 
 You can also look for general enhancements along the way. Please use the
 [Lightning issue queue][issue_queue] for latest information and to request
@@ -91,10 +90,6 @@ These instructions assume you have used Composer to install Lightning.
 
 If necessary, edit behat.local.yml to match your environment. Generally you
 will not need to do this.
-
-### Jasmine Media Tests
-    $ cd MYPROJECT/docroot/profiles/lightning/modules/lightning_features/lightning_media/tests/js
-    $ npm install && npm test
 
 [issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
 [template]: https://github.com/acquia/lightning-project "Composer-based project template"
