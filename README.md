@@ -37,6 +37,10 @@ layout of any content type using a drag-and-drop interface (Panels IPE).
 Lightning also includes a Landing Page content type for you to create
 landing pages with their own one-off layouts and content.
 
+Any content type that uses Panelizer will allow you to set up default layouts
+for each view mode of that content type, which you can choose from (or override
+on a one-off basis) for individual pieces of content.
+
 Eight layouts are provided out of the box by Panels. You can create your own
 layouts (see the [Layout Plugin](https://www.drupal.org/project/layout_plugin)
 module) or install a contributed library of layouts like
@@ -61,9 +65,7 @@ by downloading a tarball from our
 ## Project Roadmap
 The roadmap is subject to change, but our projected schedule is:
 
-* QTR2 2016
-  * Ability to set bundle-level layouts from the node type display page
-* QTR3/4
+* QTR3/4, 2016
   * Point in time preview
   * Personalization
   * Workspace Preview System

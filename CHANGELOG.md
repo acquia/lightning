@@ -1,13 +1,19 @@
-## Release Candidate6 (RC6)
+## Release Candidate 7 (RC7)
+* Drupal core's developer dependencies are now included with Lightning so that
+  you can run standard Drupal tests. (Issues #2703009 and #2747953)
+* Lightning now integrates Panelizer's new administrative UI, which allows the
+  creation of default layouts for any view mode of any content type. (Issue #2678240)
+
+## Release Candidate 6 (RC6)
 * Lightning Media no longer depends on or references the Lightning profile
   directly. [#2692419]
 * Site Builders can now choose to opt out of the user roles that Lightning
   generates per content type. Visit `admin/config/system/lightning` to change
   this setting. [#2715517]
 * Added build status to README.md. [#2737655]
-* Updated all dependecies to latest releases. [#2737745]
+* Updated all dependencies to latest releases. [#2737745]
 * The dependency on Drush has been moved to `require-dev`. [#2716657]
-* Lightning Media has been rewritted to take advantage of Entity Browser. [#2726889]
+* Lightning Media has been rewritten to take advantage of Entity Browser. [#2726889]
 * Lightning Media now supports documents (txt, pdf, doc, and docx).
 
 ## Release Candidate 5 (RC5)

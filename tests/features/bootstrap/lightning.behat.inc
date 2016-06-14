@@ -341,7 +341,7 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    * @Then I should be visiting a media entity
    */
   public function assertVisitingMediaEntity() {
-    $this->assertSession()->addressMatches('/^\/media\/[0-9]+$/');
+    $this->assertSession()->addressMatches('/\/media\/[0-9]+$/');
 
     try {
       $this->assertSession()->statusCodeEquals(200);
@@ -367,6 +367,24 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    */
   public function switchToWindow() {
     $this->getSession()->switchToWindow();
+  }
+
+  /**
+   * Asserts that a given field has the disabled attribute.
+   *
+   * @param string $field
+   *   The label, placeholder, ID or name of the field to check.
+   *
+   * @Then the :field field should be disabled
+   *
+   * @throws ExpectationException
+   *   If the field does not have the disabled attribute.
+   */
+  public function assertDisabledField($field) {
+    $element = $this->assertSession()->fieldExists($field);
+    if (!$element->hasAttribute('disabled')) {
+      throw new ExpectationException("Expected '{$field}' field to be disabled.", $this->getSession()->getDriver());
+    }
   }
 
 }

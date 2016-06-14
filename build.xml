@@ -51,7 +51,7 @@
   </target>
 
   <target name="pull" depends="env">
-    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="libraries,modules/contrib" />
+    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="libraries,modules/contrib,behat.local.yml" />
   </target>
 
   <!-- Builds a Lightning code base using Composer. -->

@@ -1,5 +1,8 @@
 <?php
 
+use Drupal\Core\Config\PreExistingConfigException;
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\node\Entity\NodeType;
 use Drupal\user\Entity\Role;
 
@@ -43,6 +46,79 @@ function lightning_layout_update_8003() {
     $permissions[] = 'administer node ' . $node_type->id() . ' defaults';
   }
   user_role_grant_permissions('layout_manager', $permissions);
+}
+
+/**
+ * Installs Panelizer defaults for the landing_page content type.
+ */
+function lightning_layout_update_8004() {
+  // Sanity check -- only proceed if the landing_page node type exists.
+  if (NodeType::load('landing_page') == NULL) {
+    return;
+  }
+
+  _lightning_layout_update_panelizer_default_displays('node.landing_page.default');
+
+  $values = lightning_read_config('core.entity_view_display.node.landing_page.full', 'lightning_layout');
+  try {
+    EntityViewDisplay::create($values)->save();
+  }
+  catch (PreExistingConfigException $e) {
+    _lightning_layout_update_panelizer_default_displays('node.landing_page.full');
+  }
+
+  EntityFormDisplay::load('node.landing_page.default')
+    ->setComponent('panelizer', [
+      'type' => 'panelizer',
+    ])
+    ->save();
+}
+
+/**
+ * Updates an entity view display with Lightning-provided Panelizer defaults.
+ *
+ * @param string $display_id
+ *   The existing view display entity ID (e.g. node.page.default)
+ */
+function _lightning_layout_update_panelizer_default_displays($display_id) {
+  $display = EntityViewDisplay::load($display_id);
+
+  if ($display) {
+    $values = lightning_read_config($display->getConfigDependencyName(), 'lightning_layout');
+
+    $panelizer_displays = array_merge_canadian(
+      $display->getThirdPartySetting('panelizer', 'displays', []),
+      $values['third_party_settings']['panelizer']['displays']
+    );
+    $display
+      ->setThirdPartySetting('panelizer', 'displays', $panelizer_displays)
+      ->save();
+  }
+}
+
+/**
+ * Recursively merges arrays using the + method.
+ *
+ * Existing keys at all levels of $a, both numeric and associative, will always
+ * be preserved. That's why I'm calling this a "Canadian" merge -- it doesn't
+ * want to step on any toes.
+ *
+ * @param array $a
+ *   The input array.
+ * @param array $b
+ *   The array to merge into $a.
+ *
+ * @return array
+ *   The merged arrays.
+ */
+function array_merge_canadian(array $a, array $b) {
+  $a += $b;
+  foreach ($a as $k => $v) {
+    if (is_array($v) && isset($b[$k]) && is_array($b[$k])) {
+      $a[$k] = call_user_func(__FUNCTION__, $a[$k], $b[$k]);
+    }
+  }
+  return $a;
 }
 
 /**
