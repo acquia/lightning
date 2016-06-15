@@ -2,7 +2,11 @@
 * Drupal core's developer dependencies are now included with Lightning so that
   you can run standard Drupal tests. (Issues #2703009 and #2747953)
 * Lightning now integrates Panelizer's new administrative UI, which allows the
-  creation of default layouts for any view mode of any content type. (Issue #2678240)
+  creation of default layouts for any view mode of any content type. (Issue
+  #2678240)
+* Formalized Lightning's logic for determining dependency version constraints.
+  (Issue #2745949)
+* Updates Drupal Core to 8.1.3
 
 ## Release Candidate 6 (RC6)
 * Lightning Media no longer depends on or references the Lightning profile

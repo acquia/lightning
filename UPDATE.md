@@ -55,19 +55,26 @@ to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
 ### RC6 to RC7
-* Go to *Structure > Content types* and choose **Manage Display** for the Landing
-  Page content type.
-* Under "Custom Display Settings", make sure the the **Full content** box is checked.
-* Scroll down and ensure the **Panelize this view mode** and **Allow custom overrides
-  of each entity** boxes are checked.
+After running `drush updatedb` or visiting `/update.php`:
+
+* Go to *Structure > Content types* and choose **Manage Display** for the
+  Landing Page content type.
+* Under "Custom Display Settings", make sure the the **Full content** box is
+  checked.
+* Scroll down and ensure the **Panelize this view mode** and **Allow custom
+  overrides of each entity** boxes are checked.
 * Press Save.
 * Click the **Full content** tab.
-* Scroll down and ensure that the **Panelize this view mode**, **Allow custom overrides
-  of each entity**, and **Allow panelizer default choice** boxes are checked.
+* Scroll down and ensure that the **Panelize this view mode**, **Allow custom
+  overrides of each entity**, and **Allow panelizer default choice** boxes are
+  checked.
 * Press Save.
 * Click the **Manage form display** tab.
-* Move the **Panelizer** field out the Disabled area. Be sure that "Panelizer" is
-  selected as the widget type, and press Save.
+* Move the **Panelizer** field out the Disabled area. Be sure that "Panelizer"
+  is selected as the widget type, and press Save.
+
+Depending on what customizations you made to Landing Page prior to the update,
+some, all, or none of these setting might already be enabled.
 
 ### RC5 to RC6
 There are no manual update steps for this version. There are several database
