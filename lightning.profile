@@ -11,6 +11,16 @@ use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
+ * Rebuilds the service container.
+ */
+function lightning_rebuild_container() {
+  require_once \Drupal::root() . '/core/includes/utility.inc';
+  $class_loader = \Drupal::service('class_loader');
+  $request = \Drupal::request();
+  drupal_rebuild($class_loader, $request);
+}
+
+/**
  * Implements template_preprocess_block().
  */
 function lightning_preprocess_block(array &$variables) {

@@ -626,8 +626,6 @@ function lightning_media_update_8010() {
 
 /**
  * Grants creator content role access to the rich_text format and media browser.
- *
- * @see lightning_media_user_role_presave()
  */
 function lightning_media_update_8011() {
   $config = \Drupal::configFactory()->getEditable('lightning_core.settings');
@@ -649,9 +647,9 @@ function lightning_media_update_dependencies() {
       8004 => [
         'lightning' => 8002,
       ],
+      // 8011 requires the lightning_core.settings config object, which is
+      // created by lightning_core 8001.
       8011 => [
-        // 8011 alters the lightning_core.settings config object, which is
-        // created by lightning_core 8001.
         'lightning_core' => 8001,
       ],
     ],

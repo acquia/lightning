@@ -57,13 +57,13 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
 ### RC6 to RC7
 * Go to *Structure > Content types* and choose **Manage Display** for the Landing
   Page content type.
-* Under "Custom Display Settings", check the **Full content** box.
-* Scroll down and enable the **Panelize this view mode** and **Allow custom overrides
-  of each entity** checkboxes.
+* Under "Custom Display Settings", make sure the the **Full content** box is checked.
+* Scroll down and ensure the **Panelize this view mode** and **Allow custom overrides
+  of each entity** boxes are checked.
 * Press Save.
 * Click the **Full content** tab.
-* Scroll down and enable the **Panelize this view mode**, **Allow custom overrides of
-  each entity**, and **Allow panelizer default choice** checkboxes.
+* Scroll down and ensure that the **Panelize this view mode**, **Allow custom overrides
+  of each entity**, and **Allow panelizer default choice** boxes are checked.
 * Press Save.
 * Click the **Manage form display** tab.
 * Move the **Panelizer** field out the Disabled area. Be sure that "Panelizer" is

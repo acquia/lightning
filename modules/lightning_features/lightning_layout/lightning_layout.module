@@ -4,34 +4,12 @@ use Drupal\node\NodeTypeInterface;
 use Drupal\user\Entity\Role;
 
 /**
- * Returns common layout-related permissions for a node type.
- *
- * @param \Drupal\node\NodeTypeInterface $node_type
- *   The node type.
- *
- * @return string[]
- *   The permissions.
- */
-function _lightning_layout_node_type_permissions(NodeTypeInterface $node_type) {
-  return [
-    'access panels in-place editing',
-    'change layouts in place editing',
-    'administer panelizer node ' . $node_type->id() . ' content',
-    'administer panelizer node ' . $node_type->id() . ' layout',
-  ];
-}
-
-/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_layout_node_type_insert(NodeTypeInterface $node_type) {
   user_role_grant_permissions('layout_manager', [
     'administer panelizer node ' . $node_type->id() . ' defaults',
   ]);
-
-  $permissions = _lightning_layout_node_type_permissions($node_type);
-  user_role_grant_permissions($node_type->id() . '_creator', $permissions);
-  user_role_grant_permissions($node_type->id() . '_reviewer', $permissions);
 }
 
 /**
@@ -44,15 +22,5 @@ function lightning_layout_node_type_delete(NodeTypeInterface $node_type) {
     $role
       ->revokePermission('administer panelizer node ' . $node_type->id() . ' defaults')
       ->save();
-  }
-
-  $roles = Role::loadMultiple([
-    $node_type->id() . '_creator',
-    $node_type->id() . '_reviewer',
-  ]);
-  $permissions = _lightning_layout_node_type_permissions($node_type);
-  foreach ($roles as $role) {
-    array_walk($permissions, [$role, 'revokePermission']);
-    $role->save();
   }
 }
