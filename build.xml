@@ -3,7 +3,6 @@
 
   <property name="drush" value="${project.basedir}/bin/drush" />
   <property name="composer" value="/usr/local/bin/composer" />
-  <property name="npm" value="/usr/local/bin/npm" />
   <property name="rsync" value="/usr/bin/rsync" />
   <property name="db.type" value="mysql" />
   <property name="db.host" value="localhost" />
@@ -15,7 +14,7 @@
   <property name="profile" value="${docroot}/profiles/lightning" />
   <property name="site" value="${docroot}/sites/default" />
 
-  <!-- Finds Composer, NPM, and rsync. -->
+  <!-- Finds Composer and rsync. -->
   <target name="env">
     <if>
       <not>
@@ -26,7 +25,6 @@
       </then>
     </if>
     <exec command="which composer" outputProperty="composer" />
-    <exec command="which npm" outputProperty="npm" />
     <exec command="which rsync" outputProperty="rsync" />
   </target>
 
@@ -34,13 +32,6 @@
   <target name="push" depends="env">
     <!-- Create the destination if it doesn't exist. -->
     <mkdir dir="${profile}" />
-
-    <!--
-    bower.json may have changed, so reinstall front-end dependencies using
-    the version of Bower installed locally in node_modules. The
-    install-libraries script lives in package.json.
-    -->
-    <exec command="${npm} run install-libraries" passthru="true" />
 
     <!-- rsync the profile, excluding developer flotsam. -->
     <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},karma.conf.js,*.make,node_modules,.travis.yml,vendor" />
