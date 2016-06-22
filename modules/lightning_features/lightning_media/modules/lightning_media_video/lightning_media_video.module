@@ -1,6 +1,16 @@
 <?php
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\media_entity\MediaInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function lightning_media_video_media_presave(MediaInterface $entity) {
+  if ($entity->bundle() == 'video') {
+    $entity->automaticallySetThumbnail();
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().
