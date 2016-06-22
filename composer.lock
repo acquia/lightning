@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4fb2c2018218e17569be458d68631f26",
-    "content-hash": "dfbecc729c4d04668b255e5d5c92918b",
+    "hash": "1af0fa5b21e104048167bc73494efaf1",
+    "content-hash": "50303e8e02567934778fa7a774fcdcb2",
     "packages": [
         {
             "name": "composer/installers",
@@ -4663,25 +4663,27 @@
         },
         {
             "name": "drupal/drupal-extension",
-            "version": "v3.1.5",
+            "version": "v3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/drupalextension.git",
-                "reference": "6bfff4967d0efacff51e2ff51a306021012396d8"
+                "reference": "51a84d29b1622dc6b5e2bd2f131f18b0fcb2e6dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/6bfff4967d0efacff51e2ff51a306021012396d8",
-                "reference": "6bfff4967d0efacff51e2ff51a306021012396d8",
+                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/51a84d29b1622dc6b5e2bd2f131f18b0fcb2e6dd",
+                "reference": "51a84d29b1622dc6b5e2bd2f131f18b0fcb2e6dd",
                 "shasum": ""
             },
             "require": {
-                "behat/behat": "~3.0,>=3.0.5",
+                "behat/behat": "~3.1.0-rc2",
                 "behat/mink": "~1.5",
                 "behat/mink-extension": "~2.0",
                 "behat/mink-goutte-driver": "~1.0",
                 "behat/mink-selenium2-driver": "~1.1",
-                "drupal/drupal-driver": "~1.1"
+                "drupal/drupal-driver": "~1.2",
+                "symfony/dependency-injection": "~2.7",
+                "symfony/event-dispatcher": "~2.7"
             },
             "require-dev": {
                 "behat/mink-zombie-driver": "^1.2",
@@ -4689,6 +4691,11 @@
                 "phpunit/phpunit": "3.7.*"
             },
             "type": "behat-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.2.x-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
                     "Drupal\\Drupal": "src/",
@@ -4713,7 +4720,7 @@
                 "test",
                 "web"
             ],
-            "time": "2015-12-22 20:10:14"
+            "time": "2016-06-16 22:34:45"
         },
         {
             "name": "drush/drush",

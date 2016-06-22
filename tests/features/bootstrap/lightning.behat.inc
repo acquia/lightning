@@ -264,23 +264,6 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   }
 
   /**
-   * Asserts that a button is not present on the page.
-   *
-   * @param string $button
-   *   The label of the button.
-   *
-   * @Then I should not see the :button button
-   */
-  public function assertNotButton($button) {
-    try {
-      $this->minkContext->assertButton($button);
-    }
-    catch (\Exception $e) {
-      // If the assertion failed, the button does not exist and all is well.
-    }
-  }
-
-  /**
    * Fills in an autocompleting entity reference field.
    *
    * @param string $entity_type
