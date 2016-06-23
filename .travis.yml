@@ -36,6 +36,8 @@ install:
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
+  # The composer-asset-plugin must be installed globally.
+  - composer global require fxp/composer-asset-plugin:dev-master
   # Let Composer do all the magic!
   - composer install
 
