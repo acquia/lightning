@@ -49,6 +49,7 @@ before_script:
   - cd ..
 
 script:
+  - composer validate --no-check-all --ansi
   - cd docroot/profiles/lightning
   - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,libraries,modules/contrib .
   - behat --strict
