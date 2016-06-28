@@ -33,7 +33,8 @@
     "scripts": {
         "post-install-cmd": [
             "PhantomInstaller\\Installer::installPhantomJS",
-            "./bin/phing"
+            "@composer drupal-scaffold",
+            "./bin/phing push"
         ],
         "post-update-cmd": [
             "./bin/phing push"

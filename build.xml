@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Lightning" default="build">
+<project name="Lightning" default="env">
 
   <property name="drush" value="${project.basedir}/bin/drush" />
   <property name="composer" value="/usr/local/bin/composer" />
@@ -14,6 +14,7 @@
   <property name="docroot" value="docroot" />
   <property name="profile" value="${docroot}/profiles/lightning" />
   <property name="site" value="${docroot}/sites/default" />
+  <property name="version" value="HEAD" />
 
   <!-- Finds Composer, NPM, and rsync. -->
   <target name="env">
@@ -28,6 +29,11 @@
     <exec command="which composer" outputProperty="composer" />
     <exec command="which npm" outputProperty="npm" />
     <exec command="which rsync" outputProperty="rsync" />
+
+    <echo message="Found Drush: ${drush}" />
+    <echo message="Found Composer: ${composer}" />
+    <echo message="Found NPM: ${npm}" />
+    <echo message="Found rsync: ${rsync}" />
   </target>
 
   <!-- Syncs the Lightning profile into the Drupal code base. -->
@@ -56,8 +62,27 @@
 
   <!-- Builds a Lightning code base using Composer. -->
   <target name="build" depends="env">
-    <exec command="${composer} drupal-scaffold" />
-    <phingcall target="push" />
+    <if>
+      <equals arg1="${version}" arg2="HEAD" />
+      <then>
+        <exec command="${composer} install" passthru="true" />
+      </then>
+      <else>
+        <exec command="git archive -o archive.tar ${version}" />
+        <mkdir dir="build" />
+        <untar file="archive.tar" todir="build" />
+        <delete file="archive.tar" />
+        <exec command="${composer} install" dir="build" passthru="true" />
+        <move todir=".">
+          <fileset dir="build">
+            <include name="bin/**" />
+            <include name="${docroot}/**" />
+            <include name="vendor/**" />
+          </fileset>
+        </move>
+        <delete dir="build" quiet="true" />
+      </else>
+    </if>
   </target>
 
   <!-- Installs Lightning and sets it up for development. -->

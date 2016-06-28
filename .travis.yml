@@ -3,11 +3,14 @@ cache:
   bundler: true
   apt: true
   directories:
-  - "$HOME/.composer/cache"
-  - "$HOME/.drush/cache"
-  - "$HOME/.npm"
+    - "$HOME/.composer/cache"
+    - "$HOME/.drush/cache"
+    - "$HOME/.npm"
 php:
   - 5.5
+env:
+  - VERSION=HEAD
+  - VERSION=8.x-1.00
 
 sudo: false
 
@@ -24,7 +27,7 @@ before_install:
 install:
   # Add Composer's local bin directory to the PATH so that we will be running
   # our installed versions of Drush, PHPCS, Behat, PhantomJS, etc.
-  - export PATH="$TRAVIS_BUILD_DIR/bin:$PATH"
+  - export PATH="$HOME/.composer/vendor/bin:$TRAVIS_BUILD_DIR/bin:$PATH"
 
   # MySQL Options
   - mysql -e 'SET GLOBAL wait_timeout = 5400;'
@@ -36,8 +39,9 @@ install:
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
-  # Let Composer do all the magic!
-  - composer install
+  # Build the Lightning code base.
+  - composer global require phing/phing
+  - phing build -Dversion=$VERSION
 
   # Install Lightning.
   - phing install -Ddb.database=drupal
