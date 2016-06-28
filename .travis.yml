@@ -44,7 +44,7 @@ install:
 
   # Build the Lightning code base.
   - composer global require phing/phing
-  - phing build -Dversion=$VERSION
+  - phing build -Dversion=$VERSION -Dbranch=$TRAVIS_COMMIT
 
   # Install Lightning.
   - phing install -Ddb.database=drupal
