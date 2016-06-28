@@ -11,6 +11,9 @@ php:
 env:
   - VERSION=HEAD
   - VERSION=8.x-1.00
+  - VERSION=8.x-1.00-rc7
+  - VERSION=8.x-1.00-rc6
+  - VERSION=8.x-1.00-rc5
 
 sudo: false
 
@@ -51,6 +54,9 @@ before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - phantomjs --webdriver=4444 > /dev/null &
   - cd ..
+
+  # Execute database updates if we're not building from HEAD.
+  - if [ $VERSION != "HEAD" ]; then phing upgrade; fi
 
 script:
   - cd docroot/profiles/lightning
