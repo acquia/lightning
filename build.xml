@@ -65,12 +65,12 @@
     <if>
       <equals arg1="${version}" arg2="HEAD" />
       <then>
-        <composer composer="${composer}" command="install" />
+        <exec command="${composer} install" passthru="true" />
       </then>
       <else>
         <exec command="git rev-parse --abbrev-ref HEAD" outputProperty="branch" />
         <exec command="git checkout ${version}" />
-        <composer composer="${composer}" command="install" />
+        <exec command="${composer} install" passthru="true" />
         <exec command="git checkout ${branch}" />
       </else>
     </if>
