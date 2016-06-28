@@ -68,7 +68,14 @@
         <exec command="${composer} install" passthru="true" />
       </then>
       <else>
-        <exec command="git rev-parse --abbrev-ref HEAD" outputProperty="branch" />
+        <if>
+          <not>
+            <isset property="branch" />
+          </not>
+          <then>
+            <exec command="git rev-parse --abbrev-ref HEAD" outputProperty="branch" />
+          </then>
+        </if>
         <exec command="git checkout ${version}" />
         <exec command="${composer} install" passthru="true" />
         <exec command="git checkout ${branch}" />
