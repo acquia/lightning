@@ -65,22 +65,13 @@
     <if>
       <equals arg1="${version}" arg2="HEAD" />
       <then>
-        <exec command="${composer} install" passthru="true" />
+        <composer composer="${composer}" command="install" />
       </then>
       <else>
-        <exec command="git archive -o archive.tar ${version}" />
-        <mkdir dir="build" />
-        <untar file="archive.tar" todir="build" />
-        <delete file="archive.tar" />
-        <exec command="${composer} install" dir="build" passthru="true" />
-        <move todir=".">
-          <fileset dir="build">
-            <include name="bin/**" />
-            <include name="${docroot}/**" />
-            <include name="vendor/**" />
-          </fileset>
-        </move>
-        <delete dir="build" quiet="true" />
+        <exec command="git rev-parse --abbrev-ref HEAD" outputProperty="branch" />
+        <exec command="git checkout ${version}" />
+        <composer composer="${composer}" command="install" />
+        <exec command="git checkout ${branch}" />
       </else>
     </if>
   </target>
