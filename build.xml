@@ -95,6 +95,7 @@
   executes all database updates. -->
   <target name="upgrade" depends="env">
     <phingcall target="build" />
+    <exec command="${drush} cache-rebuild" />
     <exec command="${drush} updatedb --yes" dir="${docroot}" passthru="true" />
     <!-- TODO: Execute manual update steps as needed. -->
   </target>

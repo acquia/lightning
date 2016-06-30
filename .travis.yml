@@ -48,18 +48,16 @@ install:
 
   # Install Lightning.
   - phing install -Ddb.database=drupal
+  # Execute database updates if we're not building from HEAD.
+  - if [ $VERSION != "HEAD" ]; then phing upgrade; fi
 
 before_script:
   - cd docroot
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - phantomjs --webdriver=4444 > /dev/null &
-  - cd ..
-
-  # Execute database updates if we're not building from HEAD.
-  - if [ $VERSION != "HEAD" ]; then phing upgrade; fi
 
 script:
-  - cd docroot/profiles/lightning
+  - cd ./profiles/lightning
   - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,libraries,modules/contrib .
   - behat --strict
 
