@@ -64,12 +64,12 @@ function lightning_layout_update_8004() {
   // There is always a default view display, so unconditionally update it.
   _lightning_layout_update_panelizer_default_displays('node.landing_page.default');
 
-  $values = _lightning_layout_get_view_display('node.landing_page.full');
   try {
-    EntityViewDisplay::create($values)->save();
-  }
-  catch (PreExistingConfigException $e) {
     _lightning_layout_update_panelizer_default_displays('node.landing_page.full');
+  }
+  catch (EntityStorageException $e) {
+    $values = _lightning_layout_get_view_display('node.landing_page.full');
+    EntityViewDisplay::create($values)->save();
   }
 
   EntityFormDisplay::load('node.landing_page.default')
