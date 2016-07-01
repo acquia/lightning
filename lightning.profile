@@ -8,7 +8,73 @@
 
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
-use Drupal\Core\Form\FormStateInterface;
+use Drupal\lightning\Form\ExtensionSelectForm;
+
+/**
+ * Implements hook_install_tasks().
+ */
+function lightning_install_tasks() {
+  return array(
+    'lightning_select_extensions' => array(
+      'display_name' => t('Choose extensions'),
+      'display' => TRUE,
+      'type' => 'form',
+      'function' => ExtensionSelectForm::class,
+    ),
+    'lightning_install_extensions' => array(
+      'display_name' => t('Install extensions'),
+      'display' => TRUE,
+      'type' => 'batch',
+    ),
+  );
+}
+
+/**
+ * Implements hook_install_tasks_alter().
+ */
+function lightning_install_tasks_alter(array &$tasks, array $install_state) {
+  $tasks['install_finished']['function'] = 'lightning_post_install_redirect';
+}
+
+/**
+ * Install task callback; prepares a batch job to install Lightning extensions.
+ *
+ * @param array $install_state
+ *   The current install state.
+ *
+ * @return array
+ *   The batch job definition.
+ */
+function lightning_install_extensions(array &$install_state) {
+  $batch = array();
+  foreach ($install_state['lightning']['modules'] as $module) {
+    $batch['operations'][] = ['lightning_install_module', (array) $module];
+  }
+  return $batch;
+}
+
+/**
+ * Batch API callback. Installs a module.
+ *
+ * @param string|array $module
+ *   The name(s) of the module(s) to install.
+ */
+function lightning_install_module($module) {
+  \Drupal::service('module_installer')->install((array) $module);
+}
+
+/**
+ * Redirects the user to a particular URL after installation.
+ *
+ * @param array $install_state
+ *   The current install state.
+ */
+function lightning_post_install_redirect(array &$install_state) {
+  $redirect = \Drupal::service('lightning.extender')->getRedirect();
+  if ($redirect) {
+    install_goto($redirect);
+  }
+}
 
 /**
  * Rebuilds the service container.
@@ -25,59 +91,6 @@ function lightning_rebuild_container() {
  */
 function lightning_preprocess_block(array &$variables) {
   $variables['attributes']['data-block-plugin-id'] = $variables['elements']['#plugin_id'];
-}
-
-/**
- * Implements hook_form_FORM_ID_alter() for install_configure_form().
- *
- * Allows the profile to alter the site configuration form.
- */
-function lightning_form_install_configure_form_alter(array &$form, FormStateInterface $form_state) {
-  // Add a value as example that one can choose an arbitrary site name.
-  $form['site_information']['site_name']['#placeholder'] = t('Lightning Demo');
-
-  // Add 'Lightning' fieldset and options.
-  $form['lightning'] = [
-    '#type' => 'details',
-    '#title' => t('Lightning Features'),
-    '#weight' => -5,
-    '#open' => TRUE,
-  ];
-
-  // Checkboxes to enable Lightning Features.
-  $form['lightning']['extensions'] = [
-    '#type' => 'checkboxes',
-    '#title' => t('Enable Extensions'),
-    '#description' => t('You can choose to disable some of Lightning\'s functionality above. However, it is not recommended.'),
-    '#options' => [
-      'lightning_media' => 'Lightning Media',
-      'lightning_layout' => 'Lightning Layout',
-      'lightning_workflow' => 'Lightning Workflow',
-    ],
-  ];
-  // All our extensions are checked by default.
-  $form['lightning']['extensions']['#default_value'] = array_keys($form['lightning']['extensions']['#options']);
-
-  $form['#submit'][] = 'lightning_extensions_enable';
-}
-
-/**
- * Enable requested Lightning extensions and demo content.
- */
-function lightning_extensions_enable($form_id, FormStateInterface $form_state) {
-  $features = array_filter($form_state->getValue('extensions'));
-  if ($features) {
-    if (in_array('lightning_media', $features)) {
-      $features = array_merge($features, [
-        'lightning_media_document',
-        'lightning_media_image',
-        'lightning_media_instagram',
-        'lightning_media_twitter',
-        'lightning_media_video',
-      ]);
-    }
-    \Drupal::service('module_installer')->install($features);
-  }
 }
 
 /**

@@ -16,6 +16,51 @@ function lightning_media_form_entity_browser_media_browser_form_alter(array &$fo
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
+function lightning_media_media_insert() {
+  // This is a terrible, awful kludge around a very nasty bug in Entity Browser.
+  // It's insidious, so settle into a comfortable chair while I tell you a tale
+  // of caching gone wrong...
+  //
+  // So the thing is, Entity Browser views require you to add a bulk select
+  // field in order for entities to be, like, selectable in the browser. The
+  // field is actually rendered out as a placeholder comment, and render-cached
+  // along with the rest of the row. (Each row is cached individually, and
+  // tagged with the ID of the view, and the ID of the entity it displays.) I
+  // think the use of placeholders is stupid as hell, but it's what you gotta
+  // do, given Views' limitations (and, indeed, it's what core does).
+  //
+  // So here's the rub. When you add a new entity that shows up in the browser,
+  // it is also rendered out with a numbered placeholder and cached. The problem
+  // is that the rest of the entities in the view -- the ones that were already
+  // there and previously cached, remember -- are ALSO being rendered out. With
+  // the same numerically indexed (i.e., position-dependent) placeholders that
+  // they had before! Why? Because the renderable arrays for the existing rows
+  // are not deleted when a new entity is added! Why would they be? They don't
+  // have the appropriate cache tags!
+  //
+  // I have hacked at this for hours and I cannot for the life of me figure out
+  // where the HELL to add a cache tag to each row which would be invalidated
+  // when a new entity is added. Nothing has worked. So I'm punting. This is
+  // a bug that needs to be fixed in Entity Browser, but for the time being,
+  // clearing the render cache when a media item is added will kludge the issue.
+  //
+  // We can get rid of this once #2758767 is committed to Entity Browser.
+  \Drupal::cache('render')->deleteAll();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function lightning_media_media_delete() {
+  // See lightning_media_media_insert() for an explanation of why this revolting
+  // hack is necessary. We can delete this once #2758767 is committed to
+  // Entity Browser.
+  \Drupal::cache('render')->deleteAll();
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
 function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
   /** @var \Drupal\field\Entity\FieldConfig $field */
   $field = FieldConfig::create([
