@@ -48,7 +48,7 @@ install:
   # Install Lightning.
   - phing install -Ddb.database=drupal
   # Execute database updates if we're not building from HEAD.
-  - if [ $VERSION != "HEAD" ]; then phing upgrade; fi
+  - if [ $VERSION != "HEAD" ]; then phing update; fi
 
 before_script:
   - cd docroot
