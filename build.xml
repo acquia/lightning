@@ -85,7 +85,8 @@
 
   <!-- Installs Lightning and sets it up for development. -->
   <target name="install" depends="env">
-    <exec command="${drush} site-install lightning --yes --account-pass=admin --db-url=${db.url}" dir="${docroot}" />
+    <!-- Use passthru() when executing drush site-install so that we'll know if errors occur. -->
+    <exec command="${drush} site-install lightning --yes --account-pass=admin --db-url=${db.url}" dir="${docroot}" passthru="true" />
     <exec command="${drush} config-set system.performance css.preprocess 0 --yes --format=boolean" dir="${docroot}" />
     <exec command="${drush} config-set system.performance js.preprocess 0 --yes --format=boolean" dir="${docroot}" />
     <exec command="${drush} config-set system.logging error_level all --yes" dir="${docroot}" />

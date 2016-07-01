@@ -140,6 +140,7 @@ function lightning_media_update_8007() {
  * Creates the Entity Browser display of the media view.
  */
 function lightning_media_update_8008() {
+  /** @var \Drupal\views\ViewEntityInterface $view */
   $view = View::load('media');
   // Sanity check.
   if (empty($view)) {
@@ -511,6 +512,54 @@ function lightning_media_update_8008() {
                 'entity_field' => 'bundle',
                 'plugin_id' => 'bundle',
               ),
+            'field_media_in_library_value' =>
+              array (
+                'id' => 'field_media_in_library_value',
+                'table' => 'media__field_media_in_library',
+                'field' => 'field_media_in_library_value',
+                'relationship' => 'none',
+                'group_type' => 'group',
+                'admin_label' => '',
+                'operator' => '=',
+                'value' => true,
+                'group' => 1,
+                'exposed' => false,
+                'expose' =>
+                  array (
+                    'operator_id' => '',
+                    'label' => '',
+                    'description' => '',
+                    'use_operator' => false,
+                    'operator' => '',
+                    'identifier' => '',
+                    'required' => false,
+                    'remember' => false,
+                    'multiple' => false,
+                    'remember_roles' =>
+                      array (
+                        'authenticated' => 'authenticated',
+                      ),
+                  ),
+                'is_grouped' => false,
+                'group_info' =>
+                  array (
+                    'label' => '',
+                    'description' => '',
+                    'identifier' => '',
+                    'optional' => true,
+                    'widget' => 'select',
+                    'multiple' => false,
+                    'remember' => false,
+                    'default_group' => 'All',
+                    'default_group_multiple' =>
+                      array (
+                      ),
+                    'group_items' =>
+                      array (
+                      ),
+                  ),
+                'plugin_id' => 'boolean',
+              ),
           ),
         'filter_groups' =>
           array (
@@ -639,6 +688,84 @@ function lightning_media_update_8011() {
 }
 
 /**
+ * Adds the library filter to the media view's Entity Browser display.
+ */
+function lightning_media_update_8012() {
+  /** @var \Drupal\entity_browser\EntityBrowserInterface $browser */
+  $browser = EntityBrowser::load('media_browser');
+  if (empty($browser)) {
+    return;
+  }
+
+  /** @var \Drupal\entity_browser\WidgetInterface $widget */
+  foreach ($browser->getWidgets() as $widget) {
+    if ($widget->getPluginId() == 'view') {
+      $configuration = $widget->getConfiguration();
+
+      if ($configuration['settings']['view'] == 'media') {
+        /** @var \Drupal\views\ViewEntityInterface $view */
+        $view = View::load('media');
+        // Reference the display options directly, for readability.
+        $display = &$view->getDisplay($configuration['settings']['view_display'])['display_options'];
+
+        // It's possible that the site owner took matters into their own hands
+        // and configured the filter already, so only add it if it's not there.
+        if (empty($display['filters']['field_media_in_library_value'])) {
+          $display['filters']['field_media_in_library_value'] = array (
+            'id' => 'field_media_in_library_value',
+            'table' => 'media__field_media_in_library',
+            'field' => 'field_media_in_library_value',
+            'relationship' => 'none',
+            'group_type' => 'group',
+            'admin_label' => '',
+            'operator' => '=',
+            'value' => true,
+            'group' => 1,
+            'exposed' => false,
+            'expose' =>
+              array (
+                'operator_id' => '',
+                'label' => '',
+                'description' => '',
+                'use_operator' => false,
+                'operator' => '',
+                'identifier' => '',
+                'required' => false,
+                'remember' => false,
+                'multiple' => false,
+                'remember_roles' =>
+                  array (
+                    'authenticated' => 'authenticated',
+                  ),
+              ),
+            'is_grouped' => false,
+            'group_info' =>
+              array (
+                'label' => '',
+                'description' => '',
+                'identifier' => '',
+                'optional' => true,
+                'widget' => 'select',
+                'multiple' => false,
+                'remember' => false,
+                'default_group' => 'All',
+                'default_group_multiple' =>
+                  array (
+                  ),
+                'group_items' =>
+                  array (
+                  ),
+              ),
+            'plugin_id' => 'boolean',
+          );
+          $view->save();
+        }
+      }
+    }
+  }
+}
+
+/**
  * Implements hook_update_dependencies().
  */
 function lightning_media_update_dependencies() {
@@ -651,6 +778,11 @@ function lightning_media_update_dependencies() {
       // created by lightning_core 8001.
       8011 => [
         'lightning_core' => 8001,
+      ],
+      // 8012 adds the field_media_in_library filter to the Entity Browser
+      // display of the media view, which is created by 8008.
+      8012 => [
+        'lightning_media' => 8008,
       ],
     ],
   ];
