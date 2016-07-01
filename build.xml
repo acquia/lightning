@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Lightning" default="build">
+<project name="Lightning" default="env">
 
   <property name="drush" value="${project.basedir}/bin/drush" />
   <property name="composer" value="/usr/local/bin/composer" />
@@ -14,6 +14,7 @@
   <property name="docroot" value="docroot" />
   <property name="profile" value="${docroot}/profiles/lightning" />
   <property name="site" value="${docroot}/sites/default" />
+  <property name="version" value="HEAD" />
 
   <!-- Finds Composer, NPM, and rsync. -->
   <target name="env">
@@ -61,8 +62,25 @@
 
   <!-- Builds a Lightning code base using Composer. -->
   <target name="build" depends="env">
-    <exec command="${composer} drupal-scaffold" />
-    <phingcall target="push" />
+    <if>
+      <equals arg1="${version}" arg2="HEAD" />
+      <then>
+        <exec command="${composer} install" passthru="true" />
+      </then>
+      <else>
+        <if>
+          <not>
+            <isset property="branch" />
+          </not>
+          <then>
+            <exec command="git rev-parse --abbrev-ref HEAD" outputProperty="branch" />
+          </then>
+        </if>
+        <exec command="git checkout ${version}" />
+        <exec command="${composer} install" passthru="true" />
+        <exec command="git checkout ${branch}" />
+      </else>
+    </if>
   </target>
 
   <!-- Installs Lightning and sets it up for development. -->
@@ -72,6 +90,15 @@
     <exec command="${drush} config-set system.performance css.preprocess 0 --yes --format=boolean" dir="${docroot}" />
     <exec command="${drush} config-set system.performance js.preprocess 0 --yes --format=boolean" dir="${docroot}" />
     <exec command="${drush} config-set system.logging error_level all --yes" dir="${docroot}" />
+  </target>
+
+  <!-- Builds the Lightning code base from HEAD, overwriting docroot, and
+  executes all database updates. -->
+  <target name="update" depends="env">
+    <phingcall target="build" />
+    <exec command="${drush} cache-rebuild" />
+    <exec command="${drush} updatedb --yes" dir="${docroot}" passthru="true" />
+    <!-- TODO: Execute manual update steps as needed. -->
   </target>
 
   <!-- Prepares Lightning for the drupal.org packaging system. -->
