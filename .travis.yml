@@ -61,7 +61,7 @@ before_script:
 
 script:
   - cd ./profiles/lightning
-  - [ if $VERSION = "HEAD" ]; then phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,libraries,modules/contrib .; fi
+  - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,libraries,modules/contrib .
   - behat --strict
 
 matrix:
