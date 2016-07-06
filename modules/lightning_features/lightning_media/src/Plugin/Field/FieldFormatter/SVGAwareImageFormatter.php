@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\lightning_media\Plugin\Field\FieldFormatter;
 
 use Drupal\Core\Field\FieldItemListInterface;

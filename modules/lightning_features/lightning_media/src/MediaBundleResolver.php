@@ -50,7 +50,7 @@ class MediaBundleResolver {
    *   The typed data manager.
    * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
    *   The module handler.
-   * @param \Drupal\video_embed_field\ProviderManagerInterface|NULL $video_providers
+   * @param \Drupal\video_embed_field\ProviderManagerInterface $video_providers
    *   (optional) The video provider manager.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager, TypedDataManagerInterface $typed_data_manager, ModuleHandlerInterface $module_handler, ProviderManagerInterface $video_providers = NULL) {
@@ -66,8 +66,8 @@ class MediaBundleResolver {
    * @param string $embed_code
    *   The embed code.
    *
-   * @return \Drupal\media_entity\MediaBundleInterface|FALSE
-   *   The matching bundle, or FALSE if there isn't one.
+   * @return \Drupal\media_entity\MediaBundleInterface|false
+   *   The matching bundle, or false if there isn't one.
    */
   public function getBundleFromEmbedCode($embed_code) {
     switch (TRUE) {

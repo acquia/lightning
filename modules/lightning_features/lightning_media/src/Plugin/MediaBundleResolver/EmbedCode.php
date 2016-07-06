@@ -42,7 +42,7 @@ class EmbedCode extends BundleResolverBase {
    *   The entity manager.
    * @param \Drupal\Core\TypedData\TypedDataManagerInterface $typed_data_manager
    *   The typed data manager.
-   * @param \Drupal\video_embed_field\ProviderManagerInterface|NULL $video_providers
+   * @param \Drupal\video_embed_field\ProviderManagerInterface $video_providers
    *   (optional) The video provider manager.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, TypedDataManagerInterface $typed_data_manager, ProviderManagerInterface $video_providers = NULL) {

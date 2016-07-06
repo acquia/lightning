@@ -175,8 +175,8 @@ abstract class EntityFormProxy extends WidgetBase {
    * @param string $input
    *   The input value from which to generate the entity.
    *
-   * @return \Drupal\media_entity\MediaInterface|NULL
-   *   A new, unsaved media entity, or NULL if the input value could not be
+   * @return \Drupal\media_entity\MediaInterface|null
+   *   A new, unsaved media entity, or null if the input value could not be
    *   handled by any existing media bundles.
    */
   protected function generateEntity($input) {

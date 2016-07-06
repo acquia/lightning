@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2fbd57949e23fe7780b4b6f195e2119c",
-    "content-hash": "159b2e4842167cb8c2df7a4d8a2b5e93",
+    "hash": "b6d6f4cbe6529c52108777423887b1b4",
+    "content-hash": "8db242da82b976e7d27f8eda396ecce4",
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v1.0.25",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "36e5b5843203d7f1cf6ffb0305a97e014387bd8e"
+                "reference": "a3595c5272a6f247228abb20076ed27321e4aae9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/36e5b5843203d7f1cf6ffb0305a97e014387bd8e",
-                "reference": "36e5b5843203d7f1cf6ffb0305a97e014387bd8e",
+                "url": "https://api.github.com/repos/composer/installers/zipball/a3595c5272a6f247228abb20076ed27321e4aae9",
+                "reference": "a3595c5272a6f247228abb20076ed27321e4aae9",
                 "shasum": ""
             },
             "require": {
@@ -65,6 +65,7 @@
                 "MODX Evo",
                 "Mautic",
                 "OXID",
+                "RadPHP",
                 "SMF",
                 "Thelia",
                 "WolfCMS",
@@ -80,6 +81,7 @@
                 "dokuwiki",
                 "drupal",
                 "elgg",
+                "expressionengine",
                 "fuelphp",
                 "grav",
                 "installer",
@@ -105,7 +107,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2016-04-13 19:46:30"
+            "time": "2016-07-05 06:18:20"
         },
         {
             "name": "composer/semver",
@@ -1044,7 +1046,8 @@
                     "dev-8.x-1.x": "8.1.x-dev"
                 },
                 "patches_applied": {
-                    "2738843 - The view widget should support radio buttons": "https://www.drupal.org/files/issues/2738843-2.patch"
+                    "2758767 - EB views that sort in descending order are broken by render caching": "https://www.drupal.org/files/issues/entity_browser-view-selection-render-cache-fix.patch",
+                    "2738843 - The view widget should support radio buttons": "https://www.drupal.org/files/issues/2738843-4.patch"
                 }
             },
             "notification-url": "https://packagist.drupal-composer.org/downloads/",
@@ -1235,25 +1238,21 @@
         },
         {
             "name": "drupal/media_entity",
-            "version": "8.1.1",
+            "version": "8.1.2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/media_entity.git",
-                "reference": "ffe1b5991e203605ce468bda4bfd2c36acf4fc5f"
+                "reference": "8bc03edd625dc1ce7f7f6b770ce02e51f14cbcd2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_entity-8.x-1.1.zip",
+                "url": "https://ftp.drupal.org/files/projects/media_entity-8.x-1.2.zip",
                 "reference": null,
                 "shasum": null
             },
             "require": {
                 "drupal/core": "8.*",
-                "drupal/entity": ">=8.1.0-alpha3",
-                "drupal/image": "8.*",
-                "drupal/system": ">=8.1.0",
-                "drupal/user": "8.*",
-                "drupal/views": "8.*"
+                "drupal/entity": ">=8.1.0-alpha3"
             },
             "type": "drupal-module",
             "extra": {
@@ -1267,7 +1266,7 @@
             ],
             "description": "Media entity API.",
             "homepage": "https://www.drupal.org/project/media_entity",
-            "time": "2016-05-16 20:13:30"
+            "time": "2016-07-05 11:52:22"
         },
         {
             "name": "drupal/media_entity_document",
@@ -1368,15 +1367,15 @@
         },
         {
             "name": "drupal/media_entity_twitter",
-            "version": "8.1.0",
+            "version": "8.1.1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/media_entity_twitter.git",
-                "reference": "ef412841b5666e07b09c1c5d3643597f2767aa84"
+                "reference": "ed5a40009d31deeaadb58df370c86af6de095d54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_entity_twitter-8.x-1.0.zip",
+                "url": "https://ftp.drupal.org/files/projects/media_entity_twitter-8.x-1.1.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -1397,7 +1396,7 @@
             ],
             "description": "Media entity Twitter provider.",
             "homepage": "https://www.drupal.org/project/media_entity_twitter",
-            "time": "2016-02-25 16:02:22"
+            "time": "2016-07-05 11:14:02"
         },
         {
             "name": "drupal/metatag",
@@ -1876,16 +1875,16 @@
         },
         {
             "name": "egulias/email-validator",
-            "version": "1.2.12",
+            "version": "1.2.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/egulias/EmailValidator.git",
-                "reference": "cbfe3ee6f758225559b1111048e05a3e4c2e26cf"
+                "reference": "b8bb147f46cc9790326ce2440a13be06cc5a63bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/cbfe3ee6f758225559b1111048e05a3e4c2e26cf",
-                "reference": "cbfe3ee6f758225559b1111048e05a3e4c2e26cf",
+                "url": "https://api.github.com/repos/egulias/EmailValidator/zipball/b8bb147f46cc9790326ce2440a13be06cc5a63bb",
+                "reference": "b8bb147f46cc9790326ce2440a13be06cc5a63bb",
                 "shasum": ""
             },
             "require": {
@@ -1924,7 +1923,7 @@
                 "validation",
                 "validator"
             ],
-            "time": "2016-05-15 10:06:34"
+            "time": "2016-07-03 21:52:18"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -4526,15 +4525,15 @@
         },
         {
             "name": "drupal/coder",
-            "version": "8.2.7",
+            "version": "8.2.8",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/coder",
-                "reference": "a5b5f6b5769393a016da0d106a3b33f932c73331"
+                "reference": "6d717e1a5a5dd592ebbeaafad11746849fb52532"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/coder-8.x-2.7.zip",
+                "url": "https://ftp.drupal.org/files/projects/coder-8.x-2.8.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -4558,7 +4557,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2016-03-27 09:53:21"
+            "time": "2016-07-05 20:48:03"
         },
         {
             "name": "drupal/devel",
@@ -4668,16 +4667,16 @@
         },
         {
             "name": "drupal/drupal-extension",
-            "version": "v3.2.1",
+            "version": "v3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/drupalextension.git",
-                "reference": "51a84d29b1622dc6b5e2bd2f131f18b0fcb2e6dd"
+                "reference": "abe3a33abd94382ab62423dd972fa820c63962e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/51a84d29b1622dc6b5e2bd2f131f18b0fcb2e6dd",
-                "reference": "51a84d29b1622dc6b5e2bd2f131f18b0fcb2e6dd",
+                "url": "https://api.github.com/repos/jhedstrom/drupalextension/zipball/abe3a33abd94382ab62423dd972fa820c63962e3",
+                "reference": "abe3a33abd94382ab62423dd972fa820c63962e3",
                 "shasum": ""
             },
             "require": {
@@ -4725,7 +4724,7 @@
                 "test",
                 "web"
             ],
-            "time": "2016-06-16 22:34:45"
+            "time": "2016-06-30 21:12:18"
         },
         {
             "name": "drush/drush",
@@ -4770,6 +4769,10 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "9.0.x-dev"
+                },
+                "patches_applied": {
+                    "Adding composer.json support to make-convert command": "https://github.com/drush-ops/drush/commit/ce82b946d49b09cd33da5ca84feb24a6c35f8f8e.patch",
+                    "The batch table may not exist by the time _drush_backend_batch_process() is called in 8.x-1.x": "https://github.com/drush-ops/drush/commit/c389aebb7d3e26ff0f544684d8b3ec3528107e55.diff"
                 }
             },
             "autoload": {

@@ -38,7 +38,7 @@ abstract class PreviewHandlerBase implements PreviewHandlerInterface {
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_manager
    *   The entity type manager.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface|NULL $translator
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $translator
    *   (optional) The string translation service.
    */
   public function __construct(EntityTypeManagerInterface $entity_manager, TranslationInterface $translator = NULL) {

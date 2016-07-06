@@ -34,7 +34,7 @@ interface PreviewHandlerInterface {
    *   The form structure.
    * @param \Drupal\Core\Form\FormStateInterface $form_state
    *   The current form state.
-   * @param \Drupal\Core\Entity\EntityInterface|NULL $entity
+   * @param \Drupal\Core\Entity\EntityInterface $entity
    *   (optional) The media entity. If not provided, it will be pulled from
    *   the form object.
    */

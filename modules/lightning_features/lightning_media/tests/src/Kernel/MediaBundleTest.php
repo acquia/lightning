@@ -1,4 +1,5 @@
 <?php
+
 namespace Drupal\Tests\lightning_media\Kernel;
 
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;

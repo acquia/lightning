@@ -18,8 +18,8 @@ interface BundleResolverInterface {
    * @param mixed $input
    *   The input value.
    *
-   * @return \Drupal\media_entity\MediaBundleInterface|FALSE
-   *   The applicable media bundle, or FALSE if there isn't one.
+   * @return \Drupal\media_entity\MediaBundleInterface|false
+   *   The applicable media bundle, or false if there isn't one.
    */
   public function getBundle($input);
 

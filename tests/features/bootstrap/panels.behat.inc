@@ -182,8 +182,8 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
    * @param string $region
    *   The machine name of the region in which the block is expected to be.
    *
-   * @return \Behat\Mink\Element\NodeElement|NULL
-   *   The row element, or NULL if one was not found.
+   * @return \Behat\Mink\Element\NodeElement|null
+   *   The row element, or null if one was not found.
    */
   protected function getBlockRow($block_label, $region) {
     $page = $this->getSession()->getPage();
