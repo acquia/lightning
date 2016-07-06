@@ -54,6 +54,9 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+### 1.00 to 1.01
+There are no manual update steps for this version.
+
 ### RC7 to 1.00
 There are no manual update steps for this version.
 

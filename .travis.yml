@@ -10,6 +10,7 @@ php:
   - 5.5
 env:
   - VERSION=HEAD
+  - VERSION=8.x-1.01
   - VERSION=8.x-1.00
   - VERSION=8.x-1.00-rc7
   - VERSION=8.x-1.00-rc6
@@ -60,7 +61,7 @@ before_script:
 
 script:
   - cd ./profiles/lightning
-  - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,libraries,modules/contrib .
+  - [ if $VERSION = "HEAD" ]; then phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,libraries,modules/contrib .; fi
   - behat --strict
 
 matrix:

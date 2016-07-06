@@ -1,3 +1,27 @@
+## 1.01
+* Mega patch for Panels included binary files and would fail to apply in certain
+  environments. (#2752375)
+* Removed custom step definitions which are now included in mink. (#2718123)
+* Video Entity thumbnails are now regenerated if the referenced video is
+  updated. (#2752429)
+* Fixed database update that would occur if updating directly from RC6 to 1.00.
+  (GH #133)
+* Fixed an issue where all media was displayed in the library, regardless of
+  the value of "Save to Library". (#2757473)
+* Fixed an issue that prevented users from selecting certain cached elements
+  from the media library. (#2757481)
+* Updated the front page view to use the [site:name] token instead of printing
+  "Lightning". (#2757351)
+* Provided a standard way to extend Lightning. (#2734507)
+* Improved CI now automatically tests update path.
+* Lightning Media no longer clears the render cache after entity operations.
+  (#2759313)
+
+## 1.00
+* Fixed regressions in panelizer and added test coverage. (#2751225)
+* Updated drupal scaffold to latest release. (#2751541)
+* Fixed plugin lazy loading usort warnings. (#2699157)
+
 ## Release Candidate 7 (RC7)
 * Drupal core's developer dependencies are now included with Lightning so that
   you can run standard Drupal tests. (Issues #2703009 and #2747953)
