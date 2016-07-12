@@ -65,10 +65,10 @@ class Extender {
   public function getRedirect() {
     $info = $this->getInfo();
 
-    if ($info['redirect']) {
+    if (!empty($info['redirect'])) {
       $redirect = $info['redirect']['path'];
 
-      if ($info['redirect']['query']) {
+      if (!empty($info['redirect']['query'])) {
         $redirect .= '?' . UrlHelper::buildQuery($info['redirect']['query']);
       }
       return $redirect;
