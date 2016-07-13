@@ -2,8 +2,7 @@
 
 /**
  * @file
- * Enables defines the Lightning Profile install screen by modifying the install
- * form.
+ * Defines the Lightning Profile install screen by modifying the install form.
  */
 
 use Drupal\Core\Config\FileStorage;

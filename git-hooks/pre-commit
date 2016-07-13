@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+ROOT_DIR="$(pwd)/"
+LIST=$( git diff --name-only --cached --diff-filter=ACM -- '*.php' '*.inc' '*.profile' '*.module' '*.install' '*.profile')
+PHPCS_BIN=bin/phpcs
+
+if [ ! -f $PHPCS_BIN ];
+  then
+    echo "WARNING: PHP Code Sniffer was not found. This commit might include coding standards violations. You can fix this by ensuring that composer has correctly installed it's dev dependencies including a symlink in the bin folder to the phpcs package in vendor. Commit "
+    exit 1
+  else
+    echo "Sniffing staged files via PHP Code Sniffer."
+fi
+
+if [ ! -z "$LIST" ];
+  then
+    phpcs --standard=${ROOT_DIR}/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml ${LIST}
+fi
+
+e=$?
+
+exit $e
