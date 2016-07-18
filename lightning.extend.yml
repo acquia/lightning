@@ -1,5 +1,15 @@
 # Defines additional tasks for Lightning to perform during and after site
-# installation.
+# installation. Place this file in your Site Path (e.g. /sites/default or
+# /sites/SITENAME) directory for it to take effect.
+
+# List of lightning Extensions enabled when Lightning is installed. The presence
+# of this key will disable the Lightning Select Extensions form. If you want to
+# allow users to choose which Lightning Extensions should be enabled during
+# installation, comment out the following lines.
+lightning_extensions:
+  - lightning_workflow
+  - lightning_layout
+  - lightning_media
 
 # List of additional modules to enable after Lightning is installed.
 modules: { }
