@@ -1,3 +1,13 @@
+## 1.02
+* Updated core to 8.1.7 (Security Release) and all contrib modules to latest 
+  available releases.
+* It's now possible to define which Lightning extensions will be enabled by
+  listing them in ```lightning.extend.yml```. (#2765627)
+* Extender::getRedirect() now checks to see if key exists before reading value
+  to prevent a PHP notice from being displayed on install. (#276446)
+* Fixed a bug where embedded tweets did not appear in CKEditor. (#2764909)
+* Applied a patch to suppress metatag messages during install. (#2765137)
+
 ## 1.01
 * Mega patch for Panels included binary files and would fail to apply in certain
   environments. (#2752375)
