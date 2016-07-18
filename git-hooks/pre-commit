@@ -14,7 +14,7 @@ fi
 
 if [ ! -z "$LIST" ];
   then
-    phpcs --standard=${ROOT_DIR}/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml ${LIST}
+    $PHPCS_BIN --standard=${ROOT_DIR}/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml ${LIST}
 fi
 
 e=$?

@@ -99,7 +99,7 @@ class FileUpload extends EntityFormProxy {
   protected function getInputValue(FormStateInterface $form_state) {
     $value = $form_state->getValue('file');
     if ($value) {
-      return $this->entityManager->getStorage('file')->load($value[0]);
+      return $this->entityTypeManager->getStorage('file')->load($value[0]);
     }
   }
 
