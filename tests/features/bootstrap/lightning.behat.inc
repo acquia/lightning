@@ -369,4 +369,26 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
     }
   }
 
+  /**
+   * Submits the image browser.
+   *
+   * @When I submit the entity browser
+   */
+  public function submitEntityBrowser() {
+    $this->getSession()
+      ->executeScript('window.frames["entity_browser_iframe_image-browser"].document.forms[0].op.click()');
+  }
+
+  /**
+   * Switches to an iframe.
+   *
+   * @param string $name
+   *   The iframe name.
+   *
+   * @When I switch to the :name frame
+   */
+  public function switchToFrame($name) {
+    $this->getSession()->switchToIFrame($name);
+  }
+
 }

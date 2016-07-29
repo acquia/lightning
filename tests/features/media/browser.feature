@@ -61,6 +61,36 @@ Feature: Media browser
     Then I should see "Drupal Does LSD"
     And I queue the latest media entity for deletion
 
+  Scenario: Uploading an image through the image browser
+    Given I am logged in as a user with the administrator role
+    And I visit "/admin/structure/types/manage/page/fields"
+    And I click "Add field"
+    And I select "Image" from "new_storage_type"
+    And I enter "Hero Image" for "Label"
+    And I wait 1 seconds
+    And I press "Save and continue"
+    And I press "Save field settings"
+    And I press "Save settings"
+    When I am logged in as a user with the page_creator role
+    And I visit "/node/add/page"
+    And I press "Select Image(s)"
+    And I wait for AJAX to finish
+    And I switch to the "entity_browser_iframe_image-browser" frame
+    And I wait 10 seconds
+    And I click "Upload"
+    And I attach the file "puppy.jpg" to "File"
+    And I wait for AJAX to finish
+    And I enter "Lookit the cutie pie!" for "Media name"
+    And I switch to the window
+    And I submit the entity browser
+    And I wait 10 seconds
+    And I wait for AJAX to finish
+    Then I should not see a "table[drupal-data-selector='edit-image-current'] td.empty" element
+    And I am logged in as a user with the administrator role
+    And I visit "admin/structure/types/manage/page/fields/node.page.field_hero_image/delete"
+    And I press "Delete"
+    And I queue the latest media entity for deletion
+
   Scenario: Opening the media browser on a pre-existing node
     Given I am logged in as a user with the "page_creator,page_reviewer,media_creator" roles
     And media entities:

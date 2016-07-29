@@ -121,6 +121,29 @@ function lightning_preprocess_block(array &$variables) {
 }
 
 /**
+ * Creates a config entity from default configuration.
+ *
+ * @param string $entity_type
+ *   The config entity type ID.
+ * @param string $id
+ *   The unprefixed entity ID.
+ * @param string $module
+ *   (optional) The module which has the default configuration.
+ */
+function lightning_create_config($entity_type, $id, $module = 'lightning') {
+  $values = lightning_read_config(
+    \Drupal::entityTypeManager()->getDefinition($entity_type)->getConfigPrefix() . '.' . $id,
+    $module
+  );
+  if ($values) {
+    \Drupal::entityTypeManager()
+      ->getStorage($entity_type)
+      ->create($values)
+      ->save();
+  }
+}
+
+/**
  * Reads a stored config file from a module's config/install directory.
  *
  * @param string $id

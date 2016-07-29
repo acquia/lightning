@@ -1,12 +1,15 @@
 <?php
 
+/**
+ * @file
+ * Contains installation and update routines for Lightning Layout.
+ */
+
 use Drupal\Component\Plugin\Exception\PluginNotFoundException;
-use Drupal\Core\Config\PreExistingConfigException;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityStorageException;
 use Drupal\node\Entity\NodeType;
-use Drupal\user\Entity\Role;
 
 /**
  * Implements hook_install().
@@ -31,13 +34,11 @@ function lightning_layout_update_8001() {
  * Creates the layout_manager role.
  */
 function lightning_layout_update_8002() {
-  $values = lightning_read_config('user.role.layout_manager', 'lightning_layout');
-  Role::create($values)->save();
+  lightning_create_config('user_role', 'layout_manager', 'lightning_layout');
 }
 
 /**
- * Adds Panelizer permissions to the landing_page_creator and layout_manager
- * roles.
+ * Adds Panelizer permissions to landing_page_creator and layout_manager roles.
  */
 function lightning_layout_update_8003() {
   $permissions = [];
@@ -169,7 +170,8 @@ function _lightning_layout_update_panelizer_default_displays($display_id) {
         $layout = \Drupal::service('plugin.manager.layout_plugin')->getDefinition($panelizer_display['layout']);
         $panelizer_display['label'] = $layout['label'];
       }
-      catch (PluginNotFoundException $e) {}
+      catch (PluginNotFoundException $e) {
+      }
     }
 
     // All displays must specify a storage type.
@@ -239,6 +241,6 @@ function lightning_layout_update_dependencies() {
       8005 => [
         'lightning_core' => 8001,
       ],
-    ]
+    ],
   ];
 }

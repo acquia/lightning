@@ -1,3 +1,6 @@
+## 1.03
+* Views Infinite Scroll updated to 8.x-1.2. (#2773811)
+
 ## 1.02
 * Updated core to 8.1.7 (Security Release) and all contrib modules to latest 
   available releases.
