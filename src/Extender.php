@@ -3,7 +3,7 @@
 namespace Drupal\lightning;
 
 use Drupal\Component\Serialization\Yaml;
-use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Url;
 
 /**
  * Helper class to get information from a site's lightning.extend.yml file.
@@ -78,14 +78,27 @@ class Extender {
   public function getRedirect() {
     $info = $this->getInfo();
 
-    if (!empty($info['redirect'])) {
-      $redirect = $info['redirect']['path'];
-
-      if (!empty($info['redirect']['query'])) {
-        $redirect .= '?' . UrlHelper::buildQuery($info['redirect']['query']);
-      }
-      return $redirect;
+    if (!empty($info['redirect']['path'])) {
+      $path = ltrim($info['redirect']['path'], '/');
     }
+    else {
+      // Redirect to the front page by default.
+      $path = '<front>';
+    }
+    $redirect = Url::fromUri('internal:/' . $path);
+
+    if (isset($info['redirect']['options'])) {
+      $redirect->setOptions($info['redirect']['options']);
+    }
+
+    // Explicitly set the base URL, if not previously set, to prevent weird
+    // redirection snafus.
+    $base_url = $redirect->getOption('base_url');
+    if (empty($base_url)) {
+      $redirect->setOption('base_url', $GLOBALS['base_url']);
+    }
+
+    return $redirect->setOption('absolute', TRUE)->toString();
   }
 
 }

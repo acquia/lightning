@@ -83,6 +83,33 @@
     </if>
   </target>
 
+  <!-- Prepares the docroot for installation via the UI. -->
+  <target name="preinstall" depends="uninstall">
+    <if>
+      <not>
+        <isset property="www.user" />
+      </not>
+      <then>
+        <exec command="whoami" outputProperty="www.user" />
+      </then>
+    </if>
+
+    <copy file="${site}/default.settings.php" tofile="${site}/settings.php" />
+    <chmod file="${site}/settings.php" mode="0775" />
+    <mkdir dir="${site}/files" mode="0775" />
+
+    <if>
+      <and>
+        <isset property="www.user" />
+        <isset property="www.group" />
+      </and>
+      <then>
+        <chown file="${site}/settings.php" user="${www.user}" group="${www.group}" />
+        <chown file="${site}/files" user="${www.user}" group="${www.group}" />
+      </then>
+    </if>
+  </target>
+
   <!-- Installs Lightning and sets it up for development. -->
   <target name="install" depends="env">
     <!-- Use passthru() when executing drush site-install so that we'll know if errors occur. -->
