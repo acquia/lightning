@@ -61,6 +61,7 @@ abstract class PreviewHandlerBase implements PreviewHandlerInterface {
       'description' => $this->t('A live preview of the @bundle.', [
         '@bundle' => $bundle->label(),
       ]),
+      'weight' => 0,
     ];
 
     return $extra;
