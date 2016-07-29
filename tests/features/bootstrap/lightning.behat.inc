@@ -61,7 +61,6 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    */
   public function clickElementBySelector($selector) {
     $session = $this->getSession();
-
     $element = $session->getPage()->find('css', $selector);
     if ($element) {
       try {

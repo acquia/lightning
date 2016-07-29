@@ -1,10 +1,15 @@
 <?php
 
+/**
+ * @file
+ * Core media asset support for Lightning.
+ */
+
+use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\media_entity\MediaBundleInterface;
-use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -67,9 +72,34 @@ function lightning_media_form_entity_embed_dialog_alter(array &$form, FormStateI
 /**
  * Implements hook_js_settings_alter().
  */
-function lightning_media_js_settings_alter(array &$settings, \Drupal\Core\Asset\AttachedAssetsInterface $assets) {
+function lightning_media_js_settings_alter(array &$settings, AttachedAssetsInterface $assets) {
   if (empty($settings['ajax'])) {
     $settings['ajax'] = [];
+  }
+
+  $route_name = \Drupal::routeMatch()->getRouteName();
+  if (strpos($route_name, 'entity_browser') === 0 && isset($settings['ajaxPageState']['libraries'])) {
+    $libraries = explode(',', $settings['ajaxPageState']['libraries']);
+    // If we pretend EB's iframe library has not been previously loaded, it will
+    // ALWAYS be fetched from the server, preventing (in a crappy, kludgey way)
+    // the bug in #2768849.
+    $libraries = array_diff($libraries, ['entity_browser/iframe']);
+    $settings['ajaxPageState']['libraries'] = implode(',', $libraries);
+  }
+}
+
+/**
+ * Implements hook_ajax_render_alter().
+ */
+function lightning_media_ajax_render_alter(array &$data) {
+  if (\Drupal::routeMatch()->getRouteName() == 'entity_embed.dialog') {
+    foreach ($data as &$command) {
+      if ($command['command'] == 'settings' && isset($command['settings']['ajaxPageState']['libraries'])) {
+        $libraries = explode(',', $command['settings']['ajaxPageState']['libraries']);
+        $libraries = array_diff($libraries, ['entity_browser/iframe']);
+        $command['settings']['ajaxPageState']['libraries'] = implode(',', $libraries);
+      }
+    }
   }
 }
 
