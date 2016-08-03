@@ -1,5 +1,27 @@
 ## 1.03
-* Views Infinite Scroll updated to 8.x-1.2. (#2773811)
+* Lightning now includes an image browser for uploading images to and
+  selecting images from your media library. It is automatically used
+  for all new image fields by default, to give your users a much nicer
+  out-of-the-box experience of dealing with image assets. The image
+  browser is NOT automatically added to any existing image fields, but
+  they can be manually changed to use it. (#2767213)
+* Several other modules, including Entity Browser, were updated as well.
+  Note that Entity Browser introduced several backwards-incompatible API
+  changes, so if you have custom Entity Browser code you may need to
+  update. Be safe and back up your database before running updating to
+  this version of Lightning. (#2778437)
+* Views Infinite Scroll was updated to 8.x-1.2. (#2773811)
+* A sanity check was added to prevent fatal errors when preparing extra
+  fields for media asset previews. (#2759825)
+* The Lightning Extender will now search for lightning.extend.yml in sites/all
+  as well as your site's individual directory. This means it's now possible for
+  every site in a multisite Lightning installation to use the same extender
+  configuration. (#2766337)
+* Fixed a problem where the media browser would not appear when editing a node
+  with an embedded tweet. (#2768849)
+* The Lightning Extender's redirection feature was not working and would always
+  send users to a "Drupal is already installed" error page. (#2775425)
+* Fixed a PHP notice arising from the media asset preview handler. (PR #140)
 
 ## 1.02
 * Updated core to 8.1.7 (Security Release) and all contrib modules to latest 
