@@ -75,7 +75,7 @@ Feature: Media browser
     And I visit "/node/add/page"
     And I press "Select Image(s)"
     And I wait for AJAX to finish
-    And I switch to the "entity_browser_iframe_image-browser" frame
+    And I switch to the "entity_browser_iframe_image_browser" frame
     And I wait 10 seconds
     And I click "Upload"
     And I attach the file "puppy.jpg" to "File"

@@ -29,6 +29,13 @@ function lightning_media_install() {
   // the media browser.
   lightning_media_update_8011();
 
+  // Add the media.embedded view mode to the media_browser embed button. It
+  // cannot be part of the original embed button config entity because the view
+  // mode is itself installed at the same time as the button, as part of this
+  // module's default configuration -- which means that it might not exist when
+  // the button is installed, resulting in a scary PluginNotFoundException.
+  lightning_media_update_8013();
+
   // Lightning ships with two content types -- page and landing_page. Creator
   // roles for these content types are generated automatically out of the
   // box, so grant them permission to use the rich_text format and the media
@@ -748,6 +755,25 @@ function lightning_media_update_8012() {
         }
       }
     }
+  }
+}
+
+/**
+ * Adds the media.embedded view display to the media_browser embed button.
+ */
+function lightning_media_update_8013() {
+  $button = EmbedButton::load('media_browser');
+  if ($button) {
+    // During installation, the media.embedded view mode may have just been
+    // created as part of this module's default configuration. So we need to
+    // clear Entity Embed's display plugin definition cache to ensure that it
+    // picks up the new view mode's corresponding display plugin.
+    \Drupal::service('plugin.manager.entity_embed.display')->clearCachedDefinitions();
+
+    $type_settings = $button->getTypeSettings();
+    $type_settings['display_plugins'][] = 'view_mode:media.embedded';
+    $button->set('type_settings', $type_settings);
+    $button->save();
   }
 }
 
