@@ -20,10 +20,13 @@ class Extender {
   /**
    * Extender constructor.
    *
+   * @param string $drupal_root
+   *   The path to the Drupal root.
    * @param string $site_path
    *   The path to the site's configuration (e.g. sites/default).
    */
-  public function __construct($site_path) {
+  public function __construct($drupal_root, $site_path) {
+    $this->root = $drupal_root;
     $this->sitePath = (string) $site_path;
   }
 
@@ -34,15 +37,19 @@ class Extender {
    *   The parsed extender configuration.
    */
   public function getInfo() {
-    $path = $this->sitePath . '/lightning.extend.yml';
+    // Discover lightning.extend.yml first in the `sitePath`, and then defer to
+    // `sites/all`.
+    $paths[] = $this->sitePath . '/lightning.extend.yml';
+    $paths[] = $this->root . '/sites/all/lightning.extend.yml';
 
-    if (file_exists($path)) {
-      $info = file_get_contents($path);
-      return Yaml::decode($info);
+    foreach ($paths as $path) {
+      if (file_exists($path)) {
+        $info = file_get_contents($path);
+        return Yaml::decode($info);
+      }
     }
-    else {
-      return [];
-    }
+
+    return [];
   }
 
   /**
