@@ -29,21 +29,29 @@ You may also reset the content of a Lightning Feature if it is enabled.
 
 ### Behat tests
 
-Install the drupal-extension for mink/behat from the Lightning profile.
+Use Composer to install the drupal-extension for mink/behat in the Lightning profile.
 
   ``cd profiles/lightning/tests && composer install``
 
-Set up a behat.yml file replacing ``@BASE_URL@`` with the URL to your site and ``@DRUPAL_ROOT@`` with the path to your site on disk.
+Use the behat.template.yml file as a template for a behat.yml file, replacing ``BASE_URL`` with your own url.
 
   ``cp behat.template.yml behat.yml``
 
-Check that behat is installed and running.
+Check that behat is installed and running
 
   ``bin/behat --help``
 
 Run tests.
 
   ``bin/behat``
+
+Selenium is required to run the JavaScript tests. You can download Selenium from
+http://www.seleniumhq.org and run it with:
+
+  ``java -jar selenium.jar``
+
+Note that you may require a newer version of Java which can be downloaded from
+http://www.oracle.com/technetwork/java/javase/downloads/index.html.
 
 ### Documentation
 
