@@ -25,7 +25,7 @@ function lightning_media_image_install() {
  * Creates the media_browser form display.
  */
 function lightning_media_image_update_8001() {
-  lightning_create_config('entity_form_display', 'media.image.media_browser', 'lightning_media_image');
+  lightning_core_create_config('entity_form_display', 'media.image.media_browser', 'lightning_media_image');
 }
 
 /**
@@ -40,10 +40,10 @@ function lightning_media_image_update_8002() {
   }
   catch (ServiceNotFoundException $e) {
     // Rebuild the container to ensure the widget validation service exists.
-    lightning_rebuild_container();
+    lightning_core_rebuild_container();
   }
 
-  lightning_create_config('entity_browser', 'image_browser', 'lightning_media_image');
+  lightning_core_create_config('entity_browser', 'image_browser', 'lightning_media_image');
 }
 
 /**

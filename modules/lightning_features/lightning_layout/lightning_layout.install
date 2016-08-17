@@ -34,7 +34,7 @@ function lightning_layout_update_8001() {
  * Creates the layout_manager role.
  */
 function lightning_layout_update_8002() {
-  lightning_create_config('user_role', 'layout_manager', 'lightning_layout');
+  lightning_core_create_config('user_role', 'layout_manager', 'lightning_layout');
 }
 
 /**
@@ -55,7 +55,7 @@ function lightning_layout_update_8003() {
 function lightning_layout_update_8004() {
   // Because this update interacts with Panelizer, rebuild the container to
   // pick up any changes to Panelizer's service definitions.
-  lightning_rebuild_container();
+  lightning_core_rebuild_container();
 
   // Sanity check! We can only proceed if the landing_page node type exists.
   if (NodeType::load('landing_page') == NULL) {
@@ -108,7 +108,7 @@ function lightning_layout_update_8005() {
  */
 function _lightning_layout_get_view_display($display_id) {
   // Read in our bundled version of the view display.
-  $values = lightning_read_config('core.entity_view_display.' . $display_id, 'lightning_layout');
+  $values = lightning_core_read_config('core.entity_view_display.' . $display_id, 'lightning_layout');
   if (empty($values)) {
     throw new \Exception('View display does not exist: ' . $display_id);
   }
@@ -150,7 +150,7 @@ function _lightning_layout_update_panelizer_default_displays($display_id) {
     throw new EntityStorageException('View display does not exist: ' . $display_id);
   }
 
-  $values = lightning_read_config($display->getConfigDependencyName(), 'lightning_layout');
+  $values = lightning_core_read_config($display->getConfigDependencyName(), 'lightning_layout');
 
   // Meekly merge in new values from our bundled configuration, preserving
   // anything that already exists...

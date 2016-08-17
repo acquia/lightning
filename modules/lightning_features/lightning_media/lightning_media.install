@@ -82,12 +82,12 @@ function lightning_media_update_8002() {
 function lightning_media_update_8003() {
   $role = Role::load('media_creator');
   if (empty($role)) {
-    lightning_create_config('user_role', 'media_creator', 'lightning_media');
+    lightning_core_create_config('user_role', 'media_creator', 'lightning_media');
   }
 
   $role = Role::load('media_manager');
   if (empty($role)) {
-    lightning_create_config('user_role', 'media_manager', 'lightning_media');
+    lightning_core_create_config('user_role', 'media_manager', 'lightning_media');
   }
 }
 
@@ -110,9 +110,9 @@ function lightning_media_update_8005() {
     \Drupal::service('module_installer')->install(['entity_browser']);
   }
 
-  lightning_create_config('entity_form_mode', 'media.media_browser', 'lightning_media');
-  lightning_create_config('entity_browser', 'media_browser', 'lightning_media');
-  lightning_create_config('embed_button', 'media_browser', 'lightning_media');
+  lightning_core_create_config('entity_form_mode', 'media.media_browser', 'lightning_media');
+  lightning_core_create_config('entity_browser', 'media_browser', 'lightning_media');
+  lightning_core_create_config('embed_button', 'media_browser', 'lightning_media');
 }
 
 /**
