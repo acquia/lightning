@@ -5,8 +5,6 @@
  * Defines the Lightning Profile install screen by modifying the install form.
  */
 
-use Drupal\Core\Config\FileStorage;
-use Drupal\Core\Config\InstallStorage;
 use Drupal\lightning\Form\ExtensionSelectForm;
 
 /**
@@ -101,67 +99,4 @@ function lightning_post_install_redirect(array &$install_state) {
   $output['#attached']['html_head'][] = [$meta_redirect, 'meta_redirect'];
 
   return $output;
-}
-
-/**
- * Rebuilds the service container.
- */
-function lightning_rebuild_container() {
-  require_once \Drupal::root() . '/core/includes/utility.inc';
-  $class_loader = \Drupal::service('class_loader');
-  $request = \Drupal::request();
-  drupal_rebuild($class_loader, $request);
-}
-
-/**
- * Implements template_preprocess_block().
- */
-function lightning_preprocess_block(array &$variables) {
-  $variables['attributes']['data-block-plugin-id'] = $variables['elements']['#plugin_id'];
-}
-
-/**
- * Creates a config entity from default configuration.
- *
- * @param string $entity_type
- *   The config entity type ID.
- * @param string $id
- *   The unprefixed entity ID.
- * @param string $module
- *   (optional) The module which has the default configuration.
- */
-function lightning_create_config($entity_type, $id, $module = 'lightning') {
-  $values = lightning_read_config(
-    \Drupal::entityTypeManager()->getDefinition($entity_type)->getConfigPrefix() . '.' . $id,
-    $module
-  );
-  if ($values) {
-    \Drupal::entityTypeManager()
-      ->getStorage($entity_type)
-      ->create($values)
-      ->save();
-  }
-}
-
-/**
- * Reads a stored config file from a module's config/install directory.
- *
- * @param string $id
- *   The config ID.
- * @param string $module
- *   (optional) The module to search. Defaults to 'lightning' (not technically
- *   a module, but profiles are treated like modules by the install system).
- *
- * @return array
- *   The config data.
- */
-function lightning_read_config($id, $module = 'lightning') {
-  // Statically cache all FileStorage objects, keyed by module.
-  static $storage = [];
-
-  if (empty($storage[$module])) {
-    $dir = \Drupal::service('module_handler')->getModule($module)->getPath();
-    $storage[$module] = new FileStorage($dir . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY);
-  }
-  return $storage[$module]->read($id);
 }

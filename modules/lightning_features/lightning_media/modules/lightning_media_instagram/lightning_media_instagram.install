@@ -1,11 +1,16 @@
 <?php
 
+/**
+ * @file
+ * Contains install and update routines for Lightning Media Instagram.
+ */
+
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 
 /**
  * Creates the media_browser form display.
  */
 function lightning_media_instagram_update_8001() {
-  $display = lightning_read_config('core.entity_form_display.media.instagram.media_browser', 'lightning_media_instagram');
+  $display = lightning_core_read_config('core.entity_form_display.media.instagram.media_browser', 'lightning_media_instagram');
   EntityFormDisplay::create($display)->save();
 }

@@ -43,6 +43,9 @@ function lightning_media_image_entity_form_display_presave(EntityFormDisplayInte
   foreach ($new_components as $component_id => $component) {
     $field = FieldConfig::load($entity_type . '.' . $bundle . '.' . $component_id);
 
+    if (empty($field)) {
+      continue;
+    }
     if ($field->getType() == 'image') {
       $display->setComponent($component_id, [
         'type' => 'entity_browser_file',

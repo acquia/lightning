@@ -1,10 +1,15 @@
 <?php
 
 /**
+ * @file
+ * Contains install and update routines for Lightning.
+ */
+
+/**
  * Creates the lightning_core settings object.
  */
 function lightning_core_update_8001() {
-  $values = lightning_read_config('lightning_core.settings', 'lightning_core');
+  $values = lightning_core_read_config('lightning_core.settings', 'lightning_core');
 
   \Drupal::configFactory()
     ->getEditable('lightning_core.settings')

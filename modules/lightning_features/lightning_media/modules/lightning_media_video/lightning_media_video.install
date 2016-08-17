@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Contains install and update routines for Lightning Media Video.
+ */
+
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\field\Entity\FieldConfig;
@@ -73,6 +78,5 @@ function lightning_media_video_update_8001() {
  * Creates the media_browser form display.
  */
 function lightning_media_video_update_8002() {
-  $display = lightning_read_config('core.entity_form_display.media.video.media_browser', 'lightning_media_video');
-  EntityFormDisplay::create($display)->save();
+  lightning_core_create_config('core_entity_form_display', 'media.video.media_browser', 'lightning_media_video');
 }
