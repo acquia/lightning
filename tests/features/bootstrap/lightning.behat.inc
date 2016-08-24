@@ -370,6 +370,22 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   }
 
   /**
+   * Asserts that a select list does not have a specific option.
+   *
+   * @param string $field
+   *   The select list to check.
+   * @param string $option
+   *   The option to look for.
+   *
+   * @Then :field should not have a(n) :option option
+   */
+  public function assertOptionNotExists($field, $option) {
+    $assert = $this->assertSession();
+    $field = $assert->fieldExists($field);
+    $assert->elementNotExists('named', ['option', $option], $field);
+  }
+
+  /**
    * Submits the image browser.
    *
    * @When I submit the entity browser

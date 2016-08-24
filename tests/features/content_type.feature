@@ -53,3 +53,14 @@ Feature: Lightning Content Types
     And I visit "/admin/people/roles"
     Then I should not see "foo Creator"
     And I should not see "foo Reviewer"
+
+  Scenario: Removing access to workflow actions that do not make sense with moderated content
+    Given I am logged in as a user with the administrator role
+    And page content:
+      | title |
+      | Foo   |
+      | Bar   |
+      | Baz   |
+    When I visit "/admin/content"
+    Then "With selection" should not have a "node_publish_action" option
+    And "With selection" should not have a "node_unpublish_action" option

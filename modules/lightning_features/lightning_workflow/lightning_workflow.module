@@ -1,7 +1,12 @@
 <?php
 
+/**
+ * @file
+ * Provides workflow enhancements for Drupal.
+ */
+
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
+use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
 use Drupal\node\NodeTypeInterface;
 use Drupal\user\Entity\Role;
 use Drupal\views\ViewExecutable;
@@ -27,8 +32,8 @@ function lightning_workflow_form_node_form_alter(array &$form, FormStateInterfac
     // DO NOT rejigger the buttons.
     array_shift($form['moderation_state']['widget'][0]['#process']);
 
-    // Show the basic 'Save' button, but hide the confusing 'Save as unpublished'
-    // and 'Save and publish' buttons.
+    // Show the basic 'Save' button, but hide the confusing
+    // 'Save as unpublished' and 'Save and publish' buttons.
     $form['actions']['submit']['#access'] = TRUE;
     $form['actions']['publish']['#access'] = $form['actions']['unpublish']['#access'] = FALSE;
     unset($form['actions']['publish']['#dropbutton'], $form['actions']['unpublish']['#dropbutton']);
@@ -65,6 +70,15 @@ function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
       ->grantPermission('use needs_review_published transition')
       ->grantPermission('use published_published transition')
       ->save();
+  }
+}
+
+/**
+ * Implements hook_views_plugins_field_alter().
+ */
+function lightning_workflow_views_plugins_field_alter(array &$plugins) {
+  if (isset($plugins['node_bulk_form'])) {
+    $plugins['node_bulk_form']['class'] = NodeBulkForm::class;
   }
 }
 
