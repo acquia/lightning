@@ -90,6 +90,22 @@ Feature: Panelizer Wizard
     Then the "Full content" field should be disabled
 
   @javascript
+  Scenario:  Block placement on non-default displays are preserved after re-saving the entity.
+    Given I am logged in as a user with the "layout_manager,landing_page_creator" role
+    And landing_page content:
+      | title  | path    | moderation_state |
+      | Foobar | /foobar | draft            |
+    When I visit "/foobar"
+    And I click "Edit draft"
+    And I select "two_column" from "Full content"
+    And I press "Save"
+    And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
+    And I save the layout
+    And I click "Edit draft"
+    And I press "Save"
+    Then I should see a "views_block:who_s_online-who_s_online_block" block
+
+  @javascript
   Scenario: Create a new layout using the Panelizer Wizard
     Given I am logged in as a user with the "layout_manager" role
     When I go to "/admin/structure/panelizer/add/node/landing_page/full"
