@@ -100,19 +100,22 @@ Feature: Panelizer Wizard
 
   @javascript
   Scenario:  Block placement on non-default displays are preserved after re-saving the entity.
-    Given I am logged in as a user with the "layout_manager,landing_page_creator" role
+    Given users:
+      | name | mail          | roles                               |
+      | Foo  | foo@localhost | layout_manager,landing_page_creator |
+    And I am logged in as Foo
     And landing_page content:
-      | title  | path    | moderation_state |
-      | Foobar | /foobar | draft            |
+      | title  | path    | moderation_state | author |
+      | Foobar | /foobar | draft            | Foo    |
     When I visit "/foobar"
     And I click "Edit draft"
     And I select "two_column" from "Full content"
     And I press "Save"
-    And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
+    And I place the "help_block" block from the "Help" category
     And I save the layout
     And I click "Edit draft"
     And I press "Save"
-    Then I should see a "views_block:who_s_online-who_s_online_block" block
+    Then I should see a "help_block" block
 
   @javascript
   Scenario: Create a new layout using the Panelizer Wizard

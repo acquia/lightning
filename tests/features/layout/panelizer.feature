@@ -37,6 +37,7 @@ Feature: Panelizer
     And I place the "block_content:test--here-be-dragons" block from the "Custom" category
     And I save the layout
     And I reload the page
+    And I wait 5 seconds
     Then I should see a "block_content:test--here-be-dragons" block with a "quickedit" contextual link
 
   @javascript
