@@ -39,13 +39,16 @@ Feature: Panelizer Wizard
 
   @javascript
   Scenario: Switch between defined layouts.
-    Given I am logged in as a user with the "landing_page_creator,layout_manager" roles
+    Given users:
+      | name | mail          | roles                               |
+      | Foo  | foo@localhost | landing_page_creator,layout_manager |
+    And I am logged in as Foo
     And I visit "/admin/structure/panelizer/edit/node__landing_page__full__two_column/content"
     And I place the "Authored by" block into the left panelizer region
     And I press "Update and save"
     And landing_page content:
-      | title  | path    | moderation_state |
-      | Foobar | /foobar | draft            |
+      | title  | path    | moderation_state | author |
+      | Foobar | /foobar | draft            | Foo    |
     When I visit "/foobar"
     And I click "Edit draft"
     And I select "Two Column" from "Full content"
@@ -60,10 +63,13 @@ Feature: Panelizer Wizard
 
   @javascript
   Scenario: Changes made to layouts and saved to default via the IPE are reflected in the corresponding Wizard.
-    Given I am logged in as a user with the "layout_manager,landing_page_creator" roles
+    Given users:
+      | name | mail          | roles                               |
+      | Foo  | foo@localhost | layout_manager,landing_page_creator |
+    And I am logged in as Foo
     And landing_page content:
-      | title  | path    | moderation_state |
-      | Foobar | /foobar | draft            |
+      | title  | path    | moderation_state | author |
+      | Foobar | /foobar | draft            | Foo    |
     When I visit "/foobar"
     And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
     # Click IPE Save
@@ -79,10 +85,13 @@ Feature: Panelizer Wizard
 
   @javascript
   Scenario: The default layout select list should be disabled on entities whose layout has been customized via the IPE.
-    Given I am logged in as a user with the "layout_manager,landing_page_creator" role
+    Given users:
+      | name | mail          | roles                               |
+      | Foo  | foo@localhost | layout_manager,landing_page_creator |
+    And I am logged in as Foo
     And landing_page content:
-      | title  | path    | moderation_state |
-      | Foobar | /foobar | draft            |
+      | title  | path    | moderation_state | author |
+      | Foobar | /foobar | draft            | Foo    |
     When I visit "/foobar"
     And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
     And I save the layout

@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Contains layout functionality for Lightning.
+ */
+
 use Drupal\node\NodeTypeInterface;
 use Drupal\user\Entity\Role;
 
@@ -19,8 +24,8 @@ function lightning_layout_node_type_delete(NodeTypeInterface $node_type) {
   /** @var \Drupal\user\RoleInterface $role */
   $role = Role::load('layout_manager');
   if ($role) {
-    $role
-      ->revokePermission('administer panelizer node ' . $node_type->id() . ' defaults')
-      ->save();
+    user_role_revoke_permissions($role->id(), [
+      'administer panelizer node ' . $node_type->id() . ' defaults',
+    ]);
   }
 }

@@ -1,3 +1,7 @@
+## 1.04
+* The Layout Manager role no longer has administrative capabilities
+  by default. (#2792147)
+
 ## 1.03
 * Lightning now includes an image browser for uploading images to and
   selecting images from your media library. It is automatically used

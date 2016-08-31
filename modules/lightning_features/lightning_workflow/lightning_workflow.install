@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Contains installation and update routines for Lightning Workflow.
+ */
+
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\node\Entity\NodeType;
 use Drupal\views\Entity\View;
@@ -27,7 +32,13 @@ function lightning_workflow_install() {
     /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
     $form_display = EntityFormDisplay::load('node.page.default');
     if ($form_display) {
-      $weights = array_map(function (array $component) { return $component['weight']; }, $form_display->getComponents());
+      $weights = array_map(
+        function (array $component) {
+          return $component['weight'];
+        },
+        $form_display->getComponents()
+      );
+
       sort($weights);
       $form_display->setComponent('scheduled_update', [
         'type' => 'inline_entity_form_complex',
@@ -45,8 +56,14 @@ function lightning_workflow_install() {
     }
   }
 
+  // Set up content type-specific permissions.
+  lightning_workflow_update_8001();
+
   /** @var \Drupal\views\ViewEntityInterface $view */
   $view = View::load('content');
+  if (empty($view)) {
+    return;
+  }
   $display = &$view->getDisplay('default');
 
   unset($display['display_options']['fields']['status']);
@@ -64,7 +81,8 @@ function lightning_workflow_install() {
  */
 function lightning_workflow_update_8001() {
   foreach (NodeType::loadMultiple() as $node_type) {
-    lightning_workflow_node_type_insert($node_type);
+    \Drupal::moduleHandler()
+      ->invoke('lightning_workflow', 'node_type_insert', [$node_type]);
   }
 }
 
@@ -77,6 +95,6 @@ function lightning_workflow_update_dependencies() {
       8001 => [
         'lightning' => 8002,
       ],
-    ]
+    ],
   ];
 }

@@ -14,6 +14,8 @@ Feature: Responsibility-based user roles for editing and managing layouts
     When I visit "/admin/people/permissions"
     Then the layout_manager role should have permission to:
       """
+      administer node display
+      administer panelizer
       administer panelizer node page defaults
       administer panelizer node landing_page defaults
       """

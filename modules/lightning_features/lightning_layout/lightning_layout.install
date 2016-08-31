@@ -15,7 +15,7 @@ use Drupal\node\Entity\NodeType;
  * Implements hook_install().
  */
 function lightning_layout_install() {
-  // Install permissions.
+  // Set up layout_manager permissions.
   lightning_layout_update_8003();
 
   // Add layout permissions to Lightning Core's content role configuration.
@@ -38,15 +38,14 @@ function lightning_layout_update_8002() {
 }
 
 /**
- * Adds Panelizer permissions to landing_page_creator and layout_manager roles.
+ * Adds Panelizer permissions to layout_manager role.
  */
 function lightning_layout_update_8003() {
-  $permissions = [];
   /** @var \Drupal\node\NodeTypeInterface $node_type */
   foreach (NodeType::loadMultiple() as $node_type) {
-    $permissions[] = 'administer node ' . $node_type->id() . ' defaults';
+    \Drupal::moduleHandler()
+      ->invoke('lightning_layout', 'node_type_insert', [$node_type]);
   }
-  user_role_grant_permissions('layout_manager', $permissions);
 }
 
 /**

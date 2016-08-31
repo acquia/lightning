@@ -8,7 +8,6 @@
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
 use Drupal\node\NodeTypeInterface;
-use Drupal\user\Entity\Role;
 use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
 
@@ -50,27 +49,20 @@ function lightning_workflow_form_node_form_alter(array &$form, FormStateInterfac
  */
 function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
   /** @var \Drupal\user\RoleInterface $role */
-  $role = Role::load($node_type->id() . '_creator');
-  if ($role) {
-    $role
-      ->grantPermission('view any unpublished content')
-      ->grantPermission('use draft_draft transition')
-      ->grantPermission('use draft_needs_review transition')
-      ->grantPermission('use needs_review_needs_review transition')
-      ->grantPermission('view latest version')
-      ->save();
-  }
+  user_role_grant_permissions($node_type->id() . '_creator', [
+    'view any unpublished content',
+    'use draft_draft transition',
+    'use draft_needs_review transition',
+    'use needs_review_needs_review transition',
+    'view latest version',
+  ]);
 
-  $role = Role::load($node_type->id() . '_reviewer');
-  if ($role) {
-    $role
-      // @TODO: Not sure if this role should have draft_published access...
-      ->grantPermission('use draft_published transition')
-      ->grantPermission('use needs_review_draft transition')
-      ->grantPermission('use needs_review_published transition')
-      ->grantPermission('use published_published transition')
-      ->save();
-  }
+  user_role_grant_permissions($node_type->id() . '_reviewer', [
+    'use draft_published transition',
+    'use needs_review_draft transition',
+    'use needs_review_published transition',
+    'use published_published transition',
+  ]);
 }
 
 /**
