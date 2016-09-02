@@ -98,11 +98,6 @@ will not need to do this.
   can set the image's alt text at upload time, but that text will not be
   replicated to the image field. This is due to a limitation of Entity Browser's
   API.
-* In Lightning 1.03 and earlier, the Layout Manager user role provided by Lightning
-  Layout mistakenly has the ```is_admin``` flag, which gives it full privileges through
-  the entire site. If this is not desired behavior, you can remove the role's
-  administrative status using Drush:
-  ```drush config-set user.role.layout_role is_admin 'false' --format=yaml```
 
 [issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
 [template]: https://github.com/acquia/lightning-project "Composer-based project template"
