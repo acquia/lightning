@@ -15,6 +15,9 @@ use Drupal\user\Entity\Role;
  */
 function lightning_core_node_type_insert(NodeTypeInterface $node_type) {
   $config = \Drupal::config('lightning_core.settings')->get('content_roles');
+  if (empty($config)) {
+    return;
+  }
 
   $permission_map = function ($permission) use ($node_type) {
     return str_replace('?', $node_type->id(), $permission);
