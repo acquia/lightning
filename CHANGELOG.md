@@ -1,6 +1,24 @@
 ## 1.04
+* drupal-composer/drupal-scaffold is now strictly a dev dependency
+  for Lightning. (GitHub #142)
+* All of Lightning's Behat tests now carry the @lightning tag.
+  (#2771273)
+* Pagination was not working in the media browser due to
+  out-of-the-box misconfiguration. (#2783149)
+* Added a sanity check when adding new Image fields. (#2781395)
+* Most of the configuration previously provided as part of the
+  Lightning install profile has been moved into Lightning Core.
+  (#2773519)
+* The "publish" and "unpublish" actions have been removed from the 
+  administrative Content view, because they do not make sense with
+  Workbench Moderation enabled. (#2705931)
+* Fixed a regression caused by changes in Panelizer. (#2790699)
+* Fixed a problem where installation could result in an error due to
+  an invalid configuration dependency in the Basic Page node type
+  included with Lightning Core. (#2795899)
 * The Layout Manager role no longer has administrative capabilities
-  by default. (#2792147)
+  by default. Fixing this also restored the ability to select the
+  administrative role at Admin > Config > People. (#2792147, #2792989)
 
 ## 1.03
 * Lightning now includes an image browser for uploading images to and
