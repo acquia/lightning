@@ -1,3 +1,7 @@
+## 1.05
+* Drupal core was updated to 8.1.10.
+* Several contrib dependencies were updated.
+
 ## 1.04
 * drupal-composer/drupal-scaffold is now strictly a dev dependency
   for Lightning. (GitHub #142)
