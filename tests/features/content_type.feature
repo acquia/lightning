@@ -62,5 +62,5 @@ Feature: Lightning Content Types
       | Bar   |
       | Baz   |
     When I visit "/admin/content"
-    Then "With selection" should not have a "node_publish_action" option
-    And "With selection" should not have a "node_unpublish_action" option
+    Then "Action" should not have a "node_publish_action" option
+    And "Action" should not have a "node_unpublish_action" option

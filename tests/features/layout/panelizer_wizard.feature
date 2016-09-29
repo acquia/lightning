@@ -62,28 +62,6 @@ Feature: Panelizer Wizard
     And I remove the "Authored by" block from the left panelizer region
 
   @javascript
-  Scenario: Changes made to layouts and saved to default via the IPE are reflected in the corresponding Wizard.
-    Given users:
-      | name | mail          | roles                               |
-      | Foo  | foo@localhost | layout_manager,landing_page_creator |
-    And I am logged in as Foo
-    And landing_page content:
-      | title  | path    | moderation_state | author |
-      | Foobar | /foobar | draft            | Foo    |
-    When I visit "/foobar"
-    And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
-    # Click IPE Save
-    And I save the layout as default
-    And I visit "/admin/structure/panelizer/edit/node__landing_page__full__default/content"
-    Then the "Who's online" block should be in the middle region
-    And I remove the "Who's online" block from the "middle" panelizer region
-
-  Scenario: Access denied results in 403, not an exception.
-    Given I am an anonymous user
-    When I go to "/admin/structure/panelizer/edit/node__landing_page__default__default"
-    Then the response status code should be 403
-
-  @javascript
   Scenario: The default layout select list should be disabled on entities whose layout has been customized via the IPE.
     Given users:
       | name | mail          | roles                               |
