@@ -44,11 +44,11 @@ Feature: Media browser
   Scenario: Creating a tweet from within the media browser
     Given I am logged in as a user with the media_manager role
     When I visit "/entity-browser/iframe/media_browser"
-    And I enter embed code "https://twitter.com/AprilTrubody/status/707226928730742784"
-    And I enter "chx speaks" for "Media name"
+    And I enter embed code "https://twitter.com/webchick/status/672110599497617408"
+    And I enter "angie speaks" for "Media name"
     And I press "Place"
     And I visit "/admin/content/media"
-    Then I should see "chx speaks"
+    Then I should see "angie speaks"
     And I queue the latest media entity for deletion
 
   Scenario: Creating an Instagram post from within the media browser
