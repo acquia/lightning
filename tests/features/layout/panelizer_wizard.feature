@@ -85,15 +85,18 @@ Feature: Panelizer Wizard
     And landing_page content:
       | title  | path    | moderation_state | author |
       | Foobar | /foobar | draft            | Foo    |
+    And block_content entities:
+      | type  | info               | body    | uuid                  |
+      | basic | Here be dragons... | RAWWWR! | test--here-be-dragons |
     When I visit "/foobar"
     And I click "Edit draft"
     And I select "two_column" from "Full content"
     And I press "Save"
-    And I place the "help_block" block from the "Help" category
+    And I place the "block_content:test--here-be-dragons" block from the "Custom" category
     And I save the layout
     And I click "Edit draft"
     And I press "Save"
-    Then I should see a "help_block" block
+    Then I should see a "block_content:test--here-be-dragons" block
 
   @javascript
   Scenario: Create a new layout using the Panelizer Wizard
