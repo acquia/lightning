@@ -1,3 +1,10 @@
+## 1.06
+* Drupal core updated to 8.2.0!
+* Previously, the Metatag module could break Drush. This is now patched
+  (see https://www.drupal.org/node/2786795), and Metatag has been updated
+  to 8.x-1.0-beta10.
+* Panels has been updated to 8.x-3.0-beta5 (security update).
+
 ## 1.05
 * Drupal core was updated to 8.1.10.
 * Several contrib dependencies were updated.
