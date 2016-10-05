@@ -53,3 +53,22 @@ Feature: Panelizer
     And I visit "/layout2"
     # I should not see the block placed by the first landing page
     Then I should not see a "views_block:who_s_online-who_s_online_block" block
+
+  @javascript
+  Scenario: Changing layouts through the IPE
+    Given users:
+      | name | mail          | roles                               |
+      | Foo  | foo@localhost | landing_page_creator,layout_manager |
+    And landing_page content:
+      | title  | path    | moderation_state | author |
+      | Foobar | /foobar | draft            | Foo    |
+    And I am logged in as Foo
+    When I visit "/foobar"
+    And I change the layout to "threecol_25_50_25" from the "Columns: 3" category
+    And I should see "Region: left"
+    And I should see "Region: middle"
+    And I should see "Region: right"
+    And I change the layout to "twocol" from the "Columns: 2" category
+    And I should see "Region: left"
+    And I should see "Region: right"
+    Then I should not see "Region: middle"
