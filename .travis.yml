@@ -81,7 +81,7 @@ before_script:
 
 script:
   - cd ./profiles/lightning
-  - behat --strict
+  - behat --strict --stop-on-failure
 
 matrix:
   fast_finish: true
