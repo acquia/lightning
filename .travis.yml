@@ -1,4 +1,7 @@
+sudo: true
 language: php
+dist: trusty
+
 cache:
   bundler: true
   apt: true
@@ -19,12 +22,12 @@ env:
   - VERSION=8.x-1.01
   - VERSION=8.x-1.00
 
-sudo: false
-
-mysql:
-  database: drupal
-  username: root
-  encoding: utf8
+addons:
+  apt:
+    packages:
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
 
 before_install:
   - phpenv config-rm xdebug.ini
@@ -40,8 +43,9 @@ install:
   - export COMPOSER_EXIT_ON_PATCH_FAILURE=1
 
   # MySQL Options
-  - mysql -e 'SET GLOBAL wait_timeout = 5400;'
-  - mysql -e "SHOW VARIABLES LIKE 'wait_timeout'"
+  - mysql -u root -e 'CREATE DATABASE drupal;'
+  - mysql -u root -e 'SET GLOBAL wait_timeout = 5400;'
+  - mysql -u root -e "SHOW VARIABLES LIKE 'wait_timeout'"
 
   # PHP conf tweaks
   - echo 'max_execution_time = 120' >> drupal.php.ini;
