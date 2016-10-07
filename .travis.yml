@@ -46,6 +46,7 @@ install:
   # PHP conf tweaks
   - echo 'max_execution_time = 120' >> drupal.php.ini;
   - echo 'sendmail_path = /bin/true' >> drupal.php.ini;
+  - echo "memory_limit=-1" >> drupal.php.ini;
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
