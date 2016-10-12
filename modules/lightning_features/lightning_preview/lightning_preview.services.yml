@@ -4,18 +4,14 @@ services:
     arguments:
       - '@workspace.manager'
       - '@entity_type.manager'
-      - '@lightning_preview.replication_semaphore'
+    tags:
+      -
+        name: event_subscriber
 
   lightning_preview.alias_handler:
     class: '\Drupal\lightning_preview\AliasHandler'
     arguments:
       - '@path.alias_storage'
-    tags:
-      -
-        name: event_subscriber
-
-  lightning_preview.replication_semaphore:
-    class: '\Drupal\lightning_preview\ReplicationSemaphore'
     tags:
       -
         name: event_subscriber

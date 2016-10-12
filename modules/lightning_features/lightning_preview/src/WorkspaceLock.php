@@ -8,11 +8,13 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\lightning_preview\Exception\EntityLockedException;
 use Drupal\multiversion\Entity\WorkspaceInterface;
 use Drupal\multiversion\Workspace\WorkspaceManagerInterface;
+use Drupal\replication\Event\ReplicationEvents;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
  * A service for dealing with workspace locking.
  */
-class WorkspaceLock {
+class WorkspaceLock implements EventSubscriberInterface {
 
   /**
    * The workspace manager.
@@ -29,11 +31,11 @@ class WorkspaceLock {
   protected $entityTypeManager;
 
   /**
-   * The replication semaphore.
+   * Whether a replication is currently in progress.
    *
-   * @var ReplicationSemaphore
+   * @var bool
    */
-  protected $semaphore;
+  protected $isReplicating = FALSE;
 
   /**
    * The entity type IDs that are never locked.
@@ -52,13 +54,38 @@ class WorkspaceLock {
    *   The workspace manager.
    * @param EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param ReplicationSemaphore $replication_semaphore
-   *   The replication semaphore.
    */
-  public function __construct(WorkspaceManagerInterface $workspace_manager, EntityTypeManagerInterface $entity_type_manager, ReplicationSemaphore $replication_semaphore) {
+  public function __construct(WorkspaceManagerInterface $workspace_manager, EntityTypeManagerInterface $entity_type_manager) {
     $this->workspaceManager = $workspace_manager;
     $this->entityTypeManager = $entity_type_manager;
-    $this->semaphore = $replication_semaphore;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function getSubscribedEvents() {
+    return [
+      ReplicationEvents::PRE_REPLICATION => [
+        'onReplicationStart',
+      ],
+      ReplicationEvents::POST_REPLICATION => [
+        'onReplicationEnd',
+      ],
+    ];
+  }
+
+  /**
+   * Reacts when a replication begins.
+   */
+  public function onReplicationStart() {
+    $this->isReplicating = TRUE;
+  }
+
+  /**
+   * Reacts when a replication concludes, irrespective of success or failure.
+   */
+  public function onReplicationEnd() {
+    $this->isReplicating = FALSE;
   }
 
   /**
@@ -102,7 +129,7 @@ class WorkspaceLock {
   public function isEntityTypeLocked($entity_type) {
     // Nothing is locked during a replication. Otherwise, certain entity types
     // are never locked.
-    if ($this->semaphore->getEvent() || in_array($entity_type, $this->unlocked)) {
+    if ($this->isReplicating || in_array($entity_type, $this->unlocked)) {
       return FALSE;
     }
 
