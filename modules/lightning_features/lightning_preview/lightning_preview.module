@@ -10,7 +10,6 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\lightning_preview\Exception\EntityLockedException;
 use Drupal\lightning_preview\Form\NodeDeleteForm;
@@ -256,38 +255,9 @@ function lightning_preview_form_alter(array &$form, FormStateInterface $form_sta
     if ($locked) {
       $e = new EntityLockedException($entity);
       drupal_set_message($e->getMessage() . '.', 'warning');
-      $form['#pre_render'][] = 'lightning_preview_disable_buttons';
+      $form['#pre_render'][] = 'lightning_core_disable_buttons';
     }
   }
-}
-
-/**
- * Pre-render function to disable all buttons in a renderable element.
- *
- * @param array $element
- *   The renderable element.
- *
- * @return array
- *   The renderable element with all buttons (at all levels) disabled.
- *
- * @internal
- */
-function lightning_preview_disable_buttons(array $element) {
-  if (isset($element['#type'])) {
-    $element['#access'] = !in_array($element['#type'], [
-      'button',
-      'submit',
-      'image_button',
-    ]);
-  }
-
-  // Recurse into child elements.
-  foreach (Element::children($element) as $key) {
-    if (is_array($element[$key])) {
-      $element[$key] = call_user_func(__FUNCTION__, $element[$key]);
-    }
-  }
-  return $element;
 }
 
 /**
