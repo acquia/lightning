@@ -97,7 +97,7 @@ class AliasHandler implements EventSubscriberInterface {
           $entity->path->source = NULL;
           $entity->path->alias = $alias;
 
-          // ...but if the entity is NOT new, we might need to update an existing
+          // ...but if the entity isn't new, we might need to update an existing
           // alias, which we can try to locate using the entity's system path.
           if ($entity->isNew() == FALSE) {
             $existing_alias = $this->aliasStorage->load([

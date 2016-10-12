@@ -17,10 +17,10 @@
 
       $selectables.on('click', function () {
         // Select this one...
-        $(this).addClass('selected').find( input ).prop('checked', true);
+        $(this).addClass('selected').find(input).prop('checked', true);
 
         // ...and unselect everything else.
-        $selectables.not(this).removeClass('selected').find( input ).prop('checked', false);
+        $selectables.not(this).removeClass('selected').find(input).prop('checked', false);
       });
     }
 

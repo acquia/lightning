@@ -143,11 +143,6 @@
     <!-- TODO: Execute manual update steps as needed. -->
   </target>
 
-  <!-- Enables a module via drush. -->
-  <target name="drush-pm-enable" depends="env">
-    <exec command="${drush} pm-enable ${module} --yes" dir="${docroot}" passthru="true" />
-  </target>
-
   <!-- Prepares Lightning for the drupal.org packaging system. -->
   <target name="package">
     <!-- Create a symlink to the installed libraries so that the packaging script can scan 'em. -->

@@ -57,7 +57,6 @@ install:
   - phing install -Ddb.database=drupal
   # Execute database updates if we're not building from HEAD.
   - if [ $VERSION != "HEAD" ]; then phing update; fi
-  - phing drush-pm-enable -Dmodule=lightning_preview
 
 before_script:
   - cd docroot
