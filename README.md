@@ -129,6 +129,13 @@ will not need to do this.
   under certain circumstances
 * The Workspace listing page will display a PHP warning caused by the Workspace
   module which is effectively harmless but may look alarming
+* The Author user-reference relationship that is implicit with all Node Entities
+  is lost when replicating from workspace to workspace. So if UserA creates
+  NodeB on the Live workspace, and that node is pulled to the Stage workspace,
+  the Stage workspace will be unaware of the author and will set the author to
+  Anonymous. Furthermore, if an edit is then made to NodeB on the Stage
+  workspace, and that edit is pushed back to Live, NodeB on the Live workspace
+  will also lose its author.
 
 [issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
 [template]: https://github.com/acquia/lightning-project "Composer-based project template"
