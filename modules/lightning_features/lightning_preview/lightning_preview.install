@@ -11,6 +11,7 @@ use Drupal\multiversion\Entity\WorkspaceType;
  * Implements hook_install().
  */
 function lightning_preview_install() {
+  /** @var WorkspaceType $workspace_type */
   $workspace_type = WorkspaceType::load('basic');
   if (empty($workspace_type)) {
     return;

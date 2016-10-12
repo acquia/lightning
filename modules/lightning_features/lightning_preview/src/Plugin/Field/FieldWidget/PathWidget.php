@@ -8,7 +8,7 @@ use Drupal\lightning_preview\AliasHandler;
 use Drupal\path\Plugin\Field\FieldWidget\PathWidget as BasePathWidget;
 
 /**
- * Prepends user entered paths with the workspace.
+ * A path widget that transparently prepends the active workspace machine name.
  */
 class PathWidget extends BasePathWidget {
 

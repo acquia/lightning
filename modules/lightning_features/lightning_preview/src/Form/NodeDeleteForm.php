@@ -6,7 +6,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\node\Form\NodeDeleteForm as BaseNodeDeleteForm;
 
 /**
- * Make the node delete form also purge the entity if multiversion is present.
+ * A Multiversion-aware version of NodeDeleteForm.
  */
 class NodeDeleteForm extends BaseNodeDeleteForm {
 
