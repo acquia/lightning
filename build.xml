@@ -15,6 +15,7 @@
   <property name="profile" value="${docroot}/profiles/lightning" />
   <property name="site" value="${docroot}/sites/default" />
   <property name="version" value="HEAD" />
+  <property name="module" value="lightning_preview" />
 
   <!-- Finds Composer, NPM, and rsync. -->
   <target name="env">
@@ -117,6 +118,19 @@
     <exec command="${drush} config-set system.performance css.preprocess 0 --yes --format=boolean" dir="${docroot}" />
     <exec command="${drush} config-set system.performance js.preprocess 0 --yes --format=boolean" dir="${docroot}" />
     <exec command="${drush} config-set system.logging error_level all --yes" dir="${docroot}" />
+    <!--
+    Install Lightning Preview, which is not installed by default because it's experimental.
+    Enable passthru() for this as well since it has a lot of dependencies and is therefore
+    more prone to errors than other extensions.
+    -->
+    <exec command="${drush} pm-enable lightning_preview --yes" dir="${docroot}" passthru="true" />
+
+    <if>
+      <isset property="www.group" />
+      <then>
+        <chown file="${site}/files" user="${env.USER}" group="${www.group}" />
+      </then>
+    </if>
   </target>
 
   <!-- Builds the Lightning code base from HEAD, overwriting docroot, and
@@ -125,6 +139,7 @@
     <phingcall target="build" />
     <exec command="${drush} cache-rebuild" />
     <exec command="${drush} updatedb --yes" dir="${docroot}" passthru="true" />
+    <exec command="${drush} enable lightning_preview --yes" dir="${docroot}" passthru="true" />
     <!-- TODO: Execute manual update steps as needed. -->
   </target>
 

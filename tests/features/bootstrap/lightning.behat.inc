@@ -11,12 +11,11 @@ use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 
 /**
  * Sub context for Lightning step definitions.
  */
-class LightningSubContext extends DrupalSubContextBase implements DrupalSubContextInterface {
+class LightningSubContext extends DrupalSubContextBase {
 
   /**
    * The Mink context.
@@ -386,6 +385,19 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
   }
 
   /**
+   * Asserts that a link is not present.
+   *
+   * @param string $locator
+   *   The link title, ID, or text.
+   *
+   * @Then I should not see a(n) :locator link
+   */
+  public function assertLinkNotExists($locator) {
+    $this->assertSession()
+      ->elementNotExists('named', ['link', $locator]);
+  }
+
+  /**
    * Submits the image browser.
    *
    * @When I submit the entity browser
@@ -405,6 +417,28 @@ class LightningSubContext extends DrupalSubContextBase implements DrupalSubConte
    */
   public function switchToFrame($name) {
     $this->getSession()->switchToIFrame($name);
+  }
+
+  /**
+   * Schedules a node for publication.
+   *
+   * @param string $when
+   *   The date and time at which to publish the node, in the format
+   *   YYYY-MM-DD HH:MM:SS.
+   *
+   * @When I schedule the node to be published at :when
+   */
+  public function schedulePublication($when) {
+    $this->minkContext->pressButton('Add new scheduled update');
+    $this->minkContext->iWaitForAjaxToFinish();
+
+    list ($date, $time) = explode(' ', $when, 2);
+    $this->minkContext->fillField('scheduled_update[form][inline_entity_form][update_timestamp][0][value][date]', $date);
+    $this->minkContext->fillField('scheduled_update[form][inline_entity_form][update_timestamp][0][value][time]', $time);
+    $this->minkContext->selectOption('scheduled_update[form][inline_entity_form][field_moderation_state]', 'published');
+
+    $this->minkContext->pressButton('Create scheduled update');
+    $this->minkContext->iWaitForAjaxToFinish();
   }
 
 }

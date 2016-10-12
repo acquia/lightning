@@ -1,0 +1,17 @@
+services:
+  lightning_preview.workspace_lock:
+    class: '\Drupal\lightning_preview\WorkspaceLock'
+    arguments:
+      - '@workspace.manager'
+      - '@entity_type.manager'
+    tags:
+      -
+        name: event_subscriber
+
+  lightning_preview.alias_handler:
+    class: '\Drupal\lightning_preview\AliasHandler'
+    arguments:
+      - '@path.alias_storage'
+    tags:
+      -
+        name: event_subscriber

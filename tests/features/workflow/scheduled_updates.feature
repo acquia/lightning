@@ -9,13 +9,7 @@ Feature: Scheduled updates to content
       | Foobar | /foobar | draft            |
     When I visit "/foobar"
     And I click "Edit draft"
-    And I press "Add new scheduled update"
-    And I wait for AJAX to finish
-    And I enter "1984-09-19" for "scheduled_update[form][inline_entity_form][update_timestamp][0][value][date]"
-    And I enter "08:57:00" for "scheduled_update[form][inline_entity_form][update_timestamp][0][value][time]"
-    And I select "published" from "scheduled_update[form][inline_entity_form][field_moderation_state]"
-    And I press "Create scheduled update"
-    And I wait for AJAX to finish
+    And I schedule the node to be published at "1984-09-19 08:57:00"
     And I select "Needs Review" from "Moderation state"
     And I press "Save"
     And I run cron

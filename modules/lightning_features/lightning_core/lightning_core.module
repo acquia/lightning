@@ -7,8 +7,92 @@
 
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Render\Element;
 use Drupal\node\NodeTypeInterface;
+use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
 use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_entity_load().
+ */
+function lightning_core_entity_load(array $entities, $entity_type_id) {
+  /** @var \Drupal\Core\Path\AliasStorageInterface $alias_storage */
+  $alias_storage = \Drupal::service('path.alias_storage');
+
+  foreach ($entities as $entity) {
+    // If the entity has an empty path field, try to set its value. Amazingly,
+    // Path does not do this on its freaking own.
+    if ($entity instanceof FieldableEntityInterface && $entity->hasField('path') && $entity->path instanceof PathFieldItemList && $entity->path->isEmpty()) {
+      $alias = $alias_storage->load([
+        'source' => '/' . $entity->toUrl()->getInternalPath(),
+      ]);
+
+      if ($alias) {
+        $entity->path->setValue($alias);
+      }
+    }
+  }
+}
+
+/**
+ * Puts an associative array into an arbitrary order.
+ *
+ * @param array $values
+ *   The array to reorder.
+ * @param array $keys
+ *   The keys, in their desired order.
+ */
+function array_reorder(array &$values, array $keys) {
+  $keys = array_values($keys);
+
+  uksort($values, function ($a, $b) use ($keys) {
+    return array_search($a, $keys) - array_search($b, $keys);
+  });
+}
+
+/**
+ * Pre-render function to disable all buttons in a renderable element.
+ *
+ * @param array $element
+ *   The renderable element.
+ *
+ * @return array
+ *   The renderable element with all buttons (at all levels) disabled.
+ *
+ * @internal
+ */
+function lightning_core_disable_buttons(array $element) {
+  if (isset($element['#type'])) {
+    $element['#access'] = !in_array($element['#type'], [
+      'button',
+      'submit',
+      'image_button',
+    ]);
+  }
+
+  // Recurse into child elements.
+  foreach (Element::children($element) as $key) {
+    if (is_array($element[$key])) {
+      $element[$key] = call_user_func(__FUNCTION__, $element[$key]);
+    }
+  }
+  return $element;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_core_form_system_modules_alter(array &$form) {
+  $package = 'Lightning (Experimental)';
+
+  if (isset($form['modules'][$package])) {
+    $warning = t('Here may be dragons! Please be sure you <a href="@url">understand the potential risks</a> of experimental extensions before enabling one.', [
+      '@url' => 'http://lightning.acquia.com/lightning-experimental-modules',
+    ]);
+    $form['modules'][$package]['#description'] = '<p>' . $warning . '</p>';
+  }
+}
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
@@ -32,6 +116,12 @@ function lightning_core_node_type_insert(NodeTypeInterface $node_type) {
       ])->save();
     }
   }
+
+  user_role_grant_permissions('content_manager', [
+    'create ' . $node_type->id() . ' content',
+    'delete any ' . $node_type->id() . ' content',
+    'edit any ' . $node_type->id() . ' content',
+  ]);
 }
 
 /**
@@ -45,6 +135,15 @@ function lightning_core_node_type_delete(NodeTypeInterface $node_type) {
     if ($role) {
       $role->delete();
     }
+  }
+
+  $role = Role::load('content_manager');
+  if ($role) {
+    user_role_revoke_permissions($role->id(), [
+      'create ' . $node_type->id() . ' content',
+      'delete any ' . $node_type->id() . ' content',
+      'edit any ' . $node_type->id() . ' content',
+    ]);
   }
 }
 
