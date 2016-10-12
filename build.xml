@@ -139,8 +139,12 @@
     <phingcall target="build" />
     <exec command="${drush} cache-rebuild" />
     <exec command="${drush} updatedb --yes" dir="${docroot}" passthru="true" />
-    <exec command="${drush} enable lightning_preview --yes" dir="${docroot}" passthru="true" />
-    <!-- TODO: Execute manual update steps as needed. -->
+
+    <!-- Execute manual update steps as needed. -->
+
+    <!-- Enable the Preview component, which is installed by default in
+    development builds as of 8.x-1.10. -->
+    <exec command="${drush} pm-enable lightning_preview --yes" dir="${docroot}" passthru="true" />
   </target>
 
   <!-- Prepares Lightning for the drupal.org packaging system. -->
