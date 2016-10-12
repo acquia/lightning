@@ -8,12 +8,11 @@
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 
 /**
  * Contains step definitions for working with Panels and panelized pages.
  */
-class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextInterface {
+class PanelsSubContext extends DrupalSubContextBase {
 
   /**
    * The Mink context.

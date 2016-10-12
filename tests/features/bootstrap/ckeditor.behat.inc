@@ -6,12 +6,11 @@
  */
 
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 
 /**
  * Contains steps for working with CKEditor instances.
  */
-class CkEditorSubContext extends DrupalSubContextBase implements DrupalSubContextInterface {
+class CkEditorSubContext extends DrupalSubContextBase {
 
   /**
    * Asserts that a CKEditor instance exists.

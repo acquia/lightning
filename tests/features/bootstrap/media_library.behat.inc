@@ -6,12 +6,11 @@
  */
 
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 
 /**
  * Contains step definitions for testing the CKEditor media widget.
  */
-class MediaLibrarySubContext extends DrupalSubContextBase implements DrupalSubContextInterface {
+class MediaLibrarySubContext extends DrupalSubContextBase {
 
   /**
    * The Mink context.

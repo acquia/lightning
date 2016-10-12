@@ -94,6 +94,14 @@
             "drupal/metatag": {
                 "2786795 - DrupalConsole integration breaks Drush":
                 "https://www.drupal.org/files/issues/metatag-deactivate_drupalconsole_services_0.patch"
+            },
+            "drupal/workspace": {
+                "2791789 - Workspace should report conflicts before replication":
+                "https://www.drupal.org/files/issues/2791789-34.patch"
+            },
+            "drupal/replication": {
+                "2814055 - Allow modules to react to replication events":
+                "https://www.drupal.org/files/issues/2814055-2.patch"
             }
         }
     },
@@ -120,9 +128,19 @@
         "drupal/metatag": "8.1.0-beta10",
         "drupal/token": "^8.1.0",
         "drupal/pathauto": "^8.1.0",
+        "drupal/multiversion": "8.1.0-alpha10",
+        "drupal/workspace": "8.1.0-alpha3",
+        "drupal/replication": "8.1.0-alpha4",
+        "drupal/entity_storage_migrate": "dev-8.x-1.x",
+        "drupal/key_value": "^8.1.0",
         "drupal/entity_browser": "8.1.0-alpha9",
         "drupal/views_infinite_scroll": "^8.1.1",
         "drupal/media_entity_document": "^8.1.0",
         "drupal/video_embed_field": "^8.1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Acquia\\LightningExtension\\": "src/LightningExtension"
+        }
     }
 }

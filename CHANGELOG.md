@@ -1,3 +1,7 @@
+## 1.10
+* Drupal core updated to 8.2.1
+* Introduction of the Lightning Preview module and Workspace Preview System
+
 ## 1.06
 * Drupal core updated to 8.2.0!
 * Previously, the Metatag module could break Drush. This is now patched

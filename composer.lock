@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6a4a413e33237369cbb9da3c9793f790",
-    "content-hash": "dc419a51da485a567e01874d6adbf415",
+    "hash": "7349c68b14329186a690e977300ecb40",
+    "content-hash": "ca7ffebaaf6dad325134a90009e463b7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -741,16 +741,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "8.2.0",
+            "version": "8.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal-composer/drupal-core.git",
-                "reference": "2fde0cab6c55bf613ca2eb94bb9038bb0ee44b25"
+                "reference": "a5549f2a541c0fbb0565e1576a63b917813fadba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal-composer/drupal-core/zipball/2fde0cab6c55bf613ca2eb94bb9038bb0ee44b25",
-                "reference": "2fde0cab6c55bf613ca2eb94bb9038bb0ee44b25",
+                "url": "https://api.github.com/repos/drupal-composer/drupal-core/zipball/a5549f2a541c0fbb0565e1576a63b917813fadba",
+                "reference": "a5549f2a541c0fbb0565e1576a63b917813fadba",
                 "shasum": ""
             },
             "require": {
@@ -914,7 +914,7 @@
                 "GPL-2.0+"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2016-10-05 09:36:15"
+            "time": "2016-10-11 10:18:49"
         },
         {
             "name": "drupal/ctools",
@@ -1114,6 +1114,34 @@
             "time": "2016-09-08 18:41:50"
         },
         {
+            "name": "drupal/entity_storage_migrate",
+            "version": "dev-8.x-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/entity_storage_migrate.git",
+                "reference": "792dd730f32c737acef1d7292e91e2502900ff03"
+            },
+            "require": {
+                "drupal/core": "8.*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-8.x-1.x": "8.1.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.drupal-composer.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "This module makes it possible to install modules that provide new entity storage handlers on sites that already have entity data on the site.",
+            "homepage": "http://drupal.org/project/entity_storage_migrate",
+            "keywords": [
+                "Drupal"
+            ],
+            "time": "2016-08-11 08:38:41"
+        },
+        {
             "name": "drupal/features",
             "version": "8.3.0-rc1",
             "source": {
@@ -1182,6 +1210,32 @@
             "description": "Provides a widget for inline management (creation, modification, removal) of referenced entities. ",
             "homepage": "https://www.drupal.org/project/inline_entity_form",
             "time": "2016-04-18 21:57:48"
+        },
+        {
+            "name": "drupal/key_value",
+            "version": "8.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/key_value.git",
+                "reference": "e5cf1d9918c63869f1a265bb82c40b25370a5dea"
+            },
+            "require": {
+                "drupal/core": "8.*",
+                "drupal/serialization": "8.*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-8.x-1.x": "8.1.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.drupal-composer.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Extends the core key-value API with a backend for lists and sorted sets that you can do range queries on.",
+            "homepage": "https://www.drupal.org/project/key_value",
+            "time": "2015-12-05 00:22:40"
         },
         {
             "name": "drupal/layout_plugin",
@@ -1479,6 +1533,41 @@
             "time": "2016-08-22 17:45:58"
         },
         {
+            "name": "drupal/multiversion",
+            "version": "8.1.0-alpha10",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/multiversion.git",
+                "reference": "1eb13a4919e27aef8d2557747402bd96686e07b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/multiversion-8.x-1.0-alpha10.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "drupal/core": "8.*",
+                "drupal/entity_storage_migrate": "8.*",
+                "drupal/key_value": "8.*",
+                "drupal/serialization": "8.*",
+                "drupal/system": ">=8.1.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-8.x-1.x": "8.1.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.drupal-composer.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Extends the revision support for content entities.",
+            "homepage": "https://www.drupal.org/project/multiversion",
+            "time": "2016-08-04 07:28:39"
+        },
+        {
             "name": "drupal/page_manager",
             "version": "8.1.0-alpha24",
             "source": {
@@ -1655,6 +1744,41 @@
             "description": "Provides a mechanism for modules to automatically generate aliases for the content they manage.",
             "homepage": "https://www.drupal.org/project/pathauto",
             "time": "2016-08-07 10:52:55"
+        },
+        {
+            "name": "drupal/replication",
+            "version": "8.1.0-alpha4",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/replication.git",
+                "reference": "6361d76da3571301f679e3cea81c5b6f4a6f8b50"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/replication-8.x-1.0-alpha4.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "drupal/core": "8.*",
+                "drupal/multiversion": "8.*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-8.x-1.x": "8.1.x-dev"
+                },
+                "patches_applied": {
+                    "2814055 - Allow modules to react to replication events": "https://www.drupal.org/files/issues/2814055-2.patch"
+                }
+            },
+            "notification-url": "https://packagist.drupal-composer.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Provides services and entities types to assist with and log content replication.",
+            "homepage": "http://drupal.org/project/replication",
+            "time": "2016-10-05 06:09:24"
         },
         {
             "name": "drupal/scheduled_updates",
@@ -1847,6 +1971,46 @@
             "time": "2016-06-28 04:04:37"
         },
         {
+            "name": "drupal/workspace",
+            "version": "8.1.0-alpha3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/workspace",
+                "reference": "6b21cbeada234f6bfb0e3ca24ddd11033578c9ff"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/workspace-8.x-1.0-alpha3.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "drupal/core": "8.*",
+                "drupal/datetime": "8.*",
+                "drupal/options": "8.*",
+                "drupal/replication": "8.*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-8.x-1.x": "8.1.x-dev"
+                },
+                "patches_applied": {
+                    "2791789 - Workspace should report conflicts before replication": "https://www.drupal.org/files/issues/2791789-34.patch"
+                }
+            },
+            "notification-url": "https://packagist.drupal-composer.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "Provides the ability to have multiple workspaces on a single site to facilitate things like full-site preview and content staging.",
+            "homepage": "https://www.drupal.org/project/workspace",
+            "keywords": [
+                "Drupal"
+            ],
+            "time": "2016-10-05 06:23:30"
+        },
+        {
             "name": "easyrdf/easyrdf",
             "version": "0.9.1",
             "source": {
@@ -1962,16 +2126,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "6.2.1",
+            "version": "6.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "3f808fba627f2c5b69e2501217bf31af349c1427"
+                "reference": "ebf29dee597f02f09f4d5bbecc68230ea9b08f60"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/3f808fba627f2c5b69e2501217bf31af349c1427",
-                "reference": "3f808fba627f2c5b69e2501217bf31af349c1427",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/ebf29dee597f02f09f4d5bbecc68230ea9b08f60",
+                "reference": "ebf29dee597f02f09f4d5bbecc68230ea9b08f60",
                 "shasum": ""
             },
             "require": {
@@ -2020,7 +2184,7 @@
                 "rest",
                 "web service"
             ],
-            "time": "2016-07-15 17:22:37"
+            "time": "2016-10-08 15:01:37"
         },
         {
             "name": "guzzlehttp/promises",
@@ -2430,16 +2594,16 @@
         },
         {
             "name": "psr/log",
-            "version": "1.0.1",
+            "version": "1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/log.git",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0"
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/log/zipball/5277094ed527a1c4477177d102fe4c53551953e0",
-                "reference": "5277094ed527a1c4477177d102fe4c53551953e0",
+                "url": "https://api.github.com/repos/php-fig/log/zipball/4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
+                "reference": "4ebe3a8bf773a19edfe0a84b6585ba3d401b724d",
                 "shasum": ""
             },
             "require": {
@@ -2473,7 +2637,7 @@
                 "psr",
                 "psr-3"
             ],
-            "time": "2016-09-19 16:02:08"
+            "time": "2016-10-10 12:19:37"
         },
         {
             "name": "stack/builder",
@@ -3790,16 +3954,16 @@
         },
         {
             "name": "zendframework/zend-diactoros",
-            "version": "1.3.6",
+            "version": "1.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diactoros.git",
-                "reference": "a60da179c37f2c4e44ef734d0b92824a58943f7f"
+                "reference": "969ff423d3f201da3ff718a5831bb999bb0669b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/a60da179c37f2c4e44ef734d0b92824a58943f7f",
-                "reference": "a60da179c37f2c4e44ef734d0b92824a58943f7f",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/969ff423d3f201da3ff718a5831bb999bb0669b0",
+                "reference": "969ff423d3f201da3ff718a5831bb999bb0669b0",
                 "shasum": ""
             },
             "require": {
@@ -3836,7 +4000,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2016-09-07 17:57:29"
+            "time": "2016-10-11 13:25:21"
         },
         {
             "name": "zendframework/zend-escaper",
@@ -5492,16 +5656,16 @@
         },
         {
             "name": "phing/phing",
-            "version": "2.15.0",
+            "version": "2.15.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "bbfcaee391123220fc54e9c6feffeeea3c8775b7"
+                "reference": "16f6372d9bf71783abea98fdd8cd9cb4ecb3bf41"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/bbfcaee391123220fc54e9c6feffeeea3c8775b7",
-                "reference": "bbfcaee391123220fc54e9c6feffeeea3c8775b7",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/16f6372d9bf71783abea98fdd8cd9cb4ecb3bf41",
+                "reference": "16f6372d9bf71783abea98fdd8cd9cb4ecb3bf41",
                 "shasum": ""
             },
             "require": {
@@ -5581,7 +5745,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2016-09-14 19:38:14"
+            "time": "2016-10-11 09:24:10"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -7068,7 +7232,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "drupal/entity_storage_migrate": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],

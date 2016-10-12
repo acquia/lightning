@@ -54,6 +54,13 @@ as many additional states as you like and define transitions between them. It's
 also possible to schedule content (either a single node or many at once) to be
 transitioned between states at a specific future date and time.
 
+## Preview (Experimental)
+The Workspace Preview System (WPS) gives site builders, editors, authors, and
+reviews the ability to send collections of content through an editorial workflow
+and preview that content within the context of the current live site. WPS is a
+collection of contributed Drupal modules with additional configuration UX
+improvements that all just works out of the box.
+
 ## Installing Lightning
 The preferred way to install Lightning is using our
 [Composer-based project template][template]. It's easy!
@@ -68,7 +75,6 @@ The roadmap is subject to change, but our projected schedule is:
 * QTR3/4, 2016
   * Point in time preview
   * Personalization
-  * Workspace Preview System
   * Remote replication (store workspaces on external apps)
   * Search API integration
 
@@ -94,10 +100,35 @@ If necessary, edit behat.local.yml to match your environment. Generally you
 will not need to do this.
 
 ## Known Issues
+
+### Media
+
 * If you upload an image into an image field using the new image browser, you
   can set the image's alt text at upload time, but that text will not be
   replicated to the image field. This is due to a limitation of Entity Browser's
   API.
+
+### Preview
+
+* Relies on Multiversion which
+  * Does not have a stable release
+  * Modifies data structures
+  * Leaves permanent changes in the database after being uninstalled
+  * Introduces the concept of a trash bin for deleted content. Content that is
+    deleted is not actually removed from the database anymore. It needs to be
+    deleted and then "purged" to be completely wiped from the database. However,
+    the user interface to purge content is provided by the Trash module, which
+    is not yet ready. This makes it impossible to truly delete content from the
+    UI.
+* There are several scenarios where URL aliases might produce unexpected
+  results, including:
+  * Pathauto is enable, but rules are not configured for all content types
+  * Overriding pathauto generated aliases
+  * Aliases for all Entities other than Nodes
+* Blocks on the block listing page(s) are not properly filtered by workspace
+  under certain circumstances
+* The Workspace listing page will display a PHP warning caused by the Workspace
+  module which is effectively harmless but may look alarming
 
 [issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
 [template]: https://github.com/acquia/lightning-project "Composer-based project template"

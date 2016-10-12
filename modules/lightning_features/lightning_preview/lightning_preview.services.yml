@@ -1,0 +1,13 @@
+services:
+  lightning_preview.workspace_lock:
+    class: '\Drupal\lightning_preview\WorkspaceLock'
+    arguments:
+      - '@workspace.manager'
+      - '@entity_type.manager'
+      - '@lightning_preview.replication_semaphore'
+
+  lightning_preview.replication_semaphore:
+    class: '\Drupal\lightning_preview\ReplicationSemaphore'
+    tags:
+      -
+        name: event_subscriber

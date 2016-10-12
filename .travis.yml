@@ -7,10 +7,10 @@ cache:
     - "$HOME/.drush/cache"
     - "$HOME/.npm"
 php:
-  - 7
   - 5.6
 env:
   - VERSION=HEAD
+  - VERSION=8.x-1.10
   - VERSION=8.x-1.06
   - VERSION=8.x-1.05
   - VERSION=8.x-1.04
@@ -57,6 +57,7 @@ install:
   - phing install -Ddb.database=drupal
   # Execute database updates if we're not building from HEAD.
   - if [ $VERSION != "HEAD" ]; then phing update; fi
+  - phing drush-pm-enable -Dmodule=lightning_preview
 
 before_script:
   - cd docroot
