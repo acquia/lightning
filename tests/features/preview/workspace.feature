@@ -67,6 +67,19 @@ Feature: Workspaces
     Then I should see "WPS Test Title"
 
   @cleanup
+  Scenario: Custom paths are prefixed when created on non-live workspaces
+    Given I am logged in as a user with the administrator role
+    And I switch to the "Stage" workspace
+    And I visit "/node/add/page"
+    And I fill in "WPS Alias Test 1" for "Title"
+    And I fill in "/wps-alias-test-1" for "URL alias"
+    And I press "Save"
+    Then I should be on "/stage/wps-alias-test-1"
+    # Manual cleanup
+    And I click "Delete"
+    And I press "Delete"
+
+  @cleanup
   Scenario: The Stage workspace that ships with Lightning is not the Live workspace
     Given I am logged in as a user with the administrator role
     When I switch to the "Stage" workspace
@@ -75,10 +88,10 @@ Feature: Workspaces
     And I select "Published" from "Moderation state"
     And I fill in "/wps-test-1" for "URL alias"
     And I press "Save"
-    And I am on "/wps-test-1"
+    And I am on "/stage/wps-test-1"
     And the response status code should be 200
     And I am an anonymous user
-    And I am on "/wps-test-1"
+    And I am on "/stage/wps-test-1"
     Then the response status code should be 404
     # Manual cleanup
     And I am on "/user/login"
@@ -106,15 +119,15 @@ Feature: Workspaces
     And I select "Published" from "Moderation state"
     And I fill in "/wps-test-2" for "URL alias"
     And I press "Save"
-    And I am on "/wps-test-2"
+    And I am on "/stage/wps-test-2"
     And I click "New draft"
     And I fill in "WPS Test Title: edited1" for "Title"
     And I select "Published" from "Moderation state"
     And I press "Save"
-    And I should be on "/wps-test-2"
+    And I should be on "/stage/wps-test-2"
     And I should see "WPS Test Title: edited1"
     And I set the "Stage" workspace to the "Published" moderation state
-    And I am on "/wps-test-2"
+    And I am on "/stage/wps-test-2"
     And I click "New draft"
     And I should see "Content cannot be modified in a locked workspace"
     Then I should not see the "Save" button
@@ -136,29 +149,29 @@ Feature: Workspaces
     And I set the "Stage" workspace to the "Draft" moderation state
     And I switch to the "Stage" workspace
     And I visit "/node/add/page"
-    And I fill in "WPS Test Title" for "Title"
+    And I fill in "WPS Test Title 3" for "Title"
     And I select "Published" from "Moderation state"
-    And I fill in "/wps-test-3" for "URL alias"
     And I press "Save"
-    And I am on "/wps-test-3"
+    And I visit "/admin/content"
+    And I click "WPS Test Title 3"
     And I click "New draft"
     And I fill in "WPS Test Title: edited1" for "Title"
     And I select "Published" from "Moderation state"
     And I press "Save"
-    And I should be on "/wps-test-3"
     And I should see "WPS Test Title: edited1"
     And I set the "Stage" workspace to the "Published" moderation state
-    And I am on "/wps-test-3"
+    And I visit "/admin/content"
+    And I click "WPS Test Title: edited1"
     And I click "New draft"
     And I should see "Content cannot be modified in a locked workspace"
     And I should not see the "Save" button
     And I set the "Stage" workspace to the "Draft" moderation state
-    And I am on "/wps-test-3"
+    And I visit "/admin/content"
+    And I click "WPS Test Title: edited1"
     And I click "New draft"
     And I fill in "WPS Test Title: edited2" for "Title"
     And I select "Published" from "Moderation state"
     And I press "Save"
-    And I should be on "/wps-test-3"
     Then I should see "WPS Test Title: edited2"
     # Manual cleanup
     And I visit "/admin/content"
@@ -213,19 +226,6 @@ Feature: Workspaces
     And I switch to the "Live" workspace
     And I visit "/admin/content"
     And I click "WPS Test: Edited"
-    And I click "Delete"
-    And I press "Delete"
-
-  @cleanup
-  Scenario: Custom paths are prefixed when created on non-live workspaces
-    Given I am logged in as a user with the administrator role
-    And I switch to the "Stage" workspace
-    And I visit "/node/add/page"
-    And I fill in "WPS Alias Test 1" for "Title"
-    And I fill in "/wps-alias-test-1" for "URL alias"
-    And I press "Save"
-    Then I should be on "/stage/wps-alias-test-1"
-    # Manual cleanup
     And I click "Delete"
     And I press "Delete"
 
