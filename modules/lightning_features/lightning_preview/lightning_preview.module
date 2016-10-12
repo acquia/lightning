@@ -181,48 +181,7 @@ function lightning_preview_entity_presave(EntityInterface $entity) {
     $entity->isDefaultRevision(TRUE);
   }
 
-  /** @var \Drupal\replication\Event\ReplicationEvent $event */
-  $event = \Drupal::service('lightning_preview.replication_semaphore')
-    ->getEvent();
-
-  // If there is a replication event, it means that a replication is now in
-  // progress.
-  if ($entity instanceof FieldableEntityInterface && $entity->hasField('workspace') && $event) {
-    $source_workspace = $event->getSourceWorkspace()->getMachineName();
-    $target_workspace = $entity->workspace->entity->getMachineName();
-
-    if ($entity->hasField('path')) {
-      $alias = $entity->path->alias;
-
-      if ($alias) {
-        if ($target_workspace == 'live') {
-          $alias = AliasHandler::stripPrefix($alias, $source_workspace);
-        }
-        elseif ($source_workspace == 'live') {
-          $alias = AliasHandler::addPrefix($alias, $target_workspace);
-        }
-        // By default, create a new alias...
-        $entity->path->pid = NULL;
-        $entity->path->source = NULL;
-        $entity->path->alias = $alias;
-
-        // ...but if the entity is NOT new, we might need to update an existing
-        // alias, which we can try to locate using the entity's system path.
-        if ($entity->isNew() == FALSE) {
-          $existing_alias = \Drupal::service('path.alias_storage')
-            ->load([
-              'source' => '/' . $entity->toUrl()->getInternalPath(),
-            ]);
-
-          // If an alias exists, update that one.
-          if ($existing_alias) {
-            $entity->path->source = $existing_alias['source'];
-            $entity->path->pid = $existing_alias['pid'];
-          }
-        }
-      }
-    }
-  }
+  \Drupal::service('lightning_preview.alias_handler')->replicateAlias($entity);
 }
 
 /**
