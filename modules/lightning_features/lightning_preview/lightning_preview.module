@@ -11,6 +11,7 @@ use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\lightning_preview\AliasHandler;
 use Drupal\lightning_preview\Exception\EntityLockedException;
 use Drupal\lightning_preview\Form\NodeDeleteForm;
 use Drupal\lightning_preview\Plugin\Field\FieldWidget\PathWidget;
@@ -85,7 +86,7 @@ function lightning_preview_pathauto_alias_alter(&$alias, array &$context) {
   }
 
   if (isset($entity) && $entity instanceof FieldableEntityInterface && $entity->hasField('workspace') && $entity->workspace->isEmpty() == FALSE) {
-    $alias = PathWidget::prefixPath($alias, $entity->workspace->entity->getMachineName());
+    $alias = AliasHandler::addPrefix($alias, $entity->workspace->entity->getMachineName());
   }
 }
 
@@ -156,28 +157,27 @@ function lightning_preview_entity_access(EntityInterface $entity, $operation, Ac
     return AccessResult::forbidden('The live workspace can never be edited.');
   }
 
-  $locked = \Drupal::service('lightning_preview.workspace_lock')
-    ->isEntityLocked($entity);
-
-  return AccessResult::forbiddenIf($locked);
+  try {
+    \Drupal::service('lightning_preview.workspace_lock')->assertEntityUnlocked($entity);
+    return AccessResult::neutral();
+  }
+  catch (EntityLockedException $e) {
+    return AccessResult::forbidden($e->getMessage());
+  }
 }
 
 /**
  * Implements hook_entity_presave().
  */
 function lightning_preview_entity_presave(EntityInterface $entity) {
-  $locked = \Drupal::service('lightning_preview.workspace_lock')
-    ->isEntityLocked($entity);
+  \Drupal::service('lightning_preview.workspace_lock')->assertEntityUnlocked($entity);
 
-  if ($locked) {
-    throw new EntityLockedException($entity);
-  }
   // Workspaces are revisionable only because they must be moderatable, and
   // moderatable things MUST be revisionable. As far as the user is concerned,
   // though, the workspaces are NOT revisionable -- there's no real concept
   // of 'versions' of a workspace -- so the latest revision should always be
   // the default one, and that's that.
-  elseif ($entity instanceof WorkspaceInterface && $entity->isNewRevision()) {
+  if ($entity instanceof WorkspaceInterface && $entity->isNewRevision()) {
     $entity->isDefaultRevision(TRUE);
   }
 
@@ -196,10 +196,10 @@ function lightning_preview_entity_presave(EntityInterface $entity) {
 
       if ($alias) {
         if ($target_workspace == 'live') {
-          $alias = PathWidget::unprefixPath($alias, $source_workspace);
+          $alias = AliasHandler::stripPrefix($alias, $source_workspace);
         }
         elseif ($source_workspace == 'live') {
-          $alias = PathWidget::prefixPath($alias, $target_workspace);
+          $alias = AliasHandler::addPrefix($alias, $target_workspace);
         }
         // By default, create a new alias...
         $entity->path->pid = NULL;
@@ -229,12 +229,7 @@ function lightning_preview_entity_presave(EntityInterface $entity) {
  * Implements hook_entity_predelete().
  */
 function lightning_preview_entity_predelete(EntityInterface $entity) {
-  $locked = \Drupal::service('lightning_preview.workspace_lock')
-    ->isEntityLocked($entity);
-
-  if ($locked) {
-    throw new EntityLockedException($entity);
-  }
+  \Drupal::service('lightning_preview.workspace_lock')->assertEntityUnlocked($entity);
 }
 
 /**
@@ -248,13 +243,11 @@ function lightning_preview_form_alter(array &$form, FormStateInterface $form_sta
   if ($form_object instanceof EntityFormInterface) {
     $entity = $form_object->getEntity();
 
-    $locked =
-      \Drupal::service('lightning_preview.workspace_lock')
-        ->isEntityLocked($entity);
-
-    if ($locked) {
-      $e = new EntityLockedException($entity);
-      drupal_set_message($e->getMessage() . '.', 'warning');
+    try {
+      \Drupal::service('lightning_preview.workspace_lock')->assertEntityUnlocked($entity);
+    }
+    catch (EntityLockedException $e) {
+      drupal_set_message($e->getMessage(), 'warning');
       $form['#pre_render'][] = 'lightning_core_disable_buttons';
     }
   }

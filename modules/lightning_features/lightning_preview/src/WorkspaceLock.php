@@ -5,6 +5,7 @@ namespace Drupal\lightning_preview;
 use Drupal\Core\Config\Entity\ConfigEntityTypeInterface;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\lightning_preview\Exception\EntityLockedException;
 use Drupal\multiversion\Entity\WorkspaceInterface;
 use Drupal\multiversion\Workspace\WorkspaceManagerInterface;
 
@@ -125,6 +126,22 @@ class WorkspaceLock {
     return $this->isEntityTypeLocked(
       $entity->getEntityTypeId()
     );
+  }
+
+  /**
+   * Asserts that an entity is unlocked.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity to check.
+   *
+   * @throws EntityLockedException
+   *   If the entity is locked.
+   */
+  public function assertEntityUnlocked(EntityInterface $entity) {
+    $locked = $this->isEntityLocked($entity);
+    if ($locked) {
+      throw new EntityLockedException($entity);
+    }
   }
 
 }

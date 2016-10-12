@@ -30,7 +30,7 @@ Feature: Workspaces
     When I visit "/admin/structure/workspace/2/activate"
     And I press "Activate"
     And I visit "/admin/structure/workbench-moderation/states/draft"
-    Then I should see "Configuration can only be modified in the Live workspace."
+    Then I should see "Configuration can only be modified in the Live workspace"
     And I should not see the button "Save"
 
   Scenario: Workspaces are allowed to be in the Draft, Needs Review, and Published states, but not Archived
