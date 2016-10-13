@@ -26,7 +26,11 @@ use Drupal\workbench_moderation\ModerationStateTransitionInterface as StateTrans
  */
 function lightning_preview_field_widget_info_alter(array &$info) {
   if (isset($info['path'])) {
-    $info['path']['class'] = PathWidget::class;
+    $info['path']['class'] = \Drupal::moduleHandler()->moduleExists('pathauto')
+      // We cannot use ::class here, because if Pathauto doesn't exist, PHP will
+      // blow up if we try to import the class.
+      ? '\Drupal\lightning_preview\Plugin\Field\FieldWidget\PathautoWidget'
+      : PathWidget::class;
   }
 }
 
@@ -96,11 +100,17 @@ function lightning_preview_pathauto_alias_alter(&$alias, array &$context) {
 function lightning_preview_module_implements_alter(array &$implementations, $hook) {
   $module = 'lightning_preview';
 
+  // Regarding hook_entity_presave():
   // Workbench Moderation's implementation of hook_entity_presave() screws up
   // our workspace revisioning logic, so our implementation needs to run after
   // it. We can ice this once we've ditched Workbench Moderation in favor of
   // Content Moderation.
-  if ($hook == 'entity_presave') {
+  //
+  // Regarding hook_field_widget_info_alter():
+  // Normally, Pathauto's implementation would run after ours, and it would
+  // switch the plugin to its own class. We have a special widget that extends
+  // Pathauto's, so we need to make sure it is the one that gets used.
+  if ($hook == 'entity_presave' || $hook == 'field_widget_info_alter') {
     $order = array_diff(array_keys($implementations), [$module]);
     array_push($order, $module);
     array_reorder($implementations, $order);
