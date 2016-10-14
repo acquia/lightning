@@ -1,3 +1,10 @@
+## 1.11
+* Fixed a dependency problem that was preventing Lightning from being installed
+  via Composer. (Issue #2699121)
+* Patched a core bug that could in certain circumstances result in file copies
+  failing during installation. (Issue #2782239)
+* Lightning Preview is now compatible with Pathauto. (Issue #2817253)
+
 ## 1.10
 * Drupal core updated to 8.2.1.
 * Introduced Lightning Preview module and Workspace Preview System.

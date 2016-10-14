@@ -54,12 +54,16 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+## 1.10 to 1.11
+There are no manual update steps for this version.
+
 ## 1.06 to 1.10
 There are no manual update steps for this version.
+
 If you would like to test the new Lightning Preview module and Workspace Preview
 System in a development environment, enable the Lightning Preview module from
 module listing page. Note that Lightning Preview and WPS are not yet ready for
-production environements.
+production environments.
 
 ## 1.05 to 1.06
 There are no manual update steps for this version.

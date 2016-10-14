@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1475a97cf04a9014322e88b74d159ab4",
-    "content-hash": "7fbfa92d78f8ab79dfc89c8971e5d193",
+    "hash": "b554b1ca8bcb6d6cc27161c56f7e93e7",
+    "content-hash": "528b338ed877888002796b50a660829a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -893,6 +893,11 @@
                 "symfony/css-selector": "~2.8"
             },
             "type": "drupal-core",
+            "extra": {
+                "patches_applied": {
+                    "2818031 - Trailing slashes can cause FileSystem::mkdir() to return a false negative": "https://www.drupal.org/files/issues/2818031-6.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Drupal\\Core\\": "lib/Drupal/Core",
@@ -4783,7 +4788,7 @@
             "dist": {
                 "type": "zip",
                 "url": "https://ftp.drupal.org/files/projects/coder-8.x-2.9.zip",
-                "reference": "b08682bd939cf7d3ac7034bee792aa17f80e19d7",
+                "reference": null,
                 "shasum": null
             },
             "require": {
@@ -5651,16 +5656,16 @@
         },
         {
             "name": "phing/phing",
-            "version": "2.15.1",
+            "version": "2.15.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "16f6372d9bf71783abea98fdd8cd9cb4ecb3bf41"
+                "reference": "0999ab4e94e609dc00998e3d1b88df843054db7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/16f6372d9bf71783abea98fdd8cd9cb4ecb3bf41",
-                "reference": "16f6372d9bf71783abea98fdd8cd9cb4ecb3bf41",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/0999ab4e94e609dc00998e3d1b88df843054db7c",
+                "reference": "0999ab4e94e609dc00998e3d1b88df843054db7c",
                 "shasum": ""
             },
             "require": {
@@ -5740,7 +5745,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2016-10-11 09:24:10"
+            "time": "2016-10-13 09:01:45"
         },
         {
             "name": "phpdocumentor/reflection-common",
