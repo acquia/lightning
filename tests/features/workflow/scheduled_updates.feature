@@ -9,7 +9,7 @@ Feature: Scheduled updates to content
       | Foobar | /foobar | draft            |
     When I visit "/foobar"
     And I click "Edit draft"
-    And I schedule the node to be published at "1984-09-19 08:57:00"
+    And I schedule the node to be published at "09-19-1984 08:57:00AM"
     And I select "Needs Review" from "Moderation state"
     And I press "Save"
     And I run cron
