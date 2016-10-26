@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "439e57471c7212c5dd746ed13bc88f4d",
-    "content-hash": "d4b3487d6f4f32d64b45199615ab58be",
+    "hash": "3f8896bfa47eb995dee32cf0955e15fd",
+    "content-hash": "24d4d3a0dffa0eabe5b8f14487163329",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -663,15 +663,15 @@
         },
         {
             "name": "drupal/acquia_connector",
-            "version": "8.1.5",
+            "version": "8.1.6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/acquia_connector",
-                "reference": "0f3c8d8a2b3b2e9e990ea7998249650977ae5404"
+                "reference": "07d3fc1894071949e8d934ce6cfb3b5c0d3f1bd6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.5.zip",
+                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.6.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -698,7 +698,7 @@
             ],
             "description": "Allows Drupal to securely communicate with the Acquia Subscription, and checks for updates to Acquia Drupal.",
             "homepage": "https://www.drupal.org/project/acquia_connector",
-            "time": "2016-09-28 18:36:50"
+            "time": "2016-10-26 13:52:51"
         },
         {
             "name": "drupal/config_update",
@@ -5023,6 +5023,11 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "9.0.x-dev"
+                },
+                "patches_applied": {
+                    "Adding composer.json support to make-convert command": "https://github.com/drush-ops/drush/commit/ce82b946d49b09cd33da5ca84feb24a6c35f8f8e.patch",
+                    "The batch table may not exist by the time _drush_backend_batch_process() is called in 8.x-1.x": "https://github.com/drush-ops/drush/commit/c389aebb7d3e26ff0f544684d8b3ec3528107e55.diff",
+                    "Fix composer branch-alias constraint": "https://github.com/drush-ops/drush/commit/83436c8ea505223a1868dce130d4ca1b4e558711.diff"
                 }
             },
             "autoload": {
