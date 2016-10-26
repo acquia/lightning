@@ -26,10 +26,13 @@ env:
 addons:
   apt:
     packages:
-    # Trusty does not include MySQL by defualt.
+    # Trusty does not include MySQL by default.
     - mysql-server-5.6
     - mysql-client-core-5.6
     - mysql-client-5.6
+    # Dependencies for Chrome.
+    - libappindicator1
+    - fonts-liberation
 
 before_install:
   - phpenv config-rm xdebug.ini
@@ -39,6 +42,7 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - sleep 3
+
   # Download Chrome Driver
   - LATEST_CHROMEDRIVER=$(wget -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
   - wget http://chromedriver.storage.googleapis.com/$LATEST_CHROMEDRIVER/chromedriver_linux64.zip
@@ -47,7 +51,12 @@ before_install:
   - mkdir -p $HOME/.composer/vendor/bin
   - mv -f chromedriver $HOME/.composer/vendor/bin/
   - rm chromedriver_linux64.zip
-  # Echo Chrome version
+
+  # Update Chrome.
+  - export CHROME_BIN=/usr/bin/google-chrome
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome-stable_current_amd64.deb
+  - rm google-chrome-stable_current_amd64.deb
   - google-chrome --version
 
 install:
