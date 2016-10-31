@@ -9,7 +9,6 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\lightning_media\MultiversionAwareMediaStorage;
 use Drupal\media_entity\MediaBundleInterface;
 
 /**
@@ -23,9 +22,9 @@ function lightning_media_form_entity_browser_media_browser_form_alter(array &$fo
  * Implements hook_entity_type_alter().
  */
 function lightning_media_entity_type_alter(array &$entity_types) {
-  if (\Drupal::moduleHandler()->moduleExists('multiversion')) {
-    $entity_types['media']->setHandlerClass('storage', MultiversionAwareMediaStorage::class);
-  }
+  // Files should never be workspace-aware. Besides, they ALWAYS conflict during
+  // replication, for reasons as yet unknown.
+  $entity_types['file']->set('multiversion', FALSE);
 }
 
 /**
