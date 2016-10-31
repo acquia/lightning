@@ -76,7 +76,7 @@ install:
   - phing build -Dversion=$VERSION -Dbranch=$TRAVIS_COMMIT
 
   # Install Lightning.
-  - phing install -Ddb.database=drupal
+  - phing install -Ddb.database=drupal -Dversion=$VERSION
   # Execute database updates if we're not building from HEAD.
   - if [ $VERSION != "HEAD" ]; then phing update; fi
 
