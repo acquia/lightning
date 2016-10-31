@@ -22,12 +22,9 @@ function lightning_media_form_entity_browser_media_browser_form_alter(array &$fo
  * Implements hook_entity_type_alter().
  */
 function lightning_media_entity_type_alter(array &$entity_types) {
-  // Media and files should never be under Multiversion control. Not only does
-  // it cause major problems when attempting to enable Multiversion on a site
-  // with existing content, but it is awful UX for certain media assets and
-  // files to only "exist" in certain contexts.
+  // Files should never be workspace-aware. Besides, they ALWAYS conflict during
+  // replication, for reasons as yet unknown.
   $entity_types['file']->set('multiversion', FALSE);
-  $entity_types['media']->set('multiversion', FALSE);
 }
 
 /**
