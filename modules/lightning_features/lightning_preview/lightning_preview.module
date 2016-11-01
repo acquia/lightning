@@ -5,6 +5,7 @@
  * Contains code for Lightning's integration with workspaces.
  */
 
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityFormInterface;
@@ -46,9 +47,22 @@ function lightning_preview_form_workspace_basic_edit_form_alter(array &$form, Fo
   if (isset($form['moderation_state']) && $mod_info->isModeratedEntityForm($form_object)) {
     lightning_workflow_alter_moderation_state($form['moderation_state']['widget'][0]);
 
+    $element = &$form['moderation_state']['widget'][0];
     // Normally this would say 'this piece of content', which is weird if
     // you're editing a workspace.
-    $form['moderation_state']['widget'][0]['#description'] = t('The moderation state of this workspace.');
+    $element['#description'] = t('The moderation state of this workspace. &#128274; denotes a locked state. If you put this workspace into a locked state, you will be able switch into it and look around, but not make any changes.');
+
+    $locked_states = $form_object
+      ->getEntity()
+      ->type
+      ->entity
+      ->getThirdPartySetting('workbench_moderation', 'locked_states', []);
+
+    foreach ($element['#options'] as $id => $label) {
+      if (in_array($id, $locked_states)) {
+        $element['#options'][$id] = new FormattableMarkup('@label &#128274;', ['@label' => $label]);
+      }
+    }
   }
 }
 
