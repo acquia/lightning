@@ -6,7 +6,7 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\workspace\WorkspaceListBuilder as BaseListBuilder;
 
 /**
- * Class WorkspaceListBuilder builds a list of workspaces for the admin page.
+ * Builds the administrator-facing list of workspaces.
  */
 class WorkspaceListBuilder extends BaseListBuilder {
 
@@ -14,8 +14,14 @@ class WorkspaceListBuilder extends BaseListBuilder {
    * {@inheritdoc}
    */
   public function buildHeader() {
-    return parent::buildHeader() + [
-      'moderation_state' => t('Moderation State'),
+    $header = parent::buildHeader();
+
+    // The Status column is weird and confusing from a UX perspective, so get
+    // rid of it.
+    unset($header['status']);
+
+    return $header + [
+      'moderation_state' => $this->t('Moderation State'),
     ];
   }
 
@@ -24,6 +30,10 @@ class WorkspaceListBuilder extends BaseListBuilder {
    */
   public function buildRow(EntityInterface $entity) {
     $row = parent::buildRow($entity);
+
+    // The Status column is weird and confusing from a UX perspective, so get
+    // rid of it.
+    unset($row['status']);
 
     /** @var \Drupal\multiversion\Entity\WorkspaceInterface $entity */
     if ($entity->hasField('moderation_state') && $entity->getMachineName() != 'live') {
