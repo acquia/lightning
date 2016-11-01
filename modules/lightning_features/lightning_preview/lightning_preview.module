@@ -5,13 +5,12 @@
  * Contains code for Lightning's integration with workspaces.
  */
 
-use Drupal\Component\Utility\Html;
+use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Markup;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\lightning_preview\AliasHandler;
 use Drupal\lightning_preview\Exception\EntityLockedException;
@@ -51,7 +50,7 @@ function lightning_preview_form_workspace_basic_edit_form_alter(array &$form, Fo
     $element = &$form['moderation_state']['widget'][0];
     // Normally this would say 'this piece of content', which is weird if
     // you're editing a workspace.
-    $element['#description'] = t('The moderation state of this workspace. If the workspace is in a locked state, you can activate it and look around, but will not be able to make any changes.');
+    $element['#description'] = t('The moderation state of this workspace. &#128274; denotes a locked state. If you put this workspace into a locked state, you will be able switch into it and look around, but not make any changes.');
 
     $locked_states = $form_object
       ->getEntity()
@@ -61,16 +60,7 @@ function lightning_preview_form_workspace_basic_edit_form_alter(array &$form, Fo
 
     foreach ($element['#options'] as $id => $label) {
       if (in_array($id, $locked_states)) {
-        // We can't be certain if the label is safe, so if it's still a plain
-        // string (as opposed to a string wrapped in a MarkupInterface instance)
-        // we'll escape it for safety's sake. (Which could lead to double
-        // escaping, but it beats the hell out of getting pwned.)
-        if (is_string($label)) {
-          $label = Html::escape($label);
-        }
-        // We must use a Markup object to prevent the lock symbol from being
-        // escaped.
-        $element['#options'][$id] = Markup::create($label . ' &#128274;');
+        $element['#options'][$id] = new FormattableMarkup('@label &#128274;', ['@label' => $label]);
       }
     }
   }
