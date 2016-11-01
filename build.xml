@@ -123,7 +123,15 @@
     Enable passthru() for this as well since it has a lot of dependencies and is therefore
     more prone to errors than other extensions.
     -->
-    <exec command="${drush} pm-enable lightning_preview --yes" dir="${docroot}" passthru="true" />
+    <if>
+      <and>
+        <isset property="version" />
+        <equals arg1="${version}" arg2="HEAD" />
+      </and>
+      <then>
+        <exec command="${drush} pm-enable lightning_preview --yes" dir="${docroot}" passthru="true" />
+      </then>
+    </if>
 
     <if>
       <isset property="www.group" />
