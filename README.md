@@ -69,6 +69,8 @@ If you don't want to use Composer, you can install Lightning the traditional way
 by downloading a tarball from our
 [drupal.org project page](https://www.drupal.org/project/lightning).
 
+You can customize your installation using [lightning.extend.yml](https://github.com/acquia/lightning/blob/8.x-1.x/lightning.extend.yml). Using this file, you can choose which Lightning features to install as well as install your own custom features.
+
 ## Project Roadmap
 The roadmap is subject to change, but our projected schedule is:
 
