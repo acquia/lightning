@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5776f8d304fd705f5d63a01ea174a4df",
-    "content-hash": "cf0455eb289f4f6f2546ad7d626cafa7",
+    "hash": "1ea94b6d6f85552deaa86e39f66797e4",
+    "content-hash": "6c00f78d1d37718ab63508c07483639b",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -893,7 +893,8 @@
             "type": "drupal-core",
             "extra": {
                 "patches_applied": {
-                    "2818031 - Trailing slashes can cause FileSystem::mkdir() to return a false negative": "https://www.drupal.org/files/issues/2818031-6.patch"
+                    "2818031 - Trailing slashes can cause FileSystem::mkdir() to return a false negative": "https://www.drupal.org/files/issues/2818031-6.patch",
+                    "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-28.patch"
                 }
             },
             "autoload": {
@@ -5023,6 +5024,11 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "9.0.x-dev"
+                },
+                "patches_applied": {
+                    "Adding composer.json support to make-convert command": "https://github.com/drush-ops/drush/commit/ce82b946d49b09cd33da5ca84feb24a6c35f8f8e.patch",
+                    "The batch table may not exist by the time _drush_backend_batch_process() is called in 8.x-1.x": "https://github.com/drush-ops/drush/commit/c389aebb7d3e26ff0f544684d8b3ec3528107e55.diff",
+                    "Fix composer branch-alias constraint": "https://github.com/drush-ops/drush/commit/83436c8ea505223a1868dce130d4ca1b4e558711.diff"
                 }
             },
             "autoload": {
