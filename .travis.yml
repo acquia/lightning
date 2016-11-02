@@ -13,23 +13,21 @@ php:
   - 5.6
 env:
   - VERSION=HEAD
-  - Version 8.x-1.11
+  - VERSION=8.x-1.11
   - VERSION=8.x-1.10
   - VERSION=8.x-1.06
   - VERSION=8.x-1.05
-  - VERSION=8.x-1.04
-  - VERSION=8.x-1.03
-  - VERSION=8.x-1.02
-  - VERSION=8.x-1.01
-  - VERSION=8.x-1.00
 
 addons:
   apt:
     packages:
-    # Trusty does not include MySQL by defualt.
+    # Trusty does not include MySQL by default.
     - mysql-server-5.6
     - mysql-client-core-5.6
     - mysql-client-5.6
+    # Dependencies for Chrome.
+    - libappindicator1
+    - fonts-liberation
 
 before_install:
   - phpenv config-rm xdebug.ini
@@ -39,6 +37,7 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
   - sleep 3
+
   # Download Chrome Driver
   - LATEST_CHROMEDRIVER=$(wget -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
   - wget http://chromedriver.storage.googleapis.com/$LATEST_CHROMEDRIVER/chromedriver_linux64.zip
@@ -47,7 +46,12 @@ before_install:
   - mkdir -p $HOME/.composer/vendor/bin
   - mv -f chromedriver $HOME/.composer/vendor/bin/
   - rm chromedriver_linux64.zip
-  # Echo Chrome version
+
+  # Update Chrome.
+  - export CHROME_BIN=/usr/bin/google-chrome
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome-stable_current_amd64.deb
+  - rm google-chrome-stable_current_amd64.deb
   - google-chrome --version
 
 install:
@@ -72,7 +76,7 @@ install:
   - phing build -Dversion=$VERSION -Dbranch=$TRAVIS_COMMIT
 
   # Install Lightning.
-  - phing install -Ddb.database=drupal
+  - phing install -Ddb.database=drupal -Dversion=$VERSION
   # Execute database updates if we're not building from HEAD.
   - if [ $VERSION != "HEAD" ]; then phing update; fi
 

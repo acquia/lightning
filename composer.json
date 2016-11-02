@@ -83,7 +83,9 @@
                 "Adding composer.json support to make-convert command":
                 "https://github.com/drush-ops/drush/commit/ce82b946d49b09cd33da5ca84feb24a6c35f8f8e.patch",
                 "The batch table may not exist by the time _drush_backend_batch_process() is called in 8.x-1.x":
-                "https://github.com/drush-ops/drush/commit/c389aebb7d3e26ff0f544684d8b3ec3528107e55.diff"
+                "https://github.com/drush-ops/drush/commit/c389aebb7d3e26ff0f544684d8b3ec3528107e55.diff",
+                "Fix composer branch-alias constraint":
+                "https://github.com/drush-ops/drush/commit/83436c8ea505223a1868dce130d4ca1b4e558711.diff"
             },
             "drupal/metatag": {
                 "2786795 - DrupalConsole integration breaks Drush":
@@ -93,9 +95,15 @@
                 "2791789 - Workspace should report conflicts before replication":
                 "https://www.drupal.org/files/issues/2791789-34.patch"
             },
+            "drupal/multiversion": {
+                "2822915 - Migration source plugin makes bad assumptions that can lead to data loss":
+                "https://www.drupal.org/files/issues/2822915-2.patch"
+            },
             "drupal/replication": {
                 "2814055 - Allow modules to react to replication events":
-                "https://www.drupal.org/files/issues/2814055-2.patch"
+                "https://www.drupal.org/files/issues/2814055-2.patch",
+                "2820105 - User references are not replicated":
+                "https://www.drupal.org/files/issues/2820105-10.patch"
             },
             "drupal/core": {
                 "2818031 - Trailing slashes can cause FileSystem::mkdir() to return a false negative":
@@ -128,9 +136,9 @@
         "drupal/pathauto": "^8.1.0",
         "drupal/multiversion": "8.1.0-alpha10",
         "drupal/workspace": "8.1.0-alpha3",
-        "drupal/replication": "8.1.0-alpha4",
+        "drupal/replication": "8.1.0-alpha5",
         "drupal/key_value": "^8.1.0",
-        "drupal/entity_browser": "8.1.0-alpha9",
+        "drupal/entity_browser": "8.1.0-alpha10",
         "drupal/views_infinite_scroll": "^8.1.1",
         "drupal/media_entity_document": "^8.1.0",
         "drupal/video_embed_field": "^8.1.0"
