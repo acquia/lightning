@@ -37,7 +37,8 @@
             "./bin/phing push"
         ],
         "post-update-cmd": [
-            "./bin/phing push"
+            "./bin/phing push",
+            "./bin/phing package"
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
     },
@@ -108,6 +109,10 @@
             "drupal/core": {
                 "2818031 - Trailing slashes can cause FileSystem::mkdir() to return a false negative":
                 "https://www.drupal.org/files/issues/2818031-6.patch"
+            },
+            "drupal/media_entity_twitter": {
+                "2650976 - Use SVG to generate thumbnails for text-only tweets":
+                "https://www.drupal.org/files/issues/2650976-14.patch"
             }
         }
     },
