@@ -13,10 +13,10 @@ php:
   - 5.6
 env:
   - VERSION=HEAD
-  - VERSION=8.x-1.11
-  - VERSION=8.x-1.10
-  - VERSION=8.x-1.06
-  - VERSION=8.x-1.05
+  - VERSION=1.11
+  - VERSION=1.10
+  - VERSION=1.06
+  - VERSION=1.05
 
 addons:
   apt:
@@ -71,19 +71,25 @@ install:
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
-  # Build the Lightning code base.
+  # We need Phing to execute our build steps.
   - composer global require phing/phing
-  - phing build -Dversion=$VERSION -Dbranch=$TRAVIS_COMMIT
-
-  # Install Lightning.
-  - phing install -Ddb.database=drupal -Dversion=$VERSION
-  # Execute database updates if we're not building from HEAD.
-  - if [ $VERSION != "HEAD" ]; then phing update; fi
+  # Build the Lightning code base.
+  - composer install
+  # Install Lightning cleanly so that settings.php will be created properly.
+  - phing install -Ddb.database=drupal
+  - cd docroot
+  # If there is a database fixture for the version being tested, recreate the
+  # database from it. We need to destroy the existing database in order to
+  # prevent table collisions.
+  - FIXTURE=$TRAVIS_BUILD_DIR/tests/fixtures/$VERSION.sql.bz2
+  - if [ -f $FIXTURE ]; then mysql -u root -e 'DROP DATABASE drupal; CREATE DATABASE drupal;'; bunzip2 --stdout --keep $FIXTURE | `drush sql-connect`; fi
+  - drush cache-rebuild
+  # Install Lightning Preview, if it isn't already.
+  - drush pm-enable --yes lightning_preview
+  # Execute database updates, if there are any.
+  - drush updatedb --yes
 
 before_script:
-  # A harmless diagnostic to ensure the repo is clean.
-  - git status
-  - cd docroot
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   # Start Selenium and dump its ginormous log into a temporary file.
   - mkdir tmp

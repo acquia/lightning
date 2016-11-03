@@ -61,29 +61,6 @@
     <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="libraries,modules/contrib,behat.local.yml" />
   </target>
 
-  <!-- Builds a Lightning code base using Composer. -->
-  <target name="build" depends="env">
-    <if>
-      <equals arg1="${version}" arg2="HEAD" />
-      <then>
-        <exec command="${composer} install" passthru="true" />
-      </then>
-      <else>
-        <if>
-          <not>
-            <isset property="branch" />
-          </not>
-          <then>
-            <exec command="git rev-parse --abbrev-ref HEAD" outputProperty="branch" />
-          </then>
-        </if>
-        <exec command="git checkout ${version}" />
-        <exec command="${composer} install" passthru="true" />
-        <exec command="git checkout ${branch}" />
-      </else>
-    </if>
-  </target>
-
   <!-- Prepares the docroot for installation via the UI. -->
   <target name="preinstall" depends="uninstall">
     <if>
@@ -141,43 +118,12 @@
     </if>
   </target>
 
-  <!-- Builds the Lightning code base from HEAD, overwriting docroot, and
-  executes all database updates. -->
-  <target name="update" depends="env">
-    <phingcall target="build" />
-    <exec command="${drush} cache-rebuild" />
-    <exec command="${drush} updatedb --yes" dir="${docroot}" passthru="true" />
-
-    <!-- Execute manual update steps as needed. -->
-
-    <!-- Enable the Preview component, which is installed by default in
-    development builds as of 8.x-1.10. -->
-    <exec command="${drush} pm-enable lightning_preview --yes" dir="${docroot}" passthru="true" />
-  </target>
-
   <!-- Prepares Lightning for the drupal.org packaging system. -->
   <target name="package">
     <!-- Create a symlink to the installed libraries so that the packaging script can scan 'em. -->
     <symlink target="${profile}/libraries" link="libraries" />
     <exec command="./package" />
     <delete file="libraries" />
-  </target>
-
-  <!-- Builds a Lightning code base from legacy Drush make files. -->
-  <target name="build-legacy" depends="env">
-    <if>
-      <available file="${docroot}" property="docroot.exists" />
-      <then>
-        <phingcall target="package" />
-        <delete dir="${docroot}" />
-      </then>
-    </if>
-
-    <exec command="${drush} make drupal-org-core.make ${docroot} --yes" />
-    <exec command="${drush} make drupal-org.make ${docroot} --no-core --yes" />
-    <exec command="${composer} require drush/drush" dir="${docroot}" />
-
-    <phingcall target="push" />
   </target>
 
   <!-- Destroys the Drupal installation, but leaves the code base intact. -->
