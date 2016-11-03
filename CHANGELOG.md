@@ -8,9 +8,6 @@
 * Explained the Lightning Extender in README. (GitHub #198)
 * Node authorship is now preserved during replication between workspaces.
   (GitHub #191, Issue #2817231)
-* Installing Lightning Preview could cause mysterious errors like 'File
-  migrate://foo.txt could not be copied because it does not exist.' This is now
-  fixed. (GitHub #179, Issue #2782239 and #2818031)
 * File entities are now opted out of Multiversion control (i.e., all files
   will always exist in all workspaces.) (GitHub #197)
 
@@ -18,7 +15,7 @@
 * Fixed a dependency problem that was preventing Lightning from being installed
   via Composer. (Issue #2699121)
 * Patched a core bug that could in certain circumstances result in file copies
-  failing during installation. (Issue #2782239)
+  failing during installation. (GitHub #179, Issue #2782239 and #2818031)
 * Lightning Preview is now compatible with Pathauto. (Issue #2817253)
 
 ## 1.10
