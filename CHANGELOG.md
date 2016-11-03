@@ -1,3 +1,19 @@
+## 1.12
+* Drupal core, and several contributed dependencies, were updated to their
+  latest stable releases.
+* Locked workflow states will now be clearly denoted with a lock icon when
+  editing a workspace. (GitHub #199)
+* The list of workspaces will no longer display a Status column. (GitHub #200
+  and #184)
+* Explained the Lightning Extender in README. (GitHub #198)
+* Node authorship is now preserved during replication between workspaces.
+  (GitHub #191, Issue #2817231)
+* Installing Lightning Preview could cause mysterious errors like 'File
+  migrate://foo.txt could not be copied because it does not exist.' This is now
+  fixed. (GitHub #179, Issue #2782239 and #2818031)
+* File entities are now opted out of Multiversion control (i.e., all files
+  will always exist in all workspaces.) (GitHub #197)
+
 ## 1.11
 * Fixed a dependency problem that was preventing Lightning from being installed
   via Composer. (Issue #2699121)
