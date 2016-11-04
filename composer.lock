@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d8bc1ed01df1a7d53b705ed42cf89a1b",
-    "content-hash": "03959aca961c381917c373b84903c23d",
+    "hash": "941813e78f768f05427d37e779222081",
+    "content-hash": "5203fe9d5134e16f6412b4238cf0f046",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1473,39 +1473,37 @@
         },
         {
             "name": "drupal/metatag",
-            "version": "8.1.0-beta10",
+            "version": "8.1.0-beta11",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/metatag",
-                "reference": "c0610ad2ad9318298823c24db66b8769095910a3"
+                "reference": "a0d1796064674306573b9dae1ae2c8b0394d7ef4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.0-beta10.zip",
+                "url": "https://ftp.drupal.org/files/projects/metatag-8.x-1.0-beta11.zip",
                 "reference": null,
                 "shasum": null
             },
             "require": {
                 "drupal/core": "8.*",
-                "drupal/field": "8.*",
                 "drupal/token": "8.*"
             },
             "replace": {
+                "drupal/metatag_dc": "self.version",
+                "drupal/metatag_facebook": "self.version",
                 "drupal/metatag_google_plus": "self.version",
                 "drupal/metatag_open_graph": "self.version",
                 "drupal/metatag_twitter_cards": "self.version",
                 "drupal/metatag_verification": "self.version"
             },
             "suggest": {
-                "drupal/core": "Required by drupal/metatag_google_plus, drupal/metatag_open_graph, drupal/metatag_twitter_cards, drupal/metatag_verification"
+                "drupal/core": "Required by drupal/metatag_dc, drupal/metatag_facebook, drupal/metatag_google_plus, drupal/metatag_open_graph, drupal/metatag_twitter_cards, drupal/metatag_verification"
             },
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
                     "dev-8.x-1.x": "8.1.x-dev"
-                },
-                "patches_applied": {
-                    "2786795 - DrupalConsole integration breaks Drush": "https://www.drupal.org/files/issues/metatag-deactivate_drupalconsole_services_0.patch"
                 }
             },
             "notification-url": "https://packagist.drupal-composer.org/downloads/",
@@ -1525,7 +1523,7 @@
                 "php",
                 "seo"
             ],
-            "time": "2016-08-22 17:45:58"
+            "time": "2016-10-31 15:33:38"
         },
         {
             "name": "drupal/multiversion",
@@ -1971,15 +1969,15 @@
         },
         {
             "name": "drupal/workspace",
-            "version": "8.1.0-alpha3",
+            "version": "8.1.0-alpha4",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/workspace",
-                "reference": "6b21cbeada234f6bfb0e3ca24ddd11033578c9ff"
+                "reference": "397b02a3bc8b10388eebc5a51489a54ffe5d150f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/workspace-8.x-1.0-alpha3.zip",
+                "url": "https://ftp.drupal.org/files/projects/workspace-8.x-1.0-alpha4.zip",
                 "reference": null,
                 "shasum": null
             },
@@ -1993,9 +1991,6 @@
             "extra": {
                 "branch-alias": {
                     "dev-8.x-1.x": "8.1.x-dev"
-                },
-                "patches_applied": {
-                    "2791789 - Workspace should report conflicts before replication": "https://www.drupal.org/files/issues/2791789-34.patch"
                 }
             },
             "notification-url": "https://packagist.drupal-composer.org/downloads/",
@@ -2007,7 +2002,7 @@
             "keywords": [
                 "Drupal"
             ],
-            "time": "2016-10-05 06:23:30"
+            "time": "2016-10-25 06:25:57"
         },
         {
             "name": "easyrdf/easyrdf",
