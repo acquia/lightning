@@ -7,11 +7,39 @@
 
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Entity\EntityDisplayModeInterface;
+use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
 use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_help().
+ */
+function lightning_core_help($route_name, RouteMatchInterface $route_match) {
+  $matched = [];
+  // Parse the route name to figure out what display mode we're looking at:
+  //
+  // 0 = entire string
+  // 1 = view || form
+  // 2 = entity type
+  // 3 = view_mode || form_mode
+  // 4 = view || form
+  $expr = '/^entity\.entity_(view|form)_display\.([a-z_]+)\.((view|form)_mode)$/';
+
+  if (preg_match($expr, $route_name, $matched)) {
+    $entity_id = $matched[2] . '.' . $route_match->getParameter($matched[3] . '_name');
+
+    return \Drupal::entityTypeManager()
+      ->getStorage('entity_' . $matched[3])
+      ->load($entity_id)
+      ->getThirdPartySetting('lightning_core', 'description');
+  }
+}
 
 /**
  * Implements hook_entity_load().
@@ -78,6 +106,50 @@ function lightning_core_disable_buttons(array $element) {
     }
   }
   return $element;
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function lightning_core_form_alter(array &$form, FormStateInterface $form_state) {
+  $form_object = $form_state->getFormObject();
+
+  if ($form_object instanceof EntityFormInterface) {
+    $entity = $form_object->getEntity();
+
+    if ($entity instanceof EntityDisplayModeInterface) {
+      $form['description'] = [
+        '#type' => 'textarea',
+        '#title' => t('Description'),
+        '#description' => t('Additional relevant information about this @entity_type, such as where it is used and what it is for.', [
+          '@entity_type' => $entity->getEntityType()->getSingularLabel(),
+        ]),
+        '#default_value' => $entity->getThirdPartySetting('lightning_core', 'description'),
+      ];
+      $form['actions']['submit']['#submit'][] = 'lightning_core_set_display_mode_description';
+    }
+  }
+}
+
+/**
+ * Form submit handler: updates the description of an entity display mode.
+ *
+ * @param array $form
+ *   The complete form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current form state.
+ */
+function lightning_core_set_display_mode_description(array &$form, FormStateInterface $form_state) {
+  $form_state
+    ->getFormObject()
+    ->getEntity()
+    ->setThirdPartySetting('lightning_core', 'description', $form_state->getValue('description'))
+    ->save();
+
+  // Help text is render cached, so clear the entire render cache right now so
+  // it will pick up the updated description. @see lightning_core_help()
+  // TODO: Try to use cache tags here so as to be less of a blunt instrument.
+  \Drupal::cache('render')->deleteAll();
 }
 
 /**

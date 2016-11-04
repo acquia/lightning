@@ -64,3 +64,19 @@ Feature: Lightning Content Types
     When I visit "/admin/content"
     Then "Action" should not have a "node_publish_action" option
     And "Action" should not have a "node_unpublish_action" option
+
+  Scenario: Describing a view mode
+    Given I am logged in as a user with the "access administration pages,administer display modes,administer node display" permissions
+    When I visit "/admin/structure/display-modes/view/add/node"
+    And I enter "Foobaz" for "Name"
+    And I enter "foobaz" for "id"
+    And I enter "Behold my glorious view mode" for "Description"
+    And I press "Save"
+    And I visit "/admin/structure/types/manage/page/display"
+    And I check the box "display_modes_custom[foobaz]"
+    And I press "Save"
+    And I visit "/admin/structure/types/manage/page/display/foobaz"
+    Then I should see "Behold my glorious view mode"
+    # Clean up.
+    And I visit "/admin/structure/display-modes/view/manage/node.full/delete"
+    And I press "Delete"
