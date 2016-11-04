@@ -78,5 +78,5 @@ Feature: Lightning Content Types
     And I visit "/admin/structure/types/manage/page/display/foobaz"
     Then I should see "Behold my glorious view mode"
     # Clean up.
-    And I visit "/admin/structure/display-modes/view/manage/node.full/delete"
+    And I visit "/admin/structure/display-modes/view/manage/node.foobaz/delete"
     And I press "Delete"
