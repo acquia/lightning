@@ -10,14 +10,9 @@ use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 /**
  * SVG-aware variant of the core Image formatter.
  *
- * This formatter disables image style processing for SVG images. All other
- * image formats are passed along to the core image formatter.
- *
- * @FieldFormatter(
- *   id = "image_svg",
- *   label = @Translation("Image (SVG-aware)"),
- *   field_types = {"image"}
- * )
+ * Except for dimensional transformations, this formatter disables image style
+ * processing for all SVG images. All other image formats are unaffected, and
+ * no configuration is added or changed.
  */
 class SVGAwareImageFormatter extends ImageFormatter {
 
@@ -38,8 +33,8 @@ class SVGAwareImageFormatter extends ImageFormatter {
 
       // The core image toolkits don't support SVG, so if this is an SVG image,
       // we need to prevent any image style from being applied to it...but we
-      // DO want to preserve any dimensions transformations applied by the image
-      // style.
+      // DO want to preserve any dimensional transformations applied by the
+      // image style.
       if ($file->getMimeType() == 'image/svg+xml') {
         /** @var ImageStyleInterface $image_style */
         $image_style = $this->imageStyleStorage->load($item['#image_style']);

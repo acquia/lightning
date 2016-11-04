@@ -9,7 +9,22 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
+use Drupal\lightning_media\Plugin\Field\FieldFormatter\SVGAwareImageFormatter;
 use Drupal\media_entity\MediaBundleInterface;
+
+/**
+ * Implements hook_field_formatter_info_alter().
+ */
+function lightning_media_field_formatter_info_alter(array &$info) {
+  // Replace the core image formatter with our SVG-aware variant, but only if
+  // the image formatter has not already been overridden.
+  $current_class = ltrim($info['image']['class'], '\\');
+
+  if ($current_class == ImageFormatter::class) {
+    $info['image']['class'] = SVGAwareImageFormatter::class;
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().
