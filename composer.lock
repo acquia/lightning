@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1c5dfce7d116338a195602d4caace9cf",
-    "content-hash": "b96e2d24d46a358fd8f85334ea6e2f8f",
+    "hash": "6517db0f78f55c5780f8f16020252be3",
+    "content-hash": "5ad5c94b2d310bda2ad002b0996d41f6",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -891,6 +891,11 @@
                 "symfony/css-selector": "~2.8"
             },
             "type": "drupal-core",
+            "extra": {
+                "patches_applied": {
+                    "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-28.patch"
+                }
+            },
             "autoload": {
                 "psr-4": {
                     "Drupal\\Core\\": "lib/Drupal/Core",

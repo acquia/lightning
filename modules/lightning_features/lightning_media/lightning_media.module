@@ -9,20 +9,63 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
-use Drupal\image\Plugin\Field\FieldFormatter\ImageFormatter;
-use Drupal\lightning_media\Plugin\Field\FieldFormatter\SVGAwareImageFormatter;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\media_entity\MediaBundleInterface;
 
 /**
- * Implements hook_field_formatter_info_alter().
+ * Implements template_preprocess_image_style().
+ *
+ * @param array $variables
+ *   Template variables.
  */
-function lightning_media_field_formatter_info_alter(array &$info) {
-  // Replace the core image formatter with our SVG-aware variant, but only if
-  // the image formatter has not already been overridden.
-  $current_class = ltrim($info['image']['class'], '\\');
+function lightning_media_preprocess_image_style(array &$variables) {
+  $extension = pathinfo($variables['uri'], PATHINFO_EXTENSION);
 
-  if ($current_class == ImageFormatter::class) {
-    $info['image']['class'] = SVGAwareImageFormatter::class;
+  // If this is an SVG and we don't know its dimensions, try to calculate them
+  // through the image style's effect chain.
+  if ($extension == 'svg' && (empty($variables['image']['#width']) || empty($variables['image']['#height']))) {
+    $effects = ImageStyle::load($variables['style_name'])->getEffects();
+
+    // Loop through the effect chain, collecting configured dimensions for all
+    // resizing effects.
+    $dimensions = [];
+    foreach ($effects as $effect) {
+      if ($effect instanceof ResizeImageEffect) {
+        $configuration = $effect->getConfiguration();
+
+        array_push($dimensions, [
+          'width' => $configuration['data']['width'],
+          'height' => $configuration['data']['height'],
+        ]);
+      }
+    }
+    // If there are no resizing effects, there's nothing else we can do.
+    if (empty($dimensions)) {
+      return;
+    }
+
+    // Sort the configured dimensions in ascending order by an arbitrary axis,
+    // which can be 'width' or 'height'.
+    $axis = @$variables['main_axis'] ?: 'width';
+    usort($dimensions, function (array $a, array $b) use ($axis) {
+      return $b[$axis] - $a[$axis];
+    });
+
+    // Start with the widest set of configured dimensions.
+    $dimensions = end($dimensions);
+
+    // Loop through the effect chain again to transform the dimensions.
+    foreach ($effects as $effect) {
+      $effect->transformDimensions($dimensions, $variables['uri']);
+    }
+
+    if (isset($dimensions['width'])) {
+      $variables['image']['#width'] = $dimensions['width'];
+    }
+    if (isset($dimensions['height'])) {
+      $variables['image']['#height'] = $dimensions['height'];
+    }
   }
 }
 
