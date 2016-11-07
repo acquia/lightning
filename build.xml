@@ -177,8 +177,8 @@
 
   <!-- Generates a database snapshot. -->
   <target name="snapshot" depends="env">
-    <!-- <phingcall target="reset-db" />
-    <phingcall target="install" /> -->
+    <phingcall target="reset-db" />
+    <phingcall target="install" />
     <exec command="${drush} sql-dump | ${bzip2} > ${project.basedir}/tests/fixtures/${version}.sql.bz2" dir="${docroot}" />
   </target>
 
