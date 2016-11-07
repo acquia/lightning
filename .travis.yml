@@ -91,10 +91,9 @@ install:
 
 before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
-  - cd ../
   # Start Selenium and dump its ginormous log into a temporary file.
-  - mkdir tmp
-  - selenium-server-standalone -port 4444 -log tmp/selenium2.log &
+  - mkdir ../tmp
+  - selenium-server-standalone -port 4444 -log ../tmp/selenium2.log &
   - sleep 5
   - cd ./profiles/lightning
 
