@@ -29,10 +29,7 @@ function lightning_media_preprocess_image_style(array &$variables) {
 
     // Loop through the effect chain, collecting configured dimensions for all
     // resizing effects.
-    $dimensions = [
-      'width' => 0,
-      'height' => 0,
-    ];
+    $dimensions = [];
     foreach ($image_style->getEffects() as $effect) {
       if ($effect instanceof ResizeImageEffect) {
         $configuration = $effect->getConfiguration();
@@ -43,10 +40,14 @@ function lightning_media_preprocess_image_style(array &$variables) {
         ]);
       }
     }
+    // If we didn't collect any dimensions, there's nothing else to be done.
+    if (empty($dimensions)) {
+      return;
+    }
 
     // Sort the configured dimensions in ascending order by an arbitrary axis,
     // which can be 'width' or 'height'.
-    $axis = @$variables['main_axis'] ?: 'width';
+    $axis = @$variables['sort_axis'] ?: 'width';
     usort($dimensions, function (array $a, array $b) use ($axis) {
       return $b[$axis] - $a[$axis];
     });
