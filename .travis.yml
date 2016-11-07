@@ -77,12 +77,9 @@ install:
   - composer install
   # Install Lightning cleanly so that settings.php will be created properly.
   - phing install -Ddb.database=drupal
+  # Import the fixture, if it exists.
+  - phing remember -Dversion=$VERSION -Ddb.database=drupal
   - cd docroot
-  # If there is a database fixture for the version being tested, recreate the
-  # database from it. We need to destroy the existing database in order to
-  # prevent table collisions.
-  - FIXTURE=$TRAVIS_BUILD_DIR/tests/fixtures/$VERSION.sql.bz2
-  - if [ -f $FIXTURE ]; then phing reset-db -Ddb.database=drupal; bunzip2 --stdout --keep $FIXTURE | `drush sql-connect`; fi
   - drush cache-rebuild
   # Install Lightning Preview, if it isn't already.
   - drush pm-enable --yes lightning_preview

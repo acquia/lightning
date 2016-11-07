@@ -1,24 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Lightning" default="env">
 
+  <!-- Locations of required binaries. -->
   <property name="drush" value="${project.basedir}/bin/drush" />
   <property name="composer" value="/usr/local/bin/composer" />
   <property name="npm" value="/usr/local/bin/npm" />
   <property name="rsync" value="/usr/bin/rsync" />
   <property name="bzip2" value="/usr/bin/bzip2" />
+  <property name="bunzip2" value="/usr/bin/bunzip2" />
+
+  <!-- Database credentials. -->
   <property name="db.type" value="mysql" />
   <property name="db.host" value="localhost" />
   <property name="db.user" value="root" />
   <property name="db.password" value="" />
   <property name="db.database" value="lightning" />
   <property name="db.url" value="${db.type}://${db.user}:${db.password}@${db.host}/${db.database}" />
+
+  <!-- Installation and build-specific variables. -->
   <property name="docroot" value="docroot" />
   <property name="profile" value="${docroot}/profiles/lightning" />
   <property name="site" value="${docroot}/sites/default" />
   <property name="version" value="HEAD" />
-  <property name="module" value="lightning_preview" />
+  <property name="fixture" value="${project.basedir}/tests/fixtures/${version}.sql" />
 
-  <!-- Finds Composer, NPM, and rsync. -->
+  <!-- Finds required binaries. -->
   <target name="env">
     <if>
       <not>
@@ -32,12 +38,14 @@
     <exec command="which npm" outputProperty="npm" />
     <exec command="which rsync" outputProperty="rsync" />
     <exec command="which bzip2" outputProperty="bzip2" />
+    <exec command="which bunzip2" outputProperty="bunzip2" />
 
     <echo message="Found Drush: ${drush}" />
     <echo message="Found Composer: ${composer}" />
     <echo message="Found NPM: ${npm}" />
     <echo message="Found rsync: ${rsync}" />
     <echo message="Found bzip2: ${bzip2}" />
+    <echo message="Found bunzip2: ${bunzip2}" />
   </target>
 
   <!-- Syncs the Lightning profile into the Drupal code base. -->
@@ -175,20 +183,40 @@
     </delete>
   </target>
 
-  <!-- Generates a database snapshot. -->
-  <target name="snapshot" depends="env">
+  <!-- Generates a database snapshot from the current code base. -->
+  <target name="memorize" depends="env">
     <phingcall target="reset-db" />
     <phingcall target="install" />
-    <exec command="${drush} sql-dump | ${bzip2} > ${project.basedir}/tests/fixtures/${version}.sql.bz2" dir="${docroot}" />
+    <exec command="${drush} sql-dump > ${fixture}" dir="${docroot}" />
+    <exec command="${bzip2} ${fixture}" />
   </target>
 
-  <!-- Drops and re-creates the database. -->
+  <!-- Imports an existing database snapshot. -->
+  <target name="remember" depends="env">
+    <if>
+      <!-- Check if the fixture exists and exit gracefully if it doesn't. -->
+      <available property="fixture_exists" file="${fixture}.bz2" />
+      <then>
+        <!-- Import the fixture into a clean database to prevent table collisions. -->
+        <phingcall target="reset-db" />
+        <!-- Inflate and execute the fixture. -->
+        <exec command="${bunzip2} --keep ${fixture}.bz2" />
+        <pdosqlexec url="${db.type}:host=${db.host};dbname=${db.database}" userid="${db.user}" password="${db.password}" src="${fixture}" />
+        <!-- Delete the inflated fixture. -->
+        <delete file="${fixture}" />
+      </then>
+      <else>
+        <echo message="${version} fixture does not exist." />
+      </else>
+    </if>
+  </target>
+
+  <!-- Empties the database by dropping and recreating it. -->
   <target name="reset-db">
-    <echo message="DROP DATABASE ${db.database}; CREATE DATABASE ${db.database};" file="phing-reset-db.sql" />
-    <pdosqlexec url="${db.type}:host=${db.host}" userid="${db.user}" password="${db.password}">
-      <transaction src="phing-reset-db.sql" />
-    </pdosqlexec>
-    <delete file="phing-reset-db.sql" />
+    <!-- pdosqlexec requires an SQL file to execute. -->
+    <echo message="DROP DATABASE ${db.database}; CREATE DATABASE ${db.database};" file=".reset.sql" />
+    <pdosqlexec url="${db.type}:host=${db.host}" userid="${db.user}" password="${db.password}" src=".reset.sql" />
+    <delete file=".reset.sql" />
   </target>
 
 </project>
