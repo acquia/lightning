@@ -82,7 +82,7 @@ install:
   # database from it. We need to destroy the existing database in order to
   # prevent table collisions.
   - FIXTURE=$TRAVIS_BUILD_DIR/tests/fixtures/$VERSION.sql.bz2
-  - if [ -f $FIXTURE ]; then mysql -u root -e 'DROP DATABASE drupal; CREATE DATABASE drupal;'; bunzip2 --stdout --keep $FIXTURE | `drush sql-connect`; fi
+  - if [ -f $FIXTURE ]; then phing reset-db -Ddb.database=drupal; bunzip2 --stdout --keep $FIXTURE | `drush sql-connect`; fi
   - drush cache-rebuild
   # Install Lightning Preview, if it isn't already.
   - drush pm-enable --yes lightning_preview
@@ -95,9 +95,9 @@ before_script:
   - mkdir tmp
   - selenium-server-standalone -port 4444 -log tmp/selenium2.log &
   - sleep 5
+  - cd ./profiles/lightning
 
 script:
-  - cd ./profiles/lightning
   - behat --strict --stop-on-failure
 
 matrix:

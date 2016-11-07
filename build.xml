@@ -5,6 +5,7 @@
   <property name="composer" value="/usr/local/bin/composer" />
   <property name="npm" value="/usr/local/bin/npm" />
   <property name="rsync" value="/usr/bin/rsync" />
+  <property name="bzip2" value="/usr/bin/bzip2" />
   <property name="db.type" value="mysql" />
   <property name="db.host" value="localhost" />
   <property name="db.user" value="root" />
@@ -30,11 +31,13 @@
     <exec command="which composer" outputProperty="composer" />
     <exec command="which npm" outputProperty="npm" />
     <exec command="which rsync" outputProperty="rsync" />
+    <exec command="which bzip2" outputProperty="bzip2" />
 
     <echo message="Found Drush: ${drush}" />
     <echo message="Found Composer: ${composer}" />
     <echo message="Found NPM: ${npm}" />
     <echo message="Found rsync: ${rsync}" />
+    <echo message="Found bzip2: ${bzip2}" />
   </target>
 
   <!-- Syncs the Lightning profile into the Drupal code base. -->
@@ -140,7 +143,7 @@
         </delete>
       </then>
     </if>
-    <!-- TODO: Delete the database and recreate it? -->
+    <phingcall target="reset-db" />
   </target>
 
   <!-- Destroys the installed code base. -->
@@ -153,6 +156,22 @@
         <include name="vendor/**" />
       </fileset>
     </delete>
+  </target>
+
+  <!-- Generates a database snapshot. -->
+  <target name="snapshot" depends="env">
+    <!-- <phingcall target="reset-db" />
+    <phingcall target="install" /> -->
+    <exec command="${drush} sql-dump | ${bzip2} > ${project.basedir}/tests/fixtures/${version}.sql.bz2" dir="${docroot}" />
+  </target>
+
+  <!-- Drops and re-creates the database. -->
+  <target name="reset-db">
+    <echo message="DROP DATABASE ${db.database}; CREATE DATABASE ${db.database};" file="phing-reset-db.sql" />
+    <pdosqlexec url="${db.type}:host=${db.host}" userid="${db.user}" password="${db.password}">
+      <transaction src="phing-reset-db.sql" />
+    </pdosqlexec>
+    <delete file="phing-reset-db.sql" />
   </target>
 
 </project>
