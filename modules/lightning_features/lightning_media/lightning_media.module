@@ -25,12 +25,15 @@ function lightning_media_preprocess_image_style(array &$variables) {
   // If this is an SVG and we don't know its dimensions, try to calculate them
   // through the image style's effect chain.
   if ($extension == 'svg' && (empty($variables['image']['#width']) || empty($variables['image']['#height']))) {
-    $effects = ImageStyle::load($variables['style_name'])->getEffects();
+    $image_style = ImageStyle::load($variables['style_name']);
 
     // Loop through the effect chain, collecting configured dimensions for all
     // resizing effects.
-    $dimensions = [];
-    foreach ($effects as $effect) {
+    $dimensions = [
+      'width' => 0,
+      'height' => 0,
+    ];
+    foreach ($image_style->getEffects() as $effect) {
       if ($effect instanceof ResizeImageEffect) {
         $configuration = $effect->getConfiguration();
 
@@ -39,10 +42,6 @@ function lightning_media_preprocess_image_style(array &$variables) {
           'height' => $configuration['data']['height'],
         ]);
       }
-    }
-    // If there are no resizing effects, there's nothing else we can do.
-    if (empty($dimensions)) {
-      return;
     }
 
     // Sort the configured dimensions in ascending order by an arbitrary axis,
@@ -54,16 +53,13 @@ function lightning_media_preprocess_image_style(array &$variables) {
 
     // Start with the widest set of configured dimensions.
     $dimensions = end($dimensions);
+    // Allow the image style to transform the dimensions as needed.
+    $image_style->transformDimensions($dimensions, $variables['uri']);
 
-    // Loop through the effect chain again to transform the dimensions.
-    foreach ($effects as $effect) {
-      $effect->transformDimensions($dimensions, $variables['uri']);
-    }
-
-    if (isset($dimensions['width'])) {
+    if ($dimensions['width']) {
       $variables['image']['#width'] = $dimensions['width'];
     }
-    if (isset($dimensions['height'])) {
+    if ($dimensions['height']) {
       $variables['image']['#height'] = $dimensions['height'];
     }
   }
