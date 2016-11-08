@@ -1,23 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Lightning" default="env">
 
+  <!-- Locations of required binaries. -->
   <property name="drush" value="${project.basedir}/bin/drush" />
   <property name="composer" value="/usr/local/bin/composer" />
   <property name="npm" value="/usr/local/bin/npm" />
   <property name="rsync" value="/usr/bin/rsync" />
+  <property name="bzip2" value="/usr/bin/bzip2" />
+  <property name="bunzip2" value="/usr/bin/bunzip2" />
+
+  <!-- Database credentials. -->
   <property name="db.type" value="mysql" />
   <property name="db.host" value="localhost" />
   <property name="db.user" value="root" />
   <property name="db.password" value="" />
   <property name="db.database" value="lightning" />
   <property name="db.url" value="${db.type}://${db.user}:${db.password}@${db.host}/${db.database}" />
+
+  <!-- Installation and build-specific variables. -->
   <property name="docroot" value="docroot" />
   <property name="profile" value="${docroot}/profiles/lightning" />
   <property name="site" value="${docroot}/sites/default" />
   <property name="version" value="HEAD" />
-  <property name="module" value="lightning_preview" />
+  <property name="fixture" value="${project.basedir}/tests/fixtures/${version}.sql" />
 
-  <!-- Finds Composer, NPM, and rsync. -->
+  <!-- Finds required binaries. -->
   <target name="env">
     <if>
       <not>
@@ -30,11 +37,15 @@
     <exec command="which composer" outputProperty="composer" />
     <exec command="which npm" outputProperty="npm" />
     <exec command="which rsync" outputProperty="rsync" />
+    <exec command="which bzip2" outputProperty="bzip2" />
+    <exec command="which bunzip2" outputProperty="bunzip2" />
 
     <echo message="Found Drush: ${drush}" />
     <echo message="Found Composer: ${composer}" />
     <echo message="Found NPM: ${npm}" />
     <echo message="Found rsync: ${rsync}" />
+    <echo message="Found bzip2: ${bzip2}" />
+    <echo message="Found bunzip2: ${bunzip2}" />
   </target>
 
   <!-- Syncs the Lightning profile into the Drupal code base. -->
@@ -59,29 +70,6 @@
 
   <target name="pull" depends="env">
     <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="libraries,modules/contrib,behat.local.yml" />
-  </target>
-
-  <!-- Builds a Lightning code base using Composer. -->
-  <target name="build" depends="env">
-    <if>
-      <equals arg1="${version}" arg2="HEAD" />
-      <then>
-        <exec command="${composer} install" passthru="true" />
-      </then>
-      <else>
-        <if>
-          <not>
-            <isset property="branch" />
-          </not>
-          <then>
-            <exec command="git rev-parse --abbrev-ref HEAD" outputProperty="branch" />
-          </then>
-        </if>
-        <exec command="git checkout ${version}" />
-        <exec command="${composer} install" passthru="true" />
-        <exec command="git checkout ${branch}" />
-      </else>
-    </if>
   </target>
 
   <!-- Prepares the docroot for installation via the UI. -->
@@ -118,17 +106,26 @@
     <exec command="${drush} config-set system.performance css.preprocess 0 --yes --format=boolean" dir="${docroot}" />
     <exec command="${drush} config-set system.performance js.preprocess 0 --yes --format=boolean" dir="${docroot}" />
     <exec command="${drush} config-set system.logging error_level all --yes" dir="${docroot}" />
-    <!--
-    Install Lightning Preview, which is not installed by default because it's experimental.
-    Enable passthru() for this as well since it has a lot of dependencies and is therefore
-    more prone to errors than other extensions.
-    -->
+
+    <!-- Set up Media Entity Twitter to use Twitter's API for thumbnail generation. -->
+    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.use_twitter_api 1 --yes --format=boolean" dir="${docroot}" />
+    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.consumer_key EOPhWrgHCRnCB9cGualb1UVBM --yes" dir="${docroot}" />
+    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.consumer_secret AX5w9QYDvUJWdD0y0g2EtG3tFIZC9Lg4kR21iaAYakkPG8YKIp --yes" dir="${docroot}" />
+    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.oauth_access_token 52258222-ICStkPK2QcFN5d7v1FKJ1BMnqqPuuJnLIDr12Jsjs --yes" dir="${docroot}" />
+    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.oauth_access_token_secret Z4qff1DPLhqxHwei0jXgsnU0xdBFET4wSpQYn6Si3G3lF --yes" dir="${docroot}" />
+    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.generate_thumbnails 1 --yes --format=boolean" dir="${docroot}" />
+
     <if>
       <and>
         <isset property="version" />
         <equals arg1="${version}" arg2="HEAD" />
       </and>
       <then>
+        <!--
+        Install Lightning Preview, which is not installed by default because it's experimental.
+        Enable passthru() for this as well since it has a lot of dependencies and is therefore
+        more prone to errors than other extensions.
+        -->
         <exec command="${drush} pm-enable lightning_preview --yes" dir="${docroot}" passthru="true" />
       </then>
     </if>
@@ -139,20 +136,6 @@
         <chown file="${site}/files" user="${env.USER}" group="${www.group}" />
       </then>
     </if>
-  </target>
-
-  <!-- Builds the Lightning code base from HEAD, overwriting docroot, and
-  executes all database updates. -->
-  <target name="update" depends="env">
-    <phingcall target="build" />
-    <exec command="${drush} cache-rebuild" />
-    <exec command="${drush} updatedb --yes" dir="${docroot}" passthru="true" />
-
-    <!-- Execute manual update steps as needed. -->
-
-    <!-- Enable the Preview component, which is installed by default in
-    development builds as of 8.x-1.10. -->
-    <exec command="${drush} pm-enable lightning_preview --yes" dir="${docroot}" passthru="true" />
   </target>
 
   <!-- Prepares Lightning for the drupal.org packaging system. -->
@@ -194,7 +177,7 @@
         </delete>
       </then>
     </if>
-    <!-- TODO: Delete the database and recreate it? -->
+    <phingcall target="reset-db" />
   </target>
 
   <!-- Destroys the installed code base. -->
@@ -207,6 +190,42 @@
         <include name="vendor/**" />
       </fileset>
     </delete>
+  </target>
+
+  <!-- Generates a database snapshot from the current code base. -->
+  <target name="memorize" depends="env">
+    <phingcall target="reset-db" />
+    <phingcall target="install" />
+    <exec command="${drush} sql-dump > ${fixture}" dir="${docroot}" />
+    <exec command="${bzip2} ${fixture}" />
+  </target>
+
+  <!-- Imports an existing database snapshot. -->
+  <target name="remember" depends="env">
+    <if>
+      <!-- Check if the fixture exists and exit gracefully if it doesn't. -->
+      <available property="fixture_exists" file="${fixture}.bz2" />
+      <then>
+        <!-- Import the fixture into a clean database to prevent table collisions. -->
+        <phingcall target="reset-db" />
+        <!-- Inflate and execute the fixture. -->
+        <exec command="${bunzip2} --keep ${fixture}.bz2" />
+        <pdosqlexec url="${db.type}:host=${db.host};dbname=${db.database}" userid="${db.user}" password="${db.password}" src="${fixture}" />
+        <!-- Delete the inflated fixture. -->
+        <delete file="${fixture}" />
+      </then>
+      <else>
+        <echo message="${version} fixture does not exist." />
+      </else>
+    </if>
+  </target>
+
+  <!-- Empties the database by dropping and recreating it. -->
+  <target name="reset-db">
+    <!-- pdosqlexec requires an SQL file to execute. -->
+    <echo message="DROP DATABASE ${db.database}; CREATE DATABASE ${db.database};" file=".reset.sql" />
+    <pdosqlexec url="${db.type}:host=${db.host}" userid="${db.user}" password="${db.password}" src=".reset.sql" />
+    <delete file=".reset.sql" />
   </target>
 
 </project>

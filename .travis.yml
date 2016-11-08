@@ -13,10 +13,10 @@ php:
   - 5.6
 env:
   - VERSION=HEAD
-  - VERSION=8.x-1.12
-  - VERSION=8.x-1.11
-  - VERSION=8.x-1.10
-  - VERSION=8.x-1.06
+  - VERSION=1.12
+  - VERSION=1.11
+  - VERSION=1.10
+  - VERSION=1.06
 
 addons:
   apt:
@@ -71,27 +71,31 @@ install:
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
-  # Build the Lightning code base.
+  # We need Phing to execute our build steps.
   - composer global require phing/phing
-  - phing build -Dversion=$VERSION -Dbranch=$TRAVIS_COMMIT
-
-  # Install Lightning.
-  - phing install -Ddb.database=drupal -Dversion=$VERSION
-  # Execute database updates if we're not building from HEAD.
-  - if [ $VERSION != "HEAD" ]; then phing update; fi
+  # Build the Lightning code base.
+  - composer install
+  # Install Lightning cleanly so that settings.php will be created properly.
+  - phing install -Ddb.database=drupal
+  # Import the fixture, if it exists.
+  - phing remember -Dversion=$VERSION -Ddb.database=drupal
+  - cd docroot
+  - drush cache-rebuild
+  # Install Lightning Preview, if it isn't already.
+  - drush pm-enable --yes lightning_preview
+  # Execute database updates, if there are any.
+  - drush updatedb --yes
 
 before_script:
-  # A harmless diagnostic to ensure the repo is clean.
-  - git status
-  - cd docroot
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   # Start Selenium and dump its ginormous log into a temporary file.
-  - mkdir tmp
-  - selenium-server-standalone -port 4444 -log tmp/selenium2.log &
+  - mkdir ../tmp
+  - selenium-server-standalone -port 4444 -log ../tmp/selenium2.log &
   - sleep 5
+  - cd ./profiles/lightning
 
 script:
-  - cd ./profiles/lightning
+  - composer validate --no-check-all --ansi
   - behat --strict --stop-on-failure
 
 matrix:

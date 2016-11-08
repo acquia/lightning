@@ -9,7 +9,62 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\media_entity\MediaBundleInterface;
+
+/**
+ * Implements template_preprocess_image_style().
+ *
+ * @param array $variables
+ *   Template variables.
+ */
+function lightning_media_preprocess_image_style(array &$variables) {
+  $extension = pathinfo($variables['uri'], PATHINFO_EXTENSION);
+
+  // If this is an SVG and we don't know its dimensions, try to calculate them
+  // through the image style's effect chain.
+  if ($extension == 'svg' && (empty($variables['image']['#width']) || empty($variables['image']['#height']))) {
+    $image_style = ImageStyle::load($variables['style_name']);
+
+    // Loop through the effect chain, collecting configured dimensions for all
+    // resizing effects.
+    $dimensions = [];
+    foreach ($image_style->getEffects() as $effect) {
+      if ($effect instanceof ResizeImageEffect) {
+        $configuration = $effect->getConfiguration();
+
+        array_push($dimensions, [
+          'width' => $configuration['data']['width'],
+          'height' => $configuration['data']['height'],
+        ]);
+      }
+    }
+    // If we didn't collect any dimensions, there's nothing else to be done.
+    if (empty($dimensions)) {
+      return;
+    }
+
+    // Sort the configured dimensions in ascending order by an arbitrary axis,
+    // which can be 'width' or 'height'.
+    $axis = @$variables['sort_axis'] ?: 'width';
+    usort($dimensions, function (array $a, array $b) use ($axis) {
+      return $b[$axis] - $a[$axis];
+    });
+
+    // Start with the widest set of configured dimensions.
+    $dimensions = end($dimensions);
+    // Allow the image style to transform the dimensions as needed.
+    $image_style->transformDimensions($dimensions, $variables['uri']);
+
+    if ($dimensions['width']) {
+      $variables['image']['#width'] = $dimensions['width'];
+    }
+    if ($dimensions['height']) {
+      $variables['image']['#height'] = $dimensions['height'];
+    }
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -22,9 +77,18 @@ function lightning_media_form_entity_browser_media_browser_form_alter(array &$fo
  * Implements hook_entity_type_alter().
  */
 function lightning_media_entity_type_alter(array &$entity_types) {
-  // Files should never be workspace-aware. Besides, they ALWAYS conflict during
-  // replication, for reasons as yet unknown.
-  $entity_types['file']->set('multiversion', FALSE);
+  if (\Drupal::moduleHandler()->moduleExists('multiversion')) {
+    // Files should never be workspace-aware. Besides, they ALWAYS conflict during
+    // replication, for reasons as yet unknown. But because Multiversion is
+    // basically a one-way ticket, only opt file entities out of Multiversion if
+    // they haven't been migrated into Multiversion's storage yet. There really
+    // should be a method on MultiversionManagerInterface to determine if an
+    // entity type has been migrated, so that we don't have to directly query
+    // state keys...but hey, you gotta work with what you have.
+    if (!\Drupal::state()->get('multiversion.migration_done.file')) {
+      $entity_types['file']->set('multiversion', FALSE);
+    }
+  }
 }
 
 /**
