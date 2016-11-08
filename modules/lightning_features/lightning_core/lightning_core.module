@@ -16,6 +16,7 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
 use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_help().
@@ -117,7 +118,7 @@ function lightning_core_form_alter(array &$form, FormStateInterface $form_state)
   if ($form_object instanceof EntityFormInterface) {
     $entity = $form_object->getEntity();
 
-    if ($entity instanceof EntityDisplayModeInterface) {
+    if ($entity instanceof EntityDisplayModeInterface || $entity instanceof RoleInterface) {
       $form['description'] = [
         '#type' => 'textarea',
         '#title' => t('Description'),
@@ -126,20 +127,20 @@ function lightning_core_form_alter(array &$form, FormStateInterface $form_state)
         ]),
         '#default_value' => $entity->getThirdPartySetting('lightning_core', 'description'),
       ];
-      $form['actions']['submit']['#submit'][] = 'lightning_core_set_display_mode_description';
+      $form['actions']['submit']['#submit'][] = 'lightning_core_set_third_party_description';
     }
   }
 }
 
 /**
- * Form submit handler: updates the description of an entity display mode.
+ * Form submit handler: updates the description of a configuration entity.
  *
  * @param array $form
  *   The complete form.
  * @param \Drupal\Core\Form\FormStateInterface $form_state
  *   The current form state.
  */
-function lightning_core_set_display_mode_description(array &$form, FormStateInterface $form_state) {
+function lightning_core_set_third_party_description(array &$form, FormStateInterface $form_state) {
   $form_state
     ->getFormObject()
     ->getEntity()
@@ -164,6 +165,52 @@ function lightning_core_form_system_modules_alter(array &$form) {
     ]);
     $form['modules'][$package]['#description'] = '<p>' . $warning . '</p>';
   }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_core_form_user_form_alter(array &$form) {
+  if (isset($form['account']['roles'])) {
+    $element = &$form['account']['roles'];
+
+    // Always ensure the standard #process function(s) run first.
+    if (empty($element['#process'])) {
+      $element_info = \Drupal::service('plugin.manager.element_info')
+        ->createInstance($element['#type'])
+        ->getInfo();
+
+      if (isset($element_info['#process'])) {
+        $element['#process'] = $element_info['#process'];
+      }
+    }
+    $form['account']['roles']['#process'][] = 'lightning_core_set_role_descriptions';
+  }
+}
+
+/**
+ * Element process function: sets descriptions for role checkboxes on user_form.
+ *
+ * @param array $element
+ *   The element to process.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current form state.
+ * @param array $complete_form
+ *   The complete form.
+ *
+ * @return array
+ *   The processed element.
+ */
+function lightning_core_set_role_descriptions(array $element, FormStateInterface $form_state, array &$complete_form) {
+  // Try to add a description for each individual role.
+  foreach (Element::children($element) as $role) {
+    // Don't overwrite any existing description.
+    if (empty($element[$role]['#description'])) {
+      $element[$role]['#description'] = Role::load($role)
+        ->getThirdPartySetting('lightning_core', 'description');
+    }
+  }
+  return $element;
 }
 
 /**
