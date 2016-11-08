@@ -29,6 +29,12 @@ function lightning_core_install() {
         ->invoke('lightning_core', 'node_type_insert', [$node_type]);
     }
   }
+
+  // Grant certain basic administrative permissions to all authenticated users.
+  user_role_grant_permissions('authenticated', [
+    'access toolbar',
+    'view the administration theme',
+  ]);
 }
 
 /**
