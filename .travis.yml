@@ -71,10 +71,8 @@ install:
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
-  # We need Phing to execute our build steps.
-  - composer global require phing/phing
-  # Build the Lightning code base.
-  - composer install
+  # Add BLT
+  - composer require acquia/blt
   # Install Lightning cleanly so that settings.php will be created properly.
   - phing install -Ddb.database=drupal
   # Import the fixture, if it exists.
@@ -86,17 +84,9 @@ install:
   # Execute database updates, if there are any.
   - drush updatedb --yes
 
-before_script:
-  - drush runserver --default-server=builtin 8080 &>/dev/null &
-  # Start Selenium and dump its ginormous log into a temporary file.
-  - mkdir ../tmp
-  - selenium-server-standalone -port 4444 -log ../tmp/selenium2.log &
-  - sleep 5
-  - cd ./profiles/lightning
-
 script:
   - composer validate --no-check-all --ansi
-  - behat --strict --stop-on-failure
+  - blt tests:behat
 
 matrix:
   fast_finish: true
