@@ -82,6 +82,8 @@ install:
   - drush pm-enable --yes lightning_preview
   # Execute database updates, if there are any.
   - drush updatedb --yes
+  # Import BLT templated files.
+  - blt update
 
 script:
   - composer validate --no-check-all --ansi
