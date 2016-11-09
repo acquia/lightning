@@ -71,6 +71,7 @@ install:
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
+  - composer install
   # Install Lightning cleanly so that settings.php will be created properly.
   - phing install -Ddb.database=drupal
   # Import the fixture, if it exists.
@@ -84,7 +85,7 @@ install:
 
 script:
   - composer validate --no-check-all --ansi
-  - blt tests:behat
+  - ./vendor/bin/blt tests:behat
 
 matrix:
   fast_finish: true
