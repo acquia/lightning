@@ -20,9 +20,6 @@
         "squizlabs/php_codesniffer": "2.*",
         "se/selenium-server-standalone": "^2.53"
     },
-    "config": {
-        "bin-dir": "bin/"
-    },
     "repositories": [
         {
             "type": "composer",
@@ -32,11 +29,11 @@
     "scripts": {
         "post-install-cmd": [
             "@composer drupal-scaffold",
-            "./bin/phing push"
+            "phing push"
         ],
         "post-update-cmd": [
-            "./bin/phing push",
-            "./bin/phing package"
+            "phing push",
+            "phing package"
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
     },

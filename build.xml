@@ -2,7 +2,7 @@
 <project name="Lightning" default="env">
 
   <!-- Locations of required binaries. -->
-  <property name="drush" value="${project.basedir}/bin/drush" />
+  <property name="drush" value="${project.basedir}/vendor/bin/drush" />
   <property name="composer" value="/usr/local/bin/composer" />
   <property name="npm" value="/usr/local/bin/npm" />
   <property name="rsync" value="/usr/bin/rsync" />
@@ -184,7 +184,6 @@
   <target name="destroy" depends="uninstall">
     <delete failonerror="true" includeemptydirs="true">
       <fileset dir="." defaultexcludes="false">
-        <include name="bin/**" />
         <include name="${docroot}/**" />
         <include name="node_modules/**" />
         <include name="vendor/**" />
