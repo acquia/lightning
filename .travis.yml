@@ -85,7 +85,8 @@ install:
 
 script:
   - composer validate --no-check-all --ansi
-  - ./vendor/bin/blt tests:behat
+  - blt ci:setup -Dcreate_alias=false
+  - blt test:behat -Dbehat.run-server=true
 
 matrix:
   fast_finish: true
