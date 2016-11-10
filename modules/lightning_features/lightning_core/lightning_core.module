@@ -5,6 +5,7 @@
  * Contains core functionality for the Lightning distribution.
  */
 
+use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Entity\EntityDisplayModeInterface;
@@ -35,10 +36,14 @@ function lightning_core_help($route_name, RouteMatchInterface $route_match) {
   if (preg_match($expr, $route_name, $matched)) {
     $entity_id = $matched[2] . '.' . $route_match->getParameter($matched[3] . '_name');
 
-    return \Drupal::entityTypeManager()
+    $description = \Drupal::entityTypeManager()
       ->getStorage('entity_' . $matched[3])
       ->load($entity_id)
       ->getThirdPartySetting('lightning_core', 'description');
+
+    if ($description) {
+      return '<p>' . $description . '</p>';
+    }
   }
 }
 
@@ -125,10 +130,26 @@ function lightning_core_form_alter(array &$form, FormStateInterface $form_state)
         '#description' => t('Additional relevant information about this @entity_type, such as where it is used and what it is for.', [
           '@entity_type' => $entity->getEntityType()->getSingularLabel(),
         ]),
+        '#rows' => 2,
         '#default_value' => $entity->getThirdPartySetting('lightning_core', 'description'),
       ];
       $form['actions']['submit']['#submit'][] = 'lightning_core_set_third_party_description';
     }
+  }
+}
+
+/**
+ * Implements hook_block_view_alter().
+ */
+function lightning_core_block_view_alter(array &$build, BlockPluginInterface $block) {
+  \Drupal::service('renderer')->addCacheableDependency($build, $block);
+
+  // Always add block_view:BASE_PLUGIN_ID as a cache tag.
+  $build['#cache']['tags'][] = 'block_view:' . $block->getBaseId();
+
+  // If the plugin is a derivative, add block_view:FULL_PLUGIN_ID as well.
+  if ($block->getDerivativeId()) {
+    $build['#cache']['tags'][] = 'block_view:' . $block->getPluginId();
   }
 }
 
@@ -147,10 +168,10 @@ function lightning_core_set_third_party_description(array &$form, FormStateInter
     ->setThirdPartySetting('lightning_core', 'description', $form_state->getValue('description'))
     ->save();
 
-  // Help text is render cached, so clear the entire render cache right now so
-  // it will pick up the updated description. @see lightning_core_help()
-  // TODO: Try to use cache tags here so as to be less of a blunt instrument.
-  \Drupal::cache('render')->deleteAll();
+  // The help text block is very likely to be render cached, so invalidate the
+  // relevant cache tag. See lightning_core_block_view_alter() and
+  // lightning_core_help().
+  \Drupal::service('cache_tags.invalidator')->invalidateTags(['block_view:help_block']);
 }
 
 /**
