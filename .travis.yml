@@ -81,8 +81,8 @@ install:
   - phing remember -Dversion=$VERSION -Ddb.database=drupal
   - cd docroot
   - drush cache-rebuild
-  # Install Lightning Preview, if it isn't already.
-  - drush pm-enable --yes lightning_preview
+  # Install Diff and Lightning Preview, if not already installed.
+  - drush pm-enable --yes diff lightning_preview
   # Execute database updates, if there are any.
   - drush updatedb --yes
 
