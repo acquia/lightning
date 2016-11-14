@@ -8,6 +8,7 @@
 use Behat\Gherkin\Node\TableNode;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\DrupalExtension\Context\DrupalContext;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Hook\Scope\EntityScope;
 use Drupal\node\Entity\Node;
@@ -83,6 +84,26 @@ class EntitySubContext extends DrupalSubContextBase {
       $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->create($row);
       $entity->save();
       $this->queueEntity($entity);
+    }
+  }
+
+  /**
+   * Marks any automatically created node as belonging to the current user.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\EntityScope $scope
+   *   The hook scope.
+   *
+   * @beforeNodeCreate
+   */
+  public function setNodeAuthor(EntityScope $scope) {
+    $node = $scope->getEntity();
+
+    if (!isset($node->uid)) {
+      $user = $this->getContext(DrupalContext::class)->user;
+
+      if (is_object($user)) {
+        $node->uid = $user->uid;
+      }
     }
   }
 
@@ -240,6 +261,44 @@ class EntitySubContext extends DrupalSubContextBase {
 
     // WTF? None of the rows were the current revision.
     throw new ExpectationException('Current revision not found.', $session->getDriver());
+  }
+
+  /**
+   * Compares two revisions of a node.
+   *
+   * @param $a
+   *   The one-based index of a revision to compare. 1st is oldest.
+   * @param $b
+   *   The one-based index of a revision to compare. 1st is oldest.
+   *
+   * @When I compare the :a and :b revisions
+   */
+  public function compareRevisions($a, $b) {
+    $re = '/^[0-9]+(st|nd|rd|th)$/i';
+
+    if (preg_match($re, $a)) {
+      $a = substr($a, 0, -2);
+    }
+    if (preg_match($re, $b)) {
+      $b = substr($b, 0, -2);
+    }
+    $a = ((int) $a) - 1;
+    $b = ((int) $b) - 1;
+
+    $this->minkContext->clickLink('Revisions');
+
+    /** @var \Behat\Mink\Element\NodeElement[] $rows */
+    $rows = $this->getSession()
+      ->getPage()
+      ->findAll('css', '.diff-revisions tbody tr');
+
+    $rows = array_reverse($rows);
+    $a = $rows[$a]->findField('radios_left')->getValue();
+    $b = $rows[$b]->findField('radios_right')->getValue();
+
+    $this->minkContext->selectOption('radios_left', $a);
+    $this->minkContext->selectOption('radios_right', $b);
+    $this->minkContext->pressButton('Compare');
   }
 
   /**
