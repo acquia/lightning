@@ -6,6 +6,7 @@
  */
 
 use Behat\Gherkin\Node\TableNode;
+use Behat\Mink\Exception\ExpectationException;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Hook\Scope\EntityScope;
@@ -226,7 +227,19 @@ class EntitySubContext extends DrupalSubContextBase {
    */
   public function visitCurrentNodeRevision() {
     $this->minkContext->clickLink('Revisions');
-    $this->lightning->clickElementBySelector('tr.revision-current td:first-child a');
+
+    $session = $this->getSession();
+
+    $rows = $session->getPage()->findAll('css', '.diff-revisions tbody tr');
+    /** @var \Behat\Mink\Element\NodeElement $row */
+    foreach ($rows as $row) {
+      if ($row->find('css', 'td:last-child')->getText() == 'Current revision') {
+        return $row->find('css', 'td:first-child a')->click();
+      }
+    }
+
+    // WTF? None of the rows were the current revision.
+    throw new ExpectationException('Current revision not found.', $session->getDriver());
   }
 
   /**
