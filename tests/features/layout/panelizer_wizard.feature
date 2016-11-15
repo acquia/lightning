@@ -27,7 +27,8 @@ Feature: Panelizer Wizard
     Given I am logged in as a user with the "landing_page_creator,layout_manager" roles
     And I have customized the search_result view mode of the landing_page content type
     When I visit "/admin/structure/types/manage/landing_page/display/search_result"
-    And I check "Allow panelizer default choice"
+    # Allow authors to choose a layout.
+    And I check "panelizer[allow]"
     And I press "Save"
     And I visit "/node/add/landing_page"
     Then I should see a "Full content" field

@@ -5,8 +5,68 @@
  * Contains layout functionality for Lightning.
  */
 
+use Drupal\Core\Url;
 use Drupal\node\NodeTypeInterface;
 use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_layout_form_entity_view_display_edit_form_alter(array &$form) {
+  $form['#process'][] = 'lightning_layout_tweak_panelizer_ui';
+}
+
+/**
+ * Makes minor tweaks to Panelizer stuff on an entity view display form.
+ *
+ * @param array $element
+ *   The form element containing Panelizer's entity view display options.
+ *
+ * @return array
+ *   The processed element.
+ */
+function lightning_layout_tweak_panelizer_ui(array $element) {
+  // If there are no Panelizer layouts, Panelizer is not enabled for this view
+  // display, so there's nothing to do.
+  if (empty($element['panelizer']['displays'])) {
+    return $element;
+  }
+
+  // Don't show the table caption.
+  // TODO: Is there an accessible way to hide this?
+  unset($element['panelizer']['displays']['#caption']);
+
+  $route_parameters = \Drupal::routeMatch()->getParameters()->all();
+  $route_parameters = array_filter($route_parameters, 'is_scalar');
+
+  // We got rid of the local action for this, so jury-rig a new local action
+  // that we can mix in with the rest of the UI elements.
+  // See lightning_layout_menu_local_actions_alter().
+  $element['panelizer']['add_link'] = [
+    '#theme' => 'menu_local_action',
+    '#link' => [
+      'title' => t('Create a layout'),
+      'url' => Url::fromRoute('panelizer.wizard.add', $route_parameters),
+    ],
+    // @TODO: Use a theme wrapper if possible.
+    '#prefix' => '<ul class="action-links">',
+    '#suffix' => '</ul>',
+  ];
+  array_reorder($element['panelizer'], ['enable', 'options', 'add_link', 'displays']);
+
+  return $element;
+}
+
+/**
+ * Implements hook_menu_local_actions_alter().
+ */
+function lightning_layout_menu_local_actions_alter(array &$local_actions) {
+  foreach ($local_actions as $id => $action) {
+    if ($action['id'] == 'panelizer.default.add') {
+      unset($local_actions[$id]);
+    }
+  }
+}
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
