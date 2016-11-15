@@ -96,7 +96,7 @@ before_script:
 
 script:
   - composer validate --no-check-all --ansi
-  - behat --strict --stop-on-failure
+  - behat --strict --tags=finicky
 
 matrix:
   fast_finish: true

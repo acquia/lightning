@@ -1,7 +1,7 @@
 @lightning @api @workflow
 Feature: Scheduled updates to content
 
-  @javascript
+  @javascript @finicky
   Scenario: Publishing a node that is scheduled to be published in the past
     Given I am logged in as a user with the administrator role
     And page content:
@@ -9,10 +9,13 @@ Feature: Scheduled updates to content
       | Foobar | /foobar | draft            |
     When I visit "/foobar"
     And I click "Edit draft"
-    And I schedule the node to be published at "09-19-1984 08:57:00AM"
     And I select "Needs Review" from "Moderation state"
+    And I schedule the node to be published at "09-19-1984 08:57:00AM"
+    And I should see "Update Date/time"
     And I press "Save"
-    And I run cron
+    And I visit "/admin/config/workflow/schedule-updates/run"
+    And I press "Run Updates"
+    And I should see "Results: 1 update(s) were performed"
     And I visit "/user/logout"
     And I visit "/foobar"
     Then I should not see "Access denied"
