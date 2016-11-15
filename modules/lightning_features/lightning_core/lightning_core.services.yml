@@ -4,3 +4,11 @@ services:
     arguments:
       - '@config.factory'
       - '@entity_type.manager'
+
+  lightning.route_subscriber:
+    class: Drupal\lightning_core\Routing\RouteSubscriber
+    arguments:
+      - '@entity_type.manager'
+    tags:
+      -
+        name: event_subscriber
