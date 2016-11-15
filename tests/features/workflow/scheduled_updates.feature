@@ -1,7 +1,7 @@
 @lightning @api @workflow
 Feature: Scheduled updates to content
 
-  @javascript @finicky
+  @javascript
   Scenario: Publishing a node that is scheduled to be published in the past
     Given I am logged in as a user with the administrator role
     And page content:
