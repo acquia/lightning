@@ -156,6 +156,10 @@ class ExtensionSelectForm extends FormBase {
       ],
       '#type' => 'actions',
     ];
+    $form['sub_components'] = [
+      '#type' => 'value',
+      '#value' => [],
+    ];
 
     foreach ($this->getExtensionInfo() as $key => $info) {
       if (empty($info['experimental'])) {
@@ -164,6 +168,11 @@ class ExtensionSelectForm extends FormBase {
       }
       else {
         $form['experimental']['modules']['#options'][$key] = $info['name'];
+      }
+
+      // Store the list sub-components to avoid re-parsing the info file.
+      if (isset($info['components'])) {
+        $form['sub_components']['#value'][$key] = $info['components'];
       }
     }
 
@@ -233,13 +242,15 @@ class ExtensionSelectForm extends FormBase {
     }
     $modules = array_filter($modules);
 
-    if (in_array('lightning_media', $modules)) {
-      $modules[] = 'lightning_media_document';
-      $modules[] = 'lightning_media_image';
-      $modules[] = 'lightning_media_instagram';
-      $modules[] = 'lightning_media_twitter';
-      $modules[] = 'lightning_media_video';
+    // Merge in sub-components of enabled extensions...
+    $sub_components = $form_state->getValue('sub_components');
+    foreach ($modules as $module) {
+      if (isset($sub_components[$module])) {
+        $modules = array_merge($modules, $sub_components[$module]);
+      }
     }
+    // ...except the ones excluded by the extender.
+    $modules = array_diff($modules, $this->extender->getExcludedComponents());
 
     $GLOBALS['install_state']['lightning']['modules'] = array_merge($modules, $this->extender->getModules());
   }
