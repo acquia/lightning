@@ -120,13 +120,20 @@ class ExtensionSelectForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, array &$install_state = NULL) {
     $form['#title'] = $this->t('Extensions');
 
+    $form['help'] = [
+      '#weight' => -1,
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+    ];
     $form['modules'] = [
       '#type' => 'checkboxes',
+      '#weight' => 0,
     ];
     $form['experimental'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Experimental'),
       '#tree' => TRUE,
+      '#weight' => 1,
     ];
     $form['experimental']['gate'] = [
       '#type' => 'checkbox',
@@ -155,6 +162,11 @@ class ExtensionSelectForm extends FormBase {
         '#value' => $this->t('Continue'),
       ],
       '#type' => 'actions',
+      '#weight' => 5,
+    ];
+    $form['sub_components'] = [
+      '#type' => 'value',
+      '#value' => [],
     ];
 
     foreach ($this->getExtensionInfo() as $key => $info) {
@@ -164,6 +176,11 @@ class ExtensionSelectForm extends FormBase {
       }
       else {
         $form['experimental']['modules']['#options'][$key] = $info['name'];
+      }
+
+      // Store the list sub-components to avoid re-parsing the info file.
+      if (isset($info['components'])) {
+        $form['sub_components']['#value'][$key] = $info['components'];
       }
     }
 
@@ -193,10 +210,10 @@ class ExtensionSelectForm extends FormBase {
       $form['experimental']['gate']['#default_value'] = TRUE;
 
       // Explain ourselves.
-      drupal_set_message($this->t('Lightning extensions have been pre-selected in the lightning.extend.yml file in your sites directory.'), 'warning');
+      $form['help']['#markup'] = $this->t("Lightning extensions have been pre-selected in the lightning.extend.yml file in your sites directory and are disabled here as a result.");
     }
     else {
-      $form['modules']['#description'] = $this->t("You can choose to disable some of Lightning's functionality above. However, it is not recommended.");
+      $form['help']['#markup'] = $this->t("You can choose to disable some of Lightning's functionality below. However, it is not recommended.");
     }
 
     return $form;
@@ -233,13 +250,15 @@ class ExtensionSelectForm extends FormBase {
     }
     $modules = array_filter($modules);
 
-    if (in_array('lightning_media', $modules)) {
-      $modules[] = 'lightning_media_document';
-      $modules[] = 'lightning_media_image';
-      $modules[] = 'lightning_media_instagram';
-      $modules[] = 'lightning_media_twitter';
-      $modules[] = 'lightning_media_video';
+    // Merge in sub-components of enabled extensions...
+    $sub_components = $form_state->getValue('sub_components');
+    foreach ($modules as $module) {
+      if (isset($sub_components[$module])) {
+        $modules = array_merge($modules, $sub_components[$module]);
+      }
     }
+    // ...except the ones excluded by the extender.
+    $modules = array_diff($modules, $this->extender->getExcludedComponents());
 
     $GLOBALS['install_state']['lightning']['modules'] = array_merge($modules, $this->extender->getModules());
   }
