@@ -115,20 +115,12 @@
     <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.oauth_access_token_secret Z4qff1DPLhqxHwei0jXgsnU0xdBFET4wSpQYn6Si3G3lF --yes" dir="${docroot}" />
     <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.generate_thumbnails 1 --yes --format=boolean" dir="${docroot}" />
 
-    <if>
-      <and>
-        <isset property="version" />
-        <equals arg1="${version}" arg2="HEAD" />
-      </and>
-      <then>
-        <!--
-        Install Lightning Preview, which is not installed by default because it's experimental.
-        Enable passthru() for this as well since it has a lot of dependencies and is therefore
-        more prone to errors than other extensions.
-        -->
-        <exec command="${drush} pm-enable lightning_preview --yes" dir="${docroot}" passthru="true" />
-      </then>
-    </if>
+    <!--
+    Install Lightning Preview, which is not installed by default because it's experimental.
+    Enable passthru() for this as well since it has a lot of dependencies and is therefore
+    more prone to errors than other extensions.
+    -->
+    <exec command="${drush} pm-enable lightning_preview --yes" dir="${docroot}" passthru="true" />
 
     <if>
       <isset property="www.group" />
@@ -196,7 +188,7 @@
   <target name="memorize" depends="env">
     <phingcall target="reset-db" />
     <phingcall target="install" />
-    <exec command="${drush} sql-dump > ${fixture}" dir="${docroot}" />
+    <exec command="${drush} sql-dump" dir="${docroot}" output="${fixture}" />
     <exec command="${bzip2} ${fixture}" />
   </target>
 
