@@ -120,13 +120,20 @@ class ExtensionSelectForm extends FormBase {
   public function buildForm(array $form, FormStateInterface $form_state, array &$install_state = NULL) {
     $form['#title'] = $this->t('Extensions');
 
+    $form['help'] = [
+      '#weight' => -1,
+      '#prefix' => '<p>',
+      '#suffix' => '</p>',
+    ];
     $form['modules'] = [
       '#type' => 'checkboxes',
+      '#weight' => 0,
     ];
     $form['experimental'] = [
       '#type' => 'fieldset',
       '#title' => $this->t('Experimental'),
       '#tree' => TRUE,
+      '#weight' => 1,
     ];
     $form['experimental']['gate'] = [
       '#type' => 'checkbox',
@@ -155,6 +162,7 @@ class ExtensionSelectForm extends FormBase {
         '#value' => $this->t('Continue'),
       ],
       '#type' => 'actions',
+      '#weight' => 5,
     ];
     $form['sub_components'] = [
       '#type' => 'value',
@@ -202,10 +210,10 @@ class ExtensionSelectForm extends FormBase {
       $form['experimental']['gate']['#default_value'] = TRUE;
 
       // Explain ourselves.
-      $form['modules']['#description'] = $this->t("Lightning Extensions have been pre-selected in the lightning.extend.yml file in your sites directory and are disabled here as a result.");
+      $form['help']['#markup'] = $this->t("Lightning extensions have been pre-selected in the lightning.extend.yml file in your sites directory and are disabled here as a result.");
     }
     else {
-      $form['modules']['#description'] = $this->t("You can choose to disable some of Lightning's functionality above. However, it is not recommended.");
+      $form['help']['#markup'] = $this->t("You can choose to disable some of Lightning's functionality below. However, it is not recommended.");
     }
 
     return $form;
