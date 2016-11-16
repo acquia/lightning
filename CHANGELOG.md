@@ -1,3 +1,18 @@
+## 1.13
+* Tests now ensure that composer.lock is kept up to date. (GitHub #132)
+* The page title block is now properly placed in the Seven theme. (GitHub #190)
+* Twitter media entities now have automatically generated thumbnails.
+  (GitHub #203)
+* CI now uses database snapshots for update tests. (GitHub #201)
+* Fix multiversion regression of node revisions list. (Issue #2824633)
+* Display modes and user roles can now have associated descriptions.
+  (GitHub #195)
+* Improved usability of the panelizer interface. (Issue #2826071)
+* Added debug steps and stabilized finicky test. (GitHub #218)
+* Lightning extender can now be used to exclude submodules of Lightning
+  extensions. (GitHub #220)
+* Updated all dependencies to their latest releases. (GitHub #219)
+
 ## 1.12
 * Drupal core, and several contributed dependencies, were updated to their
   latest stable releases.
