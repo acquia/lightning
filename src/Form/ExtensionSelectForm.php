@@ -202,7 +202,7 @@ class ExtensionSelectForm extends FormBase {
       $form['experimental']['gate']['#default_value'] = TRUE;
 
       // Explain ourselves.
-      drupal_set_message($this->t('Lightning extensions have been pre-selected in the lightning.extend.yml file in your sites directory.'), 'warning');
+      $form['modules']['#description'] = $this->t("Lightning Extensions have been pre-selected in the lightning.extend.yml file in your sites directory and are disabled here as a result.");
     }
     else {
       $form['modules']['#description'] = $this->t("You can choose to disable some of Lightning's functionality above. However, it is not recommended.");
