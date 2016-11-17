@@ -8,8 +8,19 @@
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\lightning_layout\Plugin\Field\FieldWidget\PanelizerWidget as LightningPanelizerWidget;
 use Drupal\node\NodeTypeInterface;
+use Drupal\panelizer\Plugin\Field\FieldWidget\PanelizerWidget as BasePanelizerWidget;
 use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_field_widget_info_alter().
+ */
+function lightning_layout_field_widget_info_alter(array &$info) {
+  if ($info['panelizer']['class'] == BasePanelizerWidget::class) {
+    $info['panelizer']['class'] = LightningPanelizerWidget::class;
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().

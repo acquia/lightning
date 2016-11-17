@@ -140,9 +140,10 @@ function lightning_core_form_alter(array &$form, FormStateInterface $form_state)
   $form_object = $form_state->getFormObject();
 
   if ($form_object instanceof EntityFormInterface) {
+    $supported_operations = ['default', 'add', 'edit'];
     $entity = $form_object->getEntity();
 
-    if ($entity instanceof EntityDisplayModeInterface || $entity instanceof RoleInterface) {
+    if (($entity instanceof EntityDisplayModeInterface || $entity instanceof RoleInterface) && in_array($form_object->getOperation(), $supported_operations)) {
       $form['description'] = [
         '#type' => 'textarea',
         '#title' => t('Description'),
