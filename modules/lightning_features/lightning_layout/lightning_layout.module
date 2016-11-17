@@ -5,6 +5,8 @@
  * Contains layout functionality for Lightning.
  */
 
+use Drupal\Core\Entity\Entity\EntityViewMode;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\node\NodeTypeInterface;
 use Drupal\user\Entity\Role;
@@ -12,7 +14,7 @@ use Drupal\user\Entity\Role;
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function lightning_layout_form_entity_view_display_edit_form_alter(array &$form) {
+function lightning_layout_form_entity_view_display_edit_form_alter(array &$form, FormStateInterface $form_state) {
   $form['#process'][] = 'lightning_layout_tweak_panelizer_ui';
 }
 
@@ -21,14 +23,41 @@ function lightning_layout_form_entity_view_display_edit_form_alter(array &$form)
  *
  * @param array $element
  *   The form element containing Panelizer's entity view display options.
+ * @param FormStateInterface $form_state
+ *   The current form state.
  *
  * @return array
  *   The processed element.
  */
-function lightning_layout_tweak_panelizer_ui(array $element) {
+function lightning_layout_tweak_panelizer_ui(array $element, FormStateInterface $form_state) {
+  /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $view_display */
+  $view_display = $form_state->getFormObject()->getEntity();
+
+  // Load the view mode to determine if this display is internal.
+  $view_mode = $view_display->getMode();
+  // The default view mode is never internal because it has no entity associated
+  // with it.
+  if ($view_mode == 'default') {
+    $internal = FALSE;
+  }
+  else {
+    $view_mode = $view_display->getTargetEntityTypeId() . '.' . $view_mode;
+
+    $internal = EntityViewMode::load($view_mode)
+      ->getThirdPartySetting('lightning_core', 'internal', FALSE);
+  }
+
+  if ($internal) {
+    drupal_set_message(t('This display is internal and will not be seen by normal users.'), 'warning');
+  }
+
   // If there are no Panelizer layouts, Panelizer is not enabled for this view
   // display, so there's nothing to do.
   if (empty($element['panelizer']['displays'])) {
+    // Don't allow an internal view mode to be panelized.
+    if ($internal) {
+      $element['panelizer']['#access'] = FALSE;
+    }
     return $element;
   }
 
@@ -52,7 +81,12 @@ function lightning_layout_tweak_panelizer_ui(array $element) {
     '#prefix' => '<ul class="action-links">',
     '#suffix' => '</ul>',
   ];
-  array_reorder($element['panelizer'], ['enable', 'options', 'add_link', 'displays']);
+  array_reorder($element['panelizer'], [
+    'enable',
+    'options',
+    'add_link',
+    'displays',
+  ]);
 
   return $element;
 }
