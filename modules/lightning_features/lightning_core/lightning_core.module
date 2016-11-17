@@ -25,12 +25,11 @@ use Drupal\user\RoleInterface;
 function lightning_core_help($route_name, RouteMatchInterface $route_match) {
   $matched = [];
   // Parse the route name to figure out what display mode we're looking at:
-  //
-  // 0 = entire string
-  // 1 = view || form
-  // 2 = entity type
-  // 3 = view_mode || form_mode
-  // 4 = view || form
+  // 0 is the entire string.
+  // 1 is either 'view' or 'form'.
+  // 2 is the ID of the affected entity type.
+  // 3 is either 'view_mode' or 'form_mode'.
+  // 4 is either 'view' or 'form'.
   $expr = '/^entity\.entity_(view|form)_display\.([a-z_]+)\.((view|form)_mode)$/';
 
   if (preg_match($expr, $route_name, $matched)) {
@@ -121,9 +120,10 @@ function lightning_core_form_alter(array &$form, FormStateInterface $form_state)
   $form_object = $form_state->getFormObject();
 
   if ($form_object instanceof EntityFormInterface) {
+    $supported_operations = ['default', 'add', 'edit'];
     $entity = $form_object->getEntity();
 
-    if ($entity instanceof EntityDisplayModeInterface || $entity instanceof RoleInterface) {
+    if (($entity instanceof EntityDisplayModeInterface || $entity instanceof RoleInterface) && in_array($form_object->getOperation(), $supported_operations)) {
       $form['description'] = [
         '#type' => 'textarea',
         '#title' => t('Description'),
