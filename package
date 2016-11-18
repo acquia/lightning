@@ -200,9 +200,11 @@ if (isset($make['projects']['drupal'])) {
 }
 
 foreach ($make['projects'] as $key => &$project) {
-  if (strpos($project['download']['url'], 'https://git.drupal.org/project/' . $key) === 0) {
-    $project['version'] = str_replace('8.x-', NULL, $project['download']['tag']);
-    unset($project['download']);
+  if ($project['download']['type'] == 'git') {
+    $project['download'] = [
+      'type' => 'file',
+      'url' => 'https://ftp.drupal.org/files/projects/' . $key . '-' . $project['download']['tag'] . '.zip',
+    ];
   }
 }
 
