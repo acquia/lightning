@@ -150,7 +150,7 @@
 
     <exec command="${drush} make drupal-org-core.make ${docroot} --yes" />
     <exec command="${drush} make drupal-org.make ${docroot} --no-core --yes" />
-    <exec command="${composer} require drush/drush" dir="${docroot}" />
+    <exec command="${composer} require drupal/drupal-extension j7mbo/twitter-api-php" dir="${docroot}" />
 
     <phingcall target="push" />
   </target>
