@@ -150,7 +150,9 @@
 
     <exec command="${drush} make drupal-org-core.make ${docroot} --yes" />
     <exec command="${drush} make drupal-org.make ${docroot} --no-core --yes" />
-    <exec command="${composer} require drupal/drupal-extension j7mbo/twitter-api-php" dir="${docroot}" />
+    <!-- Because legacy builds are not Composer-aware, we need to explicitly
+    require dependencies. Eugh. -->
+    <exec command="${composer} require drush/drush drupal/drupal-extension j7mbo/twitter-api-php" dir="${docroot}" />
 
     <phingcall target="push" />
   </target>
