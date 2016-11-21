@@ -6,6 +6,7 @@
  */
 
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
+use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Behat\Mink\Exception\ExpectationException;
@@ -43,7 +44,7 @@ class LightningSubContext extends DrupalSubContextBase {
   /**
    * Store current time.
    *
-   * @BeforeScenario
+   * @BeforeScenario ~@errors
    */
   public function setStartTime() {
     $this->startTime = time();
@@ -52,9 +53,9 @@ class LightningSubContext extends DrupalSubContextBase {
   /**
    * Check for errors since the scenario started.
    *
-   * @AfterScenario
+   * @AfterScenario ~@errors
    */
-  public function checkWatchdog() {
+  public function checkWatchdog(AfterScenarioScope $scope) {
     if (db_table_exists('watchdog')) {
       $log = db_select('watchdog', 'w')
         ->fields('w')
