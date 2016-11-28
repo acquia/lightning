@@ -2,4 +2,5 @@ services:
   lightning.extender:
     class: '\Drupal\lightning\Extender'
     arguments:
+      - '@app.root'
       - '@site.path'

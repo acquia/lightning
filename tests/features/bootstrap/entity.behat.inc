@@ -8,7 +8,6 @@
 use Behat\Gherkin\Node\TableNode;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 use Drupal\DrupalExtension\Hook\Scope\EntityScope;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
@@ -17,7 +16,7 @@ use Drupal\user\Entity\User;
 /**
  * Subcontext for creating and cleaning up entities of any type.
  */
-class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextInterface {
+class EntitySubContext extends DrupalSubContextBase {
 
   /**
    * Entities created during the scenario, organized by type.
@@ -151,8 +150,17 @@ class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextI
         if ($alias != $path) {
           \Drupal::service('path.alias_storage')->delete(['alias' => $alias]);
         }
+      }
 
-        $entity->delete();
+      $storage_handler = \Drupal::entityTypeManager()->getStorage($entity_type);
+
+      // If this is a Multiversion-aware storage handler, call purge() to do a
+      // hard delete.
+      if (method_exists($storage_handler, 'purge')) {
+        $storage_handler->purge($entities);
+      }
+      else {
+        $storage_handler->delete($entities);
       }
     }
   }
@@ -218,7 +226,7 @@ class EntitySubContext extends DrupalSubContextBase implements DrupalSubContextI
    */
   public function visitCurrentNodeRevision() {
     $this->minkContext->clickLink('Revisions');
-    $this->lightning->clickElementBySelector('td.revision-current:first-child a');
+    $this->lightning->clickElementBySelector('tr.revision-current td:first-child a');
   }
 
   /**

@@ -1,11 +1,13 @@
 <?php
 
-use Drupal\Core\Entity\Entity\EntityFormDisplay;
+/**
+ * @file
+ * Contains install and update routines for Lightning Media Twitter.
+ */
 
 /**
  * Creates the media_browser form display.
  */
 function lightning_media_twitter_update_8001() {
-  $display = lightning_read_config('core.entity_form_display.media.tweet.media_browser', 'lightning_media_twitter');
-  EntityFormDisplay::create($display)->save();
+  lightning_core_create_config('core_entity_form_display', 'media.tweet.media_browser', 'lightning_media_twitter');
 }

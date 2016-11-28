@@ -2,8 +2,7 @@
 
 /**
  * @file
- * Install, update and uninstall functions for the Lightning installation
- * profile.
+ * Install and uninstall functions for the Lightning installation profile.
  */
 
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
@@ -27,7 +26,7 @@ function lightning_install() {
     ->set('page.front', '/node')
     ->save(TRUE);
 
-  // Restrict user registration to admin role creation
+  // Restrict user registration to admin role creation.
   \Drupal::configFactory()
     ->getEditable('user.settings')
     ->set('register', USER_REGISTER_ADMINISTRATORS_ONLY)
@@ -59,7 +58,7 @@ function lightning_install() {
     ]
   )->save();
 
-  // Set the default and admin theme
+  // Set the default and admin theme.
   \Drupal::configFactory()
     ->getEditable('system.theme')
     ->set('default', 'bartik')
@@ -73,7 +72,7 @@ function lightning_install() {
     ->save(TRUE);
 
   // Set the path to the logo, favicon and README file based on install
-  // directory
+  // directory.
   $lightning_path = drupal_get_path('profile', 'lightning');
   \Drupal::configFactory()
     ->getEditable('system.theme.global')
@@ -84,13 +83,13 @@ function lightning_install() {
     ])
     ->set('favicon', [
       'mimetype' => 'image/vnd.microsoft.icon',
-      'path' =>  $lightning_path . '/favicon.ico',
+      'path' => $lightning_path . '/favicon.ico',
       'url' => '',
       'use_default' => FALSE,
     ])
     ->save(TRUE);
 
-  // View display definition
+  // View display definition.
   $display = [
     'default' => [
       'display_options' => [
@@ -320,7 +319,7 @@ function lightning_install() {
             'id' => 'created',
             'order' => 'DESC',
             'table' => 'node_field_data',
-            'plugin_id' =>  'date',
+            'plugin_id' => 'date',
             'relationship' => 'none',
             'group_type' => 'group',
             'admin_label' => '',
@@ -445,7 +444,7 @@ function lightning_install() {
       'module' => [
         'node',
         'user',
-      ]
+      ],
     ])
     ->set('id', 'frontpage')
     ->set('label', 'Frontpage')
@@ -464,15 +463,16 @@ function lightning_install() {
 }
 
 /**
+ * Makes updates to some basic config that ships with Lightning.
+ *
  * Install the body field on the basic block_content type, delete the Create
  * landing page shortcut, and uninstall the Media Demo Content Module.
  */
 function lightning_update_8001() {
-  // Install the body field on the basic block_content type
+  // Install the body field on the basic block_content type.
   $field = FieldConfig::load('block_content.basic.body');
   if (empty($field)) {
-    $values = lightning_read_config('field.field.block_content.basic.body');
-    FieldConfig::create($values)->save();
+    lightning_core_create_config('field_config', 'block_content.basic.body', 'lightning');
 
     $display = EntityViewDisplay::load('block_content.basic.default');
     if ($display) {
@@ -486,8 +486,7 @@ function lightning_update_8001() {
       ])->save();
     }
     else {
-      $values = lightning_read_config('core.entity_view_display.block_content.basic.default');
-      EntityViewDisplay::create($values)->save();
+      lightning_core_create_config('entity_view_display', 'block_content.basic.default', 'lightning');
     }
   }
 

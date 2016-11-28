@@ -9,17 +9,18 @@
   Drupal.behaviors.entityBrowserSelection = {
 
     attach: function (context) {
-      var $all = $('[data-selectable]', context);
+      // All selectable elements which should receive the click behavior.
+      var $selectables = $('[data-selectable]', context);
 
-      $all.on('click', function () {
-        var $input = $('input[name^="entity_browser_select"]', this);
+      // Selector for finding the actual form inputs.
+      var input = 'input[name ^= "entity_browser_select"]';
 
-        $('input[name ^= "entity_browser_select"]', this).prop('checked', true);
-        $(this).addClass('selected');
+      $selectables.on('click', function () {
+        // Select this one...
+        $(this).addClass('selected').find(input).prop('checked', true);
 
-        if ($input.is('[type = "radio"]')) {
-          $all.not(this).removeClass('selected');
-        }
+        // ...and unselect everything else.
+        $selectables.not(this).removeClass('selected').find(input).prop('checked', false);
       });
     }
 

@@ -54,6 +54,42 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+## 1.12 to 1.13
+There are no manual update steps for this version.
+
+## 1.11 to 1.12
+There are no manual update steps for this version.
+
+## 1.10 to 1.11
+There are no manual update steps for this version.
+
+## 1.06 to 1.10
+There are no manual update steps for this version.
+
+If you would like to test the new Lightning Preview module and Workspace Preview
+System in a development environment, enable the Lightning Preview module from
+module listing page. Note that Lightning Preview and WPS are not yet ready for
+production environments.
+
+## 1.05 to 1.06
+There are no manual update steps for this version.
+
+### 1.04 to 1.05
+There are no manual update steps for this version.
+
+### 1.03 to 1.04
+* Go to *Structure > Views* and edit the **Media** view.
+* Edit the **Browser** display and configure the pager.
+* Change "Items to display" to 12 and press Apply.
+* Repeat this configuration for the **Image Browser** display.
+* Save the view.
+
+### 1.02 to 1.03
+There are no manual update steps for this version.
+
+### 1.01 to 1.02
+There are no manual update steps for this version.
+
 ### 1.00 to 1.01
 There are no manual update steps for this version.
 

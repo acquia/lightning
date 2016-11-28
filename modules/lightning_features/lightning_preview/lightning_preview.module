@@ -1,0 +1,289 @@
+<?php
+
+/**
+ * @file
+ * Contains code for Lightning's integration with workspaces.
+ */
+
+use Drupal\Component\Render\FormattableMarkup;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityFormInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\lightning_preview\AliasHandler;
+use Drupal\lightning_preview\Exception\EntityLockedException;
+use Drupal\lightning_preview\Form\NodeDeleteForm;
+use Drupal\lightning_preview\Plugin\Field\FieldWidget\PathWidget;
+use Drupal\lightning_preview\WorkspaceListBuilder;
+use Drupal\multiversion\Entity\WorkspaceInterface;
+use Drupal\multiversion\Entity\WorkspaceType;
+use Drupal\user\Entity\Role;
+use Drupal\workbench_moderation\ModerationStateTransitionInterface as StateTransitionInterface;
+
+/**
+ * Implements hook_field_widget_info_alter().
+ */
+function lightning_preview_field_widget_info_alter(array &$info) {
+  if (isset($info['path'])) {
+    $info['path']['class'] = \Drupal::moduleHandler()->moduleExists('pathauto')
+      // We cannot use ::class here, because if Pathauto doesn't exist, PHP will
+      // blow up if we try to import the class.
+      ? '\Drupal\lightning_preview\Plugin\Field\FieldWidget\PathautoWidget'
+      : PathWidget::class;
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_preview_form_workspace_basic_edit_form_alter(array &$form, FormStateInterface $form_state) {
+  $form_object = $form_state->getFormObject();
+
+  /** @var \Drupal\workbench_moderation\ModerationInformation $mod_info */
+  $mod_info = \Drupal::service('workbench_moderation.moderation_information');
+
+  if (isset($form['moderation_state']) && $mod_info->isModeratedEntityForm($form_object)) {
+    lightning_workflow_alter_moderation_state($form['moderation_state']['widget'][0]);
+
+    $element = &$form['moderation_state']['widget'][0];
+    // Normally this would say 'this piece of content', which is weird if
+    // you're editing a workspace.
+    $element['#description'] = t('The moderation state of this workspace. &#128274; denotes a locked state. If you put this workspace into a locked state, you will be able switch into it and look around, but not make any changes.');
+
+    $locked_states = $form_object
+      ->getEntity()
+      ->type
+      ->entity
+      ->getThirdPartySetting('workbench_moderation', 'locked_states', []);
+
+    foreach ($element['#options'] as $id => $label) {
+      if (in_array($id, $locked_states)) {
+        $element['#options'][$id] = new FormattableMarkup('@label &#128274;', ['@label' => $label]);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function lightning_preview_entity_type_alter(array &$entity_types) {
+  // Our list builder displays the current moderation state for each workspace.
+  // @TODO Replace this with a view.
+  $entity_types['workspace']->setHandlerClass('list_builder', WorkspaceListBuilder::class);
+
+  // Use our own version of NodeDeleteForm that is aware of the purge() method
+  // in Multiversion-aware storage handlers.
+  $entity_types['node']->setFormClass('delete', NodeDeleteForm::class);
+}
+
+/**
+ * Implements hook_toolbar_alter().
+ */
+function lightning_preview_toolbar_alter(array &$items) {
+  if (isset($items['workspace_update'])) {
+    // Do not show the 'Update' toolbar button if the active workspace has no
+    // upstream. Workspaces are required to have an upstream, but in Lightning,
+    // the Live workspace does not -- because in a single-site setup, what
+    // exactly sits upstream from the live site?
+    $items['workspace_update']['tab']['#access'] = \Drupal::service('workspace.manager')
+      ->getActiveWorkspace()
+      ->get('upstream')
+      ->isEmpty() == FALSE;
+  }
+}
+
+/**
+ * Implements hook_pathauto_alias_alter().
+ */
+function lightning_preview_pathauto_alias_alter(&$alias, array &$context) {
+  if (isset($context['data']['node'])) {
+    $entity = $context['data']['node'];
+  }
+
+  if (isset($entity) && $entity instanceof FieldableEntityInterface && $entity->hasField('workspace') && $entity->workspace->isEmpty() == FALSE) {
+    $alias = AliasHandler::addPrefix($alias, $entity->workspace->entity->getMachineName());
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function lightning_preview_module_implements_alter(array &$implementations, $hook) {
+  $module = 'lightning_preview';
+
+  // Regarding hook_entity_presave():
+  // Workbench Moderation's implementation of hook_entity_presave() screws up
+  // our workspace revisioning logic, so our implementation needs to run after
+  // it. We can ice this once we've ditched Workbench Moderation in favor of
+  // Content Moderation.
+  //
+  // Regarding hook_field_widget_info_alter():
+  // Normally, Pathauto's implementation would run after ours, and it would
+  // switch the plugin to its own class. We have a special widget that extends
+  // Pathauto's, so we need to make sure it is the one that gets used.
+  if ($hook == 'entity_presave' || $hook == 'field_widget_info_alter') {
+    $order = array_diff(array_keys($implementations), [$module]);
+    array_push($order, $module);
+    array_reorder($implementations, $order);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_preview_moderation_state_transition_insert(StateTransitionInterface $transition) {
+  user_role_grant_permissions('workspace_reviewer', [
+    'use ' . $transition->id() . ' transition',
+  ]);
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function lightning_preview_moderation_state_transition_delete(StateTransitionInterface $transition) {
+  $role = Role::load('workspace_reviewer');
+  if ($role) {
+    user_role_revoke_permissions($role->id(), [
+      'use ' . $transition->id() . ' transition',
+    ]);
+  }
+}
+
+/**
+ * Implements hook_entity_create_access().
+ */
+function lightning_preview_entity_create_access(AccountInterface $account, array $context, $entity_bundle) {
+  $locked = \Drupal::service('lightning_preview.workspace_lock')
+    ->isEntityTypeLocked($context['entity_type_id']);
+
+  return AccessResult::forbiddenIf($locked);
+}
+
+/**
+ * Implements hook_entity_access().
+ */
+function lightning_preview_entity_access(EntityInterface $entity, $operation, AccountInterface $account) {
+  // Don't interfere with the view operation.
+  if ($operation == 'view') {
+    return AccessResult::neutral();
+  }
+
+  // Allow filter formats to be used like normal.
+  if ($entity->getEntityTypeId() == 'filter_format' && $operation == 'use') {
+    return AccessResult::neutral();
+  }
+
+  // The live workspace is not editable under any circumstances.
+  if ($entity instanceof WorkspaceInterface && $operation == 'update' && $entity->getMachineName() == 'live') {
+    return AccessResult::forbidden('The live workspace can never be edited.');
+  }
+
+  try {
+    \Drupal::service('lightning_preview.workspace_lock')->assertEntityUnlocked($entity);
+    return AccessResult::neutral();
+  }
+  catch (EntityLockedException $e) {
+    return AccessResult::forbidden($e->getMessage());
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function lightning_preview_entity_presave(EntityInterface $entity) {
+  \Drupal::service('lightning_preview.workspace_lock')->assertEntityUnlocked($entity);
+
+  // Workspaces are revisionable only because they must be moderatable, and
+  // moderatable things MUST be revisionable. As far as the user is concerned,
+  // though, the workspaces are NOT revisionable -- there's no real concept
+  // of 'versions' of a workspace -- so the latest revision should always be
+  // the default one, and that's that.
+  if ($entity instanceof WorkspaceInterface && $entity->isNewRevision()) {
+    $entity->isDefaultRevision(TRUE);
+  }
+
+  \Drupal::service('lightning_preview.alias_handler')->replicateAlias($entity);
+}
+
+/**
+ * Implements hook_entity_predelete().
+ */
+function lightning_preview_entity_predelete(EntityInterface $entity) {
+  \Drupal::service('lightning_preview.workspace_lock')->assertEntityUnlocked($entity);
+}
+
+/**
+ * Implements hook_form_alter().
+ */
+function lightning_preview_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  $form_object = $form_state->getFormObject();
+
+  // If this is the form for a locked entity, disable all the buttons and set
+  // a stern message.
+  if ($form_object instanceof EntityFormInterface) {
+    $entity = $form_object->getEntity();
+
+    try {
+      \Drupal::service('lightning_preview.workspace_lock')->assertEntityUnlocked($entity);
+    }
+    catch (EntityLockedException $e) {
+      drupal_set_message($e->getMessage(), 'warning');
+      $form['#pre_render'][] = 'lightning_core_disable_buttons';
+    }
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter() for moderation_state_edit_form().
+ *
+ * The aforementioned moderation_state_edit_form() is not a function, but PHP
+ * Code Sniffer is too stupid to understand that. Take it up with him.
+ */
+function lightning_preview_form_moderation_state_edit_form_alter(array &$form, FormStateInterface $form_state) {
+  $state_id = $form_state->getFormObject()->getEntity()->id();
+
+  $settings = WorkspaceType::load('basic')
+    ->getThirdPartySettings('workbench_moderation');
+
+  if (empty($settings)) {
+    return;
+  }
+  if ($settings['enabled'] && in_array($state_id, $settings['allowed_moderation_states'])) {
+    $form['lock_workspace'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Lock workspaces in this state'),
+      '#default_value' => in_array($state_id, $settings['locked_states']),
+      '#description' => t('If checked, no changes can be made in a workspace when it reaches this state.'),
+    ];
+    $form['#submit'][] = 'lightning_preview_save_locked_state';
+  }
+}
+
+/**
+ * Submit callback. Sets whether the moderation state should lock workspaces.
+ *
+ * @param array $form
+ *   The complete form.
+ * @param FormStateInterface $form_state
+ *   The current form state.
+ */
+function lightning_preview_save_locked_state(array &$form, FormStateInterface $form_state) {
+  $workspace_type = WorkspaceType::load('basic');
+  $locked_states = $workspace_type->getThirdPartySetting('workbench_moderation', 'locked_states', []);
+  $state_id = $form_state->getFormObject()->getEntity()->id();
+
+  if ($form_state->getValue('lock_workspace')) {
+    $locked_states[] = $state_id;
+    $locked_states = array_unique($locked_states);
+  }
+  else {
+    $locked_states = array_diff($locked_states, [$state_id]);
+  }
+
+  $workspace_type
+    ->setThirdPartySetting('workbench_moderation', 'locked_states', $locked_states)
+    ->save();
+}

@@ -4,6 +4,8 @@ default:
       paths:
         - %paths.base%/tests/features
       contexts:
+        - Acquia\LightningExtension\Context\DisplayModeContext
+        - Acquia\LightningExtension\Context\UndoContext
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\MessageContext
@@ -21,5 +23,7 @@ default:
         paths:
           - tests/features/bootstrap
         autoload: false
+      selectors:
+        login_form_selector: '#user-login-form'
 imports:
   - behat.local.yml

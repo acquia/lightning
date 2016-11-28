@@ -52,16 +52,21 @@ abstract class PreviewHandlerBase implements PreviewHandlerInterface {
    * {@inheritdoc}
    */
   public function extraFields($bundle) {
+    $extra = array();
+
     if (is_string($bundle)) {
       $bundle = $this->bundleStorage->load($bundle);
     }
-    $extra = array();
-    $extra['media'][$bundle->id()]['form']['preview'] = [
-      'label' => $this->t('Preview'),
-      'description' => $this->t('A live preview of the @bundle.', [
-        '@bundle' => $bundle->label(),
-      ]),
-    ];
+
+    if ($bundle instanceof EntityInterface) {
+      $extra['media'][$bundle->id()]['form']['preview'] = [
+        'label' => $this->t('Preview'),
+        'description' => $this->t('A live preview of the @bundle.', [
+          '@bundle' => $bundle->label(),
+        ]),
+        'weight' => 0,
+      ];
+    }
 
     return $extra;
   }

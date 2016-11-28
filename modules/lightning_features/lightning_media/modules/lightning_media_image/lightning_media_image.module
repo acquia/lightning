@@ -1,0 +1,64 @@
+<?php
+
+/**
+ * @file
+ * Support for image media assets in Lightning.
+ */
+
+use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
+use Drupal\Core\Form\FormStateInterface;
+use Drupal\field\Entity\FieldConfig;
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_media_image_form_entity_browser_image_browser_form_alter(array &$form, FormStateInterface $form_state) {
+  $form['#attached']['library'][] = 'lightning_media/browser.styling';
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function lightning_media_image_entity_form_display_presave(EntityFormDisplayInterface $display) {
+  if ($display->isNew()) {
+    return;
+  }
+
+  $entity_type = $display->getTargetEntityTypeId();
+  $bundle = $display->getTargetBundle();
+
+  // Since the image browser integrates with the media library, it doesn't
+  // make sense to use the image browser when creating or editing an image
+  // media entity.
+  if ($entity_type == 'media' && $bundle == 'image') {
+    return;
+  }
+
+  /** @var EntityFormDisplayInterface $original */
+  $original = \Drupal::entityTypeManager()
+    ->getStorage('entity_form_display')
+    ->loadUnchanged($display->id());
+
+  $new_components = array_diff_key($display->getComponents(), $original->getComponents());
+  foreach ($new_components as $component_id => $component) {
+    $field = FieldConfig::load($entity_type . '.' . $bundle . '.' . $component_id);
+
+    if (empty($field)) {
+      continue;
+    }
+    if ($field->getType() == 'image') {
+      $display->setComponent($component_id, [
+        'type' => 'entity_browser_file',
+        'weight' => $component['weight'],
+        'settings' => [
+          'entity_browser' => 'image_browser',
+          'field_widget_edit' => TRUE,
+          'field_widget_remove' => TRUE,
+          'view_mode' => 'default',
+          'preview_image_style' => 'thumbnail',
+          'open' => TRUE,
+        ],
+      ]);
+    }
+  }
+}

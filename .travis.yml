@@ -1,4 +1,7 @@
+sudo: required
+dist: trusty
 language: php
+
 cache:
   bundler: true
   apt: true
@@ -7,37 +10,60 @@ cache:
     - "$HOME/.drush/cache"
     - "$HOME/.npm"
 php:
-  - 5.5
+  - 5.6
 env:
   - VERSION=HEAD
-  - VERSION=8.x-1.01
-  - VERSION=8.x-1.00
-  - VERSION=8.x-1.00-rc7
-  - VERSION=8.x-1.00-rc6
+  - VERSION=1.13
+  - VERSION=1.12
+  - VERSION=1.11
+  - VERSION=1.10
 
-sudo: false
-
-mysql:
-  database: drupal
-  username: root
-  encoding: utf8
+addons:
+  apt:
+    packages:
+    # Trusty does not include MySQL by default.
+    - mysql-server-5.6
+    - mysql-client-core-5.6
+    - mysql-client-5.6
+    # Dependencies for Chrome.
+    - libappindicator1
+    - fonts-liberation
 
 before_install:
   - phpenv config-rm xdebug.ini
   - composer self-update
   - composer --version
+  # Initialize xvfb (see https://docs.travis-ci.com/user/gui-and-headless-browsers)
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+  - sleep 3
+
+  # Download Chrome Driver
+  - LATEST_CHROMEDRIVER=$(wget -q -O - http://chromedriver.storage.googleapis.com/LATEST_RELEASE)
+  - wget http://chromedriver.storage.googleapis.com/$LATEST_CHROMEDRIVER/chromedriver_linux64.zip
+  - unzip chromedriver_linux64.zip
+  - chmod +x chromedriver
+  - mkdir -p $HOME/.composer/vendor/bin
+  - mv -f chromedriver $HOME/.composer/vendor/bin/
+  - rm chromedriver_linux64.zip
+
+  # Update Chrome.
+  - export CHROME_BIN=/usr/bin/google-chrome
+  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  - sudo dpkg -i google-chrome-stable_current_amd64.deb
+  - rm google-chrome-stable_current_amd64.deb
+  - google-chrome --version
 
 install:
   # Add Composer's local bin directory to the PATH so that we will be running
   # our installed versions of Drush, PHPCS, Behat, PhantomJS, etc.
   - export PATH="$HOME/.composer/vendor/bin:$TRAVIS_BUILD_DIR/bin:$PATH"
 
-  # Composer install should fail on bad patches.
+  # composer install should fail on bad patches.
   - export COMPOSER_EXIT_ON_PATCH_FAILURE=1
 
-  # MySQL Options
-  - mysql -e 'SET GLOBAL wait_timeout = 5400;'
-  - mysql -e "SHOW VARIABLES LIKE 'wait_timeout'"
+  # Create the MySQL database and increase the timeout (?)
+  - mysql -u root -e 'CREATE DATABASE drupal; SET GLOBAL wait_timeout = 5400;'
 
   # PHP conf tweaks
   - echo 'max_execution_time = 120' >> drupal.php.ini;
@@ -45,24 +71,32 @@ install:
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
-  # Build the Lightning code base.
+  # We need Phing to execute our build steps.
   - composer global require phing/phing
-  - phing build -Dversion=$VERSION -Dbranch=$TRAVIS_COMMIT
-
-  # Install Lightning.
+  # Build the Lightning code base.
+  - composer install
+  # Install Lightning cleanly so that settings.php will be created properly.
   - phing install -Ddb.database=drupal
-  # Execute database updates if we're not building from HEAD.
-  - if [ $VERSION != "HEAD" ]; then phing update; fi
+  # Import the fixture, if it exists.
+  - phing remember -Dversion=$VERSION -Ddb.database=drupal
+  - cd docroot
+  - drush cache-rebuild
+  # Install Lightning Preview, if it isn't already.
+  - drush pm-enable --yes lightning_preview
+  # Execute database updates, if there are any.
+  - drush updatedb --yes
 
 before_script:
-  - cd docroot
   - drush runserver --default-server=builtin 8080 &>/dev/null &
-  - phantomjs --webdriver=4444 > /dev/null &
+  # Start Selenium and dump its ginormous log into a temporary file.
+  - mkdir ../tmp
+  - selenium-server-standalone -port 4444 -log ../tmp/selenium2.log &
+  - sleep 5
+  - cd ./profiles/lightning
 
 script:
-  - cd ./profiles/lightning
-  - phpcs --standard=$TRAVIS_BUILD_DIR/vendor/drupal/coder/coder_sniffer/Drupal/ruleset.xml --ignore=bin,*.css,libraries,modules/contrib .
-  - behat --strict
+  - composer validate --no-check-all --ansi
+  - behat --strict --stop-on-failure
 
 matrix:
   fast_finish: true

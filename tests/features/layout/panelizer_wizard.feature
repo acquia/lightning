@@ -27,7 +27,8 @@ Feature: Panelizer Wizard
     Given I am logged in as a user with the "landing_page_creator,layout_manager" roles
     And I have customized the search_result view mode of the landing_page content type
     When I visit "/admin/structure/types/manage/landing_page/display/search_result"
-    And I check "Allow panelizer default choice"
+    # Allow authors to choose a layout.
+    And I check "panelizer[allow]"
     And I press "Save"
     And I visit "/node/add/landing_page"
     Then I should see a "Full content" field
@@ -39,13 +40,16 @@ Feature: Panelizer Wizard
 
   @javascript
   Scenario: Switch between defined layouts.
-    Given I am logged in as a user with the "landing_page_creator,layout_manager" roles
+    Given users:
+      | name | mail          | roles                               |
+      | Foo  | foo@localhost | landing_page_creator,layout_manager |
+    And I am logged in as Foo
     And I visit "/admin/structure/panelizer/edit/node__landing_page__full__two_column/content"
     And I place the "Authored by" block into the left panelizer region
     And I press "Update and save"
     And landing_page content:
-      | title  | path    | moderation_state |
-      | Foobar | /foobar | draft            |
+      | title  | path    | moderation_state | author |
+      | Foobar | /foobar | draft            | Foo    |
     When I visit "/foobar"
     And I click "Edit draft"
     And I select "Two Column" from "Full content"
@@ -59,35 +63,41 @@ Feature: Panelizer Wizard
     And I remove the "Authored by" block from the left panelizer region
 
   @javascript
-  Scenario: Changes made to layouts and saved to default via the IPE are reflected in the corresponding Wizard.
-    Given I am logged in as a user with the "layout_manager,landing_page_creator" roles
-    And landing_page content:
-      | title  | path    | moderation_state |
-      | Foobar | /foobar | draft            |
-    When I visit "/foobar"
-    And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
-    # Click IPE Save
-    And I save the layout as default
-    And I visit "/admin/structure/panelizer/edit/node__landing_page__full__default/content"
-    Then the "Who's online" block should be in the middle region
-    And I remove the "Who's online" block from the "middle" panelizer region
-
-  Scenario: Access denied results in 403, not an exception.
-    Given I am an anonymous user
-    When I go to "/admin/structure/panelizer/edit/node__landing_page__default__default"
-    Then the response status code should be 403
-
-  @javascript
   Scenario: The default layout select list should be disabled on entities whose layout has been customized via the IPE.
-    Given I am logged in as a user with the "layout_manager,landing_page_creator" role
+    Given users:
+      | name | mail          | roles                               |
+      | Foo  | foo@localhost | layout_manager,landing_page_creator |
+    And I am logged in as Foo
     And landing_page content:
-      | title  | path    | moderation_state |
-      | Foobar | /foobar | draft            |
+      | title  | path    | moderation_state | author |
+      | Foobar | /foobar | draft            | Foo    |
     When I visit "/foobar"
     And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
     And I save the layout
     And I click "Edit draft"
     Then the "Full content" field should be disabled
+
+  @javascript
+  Scenario:  Block placement on non-default displays are preserved after re-saving the entity.
+    Given users:
+      | name | mail          | roles                               |
+      | Foo  | foo@localhost | layout_manager,landing_page_creator |
+    And I am logged in as Foo
+    And landing_page content:
+      | title  | path    | moderation_state | author |
+      | Foobar | /foobar | draft            | Foo    |
+    And block_content entities:
+      | type  | info               | body    | uuid                  |
+      | basic | Here be dragons... | RAWWWR! | test--here-be-dragons |
+    When I visit "/foobar"
+    And I click "Edit draft"
+    And I select "two_column" from "Full content"
+    And I press "Save"
+    And I place the "block_content:test--here-be-dragons" block from the "Custom" category
+    And I save the layout
+    And I click "Edit draft"
+    And I press "Save"
+    Then I should see a "block_content:test--here-be-dragons" block
 
   @javascript
   Scenario: Create a new layout using the Panelizer Wizard

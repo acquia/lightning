@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains installation and update routines for Lightning Preview.
+ */
+
+use Drupal\multiversion\Entity\WorkspaceType;
+
+/**
+ * Implements hook_install().
+ */
+function lightning_preview_install() {
+  /** @var WorkspaceType $workspace_type */
+  $workspace_type = WorkspaceType::load('basic');
+  if (empty($workspace_type)) {
+    return;
+  }
+
+  // Enable moderation for the default workspace type.
+  $workspace_type
+    ->setThirdPartySetting('workbench_moderation', 'enabled', TRUE)
+    ->setThirdPartySetting('workbench_moderation', 'allowed_moderation_states', [
+      'draft',
+      'needs_review',
+      'published',
+    ])
+    ->setThirdPartySetting('workbench_moderation', 'default_moderation_state', 'draft')
+    ->setThirdPartySetting('workbench_moderation', 'locked_states', [
+      'archived',
+      'needs_review',
+      'published',
+    ])
+    ->save();
+}

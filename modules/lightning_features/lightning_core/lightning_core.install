@@ -1,10 +1,41 @@
 <?php
 
 /**
+ * @file
+ * Contains install and update routines for Lightning.
+ */
+
+use Drupal\node\Entity\NodeType;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_install().
+ */
+function lightning_core_install() {
+  $content_roles = \Drupal::config('lightning_core.settings')->get('content_roles');
+
+  /** @var \Drupal\node\NodeTypeInterface $node_type */
+  foreach (NodeType::loadMultiple() as $node_type) {
+    $roles = array();
+    foreach ($content_roles as $id => $role) {
+      if ($role['enabled']) {
+        $roles[] = $node_type->id() . '_' . $id;
+      }
+    }
+    $roles = Role::loadMultiple($roles);
+
+    if (empty($roles)) {
+      \Drupal::moduleHandler()
+        ->invoke('lightning_core', 'node_type_insert', [$node_type]);
+    }
+  }
+}
+
+/**
  * Creates the lightning_core settings object.
  */
 function lightning_core_update_8001() {
-  $values = lightning_read_config('lightning_core.settings', 'lightning_core');
+  $values = lightning_core_read_config('lightning_core.settings', 'lightning_core');
 
   \Drupal::configFactory()
     ->getEditable('lightning_core.settings')

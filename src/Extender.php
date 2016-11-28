@@ -3,7 +3,7 @@
 namespace Drupal\lightning;
 
 use Drupal\Component\Serialization\Yaml;
-use Drupal\Component\Utility\UrlHelper;
+use Drupal\Core\Url;
 
 /**
  * Helper class to get information from a site's lightning.extend.yml file.
@@ -20,10 +20,13 @@ class Extender {
   /**
    * Extender constructor.
    *
+   * @param string $drupal_root
+   *   The path to the Drupal root.
    * @param string $site_path
    *   The path to the site's configuration (e.g. sites/default).
    */
-  public function __construct($site_path) {
+  public function __construct($drupal_root, $site_path) {
+    $this->root = $drupal_root;
     $this->sitePath = (string) $site_path;
   }
 
@@ -34,15 +37,43 @@ class Extender {
    *   The parsed extender configuration.
    */
   public function getInfo() {
-    $path = $this->sitePath . '/lightning.extend.yml';
+    // Discover lightning.extend.yml first in the `sitePath`, and then defer to
+    // `sites/all`.
+    $paths[] = $this->sitePath . '/lightning.extend.yml';
+    $paths[] = $this->root . '/sites/all/lightning.extend.yml';
 
-    if (file_exists($path)) {
-      $info = file_get_contents($path);
-      return Yaml::decode($info);
+    foreach ($paths as $path) {
+      if (file_exists($path)) {
+        $info = file_get_contents($path);
+        return Yaml::decode($info);
+      }
     }
-    else {
-      return [];
-    }
+
+    return [];
+  }
+
+  /**
+   * Returns the list of Lightning Extensions to enable.
+   *
+   * @return string[]
+   *   The modules to enable.
+   */
+  public function getLightningExtensions() {
+    $info = $this->getInfo();
+    // Return FALSE instead of empty array because empty array means "don't
+    // enable _any_ extensions" in this case.
+    return isset($info['lightning_extensions']) ? $info['lightning_extensions'] : FALSE;
+  }
+
+  /**
+   * Returns the list of Lightning sub-components that should NOT be installed.
+   *
+   * @return string[]
+   *   The sub-components to exclude.
+   */
+  public function getExcludedComponents() {
+    $info = $this->getInfo();
+    return isset($info['exclude_components']) ? $info['exclude_components'] : [];
   }
 
   /**
@@ -65,14 +96,27 @@ class Extender {
   public function getRedirect() {
     $info = $this->getInfo();
 
-    if ($info['redirect']) {
-      $redirect = $info['redirect']['path'];
-
-      if ($info['redirect']['query']) {
-        $redirect .= '?' . UrlHelper::buildQuery($info['redirect']['query']);
-      }
-      return $redirect;
+    if (!empty($info['redirect']['path'])) {
+      $path = ltrim($info['redirect']['path'], '/');
     }
+    else {
+      // Redirect to the front page by default.
+      $path = '<front>';
+    }
+    $redirect = Url::fromUri('internal:/' . $path);
+
+    if (isset($info['redirect']['options'])) {
+      $redirect->setOptions($info['redirect']['options']);
+    }
+
+    // Explicitly set the base URL, if not previously set, to prevent weird
+    // redirection snafus.
+    $base_url = $redirect->getOption('base_url');
+    if (empty($base_url)) {
+      $redirect->setOption('base_url', $GLOBALS['base_url']);
+    }
+
+    return $redirect->setOption('absolute', TRUE)->toString();
   }
 
 }

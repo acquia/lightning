@@ -8,12 +8,11 @@
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\DrupalSubContextInterface;
 
 /**
  * Contains step definitions for working with Panels and panelized pages.
  */
-class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextInterface {
+class PanelsSubContext extends DrupalSubContextBase {
 
   /**
    * The Mink context.
@@ -98,6 +97,27 @@ class PanelsSubContext extends DrupalSubContextBase implements DrupalSubContextI
     $this->minkContext->iWaitForAjaxToFinish();
 
     $this->lightning->clickElementBySelector('[value = "Add"]');
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
+  /**
+   * Changes the layout of an IPE controlled entity via the IPE.
+   *
+   * @param string $category
+   *   The layout's category.
+   * @param string $layout_id
+   *   The layout's data-layout-id value.
+   *
+   * @When I change the layout to :layout_id from the :category category
+   */
+  public function changeLayout($category, $layout_id) {
+    $this->lightning->clickElementBySelector('a[title = "Change Layout"]');
+    $this->minkContext->iWaitForAjaxToFinish();
+
+    $this->lightning->clickElementBySelector('a[data-category = "' . $category . '"]');
+    $this->minkContext->iWaitForAjaxToFinish();
+
+    $this->lightning->clickElementBySelector('a[data-layout-id = "' . $layout_id . '"]');
     $this->minkContext->iWaitForAjaxToFinish();
   }
 

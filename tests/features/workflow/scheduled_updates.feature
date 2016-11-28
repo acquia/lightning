@@ -1,4 +1,4 @@
-@lightning @api @workflow
+@lightning @api @workflow @errors
 Feature: Scheduled updates to content
 
   @javascript
@@ -9,16 +9,13 @@ Feature: Scheduled updates to content
       | Foobar | /foobar | draft            |
     When I visit "/foobar"
     And I click "Edit draft"
-    And I press "Add new scheduled update"
-    And I wait for AJAX to finish
-    And I enter "1984-09-19" for "scheduled_update[form][inline_entity_form][update_timestamp][0][value][date]"
-    And I enter "08:57:00" for "scheduled_update[form][inline_entity_form][update_timestamp][0][value][time]"
-    And I select "published" from "scheduled_update[form][inline_entity_form][field_moderation_state]"
-    And I press "Create scheduled update"
-    And I wait for AJAX to finish
     And I select "Needs Review" from "Moderation state"
+    And I schedule the node to be published at "09-19-1984 08:57:00AM"
+    And I should see "Update Date/time"
     And I press "Save"
-    And I run cron
+    And I visit "/admin/config/workflow/schedule-updates/run"
+    And I press "Run Updates"
+    And I should see "Results: 1 update(s) were performed"
     And I visit "/user/logout"
     And I visit "/foobar"
     Then I should not see "Access denied"

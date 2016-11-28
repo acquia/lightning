@@ -1,4 +1,4 @@
-@media @api
+@lightning @media @api
 Feature: Twitter media assets
   A media asset representing a tweet.
 

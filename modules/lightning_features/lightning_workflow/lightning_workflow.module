@@ -1,11 +1,38 @@
 <?php
 
+/**
+ * @file
+ * Provides workflow enhancements for Drupal.
+ */
+
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
+use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
 use Drupal\node\NodeTypeInterface;
-use Drupal\user\Entity\Role;
 use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
+
+/**
+ * Alters a moderation_state form element.
+ *
+ * Workbench Moderation's out-of-the-box UX is kind of awful, so this restores
+ * a measure of sanity by making the moderation_state widget into a select list
+ * and preventing it from messing around with the form's submit buttons.
+ *
+ * @param array $element
+ *   The element to modify.
+ */
+function lightning_workflow_alter_moderation_state(array &$element) {
+  // Allow the user to choose the moderation state.
+  $element['#access'] = TRUE;
+
+  // Show the original labels of the destination states.
+  foreach (array_keys($element['#options']) as $id) {
+    $element['#options'][$id] = ModerationState::load($id)->label();
+  }
+
+  // Do NOT rejigger the form's buttons.
+  unset($element['#process'][0]);
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().
@@ -16,19 +43,10 @@ function lightning_workflow_form_node_form_alter(array &$form, FormStateInterfac
   $mod_info = \Drupal::service('workbench_moderation.moderation_information');
 
   if (isset($form['moderation_state']) && $mod_info->isModeratedEntityForm($form_object)) {
-    // Allow the user to choose the moderation state.
-    $form['moderation_state']['widget'][0]['#access'] = TRUE;
+    lightning_workflow_alter_moderation_state($form['moderation_state']['widget'][0]);
 
-    // Show the original labels of the destination states.
-    foreach (array_keys($form['moderation_state']['widget'][0]['#options']) as $id) {
-      $form['moderation_state']['widget'][0]['#options'][$id] = ModerationState::load($id)->label();
-    }
-
-    // DO NOT rejigger the buttons.
-    array_shift($form['moderation_state']['widget'][0]['#process']);
-
-    // Show the basic 'Save' button, but hide the confusing 'Save as unpublished'
-    // and 'Save and publish' buttons.
+    // Show the basic 'Save' button, but hide the confusing
+    // 'Save as unpublished' and 'Save and publish' buttons.
     $form['actions']['submit']['#access'] = TRUE;
     $form['actions']['publish']['#access'] = $form['actions']['unpublish']['#access'] = FALSE;
     unset($form['actions']['publish']['#dropbutton'], $form['actions']['unpublish']['#dropbutton']);
@@ -45,26 +63,28 @@ function lightning_workflow_form_node_form_alter(array &$form, FormStateInterfac
  */
 function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
   /** @var \Drupal\user\RoleInterface $role */
-  $role = Role::load($node_type->id() . '_creator');
-  if ($role) {
-    $role
-      ->grantPermission('view any unpublished content')
-      ->grantPermission('use draft_draft transition')
-      ->grantPermission('use draft_needs_review transition')
-      ->grantPermission('use needs_review_needs_review transition')
-      ->grantPermission('view latest version')
-      ->save();
-  }
+  user_role_grant_permissions($node_type->id() . '_creator', [
+    'view any unpublished content',
+    'use draft_draft transition',
+    'use draft_needs_review transition',
+    'use needs_review_needs_review transition',
+    'view latest version',
+  ]);
 
-  $role = Role::load($node_type->id() . '_reviewer');
-  if ($role) {
-    $role
-      // @TODO: Not sure if this role should have draft_published access...
-      ->grantPermission('use draft_published transition')
-      ->grantPermission('use needs_review_draft transition')
-      ->grantPermission('use needs_review_published transition')
-      ->grantPermission('use published_published transition')
-      ->save();
+  user_role_grant_permissions($node_type->id() . '_reviewer', [
+    'use draft_published transition',
+    'use needs_review_draft transition',
+    'use needs_review_published transition',
+    'use published_published transition',
+  ]);
+}
+
+/**
+ * Implements hook_views_plugins_field_alter().
+ */
+function lightning_workflow_views_plugins_field_alter(array &$plugins) {
+  if (isset($plugins['node_bulk_form'])) {
+    $plugins['node_bulk_form']['class'] = NodeBulkForm::class;
   }
 }
 
