@@ -5,6 +5,7 @@
  * Contains install and update routines for Lightning.
  */
 
+use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\node\Entity\NodeType;
 use Drupal\user\Entity\Role;
 
@@ -29,6 +30,9 @@ function lightning_core_install() {
         ->invoke('lightning_core', 'node_type_insert', [$node_type]);
     }
   }
+
+  // Mark core view modes as internal.
+  lightning_core_update_8002();
 }
 
 /**
@@ -41,4 +45,28 @@ function lightning_core_update_8001() {
     ->getEditable('lightning_core.settings')
     ->setData($values)
     ->save();
+}
+
+/**
+ * Marks certain node view modes as internal.
+ */
+function lightning_core_update_8002() {
+  $view_modes = EntityViewMode::loadMultiple([
+    'node.rss',
+    'node.search_index',
+  ]);
+  /** @var \Drupal\Core\Entity\EntityViewModeInterface $view_mode */
+  foreach ($view_modes as $view_mode) {
+    $view_mode->setThirdPartySetting('lightning_core', 'internal', TRUE)
+      ->save();
+  }
+}
+
+/**
+ * Marks all entity token view modes as internal.
+ */
+function lightning_core_update_8003() {
+  if (\Drupal::moduleHandler()->moduleExists('token')) {
+    lightning_core_modules_installed(['token']);
+  }
 }
