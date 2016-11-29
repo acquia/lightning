@@ -10,6 +10,7 @@ use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Entity\EntityDisplayModeInterface;
 use Drupal\Core\Entity\EntityFormInterface;
+use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
@@ -26,10 +27,10 @@ function lightning_core_help($route_name, RouteMatchInterface $route_match) {
   $matched = [];
   // Parse the route name to figure out what display mode we're looking at:
   // 0 is the entire string.
-  // 1 is either 'view' or 'form'.
+  // 1 is 'view' or 'form'.
   // 2 is the ID of the affected entity type.
-  // 3 is either 'view_mode' or 'form_mode'.
-  // 4 is either 'view' or 'form'.
+  // 3 is 'view_mode' or 'form_mode'.
+  // 4 is 'view' or 'form'.
   $expr = '/^entity\.entity_(view|form)_display\.([a-z_]+)\.((view|form)_mode)$/';
 
   if (preg_match($expr, $route_name, $matched)) {
@@ -42,6 +43,25 @@ function lightning_core_help($route_name, RouteMatchInterface $route_match) {
 
     if ($description) {
       return '<p>' . $description . '</p>';
+    }
+  }
+}
+
+/**
+ * Implements hook_modules_installed().
+ */
+function lightning_core_modules_installed(array $modules) {
+  if (in_array('token', $modules)) {
+    $view_modes = [];
+    foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type) {
+      $view_modes[] = $entity_type->id() . '.token';
+    }
+
+    $view_modes = EntityViewMode::loadMultiple($view_modes);
+    /** @var \Drupal\Core\Entity\EntityViewModeInterface $view_mode */
+    foreach ($view_modes as $view_mode) {
+      $view_mode->setThirdPartySetting('lightning_core', 'internal', TRUE)
+        ->save();
     }
   }
 }
