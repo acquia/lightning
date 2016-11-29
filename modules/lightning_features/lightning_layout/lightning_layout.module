@@ -5,6 +5,8 @@
  * Contains layout functionality for Lightning.
  */
 
+use Drupal\Core\Entity\Entity\EntityViewMode;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\lightning_layout\Plugin\Field\FieldWidget\PanelizerWidget as LightningPanelizerWidget;
 use Drupal\node\NodeTypeInterface;
@@ -23,23 +25,42 @@ function lightning_layout_field_widget_info_alter(array &$info) {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function lightning_layout_form_entity_view_display_edit_form_alter(array &$form) {
+function lightning_layout_form_entity_view_display_edit_form_alter(array &$form, FormStateInterface $form_state) {
   $form['#process'][] = 'lightning_layout_tweak_panelizer_ui';
 }
 
 /**
- * Makes minor tweaks to Panelizer stuff on an entity view display form.
+ * Tweaks the Panelizer stuff on an entity view display form.
  *
  * @param array $element
  *   The form element containing Panelizer's entity view display options.
+ * @param FormStateInterface $form_state
+ *   The current form state.
  *
  * @return array
  *   The processed element.
  */
-function lightning_layout_tweak_panelizer_ui(array $element) {
-  // If there are no Panelizer layouts, Panelizer is not enabled for this view
-  // display, so there's nothing to do.
-  if (empty($element['panelizer']['displays'])) {
+function lightning_layout_tweak_panelizer_ui(array $element, FormStateInterface $form_state) {
+  /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display */
+  $display = $form_state->getFormObject()->getEntity();
+
+  $panelizer_enabled = $display->getThirdPartySetting('panelizer', 'enable');
+
+  // Check if this display is for an internal view mode.
+  $view_mode = EntityViewMode::load($display->getTargetEntityTypeId() . '.' . $display->getMode());
+  if ($view_mode) {
+    $internal = $view_mode->getThirdPartySetting('lightning_core', 'internal');
+    if ($internal) {
+      // If it's not already applied, don't allow Panelizer.
+      $element['panelizer']['#access'] = $panelizer_enabled;
+
+      // Inform the user what's up.
+      drupal_set_message(t('This display is internal and will not be seen by normal users.'), 'warning');
+    }
+  }
+
+  // If Panelizer isn't enabled, there's nothing else to do.
+  if (empty($panelizer_enabled)) {
     return $element;
   }
 
