@@ -27,10 +27,7 @@ trait SourceFieldTrait {
    *   The source field config entity.
    */
   protected function getSourceField(MediaInterface $entity) {
-    $type_config = $entity->getType()->getConfiguration();
-    $id = $entity->getEntityTypeId() . '.' . $entity->bundle() . '.' . $type_config['source_field'];
-
-    return $this->fieldStorage->load($id);
+    return $this->getSourceFieldForBundle($entity->bundle->entity);
   }
 
   /**
@@ -44,7 +41,7 @@ trait SourceFieldTrait {
    */
   protected function getSourceFieldForBundle(MediaBundleInterface $bundle) {
     $type_config = $bundle->getType()->getConfiguration();
-    if (!isset($type_config['source_field'])) {
+    if (empty($type_config['source_field'])) {
       return NULL;
     }
     $id = 'media.' . $bundle->id() . '.' . $type_config['source_field'];
