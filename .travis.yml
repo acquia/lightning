@@ -95,8 +95,5 @@ script:
   - composer validate --no-check-all --ansi
   - behat --strict --stop-on-failure
 
-after_script:
-  - cat ../../../tmp/selenium.log
-
 matrix:
   fast_finish: true
