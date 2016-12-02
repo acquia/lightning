@@ -23,4 +23,12 @@ interface BundleResolverInterface {
    */
   public function getBundle($input);
 
+  /**
+   * Returns all possible bundles for the field type(s) this plugin supports.
+   *
+   * @return MediaBundleInterface[]
+   *   Applicable media bundles, keyed by ID.
+   */
+  public function getPossibleBundles();
+
 }
