@@ -1,0 +1,85 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.node.full
+    - field.field.node.landing_page.field_meta_tags
+    - field.field.node.landing_page.panelizer
+    - node.type.landing_page
+  module:
+    - metatag
+    - panelizer
+    - user
+third_party_settings:
+  panelizer:
+    enable: true
+    custom: true
+    displays:
+      default:
+        blocks: {  }
+        id: panels_variant
+        uuid: 1a312aa0-75a2-4467-8421-33670a7bd039
+        label: 'Single Column'
+        weight: 0
+        layout: onecol
+        layout_settings: {  }
+        page_title: '[node:title]'
+        storage_type: panelizer_default
+        storage_id: 'node:landing_page:default:default'
+        pattern: panelizer
+        builder: ipe
+        static_context: {  }
+      two_column:
+        blocks: {  }
+        id: panels_variant
+        uuid: 91b9d430-7b91-4a22-ac4d-2e5e0376c6a2
+        label: 'Two Column'
+        weight: 0
+        layout: twocol_stacked
+        layout_settings: {  }
+        page_title: '[node:title]'
+        storage_type: panelizer_default
+        storage_id: 'node:landing_page:default:two_column'
+        pattern: panelizer
+        builder: ipe
+        static_context: {  }
+      three_column:
+        blocks: {  }
+        id: panels_variant
+        uuid: 5af47416-fa98-4dfb-9761-fc497a47a76f
+        label: 'Three Column'
+        weight: 0
+        layout: threecol_25_50_25_stacked
+        layout_settings: {  }
+        page_title: '[node:title]'
+        storage_type: panelizer_default
+        storage_id: 'node:landing_page:default:three_column'
+        pattern: panelizer
+        builder: ipe
+        static_context: {  }
+    allow: true
+    default: default
+_core:
+  default_config_hash: T3lpwHq8vI4f9T3yfh_TXfwg8DkMLNMf5-RYBeWqd_0
+id: node.landing_page.full
+targetEntityType: node
+bundle: landing_page
+mode: full
+content:
+  field_meta_tags:
+    weight: 101
+    label: above
+    settings: {  }
+    third_party_settings: {  }
+    type: metatag_empty_formatter
+  links:
+    weight: 100
+    settings: {  }
+    third_party_settings: {  }
+  workbench_moderation_control:
+    weight: -20
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  panelizer: true
+
