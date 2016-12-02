@@ -21,7 +21,7 @@ class FileUpload extends BundleResolverBase {
   public function getBundle($input) {
     if ($input instanceof FileInterface) {
       foreach ($this->getPossibleBundles() as $bundle) {
-        $field = $this->getSourceField($bundle);
+        $field = $this->getSourceFieldForBundle($bundle);
         $extensions = preg_split('/,?\s+/', $field->getSetting('file_extensions'));
 
         $extension = pathinfo($input->getFilename(), PATHINFO_EXTENSION);
