@@ -39,3 +39,35 @@ function lightning_media_video_inline_entity_form_entity_form_alter(&$entity_for
 function lightning_media_video_entity_extra_field_info() {
   return \Drupal::service('lightning_media.preview.embed_code')->extraFields('video');
 }
+
+/**
+ * Implements hook_ajax_render_alter().
+ */
+function lightning_media_video_ajax_render_alter(array &$data) {
+  if (\Drupal::routeMatch()->getRouteName() == 'embed.preview') {
+    $query = \Drupal::request()->query;
+
+    if ($query->has('editor')) {
+      $style_sheets = [];
+
+      foreach ($data as $command) {
+        // Any CSS being added should be replicated in the editor.
+        if ($command['command'] == 'add_css') {
+          $matched = [];
+          // Assume (perhaps naively) that all the style sheets are embedded as
+          // <link /> tags.
+          preg_match_all('/href="([^"]+)"/', $command['data'], $matched);
+          $style_sheets = array_merge($style_sheets, $matched[1]);
+        }
+      }
+
+      // Gingerly check if the AJAX command class exists, so that we don't need
+      // to establish a hard dependency on CKEditor.
+      $command_class = '\Drupal\ckeditor\Ajax\AddStyleSheetCommand';
+      if ($style_sheets && class_exists($command_class)) {
+        $command = new $command_class($query->get('editor'), $style_sheets);
+        $data[] = $command->render();
+      }
+    }
+  }
+}
