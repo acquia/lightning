@@ -8,6 +8,7 @@
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
+use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityDisplayModeInterface;
 use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\Entity\EntityViewMode;
@@ -17,8 +18,40 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
+use Drupal\search_api\Entity\Index;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function _lightning_core_entity_type_alter(array &$entity_types) {
+  $index = Index::load('content_entities');
+  if (empty($index)) {
+    return;
+  }
+
+  $data_sources = $index->getDatasources();
+  /** @var \Drupal\Core\Entity\EntityTypeInterface $entity_type */
+  foreach ($entity_types as $id => $entity_type) {
+    if ($entity_type instanceof ContentEntityTypeInterface && $entity_type->hasViewBuilderClass()) {
+      $plugin_id = 'entity:' . $id;
+
+      if (empty($data_sources[$plugin_id])) {
+        $plugin = \Drupal::service('plugin.manager.search_api.datasource')
+          ->createInstance($plugin_id);
+
+        $index->addDatasource($plugin);
+
+        $field = $index->getField('label');
+        $configuration = $field->getConfiguration();
+        $configuration['fields'][] = $plugin_id . '/' . $entity_type->getKey('label');
+        $field->setConfiguration($configuration);
+      }
+    }
+  }
+  $index->save();
+}
 
 /**
  * Implements hook_help().
