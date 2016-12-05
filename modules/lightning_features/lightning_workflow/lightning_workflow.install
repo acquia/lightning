@@ -13,22 +13,9 @@ use Drupal\views\Entity\View;
  * Implements hook_install().
  */
 function lightning_workflow_install() {
-  $module = 'workbench_moderation';
-
   // Enable moderation for the Page content type, if it exists.
   $page_type = NodeType::load('page');
   if ($page_type) {
-    $page_type
-      ->setThirdPartySetting($module, 'enabled', TRUE)
-      ->setThirdPartySetting($module, 'allowed_moderation_states', [
-        'archived',
-        'draft',
-        'needs_review',
-        'published',
-      ])
-      ->setThirdPartySetting($module, 'default_moderation_state', 'draft')
-      ->save();
-
     /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
     $form_display = EntityFormDisplay::load('node.page.default');
     if ($form_display) {
