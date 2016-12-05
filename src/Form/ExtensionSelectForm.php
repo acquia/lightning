@@ -7,9 +7,9 @@ use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
-use Drupal\Core\Render\Element\Checkboxes;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\lightning\Extender;
+use Drupal\lightning\FormHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,6 +39,13 @@ class ExtensionSelectForm extends FormBase {
   protected $infoParser;
 
   /**
+   * The form helper.
+   *
+   * @var \Drupal\lightning\FormHelper
+   */
+  protected $formHelper;
+
+  /**
    * ExtensionSelectForm constructor.
    *
    * @param \Drupal\lightning\Extender $extender
@@ -49,12 +56,15 @@ class ExtensionSelectForm extends FormBase {
    *   The info parser service.
    * @param \Drupal\Core\StringTranslation\TranslationInterface $translator
    *   The string translation service.
+   * @param \Drupal\lightning\FormHelper $form_helper
+   *   The form helper.
    */
-  public function __construct(Extender $extender, $root, InfoParserInterface $info_parser, TranslationInterface $translator) {
+  public function __construct(Extender $extender, $root, InfoParserInterface $info_parser, TranslationInterface $translator, FormHelper $form_helper) {
     $this->extender = $extender;
     $this->root = $root;
     $this->infoParser = $info_parser;
     $this->stringTranslation = $translator;
+    $this->formHelper = $form_helper;
   }
 
   /**
@@ -65,7 +75,8 @@ class ExtensionSelectForm extends FormBase {
       $container->get('lightning.extender'),
       $container->get('app.root'),
       $container->get('info_parser'),
-      $container->get('string_translation')
+      $container->get('string_translation'),
+      $container->get('lightning.form_helper')
     );
   }
 
@@ -99,6 +110,7 @@ class ExtensionSelectForm extends FormBase {
 
     $extensions = $this->pluck(
       [
+        'lightning_core',
         'lightning_media',
         'lightning_layout',
         'lightning_workflow',
@@ -143,18 +155,6 @@ class ExtensionSelectForm extends FormBase {
     ];
     $form['experimental']['modules'] = [
       '#type' => 'checkboxes',
-      '#process' => [
-        // Apply normal checkbox processing...
-        [
-          Checkboxes::class,
-          'processCheckboxes',
-        ],
-        // ...and our own special sauce.
-        [
-          __CLASS__,
-          'addExperimentalGate',
-        ],
-      ],
     ];
     $form['actions'] = [
       'continue' => [
@@ -168,6 +168,12 @@ class ExtensionSelectForm extends FormBase {
       '#type' => 'value',
       '#value' => [],
     ];
+
+    $this->formHelper->applyStandardProcessing($form['modules']);
+    $form['modules']['#process'][] = [__CLASS__, 'requireCore'];
+
+    $this->formHelper->applyStandardProcessing($form['experimental']['modules']);
+    $form['experimental']['modules']['#process'][] = [__CLASS__, 'addExperimentalGate'];
 
     foreach ($this->getExtensionInfo() as $key => $info) {
       if (empty($info['experimental'])) {
@@ -217,6 +223,26 @@ class ExtensionSelectForm extends FormBase {
     }
 
     return $form;
+  }
+
+  /**
+   * Forces the Lightning Core extension to be selected.
+   *
+   * Turns the Lightning Core checkbox into a persistent server-side value so
+   * that it is always installed.
+   *
+   * @param array $element
+   *   The set of checkboxes listing the available extensions.
+   *
+   * @return array
+   *   The modified checkboxes.
+   */
+  public static function requireCore(array $element) {
+    $element['lightning_core'] = [
+      '#type' => 'value',
+      '#value' => $element['lightning_core']['#return_value'],
+    ];
+    return $element;
   }
 
   /**

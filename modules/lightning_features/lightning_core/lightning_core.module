@@ -228,18 +228,10 @@ function lightning_core_form_system_modules_alter(array &$form) {
  */
 function lightning_core_form_user_form_alter(array &$form) {
   if (isset($form['account']['roles'])) {
-    $element = &$form['account']['roles'];
+    // Ensure the standard process functions run first.
+    \Drupal::service('lightning.form_helper')
+      ->applyStandardProcessing($form['account']['roles']);
 
-    // Always ensure the standard #process function(s) run first.
-    if (empty($element['#process'])) {
-      $element_info = \Drupal::service('plugin.manager.element_info')
-        ->createInstance($element['#type'])
-        ->getInfo();
-
-      if (isset($element_info['#process'])) {
-        $element['#process'] = $element_info['#process'];
-      }
-    }
     $form['account']['roles']['#process'][] = 'lightning_core_set_role_descriptions';
   }
 }
