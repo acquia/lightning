@@ -13,6 +13,7 @@ use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\lightning_core\FormHelper;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
 use Drupal\user\Entity\Role;
@@ -127,23 +128,12 @@ function array_reorder(array &$values, array $keys) {
  *   The renderable element with all buttons (at all levels) disabled.
  *
  * @internal
+ *
+ * @deprecated
+ *   Use FormHelper::disableButtons() instead.
  */
 function lightning_core_disable_buttons(array $element) {
-  if (isset($element['#type'])) {
-    $element['#access'] = !in_array($element['#type'], [
-      'button',
-      'submit',
-      'image_button',
-    ]);
-  }
-
-  // Recurse into child elements.
-  foreach (Element::children($element) as $key) {
-    if (is_array($element[$key])) {
-      $element[$key] = call_user_func(__FUNCTION__, $element[$key]);
-    }
-  }
-  return $element;
+  return FormHelper::disableButtons($element);
 }
 
 /**
@@ -232,16 +222,9 @@ function lightning_core_form_user_form_alter(array &$form) {
     $element = &$form['account']['roles'];
 
     // Always ensure the standard #process function(s) run first.
-    if (empty($element['#process'])) {
-      $element_info = \Drupal::service('plugin.manager.element_info')
-        ->createInstance($element['#type'])
-        ->getInfo();
+    \Drupal::service('lightning.form_helper')->applyDefaultProcessing($element);
 
-      if (isset($element_info['#process'])) {
-        $element['#process'] = $element_info['#process'];
-      }
-    }
-    $form['account']['roles']['#process'][] = 'lightning_core_set_role_descriptions';
+    $element['#process'][] = 'lightning_core_set_role_descriptions';
   }
 }
 
@@ -350,8 +333,8 @@ function lightning_core_preprocess_block(array &$variables) {
  * @param string $module
  *   (optional) The module which has the default configuration.
  *
- * @deprecated
- *   Use ConfigHelper::create() instead.
+ * @deprecated in Lightning 1.14 and will be removed in Lightning 2.0.0. Use
+ * ConfigHelper::create() instead.
  */
 function lightning_core_create_config($entity_type, $id, $module = 'lightning_core') {
   \Drupal::service('lightning.config_helper')->create($entity_type, $id, $module);
@@ -368,8 +351,8 @@ function lightning_core_create_config($entity_type, $id, $module = 'lightning_co
  * @return array
  *   The config data.
  *
- * @deprecated
- *   Use ConfigHelper::read() instead.
+ * @deprecated in Lightning 1.14 and will be removed in Lightning 2.0.0. Use
+ * ConfigHelper::read() instead.
  */
 function lightning_core_read_config($id, $module = 'lightning_core') {
   return \Drupal::service('lightning.config_helper')->read($id, $module);

@@ -19,6 +19,11 @@ services:
       - '@entity_type.manager'
       - '@module_handler'
 
+  lightning.form_helper:
+    class: '\Drupal\lightning_core\FormHelper'
+    arguments:
+      - '@element_info'
+
   form_decorator:
     class: '\Drupal\lightning_core\FormDecorator'
     tags:
