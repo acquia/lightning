@@ -13,6 +13,12 @@ services:
       -
         name: event_subscriber
 
+  lightning.config_helper:
+    class: '\Drupal\lightning_core\ConfigHelper'
+    arguments:
+      - '@entity_type.manager'
+      - '@module_handler'
+
   form_decorator:
     class: '\Drupal\lightning_core\FormDecorator'
     tags:
