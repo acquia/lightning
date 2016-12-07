@@ -9,6 +9,7 @@ use Drupal\Component\Plugin\Exception\PluginNotFoundException;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\Core\Entity\EntityStorageException;
+use Drupal\lightning_core\Element;
 use Drupal\node\Entity\NodeType;
 
 /**
@@ -247,15 +248,12 @@ function _lightning_layout_update_panelizer_default_displays($display_id) {
  *
  * @return array
  *   The merged arrays.
+ *
+ * @deprecated in Lightning 1.14 and will be removed in Lightning 2.0.0. Use
+ * Element::mergeCanadian() instead.
  */
 function array_merge_canadian(array $a, array $b) {
-  $a += $b;
-  foreach ($a as $k => $v) {
-    if (is_array($v) && isset($b[$k]) && is_array($b[$k])) {
-      $a[$k] = call_user_func(__FUNCTION__, $a[$k], $b[$k]);
-    }
-  }
-  return $a;
+  return Element::mergeCanadian($a, $b);
 }
 
 /**

@@ -6,9 +6,49 @@ services:
       - '@entity_type.manager'
 
   lightning.route_subscriber:
-    class: Drupal\lightning_core\Routing\RouteSubscriber
+    class: 'Drupal\lightning_core\Routing\RouteSubscriber'
     arguments:
       - '@entity_type.manager'
     tags:
       -
         name: event_subscriber
+
+  lightning.config_helper:
+    class: '\Drupal\lightning_core\ConfigHelper'
+    arguments:
+      - '@entity_type.manager'
+      - '@module_handler'
+
+  lightning.form_helper:
+    class: '\Drupal\lightning_core\FormHelper'
+    arguments:
+      - '@element_info'
+
+  form_decorator:
+    class: '\Drupal\lightning_core\FormDecorator'
+    tags:
+      -
+        name: service_collector
+        tag: form_decorator
+        call: addDecorator
+
+  form_decorator.create_view_mode:
+    class: '\Drupal\lightning_core\Form\Decorator\CreateViewMode'
+    arguments:
+      - '@string_translation'
+      - '@current_route_match'
+      - '@entity_type.manager'
+    tags:
+      -
+        name: form_decorator
+
+  form_decorator.config_entity_descriptions:
+    class: '\Drupal\lightning_core\Form\Decorator\ConfigEntityDescriptions'
+    arguments:
+      - '@cache_tags.invalidator'
+      - '@string_translation'
+      - '@lightning.form_helper'
+      - '@entity_type.manager'
+    tags:
+      -
+        name: form_decorator
