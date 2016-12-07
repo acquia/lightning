@@ -10,6 +10,7 @@ use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\lightning_core\Element;
 use Drupal\lightning_core\FormHelper;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
@@ -105,13 +106,12 @@ function lightning_core_entity_load(array $entities) {
  *   The array to reorder.
  * @param array $keys
  *   The keys, in their desired order.
+ *
+ * @deprecated in Lightning 1.14 and will be removed in Lightning 2.0.0. Use
+ * Element::order() instead.
  */
 function array_reorder(array &$values, array $keys) {
-  $keys = array_values($keys);
-
-  uksort($values, function ($a, $b) use ($keys) {
-    return array_search($a, $keys) - array_search($b, $keys);
-  });
+  Element::order($values, $keys);
 }
 
 /**
@@ -123,10 +123,8 @@ function array_reorder(array &$values, array $keys) {
  * @return array
  *   The renderable element with all buttons (at all levels) disabled.
  *
- * @internal
- *
- * @deprecated
- *   Use FormHelper::disableButtons() instead.
+ * @deprecated in Lightning 1.14, and will be removed in Lightning 2.0.0. Use
+ * FormHelper::disableButtons() instead.
  */
 function lightning_core_disable_buttons(array $element) {
   return FormHelper::disableButtons($element);
