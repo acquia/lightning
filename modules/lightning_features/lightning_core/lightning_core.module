@@ -151,7 +151,10 @@ function lightning_core_disable_buttons(array $element) {
 /**
  * Implements hook_form_alter().
  */
-function lightning_core_form_alter(array &$form, FormStateInterface $form_state) {
+function lightning_core_form_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  \Drupal::service('form_decorator')
+    ->alterForm($form_id, $form, $form_state);
+
   $form_object = $form_state->getFormObject();
 
   if ($form_object instanceof EntityFormInterface) {
