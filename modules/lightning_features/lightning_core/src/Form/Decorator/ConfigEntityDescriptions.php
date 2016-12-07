@@ -153,6 +153,7 @@ class ConfigEntityDescriptions implements FormDecoratorInterface {
       'entity_view_mode_edit_form' => 'describeEntity',
       'entity_form_mode_add_form' => 'describeEntity',
       'entity_form_mode_edit_form' => 'describeEntity',
+      'user_role_form' => 'describeEntity',
       'user_form' => 'alterUserForm',
     ];
   }
