@@ -1,0 +1,11 @@
+services:
+  form_decorator.panelizer_ui:
+    class: '\Drupal\lightning_layout\Form\Decorator\PanelizerUiEnhancer'
+    arguments:
+      - '@current_route_match'
+      - '@entity_type.manager'
+      - '@url_generator'
+      - '@string_translation'
+    tags:
+      -
+        name: form_decorator
