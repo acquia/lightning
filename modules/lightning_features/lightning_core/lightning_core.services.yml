@@ -41,3 +41,14 @@ services:
     tags:
       -
         name: form_decorator
+
+  form_decorator.config_entity_descriptions:
+    class: '\Drupal\lightning_core\Form\Decorator\ConfigEntityDescriptions'
+    arguments:
+      - '@cache_tags.invalidator'
+      - '@string_translation'
+      - '@lightning.form_helper'
+      - '@entity_type.manager'
+    tags:
+      -
+        name: form_decorator
