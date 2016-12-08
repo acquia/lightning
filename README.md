@@ -103,13 +103,6 @@ will not need to do this.
 
 ## Known Issues
 
-### Media
-
-* If you upload an image into an image field using the new image browser, you
-  can set the image's alt text at upload time, but that text will not be
-  replicated to the image field. This is due to a limitation of Entity Browser's
-  API.
-
 ### Preview
 
 * This functionality relies on Multiversion, which:
