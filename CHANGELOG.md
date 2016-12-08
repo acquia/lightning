@@ -80,8 +80,8 @@
 * Several other modules, including Entity Browser, were updated as well.
   Note that Entity Browser introduced several backwards-incompatible API
   changes, so if you have custom Entity Browser code you may need to
-  update. Be safe and back up your database before running updating to
-  this version of Lightning. (#2778437)
+  update. Be safe and back up your database before updating to this version
+  of Lightning. (#2778437)
 * Views Infinite Scroll was updated to 8.x-1.2. (#2773811)
 * A sanity check was added to prevent fatal errors when preparing extra
   fields for media asset previews. (#2759825)
@@ -133,8 +133,8 @@
 * Drupal core's developer dependencies are now included with Lightning so that
   you can run standard Drupal tests. (Issues #2703009 and #2747953)
 * Lightning now integrates Panelizer's new administrative UI, which allows the
-  creation of default layouts for any view mode of any content type. (Issue
-  #2678240)
+  creation of default layouts for any view mode of any content type.
+  (Issue #2678240)
 * Formalized Lightning's logic for determining dependency version constraints.
   (Issue #2745949)
 * Updates Drupal Core to 8.1.3
