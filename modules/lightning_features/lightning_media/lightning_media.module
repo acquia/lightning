@@ -92,6 +92,39 @@ function lightning_media_entity_type_alter(array &$entity_types) {
 }
 
 /**
+ * Implements hook_field_widget_form_alter().
+ */
+function lightning_media_field_widget_form_alter(&$element, FormStateInterface $form_state, $context) {
+  /** @var \Drupal\Core\Field\FieldItemListInterface $items */
+  $items = $context['items'];
+  if ($items->getFieldDefinition()->getType() === 'image') {
+    $element['#process'][] = 'lightning_media_tweak_image_form';
+  }
+}
+
+/**
+ * Tweaks media field widget form for images.
+ *
+ * @param array $element
+ *   The field widget form element as constructed by the widget form.
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ *   The current state of the form.
+ * @param array $context
+ *   An associative array containing context as documented in
+ *   hook_field_widget_form_alter().
+ *
+ * @return array
+ *   The altered $element value.
+ *
+ * @see lightning_media_field_widget_form_alter()
+ */
+function lightning_media_tweak_image_form($element, FormStateInterface $form_state, $context) {
+  // Hide the "Alternative text" field.
+  $element['alt']['#access'] = FALSE;
+  return $element;
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
