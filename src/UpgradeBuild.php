@@ -188,7 +188,7 @@ final class UpgradeBuild {
      * 8.1.0-beta12 > 1.0.0-beta12
      * 8.12.0-rc22 > 12.0.0-rc22
      */
-    if (preg_match('/^([\^~])?8(\.)?(\d+)?(\.\d+)?(-(alpha|beta|rc)\d+)?(\.\*)?(@(dev|alpha|beta|rc))?/', $version_constraint, $matches)) {
+    if (preg_match('/^([\^~]|[><=!]{1,2})?8(\.)?(\d+)?(\.\d+)?(-(alpha|beta|rc)\d+)?(\.\*)?(@(dev|alpha|beta|rc))?/', $version_constraint, $matches)) {
       /*
        * Group 0. `~8.1.0-alpha1.*@alpha`
        * Group 1. `~`
