@@ -148,19 +148,90 @@ final class UpgradeBuild {
   /**
    * Rewrites a single version constraint.
    *
-   * @param string $version
+   * This code was written by @grasmash for BLT. He is a genius.
+   *
+   * @param string $version_constraint
    *   The version constraint to rewrite.
    *
    * @return string
    *   The rewritten constraint.
    */
-  protected function convertVersion($version) {
-    // Splice out the major core version, preserving the constraint operator.
-    $version = preg_replace('/^([^0-9]*)8\./', '$1', $version);
-    // Append a zero, before the stability suffix.
-    $version = preg_replace('/(-.+)?$/', '.0$1', $version, 1);
+  protected function convertVersion($version_constraint) {
+    /*
+     * 8.* => *
+     */
+    if (preg_match('/^8\.\*$/', $version_constraint)) {
+      return "*";
+    }
 
-    return $version;
+    /*
+     * ~8 => *@stable
+     * ^8 => *@stable
+     */
+    if (preg_match('/^[\^~]8$/', $version_constraint)) {
+      return '*@stable';
+    }
+
+    /*
+     * dev-master => master-dev
+     * dev-something_else#123abc => something_else-dev#123abc
+     */
+    if (preg_match('/^dev-([A-Za-z0-9-_]+)(#[0-9a-f]+)?/', $version_constraint, $matches)) {
+      return $matches[1] . '-dev' . $matches[2];
+    }
+
+    /*
+     * ~8.1.0-alpha1 > ~1.0.0-alpha1
+     * ^8.1.0-alpha1 > ^1.0.0-alpha1
+     * ^8.1.0 > ^1.0
+     * 8.1.0-alpha1 > 1.0.0-alpha1
+     * 8.1.0-beta12 > 1.0.0-beta12
+     * 8.12.0-rc22 > 12.0.0-rc22
+     */
+    if (preg_match('/^([\^~])?8(\.)?(\d+)?(\.\d+)?(-(alpha|beta|rc)\d+)?(\.\*)?(@(dev|alpha|beta|rc))?/', $version_constraint, $matches)) {
+      /*
+       * Group 0. `~8.1.0-alpha1.*@alpha`
+       * Group 1. `~`
+       * Group 2. `.`
+       * Group 3. `1`
+       * Group 4. `.0`
+       * Group 5. `-alpha1`
+       * Group 6. `alpha`
+       * Group 7. `.*`
+       * Group 8. `@alpha`
+       * Group 9. `alpha`
+       */
+
+      $new_version_constraint = $matches[3];
+      if (isset($matches[4])) {
+        $new_version_constraint .= $matches[4];
+      }
+      if (isset($matches[3])) {
+        $new_version_constraint .= '.0';
+      }
+      else {
+        $new_version_constraint .= '*';
+      }
+
+      if (isset($matches[5])) {
+        $new_version_constraint .= $matches[5];
+      }
+      elseif (isset($matches[7])) {
+        $new_version_constraint .= $matches[7];
+      }
+
+      if (isset($matches[8])) {
+        $new_version_constraint .= $matches[8];
+      }
+
+      if (isset($matches[1])) {
+        $new_version_constraint = $matches[1] . $new_version_constraint;
+      }
+
+      return $new_version_constraint;
+    }
+
+    return $version_constraint;
   }
 
   /**
