@@ -15,28 +15,34 @@ default configuration, you must follow the appropriate set(s) of instructions in
 the "Manual update steps" section of this file.
 
 ## Lightning 2
-Lightning 2 has landed! This is the end of the 1.x line. There will be no future
-bug fixes or security updates for Lightning 1.x, so you should update to Lightning
-2 as soon as humanly possible. Goodbye, Lightning 1.x; we knew and loved ye well.
+There will be no future bug fixes or security updates for Lightning 1.x, so you
+should update to Lightning 2 as soon as humanly possible. Goodbye, Lightning
+1.x; we knew and loved ye well.
 
-The good news is that Lightning 2 is a seamless upgrade from Lightning 1.x. But if
-you used Composer to install Lightning, you'll need to take an additional step.
-Lightning 2 uses the official drupal.org package repository, which requires changes
-to your project's root ```composer.json```. We have provided a script which can make
-the requisite changes.
+The good news is that Lightning 2 is a seamless upgrade from Lightning 1.x. The
+only change (in addition to our normal enhancements and bugfixes) is the switch
+to the official Drupal.org packagist. If you use the prebuilt tarball, there are
+no additional update instructions. If you manage your codebase with composer,
+you'll need to take an additional step to switch to the new package repository.
+Lightning 2 uses the official drupal.org package repository. We have provided a
+script which can make the requisite changes to your project's root
+`composer.json`.
 
 To run it, go to your project and do the following:
 
-```
-$ cd docroot/path/to/lightning/profile
-$ composer run upgrade-build
-```
 
-This will search for the nearest ```composer.json``` with a declared dependency on
-the ```drupal/lightning``` package, and alter it to use the official repository.
-Any dependencies in the ```drupal``` vendor namespace (e.g. ```drupal/redirect```)
-will get their version constraint rewritten for compatibility with the official
-repository's format.
+    $ cd docroot/path/to/lightning/profile (usually docroot/profiles/contrib/lightning)
+    $ composer run upgrade-build
+
+
+This will search for the nearest ```composer.json``` with a declared dependency
+on the ```drupal/lightning``` package, and alter it to use the official
+repository. Any dependencies in the ```drupal``` vendor namespace (e.g.
+```drupal/redirect```) will get their version constraint rewritten for
+compatibility with the official repository's format.
+
+For more information on the switch to the official packagist, see our
+[Packagist Switch Announcement](http://lightning.acquia.com/blog/packagist-switch).
 
 ## Updating Lightning
 
