@@ -54,12 +54,11 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
-## 1.12 to 1.13
-Lightning now includes the Diff module and installs it by default on new sites.
-To avoid unexpected changes for existing users, we decided not to automatically
-install it as part of the 1.13 update path.
-
+## 1.13 to 1.14
 * Install the Diff module.
+
+## 1.12 to 1.13
+There are no manual update steps for this version.
 
 ## 1.11 to 1.12
 There are no manual update steps for this version.

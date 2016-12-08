@@ -1,4 +1,4 @@
-@lightning @preview @api @experimental
+@lightning @preview @api @experimental @errors
 Feature: Workspaces
 
   Scenario: Locking a workspace by publishing it

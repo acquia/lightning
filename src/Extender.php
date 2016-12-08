@@ -66,6 +66,17 @@ class Extender {
   }
 
   /**
+   * Returns the list of Lightning sub-components that should NOT be installed.
+   *
+   * @return string[]
+   *   The sub-components to exclude.
+   */
+  public function getExcludedComponents() {
+    $info = $this->getInfo();
+    return isset($info['exclude_components']) ? $info['exclude_components'] : [];
+  }
+
+  /**
    * Returns the list of additional modules to enable.
    *
    * @return string[]

@@ -134,6 +134,9 @@ class FileUpload extends EntityFormProxy {
         [ManagedFile::class, 'processManagedFile'],
         [$this, 'processInitialFileElement'],
       ],
+      '#upload_validators' => [
+        'file_validate_extensions' => [$this->getAllowedFileUploadExtensions()],
+      ],
     );
 
     return $form;
@@ -313,6 +316,23 @@ class FileUpload extends EntityFormProxy {
 
     $command = new InvokeCommand($selector, 'empty');
     return $response->addCommand($command);
+  }
+
+  /**
+   * Returns a list of acceptable file extensions for the file upload field.
+   *
+   * @return array
+   *   The list of acceptable file extensions.
+   */
+  protected function getAllowedFileUploadExtensions() {
+    $extensions = [];
+    $possible_bundles = $this->bundleResolver->getPossibleBundles();
+    foreach ($possible_bundles as $bundle) {
+      $field = $this->getSourceFieldForBundle($bundle);
+      $extensions = array_merge($extensions, preg_split('/,?\s+/', $field->getSetting('file_extensions')));
+    }
+
+    return implode(' ', array_unique($extensions));
   }
 
   /**

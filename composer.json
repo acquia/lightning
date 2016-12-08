@@ -6,7 +6,7 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "drush/drush": "^9.0",
+        "drush/drush": "^8.0",
         "drupal/drupal-extension": "^3.2",
         "drupal-composer/drupal-scaffold": "^2.0.0",
         "behat/behat": "^3.0",
@@ -43,9 +43,12 @@
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
     },
     "extra": {
+        "packagist.drupal-composer.org": {
+            "discover-make-files": false
+        },
         "installer-paths": {
             "docroot/core": [
-                "drupal/core"
+                "type:drupal-core"
             ],
             "modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -60,7 +63,7 @@
                 "2700597 - Explicitly set the Panels IPE URL root when saving in Panelizer":
                 "https://www.drupal.org/files/issues/panelizer-ipe-url-root-handling.patch",
                 "2664682 - Implement admin UI for editing Panelizer defaults":
-                "https://www.drupal.org/files/issues/2664682-89.patch",
+                "https://www.drupal.org/files/issues/panelizer-2664682-93.patch",
                 "2793841 - Properly integrate with Panels IPE":
                 "https://www.drupal.org/files/issues/panelizer-panels-ipe-tempstore-id.patch"
             },
@@ -79,14 +82,6 @@
                 "https://www.drupal.org/files/issues/2668006-2.patch",
                 "2780691 - Incorrect EntityRevision paramconverter service definition causes a fatal error":
                 "https://www.drupal.org/files/issues/workbench_moderation-invalid_service_definition.patch"
-            },
-            "drush/drush": {
-                "Adding composer.json support to make-convert command":
-                "https://github.com/drush-ops/drush/commit/ce82b946d49b09cd33da5ca84feb24a6c35f8f8e.patch",
-                "The batch table may not exist by the time _drush_backend_batch_process() is called in 8.x-1.x":
-                "https://github.com/drush-ops/drush/commit/c389aebb7d3e26ff0f544684d8b3ec3528107e55.diff",
-                "Fix composer branch-alias constraint":
-                "https://github.com/drush-ops/drush/commit/83436c8ea505223a1868dce130d4ca1b4e558711.diff"
             },
             "drupal/multiversion": {
                 "2822915 - Migration source plugin makes bad assumptions that can lead to data loss":
@@ -133,7 +128,7 @@
         "drupal/workspace": "8.1.0-alpha4",
         "drupal/replication": "8.1.0-alpha5",
         "drupal/key_value": "^8.1.0",
-        "drupal/entity_browser": "8.1.0-alpha10",
+        "drupal/entity_browser": "^8.1.0",
         "drupal/views_infinite_scroll": "^8.1.1",
         "drupal/media_entity_document": "^8.1.0",
         "drupal/video_embed_field": "^8.1.0",

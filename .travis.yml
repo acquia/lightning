@@ -13,18 +13,14 @@ php:
   - 5.6
 env:
   - VERSION=HEAD
+  - VERSION=1.13
   - VERSION=1.12
   - VERSION=1.11
   - VERSION=1.10
-  - VERSION=1.06
 
 addons:
   apt:
     packages:
-    # Trusty does not include MySQL by default.
-    - mysql-server-5.6
-    - mysql-client-core-5.6
-    - mysql-client-5.6
     # Dependencies for Chrome.
     - libappindicator1
     - fonts-liberation
@@ -62,8 +58,8 @@ install:
   # composer install should fail on bad patches.
   - export COMPOSER_EXIT_ON_PATCH_FAILURE=1
 
-  # Create the MySQL database and increase the timeout (?)
-  - mysql -u root -e 'CREATE DATABASE drupal; SET GLOBAL wait_timeout = 5400;'
+  # Create the MySQL database and add a user for testing.
+  - mysql -u root -e "CREATE DATABASE drupal; CREATE USER 'lightning'@'localhost' IDENTIFIED BY 'lightning'; GRANT ALL ON drupal.* TO 'lightning'@'localhost';"
 
   # PHP conf tweaks
   - echo 'max_execution_time = 120' >> drupal.php.ini;
@@ -76,9 +72,9 @@ install:
   # Build the Lightning code base.
   - composer install
   # Install Lightning cleanly so that settings.php will be created properly.
-  - phing install -Ddb.database=drupal
+  - phing install -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1
   # Import the fixture, if it exists.
-  - phing remember -Dversion=$VERSION -Ddb.database=drupal
+  - phing remember -Dversion=$VERSION -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1
   - cd docroot
   - drush cache-rebuild
   # Install Diff and Lightning Preview, if not already installed.
@@ -88,6 +84,7 @@ install:
 
 before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
+  - jdk_switcher use oraclejdk8
   # Start Selenium and dump its ginormous log into a temporary file.
   - mkdir ../tmp
   - selenium-server-standalone -port 4444 -log ../tmp/selenium2.log &

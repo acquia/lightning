@@ -13,19 +13,14 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class BundleResolverBase extends PluginBase implements BundleResolverInterface, ContainerFactoryPluginInterface {
 
+  use SourceFieldTrait;
+
   /**
    * The media bundle entity storage handler.
    *
    * @var \Drupal\Core\Entity\EntityStorageInterface
    */
   protected $bundleStorage;
-
-  /**
-   * The configurable field entity storage handler.
-   *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
-   */
-  protected $fieldStorage;
 
   /**
    * BundleResolverBase constructor.
@@ -58,35 +53,17 @@ abstract class BundleResolverBase extends PluginBase implements BundleResolverIn
   }
 
   /**
-   * Returns all possible bundles for the field type(s) this plugin supports.
-   *
-   * @return MediaBundleInterface[]
-   *   Applicable media bundles, keyed by ID.
+   * {@inheritdoc}
    */
-  protected function getPossibleBundles() {
+  public function getPossibleBundles() {
     $plugin_definition = $this->getPluginDefinition();
 
     $filter = function (MediaBundleInterface $bundle) use ($plugin_definition) {
-      $field = $this->getSourceField($bundle);
+      $field = $this->getSourceFieldForBundle($bundle);
       return $field ? in_array($field->getType(), $plugin_definition['field_types']) : FALSE;
     };
 
     return array_filter($this->bundleStorage->loadMultiple(), $filter);
-  }
-
-  /**
-   * Returns the source field for a media bundle.
-   *
-   * @param \Drupal\media_entity\MediaBundleInterface $bundle
-   *   The media bundle entity.
-   *
-   * @return \Drupal\Core\Field\FieldConfigInterface
-   *   The configurable source field entity.
-   */
-  protected function getSourceField(MediaBundleInterface $bundle) {
-    $type_config = $bundle->getType()->getConfiguration();
-    $id = 'media.' . $bundle->id() . '.' . $type_config['source_field'];
-    return $this->fieldStorage->load($id);
   }
 
 }

@@ -1,4 +1,4 @@
-@lightning @media @api @javascript
+@lightning @media @api @javascript @errors
 Feature: Media browser
 
   Scenario: Uploading an image from within the media browser
