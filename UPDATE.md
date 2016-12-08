@@ -15,17 +15,15 @@ default configuration, you must follow the appropriate set(s) of instructions in
 the "Manual update steps" section of this file.
 
 ## Lightning 2
-Lightning 2 has landed!
+Lightning 2 has landed! This is the end of the 1.x line. There will be no future
+bug fixes or security updates for Lightning 1.x, so you should update to Lightning
+2 as soon as humanly possible. Goodbye, Lightning 1.x; we knew and loved ye well.
 
-As of this release, new features are *only* being added to Lightning 2. Lightning
-1.x will continue to receive security updates and bug fixes, but it will be retired
-by DrupalCon Baltimore, in April 2017.
-
-Lightning 2 is a seamless upgrade from Lightning 1.x, but if you used Composer to
-install Lightning, you'll need to take an additional step. Lightning 2 uses the
-official drupal.org package repository, which requires changes to your project's
-root ```composer.json```. We have provided a script which can make the requisite
-changes.
+The good news is that Lightning 2 is a seamless upgrade from Lightning 1.x. But if
+you used Composer to install Lightning, you'll need to take an additional step.
+Lightning 2 uses the official drupal.org package repository, which requires changes
+to your project's root ```composer.json```. We have provided a script which can make
+the requisite changes.
 
 To run it, go to your project and do the following:
 
