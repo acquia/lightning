@@ -4,3 +4,7 @@ services:
     arguments:
       - '@app.root'
       - '@site.path'
+  lightning.form_helper:
+    class: '\Drupal\lightning\FormHelper'
+    arguments:
+      - '@element_info'
