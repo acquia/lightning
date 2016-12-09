@@ -158,6 +158,28 @@ final class UpgradeBuild {
    */
   protected function convertVersion($version_constraint) {
     /*
+     * 8.2.x-dev => 2.x-dev
+     * 8.x-2.x-dev => 2.x-dev
+     * 8.2.x-dev#a1b2c3 => 2.x-dev#a1b2c3
+     * 8.x-2.x-dev#a1b2c3 => 2.x-dev#a1b2c3
+     */
+    if (preg_match('/-dev(#[0-9a-f]+)?$/', $version_constraint)) {
+      return preg_replace('/^8\.(x-)?/', NULL, $version_constraint);
+    }
+
+    /*
+     * dev-master => master-dev
+     * dev-8.x-1.x => 1.x-dev
+     * dev-8.x-1.x#abc123 => 1.x-dev#abc123
+     * dev-8.2.x => 2.x-dev
+     * dev-8.2.x#abc123 => 2.x-dev#abc123
+     * dev-something_else#123abc => something_else-dev#123abc
+     */
+    if (strpos($version_constraint, 'dev-') === 0) {
+      return preg_replace('/^dev-(8\.(x-)?)?([^#]+)(#[a-f0-9]+)?$/', '$3-dev$4', $version_constraint);
+    }
+
+    /*
      * 8.* => *
      */
     if (preg_match('/^8\.\*$/', $version_constraint)) {
@@ -170,14 +192,6 @@ final class UpgradeBuild {
      */
     if (preg_match('/^[\^~]8$/', $version_constraint)) {
       return '*@stable';
-    }
-
-    /*
-     * dev-master => master-dev
-     * dev-something_else#123abc => something_else-dev#123abc
-     */
-    if (preg_match('/^dev-([A-Za-z0-9-_\.]+)(#[0-9a-f]+)?/', $version_constraint, $matches)) {
-      return $matches[1] . '-dev' . @$matches[2];
     }
 
     /*
