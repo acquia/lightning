@@ -176,8 +176,8 @@ final class UpgradeBuild {
      * dev-master => master-dev
      * dev-something_else#123abc => something_else-dev#123abc
      */
-    if (preg_match('/^dev-([A-Za-z0-9-_]+)(#[0-9a-f]+)?/', $version_constraint, $matches)) {
-      return $matches[1] . '-dev' . $matches[2];
+    if (preg_match('/^dev-([A-Za-z0-9-_\.]+)(#[0-9a-f]+)?/', $version_constraint, $matches)) {
+      return $matches[1] . '-dev' . @$matches[2];
     }
 
     /*
