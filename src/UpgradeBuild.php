@@ -110,6 +110,7 @@ final class UpgradeBuild {
     ];
 
     $this->rootPackage->write($package);
+    $this->io->write('Successfully updated your root composer.json file. Switch back to your project root and run "composer update".');
   }
 
   /**
