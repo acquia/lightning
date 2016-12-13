@@ -20,11 +20,12 @@ Given the following tag: 8.x-1.23:
 
 Lightning typically makes a sprint release every four weeks. We'll also use
 sprint releases to package new minor releases of Drupal Core with Lightning as
-they become available.
+they become available. When this happens, we will also increment the feature
+release/minor version number of Lightning - about once every six months.
 
 Starting with the 2.x branch of lightning, we will also push proper [SemVer tags](http://semver.org/)
 to GitHub which is the source for the Main PHP Packagist where [Lightning Project](https://github.com/acquia/lightning-project)
-will fetch Lightning. So you can should regular SemVer tags in your root
+will fetch Lightning. So you  should regular SemVer tags in your root
 composer.json file as long as you:
 
 1. Have the official Drupal.org packagist defined
@@ -44,5 +45,5 @@ For example:
         "acquia/lightning": "~2.0.0"
     },
 
-If you used the update script provided in Lightning 1.14, your root
-composer.json file should have been automatically converted for you.
+If you used the update script provided in Lightning 1.14 to update to 2.0.0,
+your root composer.json file should have been automatically converted for you.
