@@ -54,6 +54,19 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+## 1.14 to 2.0.0
+Once you have followed the instructions contained in 1.14 to update to 2.0.0,
+there are no further manual update steps.
+
+## 1.13 to 1.14
+There are no manual update steps for this version. However, Lightning 1.14
+contains a script which will modify your root project's composer.json file in
+order to switch your project to the official Drupal.org Packagist and up date
+you to Lightning 2.0.0.
+
+If you use the tarball to manage your codebase, you can update directly to the
+2.x branch with no manual update steps.
+
 ## 1.12 to 1.13
 There are no manual update steps for this version.
 
