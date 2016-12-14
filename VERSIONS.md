@@ -13,18 +13,37 @@ Given the following tag: 8.x-1.23:
 |       |                              |
 |-------|------------------------------|
 | __8__ | Major version of Drupal Core |
-| __x__ | Works with any minor version of the indicated Major version of Drupal core |
+| __x__ |  |
 | __1__ | Major version of Lightning |
-| __2__ | Feature release of Lightning |
-| __3__ | Sprint release between feature releases |
+| __2__ | Feature release of Lightning. Also increments with minor core releases. |
+| __3__ | Sprint release between feature releases. |
 
 Lightning typically makes a sprint release every four weeks. We'll also use
 sprint releases to package new minor releases of Drupal Core with Lightning as
-they become available. Drupal Packagist does not allow patch release specificity
-for Drupal core. That is, even if Lightning were to specify `drupal/core:8.0.5`,
-Drupal Packagist would convert that to `drupal/core:~8.0.5` (note the tilde). As
-a result, Lightning will not make releases for Drupal Core Patch Releases.
+they become available. When this happens, we will also increment the feature
+release/minor version number - about every six months.
 
-Lightning release tags are synchronized with releases of Lightning's [Composer-based installer](https://github.com/acquia/lightning-project).
-Since the installer is not distributed on drupal.org, Lightning version 8.x-1.23
-corresponds with installer version 8.1.2-patch3, and so on.
+Starting with the 2.x branch of lightning, we will also push proper [SemVer tags](http://semver.org/)
+to GitHub which is the source for the Main PHP Packagist where [Lightning Project](https://github.com/acquia/lightning-project)
+will fetch Lightning. So you can should regular SemVer tags in your root
+composer.json file as long as you:
+
+1. Have the official Drupal.org packagist defined
+   (https://packages.drupal.org/8)
+2. Namespace `lightning` with `acquia` and not `drupal` so it knows to fetch it
+   from the main Packagist.
+
+For example:
+
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require": {
+        "acquia/lightning": "~2.0.0"
+    },
+
+If you used the update script provided in Lightning 1.14, your root
+composer.json file should have been automatically converted for you.

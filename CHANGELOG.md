@@ -1,3 +1,21 @@
+## 1.14
+* Added Panelizer support for view mode descriptions. (Issue #2828638)
+* Tarball releases are now built with contrib versions from drupal.org and not
+  git (Issue #2827227)
+* Updated Panelizer patch to fix a problem where it did not properly define its
+  dependency on Field UI (GitHub #226)
+* Improved the author-facing Panelizer experience by implementing "Internal"
+  View Modes for which Panelizer is always disabled. (GitHub #194 & 223)
+* Fixed a bug where Lightning assumptions + certain contrib modules would cause
+  an infinite loop. (Issue #2831550)
+* Included a script that will convert your project's root composer.json file to
+  use the official Drupal.org packagist and update your project to Lightning
+  2.0.0 which also uses the official Packagist. (See: [Lightning Packagist Switch](http://lightning.acquia.com/blog/packagist-switch))
+* Lightning no longer provides default content for the Shortcut menu.
+  (Issue #2834874)
+* Made it possible for modules and themes to pass CSS to a CKEditor instance.
+  (Issue #2729377)
+  
 ## 1.13
 * Tests now ensure that composer.lock is kept up to date. (GitHub #132)
 * The page title block is now properly placed in the Seven theme. (GitHub #190)
