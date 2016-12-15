@@ -257,7 +257,7 @@ final class UpgradeBuild {
     $lock = $reader->read();
 
     foreach ($lock['packages'] as $package) {
-      if ($this->isUnofficial($package['notification-url'])) {
+      if (isset($package['notification-url']) && $this->isUnofficial($package['notification-url'])) {
         $this->drupalPackages[] = $package['name'];
       }
     }
