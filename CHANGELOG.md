@@ -1,3 +1,6 @@
+## 1.15
+* Replaced test files with generic Lightning logos. (Issue #2836442)
+
 ## 1.14
 * Added Panelizer support for view mode descriptions. (Issue #2828638)
 * Tarball releases are now built with contrib versions from drupal.org and not
