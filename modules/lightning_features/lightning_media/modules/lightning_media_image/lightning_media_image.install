@@ -57,7 +57,7 @@ function lightning_media_image_update_8003() {
     return;
   }
 
-  $display_id = $view->addDisplay('entity_browser', 'Image Browser');
+  $display_id = $view->addDisplay('entity_browser', 'Image Browser', 'image_browser');
   $display = &$view->getDisplay($display_id);
   $display = array_merge($display, array(
     'display_options' =>
