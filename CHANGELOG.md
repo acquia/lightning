@@ -1,3 +1,6 @@
+## 2.0.1
+* Replaced test files with generic Lightning logos. (Issue #2836442)
+
 ##  2.0.0
 * Switched to the official Drupal.org packagist.
 
