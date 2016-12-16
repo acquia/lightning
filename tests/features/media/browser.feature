@@ -14,11 +14,11 @@ Feature: Media browser
   Scenario: Uploading a document from within the media browser
     Given I am logged in as a user with the media_manager role
     When I visit "/entity-browser/iframe/media_browser"
-    And I upload "internet.pdf"
-    And I enter "A rant about the Internet" for "Media name"
+    And I upload "test.pdf"
+    And I enter "A test file" for "Media name"
     And I press "Place"
     And I visit "/admin/content/media"
-    Then I should see "A rant about the Internet"
+    Then I should see "A test file"
     And I queue the latest media entity for deletion
 
   Scenario: Creating a YouTube video from within the media browser
