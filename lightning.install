@@ -39,6 +39,9 @@ function lightning_install() {
   // Allow authenticated users to use shortcuts.
   user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, ['access shortcuts']);
 
+  // Grant permission to use contact form(s).
+  lightning_update_8006();
+
   // Set the default and admin theme.
   \Drupal::configFactory()
     ->getEditable('system.theme')
@@ -504,6 +507,24 @@ function lightning_update_8003() {
 function lightning_update_8004() {
   require_once __DIR__ . '/.entity-helper.php';
   \Drupal::service('module_installer')->install(['entity']);
+}
+
+/**
+ * Installs Contact Storage.
+ */
+function lightning_update_8005() {
+  if (!\Drupal::moduleHandler()->moduleExists('contact_storage')) {
+    \Drupal::service('module_installer')->install(['contact_storage']);
+  }
+}
+
+/**
+ * Grants permission to use contact form(s).
+ */
+function lightning_update_8006() {
+  $permissions = ['access site-wide contact form'];
+  user_role_grant_permissions(RoleInterface::ANONYMOUS_ID, $permissions);
+  user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, $permissions);
 }
 
 /**
