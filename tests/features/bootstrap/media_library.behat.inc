@@ -137,7 +137,13 @@ class MediaLibrarySubContext extends DrupalSubContextBase {
    * @When I enter embed code :code
    */
   public function embed($code) {
-    $this->minkContext->clickLink('Create Embed');
+    // Activate the 'Create embed' tab. We cannot use the link text because it
+    // may change between versions of Lightning (as in commit 48fa57e), but the
+    // UUID won't.
+    $this->assertSession()
+      ->elementExists('css', 'nav.eb-tabs ul li a[data-button-id="edit-tab-selector-8b142f33-59d1-47b1-9e3a-4ae85d8376fa"]')
+      ->click();
+
     $this->minkContext->fillField('embed_code', $code);
     // The change event, which triggers AJAX, is fired automatically after 600
     // milliseconds.
