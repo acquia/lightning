@@ -1,5 +1,5 @@
 {
-    "name": "drupal/lightning",
+    "name": "acquia/lightning",
     "description": "The best of Drupal, curated by Acquia",
     "type": "drupal-profile",
     "license": "GPL-2.0+",
@@ -18,7 +18,7 @@
         "mikey179/vfsStream": "~1.2",
         "phpunit/phpunit": "~4.8",
         "symfony/css-selector": "~2.8",
-        "drupal/devel": "^8.0.0",
+        "drupal/devel": "^1.0",
         "squizlabs/php_codesniffer": "2.*",
         "se/selenium-server-standalone": "^2.53"
     },
@@ -28,7 +28,7 @@
     "repositories": [
         {
             "type": "composer",
-            "url": "https://packagist.drupal-composer.org"
+            "url": "https://packages.drupal.org/8"
         }
     ],
     "scripts": {
@@ -97,42 +97,49 @@
             },
             "drupal/core": {
                 "2652138 - ImageFormatter does not support SVGs":
-                "https://www.drupal.org/files/issues/2652138-28.patch"
+                "https://www.drupal.org/files/issues/2652138-28.patch",
+                "2765525 - Add AJAX command to add style sheets to CKEditor instances":
+                "https://www.drupal.org/files/issues/2765525-30-8.2.x.patch"
+            },
+            "drupal/entity_embed": {
+                "2832504 - Send the CKEditor instance ID to the embed.preview route":
+                "https://www.drupal.org/files/issues/2832504-2.patch"
             }
         }
     },
     "require": {
         "cweagans/composer-patches": "^1.5.0",
         "composer/installers": "^1.0",
-        "drupal/core": "~8.2.0",
-        "drupal/embed": "^8.1.0",
-        "drupal/entity_embed": "^8.1.0",
-        "drupal/media_entity": "^8.1.0",
-        "drupal/media_entity_instagram": "^8.1.0",
-        "drupal/media_entity_twitter": "^8.1.3",
-        "drupal/media_entity_image": "^8.1.0",
-        "drupal/ctools": "8.3.0-alpha27",
-        "drupal/panels": "8.3.0-beta5",
-        "drupal/page_manager": "8.1.0-alpha24",
-        "drupal/panelizer": "8.3.0-alpha2",
-        "drupal/scheduled_updates": "8.1.0-alpha5",
-        "drupal/workbench_moderation": "8.1.1",
-        "drupal/acquia_connector": "^8.1.1",
-        "drupal/config_update": "^8.1.1",
-        "drupal/features": "^8.3.0",
-        "drupal/inline_entity_form": "^8.1.0",
-        "drupal/metatag": "^8.1.0",
-        "drupal/token": "^8.1.0",
-        "drupal/pathauto": "^8.1.0",
-        "drupal/multiversion": "8.1.0-alpha12",
-        "drupal/workspace": "8.1.0-alpha4",
-        "drupal/replication": "8.1.0-alpha5",
-        "drupal/key_value": "^8.1.0",
-        "drupal/entity_browser": "^8.1.0",
-        "drupal/views_infinite_scroll": "^8.1.1",
-        "drupal/media_entity_document": "^8.1.0",
-        "drupal/video_embed_field": "^8.1.0",
-        "drupal/diff": "^8.1.0"
+        "drupal/core": "^8.2.0",
+        "drupal/embed": "^1.0",
+        "drupal/entity_embed": "^1.0",
+        "drupal/media_entity": "^1.0",
+        "drupal/media_entity_instagram": "^1.0",
+        "drupal/media_entity_twitter": "^1.3",
+        "drupal/media_entity_image": "^1.0",
+        "drupal/ctools": "3.0.0-alpha27",
+        "drupal/panels": "3.0.0-beta5",
+        "drupal/page_manager": "1.0.0-alpha24",
+        "drupal/panelizer": "3.0.0-alpha2",
+        "drupal/scheduled_updates": "1.0.0-alpha5",
+        "drupal/workbench_moderation": "1.1.0",
+        "drupal/acquia_connector": "^1.1",
+        "drupal/config_update": "^1.1",
+        "drupal/features": "^3.0",
+        "drupal/inline_entity_form": "^1.0",
+        "drupal/metatag": "^1.0",
+        "drupal/token": "^1.0",
+        "drupal-composer/drupal-scaffold": "^2.0.0",
+        "drupal/pathauto": "^1.0",
+        "drupal/entity_browser": "^1.0",
+        "drupal/views_infinite_scroll": "^1.1",
+        "drupal/media_entity_document": "^1.0",
+        "drupal/video_embed_field": "^1.0",
+        "drupal/multiversion": "1.0.0-alpha12",
+        "drupal/workspace": "1.0.0-alpha4",
+        "drupal/replication": "1.0.0-alpha5",
+        "drupal/key_value": "^1.0",
+        "drupal/contact_storage": "^1.0@beta"
     },
     "autoload": {
         "psr-4": {

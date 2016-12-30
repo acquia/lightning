@@ -5,7 +5,6 @@
  * Contains installation and update routines for Lightning Workflow.
  */
 
-use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\node\Entity\NodeType;
 use Drupal\views\Entity\View;
 
@@ -13,49 +12,6 @@ use Drupal\views\Entity\View;
  * Implements hook_install().
  */
 function lightning_workflow_install() {
-  $module = 'workbench_moderation';
-
-  // Enable moderation for the Page content type, if it exists.
-  $page_type = NodeType::load('page');
-  if ($page_type) {
-    $page_type
-      ->setThirdPartySetting($module, 'enabled', TRUE)
-      ->setThirdPartySetting($module, 'allowed_moderation_states', [
-        'archived',
-        'draft',
-        'needs_review',
-        'published',
-      ])
-      ->setThirdPartySetting($module, 'default_moderation_state', 'draft')
-      ->save();
-
-    /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
-    $form_display = EntityFormDisplay::load('node.page.default');
-    if ($form_display) {
-      $weights = array_map(
-        function (array $component) {
-          return $component['weight'];
-        },
-        $form_display->getComponents()
-      );
-
-      sort($weights);
-      $form_display->setComponent('scheduled_update', [
-        'type' => 'inline_entity_form_complex',
-        'weight' => end($weights) + 1,
-        'settings' => [
-          'override_labels' => FALSE,
-          'label_singular' => '',
-          'label_plural' => '',
-          'allow_new' => TRUE,
-          'allow_existing' => FALSE,
-          'match_operator' => 'CONTAINS',
-        ],
-        'third_party_settings' => [],
-      ])->save();
-    }
-  }
-
   // Set up content type-specific permissions.
   lightning_workflow_update_8001();
 

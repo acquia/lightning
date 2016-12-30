@@ -4,7 +4,7 @@ Feature: Media browser
   Scenario: Uploading an image from within the media browser
     Given I am logged in as a user with the media_manager role
     When I visit "/entity-browser/iframe/media_browser"
-    And I upload "puppy.jpg"
+    And I upload "test.jpg"
     And I enter "Foobazzz" for "Media name"
     And I press "Place"
     And I visit "/admin/content/media"
@@ -14,11 +14,11 @@ Feature: Media browser
   Scenario: Uploading a document from within the media browser
     Given I am logged in as a user with the media_manager role
     When I visit "/entity-browser/iframe/media_browser"
-    And I upload "internet.pdf"
-    And I enter "A rant about the Internet" for "Media name"
+    And I upload "test.pdf"
+    And I enter "A test file" for "Media name"
     And I press "Place"
     And I visit "/admin/content/media"
-    Then I should see "A rant about the Internet"
+    Then I should see "A test file"
     And I queue the latest media entity for deletion
 
   Scenario: Creating a YouTube video from within the media browser
@@ -78,7 +78,7 @@ Feature: Media browser
     And I switch to the "entity_browser_iframe_image_browser" frame
     And I wait 10 seconds
     And I click "Upload"
-    And I attach the file "puppy.jpg" to "File"
+    And I attach the file "test.jpg" to "File"
     And I wait for AJAX to finish
     And I enter "Lookit the cutie pie!" for "Media name"
     And I switch to the window

@@ -34,15 +34,22 @@ function lightning_core_help($route_name, RouteMatchInterface $route_match) {
   $expr = '/^entity\.entity_(view|form)_display\.([a-z_]+)\.((view|form)_mode)$/';
 
   if (preg_match($expr, $route_name, $matched)) {
-    $entity_id = $matched[2] . '.' . $route_match->getParameter($matched[3] . '_name');
+    $entity_id = sprintf(
+      '%s.%s',
+      $route_match->getParameter('entity_type_id'),
+      $route_match->getParameter($matched[3] . '_name')
+    );
 
-    $description = \Drupal::entityTypeManager()
+    /** @var \Drupal\Core\Entity\EntityDisplayModeInterface $display_mode */
+    $display_mode = \Drupal::entityTypeManager()
       ->getStorage('entity_' . $matched[3])
-      ->load($entity_id)
-      ->getThirdPartySetting('lightning_core', 'description');
+      ->load($entity_id);
 
-    if ($description) {
-      return '<p>' . $description . '</p>';
+    if ($display_mode) {
+      $description = $display_mode->getThirdPartySetting('lightning_core', 'description');
+      if ($description) {
+        return '<p>' . $description . '</p>';
+      }
     }
   }
 }
@@ -228,18 +235,10 @@ function lightning_core_form_system_modules_alter(array &$form) {
  */
 function lightning_core_form_user_form_alter(array &$form) {
   if (isset($form['account']['roles'])) {
-    $element = &$form['account']['roles'];
+    // Ensure the standard process functions run first.
+    \Drupal::service('lightning.form_helper')
+      ->applyStandardProcessing($form['account']['roles']);
 
-    // Always ensure the standard #process function(s) run first.
-    if (empty($element['#process'])) {
-      $element_info = \Drupal::service('plugin.manager.element_info')
-        ->createInstance($element['#type'])
-        ->getInfo();
-
-      if (isset($element_info['#process'])) {
-        $element['#process'] = $element_info['#process'];
-      }
-    }
     $form['account']['roles']['#process'][] = 'lightning_core_set_role_descriptions';
   }
 }
