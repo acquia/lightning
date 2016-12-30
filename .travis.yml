@@ -80,8 +80,8 @@ install:
   - phing remember -Dversion=$VERSION -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1
   - cd docroot
   - drush cache-rebuild
-  # Install Lightning Preview and Contact Form, if they aren't already present.
-  - drush pm-enable --yes lightning_contact_form lightning_preview
+  # Install Diff, Lightning Preview, and Contact Form, if not already installed.
+  - drush pm-enable --yes diff lightning_contact_form lightning_preview
   # Execute database updates, if there are any.
   - drush updatedb --yes
 
