@@ -115,6 +115,9 @@
     <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.oauth_access_token_secret Z4qff1DPLhqxHwei0jXgsnU0xdBFET4wSpQYn6Si3G3lF --yes" dir="${docroot}" />
     <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.generate_thumbnails 1 --yes --format=boolean" dir="${docroot}" />
 
+    <!-- Install Devel Generate. -->
+    <exec command="${drush} pm-enable devel_generate --yes" dir="${docroot}" />
+
     <!--
     Install Lightning Preview, which is not installed by default because it's experimental.
     Enable passthru() for this as well since it has a lot of dependencies and is therefore

@@ -45,14 +45,16 @@ class SearchHelper {
    *   The entity type manager.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $data_source_manager
    *   The Search API data source plugin manager.
+   * @param string $index_id
+   *   The ID of the search index to manipulate.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, PluginManagerInterface $data_source_manager) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, PluginManagerInterface $data_source_manager, $index_id) {
     $this->entityTypeManager = $entity_type_manager;
     $this->dataSourceManager = $data_source_manager;
 
-    $this->index = $entity_type_manager
+    $this->index = $this->entityTypeManager
       ->getStorage('search_api_index')
-      ->load('viewable_content');
+      ->load($index_id);
 
     $this->field = $this->index->getField('label');
   }
@@ -77,7 +79,8 @@ class SearchHelper {
     $configuration['fields'][] = "entity:{$entity_type}/{$label_key}";
     $this->field->setConfiguration($configuration);
 
-    return $this->commit();
+    $this->index->save();
+    return $this;
   }
 
   /**
@@ -98,14 +101,7 @@ class SearchHelper {
     $configuration['fields'] = array_diff($configuration['fields'], ["entity:{$entity_type}/{$label_key}"]);
     $this->field->setConfiguration($configuration);
 
-    return $this->commit();
-  }
-
-  /**
-   * Saves any changes made to the search index.
-   */
-  protected function commit() {
-    $this->index->addField($this->field)->save();
+    $this->index->save();
     return $this;
   }
 
