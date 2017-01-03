@@ -1,0 +1,75 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.server.database
+  module:
+    - search_api
+id: viewable_content
+name: 'Viewable Content'
+description: ''
+read_only: false
+field_settings:
+  label:
+    label: Label
+    property_path: aggregated_field
+    type: text
+    configuration:
+      type: first
+      fields:
+#        - 'entity:node/title'
+#        - 'entity:comment/subject'
+#        - 'entity:block_content/info'
+#        - 'entity:media/name'
+#        - 'entity:taxonomy_term/name'
+#        - 'entity:user/name'
+datasource_settings:
+#  'entity:comment':
+#    languages:
+#      default: true
+#      selected: {  }
+#    bundles:
+#      default: true
+#      selected: {  }
+#  'entity:node':
+#    bundles:
+#      default: true
+#      selected: {  }
+#    languages:
+#      default: true
+#      selected: {  }
+#  'entity:block_content':
+#    bundles:
+#      default: true
+#      selected: {  }
+#    languages:
+#      default: true
+#      selected: {  }
+#  'entity:media':
+#    bundles:
+#      default: true
+#      selected: {  }
+#    languages:
+#      default: true
+#      selected: {  }
+#  'entity:taxonomy_term':
+#    languages:
+#      default: true
+#      selected: {  }
+#    bundles:
+#      default: true
+#      selected: {  }
+#  'entity:user':
+#    languages:
+#      default: true
+#      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  rendered_item: {  }
+tracker_settings:
+  default: {  }
+options:
+  index_directly: false
+  cron_limit: 50
+server: database

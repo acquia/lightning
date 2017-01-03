@@ -2,17 +2,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.content_entities
+    - search_api.index.viewable_content
   module:
     - rest
     - search_api
     - serialization
-id: content_entities
-label: 'Content Entities'
+id: viewable_content
+label: 'Viewable Content'
 module: views
 description: ''
 tag: ''
-base_table: search_api_index_content_entities
+base_table: search_api_index_viewable_content
 base_field: search_api_id
 core: 8.x
 display:
@@ -72,7 +72,7 @@ display:
           default_field_elements: true
       fields:
         label:
-          table: search_api_index_content_entities
+          table: search_api_index_viewable_content
           field: label
           id: label
           entity_type: null
@@ -127,7 +127,7 @@ display:
           multi_separator: ', '
         search_api_id:
           id: search_api_id
-          table: search_api_index_content_entities
+          table: search_api_index_viewable_content
           field: search_api_id
           relationship: none
           group_type: group
@@ -175,26 +175,23 @@ display:
           hide_alter_empty: true
           plugin_id: standard
       filters:
-        label:
-          id: label
-          table: search_api_index_content_entities
-          field: label
+        search_api_fulltext:
+          id: search_api_fulltext
+          table: search_api_index_viewable_content
+          field: search_api_fulltext
           relationship: none
           group_type: group
           admin_label: ''
-          operator: '='
-          value:
-            min: ''
-            max: ''
-            value: ''
+          operator: and
+          value: ''
           group: 1
           exposed: true
           expose:
-            operator_id: label_op
+            operator_id: search_api_fulltext_op
             label: Keywords
             description: ''
             use_operator: false
-            operator: label_op
+            operator: search_api_fulltext_op
             identifier: keywords
             required: false
             remember: false
@@ -203,13 +200,13 @@ display:
               authenticated: authenticated
               anonymous: '0'
               administrator: '0'
-              page_creator: '0'
               layout_manager: '0'
+              media_creator: '0'
+              media_manager: '0'
+              page_creator: '0'
               page_reviewer: '0'
               landing_page_creator: '0'
               landing_page_reviewer: '0'
-              media_creator: '0'
-              media_manager: '0'
               workspace_creator: '0'
               workspace_reviewer: '0'
           is_grouped: false
@@ -224,7 +221,11 @@ display:
             default_group: All
             default_group_multiple: {  }
             group_items: {  }
-          plugin_id: search_api_text
+          parse_mode: terms
+          min_length: null
+          fields:
+            label: label
+          plugin_id: search_api_fulltext
       sorts: {  }
       header: {  }
       footer: {  }
@@ -246,7 +247,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: content_entities
+      path: viewable-content
       pager:
         type: none
         options:
@@ -254,9 +255,9 @@ display:
       style:
         type: serializer
         options:
+          grouping: {  }
           uses_fields: false
-          formats:
-            json: json
+          formats: {  }
       row:
         type: data_field
         options:
