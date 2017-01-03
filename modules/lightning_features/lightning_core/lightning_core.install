@@ -5,6 +5,7 @@
  * Contains install and update routines for Lightning.
  */
 
+use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\node\Entity\NodeType;
 use Drupal\user\Entity\Role;
@@ -69,4 +70,16 @@ function lightning_core_update_8003() {
   if (\Drupal::moduleHandler()->moduleExists('token')) {
     lightning_core_modules_installed(['token']);
   }
+}
+
+/**
+ * Installs Search API and viewable_content index.
+ */
+function lightning_core_update_8004() {
+  if (!\Drupal::moduleHandler()->moduleExists('search_api_db')) {
+    \Drupal::service('module_installer')->install(['search_api_db']);
+  }
+  lightning_core_create_config('search_api_server', 'database', 'lightning_core', InstallStorage::CONFIG_OPTIONAL_DIRECTORY);
+  lightning_core_create_config('search_api_index', 'viewable_content', 'lightning_core', InstallStorage::CONFIG_OPTIONAL_DIRECTORY);
+  lightning_core_create_config('view', 'viewable_content', 'lightning_core', InstallStorage::CONFIG_OPTIONAL_DIRECTORY);
 }

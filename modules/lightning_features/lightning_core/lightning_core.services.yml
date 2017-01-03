@@ -6,9 +6,15 @@ services:
       - '@entity_type.manager'
 
   lightning.route_subscriber:
-    class: Drupal\lightning_core\Routing\RouteSubscriber
+    class: '\Drupal\lightning_core\Routing\RouteSubscriber'
     arguments:
       - '@entity_type.manager'
     tags:
       -
         name: event_subscriber
+
+  lightning.search_helper:
+    class: '\Drupal\lightning_core\SearchHelper'
+    arguments:
+      - '@entity_type.manager'
+      - '@plugin.manager.search_api.datasource'

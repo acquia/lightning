@@ -8,7 +8,6 @@
 use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
-use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\Core\Entity\EntityDisplayModeInterface;
 use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\Entity\EntityViewMode;
@@ -18,39 +17,17 @@ use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
-use Drupal\search_api\Entity\Index;
+use Drupal\search_api\IndexInterface;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
- * Implements hook_entity_type_alter().
+ * Implements hook_ENTITY_TYPE_insert().
  */
-function _lightning_core_entity_type_alter(array &$entity_types) {
-  $index = Index::load('content_entities');
-  if (empty($index)) {
-    return;
+function lightning_core_search_api_index_insert(IndexInterface $index) {
+  if ($index->id() == 'viewable_content') {
+    \Drupal::service('lightning.search_helper')->enable('node')->commit();
   }
-
-  $data_sources = $index->getDatasources();
-  /** @var \Drupal\Core\Entity\EntityTypeInterface $entity_type */
-  foreach ($entity_types as $id => $entity_type) {
-    if ($entity_type instanceof ContentEntityTypeInterface && $entity_type->hasViewBuilderClass()) {
-      $plugin_id = 'entity:' . $id;
-
-      if (empty($data_sources[$plugin_id])) {
-        $plugin = \Drupal::service('plugin.manager.search_api.datasource')
-          ->createInstance($plugin_id);
-
-        $index->addDatasource($plugin);
-
-        $field = $index->getField('label');
-        $configuration = $field->getConfiguration();
-        $configuration['fields'][] = $plugin_id . '/' . $entity_type->getKey('label');
-        $field->setConfiguration($configuration);
-      }
-    }
-  }
-  $index->save();
 }
 
 /**
@@ -380,11 +357,15 @@ function lightning_core_preprocess_block(array &$variables) {
  *   The unprefixed entity ID.
  * @param string $module
  *   (optional) The module which has the default configuration.
+ * @param string $collection
+ *   (optional) The config collection. Defaults to the install collection, i.e.
+ *   'config/install'.
  */
-function lightning_core_create_config($entity_type, $id, $module = 'lightning_core') {
+function lightning_core_create_config($entity_type, $id, $module = 'lightning_core', $collection = InstallStorage::CONFIG_INSTALL_DIRECTORY) {
   $values = lightning_core_read_config(
     \Drupal::entityTypeManager()->getDefinition($entity_type)->getConfigPrefix() . '.' . $id,
-    $module
+    $module,
+    $collection
   );
   if ($values) {
     \Drupal::entityTypeManager()
@@ -401,17 +382,20 @@ function lightning_core_create_config($entity_type, $id, $module = 'lightning_co
  *   The config ID.
  * @param string $module
  *   (optional) The module to search. Defaults to 'lightning_core'.
+ * @param string $collection
+ *   (optional) The config collection. Defaults to the install collection, i.e.
+ *   'config/install'.
  *
  * @return array
  *   The config data.
  */
-function lightning_core_read_config($id, $module = 'lightning_core') {
+function lightning_core_read_config($id, $module = 'lightning_core', $collection = InstallStorage::CONFIG_INSTALL_DIRECTORY) {
   // Statically cache all FileStorage objects, keyed by module.
   static $storage = [];
 
   if (empty($storage[$module])) {
     $dir = \Drupal::service('module_handler')->getModule($module)->getPath();
-    $storage[$module] = new FileStorage($dir . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY);
+    $storage[$module] = new FileStorage($dir . '/' . $collection);
   }
   return $storage[$module]->read($id);
 }

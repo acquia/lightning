@@ -12,6 +12,16 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\media_entity\MediaBundleInterface;
+use Drupal\search_api\IndexInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_media_search_api_index_insert(IndexInterface $index) {
+  if ($index->id() == 'viewable_content') {
+    \Drupal::service('lightning.search_helper')->enable('media')->commit();
+  }
+}
 
 /**
  * Implements template_preprocess_image_style().
