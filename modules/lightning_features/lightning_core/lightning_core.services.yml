@@ -18,3 +18,9 @@ services:
     arguments:
       - '@entity_type.manager'
       - '@plugin.manager.search_api.datasource'
+
+  lightning.config_helper:
+    class: '\Drupal\lightning_core\ConfigHelper'
+    arguments:
+      - '@module_handler'
+      - '@entity_type.manager'

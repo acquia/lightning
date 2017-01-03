@@ -3,7 +3,6 @@
 namespace Drupal\lightning_core;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
-use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
@@ -59,75 +58,55 @@ class SearchHelper {
   }
 
   /**
-   * Returns an entity type definition.
-   *
-   * @param mixed $entity_type
-   *   An entity type definition or ID.
-   *
-   * @return \Drupal\Core\Entity\EntityTypeInterface
-   *   The entity type definition.
-   */
-  protected function getEntityType($entity_type) {
-    return $entity_type instanceof EntityTypeInterface
-      ? $entity_type
-      : $this->entityTypeManager->getDefinition($entity_type);
-  }
-
-  /**
    * Adds an entity type to the search index.
    *
-   * @param mixed $entity_type
-   *   The entity type definition or ID.
+   * @param string $entity_type
+   *   The entity type ID.
    *
    * @return $this
    *   The called object, for chaining.
    */
   public function enable($entity_type) {
-    $entity_type = $this->getEntityType($entity_type);
-
-    $id = 'entity:' . $entity_type->id();
+    $label_key = $this->entityTypeManager->getDefinition($entity_type)->getKey('label');
 
     /** @var \Drupal\search_api\Datasource\DatasourceInterface $data_source */
-    $data_source = $this->dataSourceManager->createInstance('entity:' . $entity_type->id());
+    $data_source = $this->dataSourceManager->createInstance("entity:{$entity_type}");
     $this->index->addDatasource($data_source);
 
     $configuration = $this->field->getConfiguration();
-    $configuration['fields'][] = $id . '/' . $entity_type->getKey('label');
+    $configuration['fields'][] = "entity:{$entity_type}/{$label_key}";
     $this->field->setConfiguration($configuration);
 
-    return $this;
+    return $this->commit();
   }
 
   /**
    * Removes an entity type from the search index.
    *
-   * @param mixed $entity_type
-   *   The entity type definition or ID.
+   * @param string $entity_type
+   *   The entity type ID.
    *
    * @return $this
    *   The called object, for chaining.
    */
   public function disable($entity_type) {
-    $entity_type = $this->getEntityType($entity_type);
+    $label_key = $this->entityTypeManager->getDefinition($entity_type)->getKey('label');
 
-    $id = 'entity:' . $entity_type->id();
-
-    $this->index->removeDatasource($id);
+    $this->index->removeDatasource("entity:{$entity_type}");
 
     $configuration = $this->field->getConfiguration();
-    $configuration['fields'] = array_diff($configuration['fields'], [
-      $id . '/' . $entity_type->getKey('label'),
-    ]);
+    $configuration['fields'] = array_diff($configuration['fields'], ["entity:{$entity_type}/{$label_key}"]);
     $this->field->setConfiguration($configuration);
 
-    return $this;
+    return $this->commit();
   }
 
   /**
    * Saves any changes made to the search index.
    */
-  public function commit() {
+  protected function commit() {
     $this->index->addField($this->field)->save();
+    return $this;
   }
 
 }

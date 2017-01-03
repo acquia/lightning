@@ -6,15 +6,13 @@
  */
 
 use Drupal\Core\Block\BlockPluginInterface;
-use Drupal\Core\Config\FileStorage;
-use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Entity\EntityDisplayModeInterface;
 use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\lightning_core\Element;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
 use Drupal\search_api\IndexInterface;
@@ -26,7 +24,7 @@ use Drupal\user\RoleInterface;
  */
 function lightning_core_search_api_index_insert(IndexInterface $index) {
   if ($index->id() == 'viewable_content') {
-    \Drupal::service('lightning.search_helper')->enable('node')->commit();
+    \Drupal::service('lightning.search_helper')->enable('node');
   }
 }
 
@@ -127,13 +125,11 @@ function lightning_core_entity_load(array $entities) {
  *   The array to reorder.
  * @param array $keys
  *   The keys, in their desired order.
+ *
+ * @deprecated
  */
 function array_reorder(array &$values, array $keys) {
-  $keys = array_values($keys);
-
-  uksort($values, function ($a, $b) use ($keys) {
-    return array_search($a, $keys) - array_search($b, $keys);
-  });
+  Element::order($values, $keys);
 }
 
 /**
@@ -145,24 +141,10 @@ function array_reorder(array &$values, array $keys) {
  * @return array
  *   The renderable element with all buttons (at all levels) disabled.
  *
- * @internal
+ * @deprecated
  */
 function lightning_core_disable_buttons(array $element) {
-  if (isset($element['#type'])) {
-    $element['#access'] = !in_array($element['#type'], [
-      'button',
-      'submit',
-      'image_button',
-    ]);
-  }
-
-  // Recurse into child elements.
-  foreach (Element::children($element) as $key) {
-    if (is_array($element[$key])) {
-      $element[$key] = call_user_func(__FUNCTION__, $element[$key]);
-    }
-  }
-  return $element;
+  return Element::disableButtons($element);
 }
 
 /**
@@ -357,22 +339,13 @@ function lightning_core_preprocess_block(array &$variables) {
  *   The unprefixed entity ID.
  * @param string $module
  *   (optional) The module which has the default configuration.
- * @param string $collection
- *   (optional) The config collection. Defaults to the install collection, i.e.
- *   'config/install'.
+ *
+ * @deprecated
  */
-function lightning_core_create_config($entity_type, $id, $module = 'lightning_core', $collection = InstallStorage::CONFIG_INSTALL_DIRECTORY) {
-  $values = lightning_core_read_config(
-    \Drupal::entityTypeManager()->getDefinition($entity_type)->getConfigPrefix() . '.' . $id,
-    $module,
-    $collection
-  );
-  if ($values) {
-    \Drupal::entityTypeManager()
-      ->getStorage($entity_type)
-      ->create($values)
-      ->save();
-  }
+function lightning_core_create_config($entity_type, $id, $module = 'lightning_core') {
+  \Drupal::service('lightning.config_helper')
+    ->install($module)
+    ->createEntity($entity_type, $id);
 }
 
 /**
@@ -382,20 +355,14 @@ function lightning_core_create_config($entity_type, $id, $module = 'lightning_co
  *   The config ID.
  * @param string $module
  *   (optional) The module to search. Defaults to 'lightning_core'.
- * @param string $collection
- *   (optional) The config collection. Defaults to the install collection, i.e.
- *   'config/install'.
  *
  * @return array
  *   The config data.
+ *
+ * @deprecated
  */
-function lightning_core_read_config($id, $module = 'lightning_core', $collection = InstallStorage::CONFIG_INSTALL_DIRECTORY) {
-  // Statically cache all FileStorage objects, keyed by module.
-  static $storage = [];
-
-  if (empty($storage[$module])) {
-    $dir = \Drupal::service('module_handler')->getModule($module)->getPath();
-    $storage[$module] = new FileStorage($dir . '/' . $collection);
-  }
-  return $storage[$module]->read($id);
+function lightning_core_read_config($id, $module = 'lightning_core') {
+  return \Drupal::service('lightning.config_helper')
+    ->install($module)
+    ->read($id);
 }
