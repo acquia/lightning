@@ -5,7 +5,9 @@
  * Provides workflow enhancements for Drupal.
  */
 
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\field\Entity\FieldConfig;
 use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
 use Drupal\node\NodeTypeInterface;
 use Drupal\views\ViewExecutable;
@@ -62,8 +64,9 @@ function lightning_workflow_form_node_form_alter(array &$form, FormStateInterfac
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
-  /** @var \Drupal\user\RoleInterface $role */
-  user_role_grant_permissions($node_type->id() . '_creator', [
+  $id = $node_type->id();
+
+  user_role_grant_permissions($id . '_creator', [
     'view any unpublished content',
     'use draft_draft transition',
     'use draft_needs_review transition',
@@ -71,12 +74,44 @@ function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
     'view latest version',
   ]);
 
-  user_role_grant_permissions($node_type->id() . '_reviewer', [
+  user_role_grant_permissions($id . '_reviewer', [
     'use draft_published transition',
     'use needs_review_draft transition',
     'use needs_review_published transition',
     'use published_published transition',
   ]);
+
+  if ($node_type->getThirdPartySetting('lightning_workflow', 'embargo')) {
+    FieldConfig::create([
+      'field_name' => 'scheduled_update',
+      'entity_type' => 'node',
+      'bundle' => $id,
+      'label' => t('Scheduled update'),
+      'settings' => [
+        'handler' => 'default:scheduled_update',
+        'handler_settings' => [
+          'target_bundles' => ['node_embargo'],
+        ],
+      ],
+    ])->save();
+
+    $form_display = EntityFormDisplay::load('node.' . $id . '.default');
+    if ($form_display) {
+      $form_display
+        ->setComponent('scheduled_update', [
+          'type' => 'inline_entity_form_complex',
+          'settings' => [
+            'override_labels' => FALSE,
+            'label_singular' => '',
+            'label_plural' => '',
+            'allow_new' => TRUE,
+            'allow_existing' => FALSE,
+            'match_operator' => 'CONTAINS',
+          ],
+        ])
+        ->save();
+    }
+  }
 }
 
 /**

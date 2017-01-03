@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * @file
+ * Contains install and update routines for Lightning Contact Form.
+ */
+
+use Drupal\contact\Entity\ContactForm;
+
+/**
+ * Implements hook_install().
+ */
+function lightning_contact_form_install() {
+  ContactForm::load('sitewide')
+    ->setRecipients([
+      \Drupal::config('system.site')->get('mail'),
+    ])
+    ->save();
+
+  // Create an alias for the form if it's not already taken.
+  /** @var \Drupal\Core\Path\AliasStorageInterface $alias_storage */
+  $alias_storage = \Drupal::service('path.alias_storage');
+  $alias = $alias_storage->load([
+    'alias' => '/contact',
+  ]);
+  if (empty($alias)) {
+    $alias_storage->save('/contact/sitewide', '/contact');
+  }
+}

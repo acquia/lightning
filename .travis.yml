@@ -13,10 +13,10 @@ php:
   - 5.6
 env:
   - VERSION=HEAD
+  - VERSION=2.0.1
+  - VERSION=2.0.0
+  - VERSION=1.14
   - VERSION=1.13
-  - VERSION=1.12
-  - VERSION=1.11
-  - VERSION=1.10
 
 addons:
   apt:
@@ -61,7 +61,10 @@ install:
   # Create the MySQL database and add a user for testing.
   - mysql -u root -e "CREATE DATABASE drupal; CREATE USER 'lightning'@'localhost' IDENTIFIED BY 'lightning'; GRANT ALL ON drupal.* TO 'lightning'@'localhost';"
 
-  # PHP conf tweaks
+  # Install the PECL YAML extension for strict parsing. yes is used to
+  # acknowledge all prompts.
+  - yes '' | pecl install yaml
+  # Tweak PHP configuration.
   - echo 'max_execution_time = 120' >> drupal.php.ini;
   - echo 'sendmail_path = /bin/true' >> drupal.php.ini;
   - phpenv config-add drupal.php.ini
@@ -77,8 +80,8 @@ install:
   - phing remember -Dversion=$VERSION -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1
   - cd docroot
   - drush cache-rebuild
-  # Install Lightning Preview, if it isn't already.
-  - drush pm-enable --yes lightning_preview
+  # Install Diff, Lightning Preview, and Contact Form, if not already installed.
+  - drush pm-enable --yes diff lightning_contact_form lightning_preview
   # Execute database updates, if there are any.
   - drush updatedb --yes
 
