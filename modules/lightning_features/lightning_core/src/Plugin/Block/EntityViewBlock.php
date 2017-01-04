@@ -19,11 +19,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterface {
 
   /**
-   * The view mode storage handler.
+   * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $viewModeStorage;
+  protected $entityTypeManager;
 
   /**
    * EntityViewBlock constructor.
@@ -39,7 +39,7 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->viewModeStorage = $entity_type_manager->getStorage('entity_view_mode');
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -61,7 +61,6 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
     return parent::defaultConfiguration() + [
       'entity_type' => NULL,
       'entity_id' => NULL,
-      'view_mode' => 'default',
     ];
   }
 
@@ -74,7 +73,6 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $form['search'] = [
       '#type' => 'textfield',
       '#title' => $this->t('Search for the entity to display...'),
-      '#autocomplete_route_name' => 'view.viewable_content.rest',
       '#attached' => [
         'library' => [
           'lightning_core/entity_search',
@@ -94,15 +92,6 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
       '#required' => TRUE,
       '#default_value' => $this->configuration['entity_id'],
     ];
-    $form['view_mode'] = [
-      '#type' => 'select',
-      '#title' => $this->t('View mode'),
-      '#required' => TRUE,
-      '#default_value' => $this->configuration['view_mode'],
-      '#options' => [
-        'default' => $this->t('Default'),
-      ],
-    ];
 
     return $form;
   }
@@ -115,14 +104,19 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
 
     $this->configuration['entity_type'] = $form_state->getValue('entity_type');
     $this->configuration['entity_id'] = $form_state->getValue('entity_id');
-    $this->configuration['view_mode'] = $form_state->getValue('view_mode');
   }
 
   /**
    * {@inheritdoc}
    */
   public function build() {
-    return [];
+    $entity = $this->entityTypeManager
+      ->getStorage($this->configuration['entity_type'])
+      ->load($this->configuration['entity_id']);
+
+    return $this->entityTypeManager
+      ->getViewBuilder($this->configuration['entity_type'])
+      ->view($entity, 'default');
   }
 
 }
