@@ -1,4 +1,4 @@
-@lightning @layout @api
+@lightning @layout @api @errors
 Feature: Panelizer
 
   Scenario: Panelizer is enabled for landing pages

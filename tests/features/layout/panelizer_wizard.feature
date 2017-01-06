@@ -1,4 +1,4 @@
-@lightning @layout @api @rc7
+@lightning @layout @api @rc7 @errors
 Feature: Panelizer Wizard
 
   Scenario: Landing page default layout has the proper Content context
