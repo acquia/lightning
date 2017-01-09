@@ -1,4 +1,4 @@
-(function ($) {
+(function ($, Drupal, drupalSettings) {
 
     Drupal.behaviors.entitySearch = {
 
@@ -16,15 +16,18 @@
                         var match = ui.item.value.match(/:([a-z0-9_]+)\/([0-9]+):/);
                         $(this.form).find('input[name$="settings[entity_type]"]').val(match[1]);
                         $(this.form).find('input[name$="settings[entity_id]"]').val(match[2]);
+
+                        $(this).trigger('change');
                     }
                 })
                 .on('change', function () {
                     if (this.value.length === 0) {
                         $(this.form).find('input[name$="settings[entity_type]"], input[name$="settings[entity_id]"]').prop('value', null);
                     }
+                    $(this.form).find('#view-mode-update').trigger(drupalSettings.ajax['view-mode-update'].event);
                 });
         }
 
     };
 
-})(jQuery, Drupal);
+})(jQuery, Drupal, drupalSettings);
