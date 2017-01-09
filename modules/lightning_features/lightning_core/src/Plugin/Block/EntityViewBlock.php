@@ -72,9 +72,16 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
    */
   public function defaultConfiguration() {
     return parent::defaultConfiguration() + [
+      // There is no default label; one will be automatically generated if not
+      // set (see ::blockSubmit()).
+      'label' => NULL,
       'entity_type' => NULL,
       'entity_id' => NULL,
-      'view_mode' => 'default',
+      // The default view mode will be used unless otherwise specified. (See
+      // ::build()).
+      'view_mode' => NULL,
+      // It's not too likely that we'll want to display the label by default,
+      // since this block renders an entire entity.
       'label_display' => FALSE,
     ];
   }
@@ -121,7 +128,6 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $form['view_mode'] = [
       '#type' => 'radios',
       '#title' => $this->t('View mode'),
-      '#required' => TRUE,
       '#options' => [],
       '#default_value' => $this->configuration['view_mode'],
       '#states' => [
@@ -133,9 +139,15 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
       ],
     ];
     /** @var \Drupal\Core\Entity\EntityViewModeInterface[] $all */
-    $all = $this->entityTypeManager->getStorage('entity_view_mode')->loadMultiple();
+    $all = $this->entityTypeManager
+      ->getStorage('entity_view_mode')
+      ->loadMultiple();
+
     foreach ($all as $id => $view_mode) {
-      $form['view_mode']['#options'][$id] = $view_mode->label();
+      // Exclude internal view modes.
+      if ($view_mode->getThirdPartySetting('lightning_core', 'internal') == FALSE) {
+        $form['view_mode']['#options'][$id] = $view_mode->label();
+      }
     }
 
     // Run the normal process function(s) for radios...
@@ -174,12 +186,41 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
   /**
    * {@inheritdoc}
    */
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    $form = parent::buildConfigurationForm($form, $form_state);
+    // If left blank, a label is automatically generated. See ::blockSubmit().
+    unset($form['label']['#required']);
+    return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function label() {
+    // The default behavior is to return the admin_label as the label unless
+    // otherwise specified. We don't want that.
+    return $this->configuration['label'];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function blockSubmit($form, FormStateInterface $form_state) {
     parent::blockSubmit($form, $form_state);
 
     $this->configuration['entity_type'] = $form_state->getValue('entity_type');
     $this->configuration['entity_id'] = $form_state->getValue('entity_id');
     $this->configuration['view_mode'] = $form_state->getValue('view_mode');
+
+    $entity = $this->entityTypeManager
+      ->getStorage($this->configuration['entity_type'])
+      ->load($this->configuration['entity_id']);
+
+    // Automatically generate a label if we don't have one.
+    $label = $this->label();
+    if (empty($label)) {
+      $this->configuration['label'] = $entity->getEntityType()->getSingularLabel() . ': ' . $entity->label();
+    }
   }
 
   /**
@@ -192,7 +233,7 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
 
     return $this->entityTypeManager
       ->getViewBuilder($this->configuration['entity_type'])
-      ->view($entity, $this->configuration['view_mode']);
+      ->view($entity, $this->configuration['view_mode'] ?: 'default');
   }
 
 }
