@@ -134,7 +134,7 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
     $this->formHelper->applyStandardProcessing($form['view_mode']);
     // ...bookended by our own special sauce.
     array_unshift($form['view_mode']['#process'], [$this, 'addViewModeOptions']);
-    array_push($form['view_mode']['#process'][], [$this, 'describeViewModeOptions']);
+    array_push($form['view_mode']['#process'], [$this, 'describeViewModeOptions']);
 
     $form['view_mode_update'] = [
       '#type' => 'button',
