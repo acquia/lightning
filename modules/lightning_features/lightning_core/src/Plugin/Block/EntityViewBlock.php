@@ -271,7 +271,7 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
 
     return $this->entityTypeManager
       ->getViewBuilder($this->configuration['entity_type'])
-      ->view($entity, 'default');
+      ->view($entity, $this->configuration['view_mode']);
   }
 
 }
