@@ -6,7 +6,7 @@
             $(context)
                 .find('[data-entity-search]')
                 .autocomplete({
-                    source: '/viewable-content',
+                    source: '/lightning/content-index',
                     select: function (event, ui) {
                         event.preventDefault();
 

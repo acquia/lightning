@@ -2,17 +2,17 @@ langcode: en
 status: true
 dependencies:
   config:
-    - search_api.index.viewable_content
+    - search_api.index.content
   module:
     - rest
     - search_api
     - serialization
-id: viewable_content
-label: 'Viewable Content'
+id: content_index
+label: 'Content Index'
 module: views
 description: ''
 tag: ''
-base_table: search_api_index_viewable_content
+base_table: search_api_index_content
 base_field: search_api_id
 core: 8.x
 display:
@@ -247,7 +247,7 @@ display:
     position: 1
     display_options:
       display_extenders: {  }
-      path: viewable-content
+      path: 'lightning/content-index'
       pager:
         type: none
         options:
