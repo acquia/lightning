@@ -1,4 +1,4 @@
-(function ($, Drupal, drupalSettings) {
+(function ($, Drupal) {
 
     Drupal.behaviors.entitySearch = {
 
@@ -10,24 +10,31 @@
                     select: function (event, ui) {
                         event.preventDefault();
 
-                        this.value = ui.item.label;
-
                         // Get the entity type and ID from the value.
                         var match = ui.item.value.match(/:([a-z0-9_]+)\/([0-9]+):/);
-                        $(this.form).find('input[name$="settings[entity_type]"]').val(match[1]);
-                        $(this.form).find('input[name$="settings[entity_id]"]').val(match[2]);
 
-                        $(this).trigger('change');
+                        $(this.form)
+                            .find('input[name$="settings[entity_type]"]')
+                            .val(match[1]);
+
+                        $(this.form)
+                            .find('input[name$="settings[entity_id]"]')
+                            .val(match[2]);
+
+                        $(this).val(ui.item.label).trigger('change');
                     }
                 })
                 .on('change', function () {
+                    var $elements = $(this.form)
+                        .find('input[name$="settings[entity_type]"], input[name$="settings[entity_id]"]');
+
                     if (this.value.length === 0) {
-                        $(this.form).find('input[name$="settings[entity_type]"], input[name$="settings[entity_id]"]').prop('value', null);
+                        $elements.prop('value', null);
                     }
-                    $(this.form).find('#view-mode-update').trigger(drupalSettings.ajax['view-mode-update'].event);
+                    $elements.trigger('keyup');
                 });
         }
 
     };
 
-})(jQuery, Drupal, drupalSettings);
+})(jQuery, Drupal);

@@ -5,7 +5,6 @@ namespace Drupal\lightning_core\Plugin\Block;
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Form\SubformState;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
 use Drupal\lightning\FormHelper;
@@ -123,98 +122,28 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
       '#type' => 'radios',
       '#title' => $this->t('View mode'),
       '#required' => TRUE,
-      '#options' => [
-        'default' => $this->t('Default'),
-      ],
-      '#id' => 'view-modes',
+      '#options' => [],
       '#default_value' => $this->configuration['view_mode'],
+      '#states' => [
+        'visible' => [
+          'input[name$="settings[entity_type]"' => [
+            'empty' => FALSE,
+          ],
+        ],
+      ],
     ];
+    /** @var \Drupal\Core\Entity\EntityViewModeInterface[] $all */
+    $all = $this->entityTypeManager->getStorage('entity_view_mode')->loadMultiple();
+    foreach ($all as $id => $view_mode) {
+      $form['view_mode']['#options'][$id] = $view_mode->label();
+    }
 
     // Run the normal process function(s) for radios...
     $this->formHelper->applyStandardProcessing($form['view_mode']);
-    // ...bookended by our own special sauce.
-    array_unshift($form['view_mode']['#process'], [$this, 'addViewModeOptions']);
-    array_push($form['view_mode']['#process'], [$this, 'describeViewModeOptions']);
-
-    $form['view_mode_update'] = [
-      '#type' => 'button',
-      '#value' => $this->t('Update'),
-      '#ajax' => [
-        'wrapper' => 'view-modes--wrapper',
-        'callback' => [static::class, 'viewModeUpdate'],
-      ],
-      '#attributes' => [
-        'class' => ['js-hide'],
-      ],
-      '#id' => 'view-mode-update',
-    ];
+    // ...followed by our own special sauce.
+    array_push($form['view_mode']['#process'], [$this, 'describeViewModes']);
 
     return $form;
-  }
-
-  /**
-   * Creates a subform state object for the block settings.
-   *
-   * @param array $complete_form
-   *   The complete block configuration form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The complete form state.
-   *
-   * @return \Drupal\Core\Form\SubformState
-   *   The subform state.
-   */
-  protected function settingsState(array &$complete_form, FormStateInterface $form_state) {
-    return SubformState::createForSubform($complete_form['settings'], $complete_form, $form_state);
-  }
-
-  /**
-   * AJAX callback: returns the view mode selection element.
-   *
-   * @param array $form
-   *   The complete form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current form state.
-   *
-   * @return array
-   *   The view mode selection element.
-   */
-  public static function viewModeUpdate(array &$form, FormStateInterface $form_state) {
-    return $form['settings']['view_mode'];
-  }
-
-  /**
-   * Process callback: adds options to the view mode selection element.
-   *
-   * @param array $element
-   *   The unprocessed element.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The complete form state.
-   * @param array $complete_form
-   *   The complete form.
-   *
-   * @return array
-   *   The processed element.
-   */
-  public function addViewModeOptions(array $element, FormStateInterface $form_state, array &$complete_form) {
-    $entity_type = $this
-      ->settingsState($complete_form, $form_state)
-      ->getValue('entity_type');
-
-    if ($entity_type) {
-      /** @var \Drupal\Core\Entity\EntityViewModeInterface[] $view_modes */
-      $view_modes = $this->entityTypeManager
-        ->getStorage('entity_view_mode')
-        ->loadByProperties([
-          'targetEntityType' => $entity_type,
-        ]);
-
-      foreach ($view_modes as $view_mode) {
-        $id = substr($view_mode->id(), strlen($entity_type) + 1);
-        $element['#options'][$id] = $view_mode->label();
-      }
-    }
-
-    return $element;
   }
 
   /**
@@ -222,31 +151,23 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
    *
    * @param array $element
    *   The unprocessed element.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The complete form state.
-   * @param array $complete_form
-   *   The complete form.
    *
    * @return array
    *   The processed element.
    */
-  public function describeViewModeOptions(array $element, FormStateInterface $form_state, array &$complete_form) {
-    $entity_type = $this
-      ->settingsState($complete_form, $form_state)
-      ->getValue('entity_type');
+  public function describeViewModes(array $element) {
+    $view_modes = Element::children($element);
 
-    if ($entity_type) {
-      foreach (Element::children($element) as $option) {
-        /** @var \Drupal\Core\Entity\EntityViewModeInterface $view_mode */
-        $view_mode = $this->entityTypeManager
-          ->getStorage('entity_view_mode')
-          ->load($entity_type . '.' . $option);
+    /** @var \Drupal\Core\Entity\EntityViewModeInterface[] $view_modes */
+    $view_modes = $this->entityTypeManager
+      ->getStorage('entity_view_mode')
+      ->loadMultiple($view_modes);
 
-        if ($view_mode) {
-          $element[$option]['#description'] = $view_mode->getThirdPartySetting('lightning_core', 'description');
-        }
-      }
+    foreach ($view_modes as $id => $view_mode) {
+      $element[$id]['#description'] = $view_mode->getThirdPartySetting('lightning_core', 'description');
+      $element[$id]['#states']['visible']['input[name$="settings[entity_type]"]']['value'] = $view_mode->getTargetType();
     }
+
     return $element;
   }
 
