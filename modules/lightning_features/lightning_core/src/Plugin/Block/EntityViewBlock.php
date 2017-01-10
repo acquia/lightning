@@ -7,7 +7,9 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Render\Element;
+use Drupal\lightning_core\Element as ElementHelper;
 use Drupal\lightning\FormHelper;
+use Drupal\lightning_core\SearchHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -35,6 +37,13 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
   protected $formHelper;
 
   /**
+   * The search helper.
+   *
+   * @var \Drupal\lightning_core\SearchHelper
+   */
+  protected $searchHelper;
+
+  /**
    * EntityViewBlock constructor.
    *
    * @param array $configuration
@@ -47,11 +56,14 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
    *   The entity type manager.
    * @param \Drupal\lightning\FormHelper $form_helper
    *   The form helper.
+   * @param \Drupal\lightning_core\SearchHelper $search_helper
+   *   The search helper.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, FormHelper $form_helper) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, FormHelper $form_helper, SearchHelper $search_helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
     $this->formHelper = $form_helper;
+    $this->searchHelper = $search_helper;
   }
 
   /**
@@ -63,7 +75,8 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('lightning.form_helper')
+      $container->get('lightning.form_helper'),
+      $container->get('lightning.search_helper')
     );
   }
 
@@ -113,6 +126,14 @@ class EntityViewBlock extends BlockBase implements ContainerFactoryPluginInterfa
         $form['search']['#default_value'] = $entity->label();
       }
     }
+    $entity_types = $this->searchHelper->getIndexedEntityTypes();
+    foreach ($entity_types as $id => $entity_type) {
+      $entity_types[$id] = $entity_type->getPluralLabel();
+    }
+    ElementHelper::oxford($entity_types, 'and', TRUE);
+    $form['search']['#description'] = $this->t('@entity_types will be searched.', [
+      '@entity_types' => implode(', ', $entity_types),
+    ]);
 
     $form['entity_type'] = [
       '#type' => 'hidden',

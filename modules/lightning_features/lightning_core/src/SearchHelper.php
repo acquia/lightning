@@ -60,6 +60,22 @@ class SearchHelper {
   }
 
   /**
+   * Returns the definitions of the indexed entity types.
+   *
+   * @return \Drupal\Core\Entity\EntityTypeInterface[]
+   *   The definitions of the indexed entity types.
+   */
+  public function getIndexedEntityTypes() {
+    $entity_types = [];
+    foreach ($this->index->getDatasources() as $data_source) {
+      if ($data_source->getBaseId() == 'entity') {
+        $entity_types[] = $data_source->getDerivativeId();
+      }
+    }
+    return array_map([$this->entityTypeManager, 'getDefinition'], $entity_types);
+  }
+
+  /**
    * Adds an entity type to the search index.
    *
    * @param string $entity_type
