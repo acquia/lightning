@@ -72,7 +72,7 @@ function lightning_core_update_8003() {
 }
 
 /**
- * Installs REST, Search API and viewable_content index.
+ * Installs REST, Search API and content index.
  */
 function lightning_core_update_8004() {
   /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
@@ -90,7 +90,6 @@ function lightning_core_update_8004() {
 
   \Drupal::service('lightning.config_helper')
     ->optional('lightning_core')
-    ->createEntity('search_api_server', 'database')
     ->createEntity('search_api_index', 'content')
     ->createEntity('view', 'content_index');
 }

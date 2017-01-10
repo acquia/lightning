@@ -781,7 +781,7 @@ function lightning_media_update_8013() {
 }
 
 /**
- * Adds media entities to viewable_content search index.
+ * Adds media entities to content search index.
  */
 function lightning_media_update_8014() {
   \Drupal::service('lightning.search_helper')->enable('media');
@@ -806,7 +806,7 @@ function lightning_media_update_dependencies() {
       8012 => [
         'lightning_media' => 8008,
       ],
-      // 8014 changes the viewable_content search index, which is created by
+      // 8014 changes the content search index, which is created by
       // lightning_core 8004.
       8014 => [
         'lightning_core' => 8004,

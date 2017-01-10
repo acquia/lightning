@@ -13,13 +13,6 @@ services:
       -
         name: event_subscriber
 
-  lightning.search_helper:
-    class: '\Drupal\lightning_core\SearchHelper'
-    arguments:
-      - '@entity_type.manager'
-      - '@plugin.manager.search_api.datasource'
-      - content
-
   lightning.config_helper:
     class: '\Drupal\lightning_core\ConfigHelper'
     arguments:
