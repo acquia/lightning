@@ -23,8 +23,10 @@ use Drupal\user\RoleInterface;
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_core_search_api_index_insert(IndexInterface $index) {
-  if ($index->id() == 'viewable_content') {
-    \Drupal::service('lightning.search_helper')->enable('node');
+  if ($index->id() == 'content') {
+    \Drupal::service('lightning.search_helper')
+      ->enable('node')
+      ->enable('taxonomy_term');
   }
 }
 

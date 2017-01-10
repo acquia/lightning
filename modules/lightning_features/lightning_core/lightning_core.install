@@ -90,6 +90,7 @@ function lightning_core_update_8004() {
 
   \Drupal::service('lightning.config_helper')
     ->optional('lightning_core')
+    ->createEntity('search_api_server', 'database')
     ->createEntity('search_api_index', 'content')
     ->createEntity('view', 'content_index');
 }

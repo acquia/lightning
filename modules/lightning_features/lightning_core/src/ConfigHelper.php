@@ -92,6 +92,9 @@ class ConfigHelper {
   /**
    * Creates a config entity from configuration in the current directory.
    *
+   * If an entity of the specified type with the specified ID already exists,
+   * nothing will happen.
+   *
    * @param string $entity_type
    *   The config entity type ID.
    * @param string $id
@@ -105,12 +108,14 @@ class ConfigHelper {
       ->getDefinition($entity_type)
       ->getConfigPrefix();
 
-    $values = $this->read($prefix . '.' . $id);
-    if ($values) {
-      $this->entityTypeManager
-        ->getStorage($entity_type)
-        ->create($values)
-        ->save();
+    $storage = $this->entityTypeManager->getStorage($entity_type);
+
+    $existing = $storage->load($id);
+    if (empty($existing)) {
+      $values = $this->read($prefix . '.' . $id);
+      if ($values) {
+        $storage->create($values)->save();
+      }
     }
     return $this;
   }
