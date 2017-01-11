@@ -11,8 +11,9 @@ use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\lightning_core\Element;
+use Drupal\lightning_core\Element as ElementHelper;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
 use Drupal\search_api\IndexInterface;
@@ -143,7 +144,7 @@ function lightning_core_entity_load(array $entities) {
  * @deprecated
  */
 function array_reorder(array &$values, array $keys) {
-  Element::order($values, $keys);
+  ElementHelper::order($values, $keys);
 }
 
 /**
@@ -158,7 +159,7 @@ function array_reorder(array &$values, array $keys) {
  * @deprecated
  */
 function lightning_core_disable_buttons(array $element) {
-  return Element::disableButtons($element);
+  return ElementHelper::disableButtons($element);
 }
 
 /**
