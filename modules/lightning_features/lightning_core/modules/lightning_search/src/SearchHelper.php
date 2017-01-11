@@ -32,13 +32,6 @@ class SearchHelper {
   protected $index;
 
   /**
-   * The aggregated label field.
-   *
-   * @var \Drupal\search_api\Item\FieldInterface
-   */
-  protected $field;
-
-  /**
    * SearchHelper constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
@@ -55,8 +48,6 @@ class SearchHelper {
     $this->index = $this->entityTypeManager
       ->getStorage('search_api_index')
       ->load($index_id);
-
-    $this->field = $this->index->getField('label');
   }
 
   /**
@@ -91,11 +82,13 @@ class SearchHelper {
     $data_source = $this->dataSourceManager->createInstance("entity:{$entity_type}");
     $this->index->addDatasource($data_source);
 
-    $configuration = $this->field->getConfiguration();
+    $field = $this->index->getField('label');
+    $configuration = $field->getConfiguration();
     $configuration['fields'][] = "entity:{$entity_type}/{$label_key}";
-    $this->field->setConfiguration($configuration);
+    $field->setConfiguration($configuration);
 
     $this->index->save();
+
     return $this;
   }
 
@@ -113,11 +106,13 @@ class SearchHelper {
 
     $this->index->removeDatasource("entity:{$entity_type}");
 
-    $configuration = $this->field->getConfiguration();
+    $field = $this->index->getField('label');
+    $configuration = $field->getConfiguration();
     $configuration['fields'] = array_diff($configuration['fields'], ["entity:{$entity_type}/{$label_key}"]);
-    $this->field->setConfiguration($configuration);
+    $field->setConfiguration($configuration);
 
     $this->index->save();
+
     return $this;
   }
 
