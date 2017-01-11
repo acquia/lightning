@@ -16,32 +16,8 @@ use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\lightning_core\Element as ElementHelper;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
-use Drupal\search_api\IndexInterface;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function lightning_core_search_api_index_insert(IndexInterface $index) {
-  if ($index->id() == 'content') {
-    \Drupal::service('lightning.search_helper')
-      ->enable('node')
-      ->enable('taxonomy_term');
-  }
-}
-
-/**
- * Implements hook_entity_type_alter().
- */
-function lightning_core_entity_type_alter(array &$entity_types) {
-  // Search API tasks are internal content entities and should never be
-  // workspace-aware or otherwise under Multiversion control (unless they have
-  // already been taken over, which case you're on your own).
-  if (isset($entity_types['search_api_task']) && !\Drupal::state()->get('multiversion.migration_done.search_api_task')) {
-    $entity_types['search_api_task']->set('multiversion', FALSE);
-  }
-}
 
 /**
  * Implements hook_help().

@@ -36,9 +36,6 @@ function lightning_media_install() {
   // the button is installed, resulting in a scary PluginNotFoundException.
   lightning_media_update_8013();
 
-  // Include media entities in the viewable_content search index.
-  lightning_media_update_8014();
-
   // Lightning ships with two content types -- page and landing_page. Creator
   // roles for these content types are generated automatically out of the
   // box, so grant them permission to use the rich_text format and the media
@@ -781,13 +778,6 @@ function lightning_media_update_8013() {
 }
 
 /**
- * Adds media entities to content search index.
- */
-function lightning_media_update_8014() {
-  \Drupal::service('lightning.search_helper')->enable('media');
-}
-
-/**
  * Implements hook_update_dependencies().
  */
 function lightning_media_update_dependencies() {
@@ -805,11 +795,6 @@ function lightning_media_update_dependencies() {
       // display of the media view, which is created by 8008.
       8012 => [
         'lightning_media' => 8008,
-      ],
-      // 8014 changes the content search index, which is created by
-      // lightning_core 8004.
-      8014 => [
-        'lightning_core' => 8004,
       ],
     ],
   ];

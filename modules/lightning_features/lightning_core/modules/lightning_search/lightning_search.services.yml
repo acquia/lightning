@@ -1,0 +1,7 @@
+services:
+  lightning.search_helper:
+    class: '\Drupal\lightning_search\SearchHelper'
+    arguments:
+      - '@entity_type.manager'
+      - '@plugin.manager.search_api.datasource'
+      - content

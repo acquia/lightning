@@ -185,17 +185,19 @@ class EntityBlock extends EntityView {
   }
 
   /**
-   * Returns the entity being displayed by this block.
+   * Returns the entity being displayed by this block, if any.
    *
-   * @return \Drupal\Core\Entity\EntityInterface
-   *   The entity being displayed.
+   * @return \Drupal\Core\Entity\EntityInterface|null
+   *   The entity being displayed, or NULL if no entity is configured.
    */
   protected function getEntity() {
-    $entity_type = $this->getDerivativeId();
+    if ($this->configuration['entity_id']) {
+      $entity_type = $this->getDerivativeId();
 
-    return $this->entityManager
-      ->getStorage($entity_type)
-      ->load($this->configuration['entity_id']);
+      return $this->entityManager
+        ->getStorage($entity_type)
+        ->load($this->configuration['entity_id']);
+    }
   }
 
   /**

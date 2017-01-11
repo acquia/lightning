@@ -70,27 +70,3 @@ function lightning_core_update_8003() {
     lightning_core_modules_installed(['token']);
   }
 }
-
-/**
- * Installs REST, Search API and content index.
- */
-function lightning_core_update_8004() {
-  /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
-  $module_handler = \Drupal::moduleHandler();
-  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $installer */
-  $installer = \Drupal::service('module_installer');
-
-  // Install REST and Search API if needed.
-  if (!$module_handler->moduleExists('rest')) {
-    $installer->install(['rest']);
-  }
-  if (!$module_handler->moduleExists('search_api_db')) {
-    $installer->install(['search_api_db']);
-  }
-
-  \Drupal::service('lightning.config_helper')
-    ->optional('lightning_core')
-    ->createEntity('search_api_server', 'database')
-    ->createEntity('search_api_index', 'content')
-    ->createEntity('view', 'content_index');
-}
