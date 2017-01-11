@@ -31,6 +31,18 @@ function lightning_core_search_api_index_insert(IndexInterface $index) {
 }
 
 /**
+ * Implements hook_entity_type_alter().
+ */
+function lightning_core_entity_type_alter(array &$entity_types) {
+  // Search API tasks are internal content entities and should never be
+  // workspace-aware or otherwise under Multiversion control (unless they have
+  // already been taken over, which case you're on your own).
+  if (isset($entity_types['search_api_task']) && !\Drupal::state()->get('multiversion.migration_done.search_api_task')) {
+    $entity_types['search_api_task']->set('multiversion', FALSE);
+  }
+}
+
+/**
  * Implements hook_help().
  */
 function lightning_core_help($route_name, RouteMatchInterface $route_match) {
