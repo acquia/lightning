@@ -6,6 +6,13 @@
  */
 
 /**
+ * Implements hook_block_alter().
+ */
+function lightning_search_block_alter(array &$blocks) {
+  unset($blocks['entity_block:search_api_task']);
+}
+
+/**
  * Implements hook_entity_type_alter().
  */
 function lightning_search_entity_type_alter(array &$entity_types) {

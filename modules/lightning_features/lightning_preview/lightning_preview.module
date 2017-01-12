@@ -23,6 +23,18 @@ use Drupal\user\Entity\Role;
 use Drupal\workbench_moderation\ModerationStateTransitionInterface as StateTransitionInterface;
 
 /**
+ * Implements hook_block_alter().
+ */
+function lightning_preview_block_alter(array &$blocks) {
+  unset(
+    $blocks['entity_block:workspace'],
+    $blocks['entity_block:replication_log'],
+    $blocks['entity_block:replication'],
+    $blocks['entity_block:workspace_pointer']
+  );
+}
+
+/**
  * Implements hook_field_widget_info_alter().
  */
 function lightning_preview_field_widget_info_alter(array &$info) {

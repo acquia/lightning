@@ -15,7 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * A block that can display any entity in the content search index.
  *
  * @Block(
- *   id = "entity_block",
+ *   id = "entity_search_block",
  *   admin_label = @Translation("Entity")
  * )
  */
