@@ -14,13 +14,6 @@ use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
 
 /**
- * Implements hook_block_alter().
- */
-function lightning_workflow_block_alter(array &$blocks) {
-  unset($blocks['entity_block:scheduled_update']);
-}
-
-/**
  * Alters a moderation_state form element.
  *
  * Workbench Moderation's out-of-the-box UX is kind of awful, so this restores

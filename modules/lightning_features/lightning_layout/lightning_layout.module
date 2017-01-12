@@ -14,13 +14,6 @@ use Drupal\panelizer\Plugin\Field\FieldWidget\PanelizerWidget as BasePanelizerWi
 use Drupal\user\Entity\Role;
 
 /**
- * Implements hook_block_alter().
- */
-function lightning_layout_block_alter(array &$blocks) {
-  unset($blocks['entity_block:page_variant']);
-}
-
-/**
  * Implements hook_field_widget_info_alter().
  */
 function lightning_layout_field_widget_info_alter(array &$info) {

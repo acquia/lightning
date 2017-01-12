@@ -25,3 +25,13 @@ lightning_core.settings:
       sequence:
         type: lightning_core.content_role
         label: 'Content role'
+    entity_block:
+      type: mapping
+      label: 'Entity Block plugin settings'
+      mapping:
+        blacklist:
+          type: sequence
+          label: 'Entity type blacklist'
+          sequence:
+            type: string
+            label: 'Entity type ID'

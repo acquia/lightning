@@ -20,18 +20,6 @@ use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
- * Implements hook_block_alter().
- */
-function lightning_core_block_alter(array &$blocks) {
-  unset(
-    $blocks['entity_block:block'],
-    $blocks['entity_block:block_content'],
-    $blocks['entity_block:shortcut'],
-    $blocks['entity_block:menu_link_content']
-  );
-}
-
-/**
  * Implements hook_help().
  */
 function lightning_core_help($route_name, RouteMatchInterface $route_match) {
