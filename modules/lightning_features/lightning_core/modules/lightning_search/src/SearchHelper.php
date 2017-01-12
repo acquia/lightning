@@ -54,16 +54,17 @@ class SearchHelper {
    * Returns the definitions of the indexed entity types.
    *
    * @return \Drupal\Core\Entity\EntityTypeInterface[]
-   *   The definitions of the indexed entity types.
+   *   The definitions of the indexed entity types, keyed by entity type ID.
    */
   public function getIndexedEntityTypes() {
     $entity_types = [];
     foreach ($this->index->getDatasources() as $data_source) {
       if ($data_source->getBaseId() == 'entity') {
-        $entity_types[] = $data_source->getDerivativeId();
+        $id = $data_source->getDerivativeId();
+        $entity_types[$id] = $this->entityTypeManager->getDefinition($id);
       }
     }
-    return array_map([$this->entityTypeManager, 'getDefinition'], $entity_types);
+    return $entity_types;
   }
 
   /**

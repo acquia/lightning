@@ -7,7 +7,7 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\search_api\Item\Field;
 
 /**
- * @covers \Drupal\lightning_search\SearchHelper
+ * @coversDefaultClass \Drupal\lightning_search\SearchHelper
  * @group lightning_search
  */
 class SearchHelperTest extends KernelTestBase {
@@ -15,7 +15,13 @@ class SearchHelperTest extends KernelTestBase {
   /**
    * {@inheritdoc}
    */
-  public static $modules = ['node', 'search_api', 'taxonomy'];
+  public static $modules = [
+    'lightning_search',
+    'node',
+    'search_api',
+    'taxonomy',
+    'user',
+  ];
 
   /**
    * {@inheritdoc}
@@ -23,12 +29,20 @@ class SearchHelperTest extends KernelTestBase {
   protected function setUp() {
     parent::setUp();
 
+    $this->installEntitySchema('search_api_task');
+
+    /** @var \Drupal\search_api\Tracker\TrackerInterface $tracker */
+    $tracker = $this->container
+      ->get('plugin.manager.search_api.tracker')
+      ->createInstance('default');
+
     /** @var \Drupal\search_api\IndexInterface $index */
     $index = $this->container->get('entity_type.manager')
       ->getStorage('search_api_index')
       ->create([
         'id' => 'content',
-      ]);
+      ])
+      ->setTracker($tracker);
 
     $field = (new Field($index, 'label'))
       ->setLabel('Label')
