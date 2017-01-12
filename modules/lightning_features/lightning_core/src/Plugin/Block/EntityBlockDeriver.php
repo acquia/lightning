@@ -62,17 +62,14 @@ class EntityBlockDeriver extends DeriverBase implements ContainerDeriverInterfac
    * {@inheritdoc}
    */
   public function getDerivativeDefinitions($base_plugin_definition) {
-    $blacklist = $this->configFactory
+    $allowed_types = $this->configFactory
       ->get('lightning_core.settings')
-      ->get('entity_block.blacklist');
+      ->get('entity_block.allowed_types');
 
     foreach ($this->entityTypeManager->getDefinitions() as $entity_type) {
       $id = $entity_type->id();
 
-      if (in_array($id, $blacklist)) {
-        continue;
-      }
-      elseif ($entity_type->hasViewBuilderClass()) {
+      if ($entity_type->hasViewBuilderClass() && in_array($id, $allowed_types)) {
         $derivative = $base_plugin_definition;
         $derivative['admin_label'] = $entity_type->getLabel();
         $derivative['description'] = $this->t('Displays a single @entity_type.', [
