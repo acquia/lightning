@@ -70,17 +70,3 @@ function lightning_core_update_8003() {
     lightning_core_modules_installed(['token']);
   }
 }
-
-/**
- * Creates the entity block config settings.
- */
-function lightning_core_update_8004() {
-  $values = \Drupal::service('lightning.config_helper')
-    ->install('lightning_core')
-    ->read('lightning_core.settings');
-
-  \Drupal::configFactory()
-    ->getEditable('lightning_core.settings')
-    ->set('entity_block', $values['entity_block'])
-    ->save();
-}
