@@ -16,7 +16,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Block(
  *   id = "entity_search_block",
- *   admin_label = @Translation("Entity")
+ *   admin_label = @Translation("Search for an entity")
  * )
  */
 class EntityBlock extends BaseEntityBlock {

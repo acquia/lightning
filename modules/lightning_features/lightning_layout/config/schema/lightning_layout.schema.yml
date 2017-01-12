@@ -1,0 +1,24 @@
+lightning_layout.settings:
+  type: config_object
+  label: 'Lightning Layout settings'
+  mapping:
+    ipe:
+      type: mapping
+      label: 'Panels IPE settings'
+      mapping:
+        categories:
+          type: sequence
+          label: 'Block categories'
+          sequence:
+            type: mapping
+            label: 'Category'
+            mapping:
+              label:
+                type: string
+                label: 'Label'
+              blocks:
+                type: sequence
+                label: 'Blocks'
+                sequence:
+                  type: string
+                  label: 'Plugin ID'
