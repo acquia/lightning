@@ -153,34 +153,56 @@ class EntityBlock extends BlockBase implements ContainerFactoryPluginInterface {
       '#default_value' => $this->configuration['entity_id'],
     ];
 
+    $form['view_mode'] = [
+      '#type' => 'radios',
+      '#states' => [
+        // You can only choose a view mode when the entity type is known.
+        'visible' => [
+          'input[name $= "settings[entity_type]"]' => [
+            'empty' => FALSE,
+          ],
+        ],
+      ],
+    ];
+
     /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface[] $displays */
     $displays = $this->entityTypeManager
       ->getStorage('entity_view_display')
       ->loadMultiple();
 
+    foreach ($displays as $display) {
+      $mode = $display->getMode();
+      $id = $display->getTargetEntityTypeId() . '.' . $mode;
+
+      // Regardless of entity type, the default view mode is always a special
+      // snowflake!
+      if ($mode == 'default') {
+        $form['view_mode']['#options'][$id] = $this->t('Default');
+      }
+      else {
+        /** @var \Drupal\Core\Entity\EntityViewModeInterface $view_mode */
+        $view_mode = $this->entityTypeManager
+          ->getStorage('entity_view_mode')
+          ->load($id);
+
+        $settings = $view_mode->getThirdPartySettings('lightning_core');
+
+        // Don't expose internal view modes.
+        if (empty($settings['internal'])) {
+          $form['view_mode']['#options'][$id] = $view_mode->label();
+          $form['view_mode']['#legend'][$id] = @$settings['description'];
+        }
+      }
+    }
+    if ($entity) {
+      $form['view_mode']['#default_value'] = $entity->getEntityTypeId() . '.' . $this->configuration['view_mode'];
+    }
+
     if ($displays) {
-      $form['view_mode'] = [
-        '#type' => 'radios',
-        '#title' => $this->t('View mode'),
-        '#states' => [
-          // You can only choose a view mode when the entity type is known.
-          'visible' => [
-            'input[name $= "settings[entity_type]"]' => [
-              'empty' => FALSE,
-            ],
-          ],
-        ],
-      ];
-      foreach ($displays as $display) {
-        $value = $display->getTargetEntityTypeId() . '.' . $display->getMode();
-        // The option label will be changed in ::processViewMode().
-        $form['view_mode']['#options'][$value] = $this->t('Default');
-      }
-      if ($entity) {
-        $form['view_mode']['#default_value'] = $entity->getEntityTypeId() . '.' . $this->configuration['view_mode'];
-      }
+      $form['view_mode']['#title'] = $this->t('View mode');
+
       $this->formHelper->applyStandardProcessing($form['view_mode']);
-      $form['view_mode']['#process'][] = [$this, 'processViewMode'];
+      $form['view_mode']['#process'][] = [$this, 'setViewModeVisibility'];
     }
 
     return $form;
@@ -207,10 +229,7 @@ class EntityBlock extends BlockBase implements ContainerFactoryPluginInterface {
   }
 
   /**
-   * Process function for view mode selection element.
-   *
-   * Sets JavaScript visibility states and descriptions for view mode options,
-   * and hides internal view modes.
+   * Process function: sets visibility states for view mode options.
    *
    * @param array $element
    *   The unprocessed element.
@@ -218,7 +237,7 @@ class EntityBlock extends BlockBase implements ContainerFactoryPluginInterface {
    * @return array
    *    The processed element.
    */
-  public function processViewMode(array $element) {
+  public function setViewModeVisibility(array $element) {
     $children = Element::children($element);
 
     // Each view mode should only be visible when the selected entity is of its
@@ -228,23 +247,6 @@ class EntityBlock extends BlockBase implements ContainerFactoryPluginInterface {
       $element[$id]['#states']['visible']['input[name $= "settings[entity_type]"']['value'] = $entity_type;
     }
 
-    /** @var \Drupal\Core\Entity\EntityViewModeInterface[] $view_modes */
-    $view_modes = $this->entityTypeManager
-      ->getStorage('entity_view_mode')
-      ->loadMultiple($children);
-
-    foreach ($view_modes as $id => $view_mode) {
-      $element[$id]['#title'] = $view_mode->label();
-
-      $settings = $view_mode->getThirdPartySettings('lightning_core');
-
-      if (empty($settings['internal'])) {
-        $element[$id]['#description'] = @$settings['description'];
-      }
-      else {
-        $element[$id]['#access'] = FALSE;
-      }
-    }
     return $element;
   }
 

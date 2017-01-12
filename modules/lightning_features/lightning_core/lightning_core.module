@@ -11,13 +11,20 @@ use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\lightning_core\Element as ElementHelper;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function lightning_core_element_info_alter(array &$info) {
+  $info['radios']['#legend'] = $info['checkboxes']['#legend'] = [];
+  $info['radios']['#process'][] = $info['checkboxes']['#process'][] = [ElementHelper::class, 'processLegend'];
+}
 
 /**
  * Implements hook_help().
@@ -218,37 +225,12 @@ function lightning_core_form_system_modules_alter(array &$form) {
  */
 function lightning_core_form_user_form_alter(array &$form) {
   if (isset($form['account']['roles'])) {
-    // Ensure the standard process functions run first.
-    \Drupal::service('lightning.form_helper')
-      ->applyStandardProcessing($form['account']['roles']);
-
-    $form['account']['roles']['#process'][] = 'lightning_core_set_role_descriptions';
-  }
-}
-
-/**
- * Element process function: sets descriptions for role checkboxes on user_form.
- *
- * @param array $element
- *   The element to process.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   The current form state.
- * @param array $complete_form
- *   The complete form.
- *
- * @return array
- *   The processed element.
- */
-function lightning_core_set_role_descriptions(array $element, FormStateInterface $form_state, array &$complete_form) {
-  // Try to add a description for each individual role.
-  foreach (Element::children($element) as $role) {
-    // Don't overwrite any existing description.
-    if (empty($element[$role]['#description'])) {
-      $element[$role]['#description'] = Role::load($role)
+    /** @var RoleInterface $role */
+    foreach (Role::loadMultiple() as $id => $role) {
+      $form['account']['roles']['#legend'][$id] = $role
         ->getThirdPartySetting('lightning_core', 'description');
     }
   }
-  return $element;
 }
 
 /**

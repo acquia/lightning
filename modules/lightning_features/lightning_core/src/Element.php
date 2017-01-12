@@ -76,4 +76,27 @@ class Element {
     }
   }
 
+  /**
+   * Sets descriptions on child elements according to the #legend property.
+   *
+   * @param array $element
+   *   The unprocessed element.
+   *
+   * @return array
+   *   The processed element.
+   */
+  public static function processLegend(array $element) {
+    if ($element['#legend']) {
+      foreach (RenderElement::children($element) as $key) {
+        if (is_callable($element['#legend'])) {
+          $element[$key]['#description'] = $element['#legend']($element[$key]);
+        }
+        elseif (isset($element['#legend'][$key])) {
+          $element[$key]['#description'] = $element['#legend'][$key];
+        }
+      }
+    }
+    return $element;
+  }
+
 }
