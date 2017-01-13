@@ -3,6 +3,7 @@
 namespace Drupal\lightning_search;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 
 /**
@@ -38,12 +39,16 @@ class SearchHelper {
    *   The entity type manager.
    * @param \Drupal\Component\Plugin\PluginManagerInterface $data_source_manager
    *   The Search API data source plugin manager.
-   * @param string $index_id
-   *   The ID of the search index to manipulate.
+   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   *   The config factory.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, PluginManagerInterface $data_source_manager, $index_id) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, PluginManagerInterface $data_source_manager, ConfigFactoryInterface $config_factory) {
     $this->entityTypeManager = $entity_type_manager;
     $this->dataSourceManager = $data_source_manager;
+
+    $index_id = $config_factory
+      ->get('lightning_search.settings')
+      ->get('content_index');
 
     $this->index = $this->entityTypeManager
       ->getStorage('search_api_index')
