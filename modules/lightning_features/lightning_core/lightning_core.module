@@ -124,7 +124,8 @@ function lightning_core_entity_load(array $entities) {
  * @param array $keys
  *   The keys, in their desired order.
  *
- * @deprecated
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use
+ * \Drupal\lightning_core\Element::order() instead.
  */
 function array_reorder(array &$values, array $keys) {
   ElementHelper::order($values, $keys);
@@ -139,7 +140,8 @@ function array_reorder(array &$values, array $keys) {
  * @return array
  *   The renderable element with all buttons (at all levels) disabled.
  *
- * @deprecated
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use
+ * \Drupal\lightning_core\Element::disableButtons() instead.
  */
 function lightning_core_disable_buttons(array $element) {
   return ElementHelper::disableButtons($element);
@@ -313,7 +315,8 @@ function lightning_core_preprocess_block(array &$variables) {
  * @param string $module
  *   (optional) The module which has the default configuration.
  *
- * @deprecated
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use the
+ * lightning.config_helper service instead.
  */
 function lightning_core_create_config($entity_type, $id, $module = 'lightning_core') {
   \Drupal::service('lightning.config_helper')
@@ -332,7 +335,8 @@ function lightning_core_create_config($entity_type, $id, $module = 'lightning_co
  * @return array
  *   The config data.
  *
- * @deprecated
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use the
+ * lightning.config_helper service instead.
  */
 function lightning_core_read_config($id, $module = 'lightning_core') {
   return \Drupal::service('lightning.config_helper')
