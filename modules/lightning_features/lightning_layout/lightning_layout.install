@@ -125,6 +125,22 @@ function lightning_layout_update_8006() {
 }
 
 /**
+ * Creates the Lighting Layout settings object.
+ */
+function lightning_layout_update_8007() {
+  $object_id = 'lightning_layout.settings';
+
+  $values = \Drupal::service('lightning.config_helper')
+    ->install('lightning_layout')
+    ->read($object_id);
+
+  \Drupal::configFactory()
+    ->getEditable($object_id)
+    ->setData($values)
+    ->save();
+}
+
+/**
  * Returns the raw values for a bundled view display.
  *
  * @param string $display_id

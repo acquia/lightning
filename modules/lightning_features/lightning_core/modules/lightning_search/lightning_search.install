@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Contains installation and update routines for Lightning Search.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function lightning_search_install() {
+  \Drupal::service('lightning.search_helper')
+    ->enable('node')
+    ->enable('taxonomy_term');
+}

@@ -266,9 +266,9 @@ class EntitySubContext extends DrupalSubContextBase {
   /**
    * Compares two revisions of a node.
    *
-   * @param $a
+   * @param string $a
    *   The one-based index of a revision to compare. 1st is oldest.
-   * @param $b
+   * @param string $b
    *   The one-based index of a revision to compare. 1st is oldest.
    *
    * @When I compare the :a and :b revisions
