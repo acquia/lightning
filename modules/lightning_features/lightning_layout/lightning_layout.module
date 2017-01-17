@@ -17,17 +17,13 @@ use Drupal\user\Entity\Role;
  * Implements hook_block_alter().
  */
 function lightning_layout_block_alter(array &$blocks) {
-  // Disable all entity blocks that aren't in our configured whitelist.
-  $entity_types = \Drupal::config('lightning_layout.settings')
-    ->get('entity_blocks');
+  $allow = \Drupal::config('lightning_layout.settings')->get('entity_blocks');
 
-  foreach (array_keys($blocks) as $plugin_id) {
-    if (strpos($plugin_id, 'entity_block:') === 0) {
-      $entity_type = substr($plugin_id, 13);
-
-      if (in_array($entity_type, $entity_types) == FALSE) {
-        unset($blocks[$plugin_id]);
-      }
+  // Suppress all entity_block derivatives for non-whitelisted entity types.
+  $plugins = preg_grep('/^entity_block:/', array_keys($blocks));
+  foreach ($plugins as $plugin_id) {
+    if (!in_array(substr($plugin_id, 13), $allow)) {
+      unset($blocks[$plugin_id]);
     }
   }
 }

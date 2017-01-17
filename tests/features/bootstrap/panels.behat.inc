@@ -275,7 +275,7 @@ class PanelsSubContext extends DrupalSubContextBase {
   }
 
   /**
-   * Asserts that a block with a specific plugin ID is not present.
+   * Asserts that a block with a specific plugin ID is NOT present.
    *
    * @param string $plugin_id
    *   The block plugin ID.

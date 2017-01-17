@@ -125,19 +125,23 @@ function lightning_layout_update_8006() {
 }
 
 /**
- * Creates the Lighting Layout settings object.
+ * Creates Lightning Layout settings config object and installs Entity Blocks.
  */
 function lightning_layout_update_8007() {
-  $object_id = 'lightning_layout.settings';
+  $id = 'lightning_layout.settings';
 
   $values = \Drupal::service('lightning.config_helper')
     ->install('lightning_layout')
-    ->read($object_id);
+    ->read($id);
 
   \Drupal::configFactory()
-    ->getEditable($object_id)
+    ->getEditable($id)
     ->setData($values)
     ->save();
+
+  if (!\Drupal::moduleHandler()->moduleExists('entity_block')) {
+    \Drupal::service('module_installer')->install(['entity_block']);
+  }
 }
 
 /**
