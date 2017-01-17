@@ -14,15 +14,6 @@ use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\media_entity\MediaBundleInterface;
 
 /**
- * Implements hook_modules_installed().
- */
-function lightning_media_modules_installed(array $modules) {
-  if (in_array('lightning_search', $modules)) {
-    \Drupal::service('lightning.search_helper')->enable('media');
-  }
-}
-
-/**
  * Implements template_preprocess_image_style().
  *
  * @param array $variables

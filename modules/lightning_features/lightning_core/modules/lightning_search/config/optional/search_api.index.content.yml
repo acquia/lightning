@@ -1,0 +1,50 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - search_api.server.database
+  module:
+    - search_api
+    - node
+id: content
+name: Content
+description: 'An index of all content in your site.'
+read_only: false
+field_settings:
+  rendered:
+    label: Rendered
+    property_path: rendered_item
+    type: text
+    configuration:
+      roles:
+        anonymous: anonymous
+      view_mode:
+        'entity:node':
+          landing_page: default
+          page: default
+  label:
+    label: Label
+    property_path: aggregated_field
+    type: text
+    configuration:
+      type: first
+      fields:
+        - 'entity:node/title'
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: true
+      selected: {  }
+    languages:
+      default: true
+      selected: {  }
+processor_settings:
+  add_url: {  }
+  aggregated_field: {  }
+  rendered_item: {  }
+tracker_settings:
+  default: {  }
+options:
+  index_directly: true
+  cron_limit: 50
+server: database
