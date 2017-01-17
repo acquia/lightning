@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Contains Search API integration for Lightning.
+ */
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function lightning_search_views_data_alter(array &$data) {
+  $data['search_api_index_content']['rendered']['field']['id'] = 'search_api';
+}
