@@ -81,3 +81,14 @@ Feature: Panelizer
       """
     And I visit "/node/add/landing_page"
     Then I should see "A view mode with a description? AMAZUNG!"
+
+  @javascript
+  Scenario: Not all entity types should be exposed as embeddable blocks
+    Given I am logged in as a user with the landing_page_creator role
+    And landing_page content:
+      | title  | path    | moderation_state |
+      | Foobar | /foobar | draft            |
+    When I visit "/foobar"
+    And I open the "Entity Block" category
+    Then I should not see the "entity_block:block" plugin
+    And I should not see the "entity_block:block_custom" plugin

@@ -125,6 +125,19 @@ function lightning_layout_update_8006() {
 }
 
 /**
+ * Creates Lightning Layout settings config object and installs Entity Blocks.
+ */
+function lightning_layout_update_8007() {
+  $id = 'lightning_layout.settings';
+  $values = lightning_core_read_config($id, 'lightning_layout');
+  \Drupal::configFactory()->getEditable($id)->setData($values)->save();
+
+  if (!\Drupal::moduleHandler()->moduleExists('entity_block')) {
+    \Drupal::service('module_installer')->install(['entity_block']);
+  }
+}
+
+/**
  * Returns the raw values for a bundled view display.
  *
  * @param string $display_id

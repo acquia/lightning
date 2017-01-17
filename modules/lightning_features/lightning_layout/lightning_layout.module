@@ -14,6 +14,21 @@ use Drupal\panelizer\Plugin\Field\FieldWidget\PanelizerWidget as BasePanelizerWi
 use Drupal\user\Entity\Role;
 
 /**
+ * Implements hook_block_alter().
+ */
+function lightning_layout_block_alter(array &$blocks) {
+  $allow = \Drupal::config('lightning_layout.settings')->get('entity_blocks');
+
+  // Suppress all entity_block derivatives for non-whitelisted entity types.
+  $plugins = preg_grep('/^entity_block:/', array_keys($blocks));
+  foreach ($plugins as $plugin_id) {
+    if (!in_array(substr($plugin_id, 13), $allow)) {
+      unset($blocks[$plugin_id]);
+    }
+  }
+}
+
+/**
  * Implements hook_field_widget_info_alter().
  */
 function lightning_layout_field_widget_info_alter(array &$info) {
