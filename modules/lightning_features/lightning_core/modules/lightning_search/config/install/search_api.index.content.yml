@@ -30,6 +30,14 @@ field_settings:
       type: first
       fields:
         - 'entity:node/title'
+  status:
+    label: Status
+    property_path: aggregated_field
+    type: boolean
+    configuration:
+      type: first
+      fields:
+        - 'entity:node/status'
 datasource_settings:
   'entity:node':
     bundles:
@@ -42,6 +50,13 @@ processor_settings:
   add_url: {  }
   aggregated_field: {  }
   rendered_item: {  }
+  ignorecase:
+    fields:
+      - rendered
+      - label
+    weights:
+      preprocess_index: -10
+      preprocess_query: -10
 tracker_settings:
   default: {  }
 options:

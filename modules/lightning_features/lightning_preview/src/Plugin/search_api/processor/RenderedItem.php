@@ -22,16 +22,16 @@ class RenderedItem extends BaseRenderedItem {
   /**
    * The workspace manager.
    *
-   * @var \Drupal\multiversion\Workspace\WorkspaceManagerInterface
+   * @var WorkspaceManagerInterface
    */
   protected $workspaceManager;
 
   /**
-   * The forcible workspace negotiator.
+   * The explicit workspace negotiator.
    *
-   * @var \Drupal\lightning_preview\ForcibleWorkspaceNegotiator
+   * @var ExplicitWorkspaceNegotiator
    */
-  protected $forcibleNegotiator;
+  protected $explicitNegotiator;
 
   /**
    * RenderedItem constructor.
@@ -42,21 +42,21 @@ class RenderedItem extends BaseRenderedItem {
    *   The plugin ID.
    * @param array $plugin_definition
    *   The plugin definition.
-   * @param \Drupal\Core\Session\AccountProxyInterface $current_user
+   * @param AccountProxyInterface $current_user
    *   The currently logged in user.
-   * @param \Drupal\Core\Render\RendererInterface $renderer
+   * @param RendererInterface $renderer
    *   The renderer.
-   * @param \Drupal\Core\Logger\LoggerChannelInterface $logger_channel
+   * @param LoggerChannelInterface $logger_channel
    *   The Search API logger channel.
-   * @param \Drupal\Core\Theme\ThemeManagerInterface $theme_manager
+   * @param ThemeManagerInterface $theme_manager
    *   The theme manager.
-   * @param \Drupal\Core\Theme\ThemeInitializationInterface $theme_initializer
+   * @param ThemeInitializationInterface $theme_initializer
    *   The theme initializer.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
+   * @param ConfigFactoryInterface $config_factory
    *   The config factory.
-   * @param \Drupal\multiversion\Workspace\WorkspaceManagerInterface $workspace_manager
+   * @param WorkspaceManagerInterface $workspace_manager
    *   The workspace manager.
-   * @param \Drupal\lightning_preview\ExplicitWorkspaceNegotiator $explicit_negotiator
+   * @param ExplicitWorkspaceNegotiator $explicit_negotiator
    *   The explicit workspace negotiator.
    */
   public function __construct(array $configuration, $plugin_id, array $plugin_definition, AccountProxyInterface $current_user, RendererInterface $renderer, LoggerChannelInterface $logger_channel, ThemeManagerInterface $theme_manager, ThemeInitializationInterface $theme_initializer, ConfigFactoryInterface $config_factory, WorkspaceManagerInterface $workspace_manager, ExplicitWorkspaceNegotiator $explicit_negotiator) {
@@ -95,7 +95,7 @@ class RenderedItem extends BaseRenderedItem {
    */
   public function addFieldValues(ItemInterface $item) {
     $workspace_id = $this->workspaceManager->getActiveWorkspace()->id();
-    $this->forcibleNegotiator->setWorkspace($workspace_id);
+    $this->explicitNegotiator->setWorkspace($workspace_id);
     parent::addFieldValues($item);
   }
 

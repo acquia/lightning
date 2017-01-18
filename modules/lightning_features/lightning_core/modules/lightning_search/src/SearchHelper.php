@@ -96,7 +96,8 @@ class SearchHelper {
 
       $this
         ->indexRendered($entity_type)
-        ->indexLabel($entity_type);
+        ->indexAggregatedKey($entity_type, 'label')
+        ->indexAggregatedKey($entity_type, 'status');
     }
     return $this;
   }
@@ -122,7 +123,8 @@ class SearchHelper {
 
       $this
         ->unindexRendered($entity_type)
-        ->unindexLabel($entity_type);
+        ->unindexAggregatedKey($entity_type, 'label')
+        ->unindexAggregatedKey($entity_type, 'status');
     }
     return $this;
   }
@@ -180,60 +182,66 @@ class SearchHelper {
   }
 
   /**
-   * Returns the label property path for an entity type.
+   * Returns the property path for an entity key.
    *
    * @param string $entity_type
    *   The entity type ID.
+   * @param string $which
+   *   The entity key.
    *
    * @return string
-   *   The label property path, e.g. entity:node/title.
+   *   The entity key's property path.
    */
-  protected function getLabelProperty($entity_type) {
-    $label_key = $this->entityTypeManager
+  protected function getKeyProperty($entity_type, $which) {
+    $key = $this->entityTypeManager
       ->getDefinition($entity_type)
-      ->getKey('label');
+      ->getKey($which);
 
-    if ($label_key) {
-      return 'entity:' . $entity_type . '/' . $label_key;
-    }
-    elseif ($entity_type == 'user') {
+    if ($entity_type == 'user' && $which == 'label') {
       return 'entity:' . $entity_type . '/name';
+    }
+    elseif ($key) {
+      return 'entity:' . $entity_type . '/' . $key;
     }
   }
 
   /**
-   * Aggregates the label of an entity type in the index.
+   * Adds an aggregated entity key to the index.
    *
    * @param string $entity_type
    *   The entity type ID.
+   * @param string $key
+   *   The entity key to add.
    *
    * @return $this
    */
-  protected function indexLabel($entity_type) {
-    $property = $this->getLabelProperty($entity_type);
-    if ($property) {
-      $field = $this->index->getField('label');
+  protected function indexAggregatedKey($entity_type, $key) {
+    $field = $this->index->getField($key);
+    $property = $this->getKeyProperty($entity_type, $key);
+
+    if ($field && $property) {
       $configuration = $field->getConfiguration();
-
       $configuration['fields'][] = $property;
-
       $field->setConfiguration($configuration);
     }
     return $this;
   }
 
   /**
-   * Removes the aggregate label of an entity type from the index.
+   * Removes an aggregated entity key from the index.
    *
    * @param string $entity_type
    *   The entity type ID.
+   * @param string $key
+   *   The entity key to remove.
    *
    * @return $this
    */
-  protected function unindexLabel($entity_type) {
-    $property = $this->getLabelProperty($entity_type);
-    if ($property) {
-      $field = $this->index->getField('label');
+  protected function unindexAggregatedKey($entity_type, $key) {
+    $field = $this->index->getField($key);
+    $property = $this->getKeyProperty($entity_type, $key);
+
+    if ($field && $property) {
       $configuration = $field->getConfiguration();
 
       $i = array_search($property, $configuration['fields']);
