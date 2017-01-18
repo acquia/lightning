@@ -81,8 +81,8 @@ install:
   - cd docroot
   # Execute database updates, if there are any.
   - drush updatedb --yes
-  # Install Diff, Lightning Preview, and Contact Form, if not already installed.
-  - drush pm-enable --yes diff lightning_contact_form lightning_preview
+  # Install Diff, Lightning Preview, Contact Form, and Lightning Search, if not already installed.
+  - drush pm-enable --yes diff lightning_contact_form lightning_preview lightning_search
 
 before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
