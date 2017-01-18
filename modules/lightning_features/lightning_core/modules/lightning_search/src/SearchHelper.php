@@ -4,6 +4,7 @@ namespace Drupal\lightning_search;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Entity\Query\QueryFactory;
 
 /**
  * Helps with configuring Search API indices.
@@ -32,6 +33,13 @@ class SearchHelper {
   protected $dataSources;
 
   /**
+   * The entity query factory.
+   *
+   * @var \Drupal\Core\Entity\Query\QueryFactory
+   */
+  protected $entityQueryFactory;
+
+  /**
    * The current search index.
    *
    * @var \Drupal\search_api\IndexInterface
@@ -39,19 +47,33 @@ class SearchHelper {
   protected $index;
 
   /**
+   * All entity view display IDs.
+   *
+   * @var string[]
+   */
+  protected $displays = [];
+
+  /**
    * SearchHelper constructor.
    *
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   * @param EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\Component\Plugin\PluginManagerInterface $data_sources
+   * @param PluginManagerInterface $data_sources
    *   The data source plugin manager.
+   * @param QueryFactory $query_factory
+   *   The entity query factory.
    */
-  public function __construct(EntityTypeManagerInterface $entity_type_manager, PluginManagerInterface $data_sources) {
+  public function __construct(EntityTypeManagerInterface $entity_type_manager, PluginManagerInterface $data_sources, QueryFactory $query_factory) {
     $this->entityTypeManager = $entity_type_manager;
     $this->dataSources = $data_sources;
+    $this->entityQueryFactory = $query_factory;
 
     $this->indexStorage = $this->entityTypeManager
       ->getStorage('search_api_index');
+
+    $this->displays = $this->entityQueryFactory
+      ->get('entity_view_display')
+      ->execute();
   }
 
   /**
@@ -139,27 +161,66 @@ class SearchHelper {
     $field = $this->index->getField('rendered');
     $configuration = $field->getConfiguration();
 
-    $plugin_id = 'entity:' . $entity_type;
+    foreach ($this->getIndexViewModes($entity_type) as $bundle => $view_mode) {
+      $configuration['view_mode']['entity:' . $entity_type][$bundle] = $view_mode;
+    }
+    $field->setConfiguration($configuration);
+
+    return $this;
+  }
+
+  /**
+   * Determine the view modes to use for indexing all bundles of an entity type.
+   *
+   * @param string $entity_type
+   *   The entity type ID.
+   *
+   * @return string[]
+   *   The view mode IDs, keyed by bundle.
+   */
+  protected function getIndexViewModes($entity_type) {
+    // Prefer the search_index view mode, then full for content.
+    $preferences = ['search_index'];
+    if ($entity_type == 'node') {
+      $preferences[] = 'full';
+    }
 
     $bundle_type = $this->entityTypeManager
       ->getDefinition($entity_type)
       ->getBundleEntityType();
 
-    if ($bundle_type) {
-      $bundles = $this->entityTypeManager
-        ->getStorage($bundle_type)
-        ->loadMultiple();
+    $bundles = $bundle_type
+      ? $this->entityQueryFactory->get($bundle_type)->execute()
+      : [$entity_type];
 
-      foreach (array_keys($bundles) as $bundle) {
-        $configuration['view_mode'][$plugin_id][$bundle] = 'default';
+    return array_map(
+      function ($bundle) use ($entity_type, $preferences) {
+        return $this->getIndexViewMode($entity_type, $bundle, $preferences);
+      },
+      array_combine($bundles, $bundles)
+    );
+  }
+
+  /**
+   * Determines the view mode to use for indexing a bundle of an entity type.
+   *
+   * @param string $entity_type
+   *   The entity type ID.
+   * @param string $bundle
+   *   The bundle.
+   * @param array $preferences
+   *   The view modes to check for, in descending order of preference.
+   *
+   * @return string
+   *   The view mode ID. Defaults to 'default' if none of the preferences exist.
+   */
+  protected function getIndexViewMode($entity_type, $bundle, array $preferences = ['search_index']) {
+    foreach ($preferences as $view_mode) {
+      if (in_array($entity_type . '.' . $bundle . '.' . $view_mode, $this->displays)) {
+        return $view_mode;
       }
     }
-    else {
-      $configuration['view_mode'][$plugin_id][$entity_type] = 'default';
-    }
-    $field->setConfiguration($configuration);
-
-    return $this;
+    return 'default';
   }
 
   /**
