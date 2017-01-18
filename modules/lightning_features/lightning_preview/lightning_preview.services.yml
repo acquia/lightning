@@ -15,3 +15,8 @@ services:
     tags:
       -
         name: event_subscriber
+
+  workspace.negotiator.explicit:
+    class: 'Drupal\lightning_preview\ExplicitWorkspaceNegotiator'
+    tags:
+      - { name: workspace_negotiator, priority: 101 }

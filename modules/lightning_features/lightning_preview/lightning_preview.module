@@ -23,6 +23,16 @@ use Drupal\user\Entity\Role;
 use Drupal\workbench_moderation\ModerationStateTransitionInterface as StateTransitionInterface;
 
 /**
+ * Implements hook_search_api_processor_info_alter().
+ */
+function lightning_preview_search_api_processor_info_alter(array &$processors) {
+  // We cannot import the class directly because it extends the RenderedItem
+  // class from Search API, and if Search API isn't enabled, importing the class
+  // will make big kaboom.
+  $processors['rendered_item']['class'] = '\Drupal\lightning_preview\Plugin\search_api\processor\RenderedItem';
+}
+
+/**
  * Implements hook_field_widget_info_alter().
  */
 function lightning_preview_field_widget_info_alter(array &$info) {
