@@ -96,8 +96,7 @@ class SearchHelper {
 
       $this
         ->indexRendered($entity_type)
-        ->indexAggregatedKey($entity_type, 'label')
-        ->indexAggregatedKey($entity_type, 'status');
+        ->indexAggregatedKey($entity_type, 'label');
     }
     return $this;
   }
@@ -123,8 +122,7 @@ class SearchHelper {
 
       $this
         ->unindexRendered($entity_type)
-        ->unindexAggregatedKey($entity_type, 'label')
-        ->unindexAggregatedKey($entity_type, 'status');
+        ->unindexAggregatedKey($entity_type, 'label');
     }
     return $this;
   }

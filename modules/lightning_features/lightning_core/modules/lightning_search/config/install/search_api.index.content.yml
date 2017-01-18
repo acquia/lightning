@@ -30,14 +30,27 @@ field_settings:
       type: first
       fields:
         - 'entity:node/title'
+  node_grants:
+    label: 'Node access information'
+    property_path: search_api_node_grants
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
   status:
-    label: Status
-    property_path: aggregated_field
+    label: status
+    datasource_id: 'entity:node'
+    property_path: status
     type: boolean
-    configuration:
-      type: first
-      fields:
-        - 'entity:node/status'
+    indexed_locked: true
+    type_locked: true
+  uid:
+    label: uid
+    datasource_id: 'entity:node'
+    property_path: uid
+    type: integer
+    indexed_locked: true
+    type_locked: true
 datasource_settings:
   'entity:node':
     bundles:
@@ -49,7 +62,9 @@ datasource_settings:
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
-  rendered_item: {  }
+  content_access:
+    weights:
+      preprocess_query: -10
   ignorecase:
     fields:
       - rendered
@@ -57,6 +72,7 @@ processor_settings:
     weights:
       preprocess_index: -10
       preprocess_query: -10
+  rendered_item: {  }
 tracker_settings:
   default: {  }
 options:
