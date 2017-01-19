@@ -302,12 +302,7 @@ class SearchHelper {
 
     if ($field && $property) {
       $configuration = $field->getConfiguration();
-
-      $i = array_search($property, $configuration['fields']);
-      if (is_numeric($i)) {
-        unset($configuration['fields'][$i]);
-      }
-
+      $configuration['fields'] = array_diff($configuration['fields'], [$property]);
       $field->setConfiguration($configuration);
     }
     return $this;
