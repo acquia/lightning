@@ -97,6 +97,7 @@ class RenderedItem extends BaseRenderedItem {
     $workspace_id = $this->workspaceManager->getActiveWorkspace()->id();
     $this->explicitNegotiator->setWorkspace($workspace_id);
     parent::addFieldValues($item);
+    $this->explicitNegotiator->setWorkspace();
   }
 
 }
