@@ -5,28 +5,11 @@
  * Contains installation and update routines for Lightning Landing Page.
  */
 
-use Drupal\field\Entity\FieldConfig;
-
 /**
  * Implements hook_install().
  */
 function lightning_landing_page_install() {
   if (\Drupal::moduleHandler()->moduleExists('lightning_search')) {
-    drupal_static_reset('lightning_search_node_type_insert');
     lightning_landing_page_modules_installed(['lightning_search']);
-  }
-}
-
-/**
- * Adds a description field to landing pages.
- */
-function lightning_landing_page_update_8001() {
-  $id = 'node.landing_page.body';
-
-  $field = FieldConfig::load($id);
-  if (empty($field)) {
-    \Drupal::service('lightning.config_helper')
-      ->install('lightning_layout')
-      ->createEntity('field_config', $id);
   }
 }

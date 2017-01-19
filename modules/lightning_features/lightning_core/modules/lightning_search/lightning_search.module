@@ -7,11 +7,14 @@
 
 use Drupal\node\NodeTypeInterface;
 use Drupal\search_api\Entity\Index;
+use Drupal\views\Entity\View;
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_search_node_type_insert(NodeTypeInterface $node_type) {
+  $type = $node_type->id();
+
   // No point in continuing without an index to configure.
   /** @var \Drupal\search_api\IndexInterface $index */
   $index = Index::load('content');
@@ -19,29 +22,27 @@ function lightning_search_node_type_insert(NodeTypeInterface $node_type) {
     return;
   }
 
-  // Look up all entity view displays in the system so that we can index using
-  // the preferred one. Store the query result in the central static cache so
-  // that other modules can clear it (i.e., if they install additional view
-  // displays that should be picked up).
-  $displays = &drupal_static(__FUNCTION__);
-  if (is_null($displays)) {
-    $displays = \Drupal::entityQuery('entity_view_display')->execute();
-  }
-
-  $index_mode = 'default';
-  foreach (['search_index', 'full'] as $view_mode) {
-    if (in_array('node.' . $node_type->id() . '.' . $view_mode, $displays)) {
-      $index_mode = $view_mode;
-      break;
-    }
-  }
+  /** @var \Drupal\lightning_core\DisplayHelper $display_helper */
+  $display_helper = \Drupal::service('lightning.display_helper');
 
   $field = $index->getField('rendered');
   if ($field) {
     $configuration = $field->getConfiguration();
-    $configuration['view_mode']['entity:node'][$node_type->id()] = $index_mode;
+    $configuration['view_mode']['entity:node'][$type] = $display_helper->getPreferredMode('node', $type, ['search_index', 'full']);
     $field->setConfiguration($configuration);
     $index->save();
+  }
+
+  /** @var \Drupal\views\ViewEntityInterface $view */
+  $view = View::load('search');
+  if (empty($view)) {
+    return;
+  }
+
+  $display = &$view->getDisplay('default');
+  if ($display['display_options']['row']['type'] == 'search_api') {
+    $display['display_options']['row']['options']['view_modes']['entity:node'][$type] = $display_helper->getPreferredMode('node', $type, ['search_result', 'teaser']);
+    $view->save();
   }
 }
 
@@ -49,6 +50,8 @@ function lightning_search_node_type_insert(NodeTypeInterface $node_type) {
  * Implements hook_ENTITY_TYPE_delete().
  */
 function lightning_search_node_type_delete(NodeTypeInterface $node_type) {
+  $type = $node_type->id();
+
   // No point in continuing without an index to configure.
   /** @var \Drupal\search_api\IndexInterface $index */
   $index = Index::load('content');
@@ -59,9 +62,21 @@ function lightning_search_node_type_delete(NodeTypeInterface $node_type) {
   $field = $index->getField('rendered');
   if ($field) {
     $configuration = $field->getConfiguration();
-    unset($configuration['view_mode']['entity:node'][$node_type->id()]);
+    unset($configuration['view_mode']['entity:node'][$type]);
     $field->setConfiguration($configuration);
     $index->save();
+  }
+
+  /** @var \Drupal\views\ViewEntityInterface $view */
+  $view = View::load('search');
+  if (empty($view)) {
+    return;
+  }
+
+  $display = &$view->getDisplay('default');
+  if ($display['display_options']['row']['type'] == 'search_api') {
+    unset($display['display_options']['row']['options']['view_modes']['entity:node'][$type]);
+    $view->save();
   }
 }
 

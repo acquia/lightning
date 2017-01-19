@@ -18,3 +18,8 @@ services:
     arguments:
       - '@module_handler'
       - '@entity_type.manager'
+
+  lightning.display_helper:
+    class: '\Drupal\lightning_core\DisplayHelper'
+    arguments:
+      - '@entity.query'
