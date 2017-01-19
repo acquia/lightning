@@ -159,13 +159,15 @@ class SearchHelper {
    */
   protected function indexRendered($entity_type) {
     $field = $this->index->getField('rendered');
-    $configuration = $field->getConfiguration();
 
-    foreach ($this->getIndexViewModes($entity_type) as $bundle => $view_mode) {
-      $configuration['view_mode']['entity:' . $entity_type][$bundle] = $view_mode;
+    if ($field) {
+      $configuration = $field->getConfiguration();
+
+      foreach ($this->getIndexViewModes($entity_type) as $bundle => $view_mode) {
+        $configuration['view_mode']['entity:' . $entity_type][$bundle] = $view_mode;
+      }
+      $field->setConfiguration($configuration);
     }
-    $field->setConfiguration($configuration);
-
     return $this;
   }
 
@@ -233,10 +235,12 @@ class SearchHelper {
    */
   protected function unindexRendered($entity_type) {
     $field = $this->index->getField('rendered');
-    $configuration = $field->getConfiguration();
-    unset($configuration['view_mode']['entity:' . $entity_type]);
-    $field->setConfiguration($configuration);
 
+    if ($field) {
+      $configuration = $field->getConfiguration();
+      unset($configuration['view_mode']['entity:' . $entity_type]);
+      $field->setConfiguration($configuration);
+    }
     return $this;
   }
 

@@ -94,9 +94,18 @@ class RenderedItem extends BaseRenderedItem {
    * {@inheritdoc}
    */
   public function addFieldValues(ItemInterface $item) {
-    $workspace_id = $this->workspaceManager->getActiveWorkspace()->id();
-    $this->explicitNegotiator->setWorkspace($workspace_id);
+    $current_workspace = $this->workspaceManager
+      ->getActiveWorkspace()
+      ->id();
+
+    // The processor will switch to a completely new user session in order to
+    // to collect the rendered item's content, but this may pull it out of the
+    // current workspace, which in turn can cause all hell to break loose. So
+    // we use our explicit workspace negotiator to ensure that the session
+    // remains in the current workspace.
+    $this->explicitNegotiator->setWorkspace($current_workspace);
     parent::addFieldValues($item);
+    // All done, we no longer need to enforce the current workspace.
     $this->explicitNegotiator->setWorkspace();
   }
 
