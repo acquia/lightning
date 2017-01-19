@@ -1,6 +1,4 @@
-# Errors are logged during these scenarios due to dumb stuff in
-# multiversion_views_post_execute().
-@lightning @api @errors
+@lightning @api
 Feature: Site search
 
   Scenario: Unpublished content does not appear in search results
