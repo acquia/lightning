@@ -1,0 +1,18 @@
+<?php
+
+/**
+ * @file
+ * Contains landing page functionality for Lightning.
+ */
+
+use Drupal\node\Entity\NodeType;
+
+/**
+ * Implements hook_modules_installed().
+ */
+function lightning_landing_page_modules_installed(array $modules) {
+  if (in_array('lightning_search', $modules)) {
+    $node_type = NodeType::load('landing_page');
+    lightning_search_node_type_insert($node_type);
+  }
+}

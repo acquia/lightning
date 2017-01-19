@@ -5,6 +5,7 @@ dependencies:
     - search_api.server.database
   module:
     - search_api
+    - node
 id: content
 name: Content
 description: 'An index of all content in your site.'
@@ -24,16 +25,47 @@ field_settings:
     type: text
     configuration:
       type: first
-      fields: {  }
-datasource_settings: {  }
+      fields:
+        - 'entity:node/title'
+  status:
+    label: null
+    datasource_id: 'entity:node'
+    property_path: status
+    type: boolean
+    indexed_locked: true
+    type_locked: true
+  uid:
+    label: null
+    datasource_id: 'entity:node'
+    property_path: uid
+    type: integer
+    indexed_locked: true
+    type_locked: true
+  node_grants:
+    label: 'Node access information'
+    property_path: search_api_node_grants
+    type: string
+    indexed_locked: true
+    type_locked: true
+    hidden: true
+datasource_settings:
+  'entity:node':
+    bundles:
+      default: true
+      selected: {  }
+    languages:
+      default: true
+      selected: {  }
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
+  content_access:
+    weights:
+      preprocess_query: -10
   html_filter:
     fields:
       - rendered
       - label
-      - node_grants
     title: true
     alt: true
     tags:

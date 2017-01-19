@@ -5,6 +5,66 @@
  * Contains Search API integration for Lightning.
  */
 
+use Drupal\node\NodeTypeInterface;
+use Drupal\search_api\Entity\Index;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_search_node_type_insert(NodeTypeInterface $node_type) {
+  // No point in continuing without an index to configure.
+  /** @var \Drupal\search_api\IndexInterface $index */
+  $index = Index::load('content');
+  if (empty($index)) {
+    return;
+  }
+
+  // Look up all entity view displays in the system so that we can index using
+  // the preferred one. Store the query result in the central static cache so
+  // that other modules can clear it (i.e., if they install additional view
+  // displays that should be picked up).
+  $displays = &drupal_static(__FUNCTION__);
+  if (is_null($displays)) {
+    $displays = \Drupal::entityQuery('entity_view_display')->execute();
+  }
+
+  $index_mode = 'default';
+  foreach (['search_index', 'full'] as $view_mode) {
+    if (in_array('node.' . $node_type->id() . '.' . $view_mode, $displays)) {
+      $index_mode = $view_mode;
+      break;
+    }
+  }
+
+  $field = $index->getField('rendered');
+  if ($field) {
+    $configuration = $field->getConfiguration();
+    $configuration['view_mode']['entity:node'][$node_type->id()] = $index_mode;
+    $field->setConfiguration($configuration);
+    $index->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function lightning_search_node_type_delete(NodeTypeInterface $node_type) {
+  // No point in continuing without an index to configure.
+  /** @var \Drupal\search_api\IndexInterface $index */
+  $index = Index::load('content');
+  if (empty($index)) {
+    return;
+  }
+
+  $field = $index->getField('rendered');
+  if ($field) {
+    $configuration = $field->getConfiguration();
+    unset($configuration['view_mode']['entity:node'][$node_type->id()]);
+    $field->setConfiguration($configuration);
+    $index->save();
+  }
+}
+
 /**
  * Implements hook_views_data_alter().
  */

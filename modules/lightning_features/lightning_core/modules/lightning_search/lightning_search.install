@@ -5,22 +5,14 @@
  * Contains installation and update routines for Lightning Search.
  */
 
-use Drupal\search_api\Entity\Index;
+use Drupal\node\Entity\NodeType;
 
 /**
  * Implements hook_install().
  */
 function lightning_search_install() {
-  \Drupal::service('lightning.search_helper')
-    ->configure('content')
-    ->enable('node')
-    ->commit();
-
-  /** @var \Drupal\search_api\Plugin\search_api\Processor\ContentAccess $processor */
-  $processor = \Drupal::service('plugin.manager.search_api.processor')
-    ->createInstance('content_access');
-
-  $index = Index::load('content');
-  $processor->setIndex($index);
-  $index->addProcessor($processor)->save();
+  /** @var \Drupal\node\NodeTypeInterface $node_type */
+  foreach (NodeType::loadMultiple() as $node_type) {
+    lightning_search_node_type_insert($node_type);
+  }
 }
