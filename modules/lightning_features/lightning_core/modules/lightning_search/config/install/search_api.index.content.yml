@@ -65,14 +65,6 @@ processor_settings:
   content_access:
     weights:
       preprocess_query: -10
-  ignorecase:
-    fields:
-      - rendered
-      - label
-    weights:
-      preprocess_index: -10
-      preprocess_query: -10
-  rendered_item: {  }
   html_filter:
     fields:
       - rendered
@@ -86,11 +78,27 @@ processor_settings:
       h3: 2
       strong: 2
       b: 2
-      em: 1
-      u: 1
     weights:
       preprocess_index: -10
       preprocess_query: -10
+  ignorecase:
+    fields:
+      - rendered
+      - label
+    weights:
+      preprocess_index: -10
+      preprocess_query: -10
+  rendered_item: {  }
+  tokenizer:
+    fields:
+      - rendered
+      - label
+    spaces: ''
+    overlap_cjk: 1
+    minimum_word_size: '3'
+    weights:
+      preprocess_index: -6
+      preprocess_query: -6
 tracker_settings:
   default: {  }
 options:
