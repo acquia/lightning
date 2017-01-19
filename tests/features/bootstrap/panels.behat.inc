@@ -237,32 +237,6 @@ class PanelsSubContext extends DrupalSubContextBase {
   }
 
   /**
-   * Saves the current Panels layout as a custom layout.
-   *
-   * @When I save the layout
-   */
-  public function saveCustomLayout() {
-    $this->lightning->clickElementBySelector('a[title = "Save"]');
-    $this->minkContext->iWaitForAjaxToFinish();
-
-    $this->lightning->clickElementBySelector('a.panelizer-ipe-save-custom');
-    $this->minkContext->iWaitForAjaxToFinish();
-  }
-
-  /**
-   * Saves the current Panels layout as a default layout.
-   *
-   * @When I save the layout as default
-   */
-  public function saveDefaultLayout() {
-    $this->lightning->clickElementBySelector('a[title = "Save"]');
-    $this->minkContext->iWaitForAjaxToFinish();
-
-    $this->lightning->clickElementBySelector('a.panelizer-ipe-save-default');
-    $this->minkContext->iWaitForAjaxToFinish();
-  }
-
-  /**
    * Asserts that a block with a specific plugin ID is present.
    *
    * @param string $plugin_id
