@@ -139,9 +139,7 @@ function lightning_layout_update_8007() {
     ->setData($values)
     ->save();
 
-  if (!\Drupal::moduleHandler()->moduleExists('entity_block')) {
-    \Drupal::service('module_installer')->install(['entity_block']);
-  }
+  \Drupal::service('module_installer')->install(['entity_block']);
 }
 
 /**

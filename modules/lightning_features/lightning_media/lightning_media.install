@@ -63,17 +63,14 @@ function lightning_media_update_8001() {
  * Activates Lightning Media sub-features.
  */
 function lightning_media_update_8002() {
-  $installer = \Drupal::service('module_installer');
-
-  if (!\Drupal::moduleHandler()->moduleExists('features')) {
-    $installer->install(['features']);
-  }
-  $installer->install([
-    'lightning_media_image',
-    'lightning_media_instagram',
-    'lightning_media_twitter',
-    'lightning_media_video',
-  ]);
+  \Drupal::service('module_installer')
+    ->install([
+      'features',
+      'lightning_media_image',
+      'lightning_media_instagram',
+      'lightning_media_twitter',
+      'lightning_media_video',
+    ]);
 }
 
 /**
@@ -106,9 +103,7 @@ function lightning_media_update_8004() {
  * Installs the media browser and its embed button.
  */
 function lightning_media_update_8005() {
-  if (!\Drupal::moduleHandler()->moduleExists('entity_browser')) {
-    \Drupal::service('module_installer')->install(['entity_browser']);
-  }
+  \Drupal::service('module_installer')->install(['entity_browser']);
 
   lightning_core_create_config('entity_form_mode', 'media.media_browser', 'lightning_media');
   lightning_core_create_config('entity_browser', 'media_browser', 'lightning_media');
@@ -156,9 +151,7 @@ function lightning_media_update_8008() {
   }
 
   // Views Infinite Scroll powers the pager of the EB display.
-  if (!\Drupal::moduleHandler()->moduleExists('views_infinite_scroll')) {
-    \Drupal::service('module_installer')->install(['views_infinite_scroll']);
-  }
+  \Drupal::service('module_installer')->install(['views_infinite_scroll']);
 
   $display_id = $view->addDisplay('entity_browser', 'Browser');
   $display = &$view->getDisplay($display_id);
