@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * @file
+ * Contains installation and update routines for Lightning Dev.
+ */
+
+use Drupal\media_entity\Entity\MediaBundle;
+
+/**
+ * Implements hook_install().
+ */
+function lightning_dev_install() {
+  \Drupal::configFactory()
+    ->getEditable('system.performance')
+    ->set('css.preprocess', FALSE)
+    ->set('js.preprocess', FALSE)
+    ->save();
+
+  \Drupal::configFactory()
+    ->getEditable('system.logging')
+    ->set('error_level', ERROR_REPORTING_DISPLAY_ALL)
+    ->save();
+
+  // Set up Media Entity Twitter to use Twitter's API for thumbnail generation.
+  $tweet_bundle = MediaBundle::load('tweet');
+  $tweet_bundle->setTypeConfiguration([
+    'use_twitter_api' => TRUE,
+    'consumer_key' => 'EOPhWrgHCRnCB9cGualb1UVBM',
+    'consumer_secret' => 'AX5w9QYDvUJWdD0y0g2EtG3tFIZC9Lg4kR21iaAYakkPG8YKIp',
+    'oauth_access_token' => '52258222-ICStkPK2QcFN5d7v1FKJ1BMnqqPuuJnLIDr12Jsjs',
+    'oauth_access_token_secret' => 'Z4qff1DPLhqxHwei0jXgsnU0xdBFET4wSpQYn6Si3G3lF',
+    'generate_thumbnails' => TRUE,
+  ]);
+  $tweet_bundle->save();
+
+  \Drupal::service('module_installer')->install(['lightning_preview']);
+
+  // This module was introduced in Lightning 2.0.3, so we'll need to run manual
+  // update steps for versions older than that. We can remove this when 2.0.3
+  // is the oldest tested version of Lightning.
+  lightning_dev_update_8001();
+  lightning_dev_update_8002();
+}
+
+/**
+ * Executes manual updates for Lightning 2.0.1 --> 2.0.2.
+ */
+function lightning_dev_update_8001() {
+  \Drupal::service('module_installer')
+    ->install(['diff', 'lightning_contact_form']);
+}
+
+/**
+ * Executes manual updates for Lightning 2.0.2 --> 2.0.3.
+ */
+function lightning_dev_update_8002() {
+  \Drupal::service('module_installer')
+    ->install(['search_api_db', 'lightning_search']);
+
+  /** @var \Drupal\lightning_core\ConfigHelper $config_helper */
+  $config_helper = \Drupal::service('lightning.config_helper')
+    ->install('lightning_layout')
+    ->createEntity('field_config', 'node.landing_page.body')
+    ->install('lightning_landing_page');
+
+  $values = $config_helper
+    ->read('core.entity_form_display.node.landing_page.default');
+  entity_get_form_display('node', 'landing_page', 'default')
+    ->setComponent('body', $values['content']['body'])
+    ->save();
+
+  $values = $config_helper
+    ->read('core.entity_view_display.node.landing_page.default');
+  entity_get_display('node', 'landing_page', 'default')
+    ->setComponent('body', $values['content']['body'])
+    ->unsetThirdPartySetting('panelizer', 'enable')
+    ->unsetThirdPartySetting('panelizer', 'custom')
+    ->unsetThirdPartySetting('panelizer', 'allow')
+    ->unsetThirdPartySetting('panelizer', 'default')
+    ->unsetThirdPartySetting('panelizer', 'displays')
+    ->save();
+}

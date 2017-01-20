@@ -103,27 +103,9 @@
   <target name="install" depends="env">
     <!-- Use passthru() when executing drush site-install so that we'll know if errors occur. -->
     <exec command="${drush} site-install lightning --yes --account-pass=admin --db-url=${db.url}" dir="${docroot}" passthru="true" />
-    <exec command="${drush} config-set system.performance css.preprocess 0 --yes --format=boolean" dir="${docroot}" />
-    <exec command="${drush} config-set system.performance js.preprocess 0 --yes --format=boolean" dir="${docroot}" />
-    <exec command="${drush} config-set system.logging error_level all --yes" dir="${docroot}" />
 
-    <!-- Set up Media Entity Twitter to use Twitter's API for thumbnail generation. -->
-    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.use_twitter_api 1 --yes --format=boolean" dir="${docroot}" />
-    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.consumer_key EOPhWrgHCRnCB9cGualb1UVBM --yes" dir="${docroot}" />
-    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.consumer_secret AX5w9QYDvUJWdD0y0g2EtG3tFIZC9Lg4kR21iaAYakkPG8YKIp --yes" dir="${docroot}" />
-    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.oauth_access_token 52258222-ICStkPK2QcFN5d7v1FKJ1BMnqqPuuJnLIDr12Jsjs --yes" dir="${docroot}" />
-    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.oauth_access_token_secret Z4qff1DPLhqxHwei0jXgsnU0xdBFET4wSpQYn6Si3G3lF --yes" dir="${docroot}" />
-    <exec command="${drush} config-set media_entity.bundle.tweet type_configuration.generate_thumbnails 1 --yes --format=boolean" dir="${docroot}" />
-
-    <!-- Install Devel Generate. -->
-    <exec command="${drush} pm-enable devel_generate --yes" dir="${docroot}" />
-
-    <!--
-    Install Lightning Preview, which is not installed by default because it's experimental.
-    Enable passthru() for this as well since it has a lot of dependencies and is therefore
-    more prone to errors than other extensions.
-    -->
-    <exec command="${drush} pm-enable lightning_preview --yes" dir="${docroot}" passthru="true" />
+    <!-- Install Lightning Dev. -->
+    <exec command="${drush} pm-enable lightning_dev --yes" dir="${docroot}" passthru="true" />
 
     <if>
       <isset property="www.group" />
@@ -210,6 +192,19 @@
         <pdosqlexec url="${db.type}:host=${db.host};dbname=${db.database}" userid="${db.user}" password="${db.password}" src="${fixture}" />
         <!-- Delete the inflated fixture. -->
         <delete file="${fixture}" />
+
+        <!--
+        Lightning 2.0.3 introduced Lightning Dev, which contains automated
+        versions of all our manual update steps. If the imported fixture
+        predates Lightning 2.0.3, we'll need to install Lightning Dev. We can
+        ice this when 2.0.3 is the oldest tested version of Lightning.
+        -->
+        <if>
+          <versioncompare desiredVersion="2.0.3" version="${version}" operator="lt" />
+          <then>
+            <exec command="${drush} pm-enable lightning_dev --yes" dir="${docroot}" passthru="true" />
+          </then>
+        </if>
       </then>
       <else>
         <echo message="${version} fixture does not exist." />
