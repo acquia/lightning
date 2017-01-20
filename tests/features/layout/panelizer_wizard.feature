@@ -1,12 +1,12 @@
-@lightning @layout @api @rc7 @errors
+@lightning @layout @api @errors
 Feature: Panelizer Wizard
 
-  Scenario: Landing page default layout has the proper Content context
+  Scenario: Full content landing page layout has the proper Content context
     Given I am logged in as a user with the layout_manager role
-    # Initialize the tempstor
-    When I visit "/admin/structure/panelizer/edit/node__landing_page__default__default"
+    # Initialize the tempstore
+    When I visit "/admin/structure/panelizer/edit/node__landing_page__full__default"
     # Then view the list of available contexts
-    And I visit "/admin/structure/panels/panelizer.wizard/node__landing_page__default__default/select_block"
+    And I visit "/admin/structure/panels/panelizer.wizard/node__landing_page__full__default/select_block"
     Then I should see "Authored by"
 
   @javascript
