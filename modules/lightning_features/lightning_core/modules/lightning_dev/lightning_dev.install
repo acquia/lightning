@@ -60,9 +60,8 @@ function lightning_dev_update_8002() {
 
   /** @var \Drupal\lightning_core\ConfigHelper $config_helper */
   $config_helper = \Drupal::service('lightning.config_helper')
-    ->install('lightning_layout')
-    ->createEntity('field_config', 'node.landing_page.body')
-    ->install('lightning_landing_page');
+    ->install('lightning_landing_page')
+    ->createEntity('field_config', 'node.landing_page.body');
 
   $values = $config_helper
     ->read('core.entity_form_display.node.landing_page.default');

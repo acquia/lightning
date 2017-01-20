@@ -77,30 +77,6 @@ class PanelsSubContext extends DrupalSubContextBase {
   }
 
   /**
-   * Places a block into a Panels layout.
-   *
-   * @param string $plugin_id
-   *   The block plugin ID.
-   * @param string $category
-   *   The block's category.
-   *
-   * @When I place the :plugin_id block from the :category category
-   */
-  public function placeBlock($plugin_id, $category) {
-    $this->lightning->clickElementBySelector('a[title = "Manage Content"]');
-    $this->minkContext->iWaitForAjaxToFinish();
-
-    $this->lightning->clickElementBySelector('a[data-category = "' . $category . '"]');
-    $this->minkContext->iWaitForAjaxToFinish();
-
-    $this->lightning->clickElementBySelector('a[data-plugin-id = "' . $plugin_id . '"]');
-    $this->minkContext->iWaitForAjaxToFinish();
-
-    $this->lightning->clickElementBySelector('[value = "Add"]');
-    $this->minkContext->iWaitForAjaxToFinish();
-  }
-
-  /**
    * Changes the layout of an IPE controlled entity via the IPE.
    *
    * @param string $category
