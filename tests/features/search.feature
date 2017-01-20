@@ -1,4 +1,4 @@
-@lightning @api
+@lightning @api @errors
 Feature: Site search
 
   Scenario: Unpublished content does not appear in search results
