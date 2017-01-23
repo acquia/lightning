@@ -1,6 +1,9 @@
 langcode: en
 status: false
 dependencies:
+  config:
+    - search_api.server.database
+    - core.entity_view_mode.node.full
   module:
     - search_api
     - node
@@ -74,15 +77,59 @@ processor_settings:
       b: 2
     weights:
       preprocess_index: -10
-      preprocess_query: -10
+      preprocess_query: -9
   ignorecase:
     fields:
       - rendered
       - label
     weights:
-      preprocess_index: -10
-      preprocess_query: -10
+      preprocess_index: -9
+      preprocess_query: -8
+  node_status: {  }
   rendered_item: {  }
+  stopwords:
+    fields:
+      - rendered
+      - label
+    stopwords:
+      - a
+      - an
+      - and
+      - are
+      - as
+      - at
+      - be
+      - but
+      - by
+      - for
+      - if
+      - in
+      - into
+      - is
+      - it
+      - 'no'
+      - not
+      - of
+      - 'on'
+      - or
+      - s
+      - such
+      - t
+      - that
+      - the
+      - their
+      - then
+      - there
+      - these
+      - they
+      - this
+      - to
+      - was
+      - will
+      - with
+    weights:
+      preprocess_index: -5
+      preprocess_query: -4
   tokenizer:
     fields:
       - rendered
@@ -92,7 +139,14 @@ processor_settings:
     minimum_word_size: '3'
     weights:
       preprocess_index: -6
-      preprocess_query: -6
+      preprocess_query: -5
+  transliteration:
+    fields:
+      - rendered
+      - label
+    weights:
+      preprocess_index: -4
+      preprocess_query: -3
 tracker_settings:
   default: {  }
 options:
