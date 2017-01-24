@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Contains installation and update routines for Lightning Landing Page.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function lightning_landing_page_install() {
+  if (\Drupal::moduleHandler()->moduleExists('lightning_search')) {
+    lightning_landing_page_modules_installed(['lightning_search']);
+  }
+}

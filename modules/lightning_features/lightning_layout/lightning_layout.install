@@ -129,12 +129,17 @@ function lightning_layout_update_8006() {
  */
 function lightning_layout_update_8007() {
   $id = 'lightning_layout.settings';
-  $values = lightning_core_read_config($id, 'lightning_layout');
-  \Drupal::configFactory()->getEditable($id)->setData($values)->save();
 
-  if (!\Drupal::moduleHandler()->moduleExists('entity_block')) {
-    \Drupal::service('module_installer')->install(['entity_block']);
-  }
+  $values = \Drupal::service('lightning.config_helper')
+    ->install('lightning_layout')
+    ->read($id);
+
+  \Drupal::configFactory()
+    ->getEditable($id)
+    ->setData($values)
+    ->save();
+
+  \Drupal::service('module_installer')->install(['entity_block']);
 }
 
 /**

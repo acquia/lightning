@@ -152,8 +152,6 @@ Feature: Workspaces
     And I fill in "WPS Test Title 3" for "Title"
     And I select "Published" from "Moderation state"
     And I press "Save"
-    And I visit "/admin/content"
-    And I click "WPS Test Title 3"
     And I click "New draft"
     And I fill in "WPS Test Title: edited1" for "Title"
     And I select "Published" from "Moderation state"

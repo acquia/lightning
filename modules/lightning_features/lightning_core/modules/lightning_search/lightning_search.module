@@ -1,0 +1,100 @@
+<?php
+
+/**
+ * @file
+ * Contains Search API integration for Lightning.
+ */
+
+use Drupal\node\NodeTypeInterface;
+use Drupal\search_api\Entity\Index;
+use Drupal\views\Entity\View;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_search_node_type_insert(NodeTypeInterface $node_type) {
+  $type = $node_type->id();
+
+  // No point in continuing without an index to configure.
+  /** @var \Drupal\search_api\IndexInterface $index */
+  $index = Index::load('content');
+  if (empty($index)) {
+    return;
+  }
+
+  /** @var \Drupal\lightning_core\DisplayHelper $display_helper */
+  $display_helper = \Drupal::service('lightning.display_helper');
+
+  $field = $index->getField('rendered');
+  if ($field) {
+    $configuration = $field->getConfiguration();
+    $configuration['view_mode']['entity:node'][$type] = $display_helper->getPreferredMode('node', $type, ['search_index', 'full']);
+    $field->setConfiguration($configuration);
+    $index->save();
+  }
+
+  /** @var \Drupal\views\ViewEntityInterface $view */
+  $view = View::load('search');
+  if (empty($view)) {
+    return;
+  }
+
+  $display = &$view->getDisplay('default');
+  if ($display['display_options']['row']['type'] == 'search_api') {
+    $display['display_options']['row']['options']['view_modes']['entity:node'][$type] = $display_helper->getPreferredMode('node', $type, ['search_result', 'teaser']);
+    $view->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function lightning_search_node_type_delete(NodeTypeInterface $node_type) {
+  $type = $node_type->id();
+
+  // No point in continuing without an index to configure.
+  /** @var \Drupal\search_api\IndexInterface $index */
+  $index = Index::load('content');
+  if (empty($index)) {
+    return;
+  }
+
+  $field = $index->getField('rendered');
+  if ($field) {
+    $configuration = $field->getConfiguration();
+    unset($configuration['view_mode']['entity:node'][$type]);
+    $field->setConfiguration($configuration);
+    $index->save();
+  }
+
+  /** @var \Drupal\views\ViewEntityInterface $view */
+  $view = View::load('search');
+  if (empty($view)) {
+    return;
+  }
+
+  $display = &$view->getDisplay('default');
+  if ($display['display_options']['row']['type'] == 'search_api') {
+    unset($display['display_options']['row']['options']['view_modes']['entity:node'][$type]);
+    $view->save();
+  }
+}
+
+/**
+ * Implements hook_views_data_alter().
+ */
+function lightning_search_views_data_alter(array &$data) {
+  // @TODO: Remove this when #2843724 is fixed.
+  $data['search_api_index_content']['rendered']['field']['id'] = 'search_api';
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function lightning_search_entity_type_alter(array &$entity_types) {
+  // Search API tasks are an internal entity type and should never be under
+  // Multiversion control.
+  if (!\Drupal::state()->get('multiversion.migration_done.search_api_task')) {
+    $entity_types['search_api_task']->set('multiversion', FALSE);
+  }
+}

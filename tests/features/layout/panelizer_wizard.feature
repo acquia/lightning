@@ -1,12 +1,12 @@
-@lightning @layout @api @rc7 @errors
+@lightning @layout @api @errors
 Feature: Panelizer Wizard
 
-  Scenario: Landing page default layout has the proper Content context
+  Scenario: Full content landing page layout has the proper Content context
     Given I am logged in as a user with the layout_manager role
-    # Initialize the tempstor
-    When I visit "/admin/structure/panelizer/edit/node__landing_page__default__default"
+    # Initialize the tempstore
+    When I visit "/admin/structure/panelizer/edit/node__landing_page__full__default"
     # Then view the list of available contexts
-    And I visit "/admin/structure/panels/panelizer.wizard/node__landing_page__default__default/select_block"
+    And I visit "/admin/structure/panels/panelizer.wizard/node__landing_page__full__default/select_block"
     Then I should see "Authored by"
 
   @javascript
@@ -27,7 +27,8 @@ Feature: Panelizer Wizard
     Given I am logged in as a user with the "landing_page_creator,layout_manager" roles
     And I have customized the search_result view mode of the landing_page content type
     When I visit "/admin/structure/types/manage/landing_page/display/search_result"
-    # Allow authors to choose a layout.
+    And I check "panelizer[enable]"
+    And I check "panelizer[custom]"
     And I check "panelizer[allow]"
     And I press "Save"
     And I visit "/node/add/landing_page"
@@ -35,8 +36,7 @@ Feature: Panelizer Wizard
     And I should see a "Search result highlighting input" field
     And I uncustomize the search_result view mode of the landing_page content type
     And I visit "/node/add/landing_page"
-    # TODO: There's no way to assert that the *field* doesn't exist!
-    And I should not see "Search result highlighting input"
+    And I should not see a "Search result highlighting input" field
 
   @javascript
   Scenario: Switch between defined layouts.

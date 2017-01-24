@@ -149,4 +149,62 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
       );
   }
 
+  /**
+   * Saves the current IPE layout as a custom layout.
+   *
+   * @When I save the layout
+   */
+  public function saveLayoutAsCustom() {
+    $this->assertSession()
+      ->elementExists('named', ['link', 'Save as custom'], $this->openTab('Save'))
+      ->click();
+
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
+  /**
+   * Saves the current IPE layout as a default layout.
+   *
+   * @When I save the layout as default
+   */
+  public function saveLayoutAsDefault() {
+    $this->assertSession()
+      ->elementExists('named', ['link', 'Save as default'], $this->openTab('Save'))
+      ->click();
+
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
+  /**
+   * Places a block into a Panels IPE layout.
+   *
+   * @param string $plugin_id
+   *   The block plugin ID.
+   * @param string $category
+   *   The block's category.
+   *
+   * @When I place the :plugin_id block from the :category category
+   */
+  public function placeBlock($plugin_id, $category) {
+    $assert = $this->assertSession();
+
+    $tab = $this->openCategory($category);
+
+    $assert
+      ->elementExists(
+        'css',
+        '.ipe-block-plugin a[data-plugin-id="' . $plugin_id . '"]',
+        $tab
+      )
+      ->click();
+
+    $this->minkContext->iWaitForAjaxToFinish();
+
+    $assert
+      ->elementExists('css', '.panels-ipe-block-plugin-form', $tab)
+      ->pressButton('Add');
+
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
 }

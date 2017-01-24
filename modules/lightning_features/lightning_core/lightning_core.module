@@ -6,19 +6,25 @@
  */
 
 use Drupal\Core\Block\BlockPluginInterface;
-use Drupal\Core\Config\FileStorage;
-use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Entity\EntityDisplayModeInterface;
 use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Render\Element;
 use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\lightning_core\Element as ElementHelper;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
 use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_element_info_alter().
+ */
+function lightning_core_element_info_alter(array &$info) {
+  $info['radios']['#legend'] = $info['checkboxes']['#legend'] = [];
+  $info['radios']['#process'][] = $info['checkboxes']['#process'][] = [ElementHelper::class, 'processLegend'];
+}
 
 /**
  * Implements hook_help().
@@ -117,13 +123,12 @@ function lightning_core_entity_load(array $entities) {
  *   The array to reorder.
  * @param array $keys
  *   The keys, in their desired order.
+ *
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use
+ * \Drupal\lightning_core\Element::order() instead.
  */
 function array_reorder(array &$values, array $keys) {
-  $keys = array_values($keys);
-
-  uksort($values, function ($a, $b) use ($keys) {
-    return array_search($a, $keys) - array_search($b, $keys);
-  });
+  ElementHelper::order($values, $keys);
 }
 
 /**
@@ -135,24 +140,11 @@ function array_reorder(array &$values, array $keys) {
  * @return array
  *   The renderable element with all buttons (at all levels) disabled.
  *
- * @internal
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use
+ * \Drupal\lightning_core\Element::disableButtons() instead.
  */
 function lightning_core_disable_buttons(array $element) {
-  if (isset($element['#type'])) {
-    $element['#access'] = !in_array($element['#type'], [
-      'button',
-      'submit',
-      'image_button',
-    ]);
-  }
-
-  // Recurse into child elements.
-  foreach (Element::children($element) as $key) {
-    if (is_array($element[$key])) {
-      $element[$key] = call_user_func(__FUNCTION__, $element[$key]);
-    }
-  }
-  return $element;
+  return ElementHelper::disableButtons($element);
 }
 
 /**
@@ -235,37 +227,12 @@ function lightning_core_form_system_modules_alter(array &$form) {
  */
 function lightning_core_form_user_form_alter(array &$form) {
   if (isset($form['account']['roles'])) {
-    // Ensure the standard process functions run first.
-    \Drupal::service('lightning.form_helper')
-      ->applyStandardProcessing($form['account']['roles']);
-
-    $form['account']['roles']['#process'][] = 'lightning_core_set_role_descriptions';
-  }
-}
-
-/**
- * Element process function: sets descriptions for role checkboxes on user_form.
- *
- * @param array $element
- *   The element to process.
- * @param \Drupal\Core\Form\FormStateInterface $form_state
- *   The current form state.
- * @param array $complete_form
- *   The complete form.
- *
- * @return array
- *   The processed element.
- */
-function lightning_core_set_role_descriptions(array $element, FormStateInterface $form_state, array &$complete_form) {
-  // Try to add a description for each individual role.
-  foreach (Element::children($element) as $role) {
-    // Don't overwrite any existing description.
-    if (empty($element[$role]['#description'])) {
-      $element[$role]['#description'] = Role::load($role)
+    /** @var RoleInterface $role */
+    foreach (Role::loadMultiple() as $id => $role) {
+      $form['account']['roles']['#legend'][$id] = $role
         ->getThirdPartySetting('lightning_core', 'description');
     }
   }
-  return $element;
 }
 
 /**
@@ -347,18 +314,14 @@ function lightning_core_preprocess_block(array &$variables) {
  *   The unprefixed entity ID.
  * @param string $module
  *   (optional) The module which has the default configuration.
+ *
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use the
+ * lightning.config_helper service instead.
  */
 function lightning_core_create_config($entity_type, $id, $module = 'lightning_core') {
-  $values = lightning_core_read_config(
-    \Drupal::entityTypeManager()->getDefinition($entity_type)->getConfigPrefix() . '.' . $id,
-    $module
-  );
-  if ($values) {
-    \Drupal::entityTypeManager()
-      ->getStorage($entity_type)
-      ->create($values)
-      ->save();
-  }
+  \Drupal::service('lightning.config_helper')
+    ->install($module)
+    ->createEntity($entity_type, $id);
 }
 
 /**
@@ -371,14 +334,12 @@ function lightning_core_create_config($entity_type, $id, $module = 'lightning_co
  *
  * @return array
  *   The config data.
+ *
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use the
+ * lightning.config_helper service instead.
  */
 function lightning_core_read_config($id, $module = 'lightning_core') {
-  // Statically cache all FileStorage objects, keyed by module.
-  static $storage = [];
-
-  if (empty($storage[$module])) {
-    $dir = \Drupal::service('module_handler')->getModule($module)->getPath();
-    $storage[$module] = new FileStorage($dir . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY);
-  }
-  return $storage[$module]->read($id);
+  return \Drupal::service('lightning.config_helper')
+    ->install($module)
+    ->read($id);
 }
