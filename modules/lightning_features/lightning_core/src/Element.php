@@ -53,26 +53,29 @@ class Element {
   }
 
   /**
-   * Applies the Oxford comma to an array of strings.
+   * Formats a set of strings with an Oxford comma.
    *
    * @param string[] $items
-   *   The array to modify, passed by reference.
-   * @param string $conjuction
-   *   (optional) The untranslated conjuction to insert before the final item.
+   *   The set of strings to format.
+   * @param string $conjunction
+   *   (optional) The translated conjunction to insert before the final item.
    *   Defaults to 'and'.
-   * @param bool $is_sentence
-   *   (optional) Whether the items represent a complete sentence. If true, the
-   *   first letter of the first item will be capitalized. Defaults to FALSE.
+   *
+   * @return string
+   *   The single Oxford-ized string.
    */
-  public static function oxford(array &$items, $conjuction = 'and', $is_sentence = FALSE) {
-    $items[] = t('@conjunction @item', [
-      '@conjunction' => $conjuction,
-      '@item' => array_pop($items),
-    ]);
+  public static function oxford(array $items, $conjunction = 'and') {
+    $count = count($items);
 
-    if ($is_sentence) {
-      $head = array_shift($items);
-      array_unshift($items, ucfirst($head));
+    if ($count < 2) {
+      return (string) reset($items);
+    }
+    elseif ($count === 2) {
+      return reset($items) . ' ' . $conjunction . ' ' . end($items);
+    }
+    else {
+      $items[] = $conjunction . ' ' . array_pop($items);
+      return implode(', ', $items);
     }
   }
 

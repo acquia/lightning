@@ -11,7 +11,9 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityFormInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
+use Drupal\lightning_core\Element;
 use Drupal\lightning_preview\AliasHandler;
 use Drupal\lightning_preview\Exception\EntityLockedException;
 use Drupal\lightning_preview\Form\NodeDeleteForm;
@@ -20,7 +22,38 @@ use Drupal\lightning_preview\WorkspaceListBuilder;
 use Drupal\multiversion\Entity\WorkspaceInterface;
 use Drupal\multiversion\Entity\WorkspaceType;
 use Drupal\user\Entity\Role;
+use Drupal\workbench_moderation\Entity\ModerationState;
 use Drupal\workbench_moderation\ModerationStateTransitionInterface as StateTransitionInterface;
+
+/**
+ * Implements hook_help().
+ */
+function lightning_preview_help($route_name, RouteMatchInterface $route_match) {
+  $variables = [];
+
+  if ($route_name == 'entity.workspace.edit_form') {
+    /** @var WorkspaceInterface $workspace */
+    $workspace = $route_match->getParameter('workspace');
+
+    if ($workspace->getMachineName() != 'live') {
+      $states = $workspace
+        ->type
+        ->entity
+        ->getThirdPartySetting('workbench_moderation', 'allowed_moderation_states', []);
+
+      $published_states = [];
+      /** @var ModerationState $state */
+      foreach (ModerationState::loadMultiple($states) as $state) {
+        if ($state->isPublishedState()) {
+          $published_states[] = $state->label();
+        }
+      }
+      $variables['@published'] = Element::oxford($published_states, t('or'));
+
+      return t('<p>You can push all changes in this workspace to your live site by setting the moderation state to <strong>@published</strong>.</p>', $variables);
+    }
+  }
+}
 
 /**
  * Implements hook_search_api_processor_info_alter().
