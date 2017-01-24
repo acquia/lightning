@@ -117,11 +117,14 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
    * @param string $category
    *   (optional) The category to open.
    *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The link to instantiate the block plugin.
+   *
    * @Then I should see the :plugin_id plugin
    * @Then I should see the :plugin_id plugin in the :category category
    */
   public function assertBlockPluginExists($plugin_id, $category = NULL) {
-    $this->assertSession()
+    return $this->assertSession()
       ->elementExists(
         'css',
         '.ipe-block-plugin a[data-plugin-id="' . $plugin_id . '"]',
@@ -147,6 +150,30 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
         '.ipe-block-plugin a[data-plugin-id="' . $plugin_id . '"]',
         $category ? $this->openCategory($category) : $this->getActiveTab()
       );
+  }
+
+  /**
+   * Instantiates a block plugin.
+   *
+   * @param string $plugin_id
+   *   The block plugin ID.
+   * @param string $category
+   *   (optional) The category in which the block plugin resides.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The block plugin configuration form.
+   *
+   * @When I instantiate the :plugin_id block
+   * @When I instantiate the :plugin_id block from the :category category
+   */
+  public function instantiateBlock($plugin_id, $category = NULL) {
+    $this->assertBlockPluginExists($plugin_id, $category)
+      ->click();
+
+    $this->minkContext->iWaitForAjaxToFinish();
+
+    return $this->assertSession()
+      ->elementExists('css', '.panels-ipe-block-plugin-form', $this->getActiveTab());
   }
 
   /**
@@ -181,27 +208,13 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
    * @param string $plugin_id
    *   The block plugin ID.
    * @param string $category
-   *   The block's category.
+   *   (optional) The category in which the block plugin resides.
    *
    * @When I place the :plugin_id block from the :category category
+   * @When I place the :plugin_id block
    */
-  public function placeBlock($plugin_id, $category) {
-    $assert = $this->assertSession();
-
-    $tab = $this->openCategory($category);
-
-    $assert
-      ->elementExists(
-        'css',
-        '.ipe-block-plugin a[data-plugin-id="' . $plugin_id . '"]',
-        $tab
-      )
-      ->click();
-
-    $this->minkContext->iWaitForAjaxToFinish();
-
-    $assert
-      ->elementExists('css', '.panels-ipe-block-plugin-form', $tab)
+  public function placeBlock($plugin_id, $category = NULL) {
+    $this->instantiateBlock($plugin_id, $category)
       ->pressButton('Add');
 
     $this->minkContext->iWaitForAjaxToFinish();

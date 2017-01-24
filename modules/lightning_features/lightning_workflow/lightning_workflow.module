@@ -79,6 +79,7 @@ function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
     'use needs_review_draft transition',
     'use needs_review_published transition',
     'use published_published transition',
+    'use published_archived transition',
   ]);
 
   if ($node_type->getThirdPartySetting('lightning_workflow', 'embargo')) {

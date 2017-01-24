@@ -92,3 +92,21 @@ Feature: Panelizer
     And I open the "Entity Block" category
     Then I should not see the "entity_block:block" plugin
     And I should not see the "entity_block:block_custom" plugin
+
+  Scenario: Entity blocks should respect access control
+    Given I am logged in as a user with the administrator role
+    And page content:
+      | title | moderation_state | body                                          |
+      | Fox   | published        | The quick brown Fox jumps over the lazy Dana. |
+    When I instantiate the "entity_block:node" block in bartik
+    And I reference node "Fox" in "Entity"
+    And I select "Content" from "Region"
+    And I press "Save block"
+    And I visit "/admin/content"
+    And I click "Fox"
+    And I click "New draft"
+    And I select "Archived" from "Moderation state"
+    And I press "Save"
+    And I am an anonymous user
+    And I visit "/"
+    Then I should not see "The quick brown Fox jumps over the lazy Dana."

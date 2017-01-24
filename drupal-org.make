@@ -19,6 +19,7 @@ projects[entity][type] = module
 projects[entity][version] = 1.0-alpha4
 projects[entity_block][type] = module
 projects[entity_block][patch][] = https://www.drupal.org/files/issues/entity_block-view-builder-class.patch
+projects[entity_block][patch][] = https://www.drupal.org/files/issues/2846004-2.patch
 projects[entity_block][version] = 1.0-alpha2
 projects[entity_browser][type] = module
 projects[entity_browser][version] = 1.0-beta4

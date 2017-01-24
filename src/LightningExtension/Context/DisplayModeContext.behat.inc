@@ -4,9 +4,9 @@ namespace Acquia\LightningExtension\Context;
 
 use Behat\Gherkin\Node\PyStringNode;
 use Drupal\Core\Entity\Entity\EntityViewMode;
-use Drupal\Core\Url;
+use Drupal\Core\Entity\EntityViewModeInterface;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\MinkContext;
+use Webmozart\Assert\Assert;
 
 /**
  * A context for working with entity display modes.
@@ -14,121 +14,48 @@ use Drupal\DrupalExtension\Context\MinkContext;
 class DisplayModeContext extends DrupalSubContextBase {
 
   /**
-   * The Mink context.
-   *
-   * @var MinkContext
-   */
-  protected $minkContext;
-
-  /**
-   * Gathers required contexts.
-   *
-   * @BeforeScenario
-   */
-  public function gatherContexts() {
-    $this->minkContext = $this->getContext(MinkContext::class);
-  }
-
-  /**
-   * Determines the ID of a view mode.
-   *
-   * @param string $entity_type
-   *   The entity type ID.
-   * @param string $view_mode
-   *   The view mode ID or label.
-   *
-   * @return string
-   *   The view mode ID, without the entity type ID (i.e., node.rss --> rss).
-   */
-  protected function getViewModeId($entity_type, $view_mode) {
-    $entity = EntityViewMode::load($entity_type . '.' . $view_mode);
-
-    if (empty($entity)) {
-      $loaded = \Drupal::entityTypeManager()
-        ->getStorage('entity_view_mode')
-        ->loadByProperties([
-          'targetEntityType' => $entity_type,
-          'label' => $view_mode,
-        ]);
-
-      $entity = reset($loaded);
-    }
-
-    return explode('.', $entity->id())[1];
-  }
-
-  /**
-   * Visits the configuration page for an entity view display.
-   *
-   * @param string $entity_type
-   *   The entity type ID.
-   * @param string $view_mode
-   *   The view mode ID or label. If 'default', will visit the special default
-   *   view display.
-   * @param string $bundle
-   *   (optional) The bundle ID. If omitted, the entity type will be presumed
-   *   to not support bundles.
-   *
-   * @When I configure the :view_mode display of the :bundle :entity_type type
-   * @When I configure the :view_mode display of :entity_type(s)
-   */
-  public function configureViewDisplay($entity_type, $view_mode, $bundle = NULL) {
-    $route = 'entity.entity_view_display.' . $entity_type;
-
-    if ($view_mode == 'default') {
-      $route .= '.default';
-      $parameters = [];
-    }
-    else {
-      $route .= '.view_mode';
-      $parameters = [
-        'view_mode_name' => $this->getViewModeId($entity_type, $view_mode),
-      ];
-    }
-
-    if ($bundle) {
-      $key = \Drupal::entityTypeManager()
-        ->getDefinition($entity_type)
-        ->getBundleEntityType();
-
-      $parameters[$key] = $bundle;
-    }
-
-    $this->visitPath(Url::fromRoute($route, $parameters)->getInternalPath());
-  }
-
-  /**
    * Sets the customization status of a view mode.
    *
-   * @param string $view_mode
-   *   The label of the view mode.
    * @param string $entity_type
    *   The ID of the affected entity type.
    * @param string $bundle
    *   (optional) The ID of the affected bundle. If omitted, the entity type is
    *   presumed to not support bundles.
-   * @param bool $customize
+   * @param string $view_mode
+   *   (optional) The view mode ID. Defaults to 'default'.
+   * @param bool $desired_status
    *   (optional) Whether to customize or uncustomize the view mode.
    *
-   * @When I customize the :view_mode display of the :bundle :entity_type type
+   * @When I customize :entity_type display
    * @When I customize the :view_mode :entity_type display
+   * @When I customize the display of the :bundle :entity_type type
+   * @When I customize the :view_mode display of the :bundle :entity_type type
    */
-  public function setViewModeCustomization($view_mode, $entity_type, $bundle = NULL, $customize = TRUE) {
-    $this->configureViewDisplay($entity_type, 'default', $bundle);
+  public function setViewModeCustomization($entity_type, $bundle = NULL, $view_mode = 'default', $desired_status = TRUE) {
+    $display = entity_get_display($entity_type, $bundle, $view_mode);
 
-    $customize
-      ? $this->minkContext->checkOption($view_mode)
-      : $this->minkContext->uncheckOption($view_mode);
+    if ($display->isNew()) {
+      $display = entity_get_display($entity_type, $bundle, 'default')
+        ->createDuplicate()
+        ->set('mode', $view_mode);
+
+      // If the display was created anew, its previous status is effectively
+      // FALSE.
+      $original_status = FALSE;
+    }
+    else {
+      $original_status = $display->status();
+    }
 
     /** @var UndoContext $undo */
     $undo = $this->getContext(UndoContext::class);
-    if ($undo) {
+    if ($undo && $desired_status != $original_status) {
       $arguments = array_slice(func_get_args(), 0, 3);
-      $arguments[] = !$customize;
+      $arguments[] = $original_status;
       $undo->push([$this, __FUNCTION__], $arguments);
     }
 
-    $this->minkContext->pressButton('Save');
+    $display->setStatus($desired_status)->save();
   }
 
   /**
@@ -142,20 +69,23 @@ class DisplayModeContext extends DrupalSubContextBase {
    * @When I describe the :id view mode:
    */
   public function describeViewMode($id, PyStringNode $description) {
-    $this->visitPath('/admin/structure/display-modes/view/manage/' . $id);
+    $view_mode = EntityViewMode::load($id);
+
+    Assert::isInstanceOf($view_mode, EntityViewModeInterface::class);
 
     /** @var UndoContext $undo */
     $undo = $this->getContext(UndoContext::class);
     if ($undo) {
-      $original = new PyStringNode(
-        (array) $this->assertSession()->fieldExists('Description')->getValue(),
-        0
-      );
+      $original_description = $view_mode
+        ->getThirdPartySetting('lightning_core', 'description');
+
+      $original = new PyStringNode([$original_description], 0);
       $undo->push([$this, __FUNCTION__], [$id, $original]);
     }
 
-    $this->minkContext->fillField('Description', (string) $description);
-    $this->minkContext->pressButton('Save');
+    $view_mode
+      ->setThirdPartySetting('lightning_core', 'description', (string) $description)
+      ->save();
   }
 
 }

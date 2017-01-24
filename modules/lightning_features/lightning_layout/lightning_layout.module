@@ -59,7 +59,7 @@ function lightning_layout_tweak_panelizer_ui(array $element, FormStateInterface 
   /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display */
   $display = $form_state->getFormObject()->getEntity();
 
-  $panelizer_enabled = $display->getThirdPartySetting('panelizer', 'enable');
+  $panelizer_enabled = $display->getThirdPartySetting('panelizer', 'enable', FALSE);
 
   // Check if this display is for an internal view mode.
   $view_mode = EntityViewMode::load($display->getTargetEntityTypeId() . '.' . $display->getMode());

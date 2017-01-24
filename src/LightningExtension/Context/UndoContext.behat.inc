@@ -2,12 +2,12 @@
 
 namespace Acquia\LightningExtension\Context;
 
-use Behat\Behat\Context\Context;
+use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
 /**
  * A context allowing easy undo of anything done during a scenario.
  */
-class UndoContext implements Context {
+class UndoContext extends DrupalSubContextBase {
 
   /**
    * Whether the stack is locked (i.e., not accepting new operations).

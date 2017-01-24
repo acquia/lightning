@@ -71,6 +71,9 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
     API DB, Lightning Search will create a search server on top of the database
     backend, and use it to power the Content search index. Otherwise, you will
     need to create the server manually, then point the index to it.
+* Grant the "Access the Content overview page" and (if available) "Use the
+  Archive transition" permissions to all content type reviewer roles, if there
+  are any.
 
 ## 2.0.1 to 2.0.2
 * Install the Diff module.
