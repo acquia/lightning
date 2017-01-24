@@ -54,6 +54,24 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+## 2.0.2 to 2.0.3
+* If you have the Landing Page content type installed, there are several manual
+  update steps (to be performed in order):
+  * Create a formatted text field on the Landing Page content type. You can
+    re-use the standard node Body field for this purpose.
+  * Customize the Teaser view mode of the Landing Page content type. Do not
+    enable Panelizer for it. Add the new text field to the display.
+  * Disable Panelizer for the Default view mode of the Landing Page content
+    type, then add the new text field to the display.
+* If you would like search functionality:
+  * If you would like to use the Drupal database as a search backend, enable
+    the Search API DB module. You don't need to enable this module if you'd
+    rather use Apache Solr (or something else) as a backend.
+  * Install the Lightning Search component. If you have already enabled Search
+    API DB, Lightning Search will create a search server on top of the database
+    backend, and use it to power the Content search index. Otherwise, you will
+    need to create the server manually, then point the index to it.
+
 ## 2.0.1 to 2.0.2
 * Install the Diff module.
 * If you would like to use Lightning's simple contact form, install the

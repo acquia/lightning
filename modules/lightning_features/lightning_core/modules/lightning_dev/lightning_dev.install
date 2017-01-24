@@ -56,13 +56,11 @@ function lightning_dev_update_8001() {
  * Executes manual updates for Lightning 2.0.2 --> 2.0.3.
  */
 function lightning_dev_update_8002() {
-  \Drupal::service('module_installer')
-    ->install(['search_api_db', 'lightning_search']);
-
   /** @var \Drupal\lightning_core\ConfigHelper $config_helper */
   $config_helper = \Drupal::service('lightning.config_helper')
     ->install('lightning_landing_page')
-    ->createEntity('field_config', 'node.landing_page.body');
+    ->createEntity('field_config', 'node.landing_page.body')
+    ->createEntity('entity_view_display', 'node.landing_page.teaser');
 
   $values = $config_helper
     ->read('core.entity_form_display.node.landing_page.default');
@@ -80,4 +78,7 @@ function lightning_dev_update_8002() {
     ->unsetThirdPartySetting('panelizer', 'default')
     ->unsetThirdPartySetting('panelizer', 'displays')
     ->save();
+
+  \Drupal::service('module_installer')
+    ->install(['search_api_db', 'lightning_search']);
 }
