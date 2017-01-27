@@ -74,6 +74,10 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
 * Grant the "Access the Content overview page" and (if available) "Use the
   Archive transition" permissions to all content type reviewer roles, if there
   are any.
+* Edit the Content view, if you have it, and add the following:
+  * A required relationship to **Content latest revision**.
+  * The **Forward revision(s) exist** filter. For parity with a clean Lightning
+    installation, label it "Has unpublished edit(s)".
 
 ## 2.0.1 to 2.0.2
 * Install the Diff module.

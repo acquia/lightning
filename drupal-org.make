@@ -79,6 +79,7 @@ projects[views_infinite_scroll][type] = module
 projects[views_infinite_scroll][version] = 1.3
 projects[workbench_moderation][type] = module
 projects[workbench_moderation][patch][] = https://www.drupal.org/files/issues/2668006-2.patch
+projects[workbench_moderation][patch][] = https://www.drupal.org/files/issues/2847078-6.patch
 projects[workbench_moderation][version] = 1.2
 projects[workspace][type] = module
 projects[workspace][version] = 1.0-alpha4

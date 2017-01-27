@@ -116,6 +116,13 @@ function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
 }
 
 /**
+ * Implements hook_views_data().
+ */
+function lightning_workflow_views_data() {
+  return \Drupal::service('lightning_workflow.views_data')->getAll();
+}
+
+/**
  * Implements hook_views_plugins_field_alter().
  */
 function lightning_workflow_views_plugins_field_alter(array &$plugins) {
