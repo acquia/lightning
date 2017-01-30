@@ -60,21 +60,23 @@ class FieldUiTitleController extends ControllerBase {
   public function bundle() {
     $route_parameters = $this->routeMatch->getParameters();
 
-    // Determine the route parameter which contains the bundle entity, assuming
-    // the entity type is bundle-able.
-    $bundle = $this->entityTypeManager()
-      ->getDefinition(
-        // Field UI routes should always have an entity_type_id parameter. Maybe
-        // a naive assumption, but this function should only ever be called for
-        // Field UI routes anyway.
-        $route_parameters->get('entity_type_id')
-      )
-      ->getBundleEntityType();
+    if ($route_parameters->has('entity_type_id')) {
+      // Determine the route parameter which contains the bundle entity,
+      // assuming the entity type is bundle-able.
+      $bundle = $this->entityTypeManager()
+        ->getDefinition(
+          // Field UI routes should always have an entity_type_id parameter.
+          // Maybe a naive assumption, but this function should only ever
+          // be called for Field UI routes anyway.
+          $route_parameters->get('entity_type_id')
+        )
+        ->getBundleEntityType();
 
-    if ($bundle) {
-      $bundle = $route_parameters->get($bundle);
-      if ($bundle instanceof EntityInterface) {
-        return $bundle->label();
+      if ($bundle) {
+        $bundle = $route_parameters->get($bundle);
+        if ($bundle instanceof EntityInterface) {
+          return $bundle->label();
+        }
       }
     }
     return $this->routeMatch->getRouteObject()->getDefault('_title');
