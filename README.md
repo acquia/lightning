@@ -22,9 +22,11 @@ If you don't want to use Composer, you can install Lightning the traditional way
 by downloading a tarball from our
 [drupal.org project page](https://www.drupal.org/project/lightning).
 
-You can customize your installation using [lightning.extend.yml](https://github.com/acquia/lightning/blob/8.x-1.x/lightning.extend.yml). Using this file, you can choose which Lightning features to install as well as install your own custom features.
+You can customize your installation using [lightning.extend.yml](https://github.com/acquia/lightning/blob/8.x-1.x/lightning.extend.yml).
+Using this file, you can choose which Lightning features to install or install
+your own custom features.
 
-## Functional areas
+## What Lightning Does
 Through custom modules and configuration, Lightning aims to target four
 functional areas:
 
@@ -78,18 +80,16 @@ improvements that all just works out of the box.
 
 ## Project Roadmap
 We publish sprint plans for each patch release. You can find a link to the
-current in our [Meta Lightning Releases][meta_releases]
-issue.
+current one in [this meta-issue][meta_releases] on Drupal.org.
 
 ## Resources
 You can find general best practices documentation inside the `help` directory of
 each Lightning "base" module. Integration with the
 [Advanced Help](https://www.drupal.org/project/advanced_help) module is planned.
 
-Instructional videos for each of our user stories can be found here:
-http://lightning.acquia.com/blog/lightning-user-stories-demonstrations
+Demonstration videos for each of our user stories can be found [here][demo_videos].
 
-Please use the [Lightning issue queue][issue_queue] for latest information and
+Please use the [Drupal.org issue queue][issue_queue] for latest information and
 to request features or bug fixes.
 
 ## Running Tests
@@ -142,3 +142,4 @@ will not need to do this.
 [template]: https://github.com/acquia/lightning-project "Composer-based project template"
 [d.o_semver]: https://www.drupal.org/node/1612910
 [lightning_composer_project]: https://github.com/acquia/lightning-project
+[demo_videos]: http://lightning.acquia.com/blog/lightning-user-stories-demonstrations "Lightning user story demonstration videos"
