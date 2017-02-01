@@ -1,5 +1,20 @@
 ## 2.0.3
-* Added Panelizer support for Taxonomy Terms. (Issue #2664574)
+* Added the Entity Blocks module, which provides block types that can display
+  any renderable entity without needing a context. This allows content editors
+  to easily embed existing content in a landing page using the in-place editor.
+  (Issue #2667896)
+* Lightning now includes Search API with an out-of-the-box site search page, a
+  database backend, and sane default configuration. (Issue #2674180)
+* Added help text to the edit form for workspaces that documents how to push a
+  workspace's content live. (Issue #2835105)
+* Fixed a bug where Lightning Media failed to declare its dependency on
+  CKEditor. (Issue #2847011)
+* Lightning Workflow now includes a column on the content list page that
+  indicates if a piece of content has unpublished edits (a.k.a forward
+  revisions). (Issue #2837788)
+* Fixed a bug that could cause an exception when translating a field.
+  (Issue #2841172)
+* It's now possible to display taxonomy terms using Panelizer. (Issue #2664574)
 
 ## 2.0.2
 * Workbench Moderation was updated to 8.x-1.2. (Issue #2838896)
