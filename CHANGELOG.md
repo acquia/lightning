@@ -1,3 +1,6 @@
+## 2.0.3
+* Added Panelizer support for Taxonomy Terms. (Issue #2664574)
+
 ## 2.0.2
 * Workbench Moderation was updated to 8.x-1.2. (Issue #2838896)
 * All info files supplied with Lightning's components now have consistent

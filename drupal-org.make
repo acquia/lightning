@@ -55,6 +55,7 @@ projects[page_manager][type] = module
 projects[page_manager][version] = 1.0-alpha24
 projects[panelizer][type] = module
 projects[panelizer][patch][] = https://www.drupal.org/files/issues/panelizer-panels-ipe-tempstore-id.patch
+projects[panelizer][patch][] = https://www.drupal.org/files/issues/2664574-26.patch
 projects[panelizer][version] = 3.0-alpha3
 projects[panels][type] = module
 projects[panels][patch][] = https://www.drupal.org/files/issues/2793801-9.patch
