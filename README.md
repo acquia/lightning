@@ -10,10 +10,27 @@ their site builds. That means that a developer should never have to undo
 something that Lightning has done. So we started with a blank slate and
 justified each addition from there.
 
+## Installing Lightning
+The preferred way to install Lightning is using our
+[Composer-based project template][template]. It's easy!
+
+```
+$ composer create-project acquia/lightning-project MY_PROJECT
+```
+
+If you don't want to use Composer, you can install Lightning the traditional way
+by downloading a tarball from our
+[drupal.org project page](https://www.drupal.org/project/lightning).
+
+You can customize your installation using [lightning.extend.yml](https://github.com/acquia/lightning/blob/8.x-1.x/lightning.extend.yml).
+Using this file, you can choose which Lightning features to install or install
+your own custom features.
+
+## What Lightning Does
 Through custom modules and configuration, Lightning aims to target four
 functional areas:
 
-## Media
+### Media
 The current version of media includes the following functionality:
 
 * A preconfigured Text Format (Rich Text) with CKEditor WYSIWYG.
@@ -31,7 +48,7 @@ The current version of media includes the following functionality:
 * Ability to embed tweets, Instagrams, and YouTube/Vimeo videos directly into
   CKEditor by pasting the video URL
 
-## Layout
+### Layout
 Lightning includes the Panelizer module, which allows you to configure the
 layout of any content type using a drag-and-drop interface (Panels IPE).
 Lightning also includes a Landing Page content type for you to create
@@ -46,7 +63,7 @@ layouts (see the [Layout Plugin](https://www.drupal.org/project/layout_plugin)
 module) or install a contributed library of layouts like
 [Radix Layouts](https://www.drupal.org/project/radix_layouts).
 
-## Workflow
+### Workflow
 Lightning includes tools for building organization-specific content workflows.
 Out of the box, Lightning gives you the ability to manage content in one of four
 workflow states (draft, needs review, published, and archived). You can create
@@ -54,42 +71,26 @@ as many additional states as you like and define transitions between them. It's
 also possible to schedule content (either a single node or many at once) to be
 transitioned between states at a specific future date and time.
 
-## Preview (Experimental)
+### Preview (Experimental)
 The Workspace Preview System (WPS) gives site builders, editors, authors, and
 reviews the ability to send collections of content through an editorial workflow
 and preview that content within the context of the current live site. WPS is a
 collection of contributed Drupal modules with additional configuration UX
 improvements that all just works out of the box.
 
-## Installing Lightning
-The preferred way to install Lightning is using our
-[Composer-based project template][template]. It's easy!
-
-If you don't want to use Composer, you can install Lightning the traditional way
-by downloading a tarball from our
-[drupal.org project page](https://www.drupal.org/project/lightning).
-
-You can customize your installation using [lightning.extend.yml](https://github.com/acquia/lightning/blob/8.x-1.x/lightning.extend.yml). Using this file, you can choose which Lightning features to install as well as install your own custom features.
-
 ## Project Roadmap
-The roadmap is subject to change, but our projected schedule is:
-
-* QTR3/4, 2016
-  * Point in time preview
-  * Personalization
-  * Remote replication (store workspaces on external apps)
-  * Search API integration
-
-You can also look for general enhancements along the way. Please use the
-[Lightning issue queue][issue_queue] for latest information and to request
-features or bug fixes.
+We publish sprint plans for each patch release. You can find a link to the
+current one in [this meta-issue][meta_releases] on Drupal.org.
 
 ## Resources
 You can find general best practices documentation inside the `help` directory of
 each Lightning "base" module. Integration with the
 [Advanced Help](https://www.drupal.org/project/advanced_help) module is planned.
 
-Please file issues in our [drupal.org issue queue][issue_queue].
+Demonstration videos for each of our user stories can be found [here][demo_videos].
+
+Please use the [Drupal.org issue queue][issue_queue] for latest information and
+to request features or bug fixes.
 
 ## Running Tests
 These instructions assume you have used Composer to install Lightning.
@@ -137,6 +138,8 @@ will not need to do this.
   both versions.
 
 [issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
+[meta_release]: https://www.drupal.org/node/2670686 "Lightning Meta Releases Issue"
 [template]: https://github.com/acquia/lightning-project "Composer-based project template"
 [d.o_semver]: https://www.drupal.org/node/1612910
 [lightning_composer_project]: https://github.com/acquia/lightning-project
+[demo_videos]: http://lightning.acquia.com/blog/lightning-user-stories-demonstrations "Lightning user story demonstration videos"
