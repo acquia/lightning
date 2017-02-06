@@ -34,6 +34,18 @@ function lightning_test_install() {
         'selection_mode' => 'selection_append',
       ],
     ])
+    ->setComponent('field_unlimited_images', [
+      'type' => 'entity_browser_file',
+      'settings' => [
+        'entity_browser' => 'image_browser',
+        'field_widget_edit' => TRUE,
+        'field_widget_remove' => TRUE,
+        'view_mode' => 'default',
+        'preview_image_style' => 'thumbnail',
+        'open' => TRUE,
+        'selection_mode' => 'selection_append',
+      ],
+    ])
     ->save();
 }
 
@@ -62,6 +74,7 @@ function lightning_test_uninstall() {
   entity_get_form_display('node', 'page', 'default')
     ->removeComponent('field_multi_image')
     ->removeComponent('field_hero_image')
+    ->removeComponent('field_unlimited_images')
     ->save();
 
   \Drupal::state()->delete('lightning_test');

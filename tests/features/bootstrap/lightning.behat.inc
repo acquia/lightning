@@ -461,16 +461,6 @@ class LightningSubContext extends DrupalSubContextBase {
   }
 
   /**
-   * Submits the image browser.
-   *
-   * @When I submit the entity browser
-   */
-  public function submitEntityBrowser() {
-    $this->getSession()
-      ->executeScript('window.frames["entity_browser_iframe_image_browser"].document.forms[0].op.click()');
-  }
-
-  /**
    * Switches to an iframe.
    *
    * @param string $name

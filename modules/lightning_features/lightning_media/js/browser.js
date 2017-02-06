@@ -22,7 +22,7 @@
       // settings for this entity browser.
       var settings = (frameElement ? parent : window).drupalSettings.entity_browser[this.uuid];
 
-      // Assume a single-cardinality entity browser with no existing selection.
+      // Assume a single-cardinality field with no existing selection.
       this.count = settings.count || 0;
       this.cardinality = settings.cardinality || 1;
     },
@@ -42,9 +42,9 @@
       // this as its context.
       var _deselect = jQuery.proxy(this.deselect, this);
 
-      this.$el
-        .find('[data-selectable]')
-        .each(function (undefined, item) { _deselect(item); });
+      this.$('[data-selectable]').each(function (undefined, item) {
+        _deselect(item);
+      });
     },
 
     select: function (item) {
@@ -55,21 +55,17 @@
     },
 
     /**
-     * Prevents any unselected items in the entity browser from being clicked.
+     * Marks unselected items in the entity browser as disabled.
      */
     lock: function () {
-      this.$el
-        .find('[data-selectable]:not(.selected)')
-        .addClass('disabled');
+      this.$('[data-selectable]:not(.selected)').addClass('disabled');
     },
 
     /**
-     * Allows all items in the entity browser to be clicked.
+     * Marks all items in the entity browser as enabled.
      */
     unlock: function () {
-      this.$el
-        .find('[data-selectable]')
-        .removeClass('disabled');
+      this.$('[data-selectable]').removeClass('disabled');
     },
 
     /**
@@ -80,7 +76,10 @@
     onClick: function (event) {
       var chosen_one = this.$(event.currentTarget);
 
-      if (this.cardinality === 1) {
+      if (chosen_one.hasClass('disabled')) {
+        return false;
+      }
+      else if (this.cardinality === 1) {
         this.deselectAll();
         this.select(chosen_one);
       }
@@ -89,11 +88,11 @@
         this.count--;
         this.unlock();
       }
-      else if (this.count < this.cardinality) {
+      else {
         this.select(chosen_one);
-        this.count++;
 
-        if (this.count === this.cardinality) {
+        // If cardinality is unlimited, this will never be fulfilled. Good.
+        if (++this.count === this.cardinality) {
           this.lock();
         }
       }

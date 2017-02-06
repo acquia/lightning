@@ -70,10 +70,7 @@ Feature: Media asset browsers for CKEditor and image fields
     And I attach the file "test.jpg" to "File"
     And I wait for AJAX to finish
     And I enter "Behold, a generic logo" for "Media name"
-    And I switch to the window
     And I submit the entity browser
-    And I wait 10 seconds
-    And I wait for AJAX to finish
     Then I should not see a "table[drupal-data-selector='edit-image-current'] td.empty" element
 
   Scenario: Opening the media browser on a pre-existing node
@@ -127,10 +124,21 @@ Feature: Media asset browsers for CKEditor and image fields
     And I open the "Multi-Image" image browser
     And I select item 2
     And I select item 3
-    And I switch to the window
     And I submit the entity browser
-    And I wait 10 seconds
-    And I wait for AJAX to finish
     And I open the "Multi-Image" image browser
     And I select item 1
     Then at least 3 elements should match "[data-selectable].disabled"
+
+  @test_module
+  Scenario: Testing an image browser with unlimited cardinality
+    Given I am logged in as a user with the page_creator,media_creator roles
+    And 4 random images
+    When I visit "/node/add/page"
+    And I open the "Unlimited Images" image browser
+    And I select item 1
+    And I select item 2
+    And I select item 3
+    And I submit the entity browser
+    And I open the "Unlimited Images" image browser
+    And I select item 4
+    Then nothing should match "[data-selectable].disabled"

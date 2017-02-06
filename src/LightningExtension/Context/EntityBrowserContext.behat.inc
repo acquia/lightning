@@ -29,6 +29,23 @@ class EntityBrowserContext extends DrupalSubContextBase {
   }
 
   /**
+   * Submits the entity browser.
+   *
+   * @When I submit the entity browser
+   */
+  public function submit() {
+    $session = $this->getSession();
+
+    // The entity browser frame will be destroyed, so we need to switch into
+    // the main window and reach into the frame to submit the form. Ugh.
+    $frame = $session->evaluateScript('frameElement.name');
+    $session->switchToWindow();
+    $session->executeScript('window.frames["' . $frame . '"].document.forms[0].op.click()');
+    sleep(10);
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
+  /**
    * Opens an image browser for a particular field.
    *
    * @param string $field
