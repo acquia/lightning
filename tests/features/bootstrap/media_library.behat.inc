@@ -5,6 +5,8 @@
  * Contains \MediaLibrarySubContext.
  */
 
+use Acquia\LightningExtension\Context\CkEditorContext;
+use Acquia\LightningExtension\Context\EntityBrowserContext;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
 /**
@@ -60,9 +62,9 @@ class MediaLibrarySubContext extends DrupalSubContextBase {
    * @When I open the media browser
    */
   public function openMediaBrowser($button = 'media_browser') {
-    /** @var \CkEditorSubContext $ck_context */
-    $ck_context = $this->getContext('\CkEditorSubContext');
-    $ck_context->execute('editdrupalentity', NULL, ['id' => $button]);
+    $this
+      ->getContext(CkEditorContext::class)
+      ->execute('editdrupalentity', NULL, ['id' => $button]);
 
     $this->minkContext->iWaitForAjaxToFinish();
     $frame = 'entity_browser_iframe_' . $button;
@@ -80,13 +82,10 @@ class MediaLibrarySubContext extends DrupalSubContextBase {
    */
   public function selectNthItem($n) {
     sleep(5);
-    $row = floor($n / 4) + 1;
-    $column = ($n % $row) + 1;
 
-    $selector = '.view-media .row-' . $row . ' .col-' . $column;
-    /** @var \LightningSubContext $lightning */
-    $lightning = $this->getContext('\LightningSubContext');
-    $lightning->clickElementBySelector($selector);
+    $this
+      ->getContext(EntityBrowserContext::class)
+      ->selectItem($n, 'media_browser');
   }
 
   /**

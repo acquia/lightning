@@ -325,6 +325,7 @@ class EntitySubContext extends DrupalSubContextBase {
    *   (optional) The maximum number of entities to track. Defaults to 1.
    *
    * @When I queue the latest :entity_type entity for deletion
+   * @When I queue the latest :limit :entity_type entities for deletion
    */
   public function trackNewest($entity_type, $sort_field = 'created', $limit = 1) {
     $this->ensureBootstrap();

@@ -14,6 +14,36 @@ use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\media_entity\MediaBundleInterface;
 
 /**
+ * Implements hook_element_info_alter().
+ */
+function lightning_media_element_info_alter(array &$info) {
+  $info['entity_browser']['#after_build'][] = 'lightning_media_inject_entity_browser_count';
+}
+
+/**
+ * Post-build callback for entity browser elements.
+ *
+ * This function injects the number of default values the entity browser has
+ * into its JavaScript settings so that several instances of an entity browser
+ * on a particular field can respect the field's cardinality. This is used by
+ * our special-sauce JavaScript in browser.js to ensure that you cannot select
+ * more entities than the cardinality will allow.
+ *
+ * @param array $element
+ *   The fully built element.
+ *
+ * @return array
+ *   The processed element.
+ */
+function lightning_media_inject_entity_browser_count(array $element) {
+  $settings = &$element['#attached']['drupalSettings']['entity_browser'];
+  $uuid = key($settings);
+  $settings[$uuid]['count'] = count($element['#default_value']);
+
+  return $element;
+}
+
+/**
  * Implements template_preprocess_image_style().
  *
  * @param array $variables

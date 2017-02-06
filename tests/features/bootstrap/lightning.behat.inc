@@ -19,6 +19,28 @@ use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 class LightningSubContext extends DrupalSubContextBase {
 
   /**
+   * Installs the Lightning Test module before a @test_module scenario.
+   *
+   * @BeforeScenario @test_module
+   */
+  public function installTestModule() {
+    $driver = $this->getDriver();
+    if ($driver->isBootstrapped() === FALSE) {
+      $driver->bootstrap();
+    }
+    \Drupal::service('module_installer')->install(['lightning_test']);
+  }
+
+  /**
+   * Uninstalls the Lighting Test module after a @test_module scenario.
+   *
+   * @AfterScenario @test_module
+   */
+  public function uninstallTestModule() {
+    \Drupal::service('module_installer')->uninstall(['lightning_test']);
+  }
+
+  /**
    * The Mink context.
    *
    * @var \Drupal\DrupalExtension\Context\MinkContext

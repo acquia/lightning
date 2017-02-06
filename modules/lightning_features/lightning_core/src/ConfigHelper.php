@@ -2,6 +2,7 @@
 
 namespace Drupal\lightning_core;
 
+use Drupal\Core\Config\Entity\ConfigEntityTypeInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -104,20 +105,69 @@ class ConfigHelper {
    *   The called object, for chaining.
    */
   public function createEntity($entity_type, $id) {
-    $prefix = $this->entityTypeManager
-      ->getDefinition($entity_type)
-      ->getConfigPrefix();
+    $prefixes = $this->getConfigPrefixMap();
 
     $storage = $this->entityTypeManager->getStorage($entity_type);
 
     $existing = $storage->load($id);
     if (empty($existing)) {
-      $values = $this->read($prefix . '.' . $id);
+      $values = $this->read($prefixes[$entity_type] . '.' . $id);
       if ($values) {
         $storage->create($values)->save();
       }
     }
     return $this;
+  }
+
+  /**
+   * Deletes an entity created from default configuration.
+   *
+   * @param string $id
+   *   The configuration ID.
+   */
+  public function delete($id) {
+    // Get the entity type prefix map and filter it by the ID to determine what
+    // entity type this ID represents.
+    $prefixes = array_filter($this->getConfigPrefixMap(), function ($prefix) use ($id) {
+      return strpos($id, $prefix . '.') === 0;
+    });
+
+    $entity_type = key($prefixes);
+    if ($entity_type) {
+      // Strip the prefix off the ID.
+      $id = substr($id, strlen(current($prefixes)) + 1);
+
+      $entity = $this->entityTypeManager->getStorage($entity_type)->load($id);
+      if ($entity) {
+        $entity->delete();
+      }
+    }
+  }
+
+  /**
+   * Deletes all entities created from default configuration.
+   */
+  public function deleteAll() {
+    $all = $this->storage->listAll();
+    array_walk($all, [$this, 'delete']);
+  }
+
+  /**
+   * Returns a map of config entity types to config prefixes.
+   *
+   * @return string[]
+   *   The config prefixes, keyed by their corresponding entity type ID.
+   */
+  protected function getConfigPrefixMap() {
+    $prefix_map = [];
+
+    foreach ($this->entityTypeManager->getDefinitions() as $id => $definition) {
+      if ($definition instanceof ConfigEntityTypeInterface) {
+        $prefix_map[$id] = $definition->getConfigPrefix();
+      }
+    }
+
+    return $prefix_map;
   }
 
 }
