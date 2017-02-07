@@ -9,3 +9,15 @@ services:
     class: '\Drupal\lightning\FormHelper'
     arguments:
       - '@element_info'
+
+  lightning.subprofile:
+    class: '\Drupal\lightning\Command\SubProfileCommand'
+    arguments: {['@?console.extension_manager', '@console.profile_generator', '@console.string_converter', '@console.validator', '@app.root', '@console.site', '@http_client']}
+    tags:
+      - { name: 'drupal.command' }
+
+  lightning.subprofile_generator:
+    class: '\Drupal\lightning\Generator\SubProfileGenerator'
+    arguments: {}
+    tags:
+      - { name: drupal.generator }

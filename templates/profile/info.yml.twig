@@ -1,0 +1,26 @@
+name: {{ profile }}
+type: {{ type }}
+description: {{ description }}
+core: {{ core }}
+distribution:
+  name: {{ profile }}
+{% if dependencies %}
+
+dependencies:
+{% for dependency in dependencies %}
+  - {{ dependency }}
+{% endfor %}
+{% endif %}
+
+themes:
+  - bartik
+  - seven
+
+base profile:
+  name: lightning
+{% if excluded_dependencies %}
+  excluded_dependencies:
+{% for excluded_dependency in excluded_dependencies %}
+    - {{ excluded_dependency }}
+{% endfor %}
+{% endif %}

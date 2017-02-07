@@ -5,27 +5,6 @@
  * Defines the Lightning Profile install screen by modifying the install form.
  */
 
-use Drupal\lightning\Form\ExtensionSelectForm;
-
-/**
- * Implements hook_install_tasks().
- */
-function lightning_install_tasks() {
-  return array(
-    'lightning_select_extensions' => array(
-      'display_name' => t('Choose extensions'),
-      'display' => TRUE,
-      'type' => 'form',
-      'function' => ExtensionSelectForm::class,
-    ),
-    'lightning_install_extensions' => array(
-      'display_name' => t('Install extensions'),
-      'display' => TRUE,
-      'type' => 'batch',
-    ),
-  );
-}
-
 /**
  * Implements hook_install_tasks_alter().
  */
