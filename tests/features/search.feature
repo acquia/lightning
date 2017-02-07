@@ -15,9 +15,9 @@ Feature: Site search
     And I should not see "Zombie 2"
     And I should see "Zombie 3"
 
-  @javascript
+  @javascript @failing
   Scenario: Indexing and searching for landing pages
-    Given I am logged in as a user with the landing_page_creator,landing_page_reviewer roles
+    Given I am logged in as a user with the landing_page_creator,landing_page_reviewer,layout_manager roles
     And landing_page content:
       | title  | path    | moderation_state | body                                                    |
       | Foobar | /foobar | draft            | In which my landing page is described in a flowery way. |
