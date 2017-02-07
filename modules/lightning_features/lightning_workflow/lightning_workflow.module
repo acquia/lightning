@@ -5,13 +5,52 @@
  * Provides workflow enhancements for Drupal.
  */
 
+use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
 use Drupal\node\NodeTypeInterface;
+use Drupal\scheduled_updates\ScheduledUpdateInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
+
+/**
+ * Implements hook_inline_entity_form_table_fields_alter().
+ */
+function lightning_workflow_inline_entity_form_table_fields_alter(array &$fields, array $context) {
+  if ($context['entity_type'] == 'scheduled_update') {
+    $fields['label']['type'] = 'callback';
+    $fields['label']['callback'] = 'lightning_workflow_scheduled_update_ief_label';
+    // We're generating a pretty, informative label...so there's no need to use
+    // the spartan, default column label.
+    $fields['label']['label'] = NULL;
+  }
+}
+
+/**
+ * Generates pretty labels for scheduled updates in an IEF.
+ *
+ * @param ScheduledUpdateInterface $entity
+ *   The scheduled update entity.
+ *
+ * @return array
+ *   The entity label, as a renderable array.
+ */
+function lightning_workflow_scheduled_update_ief_label(ScheduledUpdateInterface $entity) {
+  $label = $entity->label();
+
+  if ($entity->bundle() == 'node_embargo') {
+    $when = DrupalDateTime::createFromTimestamp($entity->update_timestamp->value);
+
+    $label = t('Move to <strong>@moderation_state</strong> state on @date at @time', [
+      '@moderation_state' => $entity->field_moderation_state->entity->label(),
+      '@date' => $when->format('F j, Y'),
+      '@time' => $when->format('g:i:s A'),
+    ]);
+  }
+  return ['#markup' => $label];
+}
 
 /**
  * Alters a moderation_state form element.
@@ -87,7 +126,7 @@ function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
       'field_name' => 'scheduled_update',
       'entity_type' => 'node',
       'bundle' => $id,
-      'label' => t('Scheduled update'),
+      'label' => t('Scheduled updates'),
       'settings' => [
         'handler' => 'default:scheduled_update',
         'handler_settings' => [
