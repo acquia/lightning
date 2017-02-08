@@ -35,6 +35,13 @@ class SubProfileCommand extends ProfileCommand {
   protected $appRoot;
 
   /**
+   * @var array.
+   *
+   * A list of all Lightning modules.
+   */
+  private $lightningComponents;
+
+  /**
    * {@inheritdoc}
    */
   protected function configure() {
@@ -105,6 +112,23 @@ class SubProfileCommand extends ProfileCommand {
     $fileQueue = new FileQueue();
     $generator->setRenderer($renderer);
     $generator->setFileQueue($fileQueue);
+    $this->lightningComponents = [
+      'lightning_core',
+      'lightning_contact_form',
+      'lightning_page',
+      'lightning_search',
+      'lightning_layout',
+      'lightning_landing_page',
+      'lightning_media',
+      'lightning_landing_page',
+      'lightning_media_document',
+      'lightning_media_image',
+      'lightning_media_instagram',
+      'lightning_media_twitter',
+      'lightning_media_video',
+      'lightning_workflow',
+      'lightning_preview',
+    ];
     parent::__construct($extensionManager, $generator, $stringConverter, $validator, $appRoot, $site, $httpClient);
   }
 
@@ -181,15 +205,11 @@ class SubProfileCommand extends ProfileCommand {
 
     $excluded_dependencies = $input->getOption('excluded_dependencies');
     if (!$excluded_dependencies) {
-      if ($io->confirm(
-        $this->trans('Would you like to exclude any of Lightning\'s dependencies from being installed'),
-        false
-      )
-      ) {
-        $excluded_dependencies = $io->ask(
-          $this->trans('Dependencies of Lightning to exclude separated by commas (i.e. lightning_media, lightning_landing_page'),
-          ''
-        );
+      if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s Components from being installed'), false)) {
+        if ($io->confirm($this->trans('Would you like to see a list of Components that can be excluded?'), false)) {
+          $io->write(implode(', ', $this->lightningComponents));
+        }
+        $excluded_dependencies = $io->ask($this->trans('Dependencies of Lightning to exclude separated by commas (i.e. lightning_media, lightning_landing_page'), '');
       }
       $input->setOption('excluded_dependencies', $excluded_dependencies);
     }
@@ -236,17 +256,22 @@ class SubProfileCommand extends ProfileCommand {
    * @param string $excluded_dependencies
    * @return mixed
    *
-   * This just formats the list into an array. @todo validate against a list of
-   * Lightning components and sub-components.
+   * This just formats the list into an array.
    */
   protected function validateExcludedDependencies($excluded_dependencies) {
     if (empty($excluded_dependencies)) {
+      // Need an explicit false here for twig.
       return FALSE;
     }
     $validated_excluded_dependencies = [];
     $excluded_dependencies = explode(',', $excluded_dependencies);
     foreach ($excluded_dependencies as $excluded_dependency) {
-      $validated_excluded_dependencies[] = trim($excluded_dependency);
+      if (in_array($excluded_dependency, $this->lightningComponents)) {
+        $validated_excluded_dependencies[] = trim($excluded_dependency);
+      }
+      else {
+        // @todo warn?
+      }
     }
     return $validated_excluded_dependencies;
   }
