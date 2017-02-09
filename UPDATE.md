@@ -58,6 +58,13 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
 * Edit the **Scheduled update** field on any content type that has it. Click
   **Field settings*, set "Allowed number of values" to "Unlimited" and save.
   Then click **Edit**, rename the field to "Scheduled updates", and save.
+* If you have the Image Browser entity browser available:
+    * Go to *Configuration > Content authoring > Entity browsers* and edit the
+      **Image Browser** entity browser.
+    * Click **Next**.
+    * Empty the "Width of the modal" and "Height of the modal" text fields.
+    * Click **Next**, then proceed through the rest of the wizard without
+      changing anything else. Then click **Finish** to save the entity browser.
 
 ## 2.0.2 to 2.0.3
 * If you have the Landing Page content type installed, there are several manual
