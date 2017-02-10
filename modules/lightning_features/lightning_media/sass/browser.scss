@@ -1,6 +1,4 @@
-@import "compass/css3/filter";
-@import "compass/css3/flexbox";
-@import "compass/css3/transition";
+@import "compass/css3";
 
 nav.eb-tabs {
   ul {
@@ -49,8 +47,8 @@ nav.eb-tabs {
   .views-col {
     margin: 0 0 0 1em;
     position: relative;
-    border: 1em solid #ebebeb;
-    @include transition(opacity .25s, border-color .25s);
+    border: 10px solid #ebebeb;
+    @include transition(border-color .6s);
 
     html[dir = "rtl"] & {
       margin: 0 1em 0 0;
@@ -61,12 +59,12 @@ nav.eb-tabs {
     }
 
     &.disabled {
-      opacity: .3;
+      @include opacity(.3);
       @include filter(saturate(10%));
     }
 
     &.selected {
-      border-color: lime;
+      border-color: #ed5; // Highlight color from Seven.
 
       &::before {
         content: "";
@@ -74,7 +72,8 @@ nav.eb-tabs {
         height: 100%;
         position: absolute;
         background: transparent url(../images/selected.svg) no-repeat center;
-        background-size: 30%;
+        @include animation(selected 1.5s 1);
+        @include opacity(0);
       }
     }
 
@@ -83,5 +82,16 @@ nav.eb-tabs {
       height: auto;
       width: 100%;
     }
+  }
+}
+
+@include keyframes(selected) {
+  0% {
+    @include opacity(1);
+    background-size: 70%;
+  }
+  100% {
+    @include opacity(0);
+    background-size: 55%;
   }
 }

@@ -5,6 +5,7 @@
  * Contains installation and update routines for Lightning Dev.
  */
 
+use Drupal\entity_browser\Entity\EntityBrowser;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\media_entity\Entity\MediaBundle;
@@ -162,4 +163,12 @@ function lightning_dev_update_8003() {
   foreach ($fields as $field) {
     $field->setLabel(t('Scheduled updates'))->save();
   }
+
+  // Allow the image browser to size itself responsively.
+  $image_browser = EntityBrowser::load('image_browser');
+  $display_plugin = $image_browser->getDisplay();
+  $configuration = $display_plugin->getConfiguration();
+  $configuration['width'] = $configuration['height'] = NULL;
+  $display_plugin->setConfiguration($configuration);
+  $image_browser->save();
 }
