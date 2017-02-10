@@ -2,6 +2,7 @@
 
 namespace Drupal\lightning\Command;
 
+use Drupal\Console\Core\Utils\ConfigurationManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -103,7 +104,8 @@ class SubProfileCommand extends ProfileCommand {
     $stringConverter = new StringConverter();
     $httpClient = new Client();
     $appRoot = \Drupal::root();
-    $site = new Site($appRoot);
+    $configurationManager = new ConfigurationManager();
+    $site = new Site($appRoot, $configurationManager);
     $extensionManager = new Manager($site, $appRoot);
     $validator = new Validator($extensionManager);
     $translater = new TranslatorManager();
