@@ -268,7 +268,7 @@ class SubProfileCommand extends ProfileCommand {
     $validated_excluded_dependencies = [];
     $excluded_dependencies = explode(',', $excluded_dependencies);
     foreach ($excluded_dependencies as $excluded_dependency) {
-      if (in_array($excluded_dependency, $this->lightningComponents)) {
+      if (in_array(trim($excluded_dependency), $this->lightningComponents)) {
         $validated_excluded_dependencies[] = trim($excluded_dependency);
       }
       else {
