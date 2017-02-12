@@ -36,11 +36,9 @@ class SubProfileCommand extends ProfileCommand {
   protected $appRoot;
 
   /**
-   * @var array.
-   *
-   * A list of all Lightning modules.
+   * @var array
    */
-  private $lightningComponents;
+  protected $topLevelComponents;
 
   /**
    * {@inheritdoc}
@@ -96,6 +94,43 @@ class SubProfileCommand extends ProfileCommand {
       );
   }
 
+  public static function getLightningComponents() {
+    return [
+      'lightning_core',
+      'lightning_contact_form' => [
+        'parent' => 'lightning_core',
+      ],
+      'lightning_page' => [
+        'parent' => 'lightning_core',
+      ],
+      'lightning_search' => [
+        'parent' => 'lightning_core',
+      ],
+      'lightning_layout',
+      'lightning_landing_page' => [
+        'parent' => 'lightning_layout',
+      ],
+      'lightning_media',
+      'lightning_media_document' => [
+        'parent' => 'lightning_media',
+      ],
+      'lightning_media_image' => [
+        'parent' => 'lightning_media',
+      ],
+      'lightning_media_instagram' => [
+        'parent' => 'lightning_media',
+      ],
+      'lightning_media_twitter' => [
+        'parent' => 'lightning_media',
+      ],
+      'lightning_media_video' => [
+        'parent' => 'lightning_media',
+      ],
+      'lightning_workflow',
+      'lightning_preview',
+    ];
+  }
+
   /**
    * ProfileCommand constructor.
    */
@@ -114,23 +149,7 @@ class SubProfileCommand extends ProfileCommand {
     $fileQueue = new FileQueue();
     $generator->setRenderer($renderer);
     $generator->setFileQueue($fileQueue);
-    $this->lightningComponents = [
-      'lightning_core',
-      'lightning_contact_form',
-      'lightning_page',
-      'lightning_search',
-      'lightning_layout',
-      'lightning_landing_page',
-      'lightning_media',
-      'lightning_landing_page',
-      'lightning_media_document',
-      'lightning_media_image',
-      'lightning_media_instagram',
-      'lightning_media_twitter',
-      'lightning_media_video',
-      'lightning_workflow',
-      'lightning_preview',
-    ];
+    $this->setTopLevelComponents();
     parent::__construct($extensionManager, $generator, $stringConverter, $validator, $appRoot, $site, $httpClient);
   }
 
@@ -192,26 +211,23 @@ class SubProfileCommand extends ProfileCommand {
 
     $dependencies = $input->getOption('dependencies');
     if (!$dependencies) {
-      if ($io->confirm(
-        $this->trans('commands.generate.profile.questions.dependencies'),
-        true
-      )
-      ) {
-        $dependencies = $io->ask(
-          $this->trans('commands.generate.profile.options.dependencies'),
-          ''
-        );
+      if ($io->confirm($this->trans('commands.generate.profile.questions.dependencies'), true)) {
+        $dependencies = $io->ask($this->trans('commands.generate.profile.options.dependencies'), '');
       }
       $input->setOption('dependencies', $dependencies);
     }
 
     $excluded_dependencies = $input->getOption('excluded_dependencies');
     if (!$excluded_dependencies) {
-      if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s Components from being installed'), false)) {
-        if ($io->confirm($this->trans('Would you like to see a list of Components that can be excluded?'), false)) {
-          $io->write(implode(', ', $this->lightningComponents));
+      if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s top-level Components from being installed'), false)) {
+        if ($io->confirm($this->trans('Would you like to see a list of top-level Components that can be excluded?'), false)) {
+          $tl_components = [];
+          foreach ($this->topLevelComponents as $component) {
+            $tl_components[] = $component;
+          }
+          $io->writeln(implode(', ', $tl_components));
         }
-        $excluded_dependencies = $io->ask($this->trans('Dependencies of Lightning to exclude separated by commas (i.e. lightning_media, lightning_landing_page'), '');
+        $excluded_dependencies = $io->ask($this->trans('Top-level components of Lightning to exclude separated by commas (i.e. lightning_layout, lightning_workflow'), '');
       }
       $input->setOption('excluded_dependencies', $excluded_dependencies);
     }
@@ -241,7 +257,7 @@ class SubProfileCommand extends ProfileCommand {
       // actually checking to see if they are present.
       $dependencies = $dependencies['success'];
     }
-    $excluded_dependencies = $this->validateExcludedDependencies($input->getOption('excluded_dependencies'));
+    $excluded_dependencies = $this->buildExcludedDependenciesList($input->getOption('excluded_dependencies'));
     $this->generator->generate(
       $profile,
       $machine_name,
@@ -258,24 +274,66 @@ class SubProfileCommand extends ProfileCommand {
    * @param string $excluded_dependencies
    * @return mixed
    *
-   * This just formats the list into an array.
+   * This just adds subcomponents of top-level components and formats the list
+   * into an array.
    */
-  protected function validateExcludedDependencies($excluded_dependencies) {
+  protected function buildExcludedDependenciesList($excluded_dependencies) {
     if (empty($excluded_dependencies)) {
       // Need an explicit false here for twig.
       return FALSE;
     }
-    $validated_excluded_dependencies = [];
+    $excluded_dependencies_list = [];
     $excluded_dependencies = explode(',', $excluded_dependencies);
     foreach ($excluded_dependencies as $excluded_dependency) {
-      if (in_array(trim($excluded_dependency), $this->lightningComponents)) {
-        $validated_excluded_dependencies[] = trim($excluded_dependency);
+      if (in_array(trim($excluded_dependency), $this->getLightningComponents())) {
+        $excluded_dependencies_list[] = trim($excluded_dependency);
+        if (in_array(trim($excluded_dependency), $this->topLevelComponents)) {
+          // If its a top-level-component, add its subcomponents too.
+          $subcomponents = $this->getSubComponents(trim($excluded_dependency));
+          foreach ($subcomponents as $subcomponent) {
+            $excluded_dependencies_list[] = $subcomponent;
+          }
+        }
       }
       else {
         // @todo warn?
       }
     }
-    return $validated_excluded_dependencies;
+    return $excluded_dependencies_list;
+  }
+
+  /**
+   * @param array $excluded
+   * @return array
+   */
+  protected function setTopLevelComponents($excluded = ['lightning_core']) {
+    $topLevelComponents = [];
+    foreach ($this->getLightningComponents() as $component) {
+      if (in_array($component, $excluded)) {}
+      elseif (!is_array($component)) {
+        $topLevelComponents[] = $component;
+      }
+      elseif (!isset($component['parent'])) {
+        $topLevelComponents[] = $component;
+      }
+    }
+    $this->topLevelComponents = $topLevelComponents;
+  }
+
+  /**
+   * @param string $topLevelComponent
+   * @return array
+   */
+  protected function getSubComponents($topLevelComponent) {
+    $subcomponents = [];
+    foreach ($this->getLightningComponents() as $component => $attributes) {
+      if (isset($attributes['parent'])) {
+        if ($attributes['parent'] == $topLevelComponent) {
+          $subcomponents[] = $component;
+        }
+      }
+    }
+    return $subcomponents;
   }
 
 }
