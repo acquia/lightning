@@ -2,26 +2,26 @@
 
 namespace Drupal\lightning\Command;
 
-use Drupal\Console\Core\Utils\ConfigurationManager;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Output\OutputInterface;
-use Drupal\Console\Core\Command\Shared\CommandTrait;
-use Drupal\Console\Command\Shared\ModuleTrait;
-use Drupal\Console\Command\Shared\FormTrait;
-use Drupal\Console\Command\Shared\ConfirmationTrait;
-use Drupal\Console\Core\Style\DrupalStyle;
-use Drupal\Console\Extension\Manager;
-use Drupal\Console\Core\Utils\FileQueue;
 use Drupal\Console\Command\Generate\ProfileCommand;
-use Drupal\lightning\Generator\SubProfileGenerator;
+use Drupal\Console\Command\Shared\ConfirmationTrait;
+use Drupal\Console\Command\Shared\FormTrait;
+use Drupal\Console\Command\Shared\ModuleTrait;
+use Drupal\Console\Core\Command\Shared\CommandTrait;
+use Drupal\Console\Core\Style\DrupalStyle;
+use Drupal\Console\Core\Utils\ConfigurationManager;
+use Drupal\Console\Core\Utils\FileQueue;
 use Drupal\Console\Core\Utils\StringConverter;
 use Drupal\Console\Core\Utils\TwigRenderer;
 use Drupal\Console\Core\Utils\TranslatorManager;
-use Drupal\Console\Utils\Validator;
+use Drupal\Console\Extension\Manager;
 use Drupal\Console\Utils\Site;
+use Drupal\Console\Utils\Validator;
+use Drupal\lightning\Generator\SubProfileGenerator;
+use Drupal\lightning_core\Element;
 use GuzzleHttp\Client;
-
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class SubProfileCommand extends ProfileCommand {
 
@@ -221,11 +221,7 @@ class SubProfileCommand extends ProfileCommand {
     if (!$excluded_dependencies) {
       if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s top-level Components from being installed'), false)) {
         if ($io->confirm($this->trans('Would you like to see a list of top-level Components that can be excluded?'), false)) {
-          $tl_components = [];
-          foreach ($this->topLevelComponents as $component) {
-            $tl_components[] = $component;
-          }
-          $io->writeln(implode(', ', $tl_components));
+          $io->writeln(Element::oxford($this->topLevelComponents));
         }
         $excluded_dependencies = $io->ask($this->trans('Top-level components of Lightning to exclude separated by commas (i.e. lightning_layout, lightning_workflow'), '');
       }
