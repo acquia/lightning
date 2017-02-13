@@ -108,59 +108,59 @@ class SubProfileCommand extends ProfileCommand {
   public static function getLightningComponents() {
     return [
       'lightning_core' => [
-        'Lightning Core',
+        'human_name' => 'Lightning Core',
         'parent' => null
       ],
       'lightning_contact_form' => [
-        'Lightning Contact Form',
+        'human_name' => 'Lightning Contact Form',
         'parent' => 'lightning_core'
       ],
       'lightning_page' => [
-        'Lightning Page',
+        'human_name' => 'Lightning Page',
         'parent' => 'lightning_core'
       ],
       'lightning_search' => [
-        'Lightning Search',
+        'human_name' => 'Lightning Search',
         'parent' => 'lightning_core'
       ],
       'lightning_layout' => [
-        'Lightning Layout',
+        'human_name' => 'Lightning Layout',
         'parent' => null
       ],
       'lightning_landing_page' => [
-        'Lightning Landing Page',
+        'human_name' => 'Lightning Landing Page',
         'parent' => 'lightning_layout'
       ],
       'lightning_media' => [
-        'Lightning Media',
+        'human_name' => 'Lightning Media',
         'parent' => null
       ],
       'lightning_media_document' => [
-        'Lightning Media Document',
+        'human_name' => 'Lightning Media Document',
         'parent' => 'lightning_media'
       ],
       'lightning_media_image' => [
-        'Lightning Media Image',
+        'human_name' => 'Lightning Media Image',
         'parent' => 'lightning_media'
       ],
       'lightning_media_instagram' => [
-        'Lightning Media Instagram',
+        'human_name' => 'Lightning Media Instagram',
         'parent' => 'lightning_media'
       ],
       'lightning_media_twitter' => [
-        'Lightning Media Twitter',
+        'human_name' => 'Lightning Media Twitter',
         'parent' => 'lightning_media'
       ],
       'lightning_media_video' => [
-        'Lightning Media Video',
+        'human_name' => 'Lightning Media Video',
         'parent' => 'lightning_media'
       ],
       'lightning_workflow' => [
-        'Lightning Workflow',
+        'human_name' => 'Lightning Workflow',
         'parent' => null
       ],
       'lightning_preview' => [
-        'Lightning Preview',
+        'human_name' => 'Lightning Preview',
         'parent' => null
       ]
     ];
