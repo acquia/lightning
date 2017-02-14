@@ -12,7 +12,7 @@ services:
 
   lightning.subprofile:
     class: '\Drupal\lightning\Command\SubProfileCommand'
-    arguments: {['@?console.extension_manager', '@console.profile_generator', '@console.string_converter', '@console.validator', '@app.root', '@console.site', '@http_client']}
+    arguments: {}
     tags:
       - { name: 'drupal.command' }
 
