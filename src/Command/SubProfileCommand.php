@@ -105,67 +105,6 @@ class SubProfileCommand extends ProfileCommand {
       );
   }
 
-  public static function getLightningComponents() {
-    return [
-      'lightning_core' => [
-        'human_name' => 'Lightning Core',
-        'parent' => null
-      ],
-      'lightning_contact_form' => [
-        'human_name' => 'Lightning Contact Form',
-        'parent' => 'lightning_core'
-      ],
-      'lightning_page' => [
-        'human_name' => 'Lightning Page',
-        'parent' => 'lightning_core'
-      ],
-      'lightning_search' => [
-        'human_name' => 'Lightning Search',
-        'parent' => 'lightning_core'
-      ],
-      'lightning_layout' => [
-        'human_name' => 'Lightning Layout',
-        'parent' => null
-      ],
-      'lightning_landing_page' => [
-        'human_name' => 'Lightning Landing Page',
-        'parent' => 'lightning_layout'
-      ],
-      'lightning_media' => [
-        'human_name' => 'Lightning Media',
-        'parent' => null
-      ],
-      'lightning_media_document' => [
-        'human_name' => 'Lightning Media Document',
-        'parent' => 'lightning_media'
-      ],
-      'lightning_media_image' => [
-        'human_name' => 'Lightning Media Image',
-        'parent' => 'lightning_media'
-      ],
-      'lightning_media_instagram' => [
-        'human_name' => 'Lightning Media Instagram',
-        'parent' => 'lightning_media'
-      ],
-      'lightning_media_twitter' => [
-        'human_name' => 'Lightning Media Twitter',
-        'parent' => 'lightning_media'
-      ],
-      'lightning_media_video' => [
-        'human_name' => 'Lightning Media Video',
-        'parent' => 'lightning_media'
-      ],
-      'lightning_workflow' => [
-        'human_name' => 'Lightning Workflow',
-        'parent' => null
-      ],
-      'lightning_preview' => [
-        'human_name' => 'Lightning Preview',
-        'parent' => null
-      ]
-    ];
-  }
-
   /**
    * ProfileCommand constructor.
    */
@@ -184,7 +123,6 @@ class SubProfileCommand extends ProfileCommand {
     $fileQueue = new FileQueue();
     $generator->setRenderer($renderer);
     $generator->setFileQueue($fileQueue);
-    $this->setTopLevelComponents();
     $this->excludedDependencies = [];
     parent::__construct($extensionManager, $generator, $stringConverter, $validator, $appRoot, $site, $httpClient);
   }
@@ -257,7 +195,7 @@ class SubProfileCommand extends ProfileCommand {
     if (!$excluded_dependencies) {
       if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s top-level components from the installation?'), false)) {
         if ($io->confirm($this->trans('Would you like to see a list of top-level components that can be excluded?'), true)) {
-          $io->writeln(Element::oxford($this->getTopLevelComponents(['lightning_core'])));
+          $io->writeln(Element::oxford($this->getTopLevelComponents(['lightning_core', 'lightning_preview'])));
         }
         $excluded_dependencies = $io->ask($this->trans('Top-level components of Lightning to exclude separated by commas.'), '');
       }
@@ -322,9 +260,9 @@ class SubProfileCommand extends ProfileCommand {
 
   /**
    * @param string $excluded_dependencies
-   * @return mixed
+   *   Dependencies to exclude separated by commas.
    *
-   * Adds the provided component to the excluded list and, if the provided
+   * Adds the provided component(s) to the excluded list and, if the provided
    * component is a top-level component, all of its subcomponents too.
    */
   protected function buildExcludedDependenciesList($excluded_dependencies) {
@@ -346,35 +284,93 @@ class SubProfileCommand extends ProfileCommand {
   }
 
   /**
-   *
+   * @return array
+   *   A list of all Lightning components and attributes.
    */
-  protected function setTopLevelComponents() {
-    $topLevelComponents = [];
-    foreach ($this->getLightningComponents() as $component => $attributes) {
-      if ($attributes['parent'] === null) {
-        $topLevelComponents[] = $component;
-      }
-    }
-    $this->topLevelComponents = $topLevelComponents;
+  public static function getLightningComponents() {
+    return [
+      'lightning_core' => [
+        'human_name' => 'Lightning Core',
+        'parent' => null
+      ],
+      'lightning_contact_form' => [
+        'human_name' => 'Lightning Contact Form',
+        'parent' => 'lightning_core'
+      ],
+      'lightning_page' => [
+        'human_name' => 'Lightning Page',
+        'parent' => 'lightning_core'
+      ],
+      'lightning_search' => [
+        'human_name' => 'Lightning Search',
+        'parent' => 'lightning_core'
+      ],
+      'lightning_layout' => [
+        'human_name' => 'Lightning Layout',
+        'parent' => null
+      ],
+      'lightning_landing_page' => [
+        'human_name' => 'Lightning Landing Page',
+        'parent' => 'lightning_layout'
+      ],
+      'lightning_media' => [
+        'human_name' => 'Lightning Media',
+        'parent' => null
+      ],
+      'lightning_media_document' => [
+        'human_name' => 'Lightning Media Document',
+        'parent' => 'lightning_media'
+      ],
+      'lightning_media_image' => [
+        'human_name' => 'Lightning Media Image',
+        'parent' => 'lightning_media'
+      ],
+      'lightning_media_instagram' => [
+        'human_name' => 'Lightning Media Instagram',
+        'parent' => 'lightning_media'
+      ],
+      'lightning_media_twitter' => [
+        'human_name' => 'Lightning Media Twitter',
+        'parent' => 'lightning_media'
+      ],
+      'lightning_media_video' => [
+        'human_name' => 'Lightning Media Video',
+        'parent' => 'lightning_media'
+      ],
+      'lightning_workflow' => [
+        'human_name' => 'Lightning Workflow',
+        'parent' => null
+      ],
+      'lightning_preview' => [
+        'human_name' => 'Lightning Preview',
+        'parent' => null,
+        'experimental' => TRUE
+      ]
+    ];
   }
 
   /**
    * @param array $excludedComponents
    *   An array of top-level components to exclude.
-   *
-   * @return array
+   * @return array of top-level Lightning components.
    */
-  public function getTopLevelComponents($excludedComponents = []) {
-    return array_diff($this->topLevelComponents, $excludedComponents);
+  public static function getTopLevelComponents($excludedComponents = []) {
+    $topLevelComponents = [];
+    foreach (self::getLightningComponents() as $component => $attributes) {
+      if ($attributes['parent'] === null) {
+        $topLevelComponents[] = $component;
+      }
+    }
+    return array_diff($topLevelComponents, $excludedComponents);
   }
 
   /**
    * @param string $topLevelComponent
-   * @return array
+   * @return array of subcomponents of the provided top-level component.
    */
-  protected function getSubComponents($topLevelComponent) {
+  public static function getSubComponents($topLevelComponent) {
     $subcomponents = [];
-    foreach ($this->getLightningComponents() as $component => $attributes) {
+    foreach (self::getLightningComponents() as $component => $attributes) {
       if (isset($attributes['parent'])) {
         if ($attributes['parent'] == $topLevelComponent) {
           $subcomponents[] = $component;

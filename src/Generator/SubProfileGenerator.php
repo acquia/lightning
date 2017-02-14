@@ -5,6 +5,10 @@ namespace Drupal\lightning\Generator;
 use Drupal\Console\Generator\ProfileGenerator;
 
 class SubProfileGenerator extends ProfileGenerator {
+
+  /**
+   * {@inheritdoc}
+   */
   public function generate(
     $profile,
     $machine_name,
