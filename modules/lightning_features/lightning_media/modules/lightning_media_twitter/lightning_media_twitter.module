@@ -6,6 +6,24 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\lightning_media_twitter\Plugin\MediaEntity\Type\Twitter;
+
+/**
+ * Implements hook_media_entity_type_info_alter().
+ */
+function lightning_media_twitter_media_entity_type_info_alter(array &$types) {
+  $class = lightning_core_override_plugin_class($types['twitter'], Twitter::class);
+
+  if ($class == Twitter::class) {
+    $types['twitter']['input_match'] = [
+      'constraint' => 'TweetEmbedCode',
+      'field_types' => [
+        'string',
+        'string_long',
+      ],
+    ];
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().

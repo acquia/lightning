@@ -9,6 +9,7 @@ use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\media_entity\MediaBundleInterface;
@@ -18,6 +19,25 @@ use Drupal\media_entity\MediaBundleInterface;
  */
 function lightning_media_element_info_alter(array &$info) {
   $info['entity_browser']['#after_build'][] = 'lightning_media_inject_entity_browser_count';
+}
+
+/**
+ * Validates a file through an entity browser widget.
+ *
+ * @param \Drupal\file\FileInterface $file
+ *   The file to validate.
+ * @param string $plugin_id
+ *   The widget plugin ID.
+ * @param array $configuration
+ *   Configuration for the widget plugin.
+ *
+ * @return string[]
+ *   An array of errors. If empty, the file passed validation.
+ */
+function lightning_media_validate_upload(FileInterface $file, $plugin_id, array $configuration = []) {
+  return \Drupal::service('plugin.manager.entity_browser.widget')
+    ->createInstance($plugin_id, $configuration)
+    ->validateFile($file);
 }
 
 /**

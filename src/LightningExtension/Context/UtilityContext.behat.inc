@@ -91,6 +91,28 @@ class UtilityContext extends DrupalSubContextBase {
   }
 
   /**
+   * Asserts than an element is empty.
+   *
+   * @param string $selector
+   *   The element's CSS selector.
+   *
+   * @throws ExpectationException
+   *   If the element has any HTML content.
+   *
+   * @Then the :selector element(s) should be empty
+   */
+  public function assertElementIsEmpty($selector) {
+    $content = $this->assertSession()->elementExists('css', $selector)->getHtml();
+
+    if (trim($content)) {
+      throw new ExpectationException(
+        'Expected ' . $selector . ' to be empty but it is not.',
+        $this->getSession()->getDriver()
+      );
+    }
+  }
+
+  /**
    * Clears a field.
    *
    * @param string $field

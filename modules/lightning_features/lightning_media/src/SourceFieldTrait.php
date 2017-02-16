@@ -6,21 +6,14 @@ use Drupal\media_entity\MediaBundleInterface;
 use Drupal\media_entity\MediaInterface;
 
 /**
- * The definition of a media entity's source field's storage.
+ * Helper for bundle resolvers that deal with source fields.
  */
 trait SourceFieldTrait {
 
   /**
-   * The field_config entity storage handler.
-   *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
-   */
-  protected $fieldStorage;
-
-  /**
    * Returns the source field definition for a media entity.
    *
-   * @param \Drupal\media_entity\MediaInterface $entity
+   * @param MediaInterface $entity
    *   The media entity.
    *
    * @return \Drupal\Core\Field\FieldConfigInterface
@@ -33,7 +26,7 @@ trait SourceFieldTrait {
   /**
    * Returns the source field for a media bundle.
    *
-   * @param \Drupal\media_entity\MediaBundleInterface $bundle
+   * @param MediaBundleInterface $bundle
    *   The media bundle entity.
    *
    * @return \Drupal\Core\Field\FieldConfigInterface
@@ -46,7 +39,17 @@ trait SourceFieldTrait {
     }
     $id = 'media.' . $bundle->id() . '.' . $type_config['source_field'];
 
-    return $this->fieldStorage->load($id);
+    return $this->entityTypeManager()->getStorage('field_config')->load($id);
+  }
+
+  /**
+   * Returns the entity type manager.
+   *
+   * @return \Drupal\Core\Entity\EntityTypeManagerInterface
+   *   The entity type manager, duh.
+   */
+  private function entityTypeManager() {
+    return @($this->entityTypeManager ?: \Drupal::entityTypeManager());
   }
 
 }
