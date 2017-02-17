@@ -1,10 +1,9 @@
 default:
   suites:
-    workflow:
+    media:
       paths:
         - '%paths.base%/modules/lightning_features/lightning_media/tests/features'
       contexts:
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\MessageContext
-        - Drupal\DrupalExtension\Context\DrushContext

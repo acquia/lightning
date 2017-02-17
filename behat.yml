@@ -1,13 +1,12 @@
 default:
   suites:
-    default:
+    lightning:
       paths:
         - '%paths.base%/tests/features'
       contexts:
         - Drupal\DrupalExtension\Context\DrupalContext
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\MessageContext
-        - Drupal\DrupalExtension\Context\DrushContext
   extensions:
     Behat\MinkExtension:
       goutte: ~
