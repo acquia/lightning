@@ -1,4 +1,4 @@
-@lightning @media @api @javascript @errors @test_module
+@lightning @api @javascript @errors @test_module
 Feature: An entity browser for image fields
 
   Scenario: Uploading an image through the image browser

@@ -1,4 +1,4 @@
-@lightning @media @api @javascript @errors
+@lightning @api @javascript @errors
 Feature: An entity browser for media assets
 
   Scenario: Opening the media browser on a pre-existing node

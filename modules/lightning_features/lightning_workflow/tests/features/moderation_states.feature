@@ -1,4 +1,4 @@
-@lightning @workflow @api
+@lightning @api
 Feature: Workflow moderation states
   As a site administator, I need to be able to manage moderation states for
   content.

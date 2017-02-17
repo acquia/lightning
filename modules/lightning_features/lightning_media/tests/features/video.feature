@@ -1,4 +1,4 @@
-@lightning @media @api
+@lightning @api
 Feature: Video media assets
   A media asset representing an externally hosted video.
 
