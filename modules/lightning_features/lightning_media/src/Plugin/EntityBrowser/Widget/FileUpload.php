@@ -2,21 +2,14 @@
 
 namespace Drupal\lightning_media\Plugin\EntityBrowser\Widget;
 
-use Drupal\Core\Ajax\HtmlCommand;
-use Drupal\Core\Ajax\InvokeCommand;
-use Drupal\Core\Entity\EntityManagerInterface;
-use Drupal\Core\File\FileSystemInterface;
+use Drupal\Core\Ajax\PrependCommand;
+use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
-use Drupal\Core\Utility\Token;
-use Drupal\entity_browser\WidgetValidationManager;
-use Drupal\file\Element\ManagedFile;
-use Drupal\lightning_media\BundleResolverInterface;
+use Drupal\file\FileInterface;
+use Drupal\image\Plugin\Field\FieldType\ImageItem;
+use Drupal\lightning_media\Element\AjaxUpload;
 use Drupal\lightning_media\SourceFieldTrait;
 use Drupal\media_entity\MediaInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * An Entity Browser widget for creating media entities from uploaded files.
@@ -25,7 +18,6 @@ use Symfony\Component\HttpFoundation\Request;
  *   id = "file_upload",
  *   label = @Translation("File Upload"),
  *   description = @Translation("Allows creation of media entities from file uploads."),
- *   bundle_resolver = "file_upload"
  * )
  */
 class FileUpload extends EntityFormProxy {
@@ -33,78 +25,10 @@ class FileUpload extends EntityFormProxy {
   use SourceFieldTrait;
 
   /**
-   * The token replacement service.
-   *
-   * @var Token
-   */
-  protected $token;
-
-  /**
-   * The file system service.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
-   */
-  protected $fileSystem;
-
-  /**
-   * FileUpload constructor.
-   *
-   * @param array $configuration
-   *   Plugin configuration.
-   * @param string $plugin_id
-   *   The plugin ID.
-   * @param mixed $plugin_definition
-   *   The plugin definition.
-   * @param EventDispatcherInterface $event_dispatcher
-   *   The event dispatcher.
-   * @param EntityManagerInterface $entity_manager
-   *   The entity manager service.
-   * @param WidgetValidationManager $widget_validation_manager
-   *   The widget validation manager.
-   * @param BundleResolverInterface $bundle_resolver
-   *   The media bundle resolver.
-   * @param AccountInterface $current_user
-   *   The currently logged in user.
-   * @param Token $token
-   *   The token replacement service.
-   * @param FileSystemInterface $file_system
-   *   The file system service.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EventDispatcherInterface $event_dispatcher, EntityManagerInterface $entity_manager, WidgetValidationManager $widget_validation_manager, BundleResolverInterface $bundle_resolver, AccountInterface $current_user, Token $token, FileSystemInterface $file_system) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $event_dispatcher, $entity_manager, $widget_validation_manager, $bundle_resolver, $current_user);
-    $this->token = $token;
-    $this->fileSystem = $file_system;
-    $this->fieldStorage = $entity_manager->getStorage('field_config');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    $bundle_resolver = $plugin_definition['bundle_resolver'];
-
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('event_dispatcher'),
-      $container->get('entity.manager'),
-      $container->get('plugin.manager.entity_browser.widget_validation'),
-      $container->get('plugin.manager.lightning_media.bundle_resolver')->createInstance($bundle_resolver),
-      $container->get('current_user'),
-      $container->get('token'),
-      $container->get('file_system')
-    );
-  }
-
-  /**
    * {@inheritdoc}
    */
   protected function getInputValue(FormStateInterface $form_state) {
-    $value = $form_state->getValue('file');
-    if ($value) {
-      return $this->entityTypeManager->getStorage('file')->load($value[0]);
-    }
+    return $form_state->getValue(['input', 'fid']);
   }
 
   /**
@@ -113,8 +37,13 @@ class FileUpload extends EntityFormProxy {
   protected function prepareEntities(array $form, FormStateInterface $form_state) {
     $entities = parent::prepareEntities($form, $form_state);
 
+    $get_file = function (MediaInterface $entity) {
+      $type_config = $entity->getType()->getConfiguration();
+      return $entity->get($type_config['source_field'])->entity;
+    };
+
     if ($this->configuration['return_file']) {
-      return array_map([$this, 'getFile'], $entities);
+      return array_map($get_file, $entities);
     }
     else {
       return $entities;
@@ -127,19 +56,104 @@ class FileUpload extends EntityFormProxy {
   public function getForm(array &$original_form, FormStateInterface $form_state, array $additional_widget_parameters) {
     $form = parent::getForm($original_form, $form_state, $additional_widget_parameters);
 
-    $form['file'] = array(
-      '#type' => 'managed_file',
+    $form['input'] = [
+      '#type' => 'ajax_upload',
       '#title' => $this->t('File'),
       '#process' => [
-        [ManagedFile::class, 'processManagedFile'],
-        [$this, 'processInitialFileElement'],
+        [$this, 'processUploadElement'],
       ],
       '#upload_validators' => [
-        'file_validate_extensions' => [$this->getAllowedFileUploadExtensions()],
+        // For security, only allow extensions that are accepted by existing
+        // media bundles.
+        'file_validate_extensions' => [
+          $this->getAcceptableExtensions(),
+        ],
+        // This must be a function because file_validate() is brain dead and
+        // still thinks function_exists() is a good way to verify callability.
+        'lightning_media_validate_upload' => [
+          $this->getPluginId(),
+          $this->getConfiguration(),
+        ],
       ],
-    );
+    ];
 
     return $form;
+  }
+
+  /**
+   * Validates an uploaded file.
+   *
+   * @param \Drupal\file\FileInterface $file
+   *   The uploaded file.
+   *
+   * @return string[]
+   *   An array of errors. If empty, the file passed validation.
+   */
+  public function validateFile(FileInterface $file) {
+    $entity = $this->generateEntity($file);
+
+    if (empty($entity)) {
+      return [];
+    }
+
+    $type_config = $entity->getType()->getConfiguration();
+    /** @var \Drupal\file\Plugin\Field\FieldType\FileItem $item */
+    $item = $entity->get($type_config['source_field'])->first();
+
+    $validators = [
+      // It's maybe a bit overzealous to run this validator, but hey...better
+      // safe than screwed over by script kiddies.
+      'file_validate_name_length' => [],
+    ];
+    $validators = array_merge($validators, $item->getUploadValidators());
+    // If we got here, the extension is already validated (see ::getForm()).
+    unset($validators['file_validate_extensions']);
+
+    // If this is an image field, add image validation. Against all sanity,
+    // this is normally done by ImageWidget, not ImageItem, which is why we
+    // need to facilitate this a bit.
+    if ($item instanceof ImageItem) {
+      // Validate that this is, indeed, a supported image.
+      $validators['file_validate_is_image'] = [];
+
+      $settings = $item->getFieldDefinition()->getSettings();
+      if ($settings['max_resolution'] || $settings['min_resolution']) {
+        $validators['file_validate_image_resolution'] = [
+          $settings['max_resolution'],
+          $settings['min_resolution'],
+        ];
+      }
+    }
+    return file_validate($file, $validators);
+  }
+
+  /**
+   * Returns an aggregated list of acceptable file extensions.
+   *
+   * @return string
+   *   A space-separated list of file extensions accepted by the existing media
+   *   bundles.
+   */
+  protected function getAcceptableExtensions() {
+    $extensions = [];
+
+    foreach ($this->bundleResolver->getPossibleBundles() as $bundle) {
+      $extensions = array_merge($extensions, preg_split('/,?\s+/', $this->getSourceFieldForBundle($bundle)->getSetting('file_extensions')));
+    }
+    return implode(' ', array_unique($extensions));
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function validate(array &$form, FormStateInterface $form_state) {
+    $input = $this->getInputValue($form_state);
+    if ($input) {
+      parent::validate($form, $form_state);
+    }
+    else {
+      $form_state->setError($form['widget'], $this->t('You must upload a file.'));
+    }
   }
 
   /**
@@ -149,7 +163,21 @@ class FileUpload extends EntityFormProxy {
     /** @var \Drupal\media_entity\MediaInterface $entity */
     $entity = $element['entity']['#entity'];
 
-    $file = $this->getFile($entity);
+    $type_config = $entity->getType()->getConfiguration();
+    /** @var \Drupal\file\Plugin\Field\FieldType\FileItem $item */
+    $item = $entity->get($type_config['source_field'])->first();
+    /** @var FileInterface $file */
+    $file = $item->entity;
+
+    // Prepare the file's permanent home.
+    $dir = $item->getUploadLocation();
+    file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
+
+    $destination = $dir . '/' . $file->getFilename();
+    if (!file_exists($destination)) {
+      $file = file_move($file, $destination);
+      $entity->set($type_config['source_field'], $file)->save();
+    }
     $file->setPermanent();
     $file->save();
 
@@ -160,179 +188,46 @@ class FileUpload extends EntityFormProxy {
   }
 
   /**
-   * Returns the source file of a media entity.
-   *
-   * @param \Drupal\media_entity\MediaInterface $entity
-   *   The media entity.
-   *
-   * @return \Drupal\file\FileInterface
-   *   The source file.
-   */
-  protected function getFile(MediaInterface $entity) {
-    $field = $this->getSourceField($entity)->getName();
-    return $entity->get($field)->entity;
-  }
-
-  /**
-   * Returns the expected permanent URI of the source file of a media entity.
-   *
-   * The permanent URI is computed from field configuration values and might
-   * change (i.e., FILE_EXISTS_RENAME) during file system operations.
-   *
-   * @param \Drupal\media_entity\MediaInterface $entity
-   *   The media entity.
-   *
-   * @return string
-   *   The expected permanent URI.
-   */
-  protected function getPermanentUri(MediaInterface $entity) {
-    $field = $this->getSourceField($entity);
-
-    $uri = '';
-    $uri .= $field->getFieldStorageDefinition()->getSetting('uri_scheme');
-    $uri .= '://';
-    $uri .= $this->token->replace($field->getSetting('file_directory'));
-    if (substr($uri, -3) != '://') {
-      $uri .= '/';
-    }
-    $uri .= $this->getFile($entity)->getFilename();
-
-    return $uri;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function generateEntity($input) {
-    $entity = parent::generateEntity($input);
-
-    $destination = $this->getPermanentUri($entity);
-    $dir = $this->fileSystem->dirname($destination);
-    $ready = file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
-    if ($ready) {
-      $file = file_move($this->getFile($entity), $destination);
-
-      if ($file) {
-        $file->setTemporary();
-        $file->save();
-        return $entity->set($this->getSourceField($entity)->getName(), $file);
-      }
-    }
-  }
-
-  /**
-   * Processes the file element that is NOT part of the entity form.
+   * Processes the upload element.
    *
    * @param array $element
-   *   The file element.
+   *   The upload element.
+   * @param FormStateInterface $form_state
+   *   The current form state.
    *
    * @return array
-   *   The processed file element.
+   *   The processed upload element.
    */
-  public function processInitialFileElement(array $element) {
-    $element['upload_button']['#ajax']['callback'] = [$this, 'onUpload'];
-    $element['remove_button']['#value'] = $this->t('Cancel');
-    $element['remove_button']['#ajax']['callback'] = [$this, 'onRemove'];
+  public function processUploadElement(array $element, FormStateInterface $form_state) {
+    $element = AjaxUpload::process($element, $form_state);
+
+    $element['upload']['#ajax']['callback'] =
+    $element['remove']['#ajax']['callback'] = [static::class, 'ajax'];
+
+    $element['remove']['#value'] = $this->t('Cancel');
+
     return $element;
   }
 
   /**
    * {@inheritdoc}
    */
-  public function processEntityForm(array $entity_form) {
-    $type_config = $entity_form['#entity']->getType()->getConfiguration();
-    $field = $type_config['source_field'];
+  public static function ajax(array &$form, FormStateInterface $form_state) {
+    $el = AjaxUpload::el($form, $form_state);
 
-    if (isset($entity_form[$field])) {
-      $entity_form[$field]['widget'][0]['#process'][] = [$this, 'processEntityFormFileElement'];
-    }
+    $wrapper = '#' . $el['#ajax']['wrapper'];
 
-    return parent::processEntityForm($entity_form);
-  }
-
-  /**
-   * Processes the file element that IS part of the entity form.
-   *
-   * @param array $element
-   *   The file element.
-   *
-   * @return array
-   *   The processed file element.
-   */
-  public function processEntityFormFileElement(array $element) {
-    $element['remove_button']['#access'] = FALSE;
-
-    if ($element['#default_value']) {
-      $key = 'file_' . $element['#default_value']['target_id'];
-      $element[$key]['#access'] = FALSE;
-    }
-
-    return $element;
-  }
-
-  /**
-   * AJAX callback. Responds when a file has been uploaded.
-   *
-   * @param array $form
-   *   The complete form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current form state.
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The current HTTP request.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   The AJAX response.
-   */
-  public function onUpload(array &$form, FormStateInterface $form_state, Request $request) {
-    $response = ManagedFile::uploadAjaxCallback($form, $form_state, $request);
-
-    $complete_form = $form_state->getCompleteForm();
-    $selector = '#' . $complete_form['widget']['ief_target']['#id'];
-    $content = $this->getEntityForm($complete_form, $form_state);
-
-    $command = new HtmlCommand($selector, $content);
-    $response->addCommand($command);
-    return $response;
-  }
-
-  /**
-   * AJAX callback. Responds when the uploaded file is removed.
-   *
-   * @param array $form
-   *   The complete form.
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *   The current form state.
-   * @param \Symfony\Component\HttpFoundation\Request $request
-   *   The current HTTP request.
-   *
-   * @return \Drupal\Core\Ajax\AjaxResponse
-   *   The AJAX response.
-   */
-  public function onRemove(array &$form, FormStateInterface $form_state, Request $request) {
-    $response = ManagedFile::uploadAjaxCallback($form, $form_state, $request);
-
-    $complete_form = $form_state->getCompleteForm();
-    $selector = '#' . $complete_form['widget']['ief_target']['#id'];
-
-    $command = new InvokeCommand($selector, 'empty');
-    return $response->addCommand($command);
-  }
-
-  /**
-   * Returns a list of acceptable file extensions for the file upload field.
-   *
-   * @return array
-   *   The list of acceptable file extensions.
-   */
-  protected function getAllowedFileUploadExtensions() {
-    $extensions = [];
-    $possible_bundles = $this->bundleResolver->getPossibleBundles();
-    foreach ($possible_bundles as $bundle) {
-      $field = $this->getSourceFieldForBundle($bundle);
-      $extensions = array_merge($extensions, preg_split('/,?\s+/', $field->getSetting('file_extensions')));
-    }
-
-    return implode(' ', array_unique($extensions));
+    return parent::ajax($form, $form_state)
+      // Replace the upload element with its rebuilt version.
+      ->addCommand(
+        new ReplaceCommand($wrapper, $el)
+      )
+      // Prepend the status messages so that a) any errors regarding the
+      // uploaded file will be displayed right away, and b) the message queue
+      // will be cleared so that the errors won't persist on a full page reload.
+      ->addCommand(
+        new PrependCommand($wrapper, ['#type' => 'status_messages'])
+      );
   }
 
   /**

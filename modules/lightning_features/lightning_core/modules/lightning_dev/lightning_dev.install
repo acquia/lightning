@@ -42,6 +42,14 @@ function lightning_dev_install() {
 
   \Drupal::service('module_installer')->install(['lightning_preview']);
 
+  // Sentence-case the label of the media browser's embed code widget. Yes, not
+  // doing this can cause tests to fail.
+  $entity_browser = EntityBrowser::load('media_browser');
+  $widgets = $entity_browser->get('widgets');
+  $widgets['8b142f33-59d1-47b1-9e3a-4ae85d8376fa']['label'] = 'Create embed';
+  $entity_browser->set('widgets', $widgets);
+  $entity_browser->save();
+
   // This module was introduced in Lightning 2.0.3, so we'll need to run manual
   // update steps for versions older than that. We can remove this when 2.0.3
   // is the oldest tested version of Lightning.

@@ -5,22 +5,31 @@ namespace Drupal\lightning_media;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\Plugin\PluginBase;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\media_entity\MediaBundleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Base class for media bundle resolvers.
+ *
+ * @deprecated in Lightning 2.0.4 and will be removed in Lightning 3.x. Media
+ * type plugins should implement InputMatchInterface directly instead.
  */
-abstract class BundleResolverBase extends PluginBase implements BundleResolverInterface, ContainerFactoryPluginInterface {
-
-  use SourceFieldTrait;
+class BundleResolverBase extends PluginBase implements BundleResolverInterface, ContainerFactoryPluginInterface {
 
   /**
-   * The media bundle entity storage handler.
+   * The entity type manager.
    *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
+   * @var EntityTypeManagerInterface
    */
-  protected $bundleStorage;
+  protected $entityTypeManager;
+
+  /**
+   * The currently logged in user.
+   *
+   * @var AccountInterface
+   */
+  protected $currentUser;
 
   /**
    * BundleResolverBase constructor.
@@ -31,13 +40,15 @@ abstract class BundleResolverBase extends PluginBase implements BundleResolverIn
    *   The plugin ID.
    * @param mixed $plugin_definition
    *   The plugin definition.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
+   * @param EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
+   * @param AccountInterface $current_user
+   *   The currently logged in user.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, AccountInterface $current_user) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
-    $this->bundleStorage = $entity_type_manager->getStorage('media_bundle');
-    $this->fieldStorage = $entity_type_manager->getStorage('field_config');
+    $this->entityTypeManager = $entity_type_manager;
+    $this->currentUser = $current_user;
   }
 
   /**
@@ -48,22 +59,48 @@ abstract class BundleResolverBase extends PluginBase implements BundleResolverIn
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('current_user')
     );
   }
 
   /**
-   * {@inheritdoc}
+   * Returns all available media bundles.
+   *
+   * @return MediaBundleInterface[]
+   *   All available media bundles for which the current user has create access.
    */
   public function getPossibleBundles() {
-    $plugin_definition = $this->getPluginDefinition();
+    $access_handler = $this->entityTypeManager->getAccessControlHandler('media');
 
-    $filter = function (MediaBundleInterface $bundle) use ($plugin_definition) {
-      $field = $this->getSourceFieldForBundle($bundle);
-      return $field ? in_array($field->getType(), $plugin_definition['field_types']) : FALSE;
-    };
+    return array_filter(
+      $this->entityTypeManager
+        ->getStorage('media_bundle')
+        ->loadMultiple(),
 
-    return array_filter($this->bundleStorage->loadMultiple(), $filter);
+      function (MediaBundleInterface $bundle) use ($access_handler) {
+        return $access_handler->createAccess($bundle->id(), $this->currentUser);
+      }
+    );
+  }
+
+  /**
+   * Returns the first available media bundle that can handle an input value.
+   *
+   * @param mixed $input
+   *   The input value.
+   *
+   * @return MediaBundleInterface|false
+   *   A media bundle which can handle the input, or FALSE if there are none.
+   */
+  public function getBundle($input) {
+    foreach ($this->getPossibleBundles() as $bundle) {
+      $plugin = $bundle->getType();
+      if ($plugin instanceof InputMatchInterface && $plugin->appliesTo($input, $bundle)) {
+        return $bundle;
+      }
+    }
+    return FALSE;
   }
 
 }

@@ -19,6 +19,27 @@ use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
+ * Conditionally overrides the class specified by a plugin definition.
+ *
+ * The class is overridden only if the replacement class' immediate parent is
+ * the one in the plugin definition.
+ *
+ * @param array $definition
+ *   The plugin definition.
+ * @param string $replacement_class
+ *   The replacement class.
+ *
+ * @return string
+ *   The chosen plugin class.
+ */
+function lightning_core_override_plugin_class(array &$definition, $replacement_class) {
+  if (get_parent_class($replacement_class) == $definition['class']) {
+    $definition['class'] = $replacement_class;
+  }
+  return $definition['class'];
+}
+
+/**
  * Implements hook_element_info_alter().
  */
 function lightning_core_element_info_alter(array &$info) {

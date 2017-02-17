@@ -40,7 +40,9 @@ class EntityBrowserContext extends DrupalSubContextBase {
     // the main window and reach into the frame to submit the form. Ugh.
     $frame = $session->evaluateScript('frameElement.name');
     $session->switchToWindow();
-    $session->executeScript('window.frames["' . $frame . '"].document.forms[0].op.click()');
+    // @TODO: Make this smarter, because we can't be sure that #edit-submit
+    // exists at all, or that it's the correct submit button.
+    $session->executeScript('frames["' . $frame . '"].document.forms[0].querySelector("#edit-submit").click()');
     sleep(10);
     $this->minkContext->iWaitForAjaxToFinish();
   }
