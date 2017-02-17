@@ -3,7 +3,7 @@
  * Behaviors for the Entity Browser-based Media Library.
  */
 
-(function ($, Backbone, Drupal) {
+(function ($, _, Backbone, Drupal) {
 
   "use strict";
 
@@ -131,4 +131,20 @@
 
   };
 
-})(jQuery, Backbone, Drupal);
+  Drupal.behaviors.changeOnKeyUp = {
+
+    onKeyUp: _.debounce(function () {
+      $(this).trigger('change');
+    }, 600),
+
+    attach: function (context) {
+      $('.keyup-change', context).on('keyup', this.onKeyUp);
+    },
+
+    detach: function (context) {
+      $('.keyup-change', context).off('keyup', this.onKeyUp);
+    }
+
+  };
+
+})(jQuery, _, Backbone, Drupal);

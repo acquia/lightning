@@ -1,0 +1,19 @@
+<?php
+
+/**
+ * @file
+ * Support for document media assets in Lightning.
+ */
+
+use Drupal\lightning_media_document\Plugin\MediaEntity\Type\Document;
+
+/**
+ * Implements hook_media_entity_type_info_alter().
+ */
+function lightning_media_document_media_entity_type_info_alter(array &$types) {
+  $class = lightning_core_override_plugin_class($types['document'], Document::class);
+
+  if ($class == Document::class) {
+    $types['document']['input_match']['field_types'] = ['file'];
+  }
+}

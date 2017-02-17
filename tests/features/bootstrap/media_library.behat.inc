@@ -110,7 +110,7 @@ class MediaLibrarySubContext extends DrupalSubContextBase {
    */
   protected function awaitEntityForm() {
     $this->minkContext->iWaitForAjaxToFinish();
-    $this->awaitExpression('document.getElementById("ief-target").textContent.length');
+    $this->awaitExpression('jQuery("#entity").children().length');
   }
 
   /**
@@ -143,7 +143,7 @@ class MediaLibrarySubContext extends DrupalSubContextBase {
       ->elementExists('css', 'nav.eb-tabs ul li a[data-button-id="edit-tab-selector-8b142f33-59d1-47b1-9e3a-4ae85d8376fa"]')
       ->click();
 
-    $this->minkContext->fillField('embed_code', $code);
+    $this->minkContext->fillField('input', $code);
     // The change event, which triggers AJAX, is fired automatically after 600
     // milliseconds.
     sleep(1);

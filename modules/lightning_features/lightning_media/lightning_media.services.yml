@@ -1,4 +1,6 @@
 services:
+  # Deprecated in Lightning 2.0.4 and will be removed in Lightning 3.x. Media
+  # type plugins should implement InputMatchInterface directly instead.
   plugin.manager.lightning_media.bundle_resolver:
     class: '\Drupal\Core\Plugin\DefaultPluginManager'
     arguments:

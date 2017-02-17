@@ -6,6 +6,24 @@
  */
 
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\lightning_media_instagram\Plugin\MediaEntity\Type\Instagram;
+
+/**
+ * Implements hook_media_entity_type_info_alter().
+ */
+function lightning_media_instagram_media_entity_type_info_alter(array &$types) {
+  $class = lightning_core_override_plugin_class($types['instagram'], Instagram::class);
+
+  if ($class == Instagram::class) {
+    $types['instagram']['input_match'] = [
+      'constraint' => 'InstagramEmbedCode',
+      'field_types' => [
+        'string',
+        'string_long',
+      ],
+    ];
+  }
+}
 
 /**
  * Implements hook_form_FORM_ID_alter().

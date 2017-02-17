@@ -11,7 +11,6 @@ use Drupal\Core\Form\FormStateInterface;
  *   id = "embed_code",
  *   label = @Translation("Embed Code"),
  *   description = @Translation("Allows creation of media entities from embed codes."),
- *   bundle_resolver = "embed_code"
  * )
  */
 class EmbedCode extends EntityFormProxy {
@@ -19,29 +18,22 @@ class EmbedCode extends EntityFormProxy {
   /**
    * {@inheritdoc}
    */
-  protected function getInputValue(FormStateInterface $form_state) {
-    return $form_state->getValue('embed_code');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function getForm(array &$original_form, FormStateInterface $form_state, array $additional_widget_parameters) {
     $form = parent::getForm($original_form, $form_state, $additional_widget_parameters);
 
-    $form['embed_code'] = array(
+    $form['input'] = [
       '#type' => 'textarea',
       '#placeholder' => $this->t('Enter a URL...'),
-      '#attributes' => array(
-        'class' => array('keyup-change'),
-      ),
-      '#ajax' => array(
+      '#attributes' => [
+        'class' => ['keyup-change'],
+      ],
+      '#ajax' => [
         'event' => 'change',
-        'wrapper' => $form['ief_target']['#id'],
+        'wrapper' => 'entity',
         'method' => 'html',
-        'callback' => [$this, 'getEntityForm'],
-      ),
-    );
+        'callback' => [static::class, 'ajax'],
+      ],
+    ];
 
     return $form;
   }
@@ -50,10 +42,12 @@ class EmbedCode extends EntityFormProxy {
    * {@inheritdoc}
    */
   public function validate(array &$form, FormStateInterface $form_state) {
-    $input = $this->getInputValue($form_state);
-    $bundle = $this->bundleResolver->getBundle($input);
-    if (empty($bundle)) {
-      $form_state->setError($form['widget']['embed_code'], 'This is not a valid URL or embed code.');
+    $input = trim($this->getInputValue($form_state));
+    if ($input) {
+      parent::validate($form, $form_state);
+    }
+    else {
+      $form_state->setError($form['widget'], $this->t('You must enter a URL or embed code.'));
     }
   }
 
