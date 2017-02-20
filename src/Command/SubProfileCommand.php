@@ -16,6 +16,8 @@ use Drupal\Console\Core\Utils\TranslatorManager;
 use Drupal\Console\Extension\Manager;
 use Drupal\Console\Utils\Site;
 use Drupal\Console\Utils\Validator;
+use Drupal\Core\Extension\ExtensionDiscovery;
+use Drupal\Core\Extension\InfoParser;
 use Drupal\lightning\Generator\SubProfileGenerator;
 use Drupal\lightning_core\Element;
 use GuzzleHttp\Client;
@@ -283,70 +285,46 @@ class SubProfileCommand extends ProfileCommand {
     $this->excludedDependencies = array_merge($this->excludedDependencies, $excluded_dependencies_list);
   }
 
-  /**
-   * @return array
-   *   A list of all Lightning components and attributes.
-   */
   public static function getLightningComponents() {
-    return [
-      'lightning_core' => [
-        'human_name' => 'Lightning Core',
-        'parent' => null
-      ],
-      'lightning_contact_form' => [
-        'human_name' => 'Lightning Contact Form',
-        'parent' => 'lightning_core'
-      ],
-      'lightning_page' => [
-        'human_name' => 'Lightning Page',
-        'parent' => 'lightning_core'
-      ],
-      'lightning_search' => [
-        'human_name' => 'Lightning Search',
-        'parent' => 'lightning_core'
-      ],
-      'lightning_layout' => [
-        'human_name' => 'Lightning Layout',
-        'parent' => null
-      ],
-      'lightning_landing_page' => [
-        'human_name' => 'Lightning Landing Page',
-        'parent' => 'lightning_layout'
-      ],
-      'lightning_media' => [
-        'human_name' => 'Lightning Media',
-        'parent' => null
-      ],
-      'lightning_media_document' => [
-        'human_name' => 'Lightning Media Document',
-        'parent' => 'lightning_media'
-      ],
-      'lightning_media_image' => [
-        'human_name' => 'Lightning Media Image',
-        'parent' => 'lightning_media'
-      ],
-      'lightning_media_instagram' => [
-        'human_name' => 'Lightning Media Instagram',
-        'parent' => 'lightning_media'
-      ],
-      'lightning_media_twitter' => [
-        'human_name' => 'Lightning Media Twitter',
-        'parent' => 'lightning_media'
-      ],
-      'lightning_media_video' => [
-        'human_name' => 'Lightning Media Video',
-        'parent' => 'lightning_media'
-      ],
-      'lightning_workflow' => [
-        'human_name' => 'Lightning Workflow',
-        'parent' => null
-      ],
-      'lightning_preview' => [
-        'human_name' => 'Lightning Preview',
-        'parent' => null,
-        'experimental' => TRUE
-      ]
-    ];
+    $appRoot = \Drupal::root();
+    $extensions = new ExtensionDiscovery($appRoot);
+    $extensions = $extensions->scan('module');
+
+    $lightning_extensions = self::array_filter_key($extensions, function($key) {
+      return strpos($key, 'lightning_') === 0;
+    });
+
+    $lightning_components = [];
+    foreach($lightning_extensions as $machine_name => $lightning_extension) {
+      $InfoParser = new InfoParser();
+      $info = $InfoParser->parse($lightning_extension->getPathname());
+      $lightning_components[$machine_name] = [
+        'name' => $info['name'],
+      ];
+      if (isset($info['components'])) {
+        $lightning_components[$machine_name]['subcomponents'] =  $info['components'];
+      }
+    }
+
+    return $lightning_components;
+  }
+
+  /**
+   * @param $input
+   * @param $callback
+   * @return array|null
+   *
+   * Filter an array by keys.
+   */
+  private static function array_filter_key(array $input, $callback) {
+    $keys = array_keys($input);
+    $filteredKeys = array_filter($keys, $callback);
+    if (empty($filteredKeys)) {
+      return [];
+    }
+    $input = array_intersect_key($input, array_flip($filteredKeys));
+
+    return $input;
   }
 
   /**
@@ -357,7 +335,7 @@ class SubProfileCommand extends ProfileCommand {
   public static function getTopLevelComponents($excludedComponents = []) {
     $topLevelComponents = [];
     foreach (self::getLightningComponents() as $component => $attributes) {
-      if ($attributes['parent'] === null) {
+      if ($attributes['subcomponents'] === null) {
         $topLevelComponents[] = $component;
       }
     }
@@ -369,15 +347,8 @@ class SubProfileCommand extends ProfileCommand {
    * @return array of subcomponents of the provided top-level component.
    */
   public static function getSubComponents($topLevelComponent) {
-    $subcomponents = [];
-    foreach (self::getLightningComponents() as $component => $attributes) {
-      if (isset($attributes['parent'])) {
-        if ($attributes['parent'] == $topLevelComponent) {
-          $subcomponents[] = $component;
-        }
-      }
-    }
-    return $subcomponents;
+    $components = self::getTopLevelComponents();
+    return $components[$topLevelComponent]['subcomponents'];
   }
 
 }
