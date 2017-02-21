@@ -24,6 +24,7 @@ use GuzzleHttp\Client;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class SubProfileCommand extends ProfileCommand {
 
@@ -195,11 +196,12 @@ class SubProfileCommand extends ProfileCommand {
 
     $excluded_dependencies = $input->getOption('excluded_dependencies');
     if (!$excluded_dependencies) {
-      if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s top-level components from the installation?'), false)) {
-        if ($io->confirm($this->trans('Would you like to see a list of top-level components that can be excluded?'), true)) {
-          $io->writeln(Element::oxford($this->getTopLevelComponents(['lightning_core', 'lightning_preview'])));
-        }
-        $excluded_dependencies = $io->ask($this->trans('Top-level components of Lightning to exclude separated by commas.'), '');
+      if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s top-level components from the installation? (Experimental components are excluded automatically.)'), false)) {
+        $excludable_components = self::getTopLevelComponents(['lightning_core', 'lightning_preview']);
+        $question = new ChoiceQuestion('List the top-level components you would like to exclude, separated by commas', $excludable_components);
+        $question->setMultiselect(true);
+        $io->writeln('The following components can be excluded: ' . Element::oxford($question->getChoices()));
+        $excluded_dependencies = $io->askChoiceQuestion($question);
       }
       $input->setOption('excluded_dependencies', $excluded_dependencies);
     }
@@ -207,14 +209,12 @@ class SubProfileCommand extends ProfileCommand {
     $excluded_subcomponents = $input->getOption('excluded_subcomponents');
     if (!$excluded_subcomponents) {
       if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s sub-components?'), false)) {
-        if ($io->confirm($this->trans('Would you like to see a list of sub-components that can be excluded? (Sub-components of excluded top-level components are automatically excluded.)'), true)) {
-          $subcomponents = [];
-          foreach ($this->getTopLevelComponents() as $tlc) {
-            $foo = $this->getSubComponents($tlc);
-            $subcomponents = array_merge($subcomponents, $foo);
-          }
-          $io->writeln(Element::oxford($subcomponents));
+        $subcomponents = [];
+        foreach ($this->getTopLevelComponents() as $tlc) {
+          $foo = $this->getSubComponents($tlc);
+          $subcomponents = array_merge($subcomponents, $foo);
         }
+        $io->writeln('The following Lightning sub-components can be excluded: ' . Element::oxford($subcomponents) . '.');
         $excluded_subcomponents = $io->ask($this->trans('Lightning sub-components to exclude separated by commas.'), '');
       }
       $input->setOption('excluded_subcomponents', $excluded_subcomponents);
@@ -335,7 +335,7 @@ class SubProfileCommand extends ProfileCommand {
   public static function getTopLevelComponents($excludedComponents = []) {
     $topLevelComponents = [];
     foreach (self::getLightningComponents() as $component => $attributes) {
-      if ($attributes['subcomponents'] === null) {
+      if (isset($attributes['subcomponents'])) {
         $topLevelComponents[] = $component;
       }
     }
@@ -345,9 +345,15 @@ class SubProfileCommand extends ProfileCommand {
   /**
    * @param string $topLevelComponent
    * @return array of subcomponents of the provided top-level component.
+   *
+   * @throws \Exception
    */
   public static function getSubComponents($topLevelComponent) {
-    $components = self::getTopLevelComponents();
+    $topLevelComponents = self::getTopLevelComponents();
+    if (!in_array($topLevelComponent, $topLevelComponents)) {
+      throw new \Exception($topLevelComponent . ' is Not a top-level component.');
+    }
+    $components = self::getLightningComponents();
     return $components[$topLevelComponent]['subcomponents'];
   }
 
