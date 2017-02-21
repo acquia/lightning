@@ -26,12 +26,8 @@ function lightning_contact_form_install() {
   if (empty($alias)) {
     $alias_storage->save('/contact/sitewide', '/contact');
   }
-}
 
-/**
- * Grants permission to use contact form(s).
- */
-function lightning_contact_form_update_8001() {
+  // Grants permission to use contact form(s).
   $permissions = ['access site-wide contact form'];
   user_role_grant_permissions(RoleInterface::ANONYMOUS_ID, $permissions);
   user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, $permissions);
