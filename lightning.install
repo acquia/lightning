@@ -513,18 +513,16 @@ function lightning_update_8004() {
  * Installs Contact Storage.
  */
 function lightning_update_8005() {
-  if (!\Drupal::moduleHandler()->moduleExists('contact_storage')) {
-    \Drupal::service('module_installer')->install(['contact_storage']);
-  }
+  // Contact and Contact Storage are now dependencies of Lightning Contact Form
+  // only.
 }
 
 /**
  * Grants permission to use contact form(s).
  */
 function lightning_update_8006() {
-  $permissions = ['access site-wide contact form'];
-  user_role_grant_permissions(RoleInterface::ANONYMOUS_ID, $permissions);
-  user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, $permissions);
+  // Contact and Contact Storage are now dependencies of Lightning Contact Form
+  // only.
 }
 
 /**
