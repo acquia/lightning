@@ -262,20 +262,23 @@ class SubProfileCommand extends ProfileCommand {
   protected function buildExcludedDependenciesList($excluded_dependencies) {
     $excluded_dependencies_list = [];
     foreach ($excluded_dependencies as $excluded_dependency) {
-      if (array_key_exists($excluded_dependency, $this->getLightningComponents())) {
+      if (array_key_exists($excluded_dependency, self::getLightningComponents())) {
         $excluded_dependencies_list[] = $excluded_dependency;
-        if (in_array($excluded_dependency, $this->getTopLevelComponents())) {
+        if (in_array($excluded_dependency, self::getTopLevelComponents())) {
           // If its a top-level-component, add its subcomponents too.
-          $subcomponents = $this->getSubComponents(trim($excluded_dependency));
-          foreach ($subcomponents as $subcomponent) {
-            $excluded_dependencies_list[] = $subcomponent;
-          }
+          $subcomponents = self::getSubComponents(trim($excluded_dependency));
+          $excluded_dependencies_list = array_merge($excluded_dependencies_list, $subcomponents);
         }
       }
     }
     $this->excludedDependencies = array_merge($this->excludedDependencies, $excluded_dependencies_list);
   }
 
+  /**
+   * @return array
+   *
+   * Gets all of Lightnings components including subcomponents.
+   */
   public static function getLightningComponents() {
     $appRoot = \Drupal::root();
     $extensions = new ExtensionDiscovery($appRoot);
@@ -286,9 +289,9 @@ class SubProfileCommand extends ProfileCommand {
     });
 
     $lightning_components = [];
-    foreach($lightning_extensions as $machine_name => $lightning_extension) {
-      $InfoParser = new InfoParser();
-      $info = $InfoParser->parse($lightning_extension->getPathname());
+    foreach ($lightning_extensions as $machine_name => $lightning_extension) {
+      $info_parser = new InfoParser();
+      $info = $info_parser->parse($lightning_extension->getPathname());
       $lightning_components[$machine_name] = [
         'name' => $info['name'],
       ];
@@ -301,21 +304,19 @@ class SubProfileCommand extends ProfileCommand {
   }
 
   /**
+   * Filter an array by keys.
+   *
    * @param $input
    * @param $callback
    * @return array|null
-   *
-   * Filter an array by keys.
    */
-  private static function array_filter_key(array $input, $callback) {
+  protected static function array_filter_key(array $input, callable $callback) {
     $keys = array_keys($input);
     $filteredKeys = array_filter($keys, $callback);
     if (empty($filteredKeys)) {
       return [];
     }
-    $input = array_intersect_key($input, array_flip($filteredKeys));
-
-    return $input;
+    return array_intersect_key($input, array_flip($filteredKeys));
   }
 
   /**
