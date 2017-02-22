@@ -179,10 +179,7 @@ class SubProfileCommand extends ProfileCommand {
 
     $description = $input->getOption('description');
     if (!$description) {
-      $description = $io->ask(
-        $this->trans('Subprofile description'),
-        'My Lightning Sub-Profile'
-      );
+      $description = $io->ask($this->trans('Subprofile description'), '');
       $input->setOption('description', $description);
     }
 
@@ -198,7 +195,7 @@ class SubProfileCommand extends ProfileCommand {
     if (!$excluded_dependencies) {
       if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s top-level components from the installation? (Experimental components are excluded automatically.)'), false)) {
         $excludable_components = self::getTopLevelComponents(['lightning_core', 'lightning_preview']);
-        $question = new ChoiceQuestion('List the top-level components you would like to exclude, separated by commas', $excludable_components);
+        $question = new ChoiceQuestion('List the top-level components you would like to exclude, separated by commas.', $excludable_components);
         $question->setMultiselect(true);
         $io->writeln('The following components can be excluded: ' . Element::oxford($question->getChoices()));
         $excluded_dependencies = $io->askChoiceQuestion($question);
@@ -209,17 +206,24 @@ class SubProfileCommand extends ProfileCommand {
     $excluded_subcomponents = $input->getOption('excluded_subcomponents');
     if (!$excluded_subcomponents) {
       if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s sub-components?'), false)) {
-        $subcomponents = [];
-        foreach ($this->getTopLevelComponents() as $tlc) {
-          $foo = $this->getSubComponents($tlc);
-          $subcomponents = array_merge($subcomponents, $foo);
+        // Subcomponents whose parent is already excluded are automatically
+        // excluded. So we build a list of excludable subcomponents whose parent
+        // component isn't already excluded.
+        $excludable_subcomponents = [];
+        $top_level_components = self::getTopLevelComponents();
+        $non_excluded_tlcs = array_diff($top_level_components, $excluded_dependencies);
+        foreach ($non_excluded_tlcs as $non_excluded_tlc) {
+          $tlc_subcomponents = self::getSubComponents($non_excluded_tlc);
+          $excludable_subcomponents = array_merge($excludable_subcomponents, $tlc_subcomponents);
         }
-        $io->writeln('The following Lightning sub-components can be excluded: ' . Element::oxford($subcomponents) . '.');
-        $excluded_subcomponents = $io->ask($this->trans('Lightning sub-components to exclude separated by commas.'), '');
+
+        $question = new ChoiceQuestion('List the sub-components you would like to exclude, separated by commas.', $excludable_subcomponents);
+        $question->setMultiselect(true);
+        $io->writeln('The following sub-components can be excluded: ' . Element::oxford($question->getChoices()));
+        $excluded_subcomponents = $io->askChoiceQuestion($question);
       }
       $input->setOption('excluded_subcomponents', $excluded_subcomponents);
     }
-
   }
 
   /**
@@ -261,19 +265,18 @@ class SubProfileCommand extends ProfileCommand {
   }
 
   /**
-   * @param string $excluded_dependencies
-   *   Dependencies to exclude separated by commas.
+   * @param array $excluded_dependencies
+   *   Dependencies to exclude.
    *
    * Adds the provided component(s) to the excluded list and, if the provided
    * component is a top-level component, all of its subcomponents too.
    */
   protected function buildExcludedDependenciesList($excluded_dependencies) {
     $excluded_dependencies_list = [];
-    $excluded_dependencies = explode(',', $excluded_dependencies);
     foreach ($excluded_dependencies as $excluded_dependency) {
-      if (array_key_exists(trim($excluded_dependency), $this->getLightningComponents())) {
-        $excluded_dependencies_list[] = trim($excluded_dependency);
-        if (in_array(trim($excluded_dependency), $this->getTopLevelComponents())) {
+      if (array_key_exists($excluded_dependency, $this->getLightningComponents())) {
+        $excluded_dependencies_list[] = $excluded_dependency;
+        if (in_array($excluded_dependency, $this->getTopLevelComponents())) {
           // If its a top-level-component, add its subcomponents too.
           $subcomponents = $this->getSubComponents(trim($excluded_dependency));
           foreach ($subcomponents as $subcomponent) {
