@@ -112,20 +112,20 @@ class SubProfileCommand extends ProfileCommand {
    * ProfileCommand constructor.
    */
   public function __construct() {
-    $generator = new SubProfileGenerator();
+    $translater = new TranslatorManager();
     $stringConverter = new StringConverter();
+    $renderer = new TwigRenderer($translater, $stringConverter);
+    $renderer->setSkeletonDirs([__DIR__ . '/../../templates/']);
+    $fileQueue = new FileQueue();
+    $generator = new SubProfileGenerator();
+    $generator->setRenderer($renderer);
+    $generator->setFileQueue($fileQueue);
     $httpClient = new Client();
     $appRoot = \Drupal::root();
     $configurationManager = new ConfigurationManager();
     $site = new Site($appRoot, $configurationManager);
     $extensionManager = new Manager($site, $appRoot);
     $validator = new Validator($extensionManager);
-    $translater = new TranslatorManager();
-    $renderer = new TwigRenderer($translater, $stringConverter);
-    $renderer->setSkeletonDirs([__DIR__ . '/../../templates/']);
-    $fileQueue = new FileQueue();
-    $generator->setRenderer($renderer);
-    $generator->setFileQueue($fileQueue);
     $this->excludedDependencies = [];
     parent::__construct($extensionManager, $generator, $stringConverter, $validator, $appRoot, $site, $httpClient);
   }
