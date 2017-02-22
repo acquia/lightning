@@ -54,6 +54,11 @@ class SubProfileCommand extends ProfileCommand {
   protected $generator;
 
   /**
+   * @var
+   */
+  protected $lightning_translations;
+
+  /**
    * {@inheritdoc}
    */
   protected function configure() {
@@ -65,7 +70,7 @@ class SubProfileCommand extends ProfileCommand {
         'profile',
         '',
         InputOption::VALUE_REQUIRED,
-        $this->trans('The name of the subprofile')
+        $this->trans('Foo')
       )
       ->addOption(
         'machine-name',
@@ -89,13 +94,13 @@ class SubProfileCommand extends ProfileCommand {
         'excluded_dependencies',
         false,
         InputOption::VALUE_OPTIONAL,
-        $this->trans('Top-level components of Lightning to exclude separated by commas.')
+        $this->trans('commands.lightning.subprofile.options.excluded-components')
       )
       ->addOption(
         'excluded_subcomponents',
         false,
         InputOption::VALUE_OPTIONAL,
-        $this->trans('Lightning sub-components to exclude separated by commas.')
+        $this->trans('commands.lightning.subprofile.options.excluded-subcomponents')
       );
   }
 
@@ -103,16 +108,21 @@ class SubProfileCommand extends ProfileCommand {
    * ProfileCommand constructor.
    */
   public function __construct() {
-    $translater = new TranslatorManager();
+    $lightning_translations = new TranslatorManager();
+    $lightning_translations->loadResource('en', __DIR__ . '/../../lightning-en/translations');
+    $this->lightning_translations = $lightning_translations;
     $stringConverter = new StringConverter();
-    $renderer = new TwigRenderer($translater, $stringConverter);
+    $renderer = new TwigRenderer($lightning_translations, $stringConverter);
     $renderer->setSkeletonDirs([__DIR__ . '/../../templates/']);
+
     $fileQueue = new FileQueue();
     $generator = new SubProfileGenerator();
     $generator->setRenderer($renderer);
     $generator->setFileQueue($fileQueue);
     $this->generator = $generator;
+
     $httpClient = new Client();
+
     $appRoot = \Drupal::root();
     $configurationManager = new ConfigurationManager();
     $site = new Site($appRoot, $configurationManager);
@@ -133,15 +143,15 @@ class SubProfileCommand extends ProfileCommand {
       // A profile is technically also a module, so we can use the same
       // validator to check the name.
       $profile = $input->getOption('profile') ? $validators->validateModuleName($input->getOption('profile')) : null;
-    } catch (\Exception $error) {
+    }
+    catch (\Exception $error) {
       $io->error($error->getMessage());
-
       return;
     }
 
     if (!$profile) {
       $profile = $io->ask(
-        $this->trans('The name of the subprofile'),
+        $this->lightning_translations->trans('commands.lightning.subprofile.description') .
         '',
         function ($profile) use ($validators) {
           return $validators->validateModuleName($profile);
@@ -152,9 +162,9 @@ class SubProfileCommand extends ProfileCommand {
 
     try {
       $machine_name = $input->getOption('machine-name') ? $validators->validateModuleName($input->getOption('machine-name')) : null;
-    } catch (\Exception $error) {
+    }
+    catch (\Exception $error) {
       $io->error($error->getMessage());
-
       return;
     }
 
@@ -171,7 +181,7 @@ class SubProfileCommand extends ProfileCommand {
 
     $description = $input->getOption('description');
     if (!$description) {
-      $description = $io->ask($this->trans('Subprofile description'), '');
+      $description = $io->ask($this->trans('commands.lightning.subprofile.questions.description'), '');
       $input->setOption('description', $description);
     }
 
@@ -185,9 +195,9 @@ class SubProfileCommand extends ProfileCommand {
 
     $excluded_dependencies = $input->getOption('excluded_dependencies');
     if (!$excluded_dependencies) {
-      if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s top-level components from the installation? (Experimental components are excluded automatically.)'), false)) {
+      if ($io->confirm($this->trans('commans.lightning.subprofile.questions.excluded-components'), false)) {
         $excludable_components = self::getTopLevelComponents(['lightning_core', 'lightning_preview']);
-        $question = new ChoiceQuestion('List the top-level components you would like to exclude, separated by commas.', $excludable_components);
+        $question = new ChoiceQuestion('commans.lightning.subprofile.commands.excluded-components', $excludable_components);
         $question->setMultiselect(true);
         $io->writeln('The following components can be excluded: ' . Element::oxford($question->getChoices()));
         $excluded_dependencies = $io->askChoiceQuestion($question);
@@ -197,7 +207,7 @@ class SubProfileCommand extends ProfileCommand {
 
     $excluded_subcomponents = $input->getOption('excluded_subcomponents');
     if (!$excluded_subcomponents) {
-      if ($io->confirm($this->trans('Would you like to exclude any of Lightning\'s sub-components?'), false)) {
+      if ($io->confirm($this->trans('commands.lightning.subprofile.questions.excluded-subcomponents'), false)) {
         // Subcomponents whose parent is already excluded are automatically
         // excluded. So we build a list of excludable subcomponents whose parent
         // component isn't already excluded.
@@ -209,7 +219,7 @@ class SubProfileCommand extends ProfileCommand {
           $excludable_subcomponents = array_merge($excludable_subcomponents, $tlc_subcomponents);
         }
 
-        $question = new ChoiceQuestion('List the sub-components you would like to exclude, separated by commas.', $excludable_subcomponents);
+        $question = new ChoiceQuestion('commands.lightning.subprofile.commands.excluded-subcomponents', $excludable_subcomponents);
         $question->setMultiselect(true);
         $io->writeln('The following sub-components can be excluded: ' . Element::oxford($question->getChoices()));
         $excluded_subcomponents = $io->askChoiceQuestion($question);
