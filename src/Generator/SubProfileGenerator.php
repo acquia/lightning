@@ -14,9 +14,7 @@ class SubProfileGenerator extends ProfileGenerator {
     $machine_name,
     $profile_path,
     $description,
-    $core,
     $dependencies,
-    $distribution,
     $excluded_dependencies
   ) {
     $dir = $profile_path . '/' . $machine_name;
@@ -53,10 +51,8 @@ class SubProfileGenerator extends ProfileGenerator {
       'profile' => $profile,
       'machine_name' => $machine_name,
       'type' => 'profile',
-      'core' => $core,
       'description' => $description,
       'dependencies' => $dependencies,
-      'distribution' => $distribution,
       'excluded_dependencies' => $excluded_dependencies
     ];
 

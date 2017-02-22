@@ -49,6 +49,11 @@ class SubProfileCommand extends ProfileCommand {
   protected $excludedDependencies;
 
   /**
+   * @var SubProfileGenerator
+   */
+  protected $generator;
+
+  /**
    * {@inheritdoc}
    */
   protected function configure() {
@@ -75,13 +80,6 @@ class SubProfileCommand extends ProfileCommand {
         $this->trans('Subprofile description')
       )
       ->addOption(
-        'core',
-        '',
-        InputOption::VALUE_OPTIONAL,
-        $this->trans('commands.generate.profile.options.core'),
-        '8.x'
-      )
-      ->addOption(
         'dependencies',
         false,
         InputOption::VALUE_OPTIONAL,
@@ -98,13 +96,6 @@ class SubProfileCommand extends ProfileCommand {
         false,
         InputOption::VALUE_OPTIONAL,
         $this->trans('Lightning sub-components to exclude separated by commas.')
-      )
-      ->addOption(
-        'distribution',
-        false,
-        InputOption::VALUE_OPTIONAL,
-        $this->trans('commands.generate.profile.options.distribution'),
-        false
       );
   }
 
@@ -120,6 +111,7 @@ class SubProfileCommand extends ProfileCommand {
     $generator = new SubProfileGenerator();
     $generator->setRenderer($renderer);
     $generator->setFileQueue($fileQueue);
+    $this->generator = $generator;
     $httpClient = new Client();
     $appRoot = \Drupal::root();
     $configurationManager = new ConfigurationManager();
@@ -239,8 +231,6 @@ class SubProfileCommand extends ProfileCommand {
     $profile = $this->validator->validateModuleName($input->getOption('profile'));
     $machine_name = $this->validator->validateMachineName($input->getOption('machine-name'));
     $description = $input->getOption('description');
-    $core = $input->getOption('core');
-    $distribution = $input->getOption('distribution');
     $profile_path = $this->appRoot . '/profiles/custom';
 
     // Check if all module dependencies are available.
@@ -257,9 +247,7 @@ class SubProfileCommand extends ProfileCommand {
       $machine_name,
       $profile_path,
       $description,
-      $core,
       $dependencies,
-      $distribution,
       $this->excludedDependencies
     );
   }
