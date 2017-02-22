@@ -401,7 +401,12 @@ class LightningSubContext extends DrupalSubContextBase {
    * @BeforeScenario
    */
   public function setFilePath() {
-    $this->minkContext->setMinkParameter('files_path', __DIR__ . '/../../files');
+
+    $existing = $this->minkContext->getMinkParameter('files_path');
+    if (empty($existing)) {
+
+      $this->minkContext->setMinkParameter('files_path', __DIR__ . '/../../files');
+    }
   }
 
   /**
