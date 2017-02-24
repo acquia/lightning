@@ -65,5 +65,7 @@ Feature: Creating media assets from within the media browser using embed codes
     When I visit "/entity-browser/iframe/media_browser"
     And I click "Create embed"
     And I enter "https://twitter.com/webchick/status/824051274353999872" for "input"
+    # The change event, which triggers AJAX, is fired after 600 milliseconds.
+    And I wait 1 second
     And I wait for AJAX to finish
     Then the "#entity" element should be empty
