@@ -1,4 +1,4 @@
-@lightning @media @api
+@lightning @api
 Feature: Instagram media assets
   A media asset representing an Instagram post.
 
