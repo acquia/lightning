@@ -151,7 +151,7 @@ class SubProfileCommand extends ProfileCommand {
 
     if (!$profile) {
       $profile = $io->ask(
-        $this->lightning_translations->trans('commands.lightning.subprofile.description') .
+        $this->lightning_translations->trans('commands.lightning.subprofile.description'),
         '',
         function ($profile) use ($validators) {
           return $validators->validateModuleName($profile);
@@ -181,7 +181,7 @@ class SubProfileCommand extends ProfileCommand {
 
     $description = $input->getOption('description');
     if (!$description) {
-      $description = $io->ask($this->trans('commands.lightning.subprofile.questions.description'), '');
+      $description = $io->ask($this->lightning_translations->trans('commands.lightning.subprofile.questions.description'), '');
       $input->setOption('description', $description);
     }
 
@@ -195,9 +195,9 @@ class SubProfileCommand extends ProfileCommand {
 
     $excluded_dependencies = $input->getOption('excluded_dependencies');
     if (!$excluded_dependencies) {
-      if ($io->confirm($this->trans('commans.lightning.subprofile.questions.excluded-components'), false)) {
+      if ($io->confirm($this->lightning_translations->trans('commands.lightning.subprofile.questions.excluded-components'), false)) {
         $excludable_components = self::getTopLevelComponents(['lightning_core', 'lightning_preview']);
-        $question = new ChoiceQuestion('commans.lightning.subprofile.commands.excluded-components', $excludable_components);
+        $question = new ChoiceQuestion($this->lightning_translations->trans('commands.lightning.subprofile.commands.excluded-components'), $excludable_components);
         $question->setMultiselect(true);
         $io->writeln('The following components can be excluded: ' . Element::oxford($question->getChoices()));
         $excluded_dependencies = $io->askChoiceQuestion($question);
@@ -207,7 +207,7 @@ class SubProfileCommand extends ProfileCommand {
 
     $excluded_subcomponents = $input->getOption('excluded_subcomponents');
     if (!$excluded_subcomponents) {
-      if ($io->confirm($this->trans('commands.lightning.subprofile.questions.excluded-subcomponents'), false)) {
+      if ($io->confirm($this->lightning_translations->trans('commands.lightning.subprofile.questions.excluded-subcomponents'), false)) {
         // Subcomponents whose parent is already excluded are automatically
         // excluded. So we build a list of excludable subcomponents whose parent
         // component isn't already excluded.
@@ -219,7 +219,7 @@ class SubProfileCommand extends ProfileCommand {
           $excludable_subcomponents = array_merge($excludable_subcomponents, $tlc_subcomponents);
         }
 
-        $question = new ChoiceQuestion('commands.lightning.subprofile.commands.excluded-subcomponents', $excludable_subcomponents);
+        $question = new ChoiceQuestion($this->lightning_translations->trans('commands.lightning.subprofile.commands.excluded-subcomponents'), $excludable_subcomponents);
         $question->setMultiselect(true);
         $io->writeln('The following sub-components can be excluded: ' . Element::oxford($question->getChoices()));
         $excluded_subcomponents = $io->askChoiceQuestion($question);
