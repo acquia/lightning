@@ -18,6 +18,7 @@ use Drupal\Console\Utils\Site;
 use Drupal\Console\Utils\Validator;
 use Drupal\Core\Extension\ExtensionDiscovery;
 use Drupal\Core\Extension\InfoParser;
+use Drupal\Core\Installer\Exception\NoProfilesException;
 use Drupal\lightning\Generator\SubProfileGenerator;
 use Drupal\lightning_core\Element;
 use GuzzleHttp\Client;
@@ -108,26 +109,28 @@ class SubProfileCommand extends ProfileCommand {
    * ProfileCommand constructor.
    */
   public function __construct() {
-    $lightning_translations = new TranslatorManager();
-    $lightning_translations->loadResource('en', __DIR__ . '/../../lightning-en/translations');
-    $this->lightning_translations = $lightning_translations;
-    $stringConverter = new StringConverter();
-    $renderer = new TwigRenderer($lightning_translations, $stringConverter);
-    $renderer->setSkeletonDirs([__DIR__ . '/../../templates/']);
-
-    $fileQueue = new FileQueue();
-    $generator = new SubProfileGenerator();
-    $generator->setRenderer($renderer);
-    $generator->setFileQueue($fileQueue);
-    $this->generator = $generator;
-
-    $httpClient = new Client();
-
     $appRoot = \Drupal::root();
     $configurationManager = new ConfigurationManager();
     $site = new Site($appRoot, $configurationManager);
     $extensionManager = new Manager($site, $appRoot);
+
+    $lightning_translations = new TranslatorManager();
+    $lightning_translations->loadResource('en', __DIR__ . '/../../lightning-en/translations');
+    $this->lightning_translations = $lightning_translations;
+
+    $stringConverter = new StringConverter();
+    $renderer = new TwigRenderer($lightning_translations, $stringConverter);
+    $renderer->setSkeletonDirs([__DIR__ . '/../../templates/']);
+    $generator = new SubProfileGenerator();
+    $generator->setRenderer($renderer);
+    $fileQueue = new FileQueue();
+    $generator->setFileQueue($fileQueue);
+    $this->generator = $generator;
+
     $validator = new Validator($extensionManager);
+
+    $httpClient = new Client();
+
     $this->excludedDependencies = [];
     parent::__construct($extensionManager, $generator, $stringConverter, $validator, $appRoot, $site, $httpClient);
   }
@@ -286,17 +289,29 @@ class SubProfileCommand extends ProfileCommand {
 
   /**
    * @return array
+   * @throws \Exception exception
    *
    * Gets all of Lightnings components including subcomponents.
    */
   public static function getLightningComponents() {
     $appRoot = \Drupal::root();
     $extensions = new ExtensionDiscovery($appRoot);
-    $extensions = $extensions->scan('module');
+    $modules = $extensions->scan('module');
 
-    $lightning_extensions = self::array_filter_key($extensions, function($key) {
-      return strpos($key, 'lightning_') === 0;
-    });
+    $profiles = $extensions->scan('profile');
+
+    if (!isset($profiles['lightning'])) {
+      throw new \Exception('Lightning profile not found.');
+    }
+
+    $lightning_features_path = $profiles['lightning']->getPath();
+    $lightning_extensions = [];
+
+    foreach ($modules as $module) {
+      if (strpos($module->getPath(), $lightning_features_path . '/modules/lightning_features') === 0) {
+        $lightning_extensions[] = $module;
+      }
+    }
 
     $lightning_components = [];
     foreach ($lightning_extensions as $machine_name => $lightning_extension) {
@@ -314,33 +329,18 @@ class SubProfileCommand extends ProfileCommand {
   }
 
   /**
-   * Filter an array by keys.
-   *
-   * @param $input
-   * @param $callback
-   * @return array|null
-   */
-  protected static function array_filter_key(array $input, callable $callback) {
-    $keys = array_keys($input);
-    $filteredKeys = array_filter($keys, $callback);
-    if (empty($filteredKeys)) {
-      return [];
-    }
-    return array_intersect_key($input, array_flip($filteredKeys));
-  }
-
-  /**
    * @param array $excludedComponents
    *   An array of top-level components to exclude.
    * @return array of top-level Lightning components.
    */
-  public static function getTopLevelComponents($excludedComponents = []) {
+  public static function getTopLevelComponents(array $excludedComponents = []) {
     $topLevelComponents = [];
     foreach (self::getLightningComponents() as $component => $attributes) {
       if (isset($attributes['subcomponents'])) {
         $topLevelComponents[] = $component;
       }
     }
+
     return array_diff($topLevelComponents, $excludedComponents);
   }
 
@@ -348,12 +348,12 @@ class SubProfileCommand extends ProfileCommand {
    * @param string $topLevelComponent
    * @return array of subcomponents of the provided top-level component.
    *
-   * @throws \Exception
+   * @throws \LogicException
    */
   public static function getSubComponents($topLevelComponent) {
     $topLevelComponents = self::getTopLevelComponents();
     if (!in_array($topLevelComponent, $topLevelComponents)) {
-      throw new \Exception($topLevelComponent . ' is Not a top-level component.');
+      throw new \LogicException($topLevelComponent . ' is not a top-level components.');
     }
     $components = self::getLightningComponents();
     return $components[$topLevelComponent]['subcomponents'];
