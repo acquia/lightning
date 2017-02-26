@@ -93,8 +93,7 @@ function lightning_dev_update_8002() {
     ->unsetThirdPartySetting('panelizer', 'displays')
     ->save();
 
-  \Drupal::service('module_installer')
-    ->install(['search_api_db', 'lightning_search']);
+  \Drupal::service('module_installer')->install(['lightning_search']);
 
   \Drupal::service('lightning.content_roles')
     ->grantPermissions('reviewer', [

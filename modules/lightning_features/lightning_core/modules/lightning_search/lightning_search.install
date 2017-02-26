@@ -13,6 +13,13 @@ use Drupal\search_api\Entity\Server;
  * Implements hook_install().
  */
 function lightning_search_install() {
+  // Search API DB is not a hard dependency, but install it if it's available so
+  // that the search index we provide will "just work" out of the box.
+  $module_data = system_rebuild_module_data();
+  if (isset($module_data['search_api_db'])) {
+    \Drupal::service('module_installer')->install(['search_api_db']);
+  }
+
   /** @var \Drupal\node\NodeTypeInterface $node_type */
   foreach (NodeType::loadMultiple() as $node_type) {
     lightning_search_node_type_insert($node_type);
