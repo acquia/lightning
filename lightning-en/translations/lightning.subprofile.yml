@@ -1,11 +1,12 @@
 description: 'The name of the sub-profile'
+experimental: 'Beware, this component is experimental.'
 options:
-  excluded-components: 'Top-level components of Lightning to exclude separated by commas'
-  excluded-subcomponents: 'Lightning sub-components to exclude separated by commas'
+  name: 'The human-readable name of the subprofile'
+  machine_name: 'The machine-readable name of the subprofile (lowercase letters and underscores only)'
+  description: 'Optional subprofile description'
+  exclude: 'A comma-separated list of Lightning modules to exclude (e.g., lightning_layout, lightning_contact_form)'
 questions:
   description: 'Description'
-  excluded-components: 'Would you like to exclude any of Lightnings top-level components from the installation? (Experimental components are excluded automatically.)'
-  excluded-subcomponents: 'Would you like to exclude any of Lightnings sub-components?'
-commands:
-  excluded-components: 'List the top-level components you would like to exclude, separated by commas.'
-  excluded-subcomponents: 'List the sub-components you would like to exclude, separated by commas.'
+  exclude-components: '%s has %d sub-component(s): %s. Do you want to exclude any of them?'
+  choose-excluded-components: 'Enter the sub-components you want to exclude:'
+  include-component: 'Do you want to include %s?'

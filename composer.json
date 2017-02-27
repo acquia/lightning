@@ -21,7 +21,8 @@
         "drupal/devel": "^1.0",
         "squizlabs/php_codesniffer": "2.*",
         "se/selenium-server-standalone": "^2.53",
-        "drupal/console": "^1.0"
+        "drupal/console": "^1.0",
+        "composer/composer": "^1.3"
     },
     "config": {
         "bin-dir": "bin/"
@@ -41,7 +42,8 @@
             "./bin/phing push",
             "./bin/phing package"
         ],
-        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+        "migrate-extender": "Acquia\\Lightning\\Composer\\SubprofileMigrationCommand::execute"
     },
     "extra": {
         "packagist.drupal-composer.org": {
@@ -149,6 +151,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Acquia\\Lightning\\": "src",
             "Acquia\\LightningExtension\\": "src/LightningExtension"
         }
     }
