@@ -2,23 +2,18 @@
 
 namespace Drupal\lightning\Command;
 
-use Drupal\Console\Command\Generate\ProfileCommand;
+use Drupal\Console\Command\Shared\ConfirmationTrait;
 use Drupal\Console\Command\Shared\FormTrait;
 use Drupal\Console\Command\Shared\ModuleTrait;
+use Drupal\Console\Core\Command\Shared\CommandTrait;
 use Drupal\Console\Core\Style\DrupalStyle;
-use Drupal\Console\Core\Utils\ConfigurationManager;
-use Drupal\Console\Core\Utils\FileQueue;
 use Drupal\Console\Core\Utils\StringConverter;
-use Drupal\Console\Core\Utils\TwigRenderer;
-use Drupal\Console\Core\Utils\TranslatorManager;
-use Drupal\Console\Extension\Manager as ExtensionManager;
-use Drupal\Console\Utils\Site;
+use Drupal\Console\Generator\ProfileGenerator;
 use Drupal\Console\Utils\Validator;
-use Drupal\Core\Extension\InfoParser;
+use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\lightning\ComponentInfo;
-use Drupal\lightning\Generator\SubProfileGenerator;
 use Drupal\lightning_core\Element;
-use GuzzleHttp\Client;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,10 +22,12 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 /**
  * A Drupal Console command to generate a Lightning sub-profile.
  */
-class SubProfileCommand extends ProfileCommand {
+class SubProfileCommand extends Command {
 
-  use ModuleTrait;
+  use CommandTrait;
+  use ConfirmationTrait;
   use FormTrait;
+  use ModuleTrait;
 
   /**
    * The modules to exclude from the sub-profile.
@@ -48,35 +45,26 @@ class SubProfileCommand extends ProfileCommand {
 
   protected $componentInfo;
 
+  protected $generator;
+
+  protected $stringConverter;
+
+  protected $validator;
+
+  protected $appRoot;
+
   /**
    * ProfileCommand constructor.
    */
-  public function __construct() {
-    $appRoot = \Drupal::root();
-    $site = new Site($appRoot, new ConfigurationManager());
-    $extensionManager = new ExtensionManager($site, $appRoot);
+  public function __construct(ProfileGenerator $profile_generator, StringConverter $string_converter, Validator $validator, $app_root, InfoParserInterface $info_parser) {
+    parent::__construct('lightning:subprofile');
 
-    parent::__construct(
-      $extensionManager,
-      new SubProfileGenerator(),
-      new StringConverter(),
-      new Validator($extensionManager),
-      $appRoot,
-      $site,
-      new Client()
-    );
+    $this->generator = $profile_generator;
+    $this->stringConverter = $string_converter;
+    $this->validator = $validator;
+    $this->appRoot = $app_root;
 
-    $this->componentInfo = new ComponentInfo($appRoot, new InfoParser());
-
-    $this->translator = new TranslatorManager();
-    $this->translator
-      ->loadResource('en', __DIR__ . '/../../lightning-en/translations');
-
-    $renderer = new TwigRenderer($this->translator, $this->stringConverter);
-    $renderer->setSkeletonDirs([__DIR__ . '/../../templates/']);
-
-    $this->generator->setRenderer($renderer);
-    $this->generator->setFileQueue(new FileQueue());
+    $this->componentInfo = new ComponentInfo($app_root, $info_parser);
   }
 
   /**
@@ -84,7 +72,6 @@ class SubProfileCommand extends ProfileCommand {
    */
   protected function configure() {
     $this
-      ->setName('lightning:subprofile')
       ->setDescription($this->trans('Generate a subprofile of Lightning'))
       ->setHelp($this->trans('The <info>lightning:subprofile</info> command helps you generate a new subprofile of Lightning'))
       ->addOption(

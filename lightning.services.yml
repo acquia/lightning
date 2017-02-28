@@ -6,12 +6,17 @@ services:
 
   lightning.subprofile:
     class: '\Drupal\lightning\Command\SubProfileCommand'
-    arguments: {}
+    arguments:
+      - '@lightning.subprofile_generator'
+      - '@?console.string_converter'
+      - '@?console.validator'
+      - '@app.root'
+      - '@info_parser'
     tags:
-      - { name: 'drupal.command' }
+      - { name: drupal.command }
 
   lightning.subprofile_generator:
     class: '\Drupal\lightning\Generator\SubProfileGenerator'
-    arguments: {}
+    arguments: []
     tags:
       - { name: drupal.generator }
