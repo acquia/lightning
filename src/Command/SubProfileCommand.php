@@ -45,16 +45,47 @@ class SubProfileCommand extends Command {
 
   protected $componentInfo;
 
+  /**
+   * The profile generator.
+   *
+   * @var ProfileGenerator
+   */
   protected $generator;
 
+  /**
+   * The string converter.
+   *
+   * @var StringConverter
+   */
   protected $stringConverter;
 
+  /**
+   * The validation service.
+   *
+   * @var Validator
+   */
   protected $validator;
 
+  /**
+   * The Drupal application root.
+   *
+   * @var string
+   */
   protected $appRoot;
 
   /**
-   * ProfileCommand constructor.
+   * SubProfileCommand constructor.
+   *
+   * @param ProfileGenerator $profile_generator
+   *   The profile generator.
+   * @param StringConverter $string_converter
+   *   The string converter.
+   * @param Validator $validator
+   *   The validation service.
+   * @param string $app_root
+   *   The Drupal application root.
+   * @param InfoParserInterface $info_parser
+   *   The info file parser.
    */
   public function __construct(ProfileGenerator $profile_generator, StringConverter $string_converter, Validator $validator, $app_root, InfoParserInterface $info_parser) {
     parent::__construct('lightning:subprofile');
@@ -78,19 +109,19 @@ class SubProfileCommand extends Command {
         'name',
         '',
         InputOption::VALUE_REQUIRED,
-        $this->trans('commands.lightning.subprofile.options.name')
+        $this->trans('commands.generate.profile.options.profile')
       )
       ->addOption(
         'machine-name',
         '',
         InputOption::VALUE_REQUIRED,
-        $this->trans('commands.lightning.subprofile.options.machine_name')
+        $this->trans('commands.generate.profile.options.machine-name')
       )
       ->addOption(
         'description',
         '',
         InputOption::VALUE_OPTIONAL,
-        $this->trans('commands.lightning.subprofile.options.description')
+        $this->trans('commands.generate.profile.options.description')
       )
       ->addOption(
         'dependencies',
