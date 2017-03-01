@@ -3,12 +3,11 @@
 namespace Drupal\lightning\Command;
 
 use Drupal\Console\Command\Shared\ConfirmationTrait;
-use Drupal\Console\Command\Shared\FormTrait;
-use Drupal\Console\Command\Shared\ModuleTrait;
 use Drupal\Console\Core\Command\Shared\CommandTrait;
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Console\Core\Utils\StringConverter;
 use Drupal\Console\Generator\ProfileGenerator;
+use Drupal\Console\Utils\TranslatorManager;
 use Drupal\Console\Utils\Validator;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\lightning\ComponentInfo;
@@ -26,23 +25,12 @@ class SubProfileCommand extends Command {
 
   use CommandTrait;
   use ConfirmationTrait;
-  use FormTrait;
-  use ModuleTrait;
 
   /**
-   * The modules to exclude from the sub-profile.
+   * The Lightning component information gatherer.
    *
-   * @var string[]
+   * @var ComponentInfo
    */
-  protected $excludedDependencies = [];
-
-  /**
-   * The canonical list of modules to exclude.
-   *
-   * @var string[]
-   */
-  protected $exclude = [];
-
   protected $componentInfo;
 
   /**
@@ -86,16 +74,25 @@ class SubProfileCommand extends Command {
    *   The Drupal application root.
    * @param InfoParserInterface $info_parser
    *   The info file parser.
+   * @param TranslatorManager $translator
+   *   (optional) The translator manager.
    */
-  public function __construct(ProfileGenerator $profile_generator, StringConverter $string_converter, Validator $validator, $app_root, InfoParserInterface $info_parser) {
+  public function __construct(ProfileGenerator $profile_generator, StringConverter $string_converter, Validator $validator, $app_root, InfoParserInterface $info_parser, TranslatorManager $translator = NULL) {
     parent::__construct('lightning:subprofile');
 
+    $this->componentInfo = new ComponentInfo($app_root, $info_parser);
     $this->generator = $profile_generator;
     $this->stringConverter = $string_converter;
     $this->validator = $validator;
     $this->appRoot = $app_root;
 
-    $this->componentInfo = new ComponentInfo($app_root, $info_parser);
+    // For reasons I can't yet figure out, adding the DrupalCommand annotation
+    // to this class, which would allow translations to be loaded automatically,
+    // causes the command to be unrecognized by Drupal Console. Which is
+    // disturbing...but we can work around it here.
+    if ($translator) {
+      $translator->addResourceTranslationsByExtension('lightning', 'module');
+    }
   }
 
   /**
@@ -103,38 +100,63 @@ class SubProfileCommand extends Command {
    */
   protected function configure() {
     $this
-      ->setDescription($this->trans('Generate a subprofile of Lightning'))
-      ->setHelp($this->trans('The <info>lightning:subprofile</info> command helps you generate a new subprofile of Lightning'))
+      ->setDescription($this->trans('commands.lightning.subprofile.description'))
       ->addOption(
         'name',
-        '',
+        NULL,
         InputOption::VALUE_REQUIRED,
         $this->trans('commands.generate.profile.options.profile')
       )
       ->addOption(
         'machine-name',
-        '',
+        NULL,
         InputOption::VALUE_REQUIRED,
         $this->trans('commands.generate.profile.options.machine-name')
       )
       ->addOption(
         'description',
-        '',
-        InputOption::VALUE_OPTIONAL,
+        NULL,
+        InputOption::VALUE_REQUIRED,
         $this->trans('commands.generate.profile.options.description')
       )
       ->addOption(
-        'dependencies',
-        FALSE,
-        InputOption::VALUE_OPTIONAL,
-        $this->trans('commands.generate.profile.options.dependencies')
+        'include',
+        NULL,
+        InputOption::VALUE_REQUIRED,
+        $this->trans('commands.lightning.subprofile.options.include')
       )
       ->addOption(
         'exclude',
         NULL,
-        InputOption::VALUE_OPTIONAL,
+        InputOption::VALUE_REQUIRED,
         $this->trans('commands.lightning.subprofile.options.exclude')
       );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function initialize(InputInterface $input, OutputInterface $output) {
+    parent::initialize($input, $output);
+
+    $name = $input->getOption('name');
+    if ($name) {
+      $this->validator->validateModuleName($name);
+    }
+
+    $machine_name = $input->getOption('machine-name');
+    if ($machine_name) {
+      $this->validator->validateMachineName($machine_name);
+    }
+
+    // Process and validate the list of excluded modules.
+    $exclude = $this->toArray($input->getOption('exclude'));
+    if ($exclude) {
+      // Only Lightning components can be excluded. This prevents wily users
+      // from excluding modules that Lightning needs.
+      $this->validateExcludedModules($exclude);
+    }
+    $input->setOption('exclude', $exclude);
   }
 
   /**
@@ -143,101 +165,184 @@ class SubProfileCommand extends Command {
   protected function interact(InputInterface $input, OutputInterface $output) {
     $io = new DrupalStyle($input, $output);
 
-    $profile = $input->getOption('name');
-    if ($profile) {
-      $this->validator->validateMachineName($profile);
-    }
-    else {
-      $profile = $io->ask(
-        $this->trans('commands.lightning.subprofile.description'),
-        '',
-        [$this->validator, 'validateModuleName']
+    // Get the profile name from the --name option, or ask the user if none was
+    // specified.
+    $profile = $input->getOption('name') ?: $io->ask(
+      $this->trans('commands.generate.profile.questions.profile'),
+      NULL,
+      [$this->validator, 'validateModuleName']
+    );
+    $input->setOption('name', $profile);
+
+    // Get the machine name from the --machine-name option, or ask the user if
+    // none was specified.
+    $machine_name = $input->getOption('machine-name') ?: $io->ask(
+      $this->trans('commands.generate.profile.questions.machine-name'),
+      $this->stringConverter->createMachineName($profile),
+      [$this->validator, 'validateMachineName']
+    );
+    $input->setOption('machine-name', $machine_name);
+
+    // Get the description from the --description option, or ask the user if
+    // none was specified.
+    $description = $input->getOption('description') ?: $io->ask(
+      $this->trans('commands.generate.profile.questions.description'),
+      NULL,
+      'trim'
+    );
+    $input->setOption('description', $description);
+
+    // Get any included modules from the --include option, or ask the user if
+    // none were specified.
+    $include = $input->getOption('include');
+    if (empty($include)) {
+      $include .= $io->ask(
+        $this->trans('commands.lightning.subprofile.options.include'),
+        NULL,
+        'trim'
       );
-      $input->setOption('name', $profile);
     }
+    $input->setOption('include', $this->toArray($include));
 
-    $machine_name = $input->getOption('machine-name');
-    if ($machine_name) {
-      $this->validator->validateModuleName($machine_name);
-    }
-    else {
-      $machine_name = $io->ask(
-        $this->trans('commands.generate.profile.questions.machine-name'),
-        $this->stringConverter->createMachineName($profile),
-        [$this->validator, 'validateMachineName']
-      );
-      $input->setOption('machine-name', $machine_name);
-    }
+    $exclude = $input->getOption('exclude');
 
-    $description = $input->getOption('description');
-    if (!$description) {
-      $description = $io->ask($this->trans('commands.lightning.subprofile.questions.description'), '');
-      $input->setOption('description', $description);
-    }
-
-    $dependencies = $input->getOption('dependencies');
-    if (!$dependencies) {
-      if ($io->confirm($this->trans('commands.generate.profile.questions.dependencies'), TRUE)) {
-        $dependencies = $io->ask($this->trans('commands.generate.profile.options.dependencies'), '');
+    foreach ($this->getMainComponentInfo() as $component => $info) {
+      // If the component has been excluded, exclude its sub-components as well.
+      if (in_array($component, $exclude)) {
+        $exclude = array_merge($exclude, [$component], (array) @$info['components']);
       }
-      $input->setOption('dependencies', $dependencies);
+      else {
+        $info['machine_name'] = $component;
+        $exclude = array_merge($exclude, $this->excludeComponent($info, $io));
+      }
     }
+    $input->setOption('exclude', $exclude);
+  }
 
-    $components = array_diff_key($this->getMainComponentInfo(), array_flip($this->exclude));
+  /**
+   * Converts a comma-separated list into a clean array.
+   *
+   * @param string $list
+   *   The comma-separated list.
+   *
+   * @return string[]
+   *   The items in the list.
+   */
+  protected function toArray($list) {
+    $list = trim($list);
+    return $list ? array_map('trim', explode(',', $list)) : [];
+  }
 
-    foreach ($components as $component) {
-      $this->requestComponent($component, $io);
+  /**
+   * Validates excluded modules.
+   *
+   * @param string[] $excluded_modules
+   *   The modules to be excluded.
+   *
+   * @throws \InvalidArgumentException
+   *   If $excluded_modules contains anything that's not a Lightning component
+   *   or sub-component.
+   */
+  public function validateExcludedModules(array $excluded_modules) {
+    $components = $this->getComponentInfo();
+
+    // Can't exclude Lightning Core.
+    unset($components['lightning_core']);
+
+    // Can't exclude anything that isn't a Lightning component or sub-component.
+    $invalid = array_diff($excluded_modules, array_keys($components));
+
+    if ($invalid) {
+      $error = sprintf(
+        $this->trans('commands.lightning.subprofile.errors.invalid-exclusions'),
+        Element::oxford($invalid)
+      );
+
+      throw new \InvalidArgumentException($error);
     }
   }
 
   /**
-   * Collects information about including a Lightning component.
+   * Asks the user about excluding a Lightning component.
    *
-   * @param array $component
+   * @param array $info
    *   The parsed component info.
    * @param \Drupal\Console\Core\Style\DrupalStyle $io
    *   The I/O handler.
+   *
+   * @return string[]
+   *   The modules to exclude.
    */
-  protected function requestComponent(array $component, DrupalStyle $io) {
-    // We always include Lightning Core, or it won't be much of a Lightning
-    // sub-profile.
-    if ($component['name'] == 'lightning_core') {
-      $include = TRUE;
-    }
-    else {
+  protected function excludeComponent(array $info, DrupalStyle $io) {
+    // Assume we will include the component if it's not experimental.
+    $include = empty($info['experimental']);
+
+    // We don't ask about including Lightning Core, or this won't be much of a
+    // Lightning sub-profile.
+    if ($info['machine_name'] != 'lightning_core') {
       $question = sprintf(
         $this->trans('commands.lightning.subprofile.questions.include-component'),
-        $component['name']
+        $info['name']
       );
-      if (isset($component['experimental'])) {
+      if (isset($info['experimental'])) {
         $question .= sprintf(
           ' <fg=yellow>%s</>',
           $this->trans('commands.lightning.subprofile.experimental')
         );
       }
-      $include = $io->confirm($question, empty($component['experimental']));
+      $include = $io->confirm($question, $include);
     }
 
-    if ($include && !empty($component['components'])) {
-      $sub_components = $component['components'];
-      sort($sub_components);
+    // If the user declined the component, return the component and all of its
+    // sub-components.
+    if (empty($include)) {
+      return array_merge((array) $info['name'], (array) @$info['components']);
+    }
+    // Otherwise, ask about the individual sub-components.
+    elseif (isset($info['components'])) {
+      return $this->excludeSubComponents($info['components'], $info, $io);
+    }
+    // In all other cases, we're not excluding anything.
+    else {
+      return [];
+    }
+  }
 
-      $question = sprintf(
-        $this->trans('commands.lightning.subprofile.questions.exclude-components'),
-        $component['name'],
-        count($sub_components),
-        Element::oxford($sub_components)
+  /**
+   * Asks the user about excluding a set of Lightning sub-components.
+   *
+   * @param string[] $sub_components
+   *   The sub-components to ask about.
+   * @param array $parent
+   *   The parent component info.
+   * @param \Drupal\Console\Core\Style\DrupalStyle $io
+   *   The I/O handler.
+   *
+   * @return string[]
+   *   The modules to exclude.
+   */
+  protected function excludeSubComponents(array $sub_components, array $parent, DrupalStyle $io) {
+    // Alphabetize for easier skimming.
+    sort($sub_components);
+
+    $question = sprintf(
+      $this->trans('commands.lightning.subprofile.questions.exclude-components'),
+      $parent['name'],
+      count($sub_components),
+      Element::oxford($sub_components)
+    );
+
+    if ($io->confirm($question, FALSE)) {
+      $question = new ChoiceQuestion(
+        $this->trans('commands.lightning.subprofile.questions.choose-excluded-components'),
+        $sub_components
       );
+      $question->setMultiselect(TRUE);
 
-      if ($io->confirm($question, FALSE)) {
-        $question = new ChoiceQuestion(
-          $this->trans('commands.lightning.subprofile.questions.choose-excluded-components'),
-          $sub_components
-        );
-        $question->setMultiselect(TRUE);
-
-        $this->exclude = array_merge($this->exclude, $io->askChoiceQuestion($question));
-      }
+      return $io->askChoiceQuestion($question);
+    }
+    else {
+      return [];
     }
   }
 
@@ -255,46 +360,24 @@ class SubProfileCommand extends Command {
     $machine_name = $this->validator->validateMachineName($input->getOption('machine-name'));
     $description = $input->getOption('description');
     $profile_path = $this->appRoot . '/profiles/custom';
+    $include = $input->getOption('include');
 
     // Check if all module dependencies are available.
-    $dependencies = $this->validator->validateModuleDependencies($input->getOption('dependencies'));
+    $dependencies = $this->validator->validateModuleDependencies($include);
     if ($dependencies) {
       // @todo ProfileCommand::checkDependencies is private so we aren't
       // actually checking to see if they are present.
-      $dependencies = $dependencies['success'];
+      $include = $dependencies['success'];
     }
-    $this->buildExcludedDependenciesList($input->getOption('exclude-dependencies'));
-    $this->buildExcludedDependenciesList($input->getOption('exclude-subcomponents'));
     $this->generator->generate(
       $profile,
       $machine_name,
       $profile_path,
       $description,
-      $dependencies,
-      $this->excludedDependencies,
+      $include,
+      $input->getOption('exclude'),
       NULL
     );
-  }
-
-  /**
-   * Excludes the given components (and all applicable sub-components).
-   *
-   * @param string[] $excluded_dependencies
-   *   Dependencies to exclude.
-   */
-  protected function buildExcludedDependenciesList(array $excluded_dependencies) {
-    $excluded_dependencies_list = [];
-    foreach ($excluded_dependencies as $excluded_dependency) {
-      if (array_key_exists($excluded_dependency, $this->getComponentInfo())) {
-        $excluded_dependencies_list[] = $excluded_dependency;
-        if (in_array($excluded_dependency, $this->getMainComponentInfo())) {
-          // If its a top-level-component, add its subcomponents too.
-          $subcomponents = $this->listSubComponents(trim($excluded_dependency));
-          $excluded_dependencies_list = array_merge($excluded_dependencies_list, $subcomponents);
-        }
-      }
-    }
-    $this->excludedDependencies = array_merge($this->excludedDependencies, $excluded_dependencies_list);
   }
 
   /**
@@ -310,50 +393,36 @@ class SubProfileCommand extends Command {
 
     $component_info = array_filter($this->componentInfo->getAll(), $not_hidden);
 
+    // Ensure that sub-components know their parent.
     foreach ($component_info as $component => $info) {
       foreach ((array) @$info['components'] as $child) {
         $component_info[$child]['parent'] = $component;
       }
     }
-
     return $component_info;
   }
 
   /**
    * Returns info for top-level components.
    *
-   * @param string[] $exclude
-   *   The top-level components to exclude.
-   *
    * @return array[]
    *   Parsed info for all top-level Lightning components.
    */
-  protected function getMainComponentInfo(array $exclude = []) {
+  protected function getMainComponentInfo() {
     $main_components = array_filter($this->getComponentInfo(), function (array $info) {
       return empty($info['parent']);
     });
 
-    return array_diff_key($main_components, $exclude);
-  }
-
-  /**
-   * Lists sub-components of a top-level component.
-   *
-   * @param string $parent
-   *   The parent (top-level) component.
-   *
-   * @return string[]
-   *   The sub-components of the provided top-level component.
-   */
-  protected function listSubComponents($parent) {
-    $components = $this->getComponentInfo();
-
-    if (isset($components[$parent])) {
-      return (array) $components[$parent]['components'];
-    }
-    else {
-      return [];
-    }
+    // Couldn't figure out how to sort the components with a uasort() function.
+    // Went with the quick and dirty way instead. Don't judge me!
+    Element::order($main_components, [
+      'lightning_core',
+      'lightning_media',
+      'lightning_layout',
+      'lightning_workflow',
+      'lightning_preview',
+    ]);
+    return $main_components;
   }
 
 }
