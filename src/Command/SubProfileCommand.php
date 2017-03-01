@@ -6,17 +6,18 @@ use Drupal\Console\Command\Shared\ConfirmationTrait;
 use Drupal\Console\Core\Command\Shared\CommandTrait;
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Console\Core\Utils\StringConverter;
-use Drupal\Console\Generator\ProfileGenerator;
 use Drupal\Console\Utils\TranslatorManager;
 use Drupal\Console\Utils\Validator;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\lightning\ComponentInfo;
 use Drupal\lightning_core\Element;
+use Drupal\lightning\Generator\SubProfileGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
+use Drupal\Console\Core\Utils\TwigRenderer;
 
 /**
  * A Drupal Console command to generate a Lightning sub-profile.
@@ -36,7 +37,7 @@ class SubProfileCommand extends Command {
   /**
    * The profile generator.
    *
-   * @var ProfileGenerator
+   * @var SubProfileGenerator
    */
   protected $generator;
 
@@ -64,7 +65,7 @@ class SubProfileCommand extends Command {
   /**
    * SubProfileCommand constructor.
    *
-   * @param ProfileGenerator $profile_generator
+   * @param SubProfileGenerator $profile_generator
    *   The profile generator.
    * @param StringConverter $string_converter
    *   The string converter.
@@ -77,11 +78,21 @@ class SubProfileCommand extends Command {
    * @param TranslatorManager $translator
    *   (optional) The translator manager.
    */
-  public function __construct(ProfileGenerator $profile_generator, StringConverter $string_converter, Validator $validator, $app_root, InfoParserInterface $info_parser, TranslatorManager $translator = NULL) {
+  public function __construct(SubProfileGenerator $profile_generator, StringConverter $string_converter, Validator $validator, $app_root, InfoParserInterface $info_parser, TranslatorManager $translator = NULL) {
     parent::__construct('lightning:subprofile');
-
     $this->componentInfo = new ComponentInfo($app_root, $info_parser);
+
+    // The SkeletonDirs in the existing TwigRenderer contain directories that
+    // contain files with the same names as our templates. TwigRenderer
+    // doesn't provide a method to remove those directories and as a result, the
+    // other templates are always used. For now we can work around this by
+    // creating a whole new TwigRenderer, but it would be nice if it just
+    // provided a ::resetSkeletonDirs method.
+    $renderer = new TwigRenderer($translator, $string_converter);
+    $renderer->setSkeletonDirs([__DIR__ . '/../../templates/']);
+    $profile_generator->setRenderer($renderer);
     $this->generator = $profile_generator;
+
     $this->stringConverter = $string_converter;
     $this->validator = $validator;
     $this->appRoot = $app_root;
@@ -375,8 +386,7 @@ class SubProfileCommand extends Command {
       $profile_path,
       $description,
       $include,
-      $input->getOption('exclude'),
-      NULL
+      $input->getOption('exclude')
     );
   }
 
