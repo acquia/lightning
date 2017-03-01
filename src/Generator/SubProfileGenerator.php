@@ -2,9 +2,9 @@
 
 namespace Drupal\lightning\Generator;
 
-use Drupal\Console\Generator\ProfileGenerator;
+use Drupal\Console\Core\Generator\Generator;
 
-class SubProfileGenerator extends ProfileGenerator {
+class SubProfileGenerator extends Generator {
 
   /**
    * {@inheritdoc}
