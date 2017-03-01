@@ -82,6 +82,12 @@ class SubProfileCommand extends Command {
     parent::__construct('lightning:subprofile');
     $this->componentInfo = new ComponentInfo($app_root, $info_parser);
 
+    // The SkeletonDirs in the existing TwigRenderer contain directories that
+    // contain files with the same names as our templates. TwigRenderer
+    // doesn't provide a method to remove those directories and as a result, the
+    // other templates are always used. For now we can work around this by
+    // creating a whole new TwigRenderer, but it would be nice if it just
+    // provided a ::resetSkeletonDirs method.
     $renderer = new TwigRenderer($translator, $string_converter);
     $renderer->setSkeletonDirs([__DIR__ . '/../../templates/']);
     $profile_generator->setRenderer($renderer);
