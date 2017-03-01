@@ -79,15 +79,30 @@ class SubprofileMigrationCommand {
       $command .= ' --name="Lightning Extender"';
       $command .= ' --machine-name=lightning_extender';
 
-      if ($extender['modules'] || $extender['lightning_extensions']) {
-        $modules = array_merge(
-          $extender['lightning_extensions'],
-          $extender['modules']
-        );
-        $command .= ' --dependencies="' . implode(', ', $modules) . '"';
+      if ($extender['modules']) {
+        $command .= ' --include=' . implode(',', $extender['modules']);
+      }
+
+      $exclude = [];
+      if ($extender['lightning_extensions']) {
+        // Sadly, ComponentDiscovery doesn't work without Drupal (because of
+        // reasons...to do with the autoloader). So we'll just hard-code the
+        // list of main components.
+        $exclude = array_merge($exclude, array_diff(
+          [
+            'lightning_layout',
+            'lightning_media',
+            'lightning_preview',
+            'lightning_workflow',
+          ],
+          $extender['lightning_extensions']
+        ));
       }
       if ($extender['exclude_components']) {
-        $command .= ' --exclude-subcomponents="' . implode(', ', $extender['exclude_components']) . '"';
+        $exclude = array_merge($exclude, $extender['exclude_components']);
+      }
+      if ($exclude) {
+        $command .= ' --exclude=' . implode(',', $exclude);
       }
 
       // If Drupal Console is installed, go ahead and run the command
@@ -135,17 +150,24 @@ END
       return $file;
     }
     else {
-      // Locate Drupal core so we can find the sites directory.
-      $package = $this->composer
-        ->getRepositoryManager()
-        ->getLocalRepository()
-        ->findPackage('drupal/core', '*');
-
-      return sprintf(
-        '%s/../sites/default/lightning.extend.yml',
-        $this->composer->getInstallationManager()->getInstallPath($package)
-      );
+      return $this->getCorePath() . '/../sites/default/lightning.extend.yml';
     }
+  }
+
+  /**
+   * Returns the path to Drupal core.
+   *
+   * @return string
+   *   The installed path to Drupal core.
+   */
+  protected function getCorePath() {
+    // Locate Drupal core so we can find the sites directory.
+    $package = $this->composer
+      ->getRepositoryManager()
+      ->getLocalRepository()
+      ->findPackage('drupal/core', '*');
+
+    return $this->composer->getInstallationManager()->getInstallPath($package);
   }
 
 }
