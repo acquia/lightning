@@ -106,8 +106,8 @@ class SubprofileMigrationCommand {
       }
 
       // If Drupal Console is installed, go ahead and run the command
-      // non-interactively. Otherwise, echo the command and tell the user run it
-      // themselves.
+      // non-interactively. Otherwise, echo the command and tell the user to run
+      // it themselves.
       $package = $this->composer
         ->getRepositoryManager()
         ->getLocalRepository()
@@ -121,7 +121,7 @@ class SubprofileMigrationCommand {
         $this->io->write(<<<END
 Drupal Console does not appear to be installed. Install it and run the following command to generate a Lightning subprofile:
 
-/path/to/drupal/console/$command
+/path/to/drupal-console $command
 END
         );
       }
