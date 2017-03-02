@@ -37,7 +37,7 @@ class SubProfileCommand extends Command {
   /**
    * The profile generator.
    *
-   * @var Generator
+   * @var \Drupal\lightning\Generator\SubProfileGenerator
    */
   protected $generator;
 
@@ -61,6 +61,20 @@ class SubProfileCommand extends Command {
    * @var string
    */
   protected $appRoot;
+
+  /**
+   * Modules to include in the sub-profile.
+   *
+   * @var string[]
+   */
+  protected $include = [];
+
+  /**
+   * Modules to exclude from the sub-profile.
+   *
+   * @var string[]
+   */
+  protected $exclude = [];
 
   /**
    * SubProfileCommand constructor.
@@ -149,25 +163,23 @@ class SubProfileCommand extends Command {
    */
   protected function initialize(InputInterface $input, OutputInterface $output) {
     parent::initialize($input, $output);
+    $options = $input->getOptions();
 
-    $name = $input->getOption('name');
-    if ($name) {
-      $this->validator->validateModuleName($name);
+    if ($options['name']) {
+      $this->validator->validateModuleName($options['name']);
     }
-
-    $machine_name = $input->getOption('machine-name');
-    if ($machine_name) {
-      $this->validator->validateMachineName($machine_name);
+    if ($options['machine-name']) {
+      $this->validator->validateMachineName($options['machine-name']);
     }
-
-    // Process and validate the list of excluded modules.
-    $exclude = $this->toArray($input->getOption('exclude'));
-    if ($exclude) {
+    if ($options['include']) {
+      $this->include = $this->toArray($options['include']);
+    }
+    if ($options['exclude']) {
       // Only Lightning components can be excluded. This prevents wily users
       // from excluding modules that Lightning needs.
-      $this->validateExcludedModules($exclude);
+      $this->exclude = $this->toArray($options['exclude']);
+      $this->validateExcludedModules($this->exclude);
     }
-    $input->setOption('exclude', $exclude);
   }
 
   /**
@@ -175,10 +187,11 @@ class SubProfileCommand extends Command {
    */
   protected function interact(InputInterface $input, OutputInterface $output) {
     $io = new DrupalStyle($input, $output);
+    $options = $input->getOptions();
 
     // Get the profile name from the --name option, or ask the user if none was
     // specified.
-    $profile = $input->getOption('name') ?: $io->ask(
+    $profile = $options['name'] ?: $io->ask(
       $this->trans('commands.generate.profile.questions.profile'),
       NULL,
       [$this->validator, 'validateModuleName']
@@ -187,7 +200,7 @@ class SubProfileCommand extends Command {
 
     // Get the machine name from the --machine-name option, or ask the user if
     // none was specified.
-    $machine_name = $input->getOption('machine-name') ?: $io->ask(
+    $machine_name = $options['machine-name'] ?: $io->ask(
       $this->trans('commands.generate.profile.questions.machine-name'),
       $this->stringConverter->createMachineName($profile),
       [$this->validator, 'validateMachineName']
@@ -196,7 +209,7 @@ class SubProfileCommand extends Command {
 
     // Get the description from the --description option, or ask the user if
     // none was specified.
-    $description = $input->getOption('description') ?: $io->ask(
+    $description = $options['description'] ?: $io->ask(
       $this->trans('commands.generate.profile.questions.description'),
       NULL,
       'trim'
@@ -205,29 +218,25 @@ class SubProfileCommand extends Command {
 
     // Get any included modules from the --include option, or ask the user if
     // none were specified.
-    $include = $input->getOption('include');
-    if (empty($include)) {
-      $include .= $io->ask(
+    if (empty($this->include)) {
+      $include = $io->ask(
         $this->trans('commands.lightning.subprofile.options.include'),
         NULL,
         'trim'
       );
+      $this->include = $this->toArray($include);
     }
-    $input->setOption('include', $this->toArray($include));
-
-    $exclude = $input->getOption('exclude');
 
     foreach ($this->getMainComponentInfo() as $component => $info) {
-      // If the component has been excluded, exclude its sub-components as well.
-      if (in_array($component, $exclude)) {
-        $exclude = array_merge($exclude, [$component], (array) @$info['components']);
+      // If the component is excluded, exclude its sub-components as well.
+      if (in_array($component, $this->exclude)) {
+        $this->doExclude(@$info['components']);
       }
       else {
         $info['machine_name'] = $component;
-        $exclude = array_merge($exclude, $this->excludeComponent($info, $io));
+        $this->confirmComponent($info, $io);
       }
     }
-    $input->setOption('exclude', $exclude);
   }
 
   /**
@@ -274,17 +283,14 @@ class SubProfileCommand extends Command {
   }
 
   /**
-   * Asks the user about excluding a Lightning component.
+   * Asks the user about including or excluding a Lightning component.
    *
    * @param array $info
    *   The parsed component info.
    * @param \Drupal\Console\Core\Style\DrupalStyle $io
    *   The I/O handler.
-   *
-   * @return string[]
-   *   The modules to exclude.
    */
-  protected function excludeComponent(array $info, DrupalStyle $io) {
+  protected function confirmComponent(array $info, DrupalStyle $io) {
     // Assume we will include the component if it's not experimental.
     $include = empty($info['experimental']);
 
@@ -304,35 +310,72 @@ class SubProfileCommand extends Command {
       $include = $io->confirm($question, $include);
     }
 
-    // If the user declined the component, return the component and all of its
-    // sub-components.
-    if (empty($include)) {
-      return array_merge((array) $info['name'], (array) @$info['components']);
+    if ($include) {
+      // Experimental components and their sub-components must be explicitly
+      // included.
+      if (isset($info['experimental'])) {
+        $this
+          ->doInclude($info['machine_name'])
+          ->doInclude(@$info['components']);
+      }
+      // Ask about excluding individual sub-components.
+      if (isset($info['components'])) {
+        $this->excludeSubComponents($info, $io);
+      }
     }
-    // Otherwise, ask about the individual sub-components.
-    elseif (isset($info['components'])) {
-      return $this->excludeSubComponents($info['components'], $info, $io);
-    }
-    // In all other cases, we're not excluding anything.
     else {
-      return [];
+      // Exclude the component and all of its sub-components.
+      $this
+        ->doExclude($info['machine_name'])
+        ->doExclude(@$info['components']);
     }
+  }
+
+  /**
+   * Adds a set of modules to the include list.
+   *
+   * @param string|string[] $modules
+   *   The module(s) to include.
+   *
+   * @return $this
+   */
+  protected function doInclude($modules) {
+    if ($modules) {
+      $modules = (array) $modules;
+      $this->exclude = array_diff($this->exclude, $modules);
+      $this->include = array_merge($this->include, $modules);
+    }
+    return $this;
+  }
+
+  /**
+   * Adds a set of modules to the exclude list.
+   *
+   * @param string|string[] $modules
+   *   The module(s) to exclude.
+   *
+   * @return $this
+   */
+  protected function doExclude($modules) {
+    if ($modules) {
+      $modules = (array) $modules;
+      $this->exclude = array_merge($this->exclude, $modules);
+      $this->include = array_diff($this->include, $modules);
+    }
+    return $this;
   }
 
   /**
    * Asks the user about excluding a set of Lightning sub-components.
    *
-   * @param string[] $sub_components
-   *   The sub-components to ask about.
    * @param array $parent
    *   The parent component info.
    * @param \Drupal\Console\Core\Style\DrupalStyle $io
    *   The I/O handler.
-   *
-   * @return string[]
-   *   The modules to exclude.
    */
-  protected function excludeSubComponents(array $sub_components, array $parent, DrupalStyle $io) {
+  protected function excludeSubComponents(array $parent, DrupalStyle $io) {
+    $sub_components = $parent['components'];
+
     // Alphabetize for easier skimming.
     sort($sub_components);
 
@@ -350,10 +393,17 @@ class SubProfileCommand extends Command {
       );
       $question->setMultiselect(TRUE);
 
-      return $io->askChoiceQuestion($question);
-    }
-    else {
-      return [];
+      /** @var array $modules */
+      $modules = $io->askChoiceQuestion($question);
+
+      // If the parent component is experimental, the sub-components will be
+      // in the explicit include list and we'll need to kick them out of it.
+      if (empty($parent['experimental'])) {
+        $this->doExclude($modules);
+      }
+      else {
+        $this->include = array_diff($this->include, $modules);
+      }
     }
   }
 
@@ -369,8 +419,8 @@ class SubProfileCommand extends Command {
         $input->getOption('machine-name'),
         $this->appRoot . '/profiles/custom',
         $input->getOption('description'),
-        $input->getOption('include'),
-        $input->getOption('exclude')
+        array_unique($this->include),
+        array_unique($this->exclude)
       );
     }
   }
