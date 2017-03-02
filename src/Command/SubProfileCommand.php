@@ -264,7 +264,7 @@ class SubProfileCommand extends Command {
    *   or sub-component.
    */
   public function validateExcludedModules(array $excluded_modules) {
-    $components = $this->getComponentInfo();
+    $components = $this->componentInfo->getAll();
 
     // Can't exclude Lightning Core.
     unset($components['lightning_core']);
@@ -291,30 +291,33 @@ class SubProfileCommand extends Command {
    *   The I/O handler.
    */
   protected function confirmComponent(array $info, DrupalStyle $io) {
-    // Assume we will include the component if it's not experimental.
-    $include = empty($info['experimental']);
+    $experimental = isset($info['experimental']);
 
-    // We don't ask about including Lightning Core, or this won't be much of a
-    // Lightning sub-profile.
-    if ($info['machine_name'] != 'lightning_core') {
+    // Include Lightning Core, or this won't be much of a sub-profile.
+    if ($info['machine_name'] == 'lightning_core') {
+      $include = TRUE;
+    }
+    else {
       $question = sprintf(
         $this->trans('commands.lightning.subprofile.questions.include-component'),
         $info['name']
       );
-      if (isset($info['experimental'])) {
+      if ($experimental) {
         $question .= sprintf(
           ' <fg=yellow>%s</>',
           $this->trans('commands.lightning.subprofile.experimental')
         );
       }
-      $include = $io->confirm($question, $include);
+      // Assume that they want all non-experimental components.
+      $include = $io->confirm($question, !$experimental);
     }
 
     if ($include) {
       $this->handleInclude($info, $io);
     }
-    // If the component is not experimental, exclude it and its sub-components.
-    elseif (empty($info['experimental'])) {
+    // Explicitly exclude the component if it's not experimental, or it will be
+    // inherited from Lightning.
+    elseif (!$experimental) {
       $this->doExclude($info['machine_name']);
       $this->doExclude(@$info['components']);
     }
@@ -331,8 +334,7 @@ class SubProfileCommand extends Command {
   protected function handleInclude(array $info, DrupalStyle $io) {
     $is_experimental = isset($info['experimental']);
 
-    // Experimental components and their sub-components must be explicitly
-    // included.
+    // Experimental components and sub-components must be explicitly included.
     if ($is_experimental) {
       $this->doInclude($info['machine_name']);
     }
@@ -436,37 +438,13 @@ class SubProfileCommand extends Command {
   }
 
   /**
-   * Returns info for all Lightning components.
-   *
-   * @return array[]
-   *   Parsed info for all Lightning components, including sub-components.
-   */
-  protected function getComponentInfo() {
-    $not_hidden = function (array $info) {
-      return empty($info['hidden']);
-    };
-
-    $component_info = array_filter($this->componentInfo->getAll(), $not_hidden);
-
-    // Ensure that sub-components know their parent.
-    foreach ($component_info as $component => $info) {
-      foreach ((array) @$info['components'] as $child) {
-        $component_info[$child]['parent'] = $component;
-      }
-    }
-    return $component_info;
-  }
-
-  /**
    * Returns info for top-level components.
    *
    * @return array[]
    *   Parsed info for all top-level Lightning components.
    */
   protected function getMainComponentInfo() {
-    $main_components = array_filter($this->getComponentInfo(), function (array $info) {
-      return empty($info['parent']);
-    });
+    $main_components = $this->componentInfo->getMainComponents();
 
     // Couldn't figure out how to sort the components with a uasort() function.
     // Went with the quick and dirty way instead. Don't judge me!
