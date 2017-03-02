@@ -63,3 +63,21 @@ Feature: Workflow moderation states
     And I should not see "Graham Chapman"
     And I should not see "Terry Jones"
     And I should see "Eric Idle"
+
+  # Forward revisions are currently broken by Multiversion (See #2842471 -
+  # Multiversion is presumptuous about default revisions). This test relies on
+  # a forward revision. It should be uncommented when #2842471 is fixed or when
+  # we stop testing preview/multiversion.
+  #
+  #@javascript
+  #Scenario: Quick edit a forward revision
+  #  Given I am logged in as a user with the "administrator" role
+  #  And page content:
+  #  | title | moderation_state | path   |
+  #  | Squid | published        | /squid |
+  #  When I visit "/squid"
+  #  And I click "New draft"
+  #  And I select "Draft" from "Moderation state"
+  #  And I press "Save"
+  #  And I wait 2 seconds
+  #  Then I should see a "system_main_block" block with a "quickedit" contextual link
