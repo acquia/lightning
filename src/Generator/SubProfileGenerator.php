@@ -3,75 +3,69 @@
 namespace Drupal\lightning\Generator;
 
 use Drupal\Console\Core\Generator\Generator;
+use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * Generates a Lightning-subprofile.
+ */
 class SubProfileGenerator extends Generator {
 
   /**
    * {@inheritdoc}
    */
-  public function generate(
-    $profile,
-    $machine_name,
-    $profile_path,
-    $description,
-    $dependencies,
-    $excluded_dependencies
-  ) {
-    $dir = $profile_path . '/' . $machine_name;
+  public function generate($name, $machine_name, $profile_path, $description, array $dependencies, array $excluded_dependencies) {
+    $destination = $profile_path . '/' . $machine_name;
 
-    if (file_exists($dir)) {
-      if (!is_dir($dir)) {
-        throw new \RuntimeException(
-          sprintf(
-            'Unable to generate the subprofile as the target directory "%s" exists but is a file.',
-            realpath($dir)
-          )
-        );
+    // If the destination path already exists, realpath() will return something
+    // truthy. Which means we need to look a little closer...
+    $dir = realpath($destination);
+    if ($dir) {
+      if (is_dir($dir)) {
+        if (scandir($dir) != ['.', '..']) {
+          throw new \RuntimeException(
+            sprintf('Unable to generate the profile as the target directory "%s" is not empty.', $dir)
+          );
+        }
+        if (!is_writable($dir)) {
+          throw new \RuntimeException(
+            sprintf('Unable to generate the profile as the target directory "%s" is not writable.', $dir)
+          );
+        }
       }
-      $files = scandir($dir);
-      if ($files != ['.', '..']) {
+      else {
         throw new \RuntimeException(
-          sprintf(
-            'Unable to generate the subprofile as the target directory "%s" is not empty.',
-            realpath($dir)
-          )
-        );
-      }
-      if (!is_writable($dir)) {
-        throw new \RuntimeException(
-          sprintf(
-            'Unable to generate the subprofile as the target directory "%s" is not writable.',
-            realpath($dir)
-          )
+          sprintf('Unable to generate the profile as the target directory "%s" exists but is a file.', $dir)
         );
       }
     }
+    else {
+      // Use the Filesystem component to create the destination recursively.
+      (new Filesystem)->mkdir($destination);
+
+      // Recurse to do the entire validation dance again.
+      $this->generate(
+        $name,
+        $machine_name,
+        $profile_path,
+        $description,
+        $dependencies,
+        $excluded_dependencies
+      );
+    }
 
     $parameters = [
-      'profile' => $profile,
+      'profile' => $name,
       'machine_name' => $machine_name,
-      'type' => 'profile',
       'description' => $description,
       'dependencies' => $dependencies,
-      'excluded_dependencies' => $excluded_dependencies
+      'excluded_dependencies' => $excluded_dependencies,
     ];
 
-    $this->renderFile(
-      'profile/info.yml.twig',
-      $dir . '/' . $machine_name . '.info.yml',
-      $parameters
-    );
+    $prefix = "$dir/$machine_name";
 
-    $this->renderFile(
-      'profile/profile.twig',
-      $dir . '/' . $machine_name . '.profile',
-      $parameters
-    );
-
-    $this->renderFile(
-      'profile/install.twig',
-      $dir . '/' . $machine_name . '.install',
-      $parameters
-    );
+    $this->renderFile('profile/info.yml.twig', "$prefix.info.yml", $parameters);
+    $this->renderFile('profile/profile.twig', "$prefix.profile", $parameters);
+    $this->renderFile('profile/install.twig', "$prefix.install", $parameters);
   }
+
 }

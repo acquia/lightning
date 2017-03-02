@@ -6,9 +6,9 @@ description: '{{ description }}'
 core: '8.x'
 {% if dependencies %}
 dependencies:
-    {% for dependency in dependencies %}
-  - {{ dependency }}
-    {% endfor %}
+{% for module in dependencies %}
+  - {{ module }}
+{% endfor %}
 {% endif %}
 
 themes:
@@ -19,7 +19,7 @@ base profile:
   name: lightning
 {% if excluded_dependencies %}
   excluded_dependencies:
-    {% for excluded_dependency in excluded_dependencies %}
-    - {{ excluded_dependency }}
-    {% endfor %}
+{% for module in excluded_dependencies %}
+    - {{ module }}
+{% endfor %}
 {% endif %}

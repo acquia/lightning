@@ -4,6 +4,7 @@ namespace Drupal\lightning\Command;
 
 use Drupal\Console\Command\Shared\ConfirmationTrait;
 use Drupal\Console\Core\Command\Shared\CommandTrait;
+use Drupal\Console\Core\Generator\Generator;
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Console\Core\Utils\StringConverter;
 use Drupal\Console\Utils\TranslatorManager;
@@ -11,7 +12,6 @@ use Drupal\Console\Utils\Validator;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\lightning\ComponentInfo;
 use Drupal\lightning_core\Element;
-use Drupal\lightning\Generator\SubProfileGenerator;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,7 +37,7 @@ class SubProfileCommand extends Command {
   /**
    * The profile generator.
    *
-   * @var SubProfileGenerator
+   * @var Generator
    */
   protected $generator;
 
@@ -65,7 +65,7 @@ class SubProfileCommand extends Command {
   /**
    * SubProfileCommand constructor.
    *
-   * @param SubProfileGenerator $profile_generator
+   * @param Generator $profile_generator
    *   The profile generator.
    * @param StringConverter $string_converter
    *   The string converter.
@@ -78,7 +78,7 @@ class SubProfileCommand extends Command {
    * @param TranslatorManager $translator
    *   (optional) The translator manager.
    */
-  public function __construct(SubProfileGenerator $profile_generator, StringConverter $string_converter, Validator $validator, $app_root, InfoParserInterface $info_parser, TranslatorManager $translator = NULL) {
+  public function __construct(Generator $profile_generator, StringConverter $string_converter, Validator $validator, $app_root, InfoParserInterface $info_parser, TranslatorManager $translator = NULL) {
     parent::__construct('lightning:subprofile');
     $this->componentInfo = new ComponentInfo($app_root, $info_parser);
 
@@ -363,31 +363,16 @@ class SubProfileCommand extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $io = new DrupalStyle($input, $output);
 
-    if (!$this->confirmGeneration($io)) {
-      return;
+    if ($this->confirmGeneration($io)) {
+      $this->generator->generate(
+        $input->getOption('name'),
+        $input->getOption('machine-name'),
+        $this->appRoot . '/profiles/custom',
+        $input->getOption('description'),
+        $input->getOption('include'),
+        $input->getOption('exclude')
+      );
     }
-
-    $profile = $this->validator->validateModuleName($input->getOption('name'));
-    $machine_name = $this->validator->validateMachineName($input->getOption('machine-name'));
-    $description = $input->getOption('description');
-    $profile_path = $this->appRoot . '/profiles/custom';
-    $include = $input->getOption('include');
-
-    // Check if all module dependencies are available.
-    $dependencies = $this->validator->validateModuleDependencies($include);
-    if ($dependencies) {
-      // @todo ProfileCommand::checkDependencies is private so we aren't
-      // actually checking to see if they are present.
-      $include = $dependencies['success'];
-    }
-    $this->generator->generate(
-      $profile,
-      $machine_name,
-      $profile_path,
-      $description,
-      $include,
-      $input->getOption('exclude')
-    );
   }
 
   /**
