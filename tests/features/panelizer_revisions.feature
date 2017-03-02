@@ -17,6 +17,11 @@ Feature: Showing the Panels IPE interface on the latest content revision only
     And I should not see a "#panels-ipe-content" element
     And I unpanelize the page node type
 
+  # Forward revisions are currently broken by Multiversion (See #2842471 -
+  # Multiversion is presumptuous about default revisions). This test relies on
+  # a forward revision. It should be uncommented when #2842471 is fixed or when
+  # we stop testing preview/multiversion.
+  #
   #@javascript @errors
   #Scenario: Reverting a unpublished revision of a panelized page to the default layout preserves the latest default revision
   #  Given I am logged in as a user with the administrator role
