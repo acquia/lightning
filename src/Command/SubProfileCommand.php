@@ -311,23 +311,43 @@ class SubProfileCommand extends Command {
     }
 
     if ($include) {
-      // Experimental components and their sub-components must be explicitly
-      // included.
-      if (isset($info['experimental'])) {
-        $this
-          ->doInclude($info['machine_name'])
-          ->doInclude(@$info['components']);
-      }
-      // Ask about excluding individual sub-components.
-      if (isset($info['components'])) {
-        $this->excludeSubComponents($info, $io);
-      }
+      $this->handleInclude($info, $io);
     }
-    else {
-      // Exclude the component and all of its sub-components.
-      $this
-        ->doExclude($info['machine_name'])
-        ->doExclude(@$info['components']);
+    // If the component is not experimental, exclude it and its sub-components.
+    elseif (empty($info['experimental'])) {
+      $this->doExclude($info['machine_name']);
+      $this->doExclude(@$info['components']);
+    }
+  }
+
+  /**
+   * Includes a Lightning component in the sub-profile.
+   *
+   * @param array $info
+   *   The parsed component info.
+   * @param \Drupal\Console\Core\Style\DrupalStyle $io
+   *   The I/O handler.
+   */
+  protected function handleInclude(array $info, DrupalStyle $io) {
+    $is_experimental = isset($info['experimental']);
+
+    // Experimental components and their sub-components must be explicitly
+    // included.
+    if ($is_experimental) {
+      $this->doInclude($info['machine_name']);
+    }
+
+    // If there are sub-components, ask about excluding them individually.
+    if (isset($info['components'])) {
+      $exclude = $this->excludeSubComponents($info, $io);
+
+      if ($is_experimental) {
+        // Explicitly include only the sub-components which were not excluded.
+        $this->doInclude(array_diff($info['components'], $exclude));
+      }
+      else {
+        $this->doExclude($exclude);
+      }
     }
   }
 
@@ -336,8 +356,6 @@ class SubProfileCommand extends Command {
    *
    * @param string|string[] $modules
    *   The module(s) to include.
-   *
-   * @return $this
    */
   protected function doInclude($modules) {
     if ($modules) {
@@ -345,7 +363,6 @@ class SubProfileCommand extends Command {
       $this->exclude = array_diff($this->exclude, $modules);
       $this->include = array_merge($this->include, $modules);
     }
-    return $this;
   }
 
   /**
@@ -353,8 +370,6 @@ class SubProfileCommand extends Command {
    *
    * @param string|string[] $modules
    *   The module(s) to exclude.
-   *
-   * @return $this
    */
   protected function doExclude($modules) {
     if ($modules) {
@@ -362,7 +377,6 @@ class SubProfileCommand extends Command {
       $this->exclude = array_merge($this->exclude, $modules);
       $this->include = array_diff($this->include, $modules);
     }
-    return $this;
   }
 
   /**
@@ -372,6 +386,9 @@ class SubProfileCommand extends Command {
    *   The parent component info.
    * @param \Drupal\Console\Core\Style\DrupalStyle $io
    *   The I/O handler.
+   *
+   * @return string[]
+   *   The sub-components to exclude.
    */
   protected function excludeSubComponents(array $parent, DrupalStyle $io) {
     $sub_components = $parent['components'];
@@ -393,17 +410,10 @@ class SubProfileCommand extends Command {
       );
       $question->setMultiselect(TRUE);
 
-      /** @var array $modules */
-      $modules = $io->askChoiceQuestion($question);
-
-      // If the parent component is experimental, the sub-components will be
-      // in the explicit include list and we'll need to kick them out of it.
-      if (empty($parent['experimental'])) {
-        $this->doExclude($modules);
-      }
-      else {
-        $this->include = array_diff($this->include, $modules);
-      }
+      return $io->askChoiceQuestion($question);
+    }
+    else {
+      return [];
     }
   }
 
