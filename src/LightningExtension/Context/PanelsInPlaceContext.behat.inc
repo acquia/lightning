@@ -220,4 +220,17 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
     $this->minkContext->iWaitForAjaxToFinish();
   }
 
+  /**
+   * Reverts a panelized layout to its default state.
+   *
+   * @When I revert the layout
+   */
+  public function revertLayout() {
+    $this->assertSession()
+      ->elementExists('named', ['link', 'Revert to default'], $this->assertTray())
+      ->click();
+
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
 }

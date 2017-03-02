@@ -1,0 +1,20 @@
+<?php
+
+/**
+ * @file
+ * Contains internal functionality for use during functional testing.
+ */
+
+use Drupal\Core\Entity\ContentEntityInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_test_media_insert(ContentEntityInterface $entity) {
+  $state = \Drupal::state();
+
+  $expendables = $state->get('lightning_test', []);
+  $entity_type = $entity->getEntityTypeId();
+  $expendables[$entity_type][] = $entity->id();
+  $state->set('lightning_test', $expendables);
+}

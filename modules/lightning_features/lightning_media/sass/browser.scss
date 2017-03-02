@@ -1,3 +1,5 @@
+@import "compass/css3";
+
 nav.eb-tabs {
   ul {
     border-bottom-color: #d0d0d0;
@@ -36,22 +38,60 @@ nav.eb-tabs {
     margin: 2em 0;
   }
 
+  .views-row {
+    margin-bottom: 1em;
+    @include display-flex();
+    @include align-items(flex-start);
+  }
+
   .views-col {
-    height: 100%;
-    &.selected {
-      img {
-        box-shadow: 0 0 20px lime;
-      }
+    margin: 0 0 0 1em;
+    position: relative;
+    border: 10px solid #ebebeb;
+    @include transition(border-color .6s);
+
+    html[dir = "rtl"] & {
+      margin: 0 1em 0 0;
     }
-    .views-field {
-      max-height: 240px;
-      padding: 2px;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &.disabled {
+      @include opacity(.3);
+      @include filter(saturate(10%));
+    }
+
+    &.selected {
+      border-color: #ed5; // Highlight color from Seven.
+
+      &::before {
+        content: "";
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        background: transparent url(../images/selected.svg) no-repeat center;
+        @include animation(selected 1.5s 1);
+        @include opacity(0);
+      }
     }
 
     img {
-      height: 100%;
-      object-fit: cover;
-      width: 100%
+      display: block;
+      height: auto;
+      width: 100%;
     }
+  }
+}
+
+@include keyframes(selected) {
+  0% {
+    @include opacity(1);
+    background-size: 70%;
+  }
+  100% {
+    @include opacity(0);
+    background-size: 55%;
   }
 }

@@ -9,26 +9,9 @@ namespace Drupal\lightning_media;
  * appropriate for handling an input value. The input value can be of any type,
  * and the resolver needs to figure out which media bundle -- singular! -- is
  * best suited to handle that input.
+ *
+ * @deprecated in Lightning 2.0.4 and will be removed in Lightning 3.x. Media
+ * type plugins should implement InputMatchInterface directly instead.
  */
 interface BundleResolverInterface {
-
-  /**
-   * Attempts to determine the media bundle applicable for an input value.
-   *
-   * @param mixed $input
-   *   The input value.
-   *
-   * @return \Drupal\media_entity\MediaBundleInterface|false
-   *   The applicable media bundle, or false if there isn't one.
-   */
-  public function getBundle($input);
-
-  /**
-   * Returns all possible bundles for the field type(s) this plugin supports.
-   *
-   * @return MediaBundleInterface[]
-   *   Applicable media bundles, keyed by ID.
-   */
-  public function getPossibleBundles();
-
 }
