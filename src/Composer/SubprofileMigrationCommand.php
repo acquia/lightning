@@ -5,6 +5,7 @@ namespace Acquia\Lightning\Composer;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Script\Event;
+use Composer\Util\ProcessExecutor;
 use Drupal\Component\Serialization\Yaml;
 
 /**
@@ -115,7 +116,7 @@ class SubprofileMigrationCommand {
 
       if ($package) {
         $command = $this->composer->getConfig()->get('bin-dir') . '/drupal ' . $command;
-        $this->io->write($command);
+        (new ProcessExecutor($this->io))->execute($command);
       }
       else {
         $this->io->write(<<<END
