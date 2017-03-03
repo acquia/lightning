@@ -1,6 +1,10 @@
 #!/usr/bin/env php
 <?php
 
+if (empty($argv[1])) {
+  die("You must specify a lightning.extend.yml file. For example: lightning-subprofile ./docroot/sites/example.com/lightning.extend.yml\n");
+}
+
 // Get the full, absolute path to the extender file as a way to validate that
 // it exists.
 $extender = realpath($argv[1]);
@@ -61,5 +65,6 @@ else {
 Drupal Console does not appear to be installed. Install it and run the following command to generate a Lightning subprofile:
 
 /path/to/drupal-console $command
+
 END;
 }
