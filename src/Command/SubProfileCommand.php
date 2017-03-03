@@ -31,14 +31,14 @@ class SubProfileCommand extends Command {
   /**
    * The Lightning component discovery helper.
    *
-   * @var ComponentDiscovery
+   * @var \Drupal\lightning\ComponentDiscovery
    */
   protected $componentDiscovery;
 
   /**
    * The info file parser.
    *
-   * @var InfoParserInterface
+   * @var \Drupal\Core\Extension\InfoParserInterface
    */
   protected $infoParser;
 
@@ -52,14 +52,14 @@ class SubProfileCommand extends Command {
   /**
    * The string converter.
    *
-   * @var StringConverter
+   * @var \Drupal\Console\Core\Utils\StringConverter
    */
   protected $stringConverter;
 
   /**
    * The validation service.
    *
-   * @var Validator
+   * @var \Drupal\Console\Utils\Validator
    */
   protected $validator;
 
@@ -94,17 +94,17 @@ class SubProfileCommand extends Command {
   /**
    * SubProfileCommand constructor.
    *
-   * @param Generator $profile_generator
+   * @param \Drupal\Console\Core\Generator\Generator $profile_generator
    *   The profile generator.
-   * @param StringConverter $string_converter
+   * @param \Drupal\Console\Core\Utils\StringConverter $string_converter
    *   The string converter.
-   * @param Validator $validator
+   * @param \Drupal\Console\Utils\Validator $validator
    *   The validation service.
    * @param string $app_root
    *   The Drupal application root.
-   * @param InfoParserInterface $info_parser
+   * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
    *   The info file parser.
-   * @param TranslatorManager $translator
+   * @param \Drupal\Console\Utils\TranslatorManager $translator
    *   (optional) The translator manager.
    */
   public function __construct(Generator $profile_generator, StringConverter $string_converter, Validator $validator, $app_root, InfoParserInterface $info_parser, TranslatorManager $translator = NULL) {
@@ -289,7 +289,7 @@ class SubProfileCommand extends Command {
    *   or sub-component.
    */
   public function validateExcludedModules(array $excluded_modules) {
-    $components = $this->getMainComponentInfo();
+    $components = $this->componentDiscovery->getAll();
 
     // Can't exclude Lightning Core.
     unset($components['lightning_core']);
