@@ -9,8 +9,9 @@ use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Console\Core\Utils\StringConverter;
 use Drupal\Console\Utils\TranslatorManager;
 use Drupal\Console\Utils\Validator;
+use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\InfoParserInterface;
-use Drupal\lightning\ComponentInfo;
+use Drupal\lightning\ComponentDiscovery;
 use Drupal\lightning_core\Element;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,11 +29,18 @@ class SubProfileCommand extends Command {
   use ConfirmationTrait;
 
   /**
-   * The Lightning component information gatherer.
+   * The Lightning component discovery helper.
    *
-   * @var ComponentInfo
+   * @var \Drupal\lightning\ComponentDiscovery
    */
-  protected $componentInfo;
+  protected $componentDiscovery;
+
+  /**
+   * The info file parser.
+   *
+   * @var \Drupal\Core\Extension\InfoParserInterface
+   */
+  protected $infoParser;
 
   /**
    * The profile generator.
@@ -44,14 +52,14 @@ class SubProfileCommand extends Command {
   /**
    * The string converter.
    *
-   * @var StringConverter
+   * @var \Drupal\Console\Core\Utils\StringConverter
    */
   protected $stringConverter;
 
   /**
    * The validation service.
    *
-   * @var Validator
+   * @var \Drupal\Console\Utils\Validator
    */
   protected $validator;
 
@@ -77,24 +85,33 @@ class SubProfileCommand extends Command {
   protected $exclude = [];
 
   /**
+   * Cache of parsed info for Lightning's main components.
+   *
+   * @var array[]
+   */
+  protected $componentInfo;
+
+  /**
    * SubProfileCommand constructor.
    *
-   * @param Generator $profile_generator
+   * @param \Drupal\Console\Core\Generator\Generator $profile_generator
    *   The profile generator.
-   * @param StringConverter $string_converter
+   * @param \Drupal\Console\Core\Utils\StringConverter $string_converter
    *   The string converter.
-   * @param Validator $validator
+   * @param \Drupal\Console\Utils\Validator $validator
    *   The validation service.
    * @param string $app_root
    *   The Drupal application root.
-   * @param InfoParserInterface $info_parser
+   * @param \Drupal\Core\Extension\InfoParserInterface $info_parser
    *   The info file parser.
-   * @param TranslatorManager $translator
+   * @param \Drupal\Console\Utils\TranslatorManager $translator
    *   (optional) The translator manager.
    */
   public function __construct(Generator $profile_generator, StringConverter $string_converter, Validator $validator, $app_root, InfoParserInterface $info_parser, TranslatorManager $translator = NULL) {
     parent::__construct('lightning:subprofile');
-    $this->componentInfo = new ComponentInfo($app_root, $info_parser);
+
+    $this->componentDiscovery = new ComponentDiscovery($app_root);
+    $this->infoParser = $info_parser;
 
     // The SkeletonDirs in the existing TwigRenderer contain directories that
     // contain files with the same names as our templates. TwigRenderer
@@ -179,6 +196,15 @@ class SubProfileCommand extends Command {
       // from excluding modules that Lightning needs.
       $this->exclude = $this->toArray($options['exclude']);
       $this->validateExcludedModules($this->exclude);
+
+      // Exclude the sub-components of any excluded components.
+      $excluded_components = array_intersect_key(
+        $this->getMainComponentInfo(),
+        array_flip($this->exclude)
+      );
+      foreach ($excluded_components as $info) {
+        $this->doExclude(@$info['components']);
+      }
     }
   }
 
@@ -227,15 +253,14 @@ class SubProfileCommand extends Command {
       $this->include = $this->toArray($include);
     }
 
-    foreach ($this->getMainComponentInfo() as $component => $info) {
-      // If the component is excluded, exclude its sub-components as well.
-      if (in_array($component, $this->exclude)) {
-        $this->doExclude(@$info['components']);
-      }
-      else {
-        $info['machine_name'] = $component;
-        $this->confirmComponent($info, $io);
-      }
+    // Ask the user about components that have not been excluded yet.
+    $available_components = array_diff_key(
+      $this->getMainComponentInfo(),
+      array_flip($this->exclude)
+    );
+    foreach ($available_components as $component => $info) {
+      $info['machine_name'] = $component;
+      $this->confirmComponent($info, $io);
     }
   }
 
@@ -264,7 +289,7 @@ class SubProfileCommand extends Command {
    *   or sub-component.
    */
   public function validateExcludedModules(array $excluded_modules) {
-    $components = $this->componentInfo->getAll();
+    $components = $this->componentDiscovery->getAll();
 
     // Can't exclude Lightning Core.
     unset($components['lightning_core']);
@@ -444,18 +469,28 @@ class SubProfileCommand extends Command {
    *   Parsed info for all top-level Lightning components.
    */
   protected function getMainComponentInfo() {
-    $main_components = $this->componentInfo->getMainComponents();
+    // Scanning for components and parsing their info is expensive, so cache it.
+    if ($this->componentInfo === NULL) {
+      $components = $this->componentDiscovery->getMainComponents();
 
-    // Couldn't figure out how to sort the components with a uasort() function.
-    // Went with the quick and dirty way instead. Don't judge me!
-    Element::order($main_components, [
-      'lightning_core',
-      'lightning_media',
-      'lightning_layout',
-      'lightning_workflow',
-      'lightning_preview',
-    ]);
-    return $main_components;
+      // Couldn't figure out how to sort the components with a uasort(). Went
+      // with the quick and dirty way instead. Don't judge me!
+      Element::order($components, [
+        'lightning_core',
+        'lightning_media',
+        'lightning_layout',
+        'lightning_workflow',
+        'lightning_preview',
+      ]);
+
+      $this->componentInfo = array_map(
+        function (Extension $component) {
+          return $this->infoParser->parse($component->getPathname());
+        },
+        $components
+      );
+    }
+    return $this->componentInfo;
   }
 
 }
