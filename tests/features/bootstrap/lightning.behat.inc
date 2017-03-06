@@ -325,6 +325,23 @@ class LightningSubContext extends DrupalSubContextBase {
   }
 
   /**
+   *  Dumps the HTML directly to stdout and a file.
+   *
+   * @When I view the HTML
+   */
+  public function viewTheHtml() {
+
+    $html_data = $this->getSession()->getDriver()->getContent();
+    echo $html_data;
+    $file_and_path = '/tmp/behat_page.html';
+    file_put_contents($file_and_path, $html_data);
+
+    if (PHP_OS === "Darwin" && PHP_SAPI === "cli") {
+      exec('open -a "Safari.app" ' . $file_and_path);
+    };
+  }
+
+  /**
    * Fills in an autocompleting entity reference field.
    *
    * @param string $entity_type
@@ -490,8 +507,10 @@ class LightningSubContext extends DrupalSubContextBase {
     $this->minkContext->iWaitForAjaxToFinish();
 
     list ($date, $time) = explode(' ', $when, 2);
-    $this->minkContext->fillField('scheduled_update[form][inline_entity_form][update_timestamp][0][value][date]', $date);
-    $this->minkContext->fillField('scheduled_update[form][inline_entity_form][update_timestamp][0][value][time]', $time);
+
+    $this->minkContext->getSession()->executeScript('document.querySelector("[data-drupal-selector=\"edit-scheduled-update-form-inline-entity-form-update-timestamp-0-value-date\"]").value="' . $date . '"');
+    $this->minkContext->getSession()->executeScript('document.querySelector("[data-drupal-selector=\"edit-scheduled-update-form-inline-entity-form-update-timestamp-0-value-time\"]").value="' . $time . '"');
+
     $this->minkContext->selectOption('scheduled_update[form][inline_entity_form][field_moderation_state]', 'published');
 
     $this->minkContext->pressButton('Create scheduled update');
