@@ -5,7 +5,7 @@ Feature: Scheduled updates to content
   Scenario: Automatically generating informative labels for inline scheduled updates
     Given I am logged in as a user with the administrator role
     When I visit "/node/add/page"
-    And I schedule the node to be published at "09-19-1984 08:57:00AM"
+    And I schedule the node to be published at "1984-09-19 08:57:00"
     Then I should see "Move to Published state on September 19, 1984 at 8:57:00 AM"
 
   @javascript
@@ -17,7 +17,7 @@ Feature: Scheduled updates to content
     When I visit "/foobar"
     And I click "Edit draft"
     And I select "Needs Review" from "Moderation state"
-    And I schedule the node to be published at "09-19-1984 08:57:00AM"
+    And I schedule the node to be published at "1984-09-19 08:57:00"
     And I press "Save"
     And I visit "/admin/config/workflow/schedule-updates/run"
     And I press "Run Updates"

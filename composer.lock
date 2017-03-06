@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f69f0981480855e6dc9b2008430f5851",
-    "content-hash": "d41364da03278709479c87ce2f873aeb",
+    "hash": "0f8a38af85e7512114b43fa3199415b1",
+    "content-hash": "b7eb6157c6bcef459847b0851b8b724d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2691,7 +2691,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.0-beta5",
-                    "datestamp": "1488057783"
+                    "datestamp": "1475335394"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3423,20 +3423,23 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.8.0",
+            "version": "v4.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2"
+                "reference": "a1c09b09e398687deeb8e309a6305def4b43439b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
-                "reference": "d0c392f77d2f2a3dcf7fcb79e2a1e2b8804e75b2",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/a1c09b09e398687deeb8e309a6305def4b43439b",
+                "reference": "a1c09b09e398687deeb8e309a6305def4b43439b",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.2"
+            },
+            "require-dev": {
+                "simpletest/simpletest": "^1.1"
             },
             "type": "library",
             "autoload": {
@@ -3463,7 +3466,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2016-07-16 12:58:58"
+            "time": "2017-01-13 12:31:37"
         },
         {
             "name": "graphp/algorithms",
@@ -7312,6 +7315,47 @@
             "time": "2015-06-15 20:19:33"
         },
         {
+            "name": "jakoch/phantomjs-installer",
+            "version": "1.9.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jakoch/phantomjs-installer.git",
+                "reference": "fd6459094404f698a4edb9609e5e8c55c6418824"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jakoch/phantomjs-installer/zipball/fd6459094404f698a4edb9609e5e8c55c6418824",
+                "reference": "fd6459094404f698a4edb9609e5e8c55c6418824",
+                "shasum": ""
+            },
+            "require": {
+                "ext-openssl": "*"
+            },
+            "type": "custom-installer",
+            "autoload": {
+                "psr-0": {
+                    "PhantomInstaller\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jens-André Koch",
+                    "email": "jakoch@web.de"
+                }
+            ],
+            "description": "A Composer package which installs the PhantomJS binary (Linux, Windows, Mac) into `/bin` of your project.",
+            "keywords": [
+                "binaries",
+                "headless",
+                "phantomjs"
+            ],
+            "time": "2014-12-05 17:57:27"
+        },
+        {
             "name": "jakub-onderka/php-console-color",
             "version": "0.1",
             "source": {
@@ -7454,6 +7498,64 @@
                 "phantomjs"
             ],
             "time": "2016-05-04 16:27:07"
+        },
+        {
+            "name": "jcalderonzumba/mink-phantomjs-driver",
+            "version": "v0.3.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jcalderonzumba/MinkPhantomJSDriver.git",
+                "reference": "008f43670e94acd39273d15add1e7348eb23848d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jcalderonzumba/MinkPhantomJSDriver/zipball/008f43670e94acd39273d15add1e7348eb23848d",
+                "reference": "008f43670e94acd39273d15add1e7348eb23848d",
+                "shasum": ""
+            },
+            "require": {
+                "behat/mink": "~1.7",
+                "jcalderonzumba/gastonjs": "~1.0",
+                "php": ">=5.4",
+                "twig/twig": "~1.20|~2.0"
+            },
+            "require-dev": {
+                "mink/driver-testsuite": "dev-master",
+                "phpunit/phpunit": "~4.6"
+            },
+            "type": "mink-driver",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.4.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Zumba\\Mink\\Driver\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Juan Francisco Calderón Zumba",
+                    "email": "juanfcz@gmail.com",
+                    "homepage": "http://github.com/jcalderonzumba"
+                }
+            ],
+            "description": "PhantomJS driver for Mink framework",
+            "homepage": "http://mink.behat.org/",
+            "keywords": [
+                "ajax",
+                "browser",
+                "headless",
+                "javascript",
+                "phantomjs",
+                "testing"
+            ],
+            "time": "2016-12-01 10:57:30"
         },
         {
             "name": "mikey179/vfsStream",

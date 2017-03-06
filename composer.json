@@ -21,7 +21,9 @@
         "drupal/devel": "^1.0",
         "squizlabs/php_codesniffer": "2.*",
         "se/selenium-server-standalone": "^2.53",
-        "drupal/console": "^1.0"
+        "drupal/console": "^1.0",
+        "jakoch/phantomjs-installer": "1.9.8",
+        "jcalderonzumba/mink-phantomjs-driver": "~0.3.1"
     },
     "bin": [
       "lightning-subprofile"
@@ -37,6 +39,7 @@
     ],
     "scripts": {
         "post-install-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS",
             "@composer drupal-scaffold",
             "./bin/phing push"
         ],
