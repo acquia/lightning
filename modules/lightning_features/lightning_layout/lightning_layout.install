@@ -142,6 +142,15 @@ function lightning_layout_update_8007() {
   \Drupal::service('module_installer')->install(['entity_block']);
 }
 
+
+/**
+ * Installs the Panelizer Quick Edit module, which allows fields placed with IPE
+ * to be edited with Quick Edit.
+ */
+function lightning_layout_update_8008() {
+  \Drupal::service('module_installer')->install(['panelizer_quickedit']);
+}
+
 /**
  * Returns the raw values for a bundled view display.
  *

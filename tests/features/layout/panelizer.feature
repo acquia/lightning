@@ -41,6 +41,19 @@ Feature: Panelizer
     Then I should see a "block_content:test--here-be-dragons" block with a "quickedit" contextual link
 
   @javascript
+  Scenario: Quick-editing fields placed in an IPE layout
+    Given I am logged in as a user with the administrator role
+    And landing_page content:
+      | title  | path    | moderation_state | body                                 |
+      | Foobar | /zebras | draft            | How quickly deft jumping zebras vex. |
+    When I visit "/zebras"
+    And I place the "entity_field:node:body" block from the "Content" category
+    And I save the layout
+    And I reload the page
+    And I wait 5 seconds
+    Then I should see a "system_main_block" block with a "quickedit" contextual link
+
+  @javascript
   Scenario: Editing layouts does not affect other layouts if the user has not saved the edited layout as default
     Given I am logged in as a user with the administrator role
     And landing_page content:
