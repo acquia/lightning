@@ -1,0 +1,36 @@
+# This file is used by Acquia Pipelines continuous integration. It builds
+# Lightning and runs its functional tests. Upon success, an artifact is deployed
+# to the cloudlightning201 (01cc15c0-a003-40bf-aed9-510f6874cad1) sub on Acquia
+# cloud.
+version: 1.0.0
+services:
+  - mysql
+
+events:
+  build:
+    steps:
+      - setup:
+          type: script
+          script:
+            - set -x
+            - composer self-update
+            - composer validate --no-check-all --ansi
+            - composer install
+      - install:
+          type: script
+          script:
+            - set -x
+            - mysql -u root -proot -e 'CREATE DATABASE drupal;'
+            - ./bin/phing install -Ddb.password=root -Ddb.database=drupal
+            # Add the Acquia cloud database snippet to the settings file.
+            - ./bin/phing cloud-db-snippet
+      - test:
+          type: script
+          script:
+            - set -x
+            - cd ./docroot
+            - ../bin/drush runserver --default-server=builtin 8080 &>/dev/null &
+            - ../bin/phantomjs --webdriver=4444 > /dev/null &
+            - sleep 10
+            - cd ./profiles/lightning
+            - ../../../bin/behat --stop-on-failure

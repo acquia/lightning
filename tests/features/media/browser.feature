@@ -29,6 +29,7 @@ Feature: An entity browser for media assets
       | tweet  | Code Wisdom 3 | https://twitter.com/CodeWisdom/status/826460810121773057 | 1      | 1                      |
     When I visit "/node/add/page"
     And I open the media browser
+    And I wait 5 seconds
     # There was a bug where AJAX requests would completely break the selection
     # behavior. So let's make an otherwise pointless AJAX request here to guard
     # against regressions...
