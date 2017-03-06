@@ -3,6 +3,7 @@
 namespace Drupal\lightning_layout\Form;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Controller\ControllerResolverInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
@@ -32,6 +33,13 @@ class SettingsForm extends ConfigFormBase {
   protected $entityTypeManager;
 
   /**
+   * The block plugin manager.
+   *
+   * @var \Drupal\Core\Block\BlockManagerInterface|\Drupal\Core\Block\BlockManager
+   */
+  protected $blockManager;
+
+  /**
    * The entity block deriver.
    *
    * @var \Drupal\entity_block\Plugin\Derivative\EntityBlock
@@ -47,16 +55,19 @@ class SettingsForm extends ConfigFormBase {
    *   The controller resolver.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
+   *   The block plugin manager.
    * @param \Drupal\Core\StringTranslation\TranslationInterface $translator
    *   The string translation service.
    * @param mixed $deriver
    *   (optional) The entity block deriver. If passed, must be an instance of
    *   \Drupal\entity_block\Plugin\Derivative\EntityBlock.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ControllerResolverInterface $controller_resolver, EntityTypeManagerInterface $entity_type_manager, TranslationInterface $translator, $deriver = NULL) {
+  public function __construct(ConfigFactoryInterface $config_factory, ControllerResolverInterface $controller_resolver, EntityTypeManagerInterface $entity_type_manager, BlockManagerInterface $block_manager, TranslationInterface $translator, $deriver = NULL) {
     parent::__construct($config_factory);
     $this->controllerResolver = $controller_resolver;
     $this->entityTypeManager = $entity_type_manager;
+    $this->blockManager = $block_manager;
     $this->stringTranslation = $translator;
     $this->deriver = $deriver;
   }
@@ -69,6 +80,7 @@ class SettingsForm extends ConfigFormBase {
       $container->get('config.factory'),
       $container->get('controller_resolver'),
       $container->get('entity_type.manager'),
+      $container->get('plugin.manager.block'),
       $container->get('string_translation'),
     ];
 
@@ -149,6 +161,8 @@ class SettingsForm extends ConfigFormBase {
     $this->config('lightning_layout.settings')
       ->set('entity_blocks', $value)
       ->save();
+
+    $this->blockManager->clearCachedDefinitions();
 
     parent::submitForm($form, $form_state);
   }
