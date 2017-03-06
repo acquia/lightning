@@ -64,7 +64,6 @@ class SubProfileGenerator extends Generator {
     $prefix = "$dir/$machine_name";
 
     $this->renderFile('profile/info.yml.twig', "$prefix.info.yml", $parameters);
-    $this->renderFile('profile/profile.twig', "$prefix.profile", $parameters);
     $this->renderFile('profile/install.twig', "$prefix.install", $parameters);
   }
 
