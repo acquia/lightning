@@ -1,0 +1,11 @@
+description: 'Generates a sub-profile of Lightning.'
+experimental: 'Beware, this component is experimental.'
+options:
+  include: 'Additional modules to include, separated by commas (e.g. context, rules, file_entity)'
+  exclude: 'Lightning components to exclude, separated by commas (e.g. lightning_workflow, lightning_media)'
+questions:
+  exclude-components: '%s has %d sub-component(s): %s. Do you want to exclude any of them?'
+  choose-excluded-components: 'Enter the sub-components you want to exclude:'
+  include-component: 'Do you want to include %s?'
+errors:
+  invalid-exclusions: 'The following modules cannot be excluded because they are required by Lightning: %s'
