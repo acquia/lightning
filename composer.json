@@ -37,13 +37,15 @@
         "post-install-cmd": [
             "PhantomInstaller\\Installer::installPhantomJS",
             "@composer drupal-scaffold",
+            "@composer lightning-scaffold",
             "./bin/phing push"
         ],
         "post-update-cmd": [
             "./bin/phing push",
             "./bin/phing package"
         ],
-        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+        "lightning-scaffold": "Acquia\\LightningScaffold\\Plugin::scaffold"
     },
     "extra": {
         "packagist.drupal-composer.org": {
@@ -151,7 +153,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Acquia\\LightningExtension\\": "src/LightningExtension"
+            "Acquia\\LightningExtension\\": "src/LightningExtension",
+            "Acquia\\LightningScaffold\\": "src/LightningScaffold"
         }
     }
 }
