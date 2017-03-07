@@ -46,6 +46,20 @@ function lightning_test_install() {
         'selection_mode' => 'selection_append',
       ],
     ])
+    ->setComponent('field_media_reference', [
+      'type' => 'entity_browser_entity_reference',
+      'settings' => [
+        'entity_browser' => 'media_browser',
+        'field_widget_display' => 'rendered_entity',
+        'field_widget_edit' => TRUE,
+        'field_widget_remove' => TRUE,
+        'selection_mode' => 'selection_append',
+        'field_widget_display_settings' => [
+          'view_mode' => 'embedded',
+        ],
+        'open' => TRUE,
+      ],
+    ])
     ->save();
 }
 
