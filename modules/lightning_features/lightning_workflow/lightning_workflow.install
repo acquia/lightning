@@ -15,6 +15,11 @@ function lightning_workflow_install() {
   // Set up content type-specific permissions.
   lightning_workflow_update_8001();
 
+  // Give content reviewers the ability to view moderation states, e.g. in the
+  // administrative list of content.
+  \Drupal::service('lightning.content_roles')
+    ->grantPermissions('reviewer', ['view moderation states']);
+
   /** @var \Drupal\views\ViewEntityInterface $view */
   $view = View::load('content');
   if (empty($view)) {

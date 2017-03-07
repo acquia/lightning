@@ -65,6 +65,8 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
     * Empty the "Width of the modal" and "Height of the modal" text fields.
     * Click **Next**, then proceed through the rest of the wizard without
       changing anything else. Then click **Finish** to save the entity browser.
+* If you have Lightning Workflow installed, add the *View moderation states*
+  permission to all content reviewer roles.
 
 ## 2.0.2 to 2.0.3
 * If you have the Landing Page content type installed, there are several manual
