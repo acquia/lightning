@@ -159,7 +159,6 @@ function lightning_dev_update_8003() {
     ->save();
 
   // Rename all node scheduled_update fields.
-  /** @var FieldConfig[] $fields */
   $fields = \Drupal::entityTypeManager()
     ->getStorage('field_config')
     ->loadByProperties([
@@ -167,6 +166,7 @@ function lightning_dev_update_8003() {
       'entity_type' => 'node',
     ]);
 
+  /** @var \Drupal\field\Entity\FieldConfig $field */
   foreach ($fields as $field) {
     $field->setLabel(t('Scheduled updates'))->save();
   }
@@ -178,4 +178,9 @@ function lightning_dev_update_8003() {
   $configuration['width'] = $configuration['height'] = NULL;
   $display_plugin->setConfiguration($configuration);
   $image_browser->save();
+
+  // Give content reviewers the ability to view moderation states, e.g. in the
+  // administrative list of content.
+  \Drupal::service('lightning.content_roles')
+    ->grantPermissions('reviewer', ['view moderation states']);
 }

@@ -1,5 +1,5 @@
 @lightning @api
-Feature: Lightning Roles and related config
+Feature: User roles and related config
 
   Scenario: Administrator Role select list should be present in Account Settings
     Given I am logged in as a user with the administrator role
@@ -20,3 +20,20 @@ Feature: Lightning Roles and related config
     # Clean up.
     And I visit "/admin/people/roles/manage/foobaz/delete"
     And I press "Delete"
+
+  Scenario: Visiting the content overview page as a content reviewer
+    Given I am logged in as a user with the page_reviewer,landing_page_reviewer roles
+    When I visit "/admin/content"
+    Then the response status code should be 200
+
+  Scenario: Content reviewers have permission to view moderation states
+    Given I am logged in as a user with the "administer permissions" permission
+    When I visit "/admin/people/permissions"
+    Then the page_reviewer role should have permission to:
+      """
+      view moderation states
+      """
+    And the landing_page_reviewer role should have permission to:
+      """
+      view moderation states
+      """
