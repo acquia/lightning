@@ -184,10 +184,11 @@ function lightning_dev_update_8003() {
   \Drupal::service('lightning.content_roles')
     ->grantPermissions('reviewer', ['view moderation states']);
 
-  // Content view latest revision relationship should not be required.
+  // The content view's relationship to the latest node revision should not be
+  // required - Issue #2858566.
   $view = View::load('content');
   $display = &$view->getDisplay('default');
-  $display['display_options']['relationships']['latest_revision__node'] = unserialize('a:8:{s:2:"id";s:21:"latest_revision__node";s:5:"table";s:26:"workbench_revision_tracker";s:5:"field";s:21:"latest_revision__node";s:12:"relationship";s:4:"none";s:10:"group_type";s:5:"group";s:11:"admin_label";s:15:"latest revision";s:8:"required";b:0;s:9:"plugin_id";s:8:"standard";}');
+  $display['display_options']['relationships']['latest_revision__node']['required'] = FALSE;
   $view->save();
 }
 
