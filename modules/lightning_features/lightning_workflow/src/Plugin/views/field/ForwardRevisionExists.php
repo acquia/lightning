@@ -32,11 +32,9 @@ class ForwardRevisionExists extends FieldPluginBase {
     if (!isset($values->_relationship_entities[$rel])) {
       return NULL;
     }
-    elseif ($latest = $values->_relationship_entities[$rel]) {
-      /** @var \Drupal\Core\Entity\ContentEntityInterface $latest */
-      if ($latest->getRevisionId() > $current->getRevisionId()) {
-        return Markup::create('&#10003;');
-      }
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $latest */
+    elseif (($latest = $values->_relationship_entities[$rel]) && ($latest->getRevisionId() > $current->getRevisionId())) {
+      return Markup::create('&#10003;');
     }
     else {
       return NULL;
