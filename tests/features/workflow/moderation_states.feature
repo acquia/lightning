@@ -84,8 +84,8 @@ Feature: Workflow moderation states
 
   Scenario: Content whose content type is not moderated is visible in the Content view
     Given node_type entities:
-      | type          |
-      | not_moderated |
+      | type          | name          |
+      | not_moderated | Not Moderated |
     And not_moderated content:
       | title       |
       | Lazy Lummox |
