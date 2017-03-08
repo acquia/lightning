@@ -236,7 +236,7 @@ class SubProfileCommand extends Command {
     // Get the description from the --description option, or ask the user if
     // none was specified.
     $description = $options['description'] ?: $io->ask(
-      $this->trans('commands.generate.profile.questions.description'),
+      $this->trans('commands.lightning.subprofile.questions.description'),
       NULL,
       'trim'
     );
@@ -253,14 +253,21 @@ class SubProfileCommand extends Command {
       $this->include = $this->toArray($include);
     }
 
-    // Ask the user about components that have not been excluded yet.
-    $available_components = array_diff_key(
-      $this->getMainComponentInfo(),
-      array_flip($this->exclude)
+    // Ask the user if they want to exclude any Lightning components.
+    $collect_exclusions = $io->confirm(
+      $this->trans('commands.lightning.subprofile.questions.collect-exclusions'),
+      FALSE
     );
-    foreach ($available_components as $component => $info) {
-      $info['machine_name'] = $component;
-      $this->confirmComponent($info, $io);
+    if ($collect_exclusions) {
+      // Ask about components that have not been excluded yet.
+      $available_components = array_diff_key(
+        $this->getMainComponentInfo(),
+        array_flip($this->exclude)
+      );
+      foreach ($available_components as $component => $info) {
+        $info['machine_name'] = $component;
+        $this->confirmComponent($info, $io);
+      }
     }
   }
 
