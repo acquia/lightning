@@ -28,7 +28,7 @@ $extender = \Drupal\Component\Serialization\Yaml::decode($extender);
 // Build the Drupal Console command line.
 $command = 'lightning:subprofile --no-interaction';
 $command .= ' --name="Lightning Extender"';
-$command .= ' --machine-name=lightning_extender';
+$command .= ' --machine-name=' . (@$argv[2] ?: 'lightning_extender');
 
 if ($extender['modules']) {
   $command .= ' --include=' . implode(',', $extender['modules']);
