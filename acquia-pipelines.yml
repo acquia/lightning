@@ -13,7 +13,6 @@ events:
           type: script
           script:
             - set -x
-            - composer self-update
             - composer validate --no-check-all --ansi
             - composer install
       - install:
