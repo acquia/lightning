@@ -6,17 +6,18 @@
  */
 
 use Drupal\Core\Block\BlockPluginInterface;
-use Drupal\Core\Entity\EntityDisplayModeInterface;
+use Drupal\Core\Entity\EntityDescriptionInterface;
 use Drupal\Core\Entity\EntityFormInterface;
-use Drupal\Core\Entity\Entity\EntityViewMode;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\lightning_core\Element as ElementHelper;
+use Drupal\lightning_core\Entity\EntityFormMode;
+use Drupal\lightning_core\Entity\EntityViewMode;
+use Drupal\lightning_core\Entity\Role;
 use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
-use Drupal\user\Entity\Role;
-use Drupal\user\RoleInterface;
 
 /**
  * Conditionally overrides the class specified by a plugin definition.
@@ -37,6 +38,36 @@ function lightning_core_override_plugin_class(array &$definition, $replacement_c
     $definition['class'] = $replacement_class;
   }
   return $definition['class'];
+}
+
+/**
+ * Conditionally overrides the class used for entities of a specific type.
+ *
+ * The class is overridden only if the replacement class' immediate parent is
+ * the one used by the entity type.
+ *
+ * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+ *   The entity type definition.
+ * @param string $replacement_class
+ *   The replacement class.
+ *
+ * @return string
+ *   The chosen entity class.
+ */
+function lightning_core_override_entity_class(EntityTypeInterface $entity_type, $replacement_class) {
+  if (get_parent_class($replacement_class) == $entity_type->getClass()) {
+    $entity_type->setClass($replacement_class);
+  }
+  return $entity_type->getClass();
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function lightning_core_entity_type_alter(array &$entity_types) {
+  lightning_core_override_entity_class($entity_types['user_role'], Role::class);
+  lightning_core_override_entity_class($entity_types['entity_view_mode'], EntityViewMode::class);
+  lightning_core_override_entity_class($entity_types['entity_form_mode'], EntityFormMode::class);
 }
 
 /**
@@ -67,13 +98,12 @@ function lightning_core_help($route_name, RouteMatchInterface $route_match) {
       $route_match->getParameter($matched[3] . '_name')
     );
 
-    /** @var \Drupal\Core\Entity\EntityDisplayModeInterface $display_mode */
     $display_mode = \Drupal::entityTypeManager()
       ->getStorage('entity_' . $matched[3])
       ->load($entity_id);
 
-    if ($display_mode) {
-      $description = $display_mode->getThirdPartySetting('lightning_core', 'description');
+    if ($display_mode instanceof EntityDescriptionInterface) {
+      $description = $display_mode->getDescription();
       if ($description) {
         return '<p>' . $description . '</p>';
       }
@@ -178,7 +208,7 @@ function lightning_core_form_alter(array &$form, FormStateInterface $form_state)
     $supported_operations = ['default', 'add', 'edit'];
     $entity = $form_object->getEntity();
 
-    if (($entity instanceof EntityDisplayModeInterface || $entity instanceof RoleInterface) && in_array($form_object->getOperation(), $supported_operations)) {
+    if ($entity instanceof EntityDescriptionInterface && in_array($form_object->getOperation(), $supported_operations)) {
       $form['description'] = [
         '#type' => 'textarea',
         '#title' => t('Description'),
@@ -186,7 +216,7 @@ function lightning_core_form_alter(array &$form, FormStateInterface $form_state)
           '@entity_type' => $entity->getEntityType()->getSingularLabel(),
         ]),
         '#rows' => 2,
-        '#default_value' => $entity->getThirdPartySetting('lightning_core', 'description'),
+        '#default_value' => $entity->getDescription(),
       ];
       $form['actions']['submit']['#submit'][] = 'lightning_core_set_third_party_description';
     }
@@ -220,7 +250,7 @@ function lightning_core_set_third_party_description(array &$form, FormStateInter
   $form_state
     ->getFormObject()
     ->getEntity()
-    ->setThirdPartySetting('lightning_core', 'description', $form_state->getValue('description'))
+    ->setDescription($form_state->getValue('description'))
     ->save();
 
   // The help text block is very likely to be render cached, so invalidate the
@@ -248,10 +278,11 @@ function lightning_core_form_system_modules_alter(array &$form) {
  */
 function lightning_core_form_user_form_alter(array &$form) {
   if (isset($form['account']['roles'])) {
-    /** @var RoleInterface $role */
+    /** @var \Drupal\user\RoleInterface $role */
     foreach (Role::loadMultiple() as $id => $role) {
-      $form['account']['roles']['#legend'][$id] = $role
-        ->getThirdPartySetting('lightning_core', 'description');
+      if ($role instanceof EntityDescriptionInterface) {
+        $form['account']['roles']['#legend'][$id] = $role->getDescription();
+      }
     }
   }
 }
