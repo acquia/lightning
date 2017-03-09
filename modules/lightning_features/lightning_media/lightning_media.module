@@ -5,6 +5,7 @@
  * Core media asset support for Lightning.
  */
 
+use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
@@ -71,6 +72,7 @@ function lightning_media_inject_entity_browser_count(array $element) {
  */
 function lightning_media_preprocess_image_style(array &$variables) {
   $extension = pathinfo($variables['uri'], PATHINFO_EXTENSION);
+  $extension = Unicode::strtolower($extension);
 
   // If this is an SVG and we don't know its dimensions, try to calculate them
   // through the image style's effect chain.
@@ -113,6 +115,8 @@ function lightning_media_preprocess_image_style(array &$variables) {
     if ($dimensions['height']) {
       $variables['image']['#height'] = $dimensions['height'];
     }
+    // If at least one dimension is known, display the image.
+    $variables['image']['#access'] = $dimensions['width'] || $dimensions['height'];
   }
 }
 
