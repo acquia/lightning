@@ -1,3 +1,31 @@
+## 2.0.4
+* The media browser now allows you to select more than one item for multi-value
+  fields. (Issue #2829444)
+* Scheduled updates now clearly display what is scheduled to happen and when, and
+  multiple updates can be created for basic pages. (Issue #2688411)
+* Fixed a bug where reverting the layout of a forward revision of a landing page
+  also reverted the layout of the published version. (Issue #2754649) 
+* Fixed a bug where Lightning Media failed to validate file size and dimension
+  constraints. (Issue #2796683)
+* The *.features.yml files were removed from our older features that had them.
+  (Issue #2846724)
+* Lightning will no longer install Contact and Contact storage if you exclude
+  Lightning Contact Form from being installed. (Issue #2854662)
+* Fixed a bug in Lightning's Behat configuration that prevented custom paths
+  from being used for files. (GitHub #278)
+* Lightning will no longer install Search API if you exclude Lightning Search
+  from being installed. (Issue #2855075)
+* Quick Edit now works with forward revisions and content blocks placed via the
+  in-place editor. (Issue #2847467)
+* Added a configuration form to Lightning Layout that allows you to choose which
+  entity types can be embedded as blocks. (Issue #2851583)
+* Fixed a bug where image style generation failed for image files with uppercase
+  extensions. (Issue #2857694)
+* Content reviewer roles now have permission to view moderation states.
+  (GitHub #287, Issue #2825934, and Issue #2825928)
+* Fixed a bug where unmoderated content types would not show up in the Content
+  view. (Issue #2858566)
+
 ## 2.0.3
 * Added the Entity Blocks module, which provides block types that can display
   any renderable entity without needing a context. This allows content editors
