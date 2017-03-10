@@ -28,6 +28,19 @@ class AdministrativeRoleCheck implements AccessInterface {
     $this->entityTypeManager = $entity_type_manager;
   }
 
+  /**
+   * Checks if the user has at least one administrative role.
+   *
+   * @param \Symfony\Component\Routing\Route $route
+   *   The route being checked.
+   * @param \Drupal\Core\Routing\RouteMatchInterface $route_match
+   *   The route matcher.
+   * @param \Drupal\Core\Session\AccountInterface $account
+   *   The user account to check.
+   *
+   * @return \Drupal\Core\Access\AccessResult
+   *   The access result.
+   */
   public function access(Route $route, RouteMatchInterface $route_match, AccountInterface $account) {
     /** @var \Drupal\user\RoleInterface[] $roles */
     $roles = $this->entityTypeManager
