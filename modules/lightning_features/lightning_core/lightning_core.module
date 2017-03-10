@@ -265,7 +265,7 @@ function lightning_core_node_type_insert(NodeTypeInterface $node_type) {
       $role->getPermissions()
     );
 
-    array_walk($permissions, [$role, 'grantPermissions']);
+    array_walk($permissions, [$role, 'grantPermission']);
     $role->save();
   }
 
