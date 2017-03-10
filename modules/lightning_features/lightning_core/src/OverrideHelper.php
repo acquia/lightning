@@ -62,4 +62,23 @@ class OverrideHelper {
     }
   }
 
+  /**
+   * Overrides the class used for an entity handler.
+   *
+   * The replacement class is only used if its immediate parent is the handler
+   * class specified by the entity type definition.
+   *
+   * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
+   *   The entity type definition.
+   * @param string $handler_type
+   *   The handler type.
+   * @param string $replacement_class
+   *   The class to use.
+   */
+  public static function entityHandler(EntityTypeInterface $entity_type, $handler_type, $replacement_class) {
+    if (get_parent_class($replacement_class) == $entity_type->getHandlerClass($handler_type)) {
+      $entity_type->setHandlerClass($handler_type, $replacement_class);
+    }
+  }
+
 }

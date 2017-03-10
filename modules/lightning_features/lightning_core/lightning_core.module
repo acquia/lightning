@@ -64,6 +64,8 @@ function lightning_core_entity_type_alter(array &$entity_types) {
  * Implements hook_element_info_alter().
  */
 function lightning_core_element_info_alter(array &$info) {
+  // Add support for the #legend property to checkboxes and radios.
+  // @see Element::processLegend()
   $info['radios']['#legend'] = $info['checkboxes']['#legend'] = [];
   $info['radios']['#process'][] = $info['checkboxes']['#process'][] = [ElementHelper::class, 'processLegend'];
 }
@@ -165,7 +167,7 @@ function lightning_core_entity_load(array $entities) {
  * @param array $keys
  *   The keys, in their desired order.
  *
- * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 2.1.0. Use
  * \Drupal\lightning_core\Element::order() instead.
  */
 function array_reorder(array &$values, array $keys) {
@@ -181,7 +183,7 @@ function array_reorder(array &$values, array $keys) {
  * @return array
  *   The renderable element with all buttons (at all levels) disabled.
  *
- * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 2.1.0. Use
  * \Drupal\lightning_core\Element::disableButtons() instead.
  */
 function lightning_core_disable_buttons(array $element) {
@@ -245,13 +247,26 @@ function lightning_core_node_type_insert(NodeTypeInterface $node_type) {
   };
 
   foreach ($config as $key => $info) {
-    if ($info['enabled']) {
-      Role::create([
-        'id' => $node_type->id() . '_' . $key,
-        'label' => str_replace('?', $node_type->label(), $info['label']),
-        'permissions' => array_map($permission_map, $info['permissions']),
-      ])->save();
+    if (empty($info['enabled'])) {
+      continue;
     }
+    $role_id = $node_type->id() . '_' . $key;
+
+    $role = Role::load($role_id) ?: Role::create([
+      'id' =>
+        $role_id,
+      'label' =>
+        str_replace('?', $node_type->label(), $info['label']),
+    ]);
+
+    // Only grant permissions the role does not already have.
+    $permissions = array_diff(
+      array_map($permission_map, $info['permissions']),
+      $role->getPermissions()
+    );
+
+    array_walk($permissions, [$role, 'grantPermissions']);
+    $role->save();
   }
 
   user_role_grant_permissions('content_manager', [
@@ -311,8 +326,8 @@ function lightning_core_preprocess_block(array &$variables) {
  * @param string $module
  *   (optional) The module which has the default configuration.
  *
- * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use the
- * lightning.config_helper service instead.
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 2.1.0. Use
+ * the lightning.config_helper service instead.
  */
 function lightning_core_create_config($entity_type, $id, $module = 'lightning_core') {
   \Drupal::service('lightning.config_helper')
@@ -331,8 +346,8 @@ function lightning_core_create_config($entity_type, $id, $module = 'lightning_co
  * @return array
  *   The config data.
  *
- * @deprecated in Lightning 2.0.3 and will be removed in Lightning 3.x. Use the
- * lightning.config_helper service instead.
+ * @deprecated in Lightning 2.0.3 and will be removed in Lightning 2.1.0. Use
+ * the lightning.config_helper service instead.
  */
 function lightning_core_read_config($id, $module = 'lightning_core') {
   return \Drupal::service('lightning.config_helper')
