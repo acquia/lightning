@@ -16,7 +16,7 @@ use Drupal\Component\Annotation\Plugin;
  * Resolvers should return a fully-loaded media bundle entity if they find one
  * that will work for a given input, or FALSE if not.
  *
- * @deprecated in Lightning 2.0.4 and will be removed in Lightning 3.x. Media
+ * @deprecated in Lightning 2.0.4 and will be removed in Lightning 2.1.0. Media
  * type plugins should implement InputMatchInterface directly instead.
  *
  * @Annotation

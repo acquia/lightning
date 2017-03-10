@@ -7,7 +7,7 @@ use Drupal\lightning_media\BundleResolverBase;
 /**
  * Bundle resolver for uploaded files.
  *
- * @deprecated in Lightning 2.0.4 and will be removed in Lightning 3.x. Media
+ * @deprecated in Lightning 2.0.4 and will be removed in Lightning 2.1.0. Media
  * type plugins should implement InputMatchInterface directly instead.
  *
  * @MediaBundleResolver(
