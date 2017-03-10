@@ -4,11 +4,12 @@ namespace Drupal\lightning_core\Access;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Routing\Access\AccessInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Symfony\Component\Routing\Route;
 
-class AdministrativeRoleCheck {
+class AdministrativeRoleCheck implements AccessInterface {
 
   /**
    * The entity type manager.
