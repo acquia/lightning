@@ -25,7 +25,7 @@ services:
       - '@entity.query'
 
   access_check.administrator_role:
-    class: '\Drupal\lightning\Access\AdministrativeRoleCheck'
+    class: '\Drupal\lightning_core\Access\AdministrativeRoleCheck'
     arguments:
       - '@entity_type.manager'
     tags:
