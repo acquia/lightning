@@ -7,6 +7,7 @@
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
@@ -264,6 +265,48 @@ function lightning_media_preprocess_views_view_grid__media(array &$variables) {
   foreach ($variables['items'] as &$item) {
     foreach ($item['content'] as &$column) {
       $column['attributes']['data-selectable'] = 'true';
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function lightning_media_entity_form_display_presave(EntityFormDisplayInterface $display) {
+  if ($display->isNew()) {
+    return;
+  }
+
+  $entity_type = $display->getTargetEntityTypeId();
+  $bundle = $display->getTargetBundle();
+
+  /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $original */
+  $original = \Drupal::entityTypeManager()
+    ->getStorage('entity_form_display')
+    ->loadUnchanged($display->id());
+
+  $new_components = array_diff_key($display->getComponents(), $original->getComponents());
+
+  foreach ($new_components as $component_id => $component) {
+    $field = FieldConfig::load($entity_type . '.' . $bundle . '.' . $component_id);
+
+    // If this references media items, use the media browser.
+    if ($field && $field->getType() == 'entity_reference' && $field->getSetting('target_type') == 'media') {
+      $display->setComponent($component_id, [
+        'type' => 'entity_browser_entity_reference',
+        'weight' => $component['weight'],
+        'settings' => [
+          'entity_browser' => 'media_browser',
+          'field_widget_display' => 'rendered_entity',
+          'field_widget_edit' => TRUE,
+          'field_widget_remove' => TRUE,
+          'selection_mode' => 'selection_append',
+          'field_widget_display_settings' => [
+            'view_mode' => 'embedded',
+          ],
+          'open' => TRUE,
+        ],
+      ]);
     }
   }
 }
