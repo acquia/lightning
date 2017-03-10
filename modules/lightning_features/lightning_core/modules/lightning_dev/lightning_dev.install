@@ -183,4 +183,12 @@ function lightning_dev_update_8003() {
   // administrative list of content.
   \Drupal::service('lightning.content_roles')
     ->grantPermissions('reviewer', ['view moderation states']);
+
+  // The content view's relationship to the latest node revision should not be
+  // required - Issue #2858566.
+  $view = View::load('content');
+  $display = &$view->getDisplay('default');
+  $display['display_options']['relationships']['latest_revision__node']['required'] = FALSE;
+  $view->save();
 }
+

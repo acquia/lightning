@@ -81,3 +81,14 @@ Feature: Workflow moderation states
   #  And I press "Save"
   #  And I wait 2 seconds
   #  Then I should see a "system_main_block" block with a "quickedit" contextual link
+
+  Scenario: Content whose content type is not moderated is visible in the Content view
+    Given node_type entities:
+      | type          | name          |
+      | not_moderated | Not Moderated |
+    And not_moderated content:
+      | title       |
+      | Lazy Lummox |
+    And I am logged in as a user with the administrator role
+    When I visit "admin/content"
+    Then I should see "Lazy Lummox"
