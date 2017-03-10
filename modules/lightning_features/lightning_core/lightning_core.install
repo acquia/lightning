@@ -70,3 +70,10 @@ function lightning_core_update_8003() {
     lightning_core_modules_installed(['token']);
   }
 }
+
+/**
+ * Clears the entity type definition cache.
+ */
+function lightning_core_update_8004() {
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+}
