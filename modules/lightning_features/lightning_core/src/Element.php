@@ -71,7 +71,7 @@ class Element {
     // Recurse into child elements.
     foreach (RenderElement::children($element) as $key) {
       if (is_array($element[$key])) {
-        $element[$key] = call_user_func([static::class, __FUNCTION__], $element[$key]);
+        $element[$key] = static::disableButtons($element[$key]);
       }
     }
     return $element;

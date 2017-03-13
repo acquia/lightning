@@ -71,8 +71,8 @@ function lightning_workflow_scheduled_update_ief_label(ScheduledUpdateInterface 
  * @param array $element
  *   The element to modify.
  *
- * @deprecated in Lightning 2.0.5 and will be removed in Lightning 2.1.0. Use
- * NodeForm::alterModerationState() instead.
+ * @deprecated in Lightning 2.0.5 and will be removed in Lightning 2.1.0. Import
+ * ModerationAwareEntityFormTrait on entity forms directly instead.
  */
 function lightning_workflow_alter_moderation_state(array &$element) {
   NodeForm::alterModerationState($element);
