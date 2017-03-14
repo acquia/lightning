@@ -9,6 +9,7 @@ Feature: Workspaces
     Then I should not see the button "Save"
     And I set the "Stage" workspace to the "Draft" moderation state
 
+  @errors
   Scenario: Configuration entities are unconditionally locked in every workspace except the Live workspace
     Given I am logged in as a user with the administrator role
     When I visit "/admin/structure/workspace/2/activate"
