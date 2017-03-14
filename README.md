@@ -130,8 +130,6 @@ will not need to do this.
   * Aliases for any non-node entities
 * Blocks on the block listing page(s) are not properly filtered by workspace
   under certain circumstances.
-* The Workspace listing page will display a PHP warning caused by the Workspace
-  module which is effectively harmless but may look alarming.
 * There is no way yet to properly resolve conflicts between workspaces. Users
   can delete conflicting entities from one of the two workspaces to remove
   conflicts, but there is no interface yet for picking the winner and keeping
