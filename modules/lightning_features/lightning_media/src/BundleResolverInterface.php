@@ -10,7 +10,7 @@ namespace Drupal\lightning_media;
  * and the resolver needs to figure out which media bundle -- singular! -- is
  * best suited to handle that input.
  *
- * @deprecated in Lightning 2.0.4 and will be removed in Lightning 3.x. Media
+ * @deprecated in Lightning 2.0.4 and will be removed in Lightning 2.1.0. Media
  * type plugins should implement InputMatchInterface directly instead.
  */
 interface BundleResolverInterface {

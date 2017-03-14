@@ -6,9 +6,10 @@
  */
 
 use Drupal\Core\Datetime\DrupalDateTime;
-use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\lightning_core\OverrideHelper as Override;
+use Drupal\lightning_workflow\Form\NodeForm;
 use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
 use Drupal\node\NodeTypeInterface;
 use Drupal\scheduled_updates\ScheduledUpdateInterface;
@@ -38,6 +39,13 @@ function lightning_workflow_view_presave(ViewEntityInterface $view) {
     // Add the forward revision indicator.
     $display['display_options']['fields']['forward_revision_exists'] = unserialize('a:23:{s:2:"id";s:23:"forward_revision_exists";s:5:"table";s:15:"node_field_data";s:5:"field";s:23:"forward_revision_exists";s:12:"relationship";s:4:"none";s:10:"group_type";s:5:"group";s:11:"admin_label";s:0:"";s:5:"label";s:21:"Has unpublished edits";s:7:"exclude";b:0;s:5:"alter";a:26:{s:10:"alter_text";b:0;s:4:"text";s:0:"";s:9:"make_link";b:0;s:4:"path";s:0:"";s:8:"absolute";b:0;s:8:"external";b:0;s:14:"replace_spaces";b:0;s:9:"path_case";s:4:"none";s:15:"trim_whitespace";b:0;s:3:"alt";s:0:"";s:3:"rel";s:0:"";s:10:"link_class";s:0:"";s:6:"prefix";s:0:"";s:6:"suffix";s:0:"";s:6:"target";s:0:"";s:5:"nl2br";b:0;s:10:"max_length";i:0;s:13:"word_boundary";b:1;s:8:"ellipsis";b:1;s:9:"more_link";b:0;s:14:"more_link_text";s:0:"";s:14:"more_link_path";s:0:"";s:10:"strip_tags";b:0;s:4:"trim";b:0;s:13:"preserve_tags";s:0:"";s:4:"html";b:0;}s:12:"element_type";s:0:"";s:13:"element_class";s:0:"";s:18:"element_label_type";s:0:"";s:19:"element_label_class";s:0:"";s:19:"element_label_colon";b:1;s:20:"element_wrapper_type";s:0:"";s:21:"element_wrapper_class";s:0:"";s:23:"element_default_classes";b:1;s:5:"empty";s:0:"";s:10:"hide_empty";b:0;s:10:"empty_zero";b:0;s:16:"hide_alter_empty";b:1;s:11:"entity_type";s:4:"node";s:9:"plugin_id";s:23:"forward_revision_exists";}');
   }
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function lightning_workflow_entity_type_alter(array &$entity_types) {
+  Override::entityForm($entity_types['node'], NodeForm::class);
+  Override::entityForm($entity_types['node'], NodeForm::class, 'edit');
 }
 
 /**
@@ -86,42 +94,12 @@ function lightning_workflow_scheduled_update_ief_label(ScheduledUpdateInterface 
  *
  * @param array $element
  *   The element to modify.
+ *
+ * @deprecated in Lightning 2.0.5 and will be removed in Lightning 2.1.0. Import
+ * ModerationAwareEntityFormTrait on entity forms directly instead.
  */
 function lightning_workflow_alter_moderation_state(array &$element) {
-  // Allow the user to choose the moderation state.
-  $element['#access'] = TRUE;
-
-  // Show the original labels of the destination states.
-  foreach (array_keys($element['#options']) as $id) {
-    $element['#options'][$id] = ModerationState::load($id)->label();
-  }
-
-  // Do NOT rejigger the form's buttons.
-  unset($element['#process'][0]);
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function lightning_workflow_form_node_form_alter(array &$form, FormStateInterface $form_state) {
-  $form_object = $form_state->getFormObject();
-  /** @var \Drupal\workbench_moderation\ModerationInformation $mod_info */
-  $mod_info = \Drupal::service('workbench_moderation.moderation_information');
-
-  if (isset($form['moderation_state']) && $mod_info->isModeratedEntityForm($form_object)) {
-    lightning_workflow_alter_moderation_state($form['moderation_state']['widget'][0]);
-
-    // Show the basic 'Save' button, but hide the confusing
-    // 'Save as unpublished' and 'Save and publish' buttons.
-    $form['actions']['submit']['#access'] = TRUE;
-    $form['actions']['publish']['#access'] = $form['actions']['unpublish']['#access'] = FALSE;
-    unset($form['actions']['publish']['#dropbutton'], $form['actions']['unpublish']['#dropbutton']);
-
-    // Workbench Moderation enforces revisions by checking and disabling the
-    // revision checkbox. We don't need to display that.
-    $form['revision']['#type'] = 'hidden';
-    unset($form['revision_log']['#states']['visible'][':input[name="revision"]']);
-  }
+  NodeForm::alterModerationState($element);
 }
 
 /**
@@ -160,22 +138,19 @@ function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
       ],
     ])->save();
 
-    $form_display = EntityFormDisplay::load('node.' . $id . '.default');
-    if ($form_display) {
-      $form_display
-        ->setComponent('scheduled_update', [
-          'type' => 'inline_entity_form_complex',
-          'settings' => [
-            'override_labels' => FALSE,
-            'label_singular' => '',
-            'label_plural' => '',
-            'allow_new' => TRUE,
-            'allow_existing' => FALSE,
-            'match_operator' => 'CONTAINS',
-          ],
-        ])
-        ->save();
-    }
+    entity_get_form_display('node', $id, 'default')
+      ->setComponent('scheduled_update', [
+        'type' => 'inline_entity_form_complex',
+        'settings' => [
+          'override_labels' => FALSE,
+          'label_singular' => '',
+          'label_plural' => '',
+          'allow_new' => TRUE,
+          'allow_existing' => FALSE,
+          'match_operator' => 'CONTAINS',
+        ],
+      ])
+      ->save();
   }
 }
 

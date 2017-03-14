@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6d691681e027c6eb3b40d598638c70cc",
-    "content-hash": "1ee1bf8c86db9601c6d9bffbfb782b00",
+    "hash": "787ab7fb42a5aad0ecb8b54fd6add61f",
+    "content-hash": "b49cea422bf2502519448885361e01ed",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1211,7 +1211,11 @@
             },
             "type": "drupal-core",
             "extra": {
-                "patches_applied": []
+                "patches_applied": {
+                    "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138.patch",
+                    "2765525 - Add AJAX command to add style sheets to CKEditor instances": "https://www.drupal.org/files/issues/2765525-30-8.2.x.patch",
+                    "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-276-8.2.x.patch"
+                }
             },
             "autoload": {
                 "psr-4": {
@@ -2590,17 +2594,17 @@
         },
         {
             "name": "drupal/panels",
-            "version": "3.0.0-beta5",
+            "version": "3.0.0-beta6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/panels",
-                "reference": "8.x-3.0-beta5"
+                "reference": "8.x-3.0-beta6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/panels-8.x-3.0-beta5.zip",
+                "url": "https://ftp.drupal.org/files/projects/panels-8.x-3.0-beta6.zip",
                 "reference": null,
-                "shasum": "3f62240b59b503902f349f2667a65c668d1e3fb2"
+                "shasum": "44b59e5009d16d1d1b17907cd3305f488c22a757"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -2608,7 +2612,8 @@
                 "drupal/layout_plugin": ">=1.0.0-alpha22"
             },
             "require-dev": {
-                "drupal/page_manager": "*"
+                "drupal/page_manager": "*",
+                "drupal/panelizer": "*"
             },
             "type": "drupal-module",
             "extra": {
@@ -2616,11 +2621,11 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-beta5",
+                    "version": "8.x-3.0-beta6",
                     "datestamp": "1488057783"
                 },
                 "patches_applied": {
-                    "2793801 - Allow modules to influence the IPE tempstore ID": "https://www.drupal.org/files/issues/2793801-9.patch"
+                    "2793801 - Allow modules to influence the IPE tempstore ID": "https://www.drupal.org/files/issues/2793801-13.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2675,7 +2680,7 @@
         },
         {
             "name": "drupal/panels_ipe",
-            "version": "3.0.0-beta5",
+            "version": "3.0.0-beta6",
             "require": {
                 "drupal/core": "*",
                 "drupal/panels": "self.version"
@@ -2686,7 +2691,7 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-beta5",
+                    "version": "8.x-3.0-beta6",
                     "datestamp": "1488057783"
                 }
             },
@@ -2857,17 +2862,17 @@
         },
         {
             "name": "drupal/scheduled_updates",
-            "version": "1.0.0-alpha5",
+            "version": "1.0.0-alpha6",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/scheduled_updates",
-                "reference": "8.x-1.0-alpha5"
+                "reference": "8.x-1.0-alpha6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/scheduled_updates-8.x-1.0-alpha5.zip",
+                "url": "https://ftp.drupal.org/files/projects/scheduled_updates-8.x-1.0-alpha6.zip",
                 "reference": null,
-                "shasum": "05e431fba49f6acc34276b7e055725398c239428"
+                "shasum": "3746c71d480fb62c5c55db7e08be41370edb4d03"
             },
             "require": {
                 "drupal/core": "*",
@@ -2879,12 +2884,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-alpha5",
-                    "datestamp": "1453656839"
-                },
-                "patches_applied": {
-                    "2674874 - Issue saving Schedule Update Type form": "https://www.drupal.org/files/issues/schedule_updates-save_type-2674874-2.patch",
-                    "2720169 - Scheduled Update Type entity should not have canonical link template": "https://www.drupal.org/files/issues/scheduled_updates-no-canonical-link-for-update-type.patch"
+                    "version": "8.x-1.0-alpha6",
+                    "datestamp": "1489190883"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2897,14 +2898,10 @@
                     "homepage": "https://www.drupal.org/user/240860"
                 }
             ],
-            "description": "My Awesome Module",
-            "homepage": "http://drupal.org/project/scheduled_updates",
-            "keywords": [
-                "Drupal"
-            ],
+            "description": "Create scheduled updates to field values on entities such content, users, and terms.",
+            "homepage": "https://www.drupal.org/project/scheduled_updates",
             "support": {
-                "source": "http://cgit.drupalcode.org/scheduled_updates",
-                "issues": "http://drupal.org/project/issues/scheduled_updates"
+                "source": "http://cgit.drupalcode.org/scheduled_updates"
             }
         },
         {
@@ -3419,16 +3416,16 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.9.1",
+            "version": "v4.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "de82f9845f2a0f9f27abec67d6a4958427e6f5d6"
+                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/de82f9845f2a0f9f27abec67d6a4958427e6f5d6",
-                "reference": "de82f9845f2a0f9f27abec67d6a4958427e6f5d6",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
+                "reference": "6d50e5282afdfdfc3e0ff6d192aff56c5629b3d4",
                 "shasum": ""
             },
             "require": {
@@ -3462,7 +3459,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-03-08 08:22:36"
+            "time": "2017-03-13 06:30:53"
         },
         {
             "name": "graphp/algorithms",
@@ -3888,16 +3885,16 @@
         },
         {
             "name": "paragonie/random_compat",
-            "version": "v2.0.9",
+            "version": "v2.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/paragonie/random_compat.git",
-                "reference": "6968531206671f94377b01dc7888d5d1b858a01b"
+                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/6968531206671f94377b01dc7888d5d1b858a01b",
-                "reference": "6968531206671f94377b01dc7888d5d1b858a01b",
+                "url": "https://api.github.com/repos/paragonie/random_compat/zipball/634bae8e911eefa89c1abfbf1b66da679ac8f54d",
+                "reference": "634bae8e911eefa89c1abfbf1b66da679ac8f54d",
                 "shasum": ""
             },
             "require": {
@@ -3932,7 +3929,7 @@
                 "pseudorandom",
                 "random"
             ],
-            "time": "2017-03-03 20:43:42"
+            "time": "2017-03-13 16:27:32"
         },
         {
             "name": "php-instagram-api/php-instagram-api",
@@ -6560,40 +6557,64 @@
         },
         {
             "name": "drupal/coder",
-            "version": "8.2.11",
+            "version": "2.11.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/klausi/coder.git",
-                "reference": "564a361274d8234d36385766f063ca89c4184479"
+                "url": "https://git.drupal.org/project/coder",
+                "reference": "8.x-2.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/klausi/coder/zipball/564a361274d8234d36385766f063ca89c4184479",
-                "reference": "564a361274d8234d36385766f063ca89c4184479",
-                "shasum": ""
+                "url": "https://ftp.drupal.org/files/projects/coder-8.x-2.11.zip",
+                "reference": null,
+                "shasum": "f23ce96eea02a6cc0460e5b9c2c45558f86b7b34"
             },
             "require": {
-                "ext-mbstring": "*",
-                "php": ">=5.4.0",
-                "squizlabs/php_codesniffer": ">=2.8.1 <3.0",
-                "symfony/yaml": ">=2.0.0"
+                "drupal/core": "~8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=3.7 <6"
+                "drupal/rules": "*"
             },
-            "type": "phpcodesniffer-standard",
-            "notification-url": "https://packagist.org/downloads/",
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-2.x": "2.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-2.11",
+                    "datestamp": "1488445683"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
                 "GPL-2.0+"
             ],
-            "description": "Coder is a library to review Drupal code.",
-            "homepage": "https://www.drupal.org/project/coder",
-            "keywords": [
-                "code review",
-                "phpcs",
-                "standards"
+            "authors": [
+                {
+                    "name": "douggreen",
+                    "homepage": "https://www.drupal.org/user/29191"
+                },
+                {
+                    "name": "klausi",
+                    "homepage": "https://www.drupal.org/user/262198"
+                },
+                {
+                    "name": "solotandem",
+                    "homepage": "https://www.drupal.org/user/240748"
+                },
+                {
+                    "name": "stella",
+                    "homepage": "https://www.drupal.org/user/66894"
+                },
+                {
+                    "name": "sun",
+                    "homepage": "https://www.drupal.org/user/54136"
+                }
             ],
-            "time": "2017-03-02 08:57:31"
+            "homepage": "https://www.drupal.org/project/coder",
+            "support": {
+                "source": "http://cgit.drupalcode.org/coder"
+            }
         },
         {
             "name": "drupal/console",
@@ -8895,7 +8916,7 @@
         },
         {
             "name": "symfony/browser-kit",
-            "version": "v3.2.5",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/browser-kit.git",
@@ -9061,7 +9082,7 @@
         },
         {
             "name": "symfony/dom-crawler",
-            "version": "v3.2.5",
+            "version": "v3.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dom-crawler.git",

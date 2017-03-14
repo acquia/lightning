@@ -5,7 +5,6 @@
  * Contains code for Lightning's integration with workspaces.
  */
 
-use Drupal\Component\Render\FormattableMarkup;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityFormInterface;
@@ -14,13 +13,16 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\lightning_core\Element;
+use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_preview\AliasHandler;
 use Drupal\lightning_preview\Exception\EntityLockedException;
+use Drupal\lightning_preview\Form\ModerationStateForm;
 use Drupal\lightning_preview\Form\NodeDeleteForm;
+use Drupal\lightning_preview\Form\TermDeleteForm;
+use Drupal\lightning_preview\Form\WorkspaceForm;
 use Drupal\lightning_preview\Plugin\Field\FieldWidget\PathWidget;
 use Drupal\lightning_preview\WorkspaceListBuilder;
 use Drupal\multiversion\Entity\WorkspaceInterface;
-use Drupal\multiversion\Entity\WorkspaceType;
 use Drupal\user\Entity\Role;
 use Drupal\workbench_moderation\Entity\ModerationState;
 use Drupal\workbench_moderation\ModerationStateTransitionInterface as StateTransitionInterface;
@@ -79,47 +81,31 @@ function lightning_preview_field_widget_info_alter(array &$info) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
- */
-function lightning_preview_form_workspace_basic_edit_form_alter(array &$form, FormStateInterface $form_state) {
-  $form_object = $form_state->getFormObject();
-
-  /** @var \Drupal\workbench_moderation\ModerationInformation $mod_info */
-  $mod_info = \Drupal::service('workbench_moderation.moderation_information');
-
-  if (isset($form['moderation_state']) && $mod_info->isModeratedEntityForm($form_object)) {
-    lightning_workflow_alter_moderation_state($form['moderation_state']['widget'][0]);
-
-    $element = &$form['moderation_state']['widget'][0];
-    // Normally this would say 'this piece of content', which is weird if
-    // you're editing a workspace.
-    $element['#description'] = t('The moderation state of this workspace. &#128274; denotes a locked state. If you put this workspace into a locked state, you will be able switch into it and look around, but not make any changes.');
-
-    $locked_states = $form_object
-      ->getEntity()
-      ->type
-      ->entity
-      ->getThirdPartySetting('workbench_moderation', 'locked_states', []);
-
-    foreach ($element['#options'] as $id => $label) {
-      if (in_array($id, $locked_states)) {
-        $element['#options'][$id] = new FormattableMarkup('@label &#128274;', ['@label' => $label]);
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_entity_type_alter().
  */
 function lightning_preview_entity_type_alter(array &$entity_types) {
   // Our list builder displays the current moderation state for each workspace.
   // @TODO Replace this with a view.
-  $entity_types['workspace']->setHandlerClass('list_builder', WorkspaceListBuilder::class);
+  Override::entityHandler($entity_types['workspace'], 'list_builder', WorkspaceListBuilder::class);
 
-  // Use our own version of NodeDeleteForm that is aware of the purge() method
-  // in Multiversion-aware storage handlers.
-  $entity_types['node']->setFormClass('delete', NodeDeleteForm::class);
+  // Use entity deletion forms that are aware of the purge() method implemented
+  // by Multiversion-aware storage handlers.
+  if (isset($entity_types['node'])) {
+    Override::entityForm($entity_types['node'], NodeDeleteForm::class, 'delete');
+  }
+  if (isset($entity_types['taxonomy_term'])) {
+    Override::entityForm($entity_types['taxonomy_term'], TermDeleteForm::class, 'delete');
+  }
+
+  // Use a special form when editing moderation states so that moderation states
+  // can be configured to lock workspaces.
+  Override::entityForm($entity_types['moderation_state'], ModerationStateForm::class, 'edit');
+
+  // Use a special form when adding or editing workspaces in order to indicate
+  // which moderation states are locked.
+  Override::entityForm($entity_types['workspace'], WorkspaceForm::class);
+  Override::entityForm($entity_types['workspace'], WorkspaceForm::class, 'add');
+  Override::entityForm($entity_types['workspace'], WorkspaceForm::class, 'edit');
 }
 
 /**
@@ -274,59 +260,7 @@ function lightning_preview_form_alter(array &$form, FormStateInterface $form_sta
     }
     catch (EntityLockedException $e) {
       drupal_set_message($e->getMessage(), 'warning');
-      $form['#pre_render'][] = 'lightning_core_disable_buttons';
+      $form['#pre_render'][] = [Element::class, 'disableButtons'];
     }
   }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter() for moderation_state_edit_form().
- *
- * The aforementioned moderation_state_edit_form() is not a function, but PHP
- * Code Sniffer is too stupid to understand that. Take it up with him.
- */
-function lightning_preview_form_moderation_state_edit_form_alter(array &$form, FormStateInterface $form_state) {
-  $state_id = $form_state->getFormObject()->getEntity()->id();
-
-  $settings = WorkspaceType::load('basic')
-    ->getThirdPartySettings('workbench_moderation');
-
-  if (empty($settings)) {
-    return;
-  }
-  if ($settings['enabled'] && in_array($state_id, $settings['allowed_moderation_states'])) {
-    $form['lock_workspace'] = [
-      '#type' => 'checkbox',
-      '#title' => t('Lock workspaces in this state'),
-      '#default_value' => in_array($state_id, $settings['locked_states']),
-      '#description' => t('If checked, no changes can be made in a workspace when it reaches this state.'),
-    ];
-    $form['#submit'][] = 'lightning_preview_save_locked_state';
-  }
-}
-
-/**
- * Submit callback. Sets whether the moderation state should lock workspaces.
- *
- * @param array $form
- *   The complete form.
- * @param FormStateInterface $form_state
- *   The current form state.
- */
-function lightning_preview_save_locked_state(array &$form, FormStateInterface $form_state) {
-  $workspace_type = WorkspaceType::load('basic');
-  $locked_states = $workspace_type->getThirdPartySetting('workbench_moderation', 'locked_states', []);
-  $state_id = $form_state->getFormObject()->getEntity()->id();
-
-  if ($form_state->getValue('lock_workspace')) {
-    $locked_states[] = $state_id;
-    $locked_states = array_unique($locked_states);
-  }
-  else {
-    $locked_states = array_diff($locked_states, [$state_id]);
-  }
-
-  $workspace_type
-    ->setThirdPartySetting('workbench_moderation', 'locked_states', $locked_states)
-    ->save();
 }

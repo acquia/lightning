@@ -5,25 +5,16 @@ namespace Drupal\lightning_layout\Form;
 use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Block\BlockManagerInterface;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\Controller\ControllerResolverInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\lightning_core\Form\SettingsForm as LightningCoreSettingsForm;
 
 /**
  * The settings form for controlling Lightning Layout's behavior.
  */
 class SettingsForm extends ConfigFormBase {
-
-  /**
-   * The controller resolver.
-   *
-   * @var \Drupal\Core\Controller\ControllerResolverInterface
-   */
-  protected $controllerResolver;
 
   /**
    * The entity type manager.
@@ -51,8 +42,6 @@ class SettingsForm extends ConfigFormBase {
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory.
-   * @param \Drupal\Core\Controller\ControllerResolverInterface $controller_resolver
-   *   The controller resolver.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    * @param \Drupal\Core\Block\BlockManagerInterface $block_manager
@@ -63,12 +52,11 @@ class SettingsForm extends ConfigFormBase {
    *   (optional) The entity block deriver. If passed, must be an instance of
    *   \Drupal\entity_block\Plugin\Derivative\EntityBlock.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, ControllerResolverInterface $controller_resolver, EntityTypeManagerInterface $entity_type_manager, BlockManagerInterface $block_manager, TranslationInterface $translator, $deriver = NULL) {
+  public function __construct(ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager, BlockManagerInterface $block_manager, TranslationInterface $translator, $deriver = NULL) {
     parent::__construct($config_factory);
-    $this->controllerResolver = $controller_resolver;
     $this->entityTypeManager = $entity_type_manager;
     $this->blockManager = $block_manager;
-    $this->stringTranslation = $translator;
+    $this->setStringTranslation($translator);
     $this->deriver = $deriver;
   }
 
@@ -78,7 +66,6 @@ class SettingsForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     $arguments = [
       $container->get('config.factory'),
-      $container->get('controller_resolver'),
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.block'),
       $container->get('string_translation'),
@@ -116,13 +103,9 @@ class SettingsForm extends ConfigFormBase {
    *   Whether access is allowed.
    */
   public function access() {
-    // Co-opt Lightning Core's settings form access (only passes if the user has
-    // at least one administrative role).
-    /** @var callable $base_access */
-    $base_access = $this->controllerResolver
-      ->getControllerFromDefinition(LightningCoreSettingsForm::class . '::access');
-
-    return AccessResult::allowedIf((bool) $this->deriver)->andIf($base_access());
+    return AccessResult::allowedIf(
+      (bool) $this->deriver
+    );
   }
 
   /**

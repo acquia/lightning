@@ -7,9 +7,7 @@
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Asset\AttachedAssetsInterface;
-use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\field\Entity\FieldConfig;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
@@ -147,36 +145,31 @@ function lightning_media_entity_type_alter(array &$entity_types) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
-  /** @var \Drupal\field\Entity\FieldConfig $field */
-  $field = FieldConfig::create([
-    'field_name' => 'field_media_in_library',
-    'entity_type' => 'media',
-    'bundle' => $bundle->id(),
-  ]);
-
-  $t = \Drupal::translation();
-  $field
-    ->setSetting('on_label', $t->translate('Saved to my media library'))
-    ->setSetting('off_label', $t->translate('Not in my media library'))
-    ->setLabel($t->translate('Save to my media library'))
-    ->setDefaultValue(TRUE)
+  \Drupal::entityTypeManager()
+    ->getStorage('field_config')
+    ->create([
+      'field_name' => 'field_media_in_library',
+      'entity_type' => 'media',
+      'bundle' => $bundle->id(),
+      'label' => t('Save to my media library'),
+      'settings' => [
+        'on_label' => t('Saved to my media library'),
+        'off_label' => t('Not in my media library'),
+      ],
+      'default_value' => [
+        ['value' => TRUE],
+      ],
+    ])
     ->save();
 
-  $form_display = EntityFormDisplay::load('media.' . $bundle->id() . '.default');
-  if (empty($form_display)) {
-    $form_display = EntityFormDisplay::create([
-      'targetEntityType' => 'media',
-      'bundle' => $bundle->id(),
-      'mode' => 'default',
-      'status' => TRUE,
-    ]);
-  }
-  $form_display->setComponent('field_media_in_library', [
-    'type' => 'boolean_checkbox',
-    'settings' => [
-      'display_label' => TRUE,
-    ],
-  ])->save();
+  entity_get_form_display('media', $bundle->id(), 'default')
+    ->setComponent('field_media_in_library', [
+      'type' => 'boolean_checkbox',
+      'settings' => [
+        'display_label' => TRUE,
+      ],
+    ])
+    ->save();
 }
 
 /**

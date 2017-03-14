@@ -7,23 +7,21 @@
 
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\media_entity\MediaInterface;
+use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_video\Plugin\MediaEntity\Type\Video;
 
 /**
  * Implements hook_media_entity_type_info_alter().
  */
 function lightning_media_video_media_entity_type_info_alter(array &$types) {
-  $class = lightning_core_override_plugin_class($types['video_embed_field'], Video::class);
-
-  if ($class == Video::class) {
-    $types['video_embed_field']['input_match'] = [
-      'field_types' => [
-        'string',
-        'string_long',
-        'video_embed_field',
-      ],
-    ];
-  }
+  $types['video_embed_field']['input_match'] = [
+    'field_types' => [
+      'string',
+      'string_long',
+      'video_embed_field',
+    ],
+  ];
+  Override::pluginClass($types['video_embed_field'], Video::class);
 }
 
 /**
