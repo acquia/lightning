@@ -19,6 +19,7 @@ Feature: Workspaces
     Then the response status code should be 500
     And I should see "Configuration can only be modified in the Live workspace"
 
+  @errors
   Scenario: Configuration entity form routes cannot be accessed in any workspace except the Live workspace
     Given I am logged in as a user with the administrator role
     When I visit "/admin/structure/workspace/2/activate"
