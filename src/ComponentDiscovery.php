@@ -1,6 +1,6 @@
 <?php
 
-namespace Acquia\Lightning;
+namespace Drupal\lightning;
 
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ExtensionDiscovery;
@@ -38,23 +38,7 @@ class ComponentDiscovery {
    *   The application root directory.
    */
   public function __construct($app_root) {
-    // ExtensionDiscovery still has a Doc Marten stuck in the dark ages, by
-    // which I mean it calls procedural functions. So you pretty much can't use
-    // it unless Drupal is bootstrapped to at least a basic install-time level.
-    // That won't work for us, though, so we have to eval the missing functions
-    // into existence. An ugly hack for sure, but DRUPAL CORE DROVE ME TO THIS.
-    // And for good measure, let us only use file caching if Drupal is
-    // bootstrapped.
-    if (function_exists('drupal_valid_test_ua') && function_exists('drupal_get_profile')) {
-      $file_cache = TRUE;
-    }
-    else {
-      eval('function drupal_valid_test_ua() { return FALSE; }');
-      eval('function drupal_get_profile() { return NULL; }');
-      $file_cache = FALSE;
-    }
-
-    $this->discovery = new ExtensionDiscovery($app_root, $file_cache);
+    $this->discovery = new ExtensionDiscovery($app_root);
   }
 
   /**
