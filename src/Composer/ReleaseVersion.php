@@ -26,7 +26,7 @@ class ReleaseVersion {
     foreach ($finder as $file) {
       $info = Yaml::parse($file->getContents());
       $info['version'] = reset($arguments);
-      file_put_contents($file->getPathname(), Yaml::dump($info));
+      file_put_contents($file->getPathname(), Yaml::dump($info, 2, 2));
     }
   }
 
