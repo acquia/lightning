@@ -1,0 +1,25 @@
+name: '{{ profile }}'
+type: profile
+{% if description %}
+description: '{{ description }}'
+{% endif %}
+core: '8.x'
+{% if dependencies %}
+dependencies:
+{% for module in dependencies %}
+  - {{ module }}
+{% endfor %}
+{% endif %}
+
+themes:
+  - bartik
+  - seven
+
+base profile:
+  name: lightning
+{% if excluded_dependencies %}
+  excluded_dependencies:
+{% for module in excluded_dependencies %}
+    - {{ module }}
+{% endfor %}
+{% endif %}
