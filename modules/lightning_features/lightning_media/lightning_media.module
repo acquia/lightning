@@ -11,6 +11,10 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
+use Drupal\lightning_core\OverrideHelper as Override;
+use Drupal\media_entity\Entity\MediaBundle;
+use Drupal\media_entity\MediaInterface;
+use Drupal\lightning_media\Form\MediaForm;
 use Drupal\media_entity\MediaBundleInterface;
 
 /**
@@ -18,6 +22,40 @@ use Drupal\media_entity\MediaBundleInterface;
  */
 function lightning_media_element_info_alter(array &$info) {
   $info['entity_browser']['#after_build'][] = 'lightning_media_inject_entity_browser_count';
+}
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function lightning_media_entity_extra_field_info() {
+  $extra_fields = [];
+
+  /** @var \Drupal\media_entity\MediaBundleInterface $media_type */
+  foreach (MediaBundle::loadMultiple() as $id => $media_type) {
+    $plugin_definition = $media_type->getType()->getPluginDefinition();
+
+    if (isset($plugin_definition['preview'])) {
+      $extra_fields['media'][$id]['form']['preview'] = [
+        'label' => t('Preview'),
+        'description' => t('A live preview of the @media_type.', [
+          '@media_type' => $media_type->label(),
+        ]),
+        'weight' => 0,
+      ];
+    }
+  }
+  return $extra_fields;
+}
+
+/**
+ * Implements hook_inline_entity_form_entity_form_alter().
+ */
+function lightning_media_inline_entity_form_entity_form_alter(array &$entity_form) {
+  $entity = $entity_form['#entity'];
+
+  if ($entity instanceof MediaInterface && MediaForm::isPreviewable($entity)) {
+    $entity_form['preview'] = MediaForm::getSourceField($entity)->view('default');
+  }
 }
 
 /**
@@ -139,6 +177,11 @@ function lightning_media_entity_type_alter(array &$entity_types) {
   if (!\Drupal::state()->get('multiversion.migration_done.file')) {
     $entity_types['file']->set('multiversion', FALSE);
   }
+
+  // Use our specialized entity form for adding and editing media assets in
+  // order to support dynamic preview generation.
+  Override::entityForm($entity_types['media'], MediaForm::class);
+  Override::entityForm($entity_types['media'], MediaForm::class, 'edit');
 }
 
 /**
