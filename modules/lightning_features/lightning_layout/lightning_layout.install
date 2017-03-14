@@ -5,10 +5,6 @@
  * Contains installation and update routines for Lightning Layout.
  */
 
-use Drupal\Component\Plugin\Exception\PluginNotFoundException;
-use Drupal\Core\Entity\Entity\EntityFormDisplay;
-use Drupal\Core\Entity\Entity\EntityViewDisplay;
-use Drupal\Core\Entity\EntityStorageException;
 use Drupal\node\Entity\NodeType;
 
 /**
@@ -34,49 +30,27 @@ function lightning_layout_update_8001() {
  * Creates the layout_manager role.
  */
 function lightning_layout_update_8002() {
-  lightning_core_create_config('user_role', 'layout_manager', 'lightning_layout');
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_layout')
+    ->createEntity('user_role', 'layout_manager');
 }
 
 /**
  * Adds Panelizer permissions to layout_manager role.
  */
 function lightning_layout_update_8003() {
-  /** @var \Drupal\node\NodeTypeInterface $node_type */
-  foreach (NodeType::loadMultiple() as $node_type) {
-    \Drupal::moduleHandler()
-      ->invoke('lightning_layout', 'node_type_insert', [$node_type]);
-  }
+  $node_types = NodeType::loadMultiple();
+  array_walk($node_types, 'lightning_layout_node_type_insert');
 }
 
 /**
- * Installs Panelizer defaults for the landing_page content type.
+ * Removed in Lightning 8.x-2.05.
+ *
+ * Formerly installed Panelizer defaults for the landing_page content type.
+ *
+ * @deprecated
  */
 function lightning_layout_update_8004() {
-  // Because this update interacts with Panelizer, rebuild the container to
-  // pick up any changes to Panelizer's service definitions.
-  lightning_core_rebuild_container();
-
-  // Sanity check! We can only proceed if the landing_page node type exists.
-  if (NodeType::load('landing_page') == NULL) {
-    return;
-  }
-
-  // There is always a default view display, so unconditionally update it.
-  _lightning_layout_update_panelizer_default_displays('node.landing_page.default');
-
-  try {
-    _lightning_layout_update_panelizer_default_displays('node.landing_page.full');
-  }
-  catch (EntityStorageException $e) {
-    $values = _lightning_layout_get_view_display('node.landing_page.full');
-    EntityViewDisplay::create($values)->save();
-  }
-
-  EntityFormDisplay::load('node.landing_page.default')
-    ->setComponent('panelizer', [
-      'type' => 'panelizer',
-    ])
-    ->save();
 }
 
 /**
@@ -117,10 +91,7 @@ function lightning_layout_update_8006() {
       ->grantPermission('administer panelizer')
       ->save();
 
-    foreach (NodeType::loadMultiple() as $node_type) {
-      \Drupal::moduleHandler()
-        ->invoke('lightning_layout', 'node_type_insert', [$node_type]);
-    }
+    lightning_layout_update_8003();
   }
 }
 
@@ -144,145 +115,10 @@ function lightning_layout_update_8007() {
 
 
 /**
- * Installs the Panelizer Quick Edit module, which allows fields placed with IPE
- * to be edited with Quick Edit.
+ * Installs the Panelizer Quick Edit module.
  */
 function lightning_layout_update_8008() {
   \Drupal::service('module_installer')->install(['panelizer_quickedit']);
-}
-
-/**
- * Returns the raw values for a bundled view display.
- *
- * @param string $display_id
- *   The bundled view display ID (e.g., node.page.full)
- *
- * @return array
- *   The view display's raw values, suitable for Entity::create().
- *
- * @throws \Exception
- *   If the view display is not bundled with Lightning Layout or otherwise
- *   cannot be read.
- */
-function _lightning_layout_get_view_display($display_id) {
-  // Read in our bundled version of the view display.
-  $values = lightning_core_read_config('core.entity_view_display.' . $display_id, 'lightning_layout');
-  if (empty($values)) {
-    throw new \Exception('View display does not exist: ' . $display_id);
-  }
-
-  // Reference the bundled Panelizer displays, just for readability later on.
-  $displays = &$values['third_party_settings']['panelizer']['displays'];
-
-  // Get the ID of the default view mode by replacing the final ID component
-  // with 'default'.
-  $default_id = preg_replace('/\.[a-z0-9_]+$/', '.default', $display_id);
-  $defaults = EntityViewDisplay::load($default_id)
-    ->getThirdPartySetting('panelizer', 'displays', []);
-
-  // Every bundled display that does not define any blocks should inherit the
-  // ones from the corresponding display of the default view mode.
-  foreach ($defaults as $id => $default) {
-    if (isset($displays[$id]) && empty($displays[$id]['blocks'])) {
-      $displays[$id]['blocks'] = $default['blocks'];
-    }
-  }
-
-  return $values;
-}
-
-/**
- * Updates an entity view display with Lightning-provided Panelizer defaults.
- *
- * @param string $display_id
- *   The existing view display entity ID (e.g. node.page.default)
- *
- * @throws EntityStorageException
- *   If the view display cannot be loaded.
- */
-function _lightning_layout_update_panelizer_default_displays($display_id) {
-  /** @var \Drupal\Core\Entity\Display\EntityViewDisplayInterface $display */
-  $display = EntityViewDisplay::load($display_id);
-  // Let us sanity check!
-  if (empty($display)) {
-    throw new EntityStorageException('View display does not exist: ' . $display_id);
-  }
-
-  $values = lightning_core_read_config($display->getConfigDependencyName(), 'lightning_layout');
-
-  // Meekly merge in new values from our bundled configuration, preserving
-  // anything that already exists...
-  $panelizer_displays = array_merge_canadian(
-    $display->getThirdPartySetting('panelizer', 'displays', []),
-    $values['third_party_settings']['panelizer']['displays']
-  );
-  // ...except for certain important defaults which may not already exist, due
-  // to changes in the Panels and Panelizer APIs.
-  foreach ($panelizer_displays as $id => &$panelizer_display) {
-    // Previously, there was no UI to edit Panelizer displays, which means they
-    // might not have had any label set (this is true for the default display,
-    // at least). If there is no label on the display, use the layout plugin's
-    // label.
-    if (empty($panelizer_display['label'])) {
-      try {
-        $layout = \Drupal::service('plugin.manager.layout_plugin')->getDefinition($panelizer_display['layout']);
-        $panelizer_display['label'] = $layout['label'];
-      }
-      catch (PluginNotFoundException $e) {
-      }
-    }
-
-    // All displays must specify a storage type.
-    if (empty($panelizer_display['storage_type'])) {
-      $panelizer_display['storage_type'] = 'panelizer_default';
-    }
-
-    // All displays must specify a storage ID. By default, this is
-    // ENTITY_TYPE:BUNDLE:VIEW_MODE:DISPLAY_ID.
-    if (empty($panelizer_display['storage_id'])) {
-      $panelizer_display['storage_id'] = implode(':', [
-        $display->getTargetEntityTypeId(),
-        $display->getTargetBundle(),
-        $display->getMode(),
-        $id,
-      ]);
-    }
-
-    // Panels now implements a 'pattern' plugin type. I'm not sure this is
-    // absolutely necessary, but I'm erring on the side of caution here.
-    if (empty($panelizer_display['pattern'])) {
-      $panelizer_display['pattern'] = 'panelizer';
-    }
-  }
-
-  $display
-    ->setThirdPartySetting('panelizer', 'displays', $panelizer_displays)
-    ->save();
-}
-
-/**
- * Recursively merges arrays using the + method.
- *
- * Existing keys at all levels of $a, both numeric and associative, will always
- * be preserved. That's why I'm calling this a "Canadian" merge -- it does not
- * want to step on any toes.
- *
- * @param array $a
- *   The input array.
- * @param array $b
- *   The array to merge into $a.
- *
- * @return array
- *   The merged arrays.
- */
-function array_merge_canadian(array $a, array $b) {
-  $a += $b;
-  foreach ($a as $k => $v) {
-    if (is_array($v) && isset($b[$k]) && is_array($b[$k])) {
-      $a[$k] = call_user_func(__FUNCTION__, $a[$k], $b[$k]);
-    }
-  }
-  return $a;
 }
 
 /**

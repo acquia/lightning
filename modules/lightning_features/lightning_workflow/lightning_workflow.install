@@ -49,10 +49,15 @@ function lightning_workflow_install() {
  * Applies workflow permissions to content management roles.
  */
 function lightning_workflow_update_8001() {
-  foreach (NodeType::loadMultiple() as $node_type) {
-    \Drupal::moduleHandler()
-      ->invoke('lightning_workflow', 'node_type_insert', [$node_type]);
-  }
+  $node_types = NodeType::loadMultiple();
+  array_walk($node_types, 'lightning_workflow_node_type_insert');
+}
+
+/**
+ * Clears the entity type definition cache.
+ */
+function lightning_workflow_update_8002() {
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
 }
 
 /**

@@ -12,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Base class for media bundle resolvers.
  *
- * @deprecated in Lightning 2.0.4 and will be removed in Lightning 3.x. Media
+ * @deprecated in Lightning 2.0.4 and will be removed in Lightning 2.1.0. Media
  * type plugins should implement InputMatchInterface directly instead.
  */
 class BundleResolverBase extends PluginBase implements BundleResolverInterface, ContainerFactoryPluginInterface {

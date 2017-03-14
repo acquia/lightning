@@ -10,6 +10,31 @@ use Drupal\Core\Render\Element as RenderElement;
 class Element {
 
   /**
+   * Recursively merges arrays using the + method.
+   *
+   * Existing keys at all levels of $a, both numeric and associative, will
+   * always be preserved. That's why I'm calling this a "Canadian" merge -- it
+   * does not want to step on any toes.
+   *
+   * @param array $a
+   *   The input array.
+   * @param array $b
+   *   The array to merge into $a.
+   *
+   * @return array
+   *   The merged array.
+   */
+  public function mergeCanadian(array $a, array $b) {
+    $a += $b;
+    foreach ($a as $k => $v) {
+      if (is_array($v) && isset($b[$k]) && is_array($b[$k])) {
+        $a[$k] = static::mergeCanadian($a[$k], $b[$k]);
+      }
+    }
+    return $a;
+  }
+
+  /**
    * Puts an associative array into an arbitrary order.
    *
    * @param array $values
@@ -46,7 +71,7 @@ class Element {
     // Recurse into child elements.
     foreach (RenderElement::children($element) as $key) {
       if (is_array($element[$key])) {
-        $element[$key] = call_user_func([static::class, __FUNCTION__], $element[$key]);
+        $element[$key] = static::disableButtons($element[$key]);
       }
     }
     return $element;

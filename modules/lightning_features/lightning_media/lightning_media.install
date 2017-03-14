@@ -77,14 +77,20 @@ function lightning_media_update_8002() {
  * Creates the Media Creator and Media Manager roles.
  */
 function lightning_media_update_8003() {
-  $role = Role::load('media_creator');
-  if (empty($role)) {
-    lightning_core_create_config('user_role', 'media_creator', 'lightning_media');
-  }
+  /** @var \Drupal\lightning_core\ConfigHelper $config */
+  $config = \Drupal::service('lightning_config_helper')
+    ->install('lightning_media');
 
-  $role = Role::load('media_manager');
-  if (empty($role)) {
-    lightning_core_create_config('user_role', 'media_manager', 'lightning_media');
+  $roles = Role::loadMultiple([
+    'media_creator',
+    'media_manager',
+  ]);
+
+  if (empty($roles['media_creator'])) {
+    $config->createEntity('user_role', 'media_creator');
+  }
+  if (empty($roles['media_manager'])) {
+    $config->createEntity('user_role', 'media_manager');
   }
 }
 
@@ -105,9 +111,11 @@ function lightning_media_update_8004() {
 function lightning_media_update_8005() {
   \Drupal::service('module_installer')->install(['entity_browser']);
 
-  lightning_core_create_config('entity_form_mode', 'media.media_browser', 'lightning_media');
-  lightning_core_create_config('entity_browser', 'media_browser', 'lightning_media');
-  lightning_core_create_config('embed_button', 'media_browser', 'lightning_media');
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_media')
+    ->createEntity('entity_form_mode', 'media.media_browser')
+    ->createEntity('entity_browser', 'media_browser')
+    ->createEntity('embed_button', 'media_browser');
 }
 
 /**
