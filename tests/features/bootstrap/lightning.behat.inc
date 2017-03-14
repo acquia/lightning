@@ -77,7 +77,7 @@ class LightningSubContext extends DrupalSubContextBase {
   /**
    * Check for errors since the scenario started.
    *
-   * @AfterScenario
+   * @AfterScenario ~@errors
    */
   public function checkWatchdog(AfterScenarioScope $scope) {
     // Bypass the error checking if the scenario has the @errors tag.
