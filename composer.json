@@ -21,9 +21,13 @@
         "drupal/devel": "^1.0",
         "squizlabs/php_codesniffer": "2.*",
         "se/selenium-server-standalone": "^2.53",
+        "drupal/console": "^1.0",
         "jakoch/phantomjs-installer": "1.9.8",
         "jcalderonzumba/mink-phantomjs-driver": "~0.3.1"
     },
+    "bin": [
+      "lightning-subprofile"
+    ],
     "config": {
         "bin-dir": "bin/"
     },
@@ -96,7 +100,9 @@
                 "2652138 - ImageFormatter does not support SVGs":
                 "https://www.drupal.org/files/issues/2652138.patch",
                 "2765525 - Add AJAX command to add style sheets to CKEditor instances":
-                "https://www.drupal.org/files/issues/2765525-30-8.2.x.patch"
+                "https://www.drupal.org/files/issues/2765525-30-8.2.x.patch",
+                "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order":
+                "https://www.drupal.org/files/issues/1356276-276-8.2.x.patch"
             },
             "drupal/entity_embed": {
                 "2832504 - Send the CKEditor instance ID to the embed.preview route":
@@ -149,6 +155,7 @@
     },
     "autoload": {
         "psr-4": {
+            "Acquia\\Lightning\\": "src",
             "Acquia\\LightningExtension\\": "src/LightningExtension"
         }
     }
