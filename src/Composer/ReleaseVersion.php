@@ -25,8 +25,17 @@ class ReleaseVersion {
     /** @var \Symfony\Component\Finder\SplFileInfo $file */
     foreach ($finder as $file) {
       $info = Yaml::parse($file->getContents());
-      $info['version'] = reset($arguments);
-      file_put_contents($file->getPathname(), Yaml::dump($info, 2, 2));
+
+      // Wrapping the version number in << and >> will cause the dumper to quote
+      // the string, which is necessary for compliance with the strict PECL
+      // parser.
+      $info['version'] = '<<' . reset($arguments) . '>>';
+      $info = Yaml::dump($info, 2, 2);
+      // Now that the version number will be quoted, strip out the << and >>
+      // escape sequence.
+      $info = str_replace(['<<', '>>'], NULL, $info);
+
+      file_put_contents($file->getPathname(), $info);
     }
   }
 
