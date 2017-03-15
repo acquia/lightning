@@ -1,11 +1,23 @@
 services:
-  lightning.extender:
-    class: '\Drupal\lightning\Extender'
-    arguments:
-      - '@app.root'
-      - '@site.path'
-
   lightning.form_helper:
     class: '\Drupal\lightning\FormHelper'
     arguments:
       - '@element_info'
+
+  lightning.subprofile:
+    class: '\Drupal\lightning\Command\SubProfileCommand'
+    arguments:
+      - '@lightning.subprofile_generator'
+      - '@?console.string_converter'
+      - '@?console.validator'
+      - '@app.root'
+      - '@info_parser'
+      - '@?console.translator_manager'
+    tags:
+      - { name: drupal.command }
+
+  lightning.subprofile_generator:
+    class: '\Drupal\lightning\Generator\SubProfileGenerator'
+    arguments: []
+    tags:
+      - { name: drupal.generator }

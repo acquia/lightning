@@ -68,7 +68,7 @@ class LightningSubContext extends DrupalSubContextBase {
   /**
    * Store current time.
    *
-   * @BeforeScenario ~@errors
+   * @BeforeScenario
    */
   public function setStartTime() {
     $this->startTime = time();
@@ -80,14 +80,23 @@ class LightningSubContext extends DrupalSubContextBase {
    * @AfterScenario ~@errors
    */
   public function checkWatchdog(AfterScenarioScope $scope) {
-    if (db_table_exists('watchdog')) {
-      $log = db_select('watchdog', 'w')
+    // Bypass the error checking if the scenario has the @errors tag.
+    if (in_array('errors', $scope->getScenario()->getTags())) {
+      return;
+    }
+
+    $db = \Drupal::database();
+    if ($db->schema()->tableExists('watchdog')) {
+      $log = $db->select('watchdog', 'w')
         ->fields('w')
         ->condition('w.type', 'php', '=')
         ->condition('w.timestamp', $this->startTime, '>=')
         ->execute()
         ->fetchAll();
+
       if (!empty($log)) {
+        // TODO: Move this stuff to its own exception class in Lightning
+        // Extension for greater clarity.
         foreach ($log as $error) {
           // Make the substitutions easier to read in the log.
           $error->variables = unserialize($error->variables);

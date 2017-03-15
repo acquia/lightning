@@ -1,0 +1,70 @@
+#!/usr/bin/env php
+<?php
+
+if (empty($argv[1])) {
+  die("You must specify a lightning.extend.yml file. For example: lightning-subprofile ./docroot/sites/example.com/lightning.extend.yml\n");
+}
+
+// Get the full, absolute path to the extender file as a way to validate that
+// it exists.
+$extender = realpath($argv[1]);
+
+if (empty($extender)) {
+  die($argv[1] . " does not exist.\n");
+}
+
+// Go upwards until we find the autoloader, then require it. This is so we can
+// use Drupal's YAML parser.
+$loop = TRUE;
+while ($loop && ! is_file('./vendor/autoload.php')) {
+  $loop = chdir('..');
+}
+
+require_once './vendor/autoload.php';
+
+$extender = file_get_contents($extender);
+$extender = \Drupal\Component\Serialization\Yaml::decode($extender);
+
+// Build the Drupal Console command line.
+$command = 'lightning:subprofile --no-interaction';
+$command .= ' --name="Lightning Extender"';
+$command .= ' --machine-name=' . (@$argv[2] ?: 'lightning_extender');
+
+if ($extender['modules']) {
+  $command .= ' --include=' . implode(',', $extender['modules']);
+}
+
+$exclude = [];
+if ($extender['lightning_extensions']) {
+  // There's no easy way to determine the Drupal application root, so we can't
+  // automatically scan for components. So let's just use a hard-coded list.
+  $exclude = array_merge($exclude, array_diff(
+    [
+      'lightning_layout',
+      'lightning_media',
+      'lightning_preview',
+      'lightning_workflow',
+    ],
+    $extender['lightning_extensions']
+  ));
+}
+if ($extender['exclude_components']) {
+  $exclude = array_merge($exclude, $extender['exclude_components']);
+}
+if ($exclude) {
+  $command .= ' --exclude=' . implode(',', $exclude);
+}
+
+// If Drupal Console is installed, go ahead and use it to create the sub-profile
+// now. Otherwise, ask the user to install it and give them the command to run.
+if (is_file('./vendor/drupal/console/bin/drupal')) {
+  passthru('./vendor/drupal/console/bin/drupal ' . $command);
+}
+else {
+  echo <<<END
+Drupal Console does not appear to be installed. Install it and run the following command to generate a Lightning subprofile:
+
+/path/to/drupal-console $command
+
+END;
+}
