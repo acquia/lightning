@@ -126,22 +126,6 @@ function lightning_media_form_entity_browser_media_browser_form_alter(array &$fo
 }
 
 /**
- * Implements hook_entity_type_alter().
- */
-function lightning_media_entity_type_alter(array &$entity_types) {
-  // Files should never be workspace-aware. Besides, they ALWAYS conflict
-  // during replication, for reasons as yet unknown. But because Multiversion
-  // is basically a one-way ticket, only opt file entities out of Multiversion
-  // if they haven't been migrated into Multiversion's storage yet. There
-  // really should be a method on MultiversionManagerInterface to determine if
-  // an entity type has been migrated, so that we don't have to directly query
-  // state keys...but hey, you gotta work with what you have.
-  if (!\Drupal::state()->get('multiversion.migration_done.file')) {
-    $entity_types['file']->set('multiversion', FALSE);
-  }
-}
-
-/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
