@@ -323,8 +323,6 @@ class SubProfileCommand extends Command {
    *   The I/O handler.
    */
   protected function confirmComponent(array $info, DrupalStyle $io) {
-    $experimental = isset($info['experimental']);
-
     // Include Lightning Core, or this won't be much of a sub-profile.
     if ($info['machine_name'] == 'lightning_core') {
       $include = TRUE;
@@ -334,24 +332,11 @@ class SubProfileCommand extends Command {
         $this->trans('commands.lightning.subprofile.questions.include-component'),
         $info['name']
       );
-      if ($experimental) {
-        $question .= sprintf(
-          ' <fg=yellow>%s</>',
-          $this->trans('commands.lightning.subprofile.experimental')
-        );
-      }
-      // Assume that they want all non-experimental components.
-      $include = $io->confirm($question, !$experimental);
+      $include = $io->confirm($question);
     }
 
     if ($include) {
       $this->handleInclude($info, $io);
-    }
-    // Explicitly exclude the component if it's not experimental, or it will be
-    // inherited from Lightning.
-    elseif (!$experimental) {
-      $this->doExclude($info['machine_name']);
-      $this->doExclude(@$info['components']);
     }
   }
 
@@ -364,24 +349,10 @@ class SubProfileCommand extends Command {
    *   The I/O handler.
    */
   protected function handleInclude(array $info, DrupalStyle $io) {
-    $is_experimental = isset($info['experimental']);
-
-    // Experimental components and sub-components must be explicitly included.
-    if ($is_experimental) {
-      $this->doInclude($info['machine_name']);
-    }
-
     // If there are sub-components, ask about excluding them individually.
     if (isset($info['components'])) {
       $exclude = $this->excludeSubComponents($info, $io);
-
-      if ($is_experimental) {
-        // Explicitly include only the sub-components which were not excluded.
-        $this->doInclude(array_diff($info['components'], $exclude));
-      }
-      else {
-        $this->doExclude($exclude);
-      }
+      $this->doExclude($exclude);
     }
   }
 
