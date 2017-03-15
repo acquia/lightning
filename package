@@ -1,93 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-class IniEncoder {
-
-  /**
-   * Serializes an array to legacy make format.
-   *
-   * @param array $input
-   *   The data to serialize.
-   *
-   * @return string
-   *   The serialized data.
-   */
-  public function encode(array $input) {
-    return implode("\n", $this->doEncode($input));
-  }
-
-  /**
-   * Recursively serializes data to legacy make format.
-   *
-   * @param array $input
-   *   The data to serialize.
-   * @param array $keys
-   *   The current key path.
-   *
-   * @return string[]
-   *   The serialized data as a flat array of lines.
-   */
-  protected function doEncode(array $input, array $keys = []) {
-    $output = array();
-
-    foreach ($input as $key => $value) {
-      $keys[] = $key;
-
-      if (is_array($value)) {
-        if ($this->isAssociative($value)) {
-          $output = array_merge($output, $this->doEncode($value, $keys));
-        }
-        else {
-          foreach ($value as $j) {
-            $output[] = $this->keysToString($keys) . '[] = ' . $j;
-          }
-        }
-      }
-      else {
-        $output[] = $this->keysToString($keys) . ' = ' . $value;
-      }
-
-      array_pop($keys);
-    }
-
-    return $output;
-  }
-
-  /**
-   * Transforms an key path to a string.
-   *
-   * @param string[] $keys
-   *   The key path.
-   *
-   * @return string
-   *   The flattened key path.
-   */
-  protected function keysToString(array $keys) {
-    $head = array_shift($keys);
-    if ($keys) {
-      return $head . '[' . implode('][', $keys) . ']';
-    }
-    else {
-      return $head;
-    }
-  }
-
-  /**
-   * Tests if an array is associative.
-   *
-   * @param array $input
-   *   The array to test.
-   *
-   * @return bool
-   *   Whether or not the array has non-numeric keys.
-   */
-  protected function isAssociative(array $input) {
-    $keys = implode('', array_keys($input));
-    return !is_numeric($keys);
-  }
-
-}
-
 class Bower implements \IteratorAggregate {
 
   /**
@@ -169,7 +82,7 @@ class Bower implements \IteratorAggregate {
 
 require_once './vendor/autoload.php';
 
-$encoder = new IniEncoder();
+$encoder = new \Acquia\Lightning\IniEncoder();
 
 $make = \Symfony\Component\Yaml\Yaml::parse(`./bin/drush make-convert composer.lock`);
 

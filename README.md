@@ -22,9 +22,10 @@ If you don't want to use Composer, you can install Lightning the traditional way
 by downloading a tarball from our
 [drupal.org project page](https://www.drupal.org/project/lightning).
 
-You can customize your installation using [lightning.extend.yml](https://github.com/acquia/lightning/blob/8.x-1.x/lightning.extend.yml).
-Using this file, you can choose which Lightning features to install or install
-your own custom features.
+You can customize your installation by creating a [sub-profile which uses
+Lightning as its base profile][sub-profile documentation]. Lightning includes a
+Drupal Console command (`lightning:subprofile`) which will generate a
+sub-profile for you.
 
 ## What Lightning Does
 Through custom modules and configuration, Lightning aims to target four
@@ -141,3 +142,4 @@ will not need to do this.
 [d.o_semver]: https://www.drupal.org/node/1612910
 [lightning_composer_project]: https://github.com/acquia/lightning-project
 [demo_videos]: http://lightning.acquia.com/blog/lightning-user-stories-demonstrations "Lightning user story demonstration videos"
+[sub-profile documentation]: https://github.com/acquia/lightning/wiki/Lightning-as-a-Base-Profile "Lightning sub-profile documentation"

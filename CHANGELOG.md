@@ -1,8 +1,12 @@
+## 2.0.5
+* Lightning can now be used as a base profile and contains a script to generate
+  a sub-profile. (Issue #2855793)
+
 ## 2.0.4
 * The media browser now allows you to select more than one item for multi-value
   fields. (Issue #2829444)
-* Scheduled updates now clearly display what is scheduled to happen and when, and
-  multiple updates can be created for basic pages. (Issue #2688411)
+* Scheduled updates now clearly display what is scheduled to happen and when,
+  and multiple updates can be created for basic pages. (Issue #2688411)
 * Fixed a bug where reverting the layout of a forward revision of a landing page
   also reverted the layout of the published version. (Issue #2754649) 
 * Fixed a bug where Lightning Media failed to validate file size and dimension
