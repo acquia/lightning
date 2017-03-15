@@ -2,6 +2,8 @@
 
 namespace Drupal\lightning_core;
 
+use Drupal\Core\Entity\Display\EntityDisplayInterface;
+use Drupal\Core\Entity\EntityFieldManagerInterface;
 use Drupal\Core\Entity\Query\QueryFactory;
 
 /**
@@ -17,13 +19,23 @@ class DisplayHelper {
   protected $queryFactory;
 
   /**
+   * The entity field manager.
+   *
+   * @var \Drupal\Core\Entity\EntityFieldManagerInterface
+   */
+  protected $entityFieldManager;
+
+  /**
    * DisplayHelper constructor.
    *
    * @param \Drupal\Core\Entity\Query\QueryFactory $query_factory
    *   The entity query factory.
+   * @param \Drupal\Core\Entity\EntityFieldManagerInterface $entity_field_manager
+   *   The entity field manager.
    */
-  public function __construct(QueryFactory $query_factory) {
+  public function __construct(QueryFactory $query_factory, EntityFieldManagerInterface $entity_field_manager) {
     $this->queryFactory = $query_factory;
+    $this->entityFieldManager = $entity_field_manager;
   }
 
   /**
@@ -51,6 +63,26 @@ class DisplayHelper {
       }
     }
     return 'default';
+  }
+
+  public function getNewComponents(EntityDisplayInterface $display) {
+    if (isset($display->original)) {
+      return array_diff($display->getComponents(), $display->original->getComponents());
+    }
+    else {
+      return [];
+    }
+  }
+
+  public function getNewFields(EntityDisplayInterface $display, callable $filter = NULL) {
+    $fields = $this->entityFieldManager->getFieldDefinitions(
+      $display->getTargetEntityTypeId(),
+      $display->getTargetBundle()
+    );
+    if ($filter) {
+      $fields = array_filter($fields, $filter);
+    }
+    return array_intersect_key($this->getNewComponents($display), $fields);
   }
 
 }
