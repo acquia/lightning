@@ -81,4 +81,5 @@ projects[workbench_moderation][patch][] = https://www.drupal.org/files/issues/28
 projects[workbench_moderation][patch][] = https://www.drupal.org/files/issues/workbench_moderation-quickedit-support-2749503-6.patch
 projects[workbench_moderation][version] = 1.2
 projects[workspace][type] = module
+projects[workspace][patch][] = https://www.drupal.org/files/issues/missing_hook_help-2833677-5.patch
 projects[workspace][version] = 1.0-alpha4

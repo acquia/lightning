@@ -1,4 +1,4 @@
-@lightning @preview @api @experimental @errors
+@lightning @preview @api @experimental
 Feature: Workspaces
 
   Scenario: Locking a workspace by publishing it
@@ -9,6 +9,7 @@ Feature: Workspaces
     Then I should not see the button "Save"
     And I set the "Stage" workspace to the "Draft" moderation state
 
+  @errors
   Scenario: Configuration entities are unconditionally locked in every workspace except the Live workspace
     Given I am logged in as a user with the administrator role
     When I visit "/admin/structure/workspace/2/activate"
@@ -18,6 +19,7 @@ Feature: Workspaces
     Then the response status code should be 500
     And I should see "Configuration can only be modified in the Live workspace"
 
+  @errors
   Scenario: Configuration entity form routes cannot be accessed in any workspace except the Live workspace
     Given I am logged in as a user with the administrator role
     When I visit "/admin/structure/workspace/2/activate"
