@@ -2,7 +2,7 @@
 Feature: Media assets based on embed codes
 
   @javascript
-  Scenario Outline: Creating a tweet
+  Scenario Outline: Creating a media asset from an embed code
     Given I am logged in as a user with the media_creator role
     When I visit "/media/add/<bundle>"
     And I enter "<embed_code>" for "<source_field>"
@@ -20,7 +20,7 @@ Feature: Media assets based on embed codes
       | video     | https://www.youtube.com/watch?v=zQ1_IbFFbzA       | The Pill Scene                   | Video URL      |
       | video     | https://vimeo.com/14782834                        | Cache Rules Everything Around Me | Video URL      |
 
-  Scenario Outline: Viewing a tweet as an anonymous user
+  Scenario Outline: Viewing a media asset an anonymous user
     Given <bundle> media from embed code:
     """
     <embed_code>

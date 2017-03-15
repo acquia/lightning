@@ -13,49 +13,40 @@ use Drupal\media_entity\MediaInterface;
 class MediaForm extends BaseMediaForm {
 
   /**
-   * Returns the media entity.
-   *
-   * This method is overridden for a more specific return type hint.
-   *
-   * @return \Drupal\media_entity\MediaInterface
-   *   The media entity.
-   */
-  public function getEntity() {
-    return parent::getEntity();
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    /** @var \Drupal\media_entity\MediaInterface $entity */
     $entity = $this->getEntity();
+
     $field = static::getSourceField($entity);
-
-    // Get the source field widget element.
-    $widget_keys = [
-      $field->getName(),
-      'widget',
-      0,
-      $field->first()->mainPropertyName(),
-    ];
-    $widget = &NestedArray::getValue($form, $widget_keys);
-
-    // Add an attribute to identify it.
-    $widget['#attributes']['data-source-field'] = TRUE;
-
-    if (static::isPreviewable($entity)) {
-      $widget['#ajax'] = [
-        'callback' => [static::class, 'onChange'],
-        'wrapper' => 'preview',
-        'method' => 'html',
-        'event' => 'change',
+    if ($field) {
+      // Get the source field widget element.
+      $widget_keys = [
+        $field->getName(),
+        'widget',
+        0,
+        $field->first()->mainPropertyName(),
       ];
+      $widget = &NestedArray::getValue($form, $widget_keys);
 
-      $form['preview'] = $field->view('default');
-      $form['preview']['#prefix'] = '<div id="preview">';
-      $form['preview']['#suffix'] = '</div>';
+      // Add an attribute to identify it.
+      $widget['#attributes']['data-source-field'] = TRUE;
+
+      if (static::isPreviewable($entity)) {
+        $widget['#ajax'] = [
+          'callback' => [static::class, 'onChange'],
+          'wrapper' => 'preview',
+          'method' => 'html',
+          'event' => 'change',
+        ];
+
+        $form['preview'] = $field->view('default');
+        $form['preview']['#prefix'] = '<div id="preview">';
+        $form['preview']['#suffix'] = '</div>';
+      }
     }
 
     return $form;
@@ -82,13 +73,16 @@ class MediaForm extends BaseMediaForm {
    * @param \Drupal\media_entity\MediaInterface $entity
    *   The media entity.
    *
-   * @return \Drupal\Core\Field\FieldItemListInterface
-   *   The media entity's source field item list.
+   * @return \Drupal\Core\Field\FieldItemListInterface|null
+   *   The media entity's source field item list, or NULL if the media type
+   *   plugin does not define a source field.
    */
   public static function getSourceField(MediaInterface $entity) {
     $type_configuration = $entity->getType()->getConfiguration();
 
-    return $entity->get($type_configuration['source_field']);
+    return isset($type_configuration['source_field'])
+      ? $entity->get($type_configuration['source_field'])
+      : NULL;
   }
 
   /**
