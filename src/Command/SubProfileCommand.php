@@ -7,6 +7,7 @@ use Drupal\Console\Core\Command\Shared\CommandTrait;
 use Drupal\Console\Core\Generator\Generator;
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Console\Core\Utils\StringConverter;
+use Drupal\Console\Core\Utils\TwigRenderer;
 use Drupal\Console\Utils\TranslatorManager;
 use Drupal\Console\Utils\Validator;
 use Drupal\Core\Extension\Extension;
@@ -18,7 +19,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Drupal\Console\Core\Utils\TwigRenderer;
 
 /**
  * A Drupal Console command to generate a Lightning sub-profile.
