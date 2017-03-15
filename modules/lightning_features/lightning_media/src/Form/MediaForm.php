@@ -31,22 +31,27 @@ class MediaForm extends BaseMediaForm {
     $form = parent::form($form, $form_state);
 
     $entity = $this->getEntity();
+    $field = static::getSourceField($entity);
+
+    // Get the source field widget element.
+    $widget_keys = [
+      $field->getName(),
+      'widget',
+      0,
+      $field->first()->mainPropertyName(),
+    ];
+    $widget = &NestedArray::getValue($form, $widget_keys);
+
+    // Add an attribute to identify it.
+    $widget['#attributes']['data-source-field'] = TRUE;
 
     if (static::isPreviewable($entity)) {
-      $field = static::getSourceField($entity);
-
-      $keys = [
-        $field->getName(),
-        'widget',
-        0,
-        $field->first()->mainPropertyName(),
-        '#ajax',
-      ];
-      NestedArray::setValue($form, $keys, [
+      $widget['#ajax'] = [
         'callback' => [static::class, 'onChange'],
         'wrapper' => 'preview',
         'method' => 'html',
-      ]);
+        'event' => 'change',
+      ];
 
       $form['preview'] = $field->view('default');
       $form['preview']['#prefix'] = '<div id="preview">';
