@@ -91,13 +91,13 @@ before_script:
   - sleep 5
   # Start PhantomJS for PHPUnit functional JavaScript tests.
   # The command line is copied from https://www.chapterthree.com/blog/javascript-testing-comes-to-drupal-8
-  - ../bin/phantomjs --ssl-protocol=any --ignore-ssl-errors=true ../vendor/jcalderonzumba/gastonjs/src/Client/main.js 8510 1024 768 &
+  - phantomjs --ssl-protocol=any --ignore-ssl-errors=true ../vendor/jcalderonzumba/gastonjs/src/Client/main.js 8510 1024 768 2> ../tmp/phantomjs.log &
   - sleep 5
   - cd ./profiles/lightning
 
 script:
   - composer validate --no-check-all --ansi
-  - phpunit --configuration ../../core --group lightning
+  - phpunit --configuration ../../core --group lightning --verbose
   - behat --strict --stop-on-failure
 
 matrix:
