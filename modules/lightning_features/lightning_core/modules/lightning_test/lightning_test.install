@@ -5,8 +5,6 @@
  * Contains installation routines for Lightning Test.
  */
 
-use Drupal\entity_browser\Element\EntityBrowserElement;
-
 /**
  * Implements hook_install().
  */
@@ -21,7 +19,7 @@ function lightning_test_install() {
         'view_mode' => 'default',
         'preview_image_style' => 'thumbnail',
         'open' => TRUE,
-        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
+        'selection_mode' => 'selection_append',
       ],
     ])
     ->setComponent('field_hero_image', [
@@ -33,7 +31,7 @@ function lightning_test_install() {
         'view_mode' => 'default',
         'preview_image_style' => 'thumbnail',
         'open' => TRUE,
-        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
+        'selection_mode' => 'selection_append',
       ],
     ])
     ->setComponent('field_unlimited_images', [
@@ -45,21 +43,7 @@ function lightning_test_install() {
         'view_mode' => 'default',
         'preview_image_style' => 'thumbnail',
         'open' => TRUE,
-        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
-      ],
-    ])
-    ->setComponent('field_media_reference', [
-      'type' => 'entity_browser_entity_reference',
-      'settings' => [
-        'entity_browser' => 'media_browser',
-        'field_widget_display' => 'rendered_entity',
-        'field_widget_edit' => TRUE,
-        'field_widget_remove' => TRUE,
-        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
-        'field_widget_display_settings' => [
-          'view_mode' => 'embedded',
-        ],
-        'open' => TRUE,
+        'selection_mode' => 'selection_append',
       ],
     ])
     ->save();

@@ -7,10 +7,7 @@
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Asset\AttachedAssetsInterface;
-use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\entity_browser\Element\EntityBrowserElement;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
@@ -304,35 +301,5 @@ function lightning_media_preprocess_views_view_grid__media(array &$variables) {
     foreach ($item['content'] as &$column) {
       $column['attributes']['data-selectable'] = 'true';
     }
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function lightning_media_entity_form_display_presave(EntityFormDisplayInterface $display) {
-  $filter = function (FieldDefinitionInterface $field) {
-    return $field->getType() == 'entity_reference' && $field->getSetting('target_type') == 'media';
-  };
-
-  $new_components = \Drupal::service('lightning.display_helper')
-    ->getNewFields($display, $filter);
-
-  foreach ($new_components as $key => $component) {
-    $display->setComponent($key, [
-      'type' => 'entity_browser_entity_reference',
-      'weight' => $component['weight'],
-      'settings' => [
-        'entity_browser' => 'media_browser',
-        'field_widget_display' => 'rendered_entity',
-        'field_widget_edit' => TRUE,
-        'field_widget_remove' => TRUE,
-        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
-        'field_widget_display_settings' => [
-          'view_mode' => 'embedded',
-        ],
-        'open' => TRUE,
-      ],
-    ]);
   }
 }
