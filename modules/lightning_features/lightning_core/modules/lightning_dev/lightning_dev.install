@@ -40,8 +40,6 @@ function lightning_dev_install() {
   $tweet_bundle->setTypeConfiguration($configuration);
   $tweet_bundle->save();
 
-  \Drupal::service('module_installer')->install(['lightning_preview']);
-
   // Sentence-case the label of the media browser's embed code widget. Yes, not
   // doing this can cause tests to fail.
   $entity_browser = EntityBrowser::load('media_browser');
@@ -59,6 +57,8 @@ function lightning_dev_install() {
 
   // Set up centralized Behat configuration.
   lightning_dev_update_8004();
+
+  \Drupal::service('module_installer')->install(['lightning_preview']);
 }
 
 /**
