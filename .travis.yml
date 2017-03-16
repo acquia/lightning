@@ -89,11 +89,11 @@ before_script:
   - mkdir ../tmp
   - selenium-server-standalone -port 4444 -log ../tmp/selenium2.log &
   - sleep 5
-  - cd ./profiles/lightning
 
 script:
-  - composer validate --no-check-all --ansi
-  - behat --strict --stop-on-failure
+  - composer validate ./profiles/lightning/composer.json --no-check-all --ansi
+  - phpunit --configuration ./core --group lightning
+  - behat --strict --stop-on-failure --config ./sites/default/files/behat.yml
 
 matrix:
   fast_finish: true

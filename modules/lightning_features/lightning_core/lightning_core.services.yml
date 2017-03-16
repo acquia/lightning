@@ -23,6 +23,7 @@ services:
     class: '\Drupal\lightning_core\DisplayHelper'
     arguments:
       - '@entity.query'
+      - '@entity_field.manager'
 
   access_check.administrator_role:
     class: '\Drupal\lightning_core\Access\AdministrativeRoleCheck'

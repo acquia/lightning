@@ -56,6 +56,9 @@ function lightning_dev_install() {
   lightning_dev_update_8001();
   lightning_dev_update_8002();
   lightning_dev_update_8003();
+
+  // Set up centralized Behat configuration.
+  lightning_dev_update_8004();
 }
 
 /**
@@ -192,3 +195,14 @@ function lightning_dev_update_8003() {
   $view->save();
 }
 
+/**
+ * Sets up centralized Behat configuration.
+ */
+function lightning_dev_update_8004() {
+  \Drupal::service('lightning_dev.behat')->generate('http://127.0.0.1:8080');
+
+  // Update the Behat configuration for all installed modules.
+  $modules = \Drupal::moduleHandler()->getModuleList();
+  $modules = array_keys($modules);
+  lightning_dev_modules_installed($modules);
+}

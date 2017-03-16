@@ -1,0 +1,11 @@
+<?php
+
+/**
+ * Implements hook_modules_installed().
+ */
+function lightning_dev_modules_installed(array $modules) {
+  array_walk($modules, [
+    \Drupal::service('lightning_dev.behat'),
+    'add'
+  ]);
+}
