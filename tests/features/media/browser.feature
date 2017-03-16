@@ -44,9 +44,3 @@ Feature: An entity browser for media assets
     Then 1 element should match "[data-selectable].selected"
     # No choices are ever disabled in a single-cardinality entity browser.
     And nothing should match "[data-selectable].disabled"
-
-  @test_module
-  Scenario: Using the media browser in a media reference field
-    Given I am logged in as a user with the page_creator,media_creator roles
-    When I visit "/node/add/page"
-    Then I should see an "iframe[name^='entity_browser_iframe_media_browser']" element
