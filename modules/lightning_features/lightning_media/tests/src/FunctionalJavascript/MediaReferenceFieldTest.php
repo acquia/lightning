@@ -41,15 +41,13 @@ class MediaReferenceFieldTest extends JavascriptTestBase {
     $this->drupalGet('/admin/structure/types/manage/page/fields/add-field');
 
     $values = [
-      'new_storage_type' => 'entity_reference',
+      'new_storage_type' => 'field_ui:entity_reference:media',
       'label' => 'Foobar',
       'field_name' => 'foobar',
     ];
     $this->submitForm($values, 'Save and continue', 'field-ui-field-storage-add-form');
 
-    $values = [
-      'settings[target_type]' => 'media',
-    ];
+    // No need to change the field storage settings.
     $this->submitForm($values, 'Save field settings', 'field-storage-config-edit-form');
 
     $page = $this->getSession()->getPage();
