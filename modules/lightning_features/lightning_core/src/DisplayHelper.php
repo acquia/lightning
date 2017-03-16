@@ -90,15 +90,14 @@ class DisplayHelper {
    *   The display config entity.
    * @param callable|NULL $filter
    *   (optional) The function on which to filter the fields, accepting the
-   *   field definition as an argument.
+   *   field storage definition as an argument.
    *
    * @return array
    *   The newly added components.
    */
   public function getNewFields(EntityDisplayInterface $display, callable $filter = NULL) {
-    $fields = $this->entityFieldManager->getFieldDefinitions(
-      $display->getTargetEntityTypeId(),
-      $display->getTargetBundle()
+    $fields = $this->entityFieldManager->getFieldStorageDefinitions(
+      $display->getTargetEntityTypeId()
     );
     if ($filter) {
       $fields = array_filter($fields, $filter);

@@ -6,7 +6,7 @@
  */
 
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_image\Plugin\MediaEntity\Type\Image;
@@ -37,7 +37,7 @@ function lightning_media_image_entity_form_display_presave(EntityFormDisplayInte
     return;
   }
 
-  $filter = function (FieldDefinitionInterface $field) {
+  $filter = function (FieldStorageDefinitionInterface $field) {
     return $field->getType() == 'image';
   };
   $new_components = \Drupal::service('lightning.display_helper')
