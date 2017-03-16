@@ -67,7 +67,7 @@ class DisplayHelper {
 
   public function getNewComponents(EntityDisplayInterface $display) {
     if (isset($display->original)) {
-      return array_diff($display->getComponents(), $display->original->getComponents());
+      return array_diff_key($display->getComponents(), $display->original->getComponents());
     }
     else {
       return [];
