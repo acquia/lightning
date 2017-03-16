@@ -138,7 +138,10 @@ class FileUpload extends EntityFormProxy {
     $extensions = [];
 
     foreach ($this->bundleResolver->getPossibleBundles() as $bundle) {
-      $extensions = array_merge($extensions, preg_split('/,?\s+/', $this->getSourceFieldForBundle($bundle)->getSetting('file_extensions')));
+      $source_field = $this->getSourceFieldForBundle($bundle);
+      if ($source_field) {
+        $extensions = array_merge($extensions, preg_split('/,?\s+/', $source_field->getSetting('file_extensions')));
+      }
     }
     return implode(' ', array_unique($extensions));
   }
