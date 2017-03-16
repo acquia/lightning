@@ -65,6 +65,15 @@ class DisplayHelper {
     return 'default';
   }
 
+  /**
+   * Returns the components newly added to a display.
+   *
+   * @param \Drupal\Core\Entity\Display\EntityDisplayInterface $display
+   *   The display config entity.
+   *
+   * @return array
+   *   The newly added components.
+   */
   public function getNewComponents(EntityDisplayInterface $display) {
     if (isset($display->original)) {
       return array_diff_key($display->getComponents(), $display->original->getComponents());
@@ -74,6 +83,18 @@ class DisplayHelper {
     }
   }
 
+  /**
+   * Returns newly added field components, optionally filtered by a function.
+   *
+   * @param \Drupal\Core\Entity\Display\EntityDisplayInterface $display
+   *   The display config entity.
+   * @param callable|NULL $filter
+   *   (optional) The function on which to filter the fields, accepting the
+   *   field definition as an argument.
+   *
+   * @return array
+   *   The newly added components.
+   */
   public function getNewFields(EntityDisplayInterface $display, callable $filter = NULL) {
     $fields = $this->entityFieldManager->getFieldDefinitions(
       $display->getTargetEntityTypeId(),
