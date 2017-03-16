@@ -5,7 +5,6 @@
  * Support for instagram posts as media entities in Lightning.
  */
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_instagram\Plugin\MediaEntity\Type\Instagram;
 
@@ -20,28 +19,7 @@ function lightning_media_instagram_media_entity_type_info_alter(array &$types) {
       'string_long',
     ],
   ];
+  $types['instagram']['preview'] = TRUE;
+
   Override::pluginClass($types['instagram'], Instagram::class);
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function lightning_media_instagram_form_media_instagram_form_alter(array &$form, FormStateInterface $form_state) {
-  \Drupal::service('lightning_media.preview.embed_code')->alterForm($form, $form_state);
-}
-
-/**
- * Implements hook_inline_entity_form_entity_form_alter().
- */
-function lightning_media_instagram_inline_entity_form_entity_form_alter(&$entity_form, FormStateInterface $form_state) {
-  if ($entity_form['#entity_type'] == 'media' && $entity_form['#bundle'] == 'instagram') {
-    \Drupal::service('lightning_media.preview.embed_code')->alterForm($entity_form, $form_state, $entity_form['#entity']);
-  }
-}
-
-/**
- * Implements hook_entity_extra_field_info().
- */
-function lightning_media_instagram_entity_extra_field_info() {
-  return \Drupal::service('lightning_media.preview.embed_code')->extraFields('instagram');
 }
