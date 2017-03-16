@@ -2,21 +2,44 @@
 Feature: Creating media assets from within the media browser using embed codes
 
   @test_module
-  Scenario Outline: Creating media assets from within the media browser using embed codes
+  Scenario: Creating a YouTube video from within the media browser
     Given I am logged in as a user with the media_creator role
     When I visit "/entity-browser/iframe/media_browser"
-    And I enter embed code "<embed_code>"
-    And I enter "<title>" for "Media name"
+    And I enter embed code "https://www.youtube.com/watch?v=zQ1_IbFFbzA"
+    And I enter "The Pill Scene" for "Media name"
     And I press "Place"
     And I visit "/admin/content/media"
-    Then I should see "<title>"
+    Then I should see "The Pill Scene"
 
-    Examples:
-      | embed_code                                             | title                            |
-      | https://www.youtube.com/watch?v=zQ1_IbFFbzA            | The Pill Scene                   |
-      | https://vimeo.com/14782834                             | Cache Rules Everything Around Me |
-      | https://twitter.com/webchick/status/672110599497617408 | angie speaks                     |
-      | https://www.instagram.com/p/jAH6MNINJG                 | Drupal Does LSD                  |
+  @test_module
+  Scenario: Creating a Vimeo video from within the media browser
+    Given I am logged in as a user with the media_creator role
+    When I visit "/entity-browser/iframe/media_browser"
+    And I enter embed code "https://vimeo.com/14782834"
+    And I enter "Cache Rules Everything Around Me" for "Media name"
+    And I press "Place"
+    And I visit "/admin/content/media"
+    Then I should see "Cache Rules Everything Around Me"
+
+  @test_module
+  Scenario: Creating a tweet from within the media browser
+    Given I am logged in as a user with the media_creator role
+    When I visit "/entity-browser/iframe/media_browser"
+    And I enter embed code "https://twitter.com/webchick/status/672110599497617408"
+    And I enter "angie speaks" for "Media name"
+    And I press "Place"
+    And I visit "/admin/content/media"
+    Then I should see "angie speaks"
+
+  @test_module
+  Scenario: Creating an Instagram post from within the media browser
+    Given I am logged in as a user with the media_creator role
+    When I visit "/entity-browser/iframe/media_browser"
+    And I enter embed code "https://www.instagram.com/p/jAH6MNINJG"
+    And I enter "Drupal Does LSD" for "Media name"
+    And I press "Place"
+    And I visit "/admin/content/media"
+    Then I should see "Drupal Does LSD"
 
   Scenario: Embed code widget should require input
     Given I am logged in as a user with the media_creator role

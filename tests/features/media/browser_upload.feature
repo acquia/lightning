@@ -1,20 +1,25 @@
 @lightning @media @api @javascript @errors
 Feature: Uploading media assets through the media browser
 
-  @test_module @foo
-  Scenario Outline: Uploading a file from within the media browser
+  @test_module
+  Scenario: Uploading an image from within the media browser
     Given I am logged in as a user with the media_creator role
     When I visit "/entity-browser/iframe/media_browser"
-    And I upload "<file>"
-    And I enter "<title>" for "Media name"
+    And I upload "test.jpg"
+    And I enter "Foobazzz" for "Media name"
     And I press "Place"
     And I visit "/admin/content/media"
-    Then I should see "<title>"
+    Then I should see "Foobazzz"
 
-    Examples:
-      | file     | title       |
-      | test.jpg | Foobazzz    |
-      | test.pdf | A test file |
+  @test_module
+  Scenario: Uploading a document from within the media browser
+    Given I am logged in as a user with the media_creator role
+    When I visit "/entity-browser/iframe/media_browser"
+    And I upload "test.pdf"
+    And I enter "A test file" for "Media name"
+    And I press "Place"
+    And I visit "/admin/content/media"
+    Then I should see "A test file"
 
   Scenario: The upload widget should require a file
     Given I am logged in as a user with the media_creator role
