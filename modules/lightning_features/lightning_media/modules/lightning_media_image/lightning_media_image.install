@@ -599,9 +599,12 @@ function lightning_media_image_update_8005() {
  * Creates the thumbnail display for images.
  */
 function lightning_media_image_update_8006() {
-  \Drupal::service('lightning.config_helper')
-    ->install('lightning_media_image')
-    ->createEntity('entity_view_display', 'media.image.thumbnail');
+  // Only create the thumbnail view display if it doesn't already exist.
+  if (entity_get_display('media', 'image', 'thumbnail')->isNew()) {
+    \Drupal::service('lightning.config_helper')
+      ->install('lightning_media_image')
+      ->createEntity('entity_view_display', 'media.image.thumbnail');
+  }
 }
 
 /**

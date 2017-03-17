@@ -18,9 +18,12 @@ function lightning_media_instagram_update_8001() {
  * Creates the thumbnail display for Instagram posts.
  */
 function lightning_media_instagram_update_8002() {
-  \Drupal::service('lightning.config_helper')
-    ->install('lightning_media_instagram')
-    ->createEntity('entity_view_display', 'media.instagram.thumbnail');
+  // Only create the thumbnail view display if it doesn't already exist.
+  if (entity_get_display('media', 'instagram', 'thumbnail')->isNew()) {
+    \Drupal::service('lightning.config_helper')
+      ->install('lightning_media_instagram')
+      ->createEntity('entity_view_display', 'media.instagram.thumbnail');
+  }
 }
 
 /**

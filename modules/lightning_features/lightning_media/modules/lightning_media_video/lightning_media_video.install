@@ -87,9 +87,12 @@ function lightning_media_video_update_8002() {
  * Creates the thumbnail display for videos.
  */
 function lightning_media_video_update_8003() {
-  \Drupal::service('lightning.config_helper')
-    ->install('lightning_media_video')
-    ->createEntity('entity_view_display', 'media.video.thumbnail');
+  // Only create the thumbnail view display if it doesn't already exist.
+  if (entity_get_display('media', 'video', 'thumbnail')->isNew()) {
+    \Drupal::service('lightning.config_helper')
+      ->install('lightning_media_video')
+      ->createEntity('entity_view_display', 'media.video.thumbnail');
+  }
 }
 
 /**
