@@ -1,31 +1,3 @@
-lightning_core.content_role:
-  type: mapping
-  label: 'Content role'
-  mapping:
-    enabled:
-      type: boolean
-      label: 'Enabled'
-    label:
-      type: string
-      label: 'Label'
-    permissions:
-      type: sequence
-      label: 'Permissions'
-      sequence:
-        type: string
-        label: 'Permission'
-
-lightning_core.settings:
-  type: config_object
-  label: 'Lightning settings'
-  mapping:
-    content_roles:
-      type: sequence
-      label: 'Content roles'
-      sequence:
-        type: lightning_core.content_role
-        label: 'Content role'
-
 core.entity_view_mode.*.*.third_party.lightning_core:
   type: mapping
   label: 'Lightning'

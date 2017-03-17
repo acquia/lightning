@@ -6,30 +6,23 @@
  */
 
 use Drupal\Core\Entity\Entity\EntityViewMode;
-use Drupal\node\Entity\NodeType;
 
 /**
  * Implements hook_install().
  */
 function lightning_core_install() {
-  // Create content roles for all existing node types.
-  $node_types = NodeType::loadMultiple();
-  array_walk($node_types, 'lightning_core_node_type_insert');
-
   // Mark core view modes as internal.
   lightning_core_update_8002();
 }
 
 /**
- * Creates the lightning_core settings object.
+ * Removed in Lightning 8.x-2.06.
+ *
+ * Formerly created the lightning_core settings object.
+ *
+ * @deprecated
  */
 function lightning_core_update_8001() {
-  $values = lightning_core_read_config('lightning_core.settings', 'lightning_core');
-
-  \Drupal::configFactory()
-    ->getEditable('lightning_core.settings')
-    ->setData($values)
-    ->save();
 }
 
 /**
@@ -61,4 +54,22 @@ function lightning_core_update_8003() {
  */
 function lightning_core_update_8004() {
   \Drupal::entityTypeManager()->clearCachedDefinitions();
+}
+
+/**
+ * Installs Lightning Roles.
+ */
+function lightning_core_update_8005() {
+  \Drupal::service('module_installer')->install(['lightning_roles']);
+
+  // Move the content role configuration into Lightning Roles' config space.
+  $source = \Drupal::configFactory()
+    ->getEditable('lightning_core.settings');
+
+  \Drupal::configFactory()
+    ->getEditable('lightning_roles.settings')
+    ->set('content_roles', $source->get('content_roles'))
+    ->save();
+
+  $source->clear('content_roles')->save();
 }

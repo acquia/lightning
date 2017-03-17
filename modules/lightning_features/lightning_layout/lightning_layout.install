@@ -130,10 +130,10 @@ function lightning_layout_update_dependencies() {
       8003 => [
         'lightning' => 8002,
       ],
-      // 8005 requires the lightning_core.settings config object, which is
-      // created by lightning_core 8001.
+      // 8005 requires the lightning.content_roles service, which is part of
+      // Lighting Roles. Which, in turn, is installed by lightning_core 8005.
       8005 => [
-        'lightning_core' => 8001,
+        'lightning_core' => 8005,
       ],
     ],
   ];

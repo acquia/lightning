@@ -1,0 +1,12 @@
+<?php
+
+use Drupal\node\Entity\NodeType;
+
+/**
+ * Implements hook_install().
+ */
+function lightning_roles_install() {
+  // Create content roles for all existing node types.
+  $node_types = NodeType::loadMultiple();
+  array_walk($node_types, 'lightning_roles_node_type_insert');
+}

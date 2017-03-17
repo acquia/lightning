@@ -9,7 +9,6 @@ use Drupal\editor\Entity\Editor;
 use Drupal\embed\Entity\EmbedButton;
 use Drupal\entity_browser\Entity\EntityBrowser;
 use Drupal\file\Entity\File;
-use Drupal\user\Entity\Role;
 use Drupal\views\Entity\View;
 
 /**
@@ -35,17 +34,6 @@ function lightning_media_install() {
   // module's default configuration -- which means that it might not exist when
   // the button is installed, resulting in a scary PluginNotFoundException.
   lightning_media_update_8013();
-
-  // Lightning ships with two content types -- page and landing_page. Creator
-  // roles for these content types are generated automatically out of the
-  // box, so grant them permission to use the rich_text format and the media
-  // browser. (Update 8011 does this for roles created in the future).
-  $permissions = [
-    'use text format rich_text',
-    'access media_browser entity browser pages',
-  ];
-  user_role_grant_permissions('page_creator', $permissions);
-  user_role_grant_permissions('landing_page_creator', $permissions);
 }
 
 /**
@@ -74,24 +62,13 @@ function lightning_media_update_8002() {
 }
 
 /**
- * Creates the Media Creator and Media Manager roles.
+ * Removed in Lightning 8.x-2.06.
+ *
+ * Formerly created the media_creator and media_manager roles.
+ *
+ * @deprecated
  */
 function lightning_media_update_8003() {
-  /** @var \Drupal\lightning_core\ConfigHelper $config */
-  $config = \Drupal::service('lightning_config_helper')
-    ->install('lightning_media');
-
-  $roles = Role::loadMultiple([
-    'media_creator',
-    'media_manager',
-  ]);
-
-  if (empty($roles['media_creator'])) {
-    $config->createEntity('user_role', 'media_creator');
-  }
-  if (empty($roles['media_manager'])) {
-    $config->createEntity('user_role', 'media_manager');
-  }
 }
 
 /**
@@ -673,14 +650,11 @@ function lightning_media_update_8010() {
  * Grants creator content role access to the rich_text format and media browser.
  */
 function lightning_media_update_8011() {
-  $config = \Drupal::configFactory()->getEditable('lightning_core.settings');
-
-  $content_roles = $config->get('content_roles');
-  if (isset($content_roles['creator'])) {
-    $content_roles['creator']['permissions'][] = 'use text format rich_text';
-    $content_roles['creator']['permissions'][] = 'access media_browser entity browser pages';
-    $config->set('content_roles', $content_roles)->save();
-  }
+  \Drupal::service('lightning.content_roles')
+    ->grantPermissions('creator', [
+      'use text format rich_text',
+      'access media_browser entity browser pages',
+    ]);
 }
 
 /**
@@ -794,10 +768,10 @@ function lightning_media_update_dependencies() {
       8004 => [
         'lightning' => 8002,
       ],
-      // 8011 requires the lightning_core.settings config object, which is
-      // created by lightning_core 8001.
+      // 8011 requires the lightning.content_roles service, which is part of
+      // Lighting Roles. Which, in turn, is installed by lightning_core 8005.
       8011 => [
-        'lightning_core' => 8001,
+        'lightning_core' => 8005,
       ],
       // 8012 adds the field_media_in_library filter to the Entity Browser
       // display of the media view, which is created by 8008.
