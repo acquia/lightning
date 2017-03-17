@@ -78,5 +78,31 @@ function lightning_media_video_update_8001() {
  * Creates the media_browser form display.
  */
 function lightning_media_video_update_8002() {
-  lightning_core_create_config('core_entity_form_display', 'media.video.media_browser', 'lightning_media_video');
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_media_video')
+    ->createEntity('entity_form_display', 'media.video.media_browser');
+}
+
+/**
+ * Creates the thumbnail display for videos.
+ */
+function lightning_media_video_update_8003() {
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_media_video')
+    ->createEntity('entity_view_display', 'media.video.thumbnail');
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function lightning_media_video_update_dependencies() {
+  return [
+    'lightning_media_video' => [
+      // 8003 depends on the thumbnail view mode, which is created by
+      // lightning_media 8014.
+      8003 => [
+        'lightning_media' => 8014,
+      ],
+    ],
+  ];
 }

@@ -26,7 +26,9 @@ function lightning_media_image_install() {
  * Creates the media_browser form display.
  */
 function lightning_media_image_update_8001() {
-  lightning_core_create_config('entity_form_display', 'media.image.media_browser', 'lightning_media_image');
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_media_image')
+    ->createEntity('entity_form_display', 'media.image.media_browser');
 }
 
 /**
@@ -44,7 +46,9 @@ function lightning_media_image_update_8002() {
     lightning_core_rebuild_container();
   }
 
-  lightning_core_create_config('entity_browser', 'image_browser', 'lightning_media_image');
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_media_image')
+    ->createEntity('entity_browser', 'image_browser');
 }
 
 /**
@@ -592,6 +596,15 @@ function lightning_media_image_update_8005() {
 }
 
 /**
+ * Creates the thumbnail display for images.
+ */
+function lightning_media_image_update_8006() {
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_media_image')
+    ->createEntity('entity_view_display', 'media.image.thumbnail');
+}
+
+/**
  * Implements hook_update_dependencies().
  */
 function lightning_media_image_update_dependencies() {
@@ -606,6 +619,11 @@ function lightning_media_image_update_dependencies() {
         // 8004 grants access the image_browser entity browser, which is created
         // by Lightning Media Image 8002.
         'lightning_media_image' => 8002,
+      ],
+      // 8006 depends on the thumbnail view mode, which is created by
+      // lightning_media 8014.
+      8006 => [
+        'lightning_media' => 8014,
       ],
     ],
   ];
