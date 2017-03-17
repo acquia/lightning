@@ -8,4 +8,4 @@
 site="$1"
 target_env="$2"
 
-drush @$site.$target_env site-install lightning --account-pass=admin --yes
+drush @$site.$target_env updatedb --yes
