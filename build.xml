@@ -114,6 +114,7 @@
     <!-- Prepare PHPUnit. -->
     <mkdir dir="${docroot}/modules" />
     <mkdir dir="${docroot}/themes" />
+    <mkdir dir="${docroot}/sites/simpletest" />
     <if>
       <not>
         <available property="phpunit.xml" file="${docroot}/core/phpunit.xml" />
@@ -198,7 +199,7 @@
   </target>
 
   <!-- Imports an existing database snapshot. -->
-  <target name="remember" depends="env">
+  <target name="recall" depends="env">
     <if>
       <!-- Check if the fixture exists and exit gracefully if it doesn't. -->
       <available property="fixture_exists" file="${fixture}.bz2" />

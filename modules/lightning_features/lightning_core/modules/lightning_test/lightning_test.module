@@ -5,16 +5,24 @@
  * Contains internal functionality for use during functional testing.
  */
 
-use Drupal\Core\Entity\ContentEntityInterface;
+use Drupal\Core\Entity\EntityInterface;
 
 /**
- * Implements hook_ENTITY_TYPE_insert().
+ * Implements hook_entity_insert().
  */
-function lightning_test_media_insert(ContentEntityInterface $entity) {
+function lightning_test_entity_insert(EntityInterface $entity) {
   $state = \Drupal::state();
-
-  $expendables = $state->get('lightning_test', []);
   $entity_type = $entity->getEntityTypeId();
-  $expendables[$entity_type][] = $entity->id();
-  $state->set('lightning_test', $expendables);
+
+  if ($entity_type == 'media') {
+    $delete = $state->get('_delete', []);
+    $delete[$entity_type][] = $entity->id();
+    $state->set('_delete', $delete);
+  }
+  elseif ($entity_type == 'field_config') {
+    $delete = $state->get('_fields', []);
+    array_push($delete, $entity->id());
+    $state->set('_fields', $delete);
+  }
+  $state->resetCache();
 }

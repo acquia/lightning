@@ -2,26 +2,27 @@ langcode: en
 status: true
 dependencies:
   config:
-    - core.entity_view_mode.media.embedded
-    - field.field.media.document.field_document
-    - field.field.media.document.field_media_in_library
+    - core.entity_view_mode.media.thumbnail
+    - image.style.medium
     - media_entity.bundle.document
   module:
-    - file
-id: media.document.embedded
+    - image
+id: media.document.thumbnail
 targetEntityType: media
 bundle: document
-mode: embedded
+mode: thumbnail
 content:
-  field_document:
+  thumbnail:
+    type: image
     weight: 0
     label: hidden
-    settings: {  }
+    settings:
+      image_style: medium
+      image_link: ''
     third_party_settings: {  }
-    type: file_default
 hidden:
   created: true
+  field_document: true
   field_media_in_library: true
   name: true
-  thumbnail: true
   uid: true

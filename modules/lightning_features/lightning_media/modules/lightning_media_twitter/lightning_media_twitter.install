@@ -9,5 +9,35 @@
  * Creates the media_browser form display.
  */
 function lightning_media_twitter_update_8001() {
-  lightning_core_create_config('core_entity_form_display', 'media.tweet.media_browser', 'lightning_media_twitter');
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_media_twitter')
+    ->createEntity('entity_form_display', 'media.tweet.media_browser');
 }
+
+/**
+ * Creates the thumbnail display for tweets.
+ */
+function lightning_media_twitter_update_8002() {
+  // Only create the thumbnail view display if it doesn't already exist.
+  if (entity_get_display('media', 'tweet', 'thumbnail')->isNew()) {
+    \Drupal::service('lightning.config_helper')
+      ->install('lightning_media_twitter')
+      ->createEntity('entity_view_display', 'media.tweet.thumbnail');
+  }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function lightning_media_twitter_update_dependencies() {
+  return [
+    'lightning_media_twitter' => [
+      // 8002 depends on the thumbnail view mode, which is created by
+      // lightning_media 8015.
+      8002 => [
+        'lightning_media' => 8015,
+      ],
+    ],
+  ];
+}
+
