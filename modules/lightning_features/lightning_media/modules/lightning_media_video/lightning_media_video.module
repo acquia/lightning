@@ -21,6 +21,8 @@ function lightning_media_video_media_entity_type_info_alter(array &$types) {
       'video_embed_field',
     ],
   ];
+  $types['video_embed_field']['preview'] = TRUE;
+
   Override::pluginClass($types['video_embed_field'], Video::class);
 }
 
@@ -47,11 +49,4 @@ function lightning_media_video_inline_entity_form_entity_form_alter(&$entity_for
   if ($entity_form['#entity_type'] == 'media' && $entity_form['#bundle'] == 'video') {
     \Drupal::service('lightning_media.preview.embed_code')->alterForm($entity_form, $form_state, $entity_form['#entity']);
   }
-}
-
-/**
- * Implements hook_entity_extra_field_info().
- */
-function lightning_media_video_entity_extra_field_info() {
-  return \Drupal::service('lightning_media.preview.embed_code')->extraFields('video');
 }

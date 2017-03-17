@@ -779,9 +779,16 @@ function lightning_media_update_8013() {
 }
 
 /**
- * Creates the thumbnail view mode for media items.
+ * Clears the entity type definition cache.
  */
 function lightning_media_update_8014() {
+  \Drupal::entityTypeManager()->clearCachedDefinitions();
+}
+
+/**
+ * Creates the thumbnail view mode for media items.
+ */
+function lightning_media_update_8015() {
   \Drupal::service('lightning.config_helper')
     ->install('lightning_media')
     ->createEntity('entity_view_mode', 'media.thumbnail');
