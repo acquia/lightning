@@ -13,10 +13,12 @@ services:
       -
         name: event_subscriber
 
+  # Deprecated in Lightning 2.0.6 and will be removed in 2.1.0. Use the
+  # ConfigHelper facade instead.
   lightning.config_helper:
     class: '\Drupal\lightning_core\ConfigHelper'
     arguments:
-      - '@module_handler'
+      - '@config.factory'
       - '@entity_type.manager'
 
   lightning.display_helper:

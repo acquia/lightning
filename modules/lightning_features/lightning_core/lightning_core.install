@@ -6,6 +6,7 @@
  */
 
 use Drupal\Core\Entity\Entity\EntityViewMode;
+use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
 
 /**
@@ -24,12 +25,7 @@ function lightning_core_install() {
  * Creates the lightning_core settings object.
  */
 function lightning_core_update_8001() {
-  $values = lightning_core_read_config('lightning_core.settings', 'lightning_core');
-
-  \Drupal::configFactory()
-    ->getEditable('lightning_core.settings')
-    ->setData($values)
-    ->save();
+  Config::forModule('lightning_core')->get('lightning_core.settings')->save();
 }
 
 /**
