@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * Implements hook_modules_installed().
+ */
+function lightning_dev_modules_installed(array $modules) {
+  if (in_array('lightning_roles', $modules)) {
+    \Drupal::service('lightning.content_roles')
+      ->grantPermissions('reviewer', [
+        'access content overview',
+        'use published_archived transition',
+        'view moderation states',
+      ]);
+  }
+}
