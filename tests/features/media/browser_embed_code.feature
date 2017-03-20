@@ -1,7 +1,7 @@
 @lightning @media @api @javascript @errors
 Feature: Creating media assets from within the media browser using embed codes
 
-  @test_module
+  @video @twitter @instagram @test_module @5140c1ea
   Scenario Outline: Creating media assets from within the media browser using embed codes
     Given I am logged in as a user with the media_creator role
     When I visit "/entity-browser/iframe/media_browser"
@@ -18,6 +18,7 @@ Feature: Creating media assets from within the media browser using embed codes
       | https://twitter.com/webchick/status/672110599497617408 | angie speaks                     |
       | https://www.instagram.com/p/jAH6MNINJG                 | Drupal Does LSD                  |
 
+  @5140c4f6
   Scenario: Embed code widget should require input
     Given I am logged in as a user with the media_creator role
     When I visit "/entity-browser/iframe/media_browser"
@@ -25,6 +26,7 @@ Feature: Creating media assets from within the media browser using embed codes
     And I press "Place"
     Then I should see the error message "You must enter a URL or embed code."
 
+  @5140c9ce
   Scenario: Embed code widget should ensure that input can be matched to a media bundle
     Given I am logged in as a user with the media_creator role
     When I visit "/entity-browser/iframe/media_browser"
@@ -36,7 +38,7 @@ Feature: Creating media assets from within the media browser using embed codes
     And I press "Place"
     Then I should see the error message "No media types can be matched to this input."
 
-  @security
+  @twitter @security @5140cac8
   Scenario: Embed code widget will not allow the user to create media of bundles to which they do not have access
     Given I am logged in as a user with the "access media_browser entity browser pages" permission
     When I visit "/entity-browser/iframe/media_browser"

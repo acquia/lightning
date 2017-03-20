@@ -1,6 +1,7 @@
 @lightning @media @api
 Feature: Media bundles
 
+  @c83cb92a
   Scenario: Automatically attaching the "Save to my media library" field to new media bundles
     Given I am logged in as a user with the administrator role
     When I visit "/admin/structure/media/add"
