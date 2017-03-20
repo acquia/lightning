@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * Creates the thumbnail display for documents.
+ */
+function lightning_media_document_update_8001() {
+  // Only create the thumbnail view display if it doesn't already exist.
+  if (entity_get_display('media', 'document', 'thumbnail')->isNew()) {
+    \Drupal::service('lightning.config_helper')
+      ->install('lightning_media_document')
+      ->createEntity('entity_view_display', 'media.document.thumbnail');
+  }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function lightning_media_document_update_dependencies() {
+  return [
+    'lightning_media_document' => [
+      // 8001 depends on the thumbnail view mode, which is created by
+      // lightning_media 8015.
+      8001 => [
+        'lightning_media' => 8015,
+      ],
+    ],
+  ];
+}

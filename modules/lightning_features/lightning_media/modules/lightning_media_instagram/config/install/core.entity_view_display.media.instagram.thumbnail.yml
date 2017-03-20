@@ -1,0 +1,28 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - core.entity_view_mode.media.thumbnail
+    - image.style.medium
+    - media_entity.bundle.instagram
+  module:
+    - image
+id: media.instagram.thumbnail
+targetEntityType: media
+bundle: instagram
+mode: thumbnail
+content:
+  thumbnail:
+    type: image
+    weight: 0
+    label: hidden
+    settings:
+      image_style: medium
+      image_link: ''
+    third_party_settings: {  }
+hidden:
+  created: true
+  embed_code: true
+  field_media_in_library: true
+  name: true
+  uid: true

@@ -44,3 +44,19 @@ Feature: An entity browser for media assets
     Then 1 element should match "[data-selectable].selected"
     # No choices are ever disabled in a single-cardinality entity browser.
     And nothing should match "[data-selectable].disabled"
+
+  @test_module
+  Scenario: Using the media browser for a new media reference field
+    Given I am logged in as a user with the administrator role
+    And I visit "/admin/structure/types/manage/page/fields/add-field"
+    And I select "field_ui:entity_reference:media" from "new_storage_type"
+    And I enter "Foobar" for "label"
+    # Wait for the machine name to be generated automagically.
+    And I wait 3 seconds
+    And I press "Save and continue"
+    And I press "Save field settings"
+    And I check "settings[handler_settings][target_bundles][image]"
+    And I wait for AJAX to finish
+    And I press "Save settings"
+    When I visit "/node/add/page"
+    Then I should see an "iframe[name^='entity_browser_iframe_media_browser']" element

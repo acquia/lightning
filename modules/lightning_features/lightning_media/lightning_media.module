@@ -7,7 +7,10 @@
 
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Asset\AttachedAssetsInterface;
+use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\entity_browser\Element\EntityBrowserElement;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
@@ -167,6 +170,9 @@ function lightning_media_form_entity_browser_media_browser_form_alter(array &$fo
  * Implements hook_entity_type_alter().
  */
 function lightning_media_entity_type_alter(array &$entity_types) {
+  // Media items are a common reference target, and that's that...
+  $entity_types['media']->set('common_reference_target', TRUE);
+
   // Files should never be workspace-aware. Besides, they ALWAYS conflict
   // during replication, for reasons as yet unknown. But because Multiversion
   // is basically a one-way ticket, only opt file entities out of Multiversion
@@ -301,5 +307,35 @@ function lightning_media_preprocess_views_view_grid__media(array &$variables) {
     foreach ($item['content'] as &$column) {
       $column['attributes']['data-selectable'] = 'true';
     }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_presave().
+ */
+function lightning_media_entity_form_display_presave(EntityFormDisplayInterface $display) {
+  $filter = function (FieldStorageDefinitionInterface $field) {
+    return $field->getType() == 'entity_reference' && $field->getSetting('target_type') == 'media';
+  };
+
+  $new_components = \Drupal::service('lightning.display_helper')
+    ->getNewFields($display, $filter);
+
+  foreach ($new_components as $key => $component) {
+    $display->setComponent($key, [
+      'type' => 'entity_browser_entity_reference',
+      'weight' => $component['weight'],
+      'settings' => [
+        'entity_browser' => 'media_browser',
+        'field_widget_display' => 'rendered_entity',
+        'field_widget_edit' => TRUE,
+        'field_widget_remove' => TRUE,
+        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
+        'field_widget_display_settings' => [
+          'view_mode' => 'thumbnail',
+        ],
+        'open' => TRUE,
+      ],
+    ]);
   }
 }

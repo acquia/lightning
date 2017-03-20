@@ -760,6 +760,21 @@ function lightning_media_update_8014() {
 }
 
 /**
+ * Creates the thumbnail view mode for media items.
+ */
+function lightning_media_update_8015() {
+  // Only create the thumbnail view mode if it doesn't already exist.
+  $view_modes = \Drupal::service('entity_display.repository')
+    ->getViewModeOptions('media');
+
+  if (empty($view_modes['thumbnail'])) {
+    \Drupal::service('lightning.config_helper')
+      ->install('lightning_media')
+      ->createEntity('entity_view_mode', 'media.thumbnail');
+  }
+}
+
+/**
  * Implements hook_update_dependencies().
  */
 function lightning_media_update_dependencies() {
