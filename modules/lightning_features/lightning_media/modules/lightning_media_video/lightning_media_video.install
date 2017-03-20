@@ -8,6 +8,7 @@
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\media_entity\Entity\MediaBundle;
 use Drupal\video_embed_media\Plugin\MediaEntity\Type\VideoEmbedField;
 
@@ -78,21 +79,18 @@ function lightning_media_video_update_8001() {
  * Creates the media_browser form display.
  */
 function lightning_media_video_update_8002() {
-  \Drupal::service('lightning.config_helper')
-    ->install('lightning_media_video')
-    ->createEntity('entity_form_display', 'media.video.media_browser');
+  Config::forModule('lightning_media_video')
+    ->getEntity('entity_form_display', 'media.video.media_browser')
+    ->save();
 }
 
 /**
  * Creates the thumbnail display for videos.
  */
 function lightning_media_video_update_8003() {
-  // Only create the thumbnail view display if it doesn't already exist.
-  if (entity_get_display('media', 'video', 'thumbnail')->isNew()) {
-    \Drupal::service('lightning.config_helper')
-      ->install('lightning_media_video')
-      ->createEntity('entity_view_display', 'media.video.thumbnail');
-  }
+  Config::forModule('lightning_media_video')
+    ->getEntity('entity_view_display', 'media.video.thumbnail')
+    ->save();
 }
 
 /**
