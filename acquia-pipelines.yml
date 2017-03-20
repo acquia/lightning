@@ -27,8 +27,7 @@ events:
           type: script
           script:
             - set -x
-            - cd ./docroot
-            - ../bin/drush runserver --default-server=builtin 8080 &>/dev/null &
-            - ../bin/phantomjs --webdriver=4444 > /dev/null &
+            - ./bin/drush runserver --default-server=builtin 8080 &>/dev/null &
+            - ./bin/phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
-            - ./bin/behat --stop-on-failure --config ./sites/default/files/behat.yml
+            - ./bin/behat --stop-on-failure --config ./docroot/sites/default/files/behat.yml
