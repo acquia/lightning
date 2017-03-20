@@ -5,6 +5,7 @@
  * Contains installation and update routines for Lightning Search.
  */
 
+use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
 use Drupal\search_api\Entity\Index;
 use Drupal\search_api\Entity\Server;
@@ -30,9 +31,10 @@ function lightning_search_install() {
   // normal site install, so create it now if it doesn't already exist.
   $server = Server::load('database');
   if (empty($server) && \Drupal::moduleHandler()->moduleExists('search_api_db')) {
-    \Drupal::service('lightning.config_helper')
-      ->optional('lightning_search')
-      ->createEntity('search_api_server', 'database');
+    Config::forModule('lightning_search')
+      ->optional()
+      ->getEntity('search_api_server', 'database')
+      ->save();
 
     $server = Server::load('database');
   }
