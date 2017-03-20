@@ -14,6 +14,21 @@ use Drupal\node\NodeTypeInterface;
 use Drupal\user\Entity\Role;
 
 /**
+ * Implements hook_modules_installed().
+ */
+function lightning_layout_modules_installed(array $modules) {
+  if (in_array('lightning_roles', $modules)) {
+    \Drupal::service('lightning.content_roles')
+      ->grantPermissions('creator', [
+        'access panels in-place editing',
+        'change layouts in place editing',
+        'administer panelizer node ? content',
+        'administer panelizer node ? layout',
+      ]);
+  }
+}
+
+/**
  * Implements hook_block_alter().
  */
 function lightning_layout_block_alter(array &$blocks) {

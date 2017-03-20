@@ -26,7 +26,9 @@ function lightning_media_install() {
 
   // Grant the creator content role permission to use the rich_text format and
   // the media browser.
-  lightning_media_update_8011();
+  if (\Drupal::moduleHandler()->moduleExists('lightning_roles')) {
+    lightning_media_modules_installed(['lightning_roles']);
+  }
 
   // Add the media.embedded view mode to the media_browser embed button. It
   // cannot be part of the original embed button config entity because the view
@@ -647,14 +649,14 @@ function lightning_media_update_8010() {
 }
 
 /**
- * Grants creator content role access to the rich_text format and media browser.
+ * Removed in Lightning 8.x-2.06.
+ *
+ * Formerly granted the creator content role access to the rich_text input
+ * format and the media browser.
+ *
+ * @deprecated
  */
 function lightning_media_update_8011() {
-  \Drupal::service('lightning.content_roles')
-    ->grantPermissions('creator', [
-      'use text format rich_text',
-      'access media_browser entity browser pages',
-    ]);
 }
 
 /**

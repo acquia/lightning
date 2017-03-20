@@ -14,8 +14,10 @@ function lightning_layout_install() {
   // Set up layout_manager permissions.
   lightning_layout_update_8003();
 
-  // Add layout permissions to Lightning Core's content role configuration.
-  lightning_layout_update_8005();
+  // Add layout permissions to Lightning Roles' content role configuration.
+  if (\Drupal::moduleHandler()->moduleExists('lightning_roles')) {
+    lightning_layout_modules_installed(['lightning_roles']);
+  }
 }
 
 /**
@@ -54,16 +56,13 @@ function lightning_layout_update_8004() {
 }
 
 /**
- * Adds Panels and Panelizer permissions to content roles.
+ * Removed in Lightning 8.x-2.06.
+ *
+ * Formerly added Panels and Panelizer permissions to content roles.
+ *
+ * @deprecated
  */
 function lightning_layout_update_8005() {
-  \Drupal::service('lightning.content_roles')
-    ->grantPermissions('creator', [
-      'access panels in-place editing',
-      'change layouts in place editing',
-      'administer panelizer node ? content',
-      'administer panelizer node ? layout',
-    ]);
 }
 
 /**
