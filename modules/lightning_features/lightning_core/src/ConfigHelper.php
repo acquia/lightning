@@ -2,6 +2,7 @@
 
 namespace Drupal\lightning_core;
 
+use Drupal\Core\Config\Entity\ConfigEntityInterface;
 use Drupal\Core\Config\Entity\ConfigEntityTypeInterface;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
@@ -168,6 +169,19 @@ class ConfigHelper {
     }
 
     return $prefix_map;
+  }
+
+  /**
+   * Checks if a config entity is bundled with Lightning.
+   *
+   * @param \Drupal\Core\Config\Entity\ConfigEntityInterface $entity
+   *   The config entity.
+   *
+   * @return bool
+   *   Whether the config entity is marked as being bundled with Lightning.
+   */
+  public static function isBundled(ConfigEntityInterface $entity) {
+    return (bool) $entity->getThirdPartySetting('lightning', 'bundled', FALSE);
   }
 
 }
