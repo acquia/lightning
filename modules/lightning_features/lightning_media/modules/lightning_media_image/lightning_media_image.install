@@ -7,6 +7,7 @@
 
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\entity_browser\Entity\EntityBrowser;
+use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\views\Entity\View;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
@@ -26,9 +27,9 @@ function lightning_media_image_install() {
  * Creates the media_browser form display.
  */
 function lightning_media_image_update_8001() {
-  \Drupal::service('lightning.config_helper')
-    ->install('lightning_media_image')
-    ->createEntity('entity_form_display', 'media.image.media_browser');
+  Config::forModule('lightning_media_image')
+    ->getEntity('entity_form_display', 'media.image.media_browser')
+    ->save();
 }
 
 /**
@@ -46,9 +47,9 @@ function lightning_media_image_update_8002() {
     lightning_core_rebuild_container();
   }
 
-  \Drupal::service('lightning.config_helper')
-    ->install('lightning_media_image')
-    ->createEntity('entity_browser', 'image_browser');
+  Config::forModule('lightning_media_image')
+    ->getEntity('entity_browser', 'image_browser')
+    ->save();
 }
 
 /**
@@ -599,12 +600,9 @@ function lightning_media_image_update_8005() {
  * Creates the thumbnail display for images.
  */
 function lightning_media_image_update_8006() {
-  // Only create the thumbnail view display if it doesn't already exist.
-  if (entity_get_display('media', 'image', 'thumbnail')->isNew()) {
-    \Drupal::service('lightning.config_helper')
-      ->install('lightning_media_image')
-      ->createEntity('entity_view_display', 'media.image.thumbnail');
-  }
+  Config::forModule('lightning_media_image')
+    ->getEntity('entity_view_display', 'media.image.thumbnail')
+    ->save();
 }
 
 /**
