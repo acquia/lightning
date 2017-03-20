@@ -5,24 +5,25 @@
  * Contains install and update routines for Lightning Media Instagram.
  */
 
-use Drupal\lightning_core\ConfigHelper as Config;
-
 /**
  * Creates the media_browser form display.
  */
 function lightning_media_instagram_update_8001() {
-  Config::forModule('lightning_media_instagram')
-    ->getEntity('entity_form_display', 'media.instagram.media_browser')
-    ->save();
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_media_instagram')
+    ->createEntity('entity_form_display', 'media.instagram.media_browser');
 }
 
 /**
  * Creates the thumbnail display for Instagram posts.
  */
 function lightning_media_instagram_update_8002() {
-  Config::forModule('lightning_media_instagram')
-    ->getEntity('entity_view_display', 'media.instagram.thumbnail')
-    ->save();
+  // Only create the thumbnail view display if it doesn't already exist.
+  if (entity_get_display('media', 'instagram', 'thumbnail')->isNew()) {
+    \Drupal::service('lightning.config_helper')
+      ->install('lightning_media_instagram')
+      ->createEntity('entity_view_display', 'media.instagram.thumbnail');
+  }
 }
 
 /**

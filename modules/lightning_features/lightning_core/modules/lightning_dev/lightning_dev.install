@@ -8,7 +8,6 @@
 use Drupal\entity_browser\Entity\EntityBrowser;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
-use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\media_entity\Entity\MediaBundle;
 use Drupal\scheduled_updates\Entity\ScheduledUpdateType;
 use Drupal\views\Entity\View;
@@ -71,17 +70,20 @@ function lightning_dev_update_8001() {
  * Executes manual updates for Lightning 2.0.2 --> 2.0.3.
  */
 function lightning_dev_update_8002() {
-  $config = Config::forModule('lightning_landing_page');
+  /** @var \Drupal\lightning_core\ConfigHelper $config_helper */
+  $config_helper = \Drupal::service('lightning.config_helper')
+    ->install('lightning_landing_page')
+    ->createEntity('field_config', 'node.landing_page.body')
+    ->createEntity('entity_view_display', 'node.landing_page.teaser');
 
-  $config->getEntity('field_config', 'node.landing_page.body')->save();
-  $config->getEntity('entity_view_display', 'node.landing_page.teaser')->save();
-
-  $values = $config->read('core.entity_form_display.node.landing_page.default');
+  $values = $config_helper
+    ->read('core.entity_form_display.node.landing_page.default');
   entity_get_form_display('node', 'landing_page', 'default')
     ->setComponent('body', $values['content']['body'])
     ->save();
 
-  $values = $config->read('core.entity_view_display.node.landing_page.default');
+  $values = $config_helper
+    ->read('core.entity_view_display.node.landing_page.default');
   entity_get_display('node', 'landing_page', 'default')
     ->setComponent('body', $values['content']['body'])
     ->unsetThirdPartySetting('panelizer', 'enable')
@@ -93,11 +95,9 @@ function lightning_dev_update_8002() {
 
   \Drupal::service('module_installer')->install(['lightning_search']);
 
-  \Drupal::service('lightning.content_roles')
-    ->grantPermissions('reviewer', [
-      'access content overview',
-      'use published_archived transition',
-    ]);
+  if (\Drupal::moduleHandler()->moduleExists('lightning_roles')) {
+    lightning_dev_modules_installed(['lightning_roles']);
+  }
 
   // Add a relationship to the latest revision, and the forward revision
   // indicator, to the content view. This is copied directly out of
@@ -115,9 +115,9 @@ function lightning_dev_update_8002() {
  */
 function lightning_dev_update_8003() {
   // Instantiate field_moderation_state on multi-node embargoes.
-  Config::forModule('lightning_workflow')
-    ->getEntity('field_config', 'scheduled_update.multiple_node_embargo.field_moderation_state')
-    ->save();
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_workflow')
+    ->createEntity('field_config', 'scheduled_update.multiple_node_embargo.field_moderation_state');
 
   // Replace field_moderation_state_1 with field_moderation_state on the
   // multi-node embargo form.
@@ -189,4 +189,3 @@ function lightning_dev_update_8003() {
   $display['display_options']['relationships']['latest_revision__node']['required'] = FALSE;
   $view->save();
 }
-

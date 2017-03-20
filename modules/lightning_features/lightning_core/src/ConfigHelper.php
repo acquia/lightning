@@ -3,31 +3,23 @@
 namespace Drupal\lightning_core;
 
 use Drupal\Core\Config\Entity\ConfigEntityInterface;
-use Drupal\Component\Utility\Unicode;
-use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Config\Entity\ConfigEntityTypeInterface;
+use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\Extension;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 
 /**
- * A facade to assist with manipulating default config.
+ * Helps with reading and creating default configuration.
  */
-class ConfigHelper extends InstallStorage {
+class ConfigHelper {
 
   /**
-   * The extension whose default config is being manipulated by this object.
+   * The module handler.
    *
-   * @var \Drupal\Core\Extension\Extension
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
    */
-  protected $extension;
-
-  /**
-   * The config factory.
-   *
-   * @var \Drupal\Core\Config\ConfigFactoryInterface
-   */
-  protected $configFactory;
+  protected $moduleHandler;
 
   /**
    * The entity type manager.
@@ -37,130 +29,137 @@ class ConfigHelper extends InstallStorage {
   protected $entityTypeManager;
 
   /**
+   * File storage reader for the current directory.
+   *
+   * @var FileStorage
+   */
+  protected $storage;
+
+  /**
    * ConfigHelper constructor.
    *
-   * @param \Drupal\Core\Extension\Extension $extension
-   *   The extension whose default config is being manipulated by this object.
-   * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
-   *   The config factory.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
-  public function __construct(Extension $extension, ConfigFactoryInterface $config_factory, EntityTypeManagerInterface $entity_type_manager) {
-    parent::__construct();
-    $this->extension = $extension;
-    $this->configFactory = $config_factory;
+  public function __construct(ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager) {
+    $this->moduleHandler = $module_handler;
     $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
-   * Switches to the default config directory.
+   * Switches to the default config directory for a module.
+   *
+   * @param string $module
+   *   The module.
    *
    * @return $this
    *   The called object, for chaining.
    */
-  public function install() {
-    $this->directory = self::CONFIG_INSTALL_DIRECTORY;
+  public function install($module) {
+    $dir = $this->moduleHandler->getModule($module)->getPath() . '/' . InstallStorage::CONFIG_INSTALL_DIRECTORY;
+    $this->storage = new FileStorage($dir);
     return $this;
   }
 
   /**
-   * Switches to the optional config directory.
+   * Switches to the optional config directory for a module.
+   *
+   * @param string $module
+   *   The module.
    *
    * @return $this
    *   The called object, for chaining.
    */
-  public function optional() {
-    $this->directory = self::CONFIG_OPTIONAL_DIRECTORY;
+  public function optional($module) {
+    $dir = $this->moduleHandler->getModule($module)->getPath() . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
+    $this->storage = new FileStorage($dir);
     return $this;
   }
 
   /**
-   * Transparently loads a config entity from the extension's config.
+   * Reads a config file from the current directory.
+   *
+   * @param string $id
+   *   The file to read, without the YML extension.
+   *
+   * @return mixed
+   *   The values read from the file.
+   */
+  public function read($id) {
+    return $this->storage->read($id);
+  }
+
+  /**
+   * Creates a config entity from configuration in the current directory.
+   *
+   * If an entity of the specified type with the specified ID already exists,
+   * nothing will happen.
    *
    * @param string $entity_type
-   *   The entity type ID.
+   *   The config entity type ID.
    * @param string $id
-   *   The entity ID.
-   * @param bool $force
-   *   (optional) If TRUE, the entity is read from config even if it already
-   *   exists. Defaults to FALSE.
+   *   The unprefixed entity ID.
    *
-   * @return \Drupal\Core\Entity\EntityInterface|null
-   *   The config entity, or NULL if it doesn't exist.
+   * @return $this
+   *   The called object, for chaining.
    */
-  public function getEntity($entity_type, $id, $force = FALSE) {
+  public function createEntity($entity_type, $id) {
+    $prefixes = $this->getConfigPrefixMap();
+
     $storage = $this->entityTypeManager->getStorage($entity_type);
-    $entity = $storage->load($id);
 
-    if ($entity && empty($force)) {
-      return $entity;
-    }
-
-    $prefixes = $this->getConfigPrefixes();
-
-    return $storage->create(
-      $this->read($prefixes[$entity_type] . '.' . $id)
-    );
-  }
-
-  /**
-   * Loads a simple config object from the extension's config.
-   *
-   * @param string $id
-   *   The config object ID.
-   *
-   * @return \Drupal\Core\Config\Config
-   *   The config object.
-   */
-  public function get($id) {
-    $data = $this->read($id);
-    return $this->configFactory->getEditable($id)->setData($data);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function delete($id) {
-    foreach ($this->getConfigPrefixes() as $entity_type => $prefix) {
-      $prefix .= '.';
-
-      if (Unicode::strpos($id, $prefix) === 0) {
-        $entity = $this->getEntity(
-          $entity_type,
-          Unicode::substr($id, Unicode::strlen($prefix) + 1)
-        );
-        return $entity->delete();
+    $existing = $storage->load($id);
+    if (empty($existing)) {
+      $values = $this->read($prefixes[$entity_type] . '.' . $id);
+      if ($values) {
+        $storage->create($values)->save();
       }
     }
-    return $this->get($id)->delete();
+    return $this;
   }
 
   /**
-   * {@inheritdoc}
+   * Deletes an entity created from default configuration.
+   *
+   * @param string $id
+   *   The configuration ID.
    */
-  public function deleteAll($prefix = '') {
-    foreach ($this->listAll($prefix) as $id) {
-      $this->delete($id);
+  public function delete($id) {
+    // Get the entity type prefix map and filter it by the ID to determine what
+    // entity type this ID represents.
+    $prefixes = array_filter($this->getConfigPrefixMap(), function ($prefix) use ($id) {
+      return strpos($id, $prefix . '.') === 0;
+    });
+
+    $entity_type = key($prefixes);
+    if ($entity_type) {
+      // Strip the prefix off the ID.
+      $id = substr($id, strlen(current($prefixes)) + 1);
+
+      $entity = $this->entityTypeManager->getStorage($entity_type)->load($id);
+      if ($entity) {
+        $entity->delete();
+      }
     }
   }
 
   /**
-   * {@inheritdoc}
+   * Deletes all entities created from default configuration.
    */
-  protected function getAllFolders() {
-    return $this->getComponentNames([
-      $this->extension->getName() => $this->extension,
-    ]);
+  public function deleteAll() {
+    $all = $this->storage->listAll();
+    array_walk($all, [$this, 'delete']);
   }
 
   /**
-   * Returns a map of config entity type IDs to config prefixes.
+   * Returns a map of config entity types to config prefixes.
    *
    * @return string[]
-   *   The config prefixes, keyed by the corresponding entity type ID.
+   *   The config prefixes, keyed by their corresponding entity type ID.
    */
-  protected function getConfigPrefixes() {
+  protected function getConfigPrefixMap() {
     $prefix_map = [];
 
     foreach ($this->entityTypeManager->getDefinitions() as $id => $definition) {
@@ -168,6 +167,7 @@ class ConfigHelper extends InstallStorage {
         $prefix_map[$id] = $definition->getConfigPrefix();
       }
     }
+
     return $prefix_map;
   }
 
@@ -182,40 +182,6 @@ class ConfigHelper extends InstallStorage {
    */
   public static function isBundled(ConfigEntityInterface $entity) {
     return (bool) $entity->getThirdPartySetting('lightning', 'bundled', FALSE);
-  }
-
-  /**
-   * Creates a new ConfigHelper for a module.
-   *
-   * @param string $module
-   *   The module name.
-   *
-   * @return static
-   *   A new ConfigHelper object.
-   */
-  public static function forModule($module) {
-    return new static(
-      \Drupal::moduleHandler()->getModule($module),
-      \Drupal::configFactory(),
-      \Drupal::entityTypeManager()
-    );
-  }
-
-  /**
-   * Creates a new ConfigHelper for a theme.
-   *
-   * @param string $theme
-   *   The theme name.
-   *
-   * @return static
-   *   A new ConfigHelper object.
-   */
-  public static function forTheme($theme) {
-    return new static(
-      \Drupal::service('theme_handler')->getTheme($theme),
-      \Drupal::configFactory(),
-      \Drupal::entityTypeManager()
-    );
   }
 
 }

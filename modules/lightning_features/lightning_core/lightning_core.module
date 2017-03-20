@@ -9,7 +9,6 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Entity\EntityDescriptionInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\lightning_core\Element as ElementHelper;
 use Drupal\lightning_core\Entity\EntityFormMode;
 use Drupal\lightning_core\Entity\EntityViewMode;
@@ -261,10 +260,12 @@ function lightning_core_preprocess_block(array &$variables) {
  *   (optional) The module which has the default configuration.
  *
  * @deprecated in Lightning 2.0.3 and will be removed in Lightning 2.1.0. Use
- * the ConfigHelper facade instead.
+ * the lightning.config_helper service instead.
  */
 function lightning_core_create_config($entity_type, $id, $module = 'lightning_core') {
-  Config::forModule($module)->getEntity($entity_type, $id)->save();
+  \Drupal::service('lightning.config_helper')
+    ->install($module)
+    ->createEntity($entity_type, $id);
 }
 
 /**
@@ -279,8 +280,10 @@ function lightning_core_create_config($entity_type, $id, $module = 'lightning_co
  *   The config data.
  *
  * @deprecated in Lightning 2.0.3 and will be removed in Lightning 2.1.0. Use
- * the ConfigHelper facade instead.
+ * the lightning.config_helper service instead.
  */
 function lightning_core_read_config($id, $module = 'lightning_core') {
-  return Config::forModule($module)->read($id);
+  return \Drupal::service('lightning.config_helper')
+    ->install($module)
+    ->read($id);
 }

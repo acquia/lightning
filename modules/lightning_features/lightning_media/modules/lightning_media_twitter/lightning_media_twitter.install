@@ -5,24 +5,25 @@
  * Contains install and update routines for Lightning Media Twitter.
  */
 
-use Drupal\lightning_core\ConfigHelper as Config;
-
 /**
  * Creates the media_browser form display.
  */
 function lightning_media_twitter_update_8001() {
-  Config::forModule('lightning_media_twitter')
-    ->getEntity('entity_form_display', 'media.tweet.media_browser')
-    ->save();
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_media_twitter')
+    ->createEntity('entity_form_display', 'media.tweet.media_browser');
 }
 
 /**
  * Creates the thumbnail display for tweets.
  */
 function lightning_media_twitter_update_8002() {
-  Config::forModule('lightning_media_twitter')
-    ->getEntity('entity_view_display', 'media.tweet.thumbnail')
-    ->save();
+  // Only create the thumbnail view display if it doesn't already exist.
+  if (entity_get_display('media', 'tweet', 'thumbnail')->isNew()) {
+    \Drupal::service('lightning.config_helper')
+      ->install('lightning_media_twitter')
+      ->createEntity('entity_view_display', 'media.tweet.thumbnail');
+  }
 }
 
 /**
@@ -39,3 +40,4 @@ function lightning_media_twitter_update_dependencies() {
     ],
   ];
 }
+

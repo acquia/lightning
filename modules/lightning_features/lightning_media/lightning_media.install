@@ -9,7 +9,6 @@ use Drupal\editor\Entity\Editor;
 use Drupal\embed\Entity\EmbedButton;
 use Drupal\entity_browser\Entity\EntityBrowser;
 use Drupal\file\Entity\File;
-use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\views\Entity\View;
 
 /**
@@ -91,10 +90,11 @@ function lightning_media_update_8004() {
 function lightning_media_update_8005() {
   \Drupal::service('module_installer')->install(['entity_browser']);
 
-  $config = Config::forModule('lightning_media');
-  $config->getEntity('entity_form_mode', 'media.media_browser')->save();
-  $config->getEntity('entity_browser', 'media_browser')->save();
-  $config->getEntity('embed_button', 'media_browser')->save();
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_media')
+    ->createEntity('entity_form_mode', 'media.media_browser')
+    ->createEntity('entity_browser', 'media_browser')
+    ->createEntity('embed_button', 'media_browser');
 }
 
 /**
@@ -765,9 +765,15 @@ function lightning_media_update_8014() {
  * Creates the thumbnail view mode for media items.
  */
 function lightning_media_update_8015() {
-  Config::forModule('lightning_media')
-    ->getEntity('entity_view_mode', 'media.thumbnail')
-    ->save();
+  // Only create the thumbnail view mode if it doesn't already exist.
+  $view_modes = \Drupal::service('entity_display.repository')
+    ->getViewModeOptions('media');
+
+  if (empty($view_modes['thumbnail'])) {
+    \Drupal::service('lightning.config_helper')
+      ->install('lightning_media')
+      ->createEntity('entity_view_mode', 'media.thumbnail');
+  }
 }
 
 /**

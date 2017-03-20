@@ -1,14 +1,15 @@
 <?php
 
-use Drupal\lightning_core\ConfigHelper as Config;
-
 /**
  * Creates the thumbnail display for documents.
  */
 function lightning_media_document_update_8001() {
-  Config::forModule('lightning_media_document')
-    ->getEntity('entity_view_display', 'media.document.thumbnail')
-    ->save();
+  // Only create the thumbnail view display if it doesn't already exist.
+  if (entity_get_display('media', 'document', 'thumbnail')->isNew()) {
+    \Drupal::service('lightning.config_helper')
+      ->install('lightning_media_document')
+      ->createEntity('entity_view_display', 'media.document.thumbnail');
+  }
 }
 
 /**

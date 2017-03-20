@@ -5,7 +5,6 @@
  * Contains installation and update routines for Lightning Layout.
  */
 
-use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
 
 /**
@@ -33,9 +32,9 @@ function lightning_layout_update_8001() {
  * Creates the layout_manager role.
  */
 function lightning_layout_update_8002() {
-  Config::forModule('lightning_layout')
-    ->getEntity('user_role', 'layout_manager')
-    ->save();
+  \Drupal::service('lightning.config_helper')
+    ->install('lightning_layout')
+    ->createEntity('user_role', 'layout_manager');
 }
 
 /**
@@ -99,12 +98,20 @@ function lightning_layout_update_8006() {
  * Creates Lightning Layout settings config object and installs Entity Blocks.
  */
 function lightning_layout_update_8007() {
-  Config::forModule('lightning_layout')
-    ->get('lightning_layout.settings')
+  $id = 'lightning_layout.settings';
+
+  $values = \Drupal::service('lightning.config_helper')
+    ->install('lightning_layout')
+    ->read($id);
+
+  \Drupal::configFactory()
+    ->getEditable($id)
+    ->setData($values)
     ->save();
 
   \Drupal::service('module_installer')->install(['entity_block']);
 }
+
 
 /**
  * Installs the Panelizer Quick Edit module.
