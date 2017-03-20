@@ -3,9 +3,7 @@ status: true
 dependencies:
   config:
     - field.field.media.document.field_document
-    - field.field.media.document.field_document_size
     - field.field.media.document.field_media_in_library
-    - field.field.media.document.field_mime_type
     - image.style.thumbnail
     - media_entity.bundle.document
   module:
@@ -32,21 +30,6 @@ content:
     settings: {  }
     third_party_settings: {  }
     type: file_default
-  field_document_size:
-    weight: 4
-    label: above
-    settings:
-      thousand_separator: ''
-      prefix_suffix: true
-    third_party_settings: {  }
-    type: number_integer
-  field_mime_type:
-    weight: 3
-    label: above
-    settings:
-      link_to_entity: false
-    third_party_settings: {  }
-    type: string
   name:
     label: hidden
     type: string

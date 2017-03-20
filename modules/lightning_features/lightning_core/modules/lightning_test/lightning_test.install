@@ -5,6 +5,11 @@
  * Contains installation routines for Lightning Test.
  */
 
+use Drupal\Core\Form\FormState;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\entity_browser\Element\EntityBrowserElement;
+use Drupal\multiversion\Entity\Storage\ContentEntityStorageInterface;
+
 /**
  * Implements hook_install().
  */
@@ -19,7 +24,7 @@ function lightning_test_install() {
         'view_mode' => 'default',
         'preview_image_style' => 'thumbnail',
         'open' => TRUE,
-        'selection_mode' => 'selection_append',
+        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
       ],
     ])
     ->setComponent('field_hero_image', [
@@ -31,7 +36,7 @@ function lightning_test_install() {
         'view_mode' => 'default',
         'preview_image_style' => 'thumbnail',
         'open' => TRUE,
-        'selection_mode' => 'selection_append',
+        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
       ],
     ])
     ->setComponent('field_unlimited_images', [
@@ -43,7 +48,21 @@ function lightning_test_install() {
         'view_mode' => 'default',
         'preview_image_style' => 'thumbnail',
         'open' => TRUE,
-        'selection_mode' => 'selection_append',
+        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
+      ],
+    ])
+    ->setComponent('field_media_reference', [
+      'type' => 'entity_browser_entity_reference',
+      'settings' => [
+        'entity_browser' => 'media_browser',
+        'field_widget_display' => 'rendered_entity',
+        'field_widget_edit' => TRUE,
+        'field_widget_remove' => TRUE,
+        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
+        'field_widget_display_settings' => [
+          'view_mode' => 'embedded',
+        ],
+        'open' => TRUE,
       ],
     ])
     ->save();
@@ -53,29 +72,34 @@ function lightning_test_install() {
  * Implements hook_uninstall().
  */
 function lightning_test_uninstall() {
-  \Drupal::service('lightning.config_helper')
-    ->install('lightning_test')
-    ->deleteAll();
+  $state = \Drupal::state();
 
-  // Delete any content created while this module was enabled.
-  $expendables = \Drupal::state()->get('lightning_test', []);
+  // Delete all content entities created while the module was installed.
+  $delete = $state->get('_delete', []);
+  foreach ($delete as $entity_type => $entities) {
+    $storage = \Drupal::entityTypeManager()->getStorage($entity_type);
+    $entities = $storage->loadMultiple($entities);
+    $storage->delete($entities);
 
-  foreach ($expendables as $entity_type => $ids) {
-    $storage = \Drupal::entityTypeManager()
-      ->getStorage($entity_type);
-
-    $entities = $storage->loadMultiple($ids);
-
-    method_exists($storage, 'purge')
-      ? $storage->purge($entities)
-      : $storage->delete($entities);
+    // If this is a Multiversion-aware entity type, we need to explicitly purge
+    // the entities from the database.
+    if ($storage instanceof ContentEntityStorageInterface) {
+      $storage->purge($entities);
+    }
   }
+  $state->delete('_delete');
 
-  entity_get_form_display('node', 'page', 'default')
-    ->removeComponent('field_multi_image')
-    ->removeComponent('field_hero_image')
-    ->removeComponent('field_unlimited_images')
-    ->save();
+  // Delete all fields created while the module was installed. The most stable
+  // way to do this is to execute the entity form which deletes a field.
+  $fields = $state->get('_fields', []);
+  if ($fields) {
+    $form = \Drupal::entityTypeManager()->getFormObject('field_config', 'delete');
 
-  \Drupal::state()->delete('lightning_test');
+    $fields = FieldConfig::loadMultiple($fields);
+    foreach ($fields as $field) {
+      $form_state = new FormState();
+      \Drupal::formBuilder()->submitForm($form->setEntity($field), $form_state);
+    }
+  }
+  $state->delete('_fields');
 }
