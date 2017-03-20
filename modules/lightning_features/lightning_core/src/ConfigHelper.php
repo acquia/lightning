@@ -95,12 +95,12 @@ class ConfigHelper extends InstallStorage {
     if ($entity && empty($force)) {
       return $entity;
     }
-    else {
-      $prefixes = $this->getConfigPrefixes();
-      $values = $this->read($prefixes[$entity_type] . '.' . $id);
 
-      return $storage->create($values);
-    }
+    $prefixes = $this->getConfigPrefixes();
+
+    return $storage->create(
+      $this->read($prefixes[$entity_type] . '.' . $id)
+    );
   }
 
   /**
@@ -182,6 +182,23 @@ class ConfigHelper extends InstallStorage {
   public static function forModule($module) {
     return new static(
       \Drupal::moduleHandler()->getModule($module),
+      \Drupal::configFactory(),
+      \Drupal::entityTypeManager()
+    );
+  }
+
+  /**
+   * Creates a new ConfigHelper for a theme.
+   *
+   * @param string $theme
+   *   The theme name.
+   *
+   * @return static
+   *   A new ConfigHelper object.
+   */
+  public static function forTheme($theme) {
+    return new static(
+      \Drupal::service('theme_handler')->getTheme($theme),
       \Drupal::configFactory(),
       \Drupal::entityTypeManager()
     );
