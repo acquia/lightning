@@ -1,4 +1,4 @@
-@lightning @api @workflow @errors
+@lightning @api @errors
 Feature: Scheduled updates to content
 
   @javascript

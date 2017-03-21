@@ -1,4 +1,4 @@
-@lightning @workflow @api
+@lightning @api
 Feature: Diffing different revisions of content
 
   Scenario: Diffing two node revisions
