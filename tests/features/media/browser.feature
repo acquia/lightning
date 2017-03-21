@@ -1,6 +1,7 @@
 @lightning @media @api @javascript @errors
 Feature: An entity browser for media assets
 
+  @twitter @fe9a2c68
   Scenario: Opening the media browser on a pre-existing node
     Given I am logged in as a user with the "page_creator,page_reviewer,media_creator" roles
     And media entities:
@@ -20,6 +21,7 @@ Feature: An entity browser for media assets
     Then I should see a "form.entity-browser-form" element
     And I queue the latest node entity for deletion
 
+  @twitter @ee4d5a41
   Scenario: Testing cardinality enforcement in the media browser
     Given I am logged in as a user with the page_creator,media_creator roles
     And media entities:
@@ -45,7 +47,7 @@ Feature: An entity browser for media assets
     # No choices are ever disabled in a single-cardinality entity browser.
     And nothing should match "[data-selectable].disabled"
 
-  @test_module
+  @test_module @93e7dcf1
   Scenario: Using the media browser for a new media reference field
     Given I am logged in as a user with the administrator role
     And I visit "/admin/structure/types/manage/page/fields/add-field"

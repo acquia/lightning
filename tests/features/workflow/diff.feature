@@ -1,6 +1,7 @@
 @lightning @workflow @api
 Feature: Diffing different revisions of content
 
+  @5b4ba63e
   Scenario: Diffing two node revisions
     Given I am logged in as a user with the page_creator role
     And page content:

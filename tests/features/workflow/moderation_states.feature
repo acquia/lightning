@@ -3,6 +3,7 @@ Feature: Workflow moderation states
   As a site administator, I need to be able to manage moderation states for
   content.
 
+  @c9391f57
   Scenario: Anonymous users should not be able to access content in an unpublished, non-draft state.
     Given page content:
       | title             | path   | moderation_state |
@@ -10,6 +11,7 @@ Feature: Workflow moderation states
     When I go to "/mod-1"
     Then the response status code should be 403
 
+  @b3ca1fae
   Scenario: Users with permission to transition content between moderation states should be able to see content in an unpublished, non-draft state.
     Given I am logged in as a user with the "view any unpublished content" permission
     And page content:
@@ -18,6 +20,7 @@ Feature: Workflow moderation states
     When I visit "/mod-2"
     Then the response status code should be 200
 
+  @03ebc3ee
   Scenario: Publishing an entity by transitioning it to a published state
     Given I am logged in as a user with the "view any unpublished content,use draft_needs_review transition,use needs_review_published transition,create page content,edit any page content,create url aliases" permissions
     And page content:
@@ -31,6 +34,7 @@ Feature: Workflow moderation states
     And I visit "/mod-3"
     Then the response status code should be 200
 
+  @c0c17d43
   Scenario: Transitioning published content to an unpublished state
     Given I am logged in as a user with the "use draft_published transition,use published_archived transition,create page content,edit any page content,create url aliases" permissions
     And page content:
@@ -44,6 +48,7 @@ Feature: Workflow moderation states
     And I go to "/mod-4"
     Then the response status code should be 403
 
+  @cead87f0
   Scenario: Filtering content by moderation state
     Given I am logged in as a user with the "access content overview" permission
     And page content:
@@ -69,7 +74,7 @@ Feature: Workflow moderation states
   # a forward revision. It should be uncommented when #2842471 is fixed or when
   # we stop testing preview/multiversion.
   #
-  #@javascript
+  #@javascript @763fbb2c
   #Scenario: Quick edit a forward revision
   #  Given I am logged in as a user with the "administrator" role
   #  And page content:
@@ -82,6 +87,7 @@ Feature: Workflow moderation states
   #  And I wait 2 seconds
   #  Then I should see a "system_main_block" block with a "quickedit" contextual link
 
+  @35d54919
   Scenario: Content whose content type is not moderated is visible in the Content view
     Given node_type entities:
       | type          | name          |
