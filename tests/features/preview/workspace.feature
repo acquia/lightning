@@ -1,6 +1,7 @@
 @lightning @preview @api @experimental
 Feature: Workspaces
 
+  @609643f2
   Scenario: Locking a workspace by publishing it
     Given I am logged in as a user with the administrator role
     And I set the "Stage" workspace to the "Published" moderation state
@@ -9,7 +10,7 @@ Feature: Workspaces
     Then I should not see the button "Save"
     And I set the "Stage" workspace to the "Draft" moderation state
 
-  @errors
+  @errors @60964730
   Scenario: Configuration entities are unconditionally locked in every workspace except the Live workspace
     Given I am logged in as a user with the administrator role
     When I visit "/admin/structure/workspace/2/activate"
@@ -19,7 +20,7 @@ Feature: Workspaces
     Then the response status code should be 500
     And I should see "Configuration can only be modified in the Live workspace"
 
-  @errors
+  @errors @609648e8
   Scenario: Configuration entity form routes cannot be accessed in any workspace except the Live workspace
     Given I am logged in as a user with the administrator role
     When I visit "/admin/structure/workspace/2/activate"
@@ -27,6 +28,7 @@ Feature: Workspaces
     And I visit "/admin/config/content/formats"
     Then I should not see an "Add text format" link
 
+  @60964a82
   Scenario: Configuration entity forms protected by standard permissions cannot be accessed in any workspace except the Live workspace
     Given I am logged in as a user with the administrator role
     When I visit "/admin/structure/workspace/2/activate"
@@ -35,6 +37,7 @@ Feature: Workspaces
     Then I should see "Configuration can only be modified in the Live workspace"
     And I should not see the button "Save"
 
+  @60964c12
   Scenario: Workspaces are allowed to be in the Draft, Needs Review, and Published states, but not Archived
     Given I am logged in as a user with the administrator role
     When I visit "/admin/structure/workspace/types/basic/edit/moderation"
@@ -43,6 +46,7 @@ Feature: Workspaces
     And the "Published" checkbox should be checked
     Then the "Archived" checkbox should not be checked
 
+  @60964dca
   Scenario: Moderation states available to Workspace entities can be marked as Locked and others cannot
     Given I am logged in as a user with the administrator role
     When I visit "/admin/structure/workbench-moderation/states/needs_review"
@@ -50,12 +54,14 @@ Feature: Workspaces
     And I visit "/admin/structure/workbench-moderation/states/archived"
     Then I should not see "Lock workspaces in this state"
 
+  @60965676
   Scenario: The Needs Review and Published states that ship with Lightning are Locked but Draft is not
     Given I am logged in as a user with the administrator role
     And the "needs_review" state should be locked
     And the "published" state should be locked
     Then the "draft" state should not be locked
 
+  @60965888
   Scenario: The Live workspace that ships with Lightning is live
     Given I am logged in as a user with the administrator role
     When I visit "/node/add/page"
@@ -68,7 +74,7 @@ Feature: Workspaces
     And I visit "/wps-test"
     Then I should see "WPS Test Title"
 
-  @cleanup
+  @cleanup @60965a4a
   Scenario: Custom paths are prefixed when created on non-live workspaces
     Given I am logged in as a user with the administrator role
     And I switch to the "Stage" workspace
@@ -81,7 +87,7 @@ Feature: Workspaces
     And I click "Delete"
     And I press "Delete"
 
-  @cleanup
+  @cleanup @60965c48
   Scenario: The Stage workspace that ships with Lightning is not the Live workspace
     Given I am logged in as a user with the administrator role
     When I switch to the "Stage" workspace
@@ -104,6 +110,7 @@ Feature: Workspaces
     And I click "Delete"
     And I press "Delete"
 
+  @60965dce
   Scenario: The Stage workspace that ships with Lightning has Live as its Upstream
     Given I am logged in as a user with the administrator role
     And I navigate to the "Stage" workspace config form
@@ -111,7 +118,7 @@ Feature: Workspaces
     And the "Stage" checkbox should not be checked
     Then the "Live" checkbox should be checked
 
-  @cleanup
+  @cleanup @60965f40
   Scenario: Content is not editable after the content's workspace has been moved from unlocked to locked state
     Given I am logged in as a user with the administrator role
     And I set the "Stage" workspace to the "Draft" moderation state
@@ -145,7 +152,7 @@ Feature: Workspaces
     And I click "Delete"
     And I press "Delete"
 
-  @cleanup
+  @cleanup @609664ea
   Scenario: Content is editable after the content's workspace has been moved from locked to unlocked
     Given I am logged in as a user with the administrator role
     And I set the "Stage" workspace to the "Draft" moderation state
@@ -184,7 +191,7 @@ Feature: Workspaces
     And I click "Delete"
     And I press "Delete"
 
-  @cleanup
+  @cleanup @609666e8
   Scenario: Cause and resolve a conflict
     Given I am logged in as a user with the administrator role
     And I switch to the "Live" workspace
@@ -229,7 +236,7 @@ Feature: Workspaces
     And I click "Delete"
     And I press "Delete"
 
-  @cleanup
+  @cleanup @609668e6
   Scenario: Custom paths are pushed upstream
     Given I am logged in as a user with the administrator role
     And I switch to the "Stage" workspace
@@ -250,7 +257,7 @@ Feature: Workspaces
     And I click "Delete"
     And I press "Delete"
 
-  @cleanup
+  @cleanup @60966a94
   Scenario: Custom paths are replicated from upstream on update
     Given I am logged in as a user with the administrator role
     And I visit "/node/add/page"

@@ -1,14 +1,14 @@
 @lightning @api @workflow @errors
 Feature: Scheduled updates to content
 
-  @javascript
+  @javascript @afa65fea
   Scenario: Automatically generating informative labels for inline scheduled updates
     Given I am logged in as a user with the administrator role
     When I visit "/node/add/page"
     And I schedule the node to be published at "1984-09-19 08:57:00"
     Then I should see "Move to Published state on September 19, 1984 at 8:57:00 AM"
 
-  @javascript
+  @javascript @afa668e6
   Scenario: Publishing a node that is scheduled to be published in the past
     Given I am logged in as a user with the administrator role
     And page content:
@@ -26,6 +26,7 @@ Feature: Scheduled updates to content
     And I visit "/foobar"
     Then I should not see "Access denied"
 
+  @afa66b2a
   Scenario: Schedule and execute publication of node through bulk scheduled updates
     Given I am logged in as a user with the administrator role
     And page content:

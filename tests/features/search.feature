@@ -1,6 +1,7 @@
-@lightning @api @errors
+@lightning @core @search @api @errors
 Feature: Site search
 
+  @page @30876f64
   Scenario: Unpublished content does not appear in search results
     Given I am an anonymous user
     And page content:
@@ -15,7 +16,7 @@ Feature: Site search
     And I should not see "Zombie 2"
     And I should see "Zombie 3"
 
-  @javascript
+  @layout @landing-page @javascript @308772c0
   Scenario: Indexing and searching for landing pages
     Given I am logged in as a user with the landing_page_creator,landing_page_reviewer,layout_manager roles
     And landing_page content:
