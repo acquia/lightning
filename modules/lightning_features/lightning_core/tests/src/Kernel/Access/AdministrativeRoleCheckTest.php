@@ -2,7 +2,7 @@
 
 namespace Drupal\Tests\lightning_core\Kernel\Access;
 
-use Drupal\Core\Routing\RouteMatchInterface;
+use Drupal\Core\Routing\RouteMatch;
 use Drupal\lightning_core\Access\AdministrativeRoleCheck;
 use Drupal\Tests\token\Kernel\KernelTestBase;
 use Drupal\user\Entity\Role;
@@ -34,13 +34,8 @@ class AdministrativeRoleCheckTest extends KernelTestBase {
       'is_admin' => TRUE,
     ])->save();
 
-    $route = $this
-      ->prophesize(Route::class)
-      ->reveal();
-
-    $route_match = $this
-      ->prophesize(RouteMatchInterface::class)
-      ->reveal();
+    $route = new Route('/foo');
+    $route_match = new RouteMatch('foo', $route);
 
     $account = User::create();
     $account->addRole($admin_role);
