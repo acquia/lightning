@@ -21,7 +21,14 @@ class BulkUploadForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['foo']['#markup'] = t('Here be dragons.');
+    $form['dropzone'] = [
+      '#type' => 'dropzonejs',
+      '#dropzone_description' => $this->t('Drag files here to upload them'),
+    ];
+    $form['continue'] = [
+      '#type' => 'submit',
+      '#value' => $this->t('Continue'),
+    ];
     return $form;
   }
 
@@ -29,6 +36,12 @@ class BulkUploadForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
+    $uploads = $form_state->getValue(['dropzone', 'uploaded_files']);
+
+    foreach ($uploads as $upload) {
+      // $upload['path'] is a URI
+      // $upload['filename'] is...the filename, durr
+    }
   }
 
 }
