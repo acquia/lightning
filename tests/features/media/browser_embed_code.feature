@@ -1,4 +1,4 @@
-@lightning @api @javascript @errors
+@lightning @media @api @javascript @errors
 Feature: Creating media assets from within the media browser using embed codes
 
   @test_module

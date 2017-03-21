@@ -1,7 +1,7 @@
-@lightning @api @javascript @errors
+@lightning @media @api @javascript @errors
 Feature: Uploading media assets through the media browser
 
-  @test_module
+  @test_module @foo
   Scenario Outline: Uploading a file from within the media browser
     Given I am logged in as a user with the media_creator role
     When I visit "/entity-browser/iframe/media_browser"

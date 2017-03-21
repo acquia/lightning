@@ -1,4 +1,4 @@
-@lightning @api
+@lightning @api @layout
 Feature: Responsibility-based user roles for editing and managing layouts
 
   @beta5

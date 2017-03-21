@@ -1,4 +1,4 @@
-@lightning @api
+@lightning @media @api
 Feature: Media bundles
 
   Scenario: Automatically attaching the "Save to my media library" field to new media bundles

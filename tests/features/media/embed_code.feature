@@ -1,4 +1,4 @@
-@lightning @api
+@lightning @media @api
 Feature: Media assets based on embed codes
 
   @javascript

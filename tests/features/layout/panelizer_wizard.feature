@@ -1,4 +1,4 @@
-@lightning @api @errors
+@lightning @layout @api @errors
 Feature: Panelizer Wizard
 
   Scenario: Full content landing page layout has the proper Content context

@@ -1,4 +1,4 @@
-@lightning @api
+@lightning @api @media
 Feature: Responsibility-based user roles for creating and managing media assets
 
   @beta5
