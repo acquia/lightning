@@ -2,8 +2,8 @@
 
 namespace Drupal\Tests\lightning_core\Kernel;
 
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\lightning_core\Element;
-use Drupal\Tests\token\Kernel\KernelTestBase;
 
 /**
  * @coversDefaultClass \Drupal\lightning_core\Element
