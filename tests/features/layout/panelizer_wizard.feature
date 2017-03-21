@@ -1,6 +1,7 @@
 @lightning @layout @api @errors
 Feature: Panelizer Wizard
 
+  @landing-page @8ce434bd
   Scenario: Full content landing page layout has the proper Content context
     Given I am logged in as a user with the layout_manager role
     # Initialize the tempstore
@@ -9,7 +10,7 @@ Feature: Panelizer Wizard
     And I visit "/admin/structure/panels/panelizer.wizard/node__landing_page__full__default/select_block"
     Then I should see "Authored by"
 
-  @javascript
+  @landing-page @javascript @0e995113
   Scenario: Saving a panelized entity should not affect blocks placed via IPE
     Given I am logged in as a user with the "access panels in-place editing,administer panelizer node landing_page content,edit any landing_page content,view any unpublished content,use draft_draft transition,view latest version,access user profiles,set panelizer default" permissions
     And landing_page content:
@@ -23,6 +24,7 @@ Feature: Panelizer Wizard
     And I press "Save"
     Then I should see a "views_block:who_s_online-who_s_online_block" block
 
+  @landing-page @8901c0df
   Scenario: The default layout switcher is available on entity edit forms for each view mode that has the "Allow panelizer default choice" optioned enabled, and only those view modes.
     Given I am logged in as a user with the "landing_page_creator,layout_manager" roles
     And I have customized the search_result view mode of the landing_page content type
@@ -38,7 +40,7 @@ Feature: Panelizer Wizard
     And I visit "/node/add/landing_page"
     And I should not see a "Search result highlighting input" field
 
-  @javascript
+  @landing-page @javascript @7917f3ad
   Scenario: Switch between defined layouts.
     Given users:
       | name | mail          | roles                               |
@@ -62,7 +64,7 @@ Feature: Panelizer Wizard
     And I visit "/admin/structure/panelizer/edit/node__landing_page__full__two_column/content"
     And I remove the "Authored by" block from the left panelizer region
 
-  @javascript
+  @landing-page @javascript @415e9f49
   Scenario: The default layout select list should be disabled on entities whose layout has been customized via the IPE.
     Given users:
       | name | mail          | roles                               |
@@ -77,7 +79,7 @@ Feature: Panelizer Wizard
     And I click "Edit draft"
     Then the "Full content" field should be disabled
 
-  @javascript
+  @landing-page @javascript @6025f79d
   Scenario:  Block placement on non-default displays are preserved after re-saving the entity.
     Given users:
       | name | mail          | roles                               |
@@ -99,7 +101,7 @@ Feature: Panelizer Wizard
     And I press "Save"
     Then I should see a "block_content:test--here-be-dragons" block
 
-  @javascript
+  @landing-page @javascript @20e106df
   Scenario: Create a new layout using the Panelizer Wizard
     Given I am logged in as a user with the "layout_manager" role
     When I go to "/admin/structure/panelizer/add/node/landing_page/full"

@@ -1,6 +1,7 @@
 @lightning @layout @workflow @api
 Feature: Showing the Panels IPE interface on the latest content revision only
 
+  @page @aef46ea6
   Scenario: Showing the Panels IPE interface on the latest content revision only
     Given I am logged in as a user with the "administer nodes,bypass node access,use draft_draft transition,administer node display,access panels in-place editing,administer panelizer node page content,view any unpublished content,view latest version" permissions
     And I have panelized the page node type
@@ -22,7 +23,7 @@ Feature: Showing the Panels IPE interface on the latest content revision only
   # a forward revision. It should be uncommented when #2842471 is fixed or when
   # we stop testing preview/multiversion.
   #
-  #@javascript @errors
+  #@landing-page @javascript @errors @988f4ee4
   #Scenario: Reverting a unpublished revision of a panelized page to the default layout preserves the latest default revision
   #  Given I am logged in as a user with the administrator role
   #  And landing_page content:
