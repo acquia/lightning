@@ -2,17 +2,13 @@
 
 namespace Drupal\Tests\lightning_media\Kernel;
 
-use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
-use Drupal\Core\Entity\Entity\EntityFormDisplay;
-use Drupal\Core\Field\FieldConfigInterface;
-use Drupal\field\Entity\FieldConfig;
-use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\media_entity\Entity\MediaBundle;
+use Drupal\lightning_core\ConfigHelper as Config;
 
 /**
  * Tests of API-level Lightning functionality related to media bundles.
  *
+ * @group lightning
  * @group lightning_media
  */
 class MediaBundleTest extends KernelTestBase {
@@ -22,7 +18,9 @@ class MediaBundleTest extends KernelTestBase {
    */
   public static $modules = [
     'field',
+    'file',
     'image',
+    'lightning_core',
     'lightning_media',
     'media_entity',
     'user',
@@ -35,12 +33,17 @@ class MediaBundleTest extends KernelTestBase {
   public function setUp() {
     parent::setUp();
 
-    FieldStorageConfig::create([
-      'field_name' => 'field_media_in_library',
-      'entity_type' => 'media',
-      'type' => 'boolean',
-    ])
-      ->setCardinality(1)
+    Config::forModule('lightning_media')
+      ->getEntity('field_storage_config', 'media.field_media_in_library')
+      ->save();
+
+    $this->container
+      ->get('entity_type.manager')
+      ->getStorage('media_bundle')
+      ->create([
+        'id' => 'foo',
+        'label' => $this->randomString(),
+      ])
       ->save();
   }
 
@@ -48,23 +51,23 @@ class MediaBundleTest extends KernelTestBase {
    * Tests that field_media_in_library is auto-cloned for new media bundles.
    */
   public function testCloneMediaInLibraryField() {
-    MediaBundle::create([
-      'id' => 'foo',
-      'label' => $this->getRandomGenerator()->string(),
-    ])->save();
+    /** @var \Drupal\media_entity\MediaInterface $media */
+    $media = $this->container
+      ->get('entity_type.manager')
+      ->getStorage('media')
+      ->create([
+        'bundle' => 'foo',
+      ]);
 
-    $field = FieldConfig::load('media.foo.field_media_in_library');
-    $this->assertInstanceOf(FieldConfigInterface::class, $field);
-
-    // The form display should be created if it doesn't already exist.
-    $form_display = EntityFormDisplay::load('media.foo.default');
-    $this->assertInstanceOf(EntityFormDisplayInterface::class, $form_display);
+    $this->assertTrue(
+      $media->hasField('field_media_in_library')
+    );
 
     // The field should be present in the form as a checkbox.
-    $component = $form_display->getComponent('field_media_in_library');
+    $component = entity_get_form_display('media', 'foo', 'default')
+      ->getComponent('field_media_in_library');
+
     $this->assertInternalType('array', $component);
-    $this->assertEquals('boolean_checkbox', $component['type']);
-    $this->assertTrue($component['settings']['display_label']);
   }
 
 }
