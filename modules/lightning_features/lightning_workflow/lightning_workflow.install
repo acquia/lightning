@@ -14,10 +14,9 @@ function lightning_workflow_install() {
   // Set up content type-specific permissions.
   lightning_workflow_update_8001();
 
-  // Give content reviewers the ability to view moderation states, e.g. in the
-  // administrative list of content.
-  \Drupal::service('lightning.content_roles')
-    ->grantPermissions('reviewer', ['view moderation states']);
+  if (\Drupal::moduleHandler()->moduleExists('lightning_roles')) {
+    lightning_workflow_modules_installed(['lightning_roles']);
+  }
 }
 
 /**
@@ -33,17 +32,4 @@ function lightning_workflow_update_8001() {
  */
 function lightning_workflow_update_8002() {
   \Drupal::entityTypeManager()->clearCachedDefinitions();
-}
-
-/**
- * Implements hook_update_dependencies().
- */
-function lightning_workflow_update_dependencies() {
-  return [
-    'lightning_workflow' => [
-      8001 => [
-        'lightning' => 8002,
-      ],
-    ],
-  ];
 }

@@ -104,26 +104,34 @@ function lightning_workflow_alter_moderation_state(array &$element) {
 }
 
 /**
+ * Implements hook_modules_installed().
+ */
+function lightning_workflow_modules_installed(array $modules) {
+  if (in_array('lightning_roles', $modules)) {
+    \Drupal::service('lightning.content_roles')
+      ->grantPermissions('creator', [
+        'view any unpublished content',
+        'use draft_draft transition',
+        'use draft_needs_review transition',
+        'use needs_review_needs_review transition',
+        'view latest version',
+      ])
+      ->grantPermissions('reviewer', [
+        'use draft_published transition',
+        'use needs_review_draft transition',
+        'use needs_review_published transition',
+        'use published_published transition',
+        'use published_archived transition',
+        'view moderation states',
+      ]);
+  }
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
   $id = $node_type->id();
-
-  user_role_grant_permissions($id . '_creator', [
-    'view any unpublished content',
-    'use draft_draft transition',
-    'use draft_needs_review transition',
-    'use needs_review_needs_review transition',
-    'view latest version',
-  ]);
-
-  user_role_grant_permissions($id . '_reviewer', [
-    'use draft_published transition',
-    'use needs_review_draft transition',
-    'use needs_review_published transition',
-    'use published_published transition',
-    'use published_archived transition',
-  ]);
 
   if ($node_type->getThirdPartySetting('lightning_workflow', 'embargo')) {
     FieldConfig::create([

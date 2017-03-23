@@ -8,10 +8,38 @@
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_layout\Plugin\Field\FieldWidget\PanelizerWidget;
+use Drupal\node\Entity\NodeType;
 use Drupal\node\NodeTypeInterface;
 use Drupal\user\Entity\Role;
+use Drupal\user\RoleInterface;
+
+/**
+ * Implements hook_modules_installed().
+ */
+function lightning_layout_modules_installed(array $modules) {
+  if (in_array('lightning_roles', $modules)) {
+    \Drupal::service('lightning.content_roles')
+      ->grantPermissions('creator', [
+        'access panels in-place editing',
+        'change layouts in place editing',
+        'administer panelizer node ? content',
+        'administer panelizer node ? layout',
+      ]);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_layout_user_role_insert(RoleInterface $role) {
+  if ($role->id() == 'layout_manager' && Config::isBundled($role)) {
+    $node_types = NodeType::loadMultiple();
+    array_walk($node_types, 'lightning_layout_node_type_insert');
+  }
+}
 
 /**
  * Implements hook_block_alter().

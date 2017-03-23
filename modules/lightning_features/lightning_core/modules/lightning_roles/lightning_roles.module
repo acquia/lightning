@@ -1,0 +1,55 @@
+<?php
+
+use Drupal\node\NodeTypeInterface;
+use Drupal\user\Entity\Role;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_roles_node_type_insert(NodeTypeInterface $node_type) {
+  $config = \Drupal::config('lightning_roles.settings')->get('content_roles');
+  if (empty($config)) {
+    return;
+  }
+
+  $permission_map = function ($permission) use ($node_type) {
+    return str_replace('?', $node_type->id(), $permission);
+  };
+
+  foreach ($config as $key => $info) {
+    if (empty($info['enabled'])) {
+      continue;
+    }
+    $role_id = $node_type->id() . '_' . $key;
+
+    $role = Role::load($role_id) ?: Role::create([
+      'id' =>
+        $role_id,
+      'label' =>
+        str_replace('?', $node_type->label(), $info['label']),
+    ]);
+
+    // Only grant permissions the role does not already have.
+    $permissions = array_diff(
+      array_map($permission_map, $info['permissions']),
+      $role->getPermissions()
+    );
+
+    array_walk($permissions, [$role, 'grantPermission']);
+    $role->save();
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_delete().
+ */
+function lightning_roles_node_type_delete(NodeTypeInterface $node_type) {
+  $config = \Drupal::config('lightning_roles.settings')->get('content_roles');
+
+  foreach (array_keys($config) as $key) {
+    $role = Role::load($node_type->id() . '_' . $key);
+    if ($role) {
+      $role->delete();
+    }
+  }
+}
