@@ -60,16 +60,24 @@ function lightning_core_update_8004() {
  * Installs Lightning Roles.
  */
 function lightning_core_update_8005() {
-  \Drupal::service('module_installer')->install(['lightning_roles']);
-
-  // Move the content role configuration into Lightning Roles' config space.
   $source = \Drupal::configFactory()
     ->getEditable('lightning_core.settings');
 
-  \Drupal::configFactory()
-    ->getEditable('lightning_roles.settings')
-    ->set('content_roles', $source->get('content_roles'))
-    ->save();
+  $roles = $source->get('content_roles');
 
+  // If any content role is enabled, install Lightning Roles and migrate
+  // the content role configuration from Lightning Core.
+  foreach ($roles as $role) {
+    if ($role['enabled']) {
+      \Drupal::service('module_installer')->install(['lightning_roles']);
+
+      \Drupal::configFactory()
+        ->getEditable('lightning_roles.settings')
+        ->set('content_roles', $roles)
+        ->save();
+
+      break;
+    }
+  }
   $source->clear('content_roles')->save();
 }
