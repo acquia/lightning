@@ -21,6 +21,19 @@ use Drupal\lightning_media\Form\MediaForm;
 use Drupal\media_entity\MediaBundleInterface;
 
 /**
+ * Implements hook_modules_installed().
+ */
+function lightning_media_modules_installed(array $modules) {
+  if (in_array('lightning_roles', $modules)) {
+    \Drupal::service('lightning.content_roles')
+      ->grantPermissions('creator', [
+        'use text format rich_text',
+        'access media_browser entity browser pages',
+      ]);
+  }
+}
+
+/**
  * Implements hook_element_info_alter().
  */
 function lightning_media_element_info_alter(array &$info) {

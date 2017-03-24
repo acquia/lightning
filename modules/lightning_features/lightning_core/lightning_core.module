@@ -19,7 +19,6 @@ use Drupal\lightning_core\Form\EntityDisplayModeEditForm;
 use Drupal\lightning_core\Form\EntityFormModeAddForm;
 use Drupal\lightning_core\Form\RoleForm;
 use Drupal\lightning_core\OverrideHelper as Override;
-use Drupal\node\NodeTypeInterface;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
 
 /**
@@ -231,72 +230,6 @@ function lightning_core_form_user_form_alter(array &$form) {
         $form['account']['roles']['#legend'][$id] = $role->getDescription();
       }
     }
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function lightning_core_node_type_insert(NodeTypeInterface $node_type) {
-  $config = \Drupal::config('lightning_core.settings')->get('content_roles');
-  if (empty($config)) {
-    return;
-  }
-
-  $permission_map = function ($permission) use ($node_type) {
-    return str_replace('?', $node_type->id(), $permission);
-  };
-
-  foreach ($config as $key => $info) {
-    if (empty($info['enabled'])) {
-      continue;
-    }
-    $role_id = $node_type->id() . '_' . $key;
-
-    $role = Role::load($role_id) ?: Role::create([
-      'id' =>
-        $role_id,
-      'label' =>
-        str_replace('?', $node_type->label(), $info['label']),
-    ]);
-
-    // Only grant permissions the role does not already have.
-    $permissions = array_diff(
-      array_map($permission_map, $info['permissions']),
-      $role->getPermissions()
-    );
-
-    array_walk($permissions, [$role, 'grantPermission']);
-    $role->save();
-  }
-
-  user_role_grant_permissions('content_manager', [
-    'create ' . $node_type->id() . ' content',
-    'delete any ' . $node_type->id() . ' content',
-    'edit any ' . $node_type->id() . ' content',
-  ]);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_delete().
- */
-function lightning_core_node_type_delete(NodeTypeInterface $node_type) {
-  $config = \Drupal::config('lightning_core.settings')->get('content_roles');
-
-  foreach (array_keys($config) as $key) {
-    $role = Role::load($node_type->id() . '_' . $key);
-    if ($role) {
-      $role->delete();
-    }
-  }
-
-  $role = Role::load('content_manager');
-  if ($role) {
-    user_role_revoke_permissions($role->id(), [
-      'create ' . $node_type->id() . ' content',
-      'delete any ' . $node_type->id() . ' content',
-      'edit any ' . $node_type->id() . ' content',
-    ]);
   }
 }
 

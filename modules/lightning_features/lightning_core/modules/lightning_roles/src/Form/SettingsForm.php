@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lightning_core\Form;
+namespace Drupal\lightning_roles\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Form\ConfigFormBase;
@@ -9,7 +9,7 @@ use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * The settings form for controlling Lightning Core's behavior.
+ * The settings form for controlling Lightning Roles' behavior.
  */
 class SettingsForm extends ConfigFormBase {
 
@@ -40,21 +40,21 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   protected function getEditableConfigNames() {
-    return ['lightning_core.settings'];
+    return ['lightning_roles.settings'];
   }
 
   /**
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'lightning_core_settings_form';
+    return 'lightning_roles_settings_form';
   }
 
   /**
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $config = $this->config('lightning_core.settings')->get('content_roles');
+    $config = $this->config('lightning_roles.settings')->get('content_roles');
 
     $permission_map = function ($permission) {
       return str_replace('?', NULL, $permission);
@@ -83,7 +83,7 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    $config = $this->config('lightning_core.settings');
+    $config = $this->config('lightning_roles.settings');
 
     $roles = $config->get('content_roles');
 

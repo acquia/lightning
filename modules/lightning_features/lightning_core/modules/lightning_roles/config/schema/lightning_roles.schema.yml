@@ -1,0 +1,27 @@
+lightning_roles.content_role:
+  type: mapping
+  label: 'Content role'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Enabled'
+    label:
+      type: string
+      label: 'Label'
+    permissions:
+      type: sequence
+      label: 'Permissions'
+      sequence:
+        type: string
+        label: 'Permission'
+
+lightning_roles.settings:
+  type: config_object
+  label: 'Lightning Roles settings'
+  mapping:
+    content_roles:
+      type: sequence
+      label: 'Content roles'
+      sequence:
+        type: lightning_roles.content_role
+        label: 'Content role'
