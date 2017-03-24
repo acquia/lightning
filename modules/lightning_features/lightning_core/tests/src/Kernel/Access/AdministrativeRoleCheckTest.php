@@ -3,8 +3,8 @@
 namespace Drupal\Tests\lightning_core\Kernel\Access;
 
 use Drupal\Core\Routing\RouteMatch;
+use Drupal\KernelTests\KernelTestBase;
 use Drupal\lightning_core\Access\AdministrativeRoleCheck;
-use Drupal\Tests\token\Kernel\KernelTestBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Symfony\Component\Routing\Route;
