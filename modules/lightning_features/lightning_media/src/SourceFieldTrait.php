@@ -7,6 +7,9 @@ use Drupal\media_entity\MediaInterface;
 
 /**
  * Helper for bundle resolvers that deal with source fields.
+ *
+ * @deprecated and will be removed in Lightning 2.1.0. Media type plugins should
+ * implement SourceFieldInterface instead.
  */
 trait SourceFieldTrait {
 

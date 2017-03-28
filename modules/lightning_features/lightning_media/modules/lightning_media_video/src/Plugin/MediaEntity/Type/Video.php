@@ -18,8 +18,8 @@ class Video extends VideoEmbedField implements InputMatchInterface, SourceFieldI
   /**
    * {@inheritdoc}
    */
-  public function appliesTo($input, MediaBundleInterface $bundle) {
-    return (boolean) $this->providerManager->loadProviderFromInput($input);
+  public function appliesTo($value, MediaBundleInterface $bundle) {
+    return (boolean) $this->providerManager->loadProviderFromInput($value);
   }
 
 }
