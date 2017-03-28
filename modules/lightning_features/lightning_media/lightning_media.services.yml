@@ -1,4 +1,9 @@
 services:
+  lightning.media_helper:
+    class: '\Drupal\lightning_media\MediaHelper'
+    arguments:
+      - '@entity_type.manager'
+
   # Deprecated in Lightning 2.0.4 and will be removed in Lightning 2.1.0. Media
   # type plugins should implement InputMatchInterface directly instead.
   plugin.manager.lightning_media.bundle_resolver:

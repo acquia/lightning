@@ -6,12 +6,11 @@ use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\entity_browser\WidgetBase;
 use Drupal\entity_browser\WidgetValidationManager;
 use Drupal\inline_entity_form\ElementSubmit;
-use Drupal\lightning_media\BundleResolverBase;
-use Drupal\lightning_media\BundleResolverInterface;
+use Drupal\lightning_media\Exception\IndeterminateBundleException;
+use Drupal\lightning_media\MediaHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -21,18 +20,11 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 abstract class EntityFormProxy extends WidgetBase {
 
   /**
-   * The media bundle resolver.
+   * The media helper service.
    *
-   * @var BundleResolverInterface
+   * @var \Drupal\lightning_media\MediaHelper
    */
-  protected $bundleResolver;
-
-  /**
-   * The currently logged in user.
-   *
-   * @var AccountInterface
-   */
-  protected $currentUser;
+  protected $helper;
 
   /**
    * EntityFormProxy constructor.
@@ -49,15 +41,12 @@ abstract class EntityFormProxy extends WidgetBase {
    *   The entity type manager service.
    * @param WidgetValidationManager $widget_validation_manager
    *   The widget validation manager.
-   * @param BundleResolverInterface $bundle_resolver
-   *   The media bundle resolver.
-   * @param AccountInterface $current_user
-   *   The currently logged in user.
+   * @param \Drupal\lightning_media\MediaHelper $helper
+   *   The media helper service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EventDispatcherInterface $event_dispatcher, EntityTypeManagerInterface $entity_type_manager, WidgetValidationManager $widget_validation_manager, BundleResolverInterface $bundle_resolver, AccountInterface $current_user) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EventDispatcherInterface $event_dispatcher, EntityTypeManagerInterface $entity_type_manager, WidgetValidationManager $widget_validation_manager, MediaHelper $helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $event_dispatcher, $entity_type_manager, $widget_validation_manager);
-    $this->bundleResolver = $bundle_resolver;
-    $this->currentUser = $current_user;
+    $this->helper = $helper;
   }
 
   /**
@@ -71,8 +60,7 @@ abstract class EntityFormProxy extends WidgetBase {
       $container->get('event_dispatcher'),
       $container->get('entity_type.manager'),
       $container->get('plugin.manager.entity_browser.widget_validation'),
-      BundleResolverBase::create($container, [], 'bundle_resolver', []),
-      $container->get('current_user')
+      $container->get('lightning.media_helper')
     );
   }
 
@@ -87,32 +75,35 @@ abstract class EntityFormProxy extends WidgetBase {
     }
 
     $form['entity'] = [
-      '#markup' => NULL,
       '#prefix' => '<div id="entity">',
       '#suffix' => '</div>',
       '#weight' => 99,
     ];
 
-    $input = $this->getInputValue($form_state);
-    if ($input) {
-      $entity = $this->generateEntity($input);
-      if ($entity) {
-        unset($form['entity']['#markup']);
-
-        $form['entity'] += [
-          '#type' => 'inline_entity_form',
-          '#entity_type' => $entity->getEntityTypeId(),
-          '#bundle' => $entity->bundle(),
-          '#default_value' => $entity,
-          '#form_mode' => $this->configuration['form_mode'],
-        ];
-        // Without this, IEF won't know where to hook into the widget.
-        // Don't pass $original_form as the second argument to addCallback(),
-        // because it's not just the entity browser part of the form, not the
-        // actual complete form.
-        ElementSubmit::addCallback($form['actions']['submit'], $form_state->getCompleteForm());
-      }
+    $value = $this->getInputValue($form_state);
+    if (empty($value)) {
+      $form['entity']['#markup'] = NULL;
+      return $form;
     }
+
+    try {
+      $entity = $this->helper->createFromInput($value);
+    }
+    catch (IndeterminateBundleException $e) {
+      return $form;
+    }
+
+    $form['entity'] += [
+      '#type' => 'inline_entity_form',
+      '#entity_type' => $entity->getEntityTypeId(),
+      '#bundle' => $entity->bundle(),
+      '#default_value' => $entity,
+      '#form_mode' => $this->configuration['form_mode'],
+    ];
+    // Without this, IEF won't know where to hook into the widget. Don't pass
+    // $original_form as the second argument to addCallback(), because it's not
+    // just the entity browser part of the form, not the actual complete form.
+    ElementSubmit::addCallback($form['actions']['submit'], $form_state->getCompleteForm());
 
     return $form;
   }
@@ -135,10 +126,13 @@ abstract class EntityFormProxy extends WidgetBase {
    * {@inheritdoc}
    */
   public function validate(array &$form, FormStateInterface $form_state) {
-    $input = $this->getInputValue($form_state);
-    $bundle = $this->bundleResolver->getBundle($input);
-    if (empty($bundle)) {
-      $form_state->setError($form['widget'], $this->t('No media types can be matched to this input.'));
+    $value = $this->getInputValue($form_state);
+
+    try {
+      $this->helper->getBundleFromInput($value);
+    }
+    catch (IndeterminateBundleException $e) {
+      $form_state->setError($form['widget'], (string) $e);
     }
   }
 
@@ -168,33 +162,6 @@ abstract class EntityFormProxy extends WidgetBase {
       ->addCommand(
         new ReplaceCommand('#entity', $form['widget']['entity'])
       );
-  }
-
-  /**
-   * Generates a media entity from an input value.
-   *
-   * @param mixed $input
-   *   The input value from which to generate the entity.
-   *
-   * @return \Drupal\media_entity\MediaInterface|null
-   *   A new, unsaved media entity, or null if the input value could not be
-   *   matched to any existing media bundles.
-   */
-  protected function generateEntity($input) {
-    $bundle = $this->bundleResolver->getBundle($input);
-
-    if ($bundle) {
-      /** @var \Drupal\media_entity\MediaInterface $entity */
-      $entity = $this->entityTypeManager->getStorage('media')->create([
-        'bundle' => $bundle->id(),
-        'uid' => $this->currentUser->id(),
-        'status' => TRUE,
-      ]);
-      $type_config = $bundle->getTypeConfiguration();
-      $entity->set($type_config['source_field'], $input);
-
-      return $entity;
-    }
   }
 
   /**
