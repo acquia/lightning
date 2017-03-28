@@ -14,6 +14,8 @@ use Prophecy\Argument;
 
 /**
  * @coversDefaultClass \Drupal\lightning_preview\WorkspaceLock
+ *
+ * @group lightning
  * @group lightning_preview
  */
 class WorkspaceLockTest extends UnitTestCase {
