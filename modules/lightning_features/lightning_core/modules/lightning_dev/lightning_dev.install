@@ -49,13 +49,6 @@ function lightning_dev_install() {
   $entity_browser->set('widgets', $widgets);
   $entity_browser->save();
 
-  // This module was introduced in Lightning 2.0.3, so we'll need to run manual
-  // update steps for versions older than that. We can remove this when 2.0.3
-  // is the oldest tested version of Lightning.
-  lightning_dev_update_8001();
-  lightning_dev_update_8002();
-  lightning_dev_update_8003();
-
   // Set up centralized Behat configuration.
   lightning_dev_update_8004();
 
