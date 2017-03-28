@@ -14,6 +14,7 @@ use Drupal\entity_browser\Element\EntityBrowserElement;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
+use Drupal\lightning_core\BundleEntityStorage;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\media_entity\Entity\MediaBundle;
 use Drupal\media_entity\MediaInterface;
@@ -201,6 +202,9 @@ function lightning_media_entity_type_alter(array &$entity_types) {
   // order to support dynamic preview generation.
   Override::entityForm($entity_types['media'], MediaForm::class);
   Override::entityForm($entity_types['media'], MediaForm::class, 'edit');
+
+  // Use our extended storage handler for media bundles.
+  Override::entityHandler($entity_types['media_bundle'], 'storage', BundleEntityStorage::class);
 }
 
 /**
