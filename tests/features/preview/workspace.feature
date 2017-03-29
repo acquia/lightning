@@ -1,4 +1,4 @@
-@lightning @preview @api @experimental
+@lightning @preview @api
 Feature: Workspaces
 
   @d1a9bf4d
