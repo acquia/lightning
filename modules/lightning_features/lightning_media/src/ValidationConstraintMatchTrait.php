@@ -30,10 +30,10 @@ trait ValidationConstraintMatchTrait {
       ->createDataDefinition('string')
       ->addConstraint($plugin_definition['input_match']['constraint']);
 
-    $value = StringData::createInstance($definition);
-    $value->setValue($value);
+    $data = StringData::createInstance($definition);
+    $data->setValue($value);
 
-    return $value->validate()->count() === 0;
+    return $data->validate()->count() === 0;
   }
 
 }
