@@ -143,17 +143,22 @@ class MediaHelper {
     $field = static::getSourceField($entity);
     $field->setValue($file);
 
-    $destination = static::prepareFileDestination($entity) . '/' . $file->getFilename();
+    $destination = '';
+    $destination .= static::prepareFileDestination($entity);
+    if (substr($destination, -1) != '/') {
+      $destination .= '/';
+    }
+    $destination .= $file->getFilename();
 
     if ($destination == $file->getFileUri()) {
       return $file;
     }
     else {
-      $final_file = file_move($file, $destination, $replace);
+      $file = file_move($file, $destination, $replace);
 
-      if ($final_file) {
-        $field->setValue($final_file);
-        return $final_file;
+      if ($file) {
+        $field->setValue($file);
+        return $file;
       }
       else {
         return FALSE;
@@ -213,11 +218,16 @@ class MediaHelper {
    *   plugin does not define a source field.
    */
   public static function getSourceField(MediaInterface $entity) {
-    $type_configuration = $entity->getType()->getConfiguration();
+    $type_plugin = $entity->getType();
 
-    return isset($type_configuration['source_field'])
-      ? $entity->get($type_configuration['source_field'])
-      : NULL;
+    if ($type_plugin instanceof SourceFieldInterface) {
+      $field = $type_plugin->getSourceFieldDefinition($entity->bundle->entity);
+
+      return $field
+        ? $entity->get($field->getName())
+        : NULL;
+    }
+    return NULL;
   }
 
 }
