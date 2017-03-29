@@ -87,14 +87,3 @@ function lightning_search_views_data_alter(array &$data) {
   // @TODO: Remove this when #2843724 is fixed.
   $data['search_api_index_content']['rendered']['field']['id'] = 'search_api';
 }
-
-/**
- * Implements hook_entity_type_alter().
- */
-function lightning_search_entity_type_alter(array &$entity_types) {
-  // Search API tasks are an internal entity type and should never be under
-  // Multiversion control.
-  if (!\Drupal::state()->get('multiversion.migration_done.search_api_task')) {
-    $entity_types['search_api_task']->set('multiversion', FALSE);
-  }
-}
