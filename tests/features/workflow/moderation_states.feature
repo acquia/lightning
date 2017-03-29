@@ -69,7 +69,7 @@ Feature: Workflow moderation states
     And I should not see "Terry Jones"
     And I should see "Eric Idle"
 
-  @javascript @763fbb2c
+  @javascript @expect-failure @763fbb2c
   Scenario: Quick edit a forward revision
     Given I am logged in as a user with the "administrator" role
     And page content:

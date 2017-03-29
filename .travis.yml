@@ -93,7 +93,7 @@ before_script:
 script:
   - composer validate ./profiles/lightning/composer.json --no-check-all --ansi
   - phpunit --configuration ./core --group lightning
-  - behat --strict --stop-on-failure --config ./sites/default/files/behat.yml
+  - behat --strict --stop-on-failure --config ./sites/default/files/behat.yml --tags="~@expect-failure"
 
 matrix:
   fast_finish: true

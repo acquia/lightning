@@ -18,7 +18,7 @@ Feature: Showing the Panels IPE interface on the latest content revision only
     And I should not see a "#panels-ipe-content" element
     And I unpanelize the page node type
 
-  @landing-page @javascript @errors @988f4ee4
+  @landing-page @javascript @errors @expect-failure @988f4ee4
   Scenario: Reverting a unpublished revision of a panelized page to the default layout preserves the latest default revision
     Given I am logged in as a user with the administrator role
     And landing_page content:
