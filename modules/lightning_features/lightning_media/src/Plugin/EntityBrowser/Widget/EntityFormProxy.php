@@ -132,7 +132,7 @@ abstract class EntityFormProxy extends WidgetBase {
       $this->helper->getBundleFromInput($value);
     }
     catch (IndeterminateBundleException $e) {
-      $form_state->setError($form['widget'], (string) $e);
+      $form_state->setError($form['widget'], $e->getMessage());
     }
   }
 

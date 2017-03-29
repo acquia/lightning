@@ -2,6 +2,8 @@
 
 namespace Drupal\lightning_media\Exception;
 
+use Drupal\Core\Entity\EntityInterface;
+
 /**
  * Exception thrown if no bundle can be determined from an input value.
  */
@@ -20,7 +22,7 @@ class IndeterminateBundleException extends \UnexpectedValueException {
   public function __construct($value, $code = 0, \Exception $previous = NULL) {
     $message = sprintf(
       'Could not match any bundles to input: %s',
-      var_export($value, TRUE)
+      $value instanceof EntityInterface ? $value->label() : var_export($value, TRUE)
     );
     parent::__construct($message, $code, $previous);
   }
