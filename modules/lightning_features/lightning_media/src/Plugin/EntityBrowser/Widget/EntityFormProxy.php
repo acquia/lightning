@@ -4,77 +4,16 @@ namespace Drupal\lightning_media\Plugin\EntityBrowser\Widget;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Session\AccountInterface;
 use Drupal\entity_browser\WidgetBase;
-use Drupal\entity_browser\WidgetValidationManager;
 use Drupal\inline_entity_form\ElementSubmit;
-use Drupal\lightning_media\BundleResolverBase;
-use Drupal\lightning_media\BundleResolverInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Drupal\lightning_media\InputMatchInterface;
+use Drupal\media_entity\MediaBundleInterface;
 
 /**
  * Base class for EB widgets which wrap around an (inline) entity form.
  */
 abstract class EntityFormProxy extends WidgetBase {
-
-  /**
-   * The media bundle resolver.
-   *
-   * @var BundleResolverInterface
-   */
-  protected $bundleResolver;
-
-  /**
-   * The currently logged in user.
-   *
-   * @var AccountInterface
-   */
-  protected $currentUser;
-
-  /**
-   * EntityFormProxy constructor.
-   *
-   * @param array $configuration
-   *   Plugin configuration.
-   * @param string $plugin_id
-   *   The plugin ID.
-   * @param mixed $plugin_definition
-   *   The plugin definition.
-   * @param EventDispatcherInterface $event_dispatcher
-   *   The event dispatcher.
-   * @param EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
-   * @param WidgetValidationManager $widget_validation_manager
-   *   The widget validation manager.
-   * @param BundleResolverInterface $bundle_resolver
-   *   The media bundle resolver.
-   * @param AccountInterface $current_user
-   *   The currently logged in user.
-   */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EventDispatcherInterface $event_dispatcher, EntityTypeManagerInterface $entity_type_manager, WidgetValidationManager $widget_validation_manager, BundleResolverInterface $bundle_resolver, AccountInterface $current_user) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $event_dispatcher, $entity_type_manager, $widget_validation_manager);
-    $this->bundleResolver = $bundle_resolver;
-    $this->currentUser = $current_user;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition) {
-    return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('event_dispatcher'),
-      $container->get('entity_type.manager'),
-      $container->get('plugin.manager.entity_browser.widget_validation'),
-      BundleResolverBase::create($container, [], 'bundle_resolver', []),
-      $container->get('current_user')
-    );
-  }
 
   /**
    * {@inheritdoc}
@@ -136,7 +75,7 @@ abstract class EntityFormProxy extends WidgetBase {
    */
   public function validate(array &$form, FormStateInterface $form_state) {
     $input = $this->getInputValue($form_state);
-    $bundle = $this->bundleResolver->getBundle($input);
+    $bundle = $this->getBundle($input);
     if (empty($bundle)) {
       $form_state->setError($form['widget'], $this->t('No media types can be matched to this input.'));
     }
@@ -181,14 +120,12 @@ abstract class EntityFormProxy extends WidgetBase {
    *   matched to any existing media bundles.
    */
   protected function generateEntity($input) {
-    $bundle = $this->bundleResolver->getBundle($input);
+    $bundle = $this->getBundle($input);
 
     if ($bundle) {
       /** @var \Drupal\media_entity\MediaInterface $entity */
       $entity = $this->entityTypeManager->getStorage('media')->create([
         'bundle' => $bundle->id(),
-        'uid' => $this->currentUser->id(),
-        'status' => TRUE,
       ]);
       $type_config = $bundle->getTypeConfiguration();
       $entity->set($type_config['source_field'], $input);
@@ -218,6 +155,49 @@ abstract class EntityFormProxy extends WidgetBase {
     $configuration = parent::defaultConfiguration();
     $configuration['form_mode'] = 'media_browser';
     return $configuration;
+  }
+
+  /**
+   * Returns the first available media bundle that can handle an input value.
+   *
+   * @param mixed $input
+   *   The input value.
+   *
+   * @return \Drupal\media_entity\MediaBundleInterface|false
+   *   A media bundle which can handle the input, or FALSE if there are none.
+   *
+   * @deprecated and will be removed in Lightning 2.1.1.
+   */
+  protected function getBundle($input) {
+    foreach ($this->getPossibleBundles() as $bundle) {
+      $plugin = $bundle->getType();
+      if ($plugin instanceof InputMatchInterface && $plugin->appliesTo($input, $bundle)) {
+        return $bundle;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * Returns all available media bundles.
+   *
+   * @return \Drupal\media_entity\MediaBundleInterface[]
+   *   All available media bundles for which the current user has create access.
+   *
+   * @deprecated and will be removed in Lightning 2.1.1.
+   */
+  protected function getPossibleBundles() {
+    $access_handler = $this->entityTypeManager->getAccessControlHandler('media');
+
+    return array_filter(
+      $this->entityTypeManager
+        ->getStorage('media_bundle')
+        ->loadMultiple(),
+
+      function (MediaBundleInterface $bundle) use ($access_handler) {
+        return $access_handler->createAccess($bundle->id());
+      }
+    );
   }
 
 }
