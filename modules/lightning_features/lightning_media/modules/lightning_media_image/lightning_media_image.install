@@ -20,7 +20,9 @@ function lightning_media_image_install() {
 
   // Grants image browser access to the creator content role and the
   // media_creator and media_manager roles.
-  lightning_media_image_update_8004();
+  if (\Drupal::moduleHandler()->moduleExists('lightning_roles')) {
+    lightning_media_image_modules_installed(['lightning_roles']);
+  }
 }
 
 /**
@@ -562,18 +564,14 @@ function lightning_media_image_update_8003() {
 }
 
 /**
- * Grants image browser access to media_creator role and creator content role.
+ * Removed in Lightning 8.x-2.07.
+ *
+ * Formerly added the 'access image_browser entity browser pages' permission to
+ * the media_creator, media_manager and creator content roles.
+ *
+ * @deprecated
  */
 function lightning_media_image_update_8004() {
-  $permissions = ['access image_browser entity browser pages'];
-
-  // Media creators and managers can always access the image browser.
-  user_role_grant_permissions('media_creator', $permissions);
-  user_role_grant_permissions('media_manager', $permissions);
-
-  // Any content creator can as well.
-  \Drupal::service('lightning.content_roles')
-    ->grantPermissions('creator', $permissions);
 }
 
 /**

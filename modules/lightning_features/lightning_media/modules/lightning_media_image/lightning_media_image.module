@@ -12,6 +12,24 @@ use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_image\Plugin\MediaEntity\Type\Image;
 
 /**
+ * Implements hook_modules_installed().
+ */
+function lightning_media_image_modules_installed(array $modules) {
+  if (in_array('lightning_roles', $modules)) {
+    \Drupal::service('lightning.content_roles')
+      ->grantPermissions('media_creator', [
+        'access image_browser entity browser pages',
+      ])
+      ->grantPermissions('media_manager', [
+        'access image_browser entity browser pages',
+      ])
+      ->grantPermissions('creator', [
+        'access image_browser entity browser pages',
+      ]);
+  }
+}
+
+/**
  * Implements hook_media_entity_type_info_alter().
  */
 function lightning_media_image_media_entity_type_info_alter(array &$types) {
