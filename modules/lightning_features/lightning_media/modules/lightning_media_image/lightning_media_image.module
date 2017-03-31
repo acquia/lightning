@@ -16,16 +16,15 @@ use Drupal\lightning_media_image\Plugin\MediaEntity\Type\Image;
  */
 function lightning_media_image_modules_installed(array $modules) {
   if (in_array('lightning_roles', $modules)) {
+    $permissions = ['access image_browser entity browser pages'];
+
+    // Media creators and managers can always access the image browser.
+    user_role_grant_permissions('media_creator', $permissions);
+    user_role_grant_permissions('media_manager', $permissions);
+
+    // Any content creator can as well.
     \Drupal::service('lightning.content_roles')
-      ->grantPermissions('media_creator', [
-        'access image_browser entity browser pages',
-      ])
-      ->grantPermissions('media_manager', [
-        'access image_browser entity browser pages',
-      ])
-      ->grantPermissions('creator', [
-        'access image_browser entity browser pages',
-      ]);
+      ->grantPermissions('creator', $permissions);
   }
 }
 
