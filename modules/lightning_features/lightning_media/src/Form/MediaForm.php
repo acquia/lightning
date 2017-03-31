@@ -128,7 +128,7 @@ class MediaForm extends BaseMediaForm {
     $entity = $handler->getEntity();
     $handler->copyFormValuesToEntity($entity, $form, $form_state);
 
-    return $handler->renderPreview($form['preview']);
+    return $form['preview'];
   }
 
 }
