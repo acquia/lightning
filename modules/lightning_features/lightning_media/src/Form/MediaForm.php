@@ -42,14 +42,40 @@ class MediaForm extends BaseMediaForm {
           'method' => 'html',
           'event' => 'change',
         ];
-
-        $form['preview'] = $field->view('default');
-        $form['preview']['#prefix'] = '<div id="preview">';
-        $form['preview']['#suffix'] = '</div>';
+        $form['preview'] = [
+          '#pre_render' => [
+            [$this, 'renderPreview'],
+          ],
+          '#prefix' => '<div id="preview">',
+          '#suffix' => '</div>',
+        ];
       }
     }
-
     return $form;
+  }
+
+  /**
+   * Pre-render callback for the preview element.
+   *
+   * You might wonder why this rinky-dink bit of logic cannot be done in
+   * ::form(). The reason is that, under some circumstances, the renderable
+   * preview element will contain unserializable dependencies (like such as the
+   * database connection), which will produce a 500 error when trying to cache
+   * the form for AJAX purposes.
+   *
+   * By putting this logic in a pre-render callback, we ensure that the
+   * unserializable preview element will only exist during the rendering stage,
+   * and thus never be serialized for caching.
+   *
+   * @param array $element
+   *   The preview element.
+   *
+   * @return array
+   *   The renderable preview element.
+   */
+  public function renderPreview(array $element) {
+    $entity = $this->getEntity();
+    return $element + static::getSourceField($entity)->view('default');
   }
 
   /**
@@ -102,7 +128,7 @@ class MediaForm extends BaseMediaForm {
     $entity = $handler->getEntity();
     $handler->copyFormValuesToEntity($entity, $form, $form_state);
 
-    return static::getSourceField($entity)->view('default');
+    return $handler->renderPreview($form['preview']);
   }
 
 }
