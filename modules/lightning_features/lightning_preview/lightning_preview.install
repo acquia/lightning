@@ -5,6 +5,7 @@
  * Contains installation and update routines for Lightning Preview.
  */
 
+use Drupal\Core\Entity\ContentEntityTypeInterface;
 use Drupal\multiversion\Entity\WorkspaceType;
 
 /**
@@ -49,4 +50,44 @@ function lightning_preview_update_8001() {
  */
 function lightning_preview_update_8002() {
   \Drupal::entityTypeManager()->clearCachedDefinitions();
+}
+
+/**
+ * Opts non-revisionable entity types out of Multiversion.
+ */
+function lightning_preview_update_8003() {
+  $disable = [];
+  foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type) {
+    if ($entity_type instanceof ContentEntityTypeInterface && !$entity_type->hasKey('revision')) {
+      array_push($disable, $entity_type->id());
+    }
+  }
+
+  // As of beta1, Multiversion is opt-in rather than opt-out. This can break
+  // entity types that are not normally versionable, but had been taken over
+  // by Multiversion.
+  $config = \Drupal::configFactory()->getEditable('multiversion.settings');
+  $enable = array_diff($config->get('enabled_entity_types'), $disable);
+  $config->set('enabled_entity_types', $enable)->save();
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function lightning_preview_update_dependencies() {
+  return [
+    'lightning_preview' => [
+      // lightning_preview 8003 modifies the multiversion.settings config object
+      // which is created by multiversion 8005.
+      8003 => [
+        'multiversion' => 8005,
+      ],
+    ],
+    'multiversion' => [
+      // Force multiversion 8006 and higher to run after lightning_preview 8003.
+      8006 => [
+        'lightning_preview' => 8003,
+      ],
+    ],
+  ];
 }
