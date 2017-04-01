@@ -66,6 +66,23 @@ function lightning_test_install() {
       ],
     ])
     ->save();
+
+  $display = entity_get_form_display('media', 'video', 'default');
+  // Add field_image to the display and save it; lightning_media_image will
+  // default it to the image browser widget.
+  $display->setComponent('field_image', ['type' => 'image_image'])->save();
+  // Then switch it to a standard image widget.
+  $display
+    ->setComponent('field_image', [
+      'type' => 'image_image',
+      'weight' => 4,
+      'settings' => [
+        'preview_image_style' => 'thumbnail',
+        'progress_indicator' => 'throbber',
+      ],
+      'region' => 'content',
+    ])
+    ->save();
 }
 
 /**
