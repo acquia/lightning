@@ -1,4 +1,4 @@
-@lightning @preview @api @experimental
+@lightning @preview @api
 Feature: Workspaces
 
   @d1a9bf4d
@@ -113,9 +113,8 @@ Feature: Workspaces
   @b7dde099
   Scenario: The Stage workspace that ships with Lightning has Live as its Upstream
     Given I am logged in as a user with the administrator role
-    And I navigate to the "Stage" workspace config form
-    # These are actually radio button by the checkbox steps work
-    And the "Stage" checkbox should not be checked
+    When I navigate to the "Stage" workspace config form
+    # The "Live" checkbox is really a radio button, but it's the same to Mink.
     Then the "Live" checkbox should be checked
 
   @cleanup @e6abc176

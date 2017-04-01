@@ -208,20 +208,6 @@ function lightning_core_block_view_alter(array &$build, BlockPluginInterface $bl
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function lightning_core_form_system_modules_alter(array &$form) {
-  $package = 'Lightning (Experimental)';
-
-  if (isset($form['modules'][$package])) {
-    $warning = t('Here may be dragons! Please be sure you <a href="@url">understand the potential risks</a> of experimental extensions before enabling one.', [
-      '@url' => 'http://lightning.acquia.com/lightning-experimental-modules',
-    ]);
-    $form['modules'][$package]['#description'] = '<p>' . $warning . '</p>';
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
 function lightning_core_form_user_form_alter(array &$form) {
   if (isset($form['account']['roles'])) {
     /** @var \Drupal\user\RoleInterface $role */
