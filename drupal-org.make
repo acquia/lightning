@@ -55,6 +55,7 @@ projects[pathauto][version] = 1.0-rc1
 projects[scheduled_updates][type] = module
 projects[scheduled_updates][version] = 1.0-alpha6
 projects[search_api][type] = module
+projects[search_api][patch][] = https://www.drupal.org/files/issues/2866454-2.patch
 projects[search_api][version] = 1.0-beta5
 projects[token][type] = module
 projects[token][version] = 1.0-rc1
