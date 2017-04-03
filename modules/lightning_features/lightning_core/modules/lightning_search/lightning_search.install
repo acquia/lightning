@@ -42,21 +42,3 @@ function lightning_search_install() {
     Index::load('content')->setServer($server)->enable()->save();
   }
 }
-
-/**
- * Implements hook_update_dependencies().
- */
-function lightning_search_update_dependencies() {
-  return [
-    'system' => [
-      // System's 8.3.x update path will clear plugin definition caches, which
-      // can result in exceptions being thrown if any Search API views in active
-      // config are using the defunct 'search_api' cache plugin. These views are
-      // all automatically updated by search_api 8104, so run it before any of
-      // System's 8.3.x updates.
-      8300 => [
-        'search_api' => 8104,
-      ],
-    ],
-  ];
-}
