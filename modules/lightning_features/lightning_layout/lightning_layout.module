@@ -9,6 +9,7 @@ use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\lightning_core\ConfigHelper as Config;
+use Drupal\lightning_core\Element;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_layout\Plugin\Field\FieldWidget\PanelizerWidget;
 use Drupal\node\Entity\NodeType;
@@ -125,7 +126,7 @@ function lightning_layout_tweak_panelizer_ui(array $element, FormStateInterface 
     '#prefix' => '<ul class="action-links">',
     '#suffix' => '</ul>',
   ];
-  array_reorder($element['panelizer'], [
+  Element::order($element['panelizer'], [
     'enable',
     'options',
     'add_link',
