@@ -53,9 +53,21 @@ function lightning_preview_update_8002() {
 }
 
 /**
- * Opts non-revisionable entity types out of Multiversion.
+ * Clears the typed config cache.
  */
 function lightning_preview_update_8003() {
+  // Multiversion introduces a new config object in its 8005 update. Under some
+  // circumstances which I don't really understand, this goofs up the config
+  // system, and it tries to use an Undefined config schema wrapper, which
+  // results in a fatal error during the config save process. Clearing the
+  // config.typed cache circumvents this.
+  \Drupal::service('config.typed')->clearCachedDefinitions();
+}
+
+/**
+ * Opts non-revisionable entity types out of Multiversion.
+ */
+function lightning_preview_update_8004() {
   $disable = [];
   foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type) {
     if ($entity_type instanceof ContentEntityTypeInterface && !$entity_type->hasKey('revision')) {
@@ -77,16 +89,21 @@ function lightning_preview_update_8003() {
 function lightning_preview_update_dependencies() {
   return [
     'lightning_preview' => [
-      // lightning_preview 8003 modifies the multiversion.settings config object
+      // lightning_preview 8004 modifies the multiversion.settings config object
       // which is created by multiversion 8005.
-      8003 => [
+      8004 => [
         'multiversion' => 8005,
       ],
     ],
     'multiversion' => [
-      // Force multiversion 8006 and higher to run after lightning_preview 8003.
-      8006 => [
+      // lightning_preview 8003 clears the config.typed cache, which smoothes
+      // over a bug that is revealed by multiversion 8005.
+      8005 => [
         'lightning_preview' => 8003,
+      ],
+      // Force multiversion 8006 and higher to run after lightning_preview 8004.
+      8006 => [
+        'lightning_preview' => 8004,
       ],
     ],
   ];
