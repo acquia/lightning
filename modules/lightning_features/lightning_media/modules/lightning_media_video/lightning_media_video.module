@@ -5,7 +5,6 @@
  * Support for videos as media entities in Lightning.
  */
 
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\media_entity\MediaInterface;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_video\Plugin\MediaEntity\Type\Video;
@@ -32,21 +31,5 @@ function lightning_media_video_media_entity_type_info_alter(array &$types) {
 function lightning_media_video_media_presave(MediaInterface $entity) {
   if ($entity->bundle() == 'video') {
     $entity->automaticallySetThumbnail();
-  }
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function lightning_media_video_form_media_video_form_alter(array &$form, FormStateInterface $form_state) {
-  \Drupal::service('lightning_media.preview.embed_code')->alterForm($form, $form_state);
-}
-
-/**
- * Implements hook_inline_entity_form_entity_form_alter().
- */
-function lightning_media_video_inline_entity_form_entity_form_alter(&$entity_form, FormStateInterface $form_state) {
-  if ($entity_form['#entity_type'] == 'media' && $entity_form['#bundle'] == 'video') {
-    \Drupal::service('lightning_media.preview.embed_code')->alterForm($entity_form, $form_state, $entity_form['#entity']);
   }
 }

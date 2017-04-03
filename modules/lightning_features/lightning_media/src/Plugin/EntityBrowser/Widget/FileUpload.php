@@ -8,7 +8,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\file\FileInterface;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\lightning_media\Element\AjaxUpload;
-use Drupal\lightning_media\SourceFieldTrait;
+use Drupal\media_entity\MediaBundleInterface;
 use Drupal\media_entity\MediaInterface;
 
 /**
@@ -21,8 +21,6 @@ use Drupal\media_entity\MediaInterface;
  * )
  */
 class FileUpload extends EntityFormProxy {
-
-  use SourceFieldTrait;
 
   /**
    * {@inheritdoc}
@@ -137,7 +135,7 @@ class FileUpload extends EntityFormProxy {
   protected function getAcceptableExtensions() {
     $extensions = [];
 
-    foreach ($this->bundleResolver->getPossibleBundles() as $bundle) {
+    foreach ($this->getPossibleBundles() as $bundle) {
       $source_field = $this->getSourceFieldForBundle($bundle);
       if ($source_field) {
         $extensions = array_merge($extensions, preg_split('/,?\s+/', $source_field->getSetting('file_extensions')));
@@ -255,6 +253,27 @@ class FileUpload extends EntityFormProxy {
       '#description' => $this->t('If checked, the source file(s) of the media entity will be returned from this widget.'),
     ];
     return $form;
+  }
+
+  /**
+   * Returns the source field for a media bundle.
+   *
+   * @param MediaBundleInterface $bundle
+   *   The media bundle entity.
+   *
+   * @return \Drupal\Core\Field\FieldConfigInterface
+   *   The configurable source field entity.
+   *
+   * @deprecated and will be removed in Lightning 2.1.1.
+   */
+  protected function getSourceFieldForBundle(MediaBundleInterface $bundle) {
+    $type_config = $bundle->getType()->getConfiguration();
+    if (empty($type_config['source_field'])) {
+      return NULL;
+    }
+    $id = 'media.' . $bundle->id() . '.' . $type_config['source_field'];
+
+    return $this->entityTypeManager->getStorage('field_config')->load($id);
   }
 
 }
