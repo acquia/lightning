@@ -1,3 +1,18 @@
+## 2.1.0
+* Lightning has been updated to run on and now requires Drupal Core 8.3.x.
+* Created a new Experimental branch and moved all experimental components out of
+  the stable branch. (Issue #2862124)
+* Removed all code tagged as @deprecated.
+* Fixed a bug introduced in 2.0.6 that prevented images from being removed once
+  added to a media bundle image field. (Issue #2865794)
+* Fixed a bug where, under certain circumstances, Lightning Media Image might
+  attempt to setup roles before Lightning Roles was enabled. (GH Issue #318)
+* Updated the core inherited profiles patch which will now take into
+  consideration whether an installed extension is a base or parent profile when
+  building dependency trees for the Configuration Importer. (GH Issue #317)
+* Fixed a bug introduced by the beta5 release of Search API and patched a
+  separate bug the update path to the same release.
+
 ## 2.0.6
 * All user roles provided by Lightning's various components have been split out
   into a new sub-component of Lightning Core, called Lightning Roles. This
