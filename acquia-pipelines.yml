@@ -23,6 +23,7 @@ events:
             - ./bin/phing install -Ddb.password=root -Ddb.database=drupal
             # Add the Acquia cloud database snippet to the settings file.
             - ./bin/phing cloud-db-snippet
+            - mkdir -p ./config/default
       - test:
           type: script
           script:
