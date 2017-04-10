@@ -7,7 +7,6 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\lightning_media\Element\AjaxUpload;
 use Drupal\lightning_media\MediaHelper;
-use Drupal\media_entity\MediaBundleInterface;
 use Drupal\media_entity\MediaInterface;
 
 /**
@@ -73,79 +72,12 @@ class FileUpload extends EntityFormProxy {
   }
 
   /**
-<<<<<<< HEAD
-=======
-   * Validates an uploaded file.
-   *
-   * @param \Drupal\file\FileInterface $file
-   *   The uploaded file.
-   *
-   * @return string[]
-   *   An array of errors. If empty, the file passed validation.
-   */
-  public function validateFile(FileInterface $file) {
-    $entity = $this->generateEntity($file);
-
-    if (empty($entity)) {
-      return [];
-    }
-
-    $type_config = $entity->getType()->getConfiguration();
-    /** @var \Drupal\file\Plugin\Field\FieldType\FileItem $item */
-    $item = $entity->get($type_config['source_field'])->first();
-
-    $validators = [
-      // It's maybe a bit overzealous to run this validator, but hey...better
-      // safe than screwed over by script kiddies.
-      'file_validate_name_length' => [],
-    ];
-    $validators = array_merge($validators, $item->getUploadValidators());
-    // If we got here, the extension is already validated (see ::getForm()).
-    unset($validators['file_validate_extensions']);
-
-    // If this is an image field, add image validation. Against all sanity,
-    // this is normally done by ImageWidget, not ImageItem, which is why we
-    // need to facilitate this a bit.
-    if ($item instanceof ImageItem) {
-      // Validate that this is, indeed, a supported image.
-      $validators['file_validate_is_image'] = [];
-
-      $settings = $item->getFieldDefinition()->getSettings();
-      if ($settings['max_resolution'] || $settings['min_resolution']) {
-        $validators['file_validate_image_resolution'] = [
-          $settings['max_resolution'],
-          $settings['min_resolution'],
-        ];
-      }
-    }
-    return file_validate($file, $validators);
-  }
-
-  /**
-   * Returns an aggregated list of acceptable file extensions.
-   *
-   * @return string
-   *   A space-separated list of file extensions accepted by the existing media
-   *   bundles.
-   */
-  protected function getAcceptableExtensions() {
-    $extensions = [];
-
-    foreach ($this->getPossibleBundles() as $bundle) {
-      $source_field = $this->getSourceFieldForBundle($bundle);
-      if ($source_field) {
-        $extensions = array_merge($extensions, preg_split('/,?\s+/', $source_field->getSetting('file_extensions')));
-      }
-    }
-    return implode(' ', array_unique($extensions));
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function validate(array &$form, FormStateInterface $form_state) {
-    $input = $this->getInputValue($form_state);
-    if ($input) {
+    $value = $this->getInputValue($form_state);
+
+    if ($value) {
       parent::validate($form, $form_state);
     }
     else {
@@ -239,27 +171,6 @@ class FileUpload extends EntityFormProxy {
       '#description' => $this->t('If checked, the source file(s) of the media entity will be returned from this widget.'),
     ];
     return $form;
-  }
-
-  /**
-   * Returns the source field for a media bundle.
-   *
-   * @param MediaBundleInterface $bundle
-   *   The media bundle entity.
-   *
-   * @return \Drupal\Core\Field\FieldConfigInterface
-   *   The configurable source field entity.
-   *
-   * @deprecated and will be removed in Lightning 2.1.1.
-   */
-  protected function getSourceFieldForBundle(MediaBundleInterface $bundle) {
-    $type_config = $bundle->getType()->getConfiguration();
-    if (empty($type_config['source_field'])) {
-      return NULL;
-    }
-    $id = 'media.' . $bundle->id() . '.' . $type_config['source_field'];
-
-    return $this->entityTypeManager->getStorage('field_config')->load($id);
   }
 
 }
