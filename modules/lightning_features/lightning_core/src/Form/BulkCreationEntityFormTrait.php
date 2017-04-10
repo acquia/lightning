@@ -2,6 +2,7 @@
 
 namespace Drupal\lightning_core\Form;
 
+use Drupal\Core\Entity\Exception\UndefinedLinkTemplateException;
 use Drupal\Core\Form\FormStateInterface;
 
 /**
@@ -15,20 +16,39 @@ trait BulkCreationEntityFormTrait {
   public function save(array $form, FormStateInterface $form_state) {
     parent::save($form, $form_state);
 
-    $bulk_create = $this->getRequest()->query->get('bulk_create', []);
-    if ($bulk_create) {
-      $entity_type = $this->getEntity()->getEntityTypeId();
-      $id = array_shift($bulk_create);
+    $query = $this->getRequest()->query;
 
-      $redirect = $this->entityTypeManager
-        ->getStorage($entity_type)
-        ->load($id)
-        ->toUrl('edit-form', [
-          'query' => [
-            'bulk_create' => $bulk_create,
-          ],
-        ]);
-      $form_state->setRedirectUrl($redirect);
+    if ($query->has('bulk_create')) {
+      /** @var \Drupal\Core\Entity\EntityInterface $entity */
+      $entity = $this->getEntity();
+
+      // If there are more entities to create, redirect to the edit form for the
+      // next one in line.
+      $queue = $query->get('bulk_create', []);
+
+      if (is_array($queue)) {
+        $id = array_shift($queue);
+
+        $redirect = $this->entityTypeManager
+          ->getStorage($entity->getEntityTypeId())
+          ->load($id)
+          ->toUrl('edit-form', [
+            'query' => [
+              'bulk_create' => $queue ?: TRUE,
+            ],
+          ]);
+        $form_state->setRedirectUrl($redirect);
+      }
+      // Otherwise, try to redirect to the entity type's collection.
+      else {
+        try {
+          $form_state->setRedirectUrl($entity->toUrl('collection'));
+        }
+        catch (UndefinedLinkTemplateException $e) {
+          // The entity type does not declare a collection, so don't do
+          // anything.
+        }
+      }
     }
   }
 
