@@ -57,12 +57,16 @@
     <!-- rsync the profile, excluding developer flotsam. -->
     <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},karma.conf.js,*.make,node_modules,.travis.yml,vendor" />
 
-    <!-- JS libraries and contrib modules were copied over by the file sync. -->
+    <!-- Contrib modules were copied over by the file sync. -->
     <delete dir="modules/contrib" failonerror="true" quiet="true" />
+
+    <!-- Symlink JavaScript libraries into docroot. -->
+    <mkdir dir="${docroot}/libraries" />
+    <exec command="${composer} link-libraries ${docroot}/libraries" />
   </target>
 
   <target name="pull" depends="env">
-    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="libraries,modules/contrib,behat.local.yml" />
+    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="modules/contrib" />
   </target>
 
   <!-- Prepares the docroot for installation via the UI. -->
@@ -124,20 +128,12 @@
     </if>
   </target>
 
-  <!-- Prepares Lightning for the drupal.org packaging system. -->
-  <target name="package">
-    <!-- Create a symlink to the installed libraries so that the packaging script can scan 'em. -->
-    <symlink target="${profile}/libraries" link="libraries" />
-    <exec command="./package" />
-    <delete file="libraries" />
-  </target>
-
   <!-- Builds a Lightning code base from legacy Drush make files. -->
   <target name="build-legacy" depends="env">
     <if>
       <available file="${docroot}" property="docroot.exists" />
       <then>
-        <phingcall target="package" />
+        <exec command="./package" />
         <delete dir="${docroot}" />
       </then>
     </if>
