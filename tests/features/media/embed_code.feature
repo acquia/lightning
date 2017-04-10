@@ -35,3 +35,21 @@ Feature: Media assets based on embed codes
       | tweet     | https://twitter.com/webchick/status/672110599497617408 |
       | instagram | https://www.instagram.com/p/lV3WqOoNDD                 |
       | video     | https://www.youtube.com/watch?v=ktCgVopf7D0            |
+
+  @video @test_module @javascript @c74eadd0
+  Scenario: Clearing an image field on a media item
+    Given I am logged in as a user with the media_creator role
+    When I visit "/media/add/video"
+    And I enter "Foobaz" for "Media name"
+    And I enter "https://www.youtube.com/watch?v=z9qY4VUZzcY" for "Video URL"
+    And I wait for AJAX to finish
+    And I attach the file "test.jpg" to "Image"
+    And I wait for AJAX to finish
+    And I press "Save and publish"
+    And I click "Edit"
+    And I press "field_image_0_remove_button"
+    And I wait for AJAX to finish
+    # Ensure that the widget has actually been cleared. This test was written
+    # because the AJAX operation would fail due to a 500 error at the server,
+    # which would prevent the widget from being cleared.
+    Then I should not see a "field_image_0_remove_button" element

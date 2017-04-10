@@ -212,19 +212,6 @@
         <pdosqlexec url="${db.type}:host=${db.host};dbname=${db.database}" userid="${db.user}" password="${db.password}" src="${fixture}" />
         <!-- Delete the inflated fixture. -->
         <delete file="${fixture}" />
-
-        <!--
-        Lightning 2.0.3 introduced Lightning Dev, which contains automated
-        versions of all our manual update steps. If the imported fixture
-        predates Lightning 2.0.3, we'll need to install Lightning Dev. We can
-        ice this when 2.0.3 is the oldest tested version of Lightning.
-        -->
-        <if>
-          <versioncompare desiredVersion="2.0.3" version="${version}" operator="lt" />
-          <then>
-            <exec command="${drush} pm-enable lightning_dev --yes" dir="${docroot}" passthru="true" />
-          </then>
-        </if>
       </then>
       <else>
         <echo message="${version} fixture does not exist." />

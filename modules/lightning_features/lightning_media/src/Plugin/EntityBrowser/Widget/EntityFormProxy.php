@@ -4,13 +4,13 @@ namespace Drupal\lightning_media\Plugin\EntityBrowser\Widget;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\ReplaceCommand;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\entity_browser\WidgetBase;
-use Drupal\entity_browser\WidgetValidationManager;
 use Drupal\inline_entity_form\ElementSubmit;
 use Drupal\lightning_media\Exception\IndeterminateBundleException;
+use Drupal\lightning_media\InputMatchInterface;
 use Drupal\lightning_media\MediaHelper;
+use Drupal\media_entity\MediaBundleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -37,14 +37,14 @@ abstract class EntityFormProxy extends WidgetBase {
    *   The plugin definition.
    * @param EventDispatcherInterface $event_dispatcher
    *   The event dispatcher.
-   * @param EntityTypeManagerInterface $entity_type_manager
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
-   * @param WidgetValidationManager $widget_validation_manager
+   * @param \Drupal\entity_browser\WidgetValidationManager $widget_validation_manager
    *   The widget validation manager.
    * @param \Drupal\lightning_media\MediaHelper $helper
    *   The media helper service.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EventDispatcherInterface $event_dispatcher, EntityTypeManagerInterface $entity_type_manager, WidgetValidationManager $widget_validation_manager, MediaHelper $helper) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EventDispatcherInterface $event_dispatcher, $entity_type_manager, $widget_validation_manager, MediaHelper $helper) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $event_dispatcher, $entity_type_manager, $widget_validation_manager);
     $this->helper = $helper;
   }
@@ -158,10 +158,35 @@ abstract class EntityFormProxy extends WidgetBase {
    *   The AJAX response.
    */
   public static function ajax(array &$form, FormStateInterface $form_state) {
-    return (new AjaxResponse)
+    return (new AjaxResponse())
       ->addCommand(
         new ReplaceCommand('#entity', $form['widget']['entity'])
       );
+  }
+
+  /**
+   * Generates a media entity from an input value.
+   *
+   * @param mixed $input
+   *   The input value from which to generate the entity.
+   *
+   * @return \Drupal\media_entity\MediaInterface|null
+   *   A new, unsaved media entity, or null if the input value could not be
+   *   matched to any existing media bundles.
+   */
+  protected function generateEntity($input) {
+    $bundle = $this->getBundle($input);
+
+    if ($bundle) {
+      /** @var \Drupal\media_entity\MediaInterface $entity */
+      $entity = $this->entityTypeManager->getStorage('media')->create([
+        'bundle' => $bundle->id(),
+      ]);
+      $type_config = $bundle->getTypeConfiguration();
+      $entity->set($type_config['source_field'], $input);
+
+      return $entity;
+    }
   }
 
   /**
@@ -185,6 +210,49 @@ abstract class EntityFormProxy extends WidgetBase {
     $configuration = parent::defaultConfiguration();
     $configuration['form_mode'] = 'media_browser';
     return $configuration;
+  }
+
+  /**
+   * Returns the first available media bundle that can handle an input value.
+   *
+   * @param mixed $input
+   *   The input value.
+   *
+   * @return \Drupal\media_entity\MediaBundleInterface|false
+   *   A media bundle which can handle the input, or FALSE if there are none.
+   *
+   * @deprecated and will be removed in Lightning 2.1.1.
+   */
+  protected function getBundle($input) {
+    foreach ($this->getPossibleBundles() as $bundle) {
+      $plugin = $bundle->getType();
+      if ($plugin instanceof InputMatchInterface && $plugin->appliesTo($input, $bundle)) {
+        return $bundle;
+      }
+    }
+    return FALSE;
+  }
+
+  /**
+   * Returns all available media bundles.
+   *
+   * @return \Drupal\media_entity\MediaBundleInterface[]
+   *   All available media bundles for which the current user has create access.
+   *
+   * @deprecated and will be removed in Lightning 2.1.1.
+   */
+  protected function getPossibleBundles() {
+    $access_handler = $this->entityTypeManager->getAccessControlHandler('media');
+
+    return array_filter(
+      $this->entityTypeManager
+        ->getStorage('media_bundle')
+        ->loadMultiple(),
+
+      function (MediaBundleInterface $bundle) use ($access_handler) {
+        return $access_handler->createAccess($bundle->id());
+      }
+    );
   }
 
 }

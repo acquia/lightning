@@ -42,3 +42,23 @@ function lightning_search_install() {
     Index::load('content')->setServer($server)->enable()->save();
   }
 }
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function lightning_search_update_dependencies() {
+  return [
+    'block_content' => [
+      8300 => [
+        // block_content 8300 updates entity type definitions, which implicitly
+        // touches a lot of Search API configuration because entity type
+        // definition updates trigger Views cache rebuilds, which in turn
+        // triggers a lot of work, especially plugin instantiation, in Search
+        // API. So, if the configuration isn't fully up-to-date, things are
+        // likely to go kaboom. This ensures that Search API configuration is
+        // up-to-date before block_content 8300 updates entity type definitions.
+        'search_api' => 8104,
+      ],
+    ],
+  ];
+}

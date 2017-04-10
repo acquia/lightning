@@ -1,3 +1,43 @@
+## 2.1.0
+* Lightning has been updated to run on and now requires Drupal Core 8.3.x.
+* Created a new Experimental branch and moved all experimental components out of
+  the stable branch. (Issue #2862124)
+* Removed all code tagged as @deprecated.
+* Fixed a bug introduced in 2.0.6 that prevented images from being removed once
+  added to a media bundle image field. (Issue #2865794)
+* Fixed a bug where, under certain circumstances, Lightning Media Image might
+  attempt to setup roles before Lightning Roles was enabled. (GH Issue #318)
+* Updated the core inherited profiles patch which will now take into
+  consideration whether an installed extension is a base or parent profile when
+  building dependency trees for the Configuration Importer. (GH Issue #317)
+* Fixed a bug introduced by the beta5 release of Search API and patched a
+  separate bug the update path to the same release.
+
+## 2.0.6
+* All user roles provided by Lightning's various components have been split out
+  into a new sub-component of Lightning Core, called Lightning Roles. This
+  sub-component is installed with Lightning by default, but you can disable it
+  in a sub-profile. If it's disabled, Lightning will not create or install any
+  user roles. (Issue #2855724)
+* New entity reference fields that reference media items will now use
+  Lightning's media browser by default. This change only applies to new entity
+  reference fields; existing fields are left alone. (GitHub #298)
+* A preview of embed code-based media items will now be displayed when adding
+  or editing them outside of the media browser. (Issue #2825935)
+* Fixed a bug where the file upload widget used by Lightning's media and image
+  browsers would wrongly assume that all media bundles use a source field.
+  (Issue #2861292)
+* Drush, which is included with Lightning as a dev dependency, was patched to
+  fix a problem where dependencies of parent profiles could not be uninstalled.
+  (GitHub #311)
+* The lightning.config_helper service is deprecated and replaced by a new
+  facade for manipulating a module's default configuration. (GitHub #303)
+* Many tags have been added to Lightning's Behat test suite to make it easier
+  to isolate and run (or skip) individual tests. (Issue #2862119)
+* The internal Lightning Dev module now generates a special behat.yml file in
+  Drupal's public files directory, allowing any module to expose its own Behat
+  test suite by including a tests/behat.yml file. (GitHub #299)
+
 ## 2.0.5
 * Lightning can now be used as a base profile and contains a script to generate
   a sub-profile. (Issue #2855793)
