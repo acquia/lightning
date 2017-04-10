@@ -45,10 +45,11 @@
         ],
         "post-update-cmd": [
             "./bin/phing push",
-            "./bin/phing package"
+            "@composer package"
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
         "link-libraries": "Acquia\\Lightning\\Composer\\LinkLibraries::execute",
+        "package": "Acquia\\Lightning\\Composer\\Package::execute",
         "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute"
     },
     "extra": {

@@ -2,6 +2,7 @@
 
 namespace Acquia\Lightning\Composer;
 
+use Composer\Package\PackageInterface;
 use Composer\Script\Event;
 use Composer\Util\Filesystem;
 
@@ -33,13 +34,31 @@ class LinkLibraries {
     $arguments = $event->getArguments();
     $libraries_dir = realpath($arguments[0]);
 
-    $extra = $composer->getPackage()->getExtra();
-    foreach ($extra['installer-paths']['docroot/libraries/{$name}'] as $library) {
+    $package = $composer->getPackage();
+    foreach (static::getLibraries($package) as $library) {
       $fs->relativeSymlink(
         realpath($vendor_dir . '/' . $library),
         $libraries_dir . '/' . basename($library)
       );
     }
+  }
+
+  /**
+   * Returns the list of JavaScript libraries installed by a package.
+   *
+   * @param \Composer\Package\PackageInterface $package
+   *   The package.
+   *
+   * @return string[]
+   *   The JavaScript library package names, with vendor prefixes.
+   */
+  public static function getLibraries(PackageInterface $package) {
+    $pattern = 'docroot/libraries/{$name}';
+    $extra = $package->getExtra();
+
+    return isset($extra['installer-paths'][$pattern])
+      ? $extra['installer-paths'][$pattern]
+      : [];
   }
 
 }

@@ -133,7 +133,7 @@
     <if>
       <available file="${docroot}" property="docroot.exists" />
       <then>
-        <exec command="./package" />
+        <exec command="${composer} package" />
         <delete dir="${docroot}" />
       </then>
     </if>
