@@ -75,6 +75,25 @@ function lightning_media_inline_entity_form_entity_form_alter(array &$entity_for
 }
 
 /**
+ * Validates a file through an entity browser widget.
+ *
+ * @param \Drupal\file\FileInterface $file
+ *   The file to validate.
+ * @param string $plugin_id
+ *   The widget plugin ID.
+ * @param array $configuration
+ *   Configuration for the widget plugin.
+ *
+ * @return string[]
+ *   An array of errors. If empty, the file passed validation.
+ */
+function lightning_media_validate_upload(FileInterface $file, $plugin_id, array $configuration = []) {
+  return \Drupal::service('plugin.manager.entity_browser.widget')
+    ->createInstance($plugin_id, $configuration)
+    ->validateFile($file);
+}
+
+/**
  * Post-build callback for entity browser elements.
  *
  * This function injects the number of default values the entity browser has

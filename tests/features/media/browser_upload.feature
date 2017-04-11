@@ -24,11 +24,11 @@ Feature: Uploading media assets through the media browser
     And I press "Place"
     Then I should see the error message "You must upload a file."
 
-  @image @test_module @2f72f4a4
+  @image @2f72f4a4
   Scenario: The upload widget validates file size
-    Given I am logged in as a user with the media_creator,page_creator roles
-    When I visit "/node/add/page"
-    And I open the "Lightweight Image" image browser
+    Given I am logged in as a user with the media_creator role
+    And "media.image.image" has a maximum upload size of "5 KB"
+    When I visit "/entity-browser/iframe/media_browser"
     And I click "Upload"
     And I attach the file "test.jpg" to "input_file"
     And I wait for AJAX to finish

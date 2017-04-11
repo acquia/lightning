@@ -39,18 +39,6 @@ function lightning_test_install() {
         'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
       ],
     ])
-    ->setComponent('field_lightweight_image', [
-      'type' => 'entity_browser_file',
-      'settings' => [
-        'entity_browser' => 'image_browser',
-        'field_widget_edit' => TRUE,
-        'field_widget_remove' => TRUE,
-        'view_mode' => 'default',
-        'preview_image_style' => 'thumbnail',
-        'open' => TRUE,
-        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
-      ],
-    ])
     ->setComponent('field_unlimited_images', [
       'type' => 'entity_browser_file',
       'settings' => [
