@@ -18,6 +18,19 @@ use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
+ * Implements hook_library_info_alter().
+ */
+function lightning_layout_library_info_alter(array &$libraries, $extension) {
+  if ($extension == 'panels_ipe') {
+    $css = sprintf(
+      '/%s/css/ipe.css',
+      \Drupal::moduleHandler()->getModule('lightning_layout')->getPath()
+    );
+    $libraries['panels_ipe']['css']['component'][$css] = [];
+  }
+}
+
+/**
  * Implements hook_modules_installed().
  */
 function lightning_layout_modules_installed(array $modules) {
