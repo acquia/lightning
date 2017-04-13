@@ -28,7 +28,7 @@ trait YieldToArgumentTrait {
     $value = $argument->getValue();
 
     $key = $this->options['expose']['identifier'];
-    $form[$key]['#access'] = is_null($value) || isset($argument->is_default);
+    $form[$key]['#access'] = is_null($value);
   }
 
   /**
@@ -43,7 +43,7 @@ trait YieldToArgumentTrait {
       '#options' => [],
       '#empty_option' => $this->t('- None -'),
       '#default_value' => $this->options['expose']['argument'],
-      '#description' => $this->t('If this argument has a non-null, non-default value, this filter will not be exposed to the user.'),
+      '#description' => $this->t('If this argument has a non-null value (given or default), this filter will not be exposed to the user.'),
     ];
     /**
      * @var string $id
