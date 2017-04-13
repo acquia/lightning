@@ -18,7 +18,15 @@ use Drupal\lightning_core\Form\EntityDisplayModeEditForm;
 use Drupal\lightning_core\Form\EntityFormModeAddForm;
 use Drupal\lightning_core\Form\RoleForm;
 use Drupal\lightning_core\OverrideHelper as Override;
+use Drupal\lightning_core\Plugin\views\filter\Bundle;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
+
+/**
+ * Implements hook_views_plugins_filter_alter().
+ */
+function lightning_core_views_plugins_filter_alter(array &$plugins) {
+  Override::pluginClass($plugins['bundle'], Bundle::class);
+}
 
 /**
  * Implements hook_entity_type_alter().
