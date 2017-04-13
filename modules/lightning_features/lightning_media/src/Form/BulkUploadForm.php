@@ -6,6 +6,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use Drupal\lightning_core\Element;
 use Drupal\lightning_media\Exception\IndeterminateBundleException;
 use Drupal\lightning_media\MediaHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -67,16 +68,44 @@ class BulkUploadForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $extensions = $this->helper->getFileExtensions(TRUE);
+
     $form['dropzone'] = [
       '#type' => 'dropzonejs',
       '#dropzone_description' => $this->t('Drag files here to upload them'),
-      '#extensions' => implode(' ', $this->helper->getFileExtensions(TRUE)),
+      '#extensions' => implode(' ', $extensions),
     ];
     $form['continue'] = [
       '#type' => 'submit',
       '#value' => $this->t('Continue'),
     ];
+
+    $variables = [
+      '@max_size' => static::bytesToString(file_upload_max_size()),
+      '@extensions' => Element::oxford($extensions),
+    ];
+    $form['dropzone']['#description'] = $this->t('You can upload as many files as you like. Each file can be up to @max_size in size. The following file extensions are accepted: @extensions', $variables);
+
     return $form;
+  }
+
+  /**
+   * Converts a number of bytes into a human-readable string.
+   *
+   * @param int $bytes
+   *   A number of bytes.
+   *
+   * @return string
+   *   The human-readable measurement, like '2 MB' or '10 GB'.
+   */
+  public static function bytesToString($bytes) {
+    $units = array_map('t', ['bytes', 'KB', 'MB', 'GB', 'TB']);
+
+    while ($bytes > 1024) {
+      $bytes /= 1024;
+      array_shift($units);
+    }
+    return $bytes . ' ' . reset($units);
   }
 
   /**

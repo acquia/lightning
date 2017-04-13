@@ -60,11 +60,11 @@ class MediaHelper {
         // it a file field. This will automatically include things like image
         // fields, which extend file fields.
         if (is_a($field->getItemDefinition()->getClass(), FileItem::class, TRUE)) {
-          $extensions .= ' ' . $field->getSetting('file_extensions');
+          $extensions .= $field->getSetting('file_extensions') . ' ';
         }
       }
     }
-    $extensions = preg_split('/,?\s+/', $extensions);
+    $extensions = preg_split('/,?\s+/', rtrim($extensions));
     return array_unique($extensions);
   }
 
