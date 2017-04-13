@@ -11,13 +11,13 @@ use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\entity_browser\Element\EntityBrowserElement;
-use Drupal\file\FileInterface;
+use Drupal\entity_browser\Entity\EntityBrowser;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\lightning_core\OverrideHelper as Override;
+use Drupal\lightning_media\Form\MediaForm;
 use Drupal\media_entity\Entity\MediaBundle;
 use Drupal\media_entity\MediaInterface;
-use Drupal\lightning_media\Form\MediaForm;
 use Drupal\media_entity\MediaBundleInterface;
 
 /**
@@ -71,6 +71,33 @@ function lightning_media_inline_entity_form_entity_form_alter(array &$entity_for
 
   if ($entity instanceof MediaInterface && MediaForm::isPreviewable($entity)) {
     $entity_form['preview'] = MediaForm::getSourceField($entity)->view('default');
+  }
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function lightning_media_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state) {
+  $browser = EntityBrowser::load('media_browser');
+  if (empty($browser)) {
+    return;
+  }
+
+  $widgets = $browser->get('widgets');
+  if (empty($widgets['134808d9-d854-4a0b-8699-d5eba006b8b7'])) {
+    return;
+  }
+
+  $view_id = $widgets['134808d9-d854-4a0b-8699-d5eba006b8b7']['settings']['view'];
+  $display_id = $widgets['134808d9-d854-4a0b-8699-d5eba006b8b7']['settings']['view_display'];
+
+  /** @var \Drupal\views\ViewExecutable $view */
+  $view = $form_state->get('view');
+  if ($view->id() == $view_id && $view->current_display == $display_id && isset($view->argument['bundle']) && isset($form['#info']['filter-bundle']) && ($filter = $form['#info']['filter-bundle']['value']) && isset($form[$filter])) {
+    $argument = $view->argument['bundle'];
+    $value = $argument->getValue();
+    // Allow access to the filter if there is no value for the argument.
+    $form[$filter]['#access'] = empty($value) || isset($argument->is_default);
   }
 }
 
