@@ -74,8 +74,9 @@ abstract class EntityFormProxy extends WidgetBase {
    * {@inheritdoc}
    */
   public function validate(array &$form, FormStateInterface $form_state) {
-    $input = $this->getInputValue($form_state);
-    $bundle = $this->getBundle($input);
+    parent::validate($form, $form_state);
+
+    $bundle = $this->getBundle($this->getInputValue($form_state));
     if (empty($bundle)) {
       $form_state->setError($form['widget'], $this->t('No media types can be matched to this input.'));
     }
