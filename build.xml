@@ -59,10 +59,6 @@
 
     <!-- Contrib modules were copied over by the file sync. -->
     <delete dir="modules/contrib" failonerror="true" quiet="true" />
-
-    <!-- Symlink JavaScript libraries into docroot. -->
-    <mkdir dir="${docroot}/libraries" />
-    <exec command="${composer} link-libraries ${docroot}/libraries" />
   </target>
 
   <target name="pull" depends="env">

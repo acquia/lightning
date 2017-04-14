@@ -3,6 +3,7 @@
 namespace Acquia\Lightning\Composer;
 
 use Acquia\Lightning\IniEncoder;
+use Composer\Package\PackageInterface;
 use Composer\Script\Event;
 use Composer\Util\ProcessExecutor;
 use Symfony\Component\Yaml\Yaml;
@@ -29,17 +30,22 @@ class Package {
     $executor->execute($bin_dir . '/drush make-convert composer.lock', $make);
     $make = Yaml::parse($make);
 
-    // Only the libraries specifically listed in composer.json should be
-    // included in the make file.
-    $libraries = LinkLibraries::getLibraries($composer->getPackage());
-    $libraries = array_flip($libraries);
-    $libraries = array_intersect_key($make['libraries'], $libraries);
+    // Include any drupal-library packages in the make file.
+    $libraries = $composer
+      ->getRepositoryManager()
+      ->getLocalRepository()
+      ->getPackages();
+
+    $libraries = array_filter($libraries, function (PackageInterface $package) {
+      return $package->getType() == 'drupal-library';
+    });
 
     // Drop the vendor prefixes.
-    foreach ($libraries as $key => $library) {
-      unset($make['libraries'][$key]);
-      $key = basename($key);
-      $make['libraries'][$key] = $library;
+    foreach ($libraries as $library) {
+      $old_key = $library->getName();
+      $new_key = basename($old_key);
+      $make['libraries'][$new_key] = $make['libraries'][$old_key];
+      unset($make['libraries'][$old_key]);
     }
 
     if (isset($make['projects']['drupal'])) {
