@@ -54,6 +54,25 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+## 2.1.0 to 2.1.1
+* To allow fields that use the media browser to filter to only the media types
+  accepted by the field, do the following:
+    * Edit the **Browser** display of the **Media** view.
+    * Add the **Bundle** contextual filter, to the current display only, with
+      the following settings:
+      * When the filter value is NOT available, provide a default value:
+        * Type: Entity Browser Context
+        * Context key: ```target_bundles```
+        * Fallback value: ```all```
+        * Multiple values: OR
+      * When the filter value IS available or a default is provided:
+        * Specify validation criteria: Yes
+        * Validator: Media bundle
+        * Multiple arguments: One or more IDs separated by , or +
+        * Action to take if filter value does not validate: Display all results
+          for the specified field
+    * Save the view.
+
 ## 2.0.6 to 2.1.0
 There are no manual update steps for this version.
 
