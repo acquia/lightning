@@ -43,6 +43,9 @@ The current version of media includes the following functionality:
   supported:
   * Tweets
   * Instagram posts
+  * [Imgur posts](https://www.drupal.org/project/lightning_media_imgur)
+  * [Flickr posts](https://www.drupal.org/project/lightning_media_flickr)
+  * [500px posts](https://www.drupal.org/project/lightning_media_d500px)
   * Videos (YouTube and Vimeo supported out of the box)
   * Images
 * Drag-and-drop image uploads
