@@ -43,6 +43,7 @@ The current version of media includes the following functionality:
   supported:
   * Tweets
   * Instagram posts
+  * [Facebook posts](https://www.drupal.org/project/lightning_media_facebook)
   * [Imgur posts](https://www.drupal.org/project/lightning_media_imgur)
   * [Flickr posts](https://www.drupal.org/project/lightning_media_flickr)
   * [500px posts](https://www.drupal.org/project/lightning_media_d500px)
