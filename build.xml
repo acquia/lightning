@@ -6,7 +6,6 @@
   <!-- Locations of required binaries. -->
   <property name="drush" value="${project.basedir}/bin/drush" />
   <property name="composer" value="/usr/local/bin/composer" />
-  <property name="npm" value="/usr/local/bin/npm" />
   <property name="rsync" value="/usr/bin/rsync" />
   <property name="bzip2" value="/usr/bin/bzip2" />
   <property name="bunzip2" value="/usr/bin/bunzip2" />
@@ -39,14 +38,12 @@
       </then>
     </if>
     <exec command="which composer" outputProperty="composer" />
-    <exec command="which npm" outputProperty="npm" />
     <exec command="which rsync" outputProperty="rsync" />
     <exec command="which bzip2" outputProperty="bzip2" />
     <exec command="which bunzip2" outputProperty="bunzip2" />
 
     <echo message="Found Drush: ${drush}" />
     <echo message="Found Composer: ${composer}" />
-    <echo message="Found NPM: ${npm}" />
     <echo message="Found rsync: ${rsync}" />
     <echo message="Found bzip2: ${bzip2}" />
     <echo message="Found bunzip2: ${bunzip2}" />
@@ -57,23 +54,15 @@
     <!-- Create the destination if it doesn't exist. -->
     <mkdir dir="${profile}" />
 
-    <!--
-    bower.json may have changed, so reinstall front-end dependencies using
-    the version of Bower installed locally in node_modules. The
-    install-libraries script lives in package.json.
-    -->
-    <exec command="${npm} run install-libraries" passthru="true" />
-
     <!-- rsync the profile, excluding developer flotsam. -->
     <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},karma.conf.js,*.make,node_modules,.travis.yml,vendor" />
 
-    <!-- JS libraries and contrib modules were copied over by the file sync. -->
-    <delete dir="libraries" failonerror="true" quiet="true" />
+    <!-- Contrib modules were copied over by the file sync. -->
     <delete dir="modules/contrib" failonerror="true" quiet="true" />
   </target>
 
   <target name="pull" depends="env">
-    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="libraries,modules/contrib,behat.local.yml" />
+    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="modules/contrib" />
   </target>
 
   <!-- Prepares the docroot for installation via the UI. -->
@@ -135,20 +124,12 @@
     </if>
   </target>
 
-  <!-- Prepares Lightning for the drupal.org packaging system. -->
-  <target name="package">
-    <!-- Create a symlink to the installed libraries so that the packaging script can scan 'em. -->
-    <symlink target="${profile}/libraries" link="libraries" />
-    <exec command="./package" />
-    <delete file="libraries" />
-  </target>
-
   <!-- Builds a Lightning code base from legacy Drush make files. -->
   <target name="build-legacy" depends="env">
     <if>
       <available file="${docroot}" property="docroot.exists" />
       <then>
-        <phingcall target="package" />
+        <exec command="${composer} package" />
         <delete dir="${docroot}" />
       </then>
     </if>

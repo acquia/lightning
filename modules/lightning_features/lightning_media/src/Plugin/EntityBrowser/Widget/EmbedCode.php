@@ -42,8 +42,9 @@ class EmbedCode extends EntityFormProxy {
    * {@inheritdoc}
    */
   public function validate(array &$form, FormStateInterface $form_state) {
-    $input = trim($this->getInputValue($form_state));
-    if ($input) {
+    $value = trim($this->getInputValue($form_state));
+
+    if ($value) {
       parent::validate($form, $form_state);
     }
     else {
