@@ -233,6 +233,11 @@ function lightning_media_entity_type_alter(array &$entity_types) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
+  // Don't modify configuration if it is currently being synced.
+  // @see https://www.drupal.org/node/2870864#comment-12044705
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
   \Drupal::entityTypeManager()
     ->getStorage('field_config')
     ->create([
