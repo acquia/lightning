@@ -72,6 +72,11 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
         * Action to take if filter value does not validate: Display all results
           for the specified field
       * Under the "More" section, "Allow multiple values" should be checked.
+    * If the view has the media bundle as an exposed filter (most likely named
+      "Media: Bundle"), edit it and set the "Yield to argument" select box to
+      the name of the argument you just created (which will probably be "Media:
+      Bundle"). If you don't see the "Yield to argument" select box, clear all
+      caches and try again.
     * Save the view.
 
 ## 2.0.6 to 2.1.0
