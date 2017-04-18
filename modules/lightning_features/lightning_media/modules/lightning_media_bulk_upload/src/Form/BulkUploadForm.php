@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lightning_media\Form;
+namespace Drupal\lightning_media_bulk_upload\Form;
 
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormBase;
