@@ -51,13 +51,13 @@ The current version of media includes the following functionality:
   CKEditor by pasting the video URL
 
 #### Extending Lightning Media (Contributed Modules)
-A number of contributed modules have been written by Drupal community to integrate Drupal Media Entity with Lightning. This allows a seamless integration between Lightning functionality and 3rd party media services via Media Entity. Below is a list of 3rd party services and contributed modules that are currently available for Lightning Media:
+Drupal community members have contributed several modules which integrate Lightning Media with additional third-party media services. These modules are not packaged with Lightning or maintained by Acquia, but they are stable and you can use them in your Lightning site:
 
   * [Facebook](https://www.drupal.org/project/lightning_media_facebook)
   * [Imgur](https://www.drupal.org/project/lightning_media_imgur)
   * [Flickr](https://www.drupal.org/project/lightning_media_flickr)
   * [500px](https://www.drupal.org/project/lightning_media_d500px)
-  * [Soundcloud](https://www.drupal.org/project/lightning_media_soundcloud)
+  * [SoundCloud](https://www.drupal.org/project/lightning_media_soundcloud)
   * [Tumblr](https://www.drupal.org/project/lightning_media_tumblr)
   * [Spotify](https://www.drupal.org/project/lightning_media_spotify)
 
