@@ -12,7 +12,7 @@ interface InputMatchInterface {
   /**
    * Checks if this media type can handle a given input value.
    *
-   * @param mixed $input
+   * @param mixed $value
    *   The input value.
    * @param \Drupal\media_entity\MediaBundleInterface $bundle
    *   The media bundle that is using this plugin.
@@ -20,6 +20,6 @@ interface InputMatchInterface {
    * @return bool
    *   TRUE if the input can be handled by this plugin, FALSE otherwise.
    */
-  public function appliesTo($input, MediaBundleInterface $bundle);
+  public function appliesTo($value, MediaBundleInterface $bundle);
 
 }

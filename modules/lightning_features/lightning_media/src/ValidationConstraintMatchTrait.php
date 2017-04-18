@@ -23,17 +23,17 @@ trait ValidationConstraintMatchTrait {
   /**
    * Implements InputMatchInterface::appliesTo().
    */
-  public function appliesTo($input, MediaBundleInterface $bundle) {
+  public function appliesTo($value, MediaBundleInterface $bundle) {
     $plugin_definition = $this->getPluginDefinition();
 
     $definition = $this->typedDataManager()
       ->createDataDefinition('string')
       ->addConstraint($plugin_definition['input_match']['constraint']);
 
-    $value = StringData::createInstance($definition);
-    $value->setValue($input);
+    $data = StringData::createInstance($definition);
+    $data->setValue($value);
 
-    return $value->validate()->count() === 0;
+    return $data->validate()->count() === 0;
   }
 
 }
