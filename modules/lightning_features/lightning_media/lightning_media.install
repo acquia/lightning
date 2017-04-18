@@ -771,14 +771,6 @@ function lightning_media_update_8015() {
 }
 
 /**
- * Installs DropzoneJS and updates permissions.
- */
-function lightning_media_update_8016() {
-  \Drupal::service('module_installer')->install(['dropzonejs']);
-  user_role_grant_permissions('media_creator', ['dropzone upload files']);
-}
-
-/**
  * Implements hook_update_dependencies().
  */
 function lightning_media_update_dependencies() {
