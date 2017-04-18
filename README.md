@@ -48,7 +48,8 @@ The current version of media includes the following functionality:
   * [Flickr posts](https://www.drupal.org/project/lightning_media_flickr)
   * [500px posts](https://www.drupal.org/project/lightning_media_d500px)
   * [Soundcloud posts](https://www.drupal.org/project/lightning_media_soundcloud)
-  * [Tumblr posts](https://www.drupal.org/project/lightning_media_tumblr)  
+  * [Tumblr posts](https://www.drupal.org/project/lightning_media_tumblr)
+  * [Spotify posts](https://www.drupal.org/project/lightning_media_spotify)
   * Videos (YouTube and Vimeo supported out of the box)
   * Images
 * Drag-and-drop image uploads
