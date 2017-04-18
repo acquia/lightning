@@ -43,19 +43,23 @@ The current version of media includes the following functionality:
   supported:
   * Tweets
   * Instagram posts
-  * [Facebook posts](https://www.drupal.org/project/lightning_media_facebook)
-  * [Imgur posts](https://www.drupal.org/project/lightning_media_imgur)
-  * [Flickr posts](https://www.drupal.org/project/lightning_media_flickr)
-  * [500px posts](https://www.drupal.org/project/lightning_media_d500px)
-  * [Soundcloud posts](https://www.drupal.org/project/lightning_media_soundcloud)
-  * [Tumblr posts](https://www.drupal.org/project/lightning_media_tumblr)
-  * [Spotify posts](https://www.drupal.org/project/lightning_media_spotify)
   * Videos (YouTube and Vimeo supported out of the box)
   * Images
 * Drag-and-drop image uploads
 * Ability to create new media through the media library (/media/add)
 * Ability to embed tweets, Instagrams, and YouTube/Vimeo videos directly into
   CKEditor by pasting the video URL
+
+### Extending Lightning Media (Contributed Modules)
+A number of contributed modules have been writen Drupal community to integrate Drupal Media Entity with Lightning. This allows a seamless integration between Lightning functionality and 3rd party media services via Media Entity. Below is a list of 3rd party services and contributed modules that are currently available for Lightning Media:
+
+  * [Facebook](https://www.drupal.org/project/lightning_media_facebook)
+  * [Imgur](https://www.drupal.org/project/lightning_media_imgur)
+  * [Flickr](https://www.drupal.org/project/lightning_media_flickr)
+  * [500px](https://www.drupal.org/project/lightning_media_d500px)
+  * [Soundcloud](https://www.drupal.org/project/lightning_media_soundcloud)
+  * [Tumblr](https://www.drupal.org/project/lightning_media_tumblr)
+  * [Spotify](https://www.drupal.org/project/lightning_media_spotify)
 
 ### Layout
 Lightning includes the Panelizer module, which allows you to configure the
