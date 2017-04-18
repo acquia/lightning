@@ -1,0 +1,15 @@
+steps:
+  - name: Update Composer
+    command: '/usr/local/bin/composer self-update'
+  - name: Install drush-master for d8
+    command: 'composer global require drush/drush:dev-master ; cd /usr/local/bin ; mv drush drush7 ; ln -s $HOME/.composer/vendor/bin/drush drush'
+  - name: Run the profile script
+    command: './$SRC_DIR/.probo-profile-build.sh'
+  - name: Run install
+    command: "drush site-install --root=/var/www/html lightning --db-url='mysqli://root:strongpassword@localhost/bear'"
+  - name: Set file directory permissions
+    command: 'chown -R www-data:www-data /var/www/html/sites/default/files'
+  - name: Rebuild caches
+    command: 'drush cr'
+  - name: Run behat tests
+    command: 'cd /var/www/html/profiles/lightning/tests ; composer install ; ./bin/behat --profile probo'
