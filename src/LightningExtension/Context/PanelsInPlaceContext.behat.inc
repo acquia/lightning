@@ -181,22 +181,13 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
    *
    * @When I save the layout
    */
-  public function saveLayoutAsCustom() {
+  public function saveLayout() {
     $this->assertSession()
-      ->elementExists('named', ['link', 'Save as custom'], $this->openTab('Save'))
-      ->click();
-
-    $this->minkContext->iWaitForAjaxToFinish();
-  }
-
-  /**
-   * Saves the current IPE layout as a default layout.
-   *
-   * @When I save the layout as default
-   */
-  public function saveLayoutAsDefault() {
-    $this->assertSession()
-      ->elementExists('named', ['link', 'Save as default'], $this->openTab('Save'))
+      ->elementExists(
+        'named',
+        ['link', 'Save'],
+        $this->assertTray()
+      )
       ->click();
 
     $this->minkContext->iWaitForAjaxToFinish();
