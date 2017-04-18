@@ -67,8 +67,11 @@ class FileUpload extends EntityFormProxy {
     if (empty($validators['file_validate_extensions'])) {
       $validators = array_merge([
         'file_validate_extensions' => [
-          $this->helper->getFileExtensions(TRUE),
+          implode(' ', $this->helper->getFileExtensions(TRUE)),
         ],
+        // This must be a function because file_validate() still thinks that
+        // function_exists() is a good way to ensure callability.
+        'lightning_media_validate_upload' => [],
       ], $validators);
     }
     $form['input']['#upload_validators'] = $validators;
