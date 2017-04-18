@@ -50,6 +50,17 @@ The current version of media includes the following functionality:
 * Ability to embed tweets, Instagrams, and YouTube/Vimeo videos directly into
   CKEditor by pasting the video URL
 
+#### Extending Lightning Media (Contributed Modules)
+Drupal community members have contributed several modules which integrate Lightning Media with additional third-party media services. These modules are not packaged with Lightning or maintained by Acquia, but they are stable and you can use them in your Lightning site:
+
+  * [Facebook](https://www.drupal.org/project/lightning_media_facebook)
+  * [Imgur](https://www.drupal.org/project/lightning_media_imgur)
+  * [Flickr](https://www.drupal.org/project/lightning_media_flickr)
+  * [500px](https://www.drupal.org/project/lightning_media_d500px)
+  * [SoundCloud](https://www.drupal.org/project/lightning_media_soundcloud)
+  * [Tumblr](https://www.drupal.org/project/lightning_media_tumblr)
+  * [Spotify](https://www.drupal.org/project/lightning_media_spotify)
+
 ### Layout
 Lightning includes the Panelizer module, which allows you to configure the
 layout of any content type using a drag-and-drop interface (Panels IPE).
