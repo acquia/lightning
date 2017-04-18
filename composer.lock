@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "db9f94e923675d3bcb4529a61904b537",
+    "content-hash": "e860b0dbf4efcf92ac41f8a7b6cb3072",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1149,17 +1149,17 @@
         },
         {
             "name": "drupal/ctools",
-            "version": "3.0.0-beta1",
+            "version": "3.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/ctools",
-                "reference": "8.x-3.0-beta1"
+                "reference": "8.x-3.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ctools-8.x-3.0-beta1.zip",
+                "url": "https://ftp.drupal.org/files/projects/ctools-8.x-3.0-beta2.zip",
                 "reference": null,
-                "shasum": "8798ba7640a9188df9f9043e6f49b5ff0252e3dc"
+                "shasum": "6deece503cca328dde9b573a5d8a8fc74798d284"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -1170,8 +1170,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-beta1",
-                    "datestamp": "1490677984"
+                    "version": "8.x-3.0-beta2",
+                    "datestamp": "1492545842"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -1234,7 +1234,7 @@
         },
         {
             "name": "drupal/ctools_block",
-            "version": "3.0.0-beta1",
+            "version": "3.0.0-beta2",
             "require": {
                 "drupal/core": "~8.0",
                 "drupal/ctools": "self.version"
@@ -1245,8 +1245,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-beta1",
-                    "datestamp": "1490677984"
+                    "version": "8.x-3.0-beta2",
+                    "datestamp": "1492545842"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2277,17 +2277,17 @@
         },
         {
             "name": "drupal/panelizer",
-            "version": "4.0.0-beta2",
+            "version": "4.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/panelizer",
-                "reference": "8.x-4.0-beta2"
+                "reference": "8.x-4.0-beta3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/panelizer-8.x-4.0-beta2.zip",
+                "url": "https://ftp.drupal.org/files/projects/panelizer-8.x-4.0-beta3.zip",
                 "reference": null,
-                "shasum": "07de3891d94864d01630aa49c9eea51f1916b88d"
+                "shasum": "43a77bc0d8d91a26bc3dabfcc7f1ac9bb0fc6702"
             },
             "require": {
                 "drupal/core": "*",
@@ -2302,8 +2302,8 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.0-beta2",
-                    "datestamp": "1491358684"
+                    "version": "8.x-4.0-beta3",
+                    "datestamp": "1492545842"
                 },
                 "patches_applied": {
                     "2793841 - Properly integrate with Panels IPE": "https://www.drupal.org/files/issues/panelizer-panels-ipe-tempstore-id.patch"
@@ -2353,17 +2353,17 @@
         },
         {
             "name": "drupal/panels",
-            "version": "4.0.0-alpha1",
+            "version": "4.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/panels",
-                "reference": "8.x-4.0-alpha1"
+                "reference": "8.x-4.0-beta1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/panels-8.x-4.0-alpha1.zip",
+                "url": "https://ftp.drupal.org/files/projects/panels-8.x-4.0-beta1.zip",
                 "reference": null,
-                "shasum": "5a96a08e592acebfbabb3fa0b790aca1f2108be5"
+                "shasum": "8af3a72d3d2ed0caaa66578692cc5fbf96f2cf16"
             },
             "require": {
                 "drupal/core": "^8.3",
@@ -2374,15 +2374,46 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-4.x": "4.x-dev"
+                "installer-paths": {
+                    "docroot/core": [
+                        "type:drupal-core"
+                    ],
+                    "docroot/libraries/{$name}": [
+                        "type:drupal-library"
+                    ],
+                    "modules/contrib/{$name}": [
+                        "type:drupal-module"
+                    ]
                 },
-                "drupal": {
-                    "version": "8.x-4.0-alpha1",
-                    "datestamp": "1491354184"
-                },
-                "patches_applied": {
-                    "2793801 - Allow modules to influence the IPE tempstore ID": "https://www.drupal.org/files/issues/2793801-13.patch"
+                "patches": {
+                    "drupal/panelizer": {
+                        "2793841 - Properly integrate with Panels IPE": "https://www.drupal.org/files/issues/panelizer-panels-ipe-tempstore-id.patch"
+                    },
+                    "drupal/panels": {
+                        "2793801 - Allow modules to influence the IPE tempstore ID": "https://www.drupal.org/files/issues/2793801-13.patch"
+                    },
+                    "drupal/workbench_moderation": {
+                        "2668006 - Provide logical access control for when IPE should be applied to moderated nodes": "https://www.drupal.org/files/issues/2668006-2.patch",
+                        "2847078 - Revision tracker's dynamic table creation can break Views": "https://www.drupal.org/files/issues/2847078-6.patch",
+                        "2749503 - Add basic support for Quick Edit": "https://www.drupal.org/files/issues/workbench_moderation-quickedit-support-2749503-6.patch"
+                    },
+                    "drupal/core": {
+                        "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
+                        "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-303.patch"
+                    },
+                    "drupal/entity_embed": {
+                        "2832504 - Send the CKEditor instance ID to the embed.preview route": "https://www.drupal.org/files/issues/2832504-2.patch"
+                    },
+                    "drupal/entity_block": {
+                        "2844068 - Create derivatives for any viewable entity.": "https://www.drupal.org/files/issues/entity_block-view-builder-class.patch",
+                        "2846004 - Entity Block does not perform any access control": "https://www.drupal.org/files/issues/2846004-2.patch"
+                    },
+                    "drush/drush": {
+                        "2697 - Don't add profile dependencies to required_by array of modules": "https://patch-diff.githubusercontent.com/raw/drush-ops/drush/pull/2697.patch"
+                    },
+                    "drupal/dropzonejs": {
+                        "2868449 - dropzonejs/integration library is missing a dependency on jquery.once": "https://www.drupal.org/files/issues/2868449-2.patch"
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2437,7 +2468,7 @@
         },
         {
             "name": "drupal/panels_ipe",
-            "version": "4.0.0-alpha1",
+            "version": "4.0.0-beta1",
             "require": {
                 "drupal/core": "*",
                 "drupal/panels": "self.version"
@@ -2448,8 +2479,8 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.0-alpha1",
-                    "datestamp": "1491354184"
+                    "version": "8.x-4.0-beta1",
+                    "datestamp": "1492545842"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
