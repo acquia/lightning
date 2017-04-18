@@ -5,6 +5,7 @@
  * Contains installation and update routines for Lightning Layout.
  */
 
+use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
 
@@ -111,4 +112,55 @@ function lightning_layout_update_8007() {
  */
 function lightning_layout_update_8008() {
   \Drupal::service('module_installer')->install(['panelizer_quickedit']);
+}
+
+/**
+ * Converts panelized entity view displays to Layout Discovery.
+ */
+function lightning_layout_update_8009() {
+  /** @var \Drupal\Core\Entity\Display\EntityDisplayInterface[] $displays */
+  $displays = EntityViewDisplay::loadMultiple();
+
+  // TODO: Use panels_convert_plugin_ids_to_layout_discovery(). This is just a
+  // copy-paste of that function.
+  $convert_layout = function ($layout_id) {
+    switch ($layout_id) {
+      case 'onecol':
+        return 'layout_onecol';
+      case 'threecol_25_50_25':
+        return 'layout_threecol_25_50_25';
+      case 'threecol_25_50_25_stacked':
+        return 'layout_threecol_25_50_25';
+      case 'threecol_33_34_33':
+        return 'layout_threecol_33_34_33';
+      case 'threecol_33_34_33_stacked':
+        return 'layout_threecol_33_34_33';
+      case 'twocol':
+        return 'layout_twocol';
+      case 'twocol_bricks':
+        return 'layout_twocol_bricks';
+      case 'twocol_stacked':
+        return 'layout_twocol';
+      default:
+        return FALSE;
+    }
+  };
+
+  foreach ($displays as $display) {
+    $settings = $display->getThirdPartySettings('panelizer') ?: [];
+    if (empty($settings)) {
+      continue;
+    }
+
+    foreach ($settings['displays'] as &$panelizer_display) {
+      $layout_id = $convert_layout($panelizer_display['layout']);
+      if ($layout_id) {
+        $panelizer_display['layout'] = $layout_id;
+      }
+    }
+    foreach ($settings as $key => $value) {
+      $display->setThirdPartySetting('panelizer', $key, $value);
+    }
+    $display->save();
+  }
 }
