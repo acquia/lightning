@@ -50,8 +50,8 @@ The current version of media includes the following functionality:
 * Ability to embed tweets, Instagrams, and YouTube/Vimeo videos directly into
   CKEditor by pasting the video URL
 
-### Extending Lightning Media (Contributed Modules)
-A number of contributed modules have been writen Drupal community to integrate Drupal Media Entity with Lightning. This allows a seamless integration between Lightning functionality and 3rd party media services via Media Entity. Below is a list of 3rd party services and contributed modules that are currently available for Lightning Media:
+#### Extending Lightning Media (Contributed Modules)
+A number of contributed modules have been written by Drupal community to integrate Drupal Media Entity with Lightning. This allows a seamless integration between Lightning functionality and 3rd party media services via Media Entity. Below is a list of 3rd party services and contributed modules that are currently available for Lightning Media:
 
   * [Facebook](https://www.drupal.org/project/lightning_media_facebook)
   * [Imgur](https://www.drupal.org/project/lightning_media_imgur)
