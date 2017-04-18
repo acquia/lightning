@@ -184,3 +184,16 @@ function lightning_dev_update_8004() {
   $modules = array_keys($modules);
   lightning_dev_modules_installed($modules);
 }
+
+/**
+ * Executes manual updates for Lightning 2.1.0 --> 2.1.1.
+ */
+function lightning_dev_update_8005() {
+  // Add the 'bundle' contextual filter to the media browser.
+  $view = View::load('media');
+  $display = &$view->getDisplay('entity_browser_1');
+  $display['display_options']['arguments']['bundle'] = unserialize('a:27:{s:2:"id";s:6:"bundle";s:5:"table";s:16:"media_field_data";s:5:"field";s:6:"bundle";s:12:"relationship";s:4:"none";s:10:"group_type";s:5:"group";s:11:"admin_label";s:0:"";s:14:"default_action";s:7:"default";s:9:"exception";a:3:{s:5:"value";s:3:"all";s:12:"title_enable";b:0;s:5:"title";s:3:"All";}s:12:"title_enable";b:0;s:5:"title";s:0:"";s:21:"default_argument_type";s:29:"entity_browser_widget_context";s:24:"default_argument_options";a:3:{s:11:"context_key";s:14:"target_bundles";s:8:"fallback";s:3:"all";s:8:"multiple";s:2:"or";}s:25:"default_argument_skip_url";b:0;s:15:"summary_options";a:4:{s:9:"base_path";s:0:"";s:5:"count";b:1;s:14:"items_per_page";i:25;s:8:"override";b:0;}s:7:"summary";a:3:{s:10:"sort_order";s:3:"asc";s:17:"number_of_records";i:0;s:6:"format";s:15:"default_summary";}s:18:"specify_validation";b:1;s:8:"validate";a:2:{s:4:"type";s:19:"entity:media_bundle";s:4:"fail";s:6:"ignore";}s:16:"validate_options";a:4:{s:9:"operation";s:4:"view";s:8:"multiple";i:1;s:6:"access";b:0;s:7:"bundles";N;}s:8:"glossary";b:0;s:5:"limit";i:0;s:4:"case";s:4:"none";s:9:"path_case";s:4:"none";s:14:"transform_dash";b:0;s:12:"break_phrase";b:1;s:11:"entity_type";s:5:"media";s:12:"entity_field";s:6:"bundle";s:9:"plugin_id";s:6:"string";}');
+  $display['display_options']['defaults']['arguments'] = FALSE;
+  $display['display_options']['filters']['bundle']['expose']['argument'] = 'bundle';
+  $view->save();
+}

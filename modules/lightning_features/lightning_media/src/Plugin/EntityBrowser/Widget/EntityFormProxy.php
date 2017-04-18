@@ -123,8 +123,9 @@ abstract class EntityFormProxy extends WidgetBase {
    * {@inheritdoc}
    */
   public function validate(array &$form, FormStateInterface $form_state) {
-    $value = $this->getInputValue($form_state);
+    parent::validate($form, $form_state);
 
+    $value = $this->getInputValue($form_state);
     try {
       $this->helper->getBundleFromInput($value);
     }
@@ -151,7 +152,7 @@ abstract class EntityFormProxy extends WidgetBase {
    * @param FormStateInterface $form_state
    *   The current form state.
    *
-   * @return AjaxResponse
+   * @return \Drupal\Core\Ajax\AjaxResponse
    *   The AJAX response.
    */
   public static function ajax(array &$form, FormStateInterface $form_state) {
