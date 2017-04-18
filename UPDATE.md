@@ -71,6 +71,7 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
         * Multiple arguments: One or more IDs separated by , or +
         * Action to take if filter value does not validate: Display all results
           for the specified field
+      * Under the "More" section, "Allow multiple values" should be checked.
     * Save the view.
 
 ## 2.0.6 to 2.1.0
