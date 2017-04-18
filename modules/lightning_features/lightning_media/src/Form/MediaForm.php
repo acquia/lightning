@@ -4,6 +4,8 @@ namespace Drupal\lightning_media\Form;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\lightning_core\Form\BulkCreationEntityFormTrait;
+use Drupal\lightning_media\MediaHelper as Helper;
 use Drupal\media_entity\MediaForm as BaseMediaForm;
 use Drupal\media_entity\MediaInterface;
 
@@ -11,6 +13,8 @@ use Drupal\media_entity\MediaInterface;
  * Adds dynamic preview support to the media entity form.
  */
 class MediaForm extends BaseMediaForm {
+
+  use BulkCreationEntityFormTrait;
 
   /**
    * {@inheritdoc}
@@ -21,7 +25,7 @@ class MediaForm extends BaseMediaForm {
     /** @var \Drupal\media_entity\MediaInterface $entity */
     $entity = $this->getEntity();
 
-    $field = static::getSourceField($entity);
+    $field = Helper::getSourceField($entity);
     if ($field) {
       // Get the source field widget element.
       $widget_keys = [
@@ -35,7 +39,7 @@ class MediaForm extends BaseMediaForm {
       // Add an attribute to identify it.
       $widget['#attributes']['data-source-field'] = TRUE;
 
-      if (static::isPreviewable($entity)) {
+      if (Helper::isPreviewable($entity)) {
         $widget['#ajax'] = [
           'callback' => [static::class, 'onChange'],
           'wrapper' => 'preview',
@@ -128,7 +132,7 @@ class MediaForm extends BaseMediaForm {
     $entity = $handler->getEntity();
     $handler->copyFormValuesToEntity($entity, $form, $form_state);
 
-    return $form['preview'];
+    return Helper::getSourceField($entity)->view('default');
   }
 
 }

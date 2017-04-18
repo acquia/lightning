@@ -5,9 +5,8 @@ namespace Drupal\lightning_media\Plugin\EntityBrowser\Widget;
 use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\file\FileInterface;
 use Drupal\lightning_media\Element\AjaxUpload;
-use Drupal\media_entity\MediaBundleInterface;
+use Drupal\lightning_media\MediaHelper;
 use Drupal\media_entity\MediaInterface;
 
 /**
@@ -35,8 +34,7 @@ class FileUpload extends EntityFormProxy {
     $entities = parent::prepareEntities($form, $form_state);
 
     $get_file = function (MediaInterface $entity) {
-      $type_config = $entity->getType()->getConfiguration();
-      return $entity->get($type_config['source_field'])->entity;
+      return MediaHelper::getSourceField($entity)->entity;
     };
 
     if ($this->configuration['return_file']) {
@@ -69,7 +67,7 @@ class FileUpload extends EntityFormProxy {
     if (empty($validators['file_validate_extensions'])) {
       $validators = array_merge([
         'file_validate_extensions' => [
-          $this->getAcceptableExtensions(),
+          $this->helper->getFileExtensions(TRUE),
         ],
       ], $validators);
     }
@@ -79,30 +77,12 @@ class FileUpload extends EntityFormProxy {
   }
 
   /**
-   * Returns an aggregated list of acceptable file extensions.
-   *
-   * @return string
-   *   A space-separated list of file extensions accepted by the existing media
-   *   bundles.
-   */
-  protected function getAcceptableExtensions() {
-    $extensions = [];
-
-    foreach ($this->getPossibleBundles() as $bundle) {
-      $source_field = $this->getSourceFieldForBundle($bundle);
-      if ($source_field) {
-        $extensions = array_merge($extensions, preg_split('/,?\s+/', $source_field->getSetting('file_extensions')));
-      }
-    }
-    return implode(' ', array_unique($extensions));
-  }
-
-  /**
    * {@inheritdoc}
    */
   public function validate(array &$form, FormStateInterface $form_state) {
-    $input = $this->getInputValue($form_state);
-    if ($input) {
+    $value = $this->getInputValue($form_state);
+
+    if ($value) {
       parent::validate($form, $form_state);
     }
     else {
@@ -117,23 +97,13 @@ class FileUpload extends EntityFormProxy {
     /** @var \Drupal\media_entity\MediaInterface $entity */
     $entity = $element['entity']['#entity'];
 
-    $type_config = $entity->getType()->getConfiguration();
-    /** @var \Drupal\file\Plugin\Field\FieldType\FileItem $item */
-    $item = $entity->get($type_config['source_field'])->first();
-    /** @var FileInterface $file */
-    $file = $item->entity;
-
-    // Prepare the file's permanent home.
-    $dir = $item->getUploadLocation();
-    file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
-
-    $destination = $dir . '/' . $file->getFilename();
-    if (!file_exists($destination)) {
-      $file = file_move($file, $destination);
-      $entity->set($type_config['source_field'], $file)->save();
-    }
+    $file = MediaHelper::useFile(
+      $entity,
+      MediaHelper::getSourceField($entity)->entity
+    );
     $file->setPermanent();
     $file->save();
+    $entity->save();
 
     $selection = [
       $this->configuration['return_file'] ? $file : $entity,
@@ -206,27 +176,6 @@ class FileUpload extends EntityFormProxy {
       '#description' => $this->t('If checked, the source file(s) of the media entity will be returned from this widget.'),
     ];
     return $form;
-  }
-
-  /**
-   * Returns the source field for a media bundle.
-   *
-   * @param MediaBundleInterface $bundle
-   *   The media bundle entity.
-   *
-   * @return \Drupal\Core\Field\FieldConfigInterface
-   *   The configurable source field entity.
-   *
-   * @deprecated and will be removed in Lightning 2.1.1.
-   */
-  protected function getSourceFieldForBundle(MediaBundleInterface $bundle) {
-    $type_config = $bundle->getType()->getConfiguration();
-    if (empty($type_config['source_field'])) {
-      return NULL;
-    }
-    $id = 'media.' . $bundle->id() . '.' . $type_config['source_field'];
-
-    return $this->entityTypeManager->getStorage('field_config')->load($id);
   }
 
 }

@@ -11,8 +11,13 @@ use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\entity_browser\Element\EntityBrowserElement;
+use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
+use Drupal\lightning_core\BundleEntityStorage;
+use Drupal\lightning_media\Exception\IndeterminateBundleException;
+use Drupal\lightning_media\MediaHelper;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media\Form\MediaForm;
 use Drupal\media_entity\Entity\MediaBundle;
@@ -68,9 +73,58 @@ function lightning_media_entity_extra_field_info() {
 function lightning_media_inline_entity_form_entity_form_alter(array &$entity_form) {
   $entity = $entity_form['#entity'];
 
-  if ($entity instanceof MediaInterface && MediaForm::isPreviewable($entity)) {
-    $entity_form['preview'] = MediaForm::getSourceField($entity)->view('default');
+  if ($entity instanceof MediaInterface && MediaHelper::isPreviewable($entity)) {
+    $entity_form['preview'] = MediaHelper::getSourceField($entity)->view('default');
   }
+}
+
+/**
+ * Validates a file using media entity source field criteria.
+ *
+ * @param \Drupal\file\FileInterface $file
+ *   The file to validate.
+ *
+ * @return string[]
+ *   An array of errors. If empty, the file passed validation.
+ */
+function lightning_media_validate_upload(FileInterface $file) {
+  try {
+    $entity = \Drupal::service('lightning.media_helper')->createFromInput($file);
+  }
+  catch (IndeterminateBundleException $e) {
+    return [];
+  }
+
+  /** @var \Drupal\file\Plugin\Field\FieldType\FileItem $item */
+  $item = MediaHelper::getSourceField($entity)->first();
+
+  $validators = [
+    // It's maybe a bit overzealous to run this validator, but hey...better
+    // safe than screwed over by script kiddies.
+    'file_validate_name_length' => [],
+  ];
+  $validators = array_merge($validators, $item->getUploadValidators());
+  // This function is only called by the custom FileUpload widget, which runs
+  // file_validate_extensions before this function. So there's no need to
+  // validate the extensions again.
+  unset($validators['file_validate_extensions']);
+
+  // If this is an image field, add image validation. Against all sanity,
+  // this is normally done by ImageWidget, not ImageItem, which is why we
+  // need to facilitate this a bit.
+  if ($item instanceof ImageItem) {
+    // Validate that this is, indeed, a supported image.
+    $validators['file_validate_is_image'] = [];
+
+    $settings = $item->getFieldDefinition()->getSettings();
+    if ($settings['max_resolution'] || $settings['min_resolution']) {
+      $validators['file_validate_image_resolution'] = [
+        $settings['max_resolution'],
+        $settings['min_resolution'],
+      ];
+    }
+  }
+  return file_validate($file, $validators);
 }
 
 /**
@@ -170,6 +224,9 @@ function lightning_media_entity_type_alter(array &$entity_types) {
   // order to support dynamic preview generation.
   Override::entityForm($entity_types['media'], MediaForm::class);
   Override::entityForm($entity_types['media'], MediaForm::class, 'edit');
+
+  // Use our extended storage handler for media bundles.
+  Override::entityHandler($entity_types['media_bundle'], 'storage', BundleEntityStorage::class);
 }
 
 /**

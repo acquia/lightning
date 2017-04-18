@@ -13,9 +13,6 @@ use Drupal\lightning_core\Element as ElementHelper;
 use Drupal\lightning_core\Entity\EntityFormMode;
 use Drupal\lightning_core\Entity\EntityViewMode;
 use Drupal\lightning_core\Entity\Role;
-use Drupal\lightning_core\Form\EntityDisplayModeAddForm;
-use Drupal\lightning_core\Form\EntityDisplayModeEditForm;
-use Drupal\lightning_core\Form\EntityFormModeAddForm;
 use Drupal\lightning_core\Form\RoleForm;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_core\Plugin\views\filter\Bundle;
@@ -38,11 +35,13 @@ function lightning_core_entity_type_alter(array &$entity_types) {
 
   Override::entityForm($entity_types['user_role'], RoleForm::class);
 
-  Override::entityForm($entity_types['entity_view_mode'], EntityDisplayModeAddForm::class, 'add');
-  Override::entityForm($entity_types['entity_view_mode'], EntityDisplayModeEditForm::class, 'edit');
+  if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
+    Override::entityForm($entity_types['entity_view_mode'], '\Drupal\lightning_core\Form\EntityDisplayModeAddForm', 'add');
+    Override::entityForm($entity_types['entity_view_mode'], '\Drupal\lightning_core\Form\EntityDisplayModeEditForm', 'edit');
 
-  Override::entityForm($entity_types['entity_form_mode'], EntityFormModeAddForm::class, 'add');
-  Override::entityForm($entity_types['entity_form_mode'], EntityDisplayModeEditForm::class, 'edit');
+    Override::entityForm($entity_types['entity_form_mode'], '\Drupal\lightning_core\Form\EntityFormModeAddForm', 'add');
+    Override::entityForm($entity_types['entity_form_mode'], '\Drupal\lightning_core\Form\EntityDisplayModeEditForm', 'edit');
+  }
 }
 
 /**

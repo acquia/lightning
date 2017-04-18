@@ -83,7 +83,7 @@ Feature: Workflow moderation states
     Then I should see a "system_main_block" block with a "quickedit" contextual link
 
   @35d54919
-  Scenario: Content whose content type is not moderated is visible in the Content view
+  Scenario: Unmoderated content types are visible in the Content view
     Given node_type entities:
       | type          | name          |
       | not_moderated | Not Moderated |
@@ -93,3 +93,13 @@ Feature: Workflow moderation states
     And I am logged in as a user with the administrator role
     When I visit "admin/content"
     Then I should see "Lazy Lummox"
+
+  @d0f9aaa8
+  Scenario: Unmoderated content types have normal submit buttons
+    Given node_type entities:
+      | type          | name          |
+      | not_moderated | Not Moderated |
+    And I am logged in as a user with the "administer nodes,create not_moderated content" permissions
+    When I visit "/node/add/not_moderated"
+    Then I should see the "Save and publish" button
+    And I should see the "Save as unpublished" button

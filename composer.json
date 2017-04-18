@@ -45,15 +45,19 @@
         ],
         "post-update-cmd": [
             "./bin/phing push",
-            "./bin/phing package"
+            "@composer package"
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+        "package": "Acquia\\Lightning\\Composer\\Package::execute",
         "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute"
     },
     "extra": {
         "installer-paths": {
             "docroot/core": [
                 "type:drupal-core"
+            ],
+            "docroot/libraries/{$name}": [
+                "type:drupal-library"
             ],
             "modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -101,12 +105,16 @@
                 "https://www.drupal.org/files/issues/entity-browser-widget-context-2761833-37.patch",
                 "2865928 - The View widget should filter based on field settings":
                 "https://www.drupal.org/files/issues/entity-browser-view-context-2865928-8.patch"
+            },
+            "drupal/dropzonejs": {
+                "2868449 - dropzonejs/integration library is missing a dependency on jquery.once":
+                "https://www.drupal.org/files/issues/2868449-2.patch"
             }
         }
     },
     "require": {
         "cweagans/composer-patches": "^1.5.0",
-        "composer/installers": "^1.0",
+        "composer/installers": "^1.2",
         "drupal/core": "~8.3.0",
         "drupal/embed": "^1.0",
         "drupal/entity_embed": "1.0.0-beta2",

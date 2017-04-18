@@ -34,17 +34,18 @@ class NodeForm extends BaseNodeForm {
   protected function actions(array $form, FormStateInterface $form_state) {
     $element = parent::actions($form, $form_state);
 
-    // Show the basic 'Save' button.
-    $element['submit']['#access'] = TRUE;
+    if ($this->moderationInfo()->isModeratedEntityForm($this)) {
+      // Show the basic 'Save' button.
+      $element['submit']['#access'] = TRUE;
 
-    // Hide the 'Save and publish' button.
-    $element['publish']['#access'] = FALSE;
-    unset($element['publish']['#dropbutton']);
+      // Hide the 'Save and publish' button.
+      $element['publish']['#access'] = FALSE;
+      unset($element['publish']['#dropbutton']);
 
-    // Hide the 'Save as unpublished' button.
-    $element['unpublish']['#access'] = FALSE;
-    unset($element['unpublish']['#dropbutton']);
-
+      // Hide the 'Save as unpublished' button.
+      $element['unpublish']['#access'] = FALSE;
+      unset($element['unpublish']['#dropbutton']);
+    }
     return $element;
   }
 

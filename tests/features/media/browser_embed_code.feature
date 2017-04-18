@@ -36,7 +36,7 @@ Feature: Creating media assets from within the media browser using embed codes
     And I wait 1 second
     And I wait for AJAX to finish
     And I press "Place"
-    Then I should see the error message "No media types can be matched to this input."
+    Then I should see the error message containing "Could not match any bundles to input:"
 
   @twitter @security @6a9aaf7f
   Scenario: Embed code widget will not allow the user to create media of bundles to which they do not have access
