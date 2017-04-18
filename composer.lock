@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e860b0dbf4efcf92ac41f8a7b6cb3072",
+    "content-hash": "911b37e70dd030fe9e539107276afa48",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1595,6 +1595,10 @@
                 "drupal": {
                     "version": "8.x-1.0-rc2",
                     "datestamp": "1487795881"
+                },
+                "patches_applied": {
+                    "2761833 - Widget context and validators not passed to Entity Browser element": "https://www.drupal.org/files/issues/entity-browser-widget-context-2761833-37.patch",
+                    "2865928 - The View widget should filter based on field settings": "https://www.drupal.org/files/issues/entity-browser-view-context-2865928-8.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2304,9 +2308,6 @@
                 "drupal": {
                     "version": "8.x-4.0-beta3",
                     "datestamp": "1492545842"
-                },
-                "patches_applied": {
-                    "2793841 - Properly integrate with Panels IPE": "https://www.drupal.org/files/issues/panelizer-panels-ipe-tempstore-id.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2374,46 +2375,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "installer-paths": {
-                    "docroot/core": [
-                        "type:drupal-core"
-                    ],
-                    "docroot/libraries/{$name}": [
-                        "type:drupal-library"
-                    ],
-                    "modules/contrib/{$name}": [
-                        "type:drupal-module"
-                    ]
+                "branch-alias": {
+                    "dev-4.x": "4.x-dev"
                 },
-                "patches": {
-                    "drupal/panelizer": {
-                        "2793841 - Properly integrate with Panels IPE": "https://www.drupal.org/files/issues/panelizer-panels-ipe-tempstore-id.patch"
-                    },
-                    "drupal/panels": {
-                        "2793801 - Allow modules to influence the IPE tempstore ID": "https://www.drupal.org/files/issues/2793801-13.patch"
-                    },
-                    "drupal/workbench_moderation": {
-                        "2668006 - Provide logical access control for when IPE should be applied to moderated nodes": "https://www.drupal.org/files/issues/2668006-2.patch",
-                        "2847078 - Revision tracker's dynamic table creation can break Views": "https://www.drupal.org/files/issues/2847078-6.patch",
-                        "2749503 - Add basic support for Quick Edit": "https://www.drupal.org/files/issues/workbench_moderation-quickedit-support-2749503-6.patch"
-                    },
-                    "drupal/core": {
-                        "2652138 - ImageFormatter does not support SVGs": "https://www.drupal.org/files/issues/2652138-41.patch",
-                        "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356276-303.patch"
-                    },
-                    "drupal/entity_embed": {
-                        "2832504 - Send the CKEditor instance ID to the embed.preview route": "https://www.drupal.org/files/issues/2832504-2.patch"
-                    },
-                    "drupal/entity_block": {
-                        "2844068 - Create derivatives for any viewable entity.": "https://www.drupal.org/files/issues/entity_block-view-builder-class.patch",
-                        "2846004 - Entity Block does not perform any access control": "https://www.drupal.org/files/issues/2846004-2.patch"
-                    },
-                    "drush/drush": {
-                        "2697 - Don't add profile dependencies to required_by array of modules": "https://patch-diff.githubusercontent.com/raw/drush-ops/drush/pull/2697.patch"
-                    },
-                    "drupal/dropzonejs": {
-                        "2868449 - dropzonejs/integration library is missing a dependency on jquery.once": "https://www.drupal.org/files/issues/2868449-2.patch"
-                    }
+                "drupal": {
+                    "version": "8.x-4.0-beta1",
+                    "datestamp": "1492545842"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4988,16 +4955,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.33.0",
+            "version": "v1.33.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a"
+                "reference": "a87f959f4b691da66aada267a2dfdb260d0bb58a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a",
-                "reference": "05cf49921b13f6f01d3cfdf9018cfa7a8086fd5a",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/a87f959f4b691da66aada267a2dfdb260d0bb58a",
+                "reference": "a87f959f4b691da66aada267a2dfdb260d0bb58a",
                 "shasum": ""
             },
             "require": {
@@ -5046,7 +5013,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2017-03-22T15:40:09+00:00"
+            "time": "2017-04-18T21:43:11+00:00"
         },
         {
             "name": "zendframework/zend-diactoros",
