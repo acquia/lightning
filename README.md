@@ -60,6 +60,7 @@ Drupal community members have contributed several modules which integrate Lightn
   * [SoundCloud](https://www.drupal.org/project/lightning_media_soundcloud)
   * [Tumblr](https://www.drupal.org/project/lightning_media_tumblr)
   * [Spotify](https://www.drupal.org/project/lightning_media_spotify)
+  * [Pinterest](https://www.drupal.org/project/lightning_media_pinterest)  
 
 ### Layout
 Lightning includes the Panelizer module, which allows you to configure the
