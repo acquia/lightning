@@ -14,6 +14,12 @@ use Drupal\search_api\Entity\Server;
  * Implements hook_install().
  */
 function lightning_search_install() {
+  // Don't modify configuration if it is currently being synced.
+  // @see https://www.drupal.org/node/2870864#comment-12044705
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   // Search API DB is not a hard dependency, but install it if it's available so
   // that the search index we provide will "just work" out of the box.
   $module_data = system_rebuild_module_data();

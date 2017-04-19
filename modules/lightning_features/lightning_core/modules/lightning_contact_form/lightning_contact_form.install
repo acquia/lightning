@@ -12,6 +12,12 @@ use Drupal\user\RoleInterface;
  * Implements hook_install().
  */
 function lightning_contact_form_install() {
+  // Don't modify configuration if it is currently being synced.
+  // @see https://www.drupal.org/node/2870864#comment-12044705
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   ContactForm::load('sitewide')
     ->setRecipients([
       \Drupal::config('system.site')->get('mail'),
