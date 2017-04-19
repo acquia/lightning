@@ -113,14 +113,3 @@ function lightning_layout_update_8008() {
   \Drupal::service('module_installer')->install(['panelizer_quickedit']);
 }
 
-/**
- * Replaces Layout Plugin with Layout Discovery.
- */
-function lightning_layout_update_8009() {
-  if (!\Drupal::moduleHandler()->moduleExists('layout_discovery')) {
-    /** @var \Drupal\Core\Extension\ModuleInstallerInterface $installer */
-    $installer = \Drupal::service('module_installer');
-    $installer->uninstall(['layout_plugin'], FALSE);
-    $installer->install(['layout_discovery'], FALSE);
-  }
-}
