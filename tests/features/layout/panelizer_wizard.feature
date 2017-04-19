@@ -112,7 +112,7 @@ Feature: Panelizer Wizard
     And I press "Next"
     And I press "Next"
     And I enter "[node:title]" for "Page title"
-    And I place the "Authored by" block into the "middle" panelizer region
+    And I place the "Authored by" block into the "content" panelizer region
     And I press "Finish"
     And I press "Cancel"
     And I should be on "/admin/structure/types/manage/landing_page/display/full"
