@@ -1,3 +1,7 @@
+## 2.1.2
+* Updated Entity Browser to 1.0.0 and pinned it to that release to ensure patch
+  applies.
+
 ## 2.1.1
 * Panels, Panelizer and Page Manager have been upgraded to their new (stable!)
   8.x-4.x releases. These releases use the experimental Layout Discovery module

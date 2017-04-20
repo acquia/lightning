@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "713484dab9a89c856ea7f0474bf0e516",
+    "content-hash": "c0d48e061c9c7d4b29caf7db274f5bfc",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1564,17 +1564,17 @@
         },
         {
             "name": "drupal/entity_browser",
-            "version": "1.0.0-rc2",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/entity_browser",
-                "reference": "8.x-1.0-rc2"
+                "reference": "8.x-1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/entity_browser-8.x-1.0-rc2.zip",
+                "url": "https://ftp.drupal.org/files/projects/entity_browser-8.x-1.0.zip",
                 "reference": null,
-                "shasum": "7954668b9134a8ec2dac2604c482d6521e43ee91"
+                "shasum": "6bd7bbcda1eebacc3685e9edaad2ad29b525b2ad"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -1593,11 +1593,10 @@
                     "dev-8.x-1.x": "8.1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc2",
-                    "datestamp": "1487795881"
+                    "version": "8.x-1.0",
+                    "datestamp": "1492678144"
                 },
                 "patches_applied": {
-                    "2761833 - Widget context and validators not passed to Entity Browser element": "https://www.drupal.org/files/issues/entity-browser-widget-context-2761833-37.patch",
                     "2865928 - The View widget should filter based on field settings": "https://www.drupal.org/files/issues/entity-browser-view-context-2865928-8.patch"
                 }
             },
@@ -2656,17 +2655,17 @@
         },
         {
             "name": "drupal/search_api",
-            "version": "1.0.0-rc2",
+            "version": "1.0.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/search_api",
-                "reference": "8.x-1.0-rc2"
+                "reference": "8.x-1.0-rc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.0-rc2.zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.0-rc3.zip",
                 "reference": null,
-                "shasum": "174a463535c6b77c4c9ec9481a7ab7989e661868"
+                "shasum": "f1bd136650c4db81a5baedbc8d7aa65d0533a102"
             },
             "require": {
                 "drupal/core": "^8.2"
@@ -2680,8 +2679,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc2",
-                    "datestamp": "1491843242"
+                    "version": "8.x-1.0-rc3",
+                    "datestamp": "1492677545"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -6936,6 +6935,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "8.0.x-dev"
+                },
+                "patches_applied": {
+                    "2697 - Don't add profile dependencies to required_by array of modules": "https://patch-diff.githubusercontent.com/raw/drush-ops/drush/pull/2697.patch"
                 }
             },
             "autoload": {

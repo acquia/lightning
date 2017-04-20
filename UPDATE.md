@@ -54,6 +54,9 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+## 2.1.1 to 2.1.2
+There are no manual update steps for this version.
+
 ## 2.1.0 to 2.1.1
 * To allow fields that use the media browser to filter to only the media types
   accepted by the field, do the following:
