@@ -24,6 +24,9 @@ events:
             # Add the Acquia cloud database snippet to the settings file.
             - ./bin/phing cloud-db-snippet
             - mkdir -p ./config/default
+            # Generate Behat configuration.
+            - ./bin/drupal behat:init http://127.0.0.1:8080 --merge=../tests/behat.yml
+            - ./bin/drupal behat:include ../tests/features --with-subcontexts=../tests/features/bootstrap --with-subcontexts=../src/LightningExtension/Context
       - test:
           type: script
           script:
