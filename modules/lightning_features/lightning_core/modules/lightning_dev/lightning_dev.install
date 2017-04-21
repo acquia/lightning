@@ -48,9 +48,6 @@ function lightning_dev_install() {
   $widgets['8b142f33-59d1-47b1-9e3a-4ae85d8376fa']['label'] = 'Create embed';
   $entity_browser->set('widgets', $widgets);
   $entity_browser->save();
-
-  // Set up centralized Behat configuration.
-  lightning_dev_update_8004();
 }
 
 /**
@@ -174,15 +171,13 @@ function lightning_dev_update_8003() {
 }
 
 /**
- * Sets up centralized Behat configuration.
+ * Removed in Lightning 8.x-2.13.
+ *
+ * Formerly set up centralized Behat configuration.
+ *
+ * @deprecated
  */
 function lightning_dev_update_8004() {
-  \Drupal::service('lightning_dev.behat')->generate('http://127.0.0.1:8080');
-
-  // Update the Behat configuration for all installed modules.
-  $modules = \Drupal::moduleHandler()->getModuleList();
-  $modules = array_keys($modules);
-  lightning_dev_modules_installed($modules);
 }
 
 /**
