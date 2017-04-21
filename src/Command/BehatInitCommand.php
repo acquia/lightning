@@ -2,19 +2,14 @@
 
 namespace Drupal\lightning\Command;
 
-use Drupal\Component\Serialization\Yaml;
-use Drupal\Component\Utility\NestedArray;
-use Drupal\Core\Extension\ModuleHandlerInterface;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * A command to generate Behat configuration for an installed Drupal site.
  */
-class ConfigureBehatCommand extends Command {
+class BehatInitCommand extends BehatCommandBase {
 
   /**
    * The Drupal application root.
@@ -24,25 +19,16 @@ class ConfigureBehatCommand extends Command {
   protected $appRoot;
 
   /**
-   * The module handler.
+   * BehatInitCommand constructor.
    *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * ConfigureBehatCommand constructor.
-   *
+   * @param \Drupal\Core\File\FileSystemInterface $file_system
+   *   The file system service.
    * @param string $app_root
    *   The Drupal application root.
-   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
-   *   The module handler.
    */
-  public function __construct($app_root, ModuleHandlerInterface $module_handler) {
-    parent::__construct('behat:configure');
-
+  public function __construct($file_system, $app_root) {
+    parent::__construct($file_system);
     $this->appRoot = $app_root;
-    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -52,18 +38,12 @@ class ConfigureBehatCommand extends Command {
     parent::configure();
 
     $this
+      ->setName('behat:init')
       ->setDescription('Generates a configuration file for executing Behat tests.')
       ->addArgument(
         'base_url',
         InputArgument::REQUIRED,
         'The base URL of your Drupal installation.'
-      )
-      ->addOption(
-        'destination',
-        NULL,
-        InputOption::VALUE_REQUIRED,
-        'URI at which to write the generated configuration.',
-        'public://behat.yml'
       );
   }
 
@@ -71,11 +51,11 @@ class ConfigureBehatCommand extends Command {
    * {@inheritdoc}
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $profile = [];
+    $config = [];
 
     // Use the Mink Extension, if available.
     if (class_exists('\Behat\MinkExtension\ServiceContainer\MinkExtension')) {
-      $profile['extensions']['Behat\MinkExtension'] = [
+      $config['default']['extensions']['Behat\MinkExtension'] = [
         'base_url' => $input->getArgument('base_url'),
         'goutte' => NULL,
         'selenium2' => [
@@ -87,7 +67,7 @@ class ConfigureBehatCommand extends Command {
 
     // Use the Drupal Extension, if available.
     if (class_exists('\Drupal\DrupalExtension\ServiceContainer\DrupalExtension')) {
-      $profile['extensions']['Drupal\DrupalExtension'] = [
+      $config['default']['extensions']['Drupal\DrupalExtension'] = [
         'api_driver' => 'drupal',
         'blackbox' => NULL,
         'drupal' => [
@@ -105,29 +85,8 @@ class ConfigureBehatCommand extends Command {
         ],
       ];
     }
-    $config = ['default' => $profile];
 
-    foreach ($this->moduleHandler->getModuleList() as $module) {
-      $base_path = $this->appRoot . '/' . $module->getPath();
-
-      $import = $base_path . '/tests/behat.yml';
-
-      if (file_exists($import)) {
-        $import = file_get_contents($import);
-        $import = str_replace('%paths.base%', $base_path, $import);
-        $import = Yaml::decode($import);
-
-        $config = NestedArray::mergeDeep($config, $import);
-      }
-    }
-
-    $destination = drupal_realpath($input->getOption('destination'));
-
-    $success = file_put_contents($destination, Yaml::encode($config));
-    if ($success === FALSE) {
-      throw new \RuntimeException('Failed to write ' . $destination);
-    }
-    $output->writeln('Generated ' . $destination);
+    $this->writeConfig($config, $input->getOption('merge'));
   }
 
 }

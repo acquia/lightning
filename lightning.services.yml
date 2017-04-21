@@ -16,11 +16,18 @@ services:
     tags:
       - { name: drupal.command }
 
-  lightning.configure_behat:
-    class: '\Drupal\lightning\Command\ConfigureBehatCommand'
+  lightning.behat_init:
+    class: '\Drupal\lightning\Command\BehatInitCommand'
     arguments:
+      - '@file_system'
       - '@app.root'
-      - '@module_handler'
+    tags:
+      - { name: drupal.command }
+
+  lightning.behat_include:
+    class: '\Drupal\lightning\Command\BehatIncludeCommand'
+    arguments:
+      - '@file_system'
     tags:
       - { name: drupal.command }
 
