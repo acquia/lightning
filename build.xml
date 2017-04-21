@@ -56,9 +56,6 @@
 
     <!-- rsync the profile, excluding developer flotsam. -->
     <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},karma.conf.js,*.make,node_modules,.travis.yml,vendor" />
-
-    <!-- Contrib modules were copied over by the file sync. -->
-    <delete dir="modules/contrib" failonerror="true" quiet="true" />
   </target>
 
   <target name="pull" depends="env">

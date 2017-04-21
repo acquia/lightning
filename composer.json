@@ -59,19 +59,11 @@
             "docroot/libraries/{$name}": [
                 "type:drupal-library"
             ],
-            "modules/contrib/{$name}": [
+            "docroot/profiles/lightning/modules/contrib/{$name}": [
                 "type:drupal-module"
             ]
         },
         "patches": {
-            "drupal/panelizer": {
-                "2793841 - Properly integrate with Panels IPE":
-                "https://www.drupal.org/files/issues/panelizer-panels-ipe-tempstore-id.patch"
-            },
-            "drupal/panels": {
-                "2793801 - Allow modules to influence the IPE tempstore ID":
-                "https://www.drupal.org/files/issues/2793801-13.patch"
-            },
             "drupal/workbench_moderation": {
                 "2668006 - Provide logical access control for when IPE should be applied to moderated nodes":
                 "https://www.drupal.org/files/issues/2668006-2.patch",
@@ -101,8 +93,6 @@
                 "https://patch-diff.githubusercontent.com/raw/drush-ops/drush/pull/2697.patch"
             },
             "drupal/entity_browser": {
-                "2761833 - Widget context and validators not passed to Entity Browser element":
-                "https://www.drupal.org/files/issues/entity-browser-widget-context-2761833-37.patch",
                 "2865928 - The View widget should filter based on field settings":
                 "https://www.drupal.org/files/issues/entity-browser-view-context-2865928-8.patch"
             },
@@ -115,7 +105,7 @@
     "require": {
         "cweagans/composer-patches": "^1.5.0",
         "composer/installers": "^1.2",
-        "drupal/core": "~8.3.0",
+        "drupal/core": "~8.3.1",
         "drupal/embed": "^1.0",
         "drupal/entity_embed": "1.0.0-beta2",
         "drupal/media_entity": "^1.0",
@@ -123,9 +113,9 @@
         "drupal/media_entity_twitter": "^1.3",
         "drupal/media_entity_image": "^1.0",
         "drupal/ctools": "^3.0",
-        "drupal/panels": "3.0.0-beta6",
-        "drupal/page_manager": "1.0.0-alpha24",
-        "drupal/panelizer": "3.0.0-beta1",
+        "drupal/panels": "^4.0",
+        "drupal/page_manager": "^4.0",
+        "drupal/panelizer": "^4.0",
         "drupal/scheduled_updates": "1.0.0-alpha6",
         "drupal/workbench_moderation": "1.2.0",
         "drupal/acquia_connector": "^1.1",
@@ -136,14 +126,15 @@
         "drupal/token": "^1.0",
         "drupal-composer/drupal-scaffold": "^2.0.0",
         "drupal/pathauto": "^1.0",
-        "drupal/entity_browser": "^1.0",
+        "drupal/entity_browser": "1.0.0",
         "drupal/views_infinite_scroll": "^1.1",
         "drupal/media_entity_document": "^1.0",
         "drupal/video_embed_field": "^1.0",
         "drupal/contact_storage": "^1.0",
         "drupal/diff": "^1.0",
         "drupal/entity_block": "1.0.0-alpha2",
-        "drupal/search_api": "^1.0"
+        "drupal/search_api": "^1.0",
+        "drupal/layout_plugin": "^1.0@alpha"
     },
     "autoload": {
         "psr-4": {

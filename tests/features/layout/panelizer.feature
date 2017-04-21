@@ -78,11 +78,11 @@ Feature: Panelizer
       | Foobar | /foobar | draft            | Foo    |
     And I am logged in as Foo
     When I visit "/foobar"
-    And I change the layout to "threecol_25_50_25" from the "Columns: 3" category
+    And I change the layout to "layout_threecol_25_50_25" from the "Columns: 3" category
     And I should see "Region: left"
     And I should see "Region: middle"
     And I should see "Region: right"
-    And I change the layout to "twocol" from the "Columns: 2" category
+    And I change the layout to "layout_twocol" from the "Columns: 2" category
     And I should see "Region: left"
     And I should see "Region: right"
     Then I should not see "Region: middle"
