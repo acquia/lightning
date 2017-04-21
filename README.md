@@ -122,14 +122,18 @@ Please use the [Drupal.org issue queue][issue_queue] for latest information and
 to request features or bug fixes.
 
 ## Running Tests
-These instructions assume you have used Composer to install Lightning.
+These instructions assume you have used Composer to install Lightning. Once you
+have it up and running, follow these steps to execute all of Lightning's Behat
+tests:
 
 ### Behat
-    $ cd MYPROJECT/docroot/profiles/lightning
-    $ /path/to/MYPROJECT/bin/behat
+    $ cd MYPROJECT
+    $ ./bin/drupal behat:init http://YOUR.LIGHTNING.SITE --merge=../tests/behat.yml
+    $ ./bin/drupal behat:include ../tests/features --with-subcontexts=../tests/features/bootstrap --with-subcontexts=../src/LightningExtension/Context
+    $ ./bin/behat --config ./docroot/sites/default/files/behat.yml
 
-If necessary, edit behat.local.yml to match your environment. Generally you
-will not need to do this.
+If necessary, you can edit ```docroot/sites/default/files/behat.yml``` to match
+your environment, but generally you will not need to do this.
 
 ## Known Issues
 
