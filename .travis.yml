@@ -76,6 +76,8 @@ install:
   - composer install
   # Install Lightning cleanly so that settings.php will be created properly.
   - phing install -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1
+  # Generate Behat configuration.
+  - drupal behat:configure http://127.0.0.1:8080
   # Import the fixture, if it exists.
   - phing recall -Dversion=$VERSION -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1
   - cd docroot
