@@ -28,7 +28,7 @@ trait YieldToArgumentTrait {
     $value = $argument->getValue();
 
     $key = $this->options['expose']['identifier'];
-    $form[$key]['#access'] = is_null($value);
+    $form[$key]['#access'] = is_null($value) || $argument->isException($value);
   }
 
   /**
