@@ -222,18 +222,9 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
       ->elementExists('named', ['link', 'Revert to default'], $this->assertTray())
       ->click();
 
-    $driver = $this->getSession()->getDriver();
-    if ($driver instanceof Selenium2Driver) {
-      $driver->getWebDriverSession()->accept_alert();
-    }
-
-    $this->minkContext->iWaitForAjaxToFinish();
-
-    if ($driver instanceof Selenium2Driver) {
-      $driver->getWebDriverSession()->accept_alert();
-    }
-
-    $this->minkContext->iWaitForAjaxToFinish();
+    /** @var \Acquia\LightningExtension\Context\UtilityContext $utility */
+    $utility = $this->getContext(UtilityContext::class);
+    $utility->acceptAlerts([$this->minkContext, 'iWaitForAjaxToFinish']);
   }
 
 }
