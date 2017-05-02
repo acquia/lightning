@@ -9,6 +9,11 @@
  * Implements hook_install().
  */
 function lightning_landing_page_install() {
+  // Don't modify configuration if it is currently being synced.
+  // @see https://www.drupal.org/node/2870864#comment-12044705
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
   if (\Drupal::moduleHandler()->moduleExists('lightning_search')) {
     lightning_landing_page_modules_installed(['lightning_search']);
   }

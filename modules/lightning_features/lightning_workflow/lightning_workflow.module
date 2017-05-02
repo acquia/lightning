@@ -114,6 +114,12 @@ function lightning_workflow_modules_installed(array $modules) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
+  // Don't modify configuration if it is currently being synced.
+  // @see https://www.drupal.org/node/2870864#comment-12044705
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   $id = $node_type->id();
 
   if ($node_type->getThirdPartySetting('lightning_workflow', 'embargo')) {
