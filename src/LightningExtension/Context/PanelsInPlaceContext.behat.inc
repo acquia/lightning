@@ -218,14 +218,20 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
    * @When I revert the layout
    */
   public function revertLayout() {
+    $this->assertSession()
+      ->elementExists('named', ['link', 'Revert to default'], $this->assertTray())
+      ->click();
+
     $driver = $this->getSession()->getDriver();
     if ($driver instanceof Selenium2Driver) {
       $driver->getWebDriverSession()->accept_alert();
     }
 
-    $this->assertSession()
-      ->elementExists('named', ['link', 'Revert to default'], $this->assertTray())
-      ->click();
+    $this->minkContext->iWaitForAjaxToFinish();
+
+    if ($driver instanceof Selenium2Driver) {
+      $driver->getWebDriverSession()->accept_alert();
+    }
 
     $this->minkContext->iWaitForAjaxToFinish();
   }
