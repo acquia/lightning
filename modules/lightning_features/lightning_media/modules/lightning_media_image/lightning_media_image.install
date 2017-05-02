@@ -15,6 +15,11 @@ use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
  * Implements hook_install().
  */
 function lightning_media_image_install() {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   // Create the image browser display of the media view.
   lightning_media_image_update_8003();
 

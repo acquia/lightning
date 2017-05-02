@@ -44,7 +44,11 @@ function lightning_layout_layout_alter(array &$definitions) {
  * Implements hook_modules_installed().
  */
 function lightning_layout_modules_installed(array $modules) {
-  if (in_array('lightning_roles', $modules)) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  elseif (in_array('lightning_roles', $modules)) {
     \Drupal::service('lightning.content_roles')
       ->grantPermissions('creator', [
         'access panels in-place editing',
@@ -59,7 +63,11 @@ function lightning_layout_modules_installed(array $modules) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_layout_user_role_insert(RoleInterface $role) {
-  if ($role->id() == 'layout_manager' && Config::isBundled($role)) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  elseif ($role->id() == 'layout_manager' && Config::isBundled($role)) {
     $node_types = NodeType::loadMultiple();
     array_walk($node_types, 'lightning_layout_node_type_insert');
   }
@@ -174,6 +182,11 @@ function lightning_layout_menu_local_actions_alter(array &$local_actions) {
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_layout_node_type_insert(NodeTypeInterface $node_type) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   user_role_grant_permissions('layout_manager', [
     'administer panelizer node ' . $node_type->id() . ' defaults',
   ]);
@@ -183,6 +196,11 @@ function lightning_layout_node_type_insert(NodeTypeInterface $node_type) {
  * Implements hook_ENTITY_TYPE_delete().
  */
 function lightning_layout_node_type_delete(NodeTypeInterface $node_type) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   /** @var \Drupal\user\RoleInterface $role */
   $role = Role::load('layout_manager');
   if ($role) {

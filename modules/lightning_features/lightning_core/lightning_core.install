@@ -11,6 +11,11 @@ use Drupal\Core\Entity\Entity\EntityViewMode;
  * Implements hook_install().
  */
 function lightning_core_install() {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   // Mark core view modes as internal.
   lightning_core_update_8002();
 }
