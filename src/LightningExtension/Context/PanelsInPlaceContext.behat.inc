@@ -2,6 +2,7 @@
 
 namespace Acquia\LightningExtension\Context;
 
+use Behat\Mink\Driver\Selenium2Driver;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\MinkContext;
 
@@ -217,6 +218,11 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
    * @When I revert the layout
    */
   public function revertLayout() {
+    $driver = $this->getSession()->getDriver();
+    if ($driver instanceof Selenium2Driver) {
+      $driver->getWebDriverSession()->accept_alert();
+    }
+
     $this->assertSession()
       ->elementExists('named', ['link', 'Revert to default'], $this->assertTray())
       ->click();
