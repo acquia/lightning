@@ -21,7 +21,11 @@ use Drupal\workbench_moderation\Entity\ModerationState;
  * Implements hook_ENTITY_TYPE_presave().
  */
 function lightning_workflow_view_presave(ViewEntityInterface $view) {
-  if ($view->id() == 'content' && $view->isNew()) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  elseif ($view->id() == 'content' && $view->isNew()) {
     $display = &$view->getDisplay('default');
 
     // Add the moderation state as a field.
@@ -90,7 +94,11 @@ function lightning_workflow_scheduled_update_ief_label(ScheduledUpdateInterface 
  * Implements hook_modules_installed().
  */
 function lightning_workflow_modules_installed(array $modules) {
-  if (in_array('lightning_roles', $modules)) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  elseif (in_array('lightning_roles', $modules)) {
     \Drupal::service('lightning.content_roles')
       ->grantPermissions('creator', [
         'view any unpublished content',
@@ -116,7 +124,11 @@ function lightning_workflow_modules_installed(array $modules) {
 function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
   $id = $node_type->id();
 
-  if ($node_type->getThirdPartySetting('lightning_workflow', 'embargo')) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  elseif ($node_type->getThirdPartySetting('lightning_workflow', 'embargo')) {
     FieldConfig::create([
       'field_name' => 'scheduled_update',
       'entity_type' => 'node',

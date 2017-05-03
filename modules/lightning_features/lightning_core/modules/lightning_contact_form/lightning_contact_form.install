@@ -12,12 +12,6 @@ use Drupal\user\RoleInterface;
  * Implements hook_install().
  */
 function lightning_contact_form_install() {
-  ContactForm::load('sitewide')
-    ->setRecipients([
-      \Drupal::config('system.site')->get('mail'),
-    ])
-    ->save();
-
   // Create an alias for the form if it's not already taken.
   /** @var \Drupal\Core\Path\AliasStorageInterface $alias_storage */
   $alias_storage = \Drupal::service('path.alias_storage');
@@ -27,6 +21,17 @@ function lightning_contact_form_install() {
   if (empty($alias)) {
     $alias_storage->save('/contact/sitewide', '/contact');
   }
+
+  // Don't update the contact form configuration during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
+  ContactForm::load('sitewide')
+    ->setRecipients([
+      \Drupal::config('system.site')->get('mail'),
+    ])
+    ->save();
 
   // Grants permission to use contact form(s).
   $permissions = ['access site-wide contact form'];
