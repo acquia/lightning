@@ -28,7 +28,7 @@ function lightning_search_install() {
 
   /** @var \Drupal\node\NodeTypeInterface $node_type */
   $node_types = NodeType::loadMultiple();
-  array_walk($node_types, 'ligthning_search_node_type_insert');
+  array_walk($node_types, 'lightning_search_node_type_insert');
 
   // The database server is optional configuration, to be installed only if
   // Search API DB is present. For some reason, it's not installed during a
