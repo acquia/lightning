@@ -23,19 +23,15 @@ class PatchedConstraint {
   public static function execute(Event $event) {
     $root_package = $event->getComposer()->getPackage();
     $patched_dependencies = self::getPatchedDependencyConstraints($root_package);
-    $bad_constraint = [];
+    $error = [];
 
     /** @var \Composer\Package\Link $package */
     foreach ($patched_dependencies as $package) {
       if (self::packageIsUnpinned($package)) {
-        $bad_constraint[$package->getTarget()] = $package->getPrettyConstraint();
+        $error[] = $package->getTarget() . ': ' . $package->getPrettyConstraint();
       }
     }
-    if (!empty($bad_constraint)) {
-      $error[] = 'The following dependencies are patched but don\'t have pinned dependency constraints:';
-      foreach ($bad_constraint as $name => $constraint) {
-        $error[] = $name . ': ' . $constraint;
-      }
+    if (!empty($error)) {
       $event->getIO()->writeError($error);
       return false;
     }
