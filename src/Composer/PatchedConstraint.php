@@ -3,67 +3,86 @@
 namespace Acquia\Lightning\Composer;
 
 use Composer\Json\JsonFile;
+use Composer\Package\RootPackageInterface;
 use Composer\Script\Event;
 
 /**
  * Ensures that all patched dependencies are pinned to a specific version.
  */
 class PatchedConstraint {
-  private $json;
-  private $patched_dependencies;
-
-  public static function execute(Event $event) {
-    $root_package = $event->getComposer()->getPackage();
-    $patched_dependencies = self::getPatchedDependencyConstraints();
-  }
-
 
   /**
-   * Gets a list of required packages that also have patches defined.
+   * Script entry point.
    *
-   * @param array $ignore
-   *   Packages to ignore.
-   *
-   * @return array
-   *   List of required packages which are patched and their version constraint.
-   */
-  protected function getPatchedDependencyConstraints($ignore = ['drupal/core']) {
-    $app_root = \Drupal::root();
-    $json_file = new JsonFile($app_root . '/../composer.json');
-    $json = $json_file->read();
-    $patched = array_keys($json['extra']['patches']);
-    $patched_dependencies = array_intersect_key($json['require'], array_flip($patched));
-    // @todo strip out ignored dependencies.
-    return $patched_dependencies;
-  }
-
-  /**
-   * Checks to see if a given constraint is pinned to a specific release.
+   * @param \Composer\Script\Event $event
+   *   The script event.
    *
    * @return bool
+   *   False if there are unpinned patched dependencies.
    */
-  protected function isUnpinned($constraint) {
-    if ((!is_numeric(substr($constraint, 0, 1))) || (strpos($constraint, '|') !== FALSE) || (strpos($constraint, '*') !== FALSE)) {
-      return TRUE;
+  public static function execute(Event $event) {
+    $root_package = $event->getComposer()->getPackage();
+    $patched_dependencies = self::getPatchedDependencyConstraints($root_package);
+    $bad_constraint = [];
+
+    /** @var \Composer\Package\Link $package */
+    foreach ($patched_dependencies as $package) {
+      if (self::packageIsUnpinned($package)) {
+        $bad_constraint[$package->getTarget()] = $package->getPrettyConstraint();
+      }
     }
-    return FALSE;
+    if (!empty($bad_constraint)) {
+      $error[] = 'The following dependencies are patched but don\'t have pinned dependency constraints:';
+      foreach ($bad_constraint as $name => $constraint) {
+        $error[] = $name . ': ' . $constraint;
+      }
+      $event->getIO()->writeError($error);
+      return false;
+    }
+    else {
+      $event->getIO()->write('Patched dependencies have constraints that are properly pinned.');
+    }
   }
 
   /**
-   * Gets a list of patched dependencies whose version constraint might cause
-   * the defined patch to fail to apply.
+   * Filters the requires section of the RootPackage down to packages that also
+   * have patches defined in the extra section.
    *
-   * @return array
-   *   An associative array of dependencies and their constraints.
+   * @param \Composer\Package\RootPackageInterface $root_package
+   *   The root composer.json package.
+   *
+   * @return \Composer\Package\Link array
+   *   List of required packages that are patched.
    */
-  public function getUnpinnedPatchedDependencies() {
-    $unpinned_patched_dependencies = [];
-    foreach ($this->patched_dependencies as $dependency => $constraint) {
-      if ($this->isUnpinned($constraint)) {
-        $unpinned_patched_dependencies[$dependency] = $constraint;
-      }
+  protected static function getPatchedDependencyConstraints(RootPackageInterface $root_package) {
+    $required = $root_package->getRequires();
+    $extra = $root_package->getExtra();
+    $patched = $extra['patches'];
+    return array_intersect_key($required, $patched);
+  }
+
+  /**
+   * @param \Composer\Package\Link $package
+   *   The package to check.
+   *
+   * @return bool
+   *   True if the constraint appears to be unpinned.
+   */
+  protected static function packageIsUnpinned(\Composer\Package\Link $package) {
+    if ($package->getTarget() == 'drupal/core') {
+      // Bail out if the patched package is drupal/core since we release with
+      // each version of core and always ensure core patches still apply.
+      return false;
     }
-    return $unpinned_patched_dependencies;
+    $constraint = $package->getPrettyConstraint();
+    if ((!is_numeric(substr($constraint, 0, 1))) || (strpos($constraint, '|') !== FALSE) || (strpos($constraint, '*') !== FALSE)) {
+      // An unpinned constraint is a constraint where any of the following are
+      // true:
+      //   - The first character is NOT an integer (e.g. ~)
+      //   - Contains the OR operator
+      //   - Contains a wildcard
+      return true;
+    }
   }
 
 }
