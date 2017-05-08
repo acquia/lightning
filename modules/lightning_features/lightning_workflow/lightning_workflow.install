@@ -11,6 +11,11 @@ use Drupal\node\Entity\NodeType;
  * Implements hook_install().
  */
 function lightning_workflow_install() {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   // Set up content type-specific permissions.
   lightning_workflow_update_8001();
 

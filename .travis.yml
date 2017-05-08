@@ -13,10 +13,10 @@ php:
   - 7.0
 env:
   - VERSION=HEAD
+  - VERSION=2.1.3
   - VERSION=2.1.2
   - VERSION=2.1.1
   - VERSION=2.1.0
-  - VERSION=2.0.6
 
 addons:
   apt:
@@ -76,6 +76,9 @@ install:
   - composer install
   # Install Lightning cleanly so that settings.php will be created properly.
   - phing install -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1
+  # Generate Behat configuration.
+  - drupal behat:init http://127.0.0.1:8080 --merge=../tests/behat.yml
+  - drupal behat:include ../tests/features --with-subcontexts=../tests/features/bootstrap --with-subcontexts=../src/LightningExtension/Context
   # Import the fixture, if it exists.
   - phing recall -Dversion=$VERSION -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1
   - cd docroot

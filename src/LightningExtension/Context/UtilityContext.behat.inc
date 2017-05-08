@@ -2,10 +2,12 @@
 
 namespace Acquia\LightningExtension\Context;
 
+use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\Component\Utility\Random;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
+use WebDriver\Exception\NoAlertOpenError;
 
 /**
  * A context with miscellaneous helpers.
@@ -179,6 +181,35 @@ class UtilityContext extends DrupalSubContextBase {
         'field_media_in_library' => TRUE,
       ]);
       $media->save();
+    }
+  }
+
+  /**
+   * Accepts any currently open alert box(es), then optionally runs a callback.
+   *
+   * @param callable $then
+   *   (optional) A function to run after accepting the alerts.
+   * @param mixed[] $arguments
+   *   (optional) Arguments for the callback.
+   *
+   * @When I accept the alert(s)
+   */
+  public function acceptAlerts(callable $then = NULL, array $arguments = []) {
+    $driver = $this->getSession()->getDriver();
+
+    if ($driver instanceof Selenium2Driver) {
+      while (true) {
+        try {
+          $driver->getWebDriverSession()->accept_alert();
+        }
+        catch (NoAlertOpenError $e) {
+          break;
+        }
+      }
+    }
+
+    if ($then) {
+      call_user_func_array($then, $arguments);
     }
   }
 

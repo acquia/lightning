@@ -62,3 +62,10 @@ Feature: An entity browser for media assets
     And I press "Save settings"
     When I visit "/node/add/page"
     Then I should see an "iframe[name^='entity_browser_iframe_media_browser']" element
+
+  @81cfbefc
+  Scenario: Bundle filter is present when no contextual filter is given.
+    Given I am logged in as a user with the "page_creator,page_reviewer,media_creator" roles
+    When I visit "/node/add/page"
+    And I open the media browser
+    Then I should see "Type"

@@ -13,6 +13,11 @@ use Drupal\views\Entity\View;
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_search_node_type_insert(NodeTypeInterface $node_type) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   $type = $node_type->id();
 
   // No point in continuing without an index to configure.
@@ -50,6 +55,11 @@ function lightning_search_node_type_insert(NodeTypeInterface $node_type) {
  * Implements hook_ENTITY_TYPE_delete().
  */
 function lightning_search_node_type_delete(NodeTypeInterface $node_type) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   $type = $node_type->id();
 
   // No point in continuing without an index to configure.

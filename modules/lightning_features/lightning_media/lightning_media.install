@@ -16,6 +16,11 @@ use Drupal\views\Entity\View;
  * Implements hook_install().
  */
 function lightning_media_install() {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   user_role_grant_permissions('anonymous', ['view media']);
   user_role_grant_permissions('authenticated', ['view media']);
 
