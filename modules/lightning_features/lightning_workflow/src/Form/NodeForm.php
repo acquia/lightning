@@ -20,10 +20,12 @@ class NodeForm extends BaseNodeForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = $this->traitForm($form, $form_state);
 
-    // Workbench Moderation enforces revisions by checking and disabling the
-    // revision checkbox. We don't need to display that.
-    $form['revision']['#type'] = 'hidden';
-    unset($form['revision_log']['#states']['visible'][':input[name="revision"]']);
+    if ($this->moderationInfo()->isModeratedEntityForm($this)) {
+      // Workbench Moderation enforces revisions by checking and disabling the
+      // revision checkbox. We don't need to display that.
+      $form['revision']['#type'] = 'hidden';
+      unset($form['revision_log']['#states']['visible'][':input[name="revision"]']);
+    }
 
     return $form;
   }

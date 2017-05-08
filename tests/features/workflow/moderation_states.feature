@@ -103,3 +103,16 @@ Feature: Workflow moderation states
     When I visit "/node/add/not_moderated"
     Then I should see the "Save and publish" button
     And I should see the "Save as unpublished" button
+
+  @7cef449b
+  Scenario: Unmoderated content types have the "Create new revision" Checkbox
+    Given node_type entities:
+      | type          | name          |
+      | not_moderated | Not Moderated |
+    And not_moderated content:
+      | title       | path       |
+      | Deft Zebra  | /deft-zebra |
+    And I am logged in as a user with the administrator role
+    When I visit "/deft-zebra"
+    And I click "Edit"
+    Then I should see "Create new revision"
