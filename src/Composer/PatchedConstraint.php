@@ -32,6 +32,7 @@ class PatchedConstraint {
       }
     }
     if (!empty($error)) {
+      array_unshift($error, 'The following dependencies are patched but don\'t have pinned dependency constraints:');
       $event->getIO()->writeError($error);
       return false;
     }
