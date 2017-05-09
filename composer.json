@@ -41,19 +41,18 @@
         "post-install-cmd": [
             "PhantomInstaller\\Installer::installPhantomJS",
             "@composer drupal-scaffold",
-            "@composer symlink",
-            "./bin/phing push"
+            "./bin/phing push",
+            "./bin/phing symlink"
         ],
         "post-update-cmd": [
             "./bin/phing push",
-            "@composer package",
-            "@composer symlink"
+            "./bin/phing symlink",
+            "@composer package"
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
         "package": "Acquia\\Lightning\\Composer\\Package::execute",
         "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
-        "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute",
-        "symlink": "Acquia\\Lightning\\Composer\\Symlink::execute"
+        "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute"
     },
     "extra": {
         "installer-paths": {

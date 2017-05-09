@@ -212,4 +212,9 @@
     </append>
   </target>
 
+  <!-- Symlinks .git/hooks/pre-commit to our repo's pre-commit script -->
+  <target name="symlink">
+    <symlink link=".git/hooks/pre-commit" target="git-hooks/pre-commit" overwrite="true" />
+  </target>
+
 </project>
