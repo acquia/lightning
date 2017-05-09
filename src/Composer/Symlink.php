@@ -16,7 +16,11 @@ class Symlink {
   public static function execute(Event $event) {
     $fs = new Filesystem();
     if ($fs->exists('./.git/hooks/pre-commit')) {
-      // Delete the pre-commit directory if it exists.
+      // Delete the pre-commit file/symlink if it exists.
+      // @todo once we can update to symfony/filesystem:3.2 we can be a little
+      // smarter here and see if it already links to the correct place and bail
+      // out if so - so that we're not constantly rewriting this link. 3.2
+      // currently conflicts with DrupalConsole.
       $fs->remove('./.git/hooks/pre-commit');
     }
     $fs->symlink(__DIR__ . '/../../git-hooks/pre-commit', './.git/hooks/pre-commit');
