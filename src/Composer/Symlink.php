@@ -6,7 +6,7 @@ use Composer\Script\Event;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Links git hook directories to those provided by this repo.
+ * Links the git hook pre-commit file to the one provided in this repo.
  */
 class Symlink {
 
