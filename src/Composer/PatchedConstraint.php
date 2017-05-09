@@ -2,7 +2,7 @@
 
 namespace Acquia\Lightning\Composer;
 
-use Composer\Json\JsonFile;
+use Composer\Package\Link;
 use Composer\Package\RootPackageInterface;
 use Composer\Script\Event;
 
@@ -22,19 +22,19 @@ class PatchedConstraint {
    */
   public static function execute(Event $event) {
     $root_package = $event->getComposer()->getPackage();
-    $patched_dependencies = self::getPatchedDependencyConstraints($root_package);
+    $patched_dependencies = static::getPatchedDependencyConstraints($root_package);
     $error = [];
 
     /** @var \Composer\Package\Link $package */
     foreach ($patched_dependencies as $package) {
-      if (self::packageIsUnpinned($package)) {
+      if (static::packageIsUnpinned($package)) {
         $error[] = $package->getTarget() . ': ' . $package->getPrettyConstraint();
       }
     }
     if (!empty($error)) {
       array_unshift($error, 'The following dependencies are patched but don\'t have pinned dependency constraints:');
       $event->getIO()->writeError($error);
-      return false;
+      return FALSE;
     }
     else {
       $event->getIO()->write('Patched dependencies have constraints that are properly pinned.');
@@ -42,13 +42,12 @@ class PatchedConstraint {
   }
 
   /**
-   * Filters the requires section of the RootPackage down to packages that also
-   * have patches defined in the extra section.
+   * Filters the requires section to packages that are patched.
    *
    * @param \Composer\Package\RootPackageInterface $root_package
    *   The root composer.json package.
    *
-   * @return \Composer\Package\Link array
+   * @return \Composer\Package\Link
    *   List of required packages that are patched.
    */
   protected static function getPatchedDependencyConstraints(RootPackageInterface $root_package) {
@@ -59,26 +58,25 @@ class PatchedConstraint {
   }
 
   /**
+   * Determines if a given package's constraint is pinned or not.
+   *
    * @param \Composer\Package\Link $package
    *   The package to check.
    *
    * @return bool
    *   True if the constraint appears to be unpinned.
    */
-  protected static function packageIsUnpinned(\Composer\Package\Link $package) {
+  protected static function packageIsUnpinned(Link $package) {
     if ($package->getTarget() == 'drupal/core') {
       // Bail out if the patched package is drupal/core since we release with
       // each version of core and always ensure core patches still apply.
-      return false;
+      return FALSE;
     }
     $constraint = $package->getPrettyConstraint();
-    if ((!is_numeric(substr($constraint, 0, 1))) || (strpos($constraint, '|') !== FALSE) || (strpos($constraint, '*') !== FALSE)) {
-      // An unpinned constraint is a constraint where any of the following are
-      // true:
-      //   - The first character is NOT an integer (e.g. ~)
-      //   - Contains the OR operator
-      //   - Contains a wildcard
-      return true;
+    if (preg_match('/[\^~*|]/', $constraint)) {
+      // If ^, ~, *, or | characters are being used, the dependency is not
+      // pinned to a specific release.
+      return TRUE;
     }
   }
 

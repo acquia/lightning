@@ -95,7 +95,6 @@ before_script:
 
 script:
   - composer validate ./profiles/lightning/composer.json --no-check-all --ansi
-  - composer verify-patched-constraints --working-dir=../
   - phpunit --configuration ./core --group lightning
   - behat --strict --stop-on-failure --config ./sites/default/files/behat.yml
 
