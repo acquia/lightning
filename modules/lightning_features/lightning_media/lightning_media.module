@@ -6,7 +6,6 @@
  */
 
 use Drupal\Component\Utility\Unicode;
-use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -295,7 +294,7 @@ function lightning_media_form_entity_embed_dialog_alter(array &$form, FormStateI
 /**
  * Implements hook_js_settings_alter().
  */
-function lightning_media_js_settings_alter(array &$settings, AttachedAssetsInterface $assets) {
+function lightning_media_js_settings_alter(array &$settings) {
   if (empty($settings['ajax'])) {
     $settings['ajax'] = [];
   }
