@@ -28,7 +28,9 @@ use Drupal\media_entity\MediaBundleInterface;
  * Implements hook_field_widget_info_alter().
  */
 function lightning_media_field_widget_info_alter(array &$info) {
-  Override::pluginClass($info['entity_browser_entity_reference'], EntityReferenceBrowserWidget::class);
+  if (isset($info['entity_browser_entity_reference'])) {
+    Override::pluginClass($info['entity_browser_entity_reference'], EntityReferenceBrowserWidget::class);
+  }
 }
 
 /**

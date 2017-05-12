@@ -18,8 +18,8 @@ class EntityReferenceBrowserWidget extends BaseEntityReferenceBrowserWidget {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
 
     // Move the remaining number of selections to the details summary.
-    $element['#description'] .= '<p>' . $element['current']['remaining']['#markup'] . '</p>';
-    unset($element['current']['remaining']);
+    $element['#description'] .= $element['current']['#prefix'];
+    unset($element['current']['#prefix']);
 
     // Wrap the current selections in a nice <details> element.
     $cardinality = $this->fieldDefinition
