@@ -32,7 +32,7 @@ class IniEncoder {
    *   The serialized data as a flat array of lines.
    */
   protected function doEncode(array $input, array $keys = []) {
-    $output = array();
+    $output = [];
 
     foreach ($input as $key => $value) {
       $keys[] = $key;
@@ -120,7 +120,7 @@ class IniEncoder {
       foreach ($matches as $match) {
         // Fetch the key and value string.
         $i = 0;
-        foreach (array('key', 'value1', 'value2', 'value3') as $var) {
+        foreach (['key', 'value1', 'value2', 'value3'] as $var) {
           $$var = isset($match[++$i]) ? $match[$i] : '';
         }
         $value = stripslashes(substr($value1, 1, -1)) . stripslashes(substr($value2, 1, -1)) . $value3;
@@ -136,7 +136,7 @@ class IniEncoder {
             $key = count($parent);
           }
           if (!isset($parent[$key]) || !is_array($parent[$key])) {
-            $parent[$key] = array();
+            $parent[$key] = [];
           }
           $parent = &$parent[$key];
         }

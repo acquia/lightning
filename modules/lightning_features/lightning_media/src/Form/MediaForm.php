@@ -4,6 +4,8 @@ namespace Drupal\lightning_media\Form;
 
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\lightning_core\Form\BulkCreationEntityFormTrait;
+use Drupal\lightning_media\MediaHelper as Helper;
 use Drupal\media_entity\MediaForm as BaseMediaForm;
 use Drupal\media_entity\MediaInterface;
 
@@ -11,6 +13,8 @@ use Drupal\media_entity\MediaInterface;
  * Adds dynamic preview support to the media entity form.
  */
 class MediaForm extends BaseMediaForm {
+
+  use BulkCreationEntityFormTrait;
 
   /**
    * {@inheritdoc}
@@ -21,7 +25,7 @@ class MediaForm extends BaseMediaForm {
     /** @var \Drupal\media_entity\MediaInterface $entity */
     $entity = $this->getEntity();
 
-    $field = static::getSourceField($entity);
+    $field = Helper::getSourceField($entity);
     if ($field) {
       // Get the source field widget element.
       $widget_keys = [
@@ -35,21 +39,47 @@ class MediaForm extends BaseMediaForm {
       // Add an attribute to identify it.
       $widget['#attributes']['data-source-field'] = TRUE;
 
-      if (static::isPreviewable($entity)) {
+      if (Helper::isPreviewable($entity)) {
         $widget['#ajax'] = [
           'callback' => [static::class, 'onChange'],
           'wrapper' => 'preview',
           'method' => 'html',
           'event' => 'change',
         ];
-
-        $form['preview'] = $field->view('default');
-        $form['preview']['#prefix'] = '<div id="preview">';
-        $form['preview']['#suffix'] = '</div>';
+        $form['preview'] = [
+          '#pre_render' => [
+            [$this, 'renderPreview'],
+          ],
+          '#prefix' => '<div id="preview">',
+          '#suffix' => '</div>',
+        ];
       }
     }
-
     return $form;
+  }
+
+  /**
+   * Pre-render callback for the preview element.
+   *
+   * You might wonder why this rinky-dink bit of logic cannot be done in
+   * ::form(). The reason is that, under some circumstances, the renderable
+   * preview element will contain unserializable dependencies (like such as the
+   * database connection), which will produce a 500 error when trying to cache
+   * the form for AJAX purposes.
+   *
+   * By putting this logic in a pre-render callback, we ensure that the
+   * unserializable preview element will only exist during the rendering stage,
+   * and thus never be serialized for caching.
+   *
+   * @param array $element
+   *   The preview element.
+   *
+   * @return array
+   *   The renderable preview element.
+   */
+  public function renderPreview(array $element) {
+    $entity = $this->getEntity();
+    return $element + static::getSourceField($entity)->view('default');
   }
 
   /**
@@ -102,7 +132,7 @@ class MediaForm extends BaseMediaForm {
     $entity = $handler->getEntity();
     $handler->copyFormValuesToEntity($entity, $form, $form_state);
 
-    return static::getSourceField($entity)->view('default');
+    return Helper::getSourceField($entity)->view('default');
   }
 
 }

@@ -23,6 +23,10 @@ events:
             - ./bin/phing install -Ddb.password=root -Ddb.database=drupal
             # Add the Acquia cloud database snippet to the settings file.
             - ./bin/phing cloud-db-snippet
+            - mkdir -p ./config/default
+            # Generate Behat configuration.
+            - ./bin/drupal behat:init http://127.0.0.1:8080 --merge=../tests/behat.yml
+            - ./bin/drupal behat:include ../tests/features --with-subcontexts=../tests/features/bootstrap --with-subcontexts=../src/LightningExtension/Context
       - test:
           type: script
           script:
@@ -31,4 +35,4 @@ events:
             - ../bin/drush runserver --default-server=builtin 8080 &>/dev/null &
             - ../bin/phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
-            - ../bin/behat --stop-on-failure --config ./sites/default/files/behat.yml --tags="~@expect-failure"
+            - ../bin/behat --stop-on-failure --config ./sites/default/files/behat.yml --tags="~@expect-failure,~@javascript"

@@ -113,15 +113,3 @@ function lightning_layout_update_8008() {
   \Drupal::service('module_installer')->install(['panelizer_quickedit']);
 }
 
-/**
- * Implements hook_update_dependencies().
- */
-function lightning_layout_update_dependencies() {
-  return [
-    'lightning_layout' => [
-      8003 => [
-        'lightning' => 8002,
-      ],
-    ],
-  ];
-}

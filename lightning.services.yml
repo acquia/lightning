@@ -16,6 +16,21 @@ services:
     tags:
       - { name: drupal.command }
 
+  lightning.behat_init:
+    class: '\Drupal\lightning\Command\BehatInitCommand'
+    arguments:
+      - '@file_system'
+      - '@app.root'
+    tags:
+      - { name: drupal.command }
+
+  lightning.behat_include:
+    class: '\Drupal\lightning\Command\BehatIncludeCommand'
+    arguments:
+      - '@file_system'
+    tags:
+      - { name: drupal.command }
+
   lightning.subprofile_generator:
     class: '\Drupal\lightning\Generator\SubProfileGenerator'
     arguments: []
