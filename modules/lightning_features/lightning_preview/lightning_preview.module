@@ -184,7 +184,7 @@ function lightning_preview_module_implements_alter(array &$implementations, $hoo
   if ($hook == 'entity_presave' || $hook == 'field_widget_info_alter') {
     $order = array_diff(array_keys($implementations), [$module]);
     array_push($order, $module);
-    array_reorder($implementations, $order);
+    Element::order($implementations, $order);
   }
 }
 
