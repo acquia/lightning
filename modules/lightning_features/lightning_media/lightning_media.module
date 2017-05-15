@@ -6,7 +6,6 @@
  */
 
 use Drupal\Component\Utility\Unicode;
-use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -17,12 +16,22 @@ use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\lightning_core\BundleEntityStorage;
 use Drupal\lightning_media\Exception\IndeterminateBundleException;
+use Drupal\lightning_media\Plugin\Field\FieldWidget\EntityReferenceBrowserWidget;
 use Drupal\lightning_media\MediaHelper;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media\Form\MediaForm;
 use Drupal\media_entity\Entity\MediaBundle;
 use Drupal\media_entity\MediaInterface;
 use Drupal\media_entity\MediaBundleInterface;
+
+/**
+ * Implements hook_field_widget_info_alter().
+ */
+function lightning_media_field_widget_info_alter(array &$info) {
+  if (isset($info['entity_browser_entity_reference'])) {
+    Override::pluginClass($info['entity_browser_entity_reference'], EntityReferenceBrowserWidget::class);
+  }
+}
 
 /**
  * Implements hook_modules_installed().
@@ -287,7 +296,7 @@ function lightning_media_form_entity_embed_dialog_alter(array &$form, FormStateI
 /**
  * Implements hook_js_settings_alter().
  */
-function lightning_media_js_settings_alter(array &$settings, AttachedAssetsInterface $assets) {
+function lightning_media_js_settings_alter(array &$settings) {
   if (empty($settings['ajax'])) {
     $settings['ajax'] = [];
   }
