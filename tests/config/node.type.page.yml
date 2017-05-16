@@ -1,0 +1,24 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - lightning_workflow
+    - menu_ui
+    - workbench_moderation
+third_party_settings:
+  menu_ui:
+    available_menus: [main]
+    parent: 'main:'
+  workbench_moderation:
+    enabled: true
+    allowed_moderation_states: [archived, draft, needs_review, published]
+    default_moderation_state: draft
+  lightning_workflow:
+    embargo: true
+name: 'Basic page'
+type: page
+description: 'Use <em>basic pages</em> for your static content, such as an ''About us'' page.'
+help: ''
+new_revision: true
+preview_mode: 1
+display_submitted: false
