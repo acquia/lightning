@@ -9,6 +9,7 @@
   <property name="rsync" value="/usr/bin/rsync" />
   <property name="bzip2" value="/usr/bin/bzip2" />
   <property name="bunzip2" value="/usr/bin/bunzip2" />
+  <property name="yaml-cli" value="${project.basedir}/bin/yaml-cli" />
 
   <!-- Database credentials. -->
   <property name="db.type" value="mysql" />
@@ -121,6 +122,10 @@
         <include name="*.yml" />
       </fileset>
     </foreach>
+    <!-- Change config values that might, or will, change on every install. -->
+    <exec command="${yaml-cli} unset:key ${config_fixture}/embed.button.media_browser.yml dependencies.content" />
+    <exec command="${yaml-cli} update:value ${config_fixture}/embed.button.media_browser.yml icon_uuid ''" />
+    <exec command="${yaml-cli} update:value ${config_fixture}/system.date.yml timezone.default UTC" />
 
     <if>
       <isset property="www.group" />
@@ -134,8 +139,8 @@
   internally by the install target. -->
   <target name="clean-config">
     <echo message="${file}" />
-    <exec command="${project.basedir}/bin/yaml-cli unset:key ${file_path} _core" />
-    <exec command="${project.basedir}/bin/yaml-cli unset:key ${file_path} uuid" />
+    <exec command="${yaml-cli} unset:key ${file_path} _core" />
+    <exec command="${yaml-cli} unset:key ${file_path} uuid" />
   </target>
 
   <!-- Builds a Lightning code base from legacy Drush make files. -->
