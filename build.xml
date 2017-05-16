@@ -113,12 +113,29 @@
       </then>
     </if>
 
+    <!-- Export configuration for archaeological purposes. -->
+    <property name="config_fixture" value="${project.basedir}/tests/config" />
+    <exec command="${drush} config-export --destination=${config_fixture} --yes" dir="${docroot}" />
+    <foreach param="file" absparam="file_path" target="clean-config">
+      <fileset dir="${config_fixture}">
+        <include name="*.yml" />
+      </fileset>
+    </foreach>
+
     <if>
       <isset property="www.group" />
       <then>
         <chown file="${site}/files" user="${env.USER}" group="${www.group}" />
       </then>
     </if>
+  </target>
+
+  <!-- Deletes _core and uuid keys from an exported config file. Only used
+  internally by the install target. -->
+  <target name="clean-config">
+    <echo message="${file}" />
+    <exec command="${project.basedir}/bin/yaml-cli unset:key ${file_path} _core" />
+    <exec command="${project.basedir}/bin/yaml-cli unset:key ${file_path} uuid" />
   </target>
 
   <!-- Builds a Lightning code base from legacy Drush make files. -->
