@@ -5,7 +5,7 @@ dependencies:
     - field.field.media.tweet.embed_code
     - field.field.media.tweet.field_media_in_library
     - media_entity.bundle.tweet
-third_party_settings: { }
+third_party_settings: {  }
 id: media.tweet.default
 targetEntityType: media
 bundle: tweet
@@ -18,12 +18,14 @@ content:
       rows: 5
       placeholder: ''
     third_party_settings: {  }
+    region: content
   field_media_in_library:
     type: boolean_checkbox
     weight: 1
     settings:
       display_label: true
     third_party_settings: {  }
+    region: content
   name:
     type: string_textfield
     weight: 0
@@ -31,7 +33,7 @@ content:
       size: 60
       placeholder: ''
     third_party_settings: {  }
+    region: content
 hidden:
   created: true
   uid: true
-
