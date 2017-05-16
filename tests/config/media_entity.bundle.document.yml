@@ -1,0 +1,16 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - media_entity_document
+id: document
+label: Document
+description: 'A locally hosted document, such a PDF.'
+type: document
+queue_thumbnail_downloads: false
+new_revision: false
+type_configuration:
+  source_field: field_document
+field_map:
+  mime: field_mime_type
+  size: field_document_size

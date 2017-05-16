@@ -23,7 +23,8 @@
         "se/selenium-server-standalone": "^2.53",
         "drupal/console": "^1.0",
         "jakoch/phantomjs-installer": "1.9.8",
-        "composer/composer": "^1.4"
+        "composer/composer": "^1.4",
+        "grasmash/yaml-cli": "^1.0"
     },
     "bin": [
       "lightning-subprofile"
@@ -46,11 +47,9 @@
         ],
         "post-update-cmd": [
             "./bin/phing push",
-            "./bin/phing symlink",
-            "@composer package"
+            "./bin/phing symlink"
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
-        "package": "Acquia\\Lightning\\Composer\\Package::execute",
         "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
         "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute"
     },
