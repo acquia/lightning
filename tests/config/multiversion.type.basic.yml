@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  module:
+    - workbench_moderation
+third_party_settings:
+  workbench_moderation:
+    enabled: true
+    allowed_moderation_states: [draft, needs_review, published]
+    default_moderation_state: draft
+    locked_states: [archived, needs_review, published]
+id: basic
+label: 'Basic workspace'
