@@ -35,4 +35,4 @@ events:
             - ../bin/drush runserver --default-server=builtin 8080 &>/dev/null &
             - ../bin/phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
-            - ../bin/behat --stop-on-failure --config ./sites/default/files/behat.yml --tags="~@expect-failure,+~@javascript"
+            - ../bin/behat --stop-on-failure --config ./sites/default/files/behat.yml --tags="~@expect-failure+~@javascript"
