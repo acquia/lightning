@@ -6,25 +6,42 @@
  */
 
 use Drupal\Component\Utility\Unicode;
-use Drupal\Core\Asset\AttachedAssetsInterface;
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\entity_browser\Element\EntityBrowserElement;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
+use Drupal\lightning_core\BundleEntityStorage;
+use Drupal\lightning_media\Exception\IndeterminateBundleException;
+use Drupal\lightning_media\Plugin\Field\FieldWidget\EntityReferenceBrowserWidget;
+use Drupal\lightning_media\MediaHelper;
 use Drupal\lightning_core\OverrideHelper as Override;
+use Drupal\lightning_media\Form\MediaForm;
 use Drupal\media_entity\Entity\MediaBundle;
 use Drupal\media_entity\MediaInterface;
-use Drupal\lightning_media\Form\MediaForm;
 use Drupal\media_entity\MediaBundleInterface;
+
+/**
+ * Implements hook_field_widget_info_alter().
+ */
+function lightning_media_field_widget_info_alter(array &$info) {
+  if (isset($info['entity_browser_entity_reference'])) {
+    Override::pluginClass($info['entity_browser_entity_reference'], EntityReferenceBrowserWidget::class);
+  }
+}
 
 /**
  * Implements hook_modules_installed().
  */
 function lightning_media_modules_installed(array $modules) {
-  if (in_array('lightning_roles', $modules)) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  elseif (in_array('lightning_roles', $modules)) {
     \Drupal::service('lightning.content_roles')
       ->grantPermissions('creator', [
         'use text format rich_text',
@@ -69,28 +86,58 @@ function lightning_media_entity_extra_field_info() {
 function lightning_media_inline_entity_form_entity_form_alter(array &$entity_form) {
   $entity = $entity_form['#entity'];
 
-  if ($entity instanceof MediaInterface && MediaForm::isPreviewable($entity)) {
-    $entity_form['preview'] = MediaForm::getSourceField($entity)->view('default');
+  if ($entity instanceof MediaInterface && MediaHelper::isPreviewable($entity)) {
+    $entity_form['preview'] = MediaHelper::getSourceField($entity)->view('default');
   }
 }
 
 /**
- * Validates a file through an entity browser widget.
+ * Validates a file using media entity source field criteria.
  *
  * @param \Drupal\file\FileInterface $file
  *   The file to validate.
- * @param string $plugin_id
- *   The widget plugin ID.
- * @param array $configuration
- *   Configuration for the widget plugin.
  *
  * @return string[]
  *   An array of errors. If empty, the file passed validation.
  */
-function lightning_media_validate_upload(FileInterface $file, $plugin_id, array $configuration = []) {
-  return \Drupal::service('plugin.manager.entity_browser.widget')
-    ->createInstance($plugin_id, $configuration)
-    ->validateFile($file);
+function lightning_media_validate_upload(FileInterface $file) {
+  try {
+    $entity = \Drupal::service('lightning.media_helper')->createFromInput($file);
+  }
+  catch (IndeterminateBundleException $e) {
+    return [];
+  }
+
+  /** @var \Drupal\file\Plugin\Field\FieldType\FileItem $item */
+  $item = MediaHelper::getSourceField($entity)->first();
+
+  $validators = [
+    // It's maybe a bit overzealous to run this validator, but hey...better
+    // safe than screwed over by script kiddies.
+    'file_validate_name_length' => [],
+  ];
+  $validators = array_merge($validators, $item->getUploadValidators());
+  // This function is only called by the custom FileUpload widget, which runs
+  // file_validate_extensions before this function. So there's no need to
+  // validate the extensions again.
+  unset($validators['file_validate_extensions']);
+
+  // If this is an image field, add image validation. Against all sanity,
+  // this is normally done by ImageWidget, not ImageItem, which is why we
+  // need to facilitate this a bit.
+  if ($item instanceof ImageItem) {
+    // Validate that this is, indeed, a supported image.
+    $validators['file_validate_is_image'] = [];
+
+    $settings = $item->getFieldDefinition()->getSettings();
+    if ($settings['max_resolution'] || $settings['min_resolution']) {
+      $validators['file_validate_image_resolution'] = [
+        $settings['max_resolution'],
+        $settings['min_resolution'],
+      ];
+    }
+  }
+  return file_validate($file, $validators);
 }
 
 /**
@@ -186,27 +233,24 @@ function lightning_media_entity_type_alter(array &$entity_types) {
   // Media items are a common reference target, and that's that...
   $entity_types['media']->set('common_reference_target', TRUE);
 
-  // Files should never be workspace-aware. Besides, they ALWAYS conflict
-  // during replication, for reasons as yet unknown. But because Multiversion
-  // is basically a one-way ticket, only opt file entities out of Multiversion
-  // if they haven't been migrated into Multiversion's storage yet. There
-  // really should be a method on MultiversionManagerInterface to determine if
-  // an entity type has been migrated, so that we don't have to directly query
-  // state keys...but hey, you gotta work with what you have.
-  if (!\Drupal::state()->get('multiversion.migration_done.file')) {
-    $entity_types['file']->set('multiversion', FALSE);
-  }
-
   // Use our specialized entity form for adding and editing media assets in
   // order to support dynamic preview generation.
   Override::entityForm($entity_types['media'], MediaForm::class);
   Override::entityForm($entity_types['media'], MediaForm::class, 'edit');
+
+  // Use our extended storage handler for media bundles.
+  Override::entityHandler($entity_types['media_bundle'], 'storage', BundleEntityStorage::class);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   \Drupal::entityTypeManager()
     ->getStorage('field_config')
     ->create([
@@ -252,7 +296,7 @@ function lightning_media_form_entity_embed_dialog_alter(array &$form, FormStateI
 /**
  * Implements hook_js_settings_alter().
  */
-function lightning_media_js_settings_alter(array &$settings, AttachedAssetsInterface $assets) {
+function lightning_media_js_settings_alter(array &$settings) {
   if (empty($settings['ajax'])) {
     $settings['ajax'] = [];
   }
@@ -327,6 +371,11 @@ function lightning_media_preprocess_views_view_grid__media(array &$variables) {
  * Implements hook_ENTITY_TYPE_presave().
  */
 function lightning_media_entity_form_display_presave(EntityFormDisplayInterface $display) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   $filter = function (FieldStorageDefinitionInterface $field) {
     return $field->getType() == 'entity_reference' && $field->getSetting('target_type') == 'media';
   };

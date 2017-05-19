@@ -9,38 +9,20 @@ use Drupal\Core\Block\BlockPluginInterface;
 use Drupal\Core\Entity\EntityDescriptionInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Routing\RouteMatchInterface;
-use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\lightning_core\Element as ElementHelper;
 use Drupal\lightning_core\Entity\EntityFormMode;
 use Drupal\lightning_core\Entity\EntityViewMode;
 use Drupal\lightning_core\Entity\Role;
-use Drupal\lightning_core\Form\EntityDisplayModeAddForm;
-use Drupal\lightning_core\Form\EntityDisplayModeEditForm;
-use Drupal\lightning_core\Form\EntityFormModeAddForm;
 use Drupal\lightning_core\Form\RoleForm;
 use Drupal\lightning_core\OverrideHelper as Override;
+use Drupal\lightning_core\Plugin\views\filter\Bundle;
 use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
 
 /**
- * Conditionally overrides the class specified by a plugin definition.
- *
- * The class is overridden only if the replacement class' immediate parent is
- * the one in the plugin definition.
- *
- * @param array $definition
- *   The plugin definition.
- * @param string $replacement_class
- *   The replacement class.
- *
- * @return string
- *   The chosen plugin class.
- *
- * @deprecated in Lightning 2.0.5 and will be removed in Lightning 2.1.0. Use
- * OverrideHelper::pluginClass() instead.
+ * Implements hook_views_plugins_filter_alter().
  */
-function lightning_core_override_plugin_class(array &$definition, $replacement_class) {
-  Override::pluginClass($definition, $replacement_class);
-  return $definition['class'];
+function lightning_core_views_plugins_filter_alter(array &$plugins) {
+  Override::pluginClass($plugins['bundle'], Bundle::class);
 }
 
 /**
@@ -53,11 +35,13 @@ function lightning_core_entity_type_alter(array &$entity_types) {
 
   Override::entityForm($entity_types['user_role'], RoleForm::class);
 
-  Override::entityForm($entity_types['entity_view_mode'], EntityDisplayModeAddForm::class, 'add');
-  Override::entityForm($entity_types['entity_view_mode'], EntityDisplayModeEditForm::class, 'edit');
+  if (\Drupal::moduleHandler()->moduleExists('field_ui')) {
+    Override::entityForm($entity_types['entity_view_mode'], '\Drupal\lightning_core\Form\EntityDisplayModeAddForm', 'add');
+    Override::entityForm($entity_types['entity_view_mode'], '\Drupal\lightning_core\Form\EntityDisplayModeEditForm', 'edit');
 
-  Override::entityForm($entity_types['entity_form_mode'], EntityFormModeAddForm::class, 'add');
-  Override::entityForm($entity_types['entity_form_mode'], EntityDisplayModeEditForm::class, 'edit');
+    Override::entityForm($entity_types['entity_form_mode'], '\Drupal\lightning_core\Form\EntityFormModeAddForm', 'add');
+    Override::entityForm($entity_types['entity_form_mode'], '\Drupal\lightning_core\Form\EntityDisplayModeEditForm', 'edit');
+  }
 }
 
 /**
@@ -107,7 +91,11 @@ function lightning_core_help($route_name, RouteMatchInterface $route_match) {
  * Implements hook_modules_installed().
  */
 function lightning_core_modules_installed(array $modules) {
-  if (in_array('token', $modules)) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  elseif (in_array('token', $modules)) {
     $view_modes = [];
     foreach (\Drupal::entityTypeManager()->getDefinitions() as $entity_type) {
       $view_modes[] = $entity_type->id() . '.token';
@@ -160,37 +148,6 @@ function lightning_core_entity_load(array $entities) {
 }
 
 /**
- * Puts an associative array into an arbitrary order.
- *
- * @param array $values
- *   The array to reorder.
- * @param array $keys
- *   The keys, in their desired order.
- *
- * @deprecated in Lightning 2.0.3 and will be removed in Lightning 2.1.0. Use
- * \Drupal\lightning_core\Element::order() instead.
- */
-function array_reorder(array &$values, array $keys) {
-  ElementHelper::order($values, $keys);
-}
-
-/**
- * Pre-render function to disable all buttons in a renderable element.
- *
- * @param array $element
- *   The renderable element.
- *
- * @return array
- *   The renderable element with all buttons (at all levels) disabled.
- *
- * @deprecated in Lightning 2.0.3 and will be removed in Lightning 2.1.0. Use
- * \Drupal\lightning_core\Element::disableButtons() instead.
- */
-function lightning_core_disable_buttons(array $element) {
-  return ElementHelper::disableButtons($element);
-}
-
-/**
  * Implements hook_block_view_alter().
  */
 function lightning_core_block_view_alter(array &$build, BlockPluginInterface $block) {
@@ -234,39 +191,4 @@ function lightning_core_rebuild_container() {
  */
 function lightning_core_preprocess_block(array &$variables) {
   $variables['attributes']['data-block-plugin-id'] = $variables['elements']['#plugin_id'];
-}
-
-/**
- * Creates a config entity from default configuration.
- *
- * @param string $entity_type
- *   The config entity type ID.
- * @param string $id
- *   The unprefixed entity ID.
- * @param string $module
- *   (optional) The module which has the default configuration.
- *
- * @deprecated in Lightning 2.0.3 and will be removed in Lightning 2.1.0. Use
- * the ConfigHelper facade instead.
- */
-function lightning_core_create_config($entity_type, $id, $module = 'lightning_core') {
-  Config::forModule($module)->getEntity($entity_type, $id)->save();
-}
-
-/**
- * Reads a stored config file from a module's config/install directory.
- *
- * @param string $id
- *   The config ID.
- * @param string $module
- *   (optional) The module to search. Defaults to 'lightning_core'.
- *
- * @return array
- *   The config data.
- *
- * @deprecated in Lightning 2.0.3 and will be removed in Lightning 2.1.0. Use
- * the ConfigHelper facade instead.
- */
-function lightning_core_read_config($id, $module = 'lightning_core') {
-  return Config::forModule($module)->read($id);
 }

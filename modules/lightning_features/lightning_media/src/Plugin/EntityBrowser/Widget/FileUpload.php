@@ -5,10 +5,8 @@ namespace Drupal\lightning_media\Plugin\EntityBrowser\Widget;
 use Drupal\Core\Ajax\PrependCommand;
 use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\file\FileInterface;
-use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\lightning_media\Element\AjaxUpload;
-use Drupal\lightning_media\SourceFieldTrait;
+use Drupal\lightning_media\MediaHelper;
 use Drupal\media_entity\MediaInterface;
 
 /**
@@ -21,8 +19,6 @@ use Drupal\media_entity\MediaInterface;
  * )
  */
 class FileUpload extends EntityFormProxy {
-
-  use SourceFieldTrait;
 
   /**
    * {@inheritdoc}
@@ -38,8 +34,7 @@ class FileUpload extends EntityFormProxy {
     $entities = parent::prepareEntities($form, $form_state);
 
     $get_file = function (MediaInterface $entity) {
-      $type_config = $entity->getType()->getConfiguration();
-      return $entity->get($type_config['source_field'])->entity;
+      return MediaHelper::getSourceField($entity)->entity;
     };
 
     if ($this->configuration['return_file']) {
@@ -62,96 +57,35 @@ class FileUpload extends EntityFormProxy {
       '#process' => [
         [$this, 'processUploadElement'],
       ],
-      '#upload_validators' => [
-        // For security, only allow extensions that are accepted by existing
-        // media bundles.
-        'file_validate_extensions' => [
-          $this->getAcceptableExtensions(),
-        ],
-        // This must be a function because file_validate() is brain dead and
-        // still thinks function_exists() is a good way to verify callability.
-        'lightning_media_validate_upload' => [
-          $this->getPluginId(),
-          $this->getConfiguration(),
-        ],
-      ],
     ];
+
+    $validators = $form_state->get(['entity_browser', 'widget_context', 'upload_validators']) ?: [];
+
+    // If the widget context didn't specify any file extension validation, add
+    // it as the first validator, allowing it to accept only file extensions
+    // associated with existing media bundles.
+    if (empty($validators['file_validate_extensions'])) {
+      $validators = array_merge([
+        'file_validate_extensions' => [
+          implode(' ', $this->helper->getFileExtensions(TRUE)),
+        ],
+        // This must be a function because file_validate() still thinks that
+        // function_exists() is a good way to ensure callability.
+        'lightning_media_validate_upload' => [],
+      ], $validators);
+    }
+    $form['input']['#upload_validators'] = $validators;
 
     return $form;
-  }
-
-  /**
-   * Validates an uploaded file.
-   *
-   * @param \Drupal\file\FileInterface $file
-   *   The uploaded file.
-   *
-   * @return string[]
-   *   An array of errors. If empty, the file passed validation.
-   */
-  public function validateFile(FileInterface $file) {
-    $entity = $this->generateEntity($file);
-
-    if (empty($entity)) {
-      return [];
-    }
-
-    $type_config = $entity->getType()->getConfiguration();
-    /** @var \Drupal\file\Plugin\Field\FieldType\FileItem $item */
-    $item = $entity->get($type_config['source_field'])->first();
-
-    $validators = [
-      // It's maybe a bit overzealous to run this validator, but hey...better
-      // safe than screwed over by script kiddies.
-      'file_validate_name_length' => [],
-    ];
-    $validators = array_merge($validators, $item->getUploadValidators());
-    // If we got here, the extension is already validated (see ::getForm()).
-    unset($validators['file_validate_extensions']);
-
-    // If this is an image field, add image validation. Against all sanity,
-    // this is normally done by ImageWidget, not ImageItem, which is why we
-    // need to facilitate this a bit.
-    if ($item instanceof ImageItem) {
-      // Validate that this is, indeed, a supported image.
-      $validators['file_validate_is_image'] = [];
-
-      $settings = $item->getFieldDefinition()->getSettings();
-      if ($settings['max_resolution'] || $settings['min_resolution']) {
-        $validators['file_validate_image_resolution'] = [
-          $settings['max_resolution'],
-          $settings['min_resolution'],
-        ];
-      }
-    }
-    return file_validate($file, $validators);
-  }
-
-  /**
-   * Returns an aggregated list of acceptable file extensions.
-   *
-   * @return string
-   *   A space-separated list of file extensions accepted by the existing media
-   *   bundles.
-   */
-  protected function getAcceptableExtensions() {
-    $extensions = [];
-
-    foreach ($this->bundleResolver->getPossibleBundles() as $bundle) {
-      $source_field = $this->getSourceFieldForBundle($bundle);
-      if ($source_field) {
-        $extensions = array_merge($extensions, preg_split('/,?\s+/', $source_field->getSetting('file_extensions')));
-      }
-    }
-    return implode(' ', array_unique($extensions));
   }
 
   /**
    * {@inheritdoc}
    */
   public function validate(array &$form, FormStateInterface $form_state) {
-    $input = $this->getInputValue($form_state);
-    if ($input) {
+    $value = $this->getInputValue($form_state);
+
+    if ($value) {
       parent::validate($form, $form_state);
     }
     else {
@@ -166,23 +100,13 @@ class FileUpload extends EntityFormProxy {
     /** @var \Drupal\media_entity\MediaInterface $entity */
     $entity = $element['entity']['#entity'];
 
-    $type_config = $entity->getType()->getConfiguration();
-    /** @var \Drupal\file\Plugin\Field\FieldType\FileItem $item */
-    $item = $entity->get($type_config['source_field'])->first();
-    /** @var FileInterface $file */
-    $file = $item->entity;
-
-    // Prepare the file's permanent home.
-    $dir = $item->getUploadLocation();
-    file_prepare_directory($dir, FILE_CREATE_DIRECTORY | FILE_MODIFY_PERMISSIONS);
-
-    $destination = $dir . '/' . $file->getFilename();
-    if (!file_exists($destination)) {
-      $file = file_move($file, $destination);
-      $entity->set($type_config['source_field'], $file)->save();
-    }
+    $file = MediaHelper::useFile(
+      $entity,
+      MediaHelper::getSourceField($entity)->entity
+    );
     $file->setPermanent();
     $file->save();
+    $entity->save();
 
     $selection = [
       $this->configuration['return_file'] ? $file : $entity,

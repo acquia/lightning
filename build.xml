@@ -6,10 +6,10 @@
   <!-- Locations of required binaries. -->
   <property name="drush" value="${project.basedir}/bin/drush" />
   <property name="composer" value="/usr/local/bin/composer" />
-  <property name="npm" value="/usr/local/bin/npm" />
   <property name="rsync" value="/usr/bin/rsync" />
   <property name="bzip2" value="/usr/bin/bzip2" />
   <property name="bunzip2" value="/usr/bin/bunzip2" />
+  <property name="yaml-cli" value="${project.basedir}/bin/yaml-cli" />
 
   <!-- Database credentials. -->
   <property name="db.type" value="mysql" />
@@ -39,14 +39,12 @@
       </then>
     </if>
     <exec command="which composer" outputProperty="composer" />
-    <exec command="which npm" outputProperty="npm" />
     <exec command="which rsync" outputProperty="rsync" />
     <exec command="which bzip2" outputProperty="bzip2" />
     <exec command="which bunzip2" outputProperty="bunzip2" />
 
     <echo message="Found Drush: ${drush}" />
     <echo message="Found Composer: ${composer}" />
-    <echo message="Found NPM: ${npm}" />
     <echo message="Found rsync: ${rsync}" />
     <echo message="Found bzip2: ${bzip2}" />
     <echo message="Found bunzip2: ${bunzip2}" />
@@ -57,23 +55,12 @@
     <!-- Create the destination if it doesn't exist. -->
     <mkdir dir="${profile}" />
 
-    <!--
-    bower.json may have changed, so reinstall front-end dependencies using
-    the version of Bower installed locally in node_modules. The
-    install-libraries script lives in package.json.
-    -->
-    <exec command="${npm} run install-libraries" passthru="true" />
-
     <!-- rsync the profile, excluding developer flotsam. -->
     <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},karma.conf.js,*.make,node_modules,.travis.yml,vendor" />
-
-    <!-- JS libraries and contrib modules were copied over by the file sync. -->
-    <delete dir="libraries" failonerror="true" quiet="true" />
-    <delete dir="modules/contrib" failonerror="true" quiet="true" />
   </target>
 
   <target name="pull" depends="env">
-    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="libraries,modules/contrib,behat.local.yml" />
+    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="modules/contrib" />
   </target>
 
   <!-- Prepares the docroot for installation via the UI. -->
@@ -127,6 +114,23 @@
       </then>
     </if>
 
+    <!-- Prepare Behat. -->
+    <exec command="${project.basedir}/bin/drupal behat:init ${url} --merge=${project.basedir}/tests/behat.yml" dir="${docroot}" />
+    <exec command="${project.basedir}/bin/drupal behat:include ${project.basedir}/tests/features --with-subcontexts=${project.basedir}/tests/features/bootstrap --with-subcontexts=${project.basedir}/src/LightningExtension/Context" dir="${docroot}" />
+
+    <!-- Export configuration for archaeological purposes. -->
+    <property name="config_fixture" value="${project.basedir}/tests/config" />
+    <exec command="${drush} config-export --destination=${config_fixture} --yes" dir="${docroot}" />
+    <foreach param="file" absparam="file_path" target="clean-config">
+      <fileset dir="${config_fixture}">
+        <include name="*.yml" />
+      </fileset>
+    </foreach>
+    <!-- Change config values that might, or will, change on every install. -->
+    <exec command="${yaml-cli} unset:key ${config_fixture}/embed.button.media_browser.yml dependencies.content" />
+    <exec command="${yaml-cli} update:value ${config_fixture}/embed.button.media_browser.yml icon_uuid ''" />
+    <exec command="${yaml-cli} update:value ${config_fixture}/system.date.yml timezone.default UTC" />
+
     <if>
       <isset property="www.group" />
       <then>
@@ -135,12 +139,20 @@
     </if>
   </target>
 
+  <!-- Deletes _core and uuid keys from an exported config file. Only used
+  internally by the install target. -->
+  <target name="clean-config">
+    <echo message="${file}" />
+    <exec command="${yaml-cli} unset:key ${file_path} _core" />
+    <exec command="${yaml-cli} unset:key ${file_path} uuid" />
+  </target>
+
   <!-- Builds a Lightning code base from legacy Drush make files. -->
   <target name="build-legacy" depends="env">
     <if>
       <available file="${docroot}" property="docroot.exists" />
       <then>
-        <phingcall target="package" />
+        <exec command="${composer} package" />
         <delete dir="${docroot}" />
       </then>
     </if>
@@ -224,6 +236,11 @@
     <chmod file="${docroot}/sites/default/settings.php" mode="0644" verbose="true" />
     <append destFile="${docroot}/sites/default/settings.php" text="${line.separator}if (file_exists('/var/www/site-php')) {${line.separator}  require '/var/www/site-php/${cloud.subscription}/${cloud.subscription}-settings.inc';${line.separator}}${line.separator}">
     </append>
+  </target>
+
+  <!-- Symlinks .git/hooks/pre-commit to our repo's pre-commit script -->
+  <target name="symlink">
+    <symlink link=".git/hooks/pre-commit" target="git-hooks/pre-commit" overwrite="true" />
   </target>
 
 </project>

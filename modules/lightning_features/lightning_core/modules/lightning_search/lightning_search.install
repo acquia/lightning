@@ -21,10 +21,14 @@ function lightning_search_install() {
     \Drupal::service('module_installer')->install(['search_api_db']);
   }
 
-  /** @var \Drupal\node\NodeTypeInterface $node_type */
-  foreach (NodeType::loadMultiple() as $node_type) {
-    lightning_search_node_type_insert($node_type);
+  // Don't make any configuration changes during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
   }
+
+  /** @var \Drupal\node\NodeTypeInterface $node_type */
+  $node_types = NodeType::loadMultiple();
+  array_walk($node_types, 'lightning_search_node_type_insert');
 
   // The database server is optional configuration, to be installed only if
   // Search API DB is present. For some reason, it's not installed during a
@@ -41,4 +45,24 @@ function lightning_search_install() {
   if ($server) {
     Index::load('content')->setServer($server)->enable()->save();
   }
+}
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function lightning_search_update_dependencies() {
+  return [
+    'block_content' => [
+      8300 => [
+        // block_content 8300 updates entity type definitions, which implicitly
+        // touches a lot of Search API configuration because entity type
+        // definition updates trigger Views cache rebuilds, which in turn
+        // triggers a lot of work, especially plugin instantiation, in Search
+        // API. So, if the configuration isn't fully up-to-date, things are
+        // likely to go kaboom. This ensures that Search API configuration is
+        // up-to-date before block_content 8300 updates entity type definitions.
+        'search_api' => 8104,
+      ],
+    ],
+  ];
 }

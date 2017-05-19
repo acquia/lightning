@@ -20,7 +20,8 @@ $ composer create-project acquia/lightning-project MY_PROJECT
 
 If you don't want to use Composer, you can install Lightning the traditional way
 by downloading a tarball from our
-[drupal.org project page](https://www.drupal.org/project/lightning).
+[drupal.org project page](https://www.drupal.org/project/lightning). (Please
+note that the tarball does not contain any experimental features.)
 
 You can customize your installation by creating a [sub-profile which uses
 Lightning as its base profile][sub-profile documentation]. Lightning includes a
@@ -49,6 +50,18 @@ The current version of media includes the following functionality:
 * Ability to embed tweets, Instagrams, and YouTube/Vimeo videos directly into
   CKEditor by pasting the video URL
 
+#### Extending Lightning Media (Contributed Modules)
+Drupal community members have contributed several modules which integrate Lightning Media with additional third-party media services. These modules are not packaged with Lightning or maintained by Acquia, but they are stable and you can use them in your Lightning site:
+
+  * [Facebook](https://www.drupal.org/project/lightning_media_facebook)
+  * [Imgur](https://www.drupal.org/project/lightning_media_imgur)
+  * [Flickr](https://www.drupal.org/project/lightning_media_flickr)
+  * [500px](https://www.drupal.org/project/lightning_media_d500px)
+  * [SoundCloud](https://www.drupal.org/project/lightning_media_soundcloud)
+  * [Tumblr](https://www.drupal.org/project/lightning_media_tumblr)
+  * [Spotify](https://www.drupal.org/project/lightning_media_spotify)
+  * [Pinterest](https://www.drupal.org/project/lightning_media_pinterest)  
+
 ### Layout
 Lightning includes the Panelizer module, which allows you to configure the
 layout of any content type using a drag-and-drop interface (Panels IPE).
@@ -74,14 +87,29 @@ transitioned between states at a specific future date and time.
 
 ### Preview (Experimental)
 The Workspace Preview System (WPS) gives site builders, editors, authors, and
-reviews the ability to send collections of content through an editorial workflow
-and preview that content within the context of the current live site. WPS is a
-collection of contributed Drupal modules with additional configuration UX
-improvements that all just works out of the box.
+reviews the ability to send collections of content through an editorial
+workflow and preview that content within the context of the current live site.
+WPS is a collection of contributed Drupal modules with additional configuration
+UX improvements that all just works out of the box.
+
+Note that **the Workspace Preview System is experimental** and is not currently
+included in stable releases of Lightning. If you would like to use it, see
+"Experimental Features" below.
 
 ## Project Roadmap
 We publish sprint plans for each patch release. You can find a link to the
 current one in [this meta-issue][meta_releases] on Drupal.org.
+
+## Experimental Features
+Some components of Lightning (such as the Workspace Preview System) are
+currently experimental until they stabilize. Experimental features should be
+considered bleeding-edge and are **not safe for production environments.**
+
+Experimental features are kept in Lightning's ```8.x-2.x-experimental```
+development branch. To use experimental features, you will need to create your
+Lightning code base from this branch. This can be done only with the Composer-
+based [project template][template] -- check there for more information on how
+to use experimental features.
 
 ## Resources
 You can find general best practices documentation inside the `help` directory of
@@ -94,14 +122,18 @@ Please use the [Drupal.org issue queue][issue_queue] for latest information and
 to request features or bug fixes.
 
 ## Running Tests
-These instructions assume you have used Composer to install Lightning.
+These instructions assume you have used Composer to install Lightning. Once you
+have it up and running, follow these steps to execute all of Lightning's Behat
+tests:
 
 ### Behat
-    $ cd MYPROJECT/docroot/profiles/lightning
-    $ /path/to/MYPROJECT/bin/behat
+    $ cd MYPROJECT
+    $ ./bin/drupal behat:init http://YOUR.LIGHTNING.SITE --merge=../tests/behat.yml
+    $ ./bin/drupal behat:include ../tests/features --with-subcontexts=../tests/features/bootstrap --with-subcontexts=../src/LightningExtension/Context
+    $ ./bin/behat --config ./docroot/sites/default/files/behat.yml
 
-If necessary, edit behat.local.yml to match your environment. Generally you
-will not need to do this.
+If necessary, you can edit ```docroot/sites/default/files/behat.yml``` to match
+your environment, but generally you will not need to do this.
 
 ## Known Issues
 
@@ -111,29 +143,6 @@ will not need to do this.
   can set the image's alt text at upload time, but that text will not be
   replicated to the image field. This is due to a limitation of Entity Browser's
   API.
-
-### Preview
-
-* This functionality relies on Multiversion, which:
-  * Does not yet have a stable release
-  * Modifies internal data structures
-  * Leaves permanent changes in the database after being uninstalled
-  * Introduces the concept of a trash bin. Deleted content is hidden, but not
-    immediately removed from the database anymore. It needs to be deleted and
-    then "purged" to be completely wiped from the database. However, the user
-    interface to purge deleted content is provided by the Trash module, which
-    is not yet ready. This makes it impossible to truly delete content from the
-    UI. (Lightning provides a shim for this, but it only works for nodes and
-    taxonomy terms at this time.)
-* There are a few scenarios where URL aliases might produce unexpected results,
-  including:
-  * Aliases for any non-node entities
-* Blocks on the block listing page(s) are not properly filtered by workspace
-  under certain circumstances.
-* There is no way yet to properly resolve conflicts between workspaces. Users
-  can delete conflicting entities from one of the two workspaces to remove
-  conflicts, but there is no interface yet for picking the winner and keeping
-  both versions.
 
 [issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
 [meta_release]: https://www.drupal.org/node/2670686 "Lightning Meta Releases Issue"

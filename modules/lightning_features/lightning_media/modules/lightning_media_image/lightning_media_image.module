@@ -12,6 +12,27 @@ use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_image\Plugin\MediaEntity\Type\Image;
 
 /**
+ * Implements hook_modules_installed().
+ */
+function lightning_media_image_modules_installed(array $modules) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  elseif (in_array('lightning_roles', $modules)) {
+    $permissions = ['access image_browser entity browser pages'];
+
+    // Media creators and managers can always access the image browser.
+    user_role_grant_permissions('media_creator', $permissions);
+    user_role_grant_permissions('media_manager', $permissions);
+
+    // Any content creator can as well.
+    \Drupal::service('lightning.content_roles')
+      ->grantPermissions('creator', $permissions);
+  }
+}
+
+/**
  * Implements hook_media_entity_type_info_alter().
  */
 function lightning_media_image_media_entity_type_info_alter(array &$types) {
@@ -30,6 +51,11 @@ function lightning_media_image_form_entity_browser_image_browser_form_alter(arra
  * Implements hook_ENTITY_TYPE_presave().
  */
 function lightning_media_image_entity_form_display_presave(EntityFormDisplayInterface $display) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   // Since the image browser integrates with the media library, it doesn't make
   // sense to use the image browser when creating or editing an image media
   // entity.

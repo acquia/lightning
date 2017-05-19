@@ -13,10 +13,6 @@ php:
   - 7.0
 env:
   - VERSION=HEAD
-  - VERSION=2.0.6
-  - VERSION=2.0.5
-  - VERSION=2.0.4
-  - VERSION=2.0.3
 
 addons:
   apt:
@@ -75,7 +71,7 @@ install:
   # Build the Lightning code base.
   - composer install
   # Install Lightning cleanly so that settings.php will be created properly.
-  - phing install -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1
+  - phing install -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1 -Durl=http://127.0.0.1:8080
   # Import the fixture, if it exists.
   - phing recall -Dversion=$VERSION -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1
   - cd docroot

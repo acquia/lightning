@@ -20,9 +20,10 @@ events:
           script:
             - set -x
             - mysql -u root -proot -e 'CREATE DATABASE drupal;'
-            - ./bin/phing install -Ddb.password=root -Ddb.database=drupal
+            - ./bin/phing install -Ddb.password=root -Ddb.database=drupal -Durl=http://127.0.0.1:8080
             # Add the Acquia cloud database snippet to the settings file.
             - ./bin/phing cloud-db-snippet
+            - mkdir -p ./config/default
       - test:
           type: script
           script:
@@ -31,4 +32,4 @@ events:
             - ../bin/drush runserver --default-server=builtin 8080 &>/dev/null &
             - ../bin/phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
-            - ../bin/behat --stop-on-failure --config ./sites/default/files/behat.yml --tags="~@expect-failure"
+            - ../bin/behat --stop-on-failure --config ./sites/default/files/behat.yml --tags="~@expect-failure" --tags="~@javascript"

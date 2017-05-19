@@ -1,3 +1,57 @@
+## 2.1.3
+* Created new DrupalConsole commands that generate and customize behat.yml
+  configuration files for functional testing. (Issue #2812775 and GH #350) 
+* Fixed a bug where the media library filter was hidden when the contextual
+  filter value was "all". (GH #352 and #354)
+* Updated Panels, Panelizer, Page Manage, and CTools to stable releases.
+  (Issue #2874521)
+* Fixed a bug where Lightning could, under certain circumstances, break Drupal's
+  configuration sync functionality. Now, when a config sync is in progress,
+  Lightning will avoid making any changes to active configuration.
+  (Issue #2870864)
+
+## 2.1.2
+* Updated Entity Browser to 1.0.0 and pinned it to that release to ensure patch
+  applies.
+
+## 2.1.1
+* Panels, Panelizer and Page Manager have been upgraded to their new (stable!)
+  8.x-4.x releases. These releases use the experimental Layout Discovery module
+  in Drupal core, and will turn off Layout Plugin upon installation. Layout
+  Discovery is incompatible with Layout Plugin, so do NOT install Layout Plugin
+  once the upgrade is complete. (Issue #2870521)
+* The media browser will now be filtered conditionally when used with media
+  reference fields, depending on which media types the field can reference.
+  (Issue #2869240)
+* Implemented an API for bulk entity creation. A UI for bulk upload media items
+  was implemented, then pulled due to packaging issues. A patch containing that
+  UI is available at
+  https://www.drupal.org/node/2672038#comment-12044162, and will be merged back
+  into Lightning when the packaging problems are fixed. (Issue #2870740)
+* Fixed a bug where Lightning Workflow would wrongly interfere with the Save
+  button when creating or editing unmoderated content types. (Issue #2867465)
+* Fixed a bug where uninstalling Field UI would break Lightning due to an
+  implicit dependency. (GitHub #340 and #327)
+* Search API was updated to its latest release candidate. (GitHub #334)
+* Listed third-party Lightning Media integrations in the README. (GitHub #339
+  and #346)
+* Lightning now uses short array syntax in all of its code. (Issue #2867638)
+
+## 2.1.0
+* Lightning has been updated to run on and now requires Drupal Core 8.3.x.
+* Created a new Experimental branch and moved all experimental components out of
+  the stable branch. (Issue #2862124)
+* Removed all code tagged as @deprecated.
+* Fixed a bug introduced in 2.0.6 that prevented images from being removed once
+  added to a media bundle image field. (Issue #2865794)
+* Fixed a bug where, under certain circumstances, Lightning Media Image might
+  attempt to setup roles before Lightning Roles was enabled. (GH Issue #318)
+* Updated the core inherited profiles patch which will now take into
+  consideration whether an installed extension is a base or parent profile when
+  building dependency trees for the Configuration Importer. (GH Issue #317)
+* Fixed a bug introduced by the beta5 release of Search API and patched a
+  separate bug the update path to the same release.
+
 ## 2.0.6
 * All user roles provided by Lightning's various components have been split out
   into a new sub-component of Lightning Core, called Lightning Roles. This

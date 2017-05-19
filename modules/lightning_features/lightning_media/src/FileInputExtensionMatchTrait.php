@@ -23,29 +23,21 @@ trait FileInputExtensionMatchTrait {
   /**
    * Implements InputMatchInterface::appliesTo().
    */
-  public function appliesTo($input, MediaBundleInterface $bundle) {
-    if (is_numeric($input)) {
-      $input = $this->entityTypeManager()->getStorage('file')->load($input);
+  public function appliesTo($value, MediaBundleInterface $bundle) {
+    if (is_numeric($value)) {
+      $value = $this->entityTypeManager()->getStorage('file')->load($value);
     }
 
-    if ($input instanceof FileInterface) {
-      $configuration = $this->getConfiguration();
-
-      /** @var \Drupal\field\FieldConfigInterface $field */
-      $field = $this->entityTypeManager()
-        ->getStorage('field_config')
-        ->load('media.' . $bundle->id() . '.' . $configuration['source_field']);
-
-      $extension = pathinfo($input->getFilename(), PATHINFO_EXTENSION);
+    if ($value instanceof FileInterface && $this instanceof SourceFieldInterface && ($field = $this->getSourceFieldDefinition($bundle))) {
+      $extension = pathinfo($value->getFilename(), PATHINFO_EXTENSION);
       $extension = strtolower($extension);
 
-      $extensions = preg_split('/,?\s+/', $field->getSetting('file_extensions'));
-
-      return in_array($extension, $extensions);
+      return in_array(
+        $extension,
+        preg_split('/,?\s+/', $field->getSetting('file_extensions'))
+      );
     }
-    else {
-      return FALSE;
-    }
+    return FALSE;
   }
 
 }

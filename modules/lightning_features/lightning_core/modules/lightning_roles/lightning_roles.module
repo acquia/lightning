@@ -7,6 +7,11 @@ use Drupal\user\Entity\Role;
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_roles_node_type_insert(NodeTypeInterface $node_type) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   $config = \Drupal::config('lightning_roles.settings')->get('content_roles');
   if (empty($config)) {
     return;
@@ -44,6 +49,11 @@ function lightning_roles_node_type_insert(NodeTypeInterface $node_type) {
  * Implements hook_ENTITY_TYPE_delete().
  */
 function lightning_roles_node_type_delete(NodeTypeInterface $node_type) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   $config = \Drupal::config('lightning_roles.settings')->get('content_roles');
 
   foreach (array_keys($config) as $key) {

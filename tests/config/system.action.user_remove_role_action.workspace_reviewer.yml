@@ -1,0 +1,13 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - user.role.workspace_reviewer
+  module:
+    - user
+id: user_remove_role_action.workspace_reviewer
+label: 'Remove the Workspace reviewer role from the selected users'
+type: user
+plugin: user_remove_role_action
+configuration:
+  rid: workspace_reviewer
