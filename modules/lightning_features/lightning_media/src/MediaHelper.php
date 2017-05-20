@@ -37,17 +37,26 @@ class MediaHelper {
    *   (optional) Whether to filter the bundles by create access for the current
    *   user. Defaults to FALSE.
    *
+   * @param array $target_bundles
+   *   (optional) An array of target bundles to retrieve source field extensions
+   *   for. Defaults to empty array.
+   *
    * @return string[]
    *   The file extensions accepted by all available bundles.
    */
-  public function getFileExtensions($check_access = FALSE) {
+  public function getFileExtensions($check_access = FALSE, array $target_bundles = []) {
     $extensions = '';
 
     // Lightning Media overrides the media_bundle storage handler with a special
     // one that adds an optional second parameter to loadMultiple().
-    $bundles = $this->entityTypeManager
-      ->getStorage('media_bundle')
-      ->loadMultiple(NULL, $check_access);
+    $storage = $this->entityTypeManager
+      ->getStorage('media_bundle');
+    if (!empty($target_bundles)) {
+      $bundles = $storage->loadByProperties(['id' => $target_bundles], $check_access);
+    }
+    else {
+      $bundles = $storage->loadMultiple(NULL, $check_access);
+    }
 
     /** @var \Drupal\media_entity\MediaBundleInterface $bundle */
     foreach ($bundles as $bundle) {
