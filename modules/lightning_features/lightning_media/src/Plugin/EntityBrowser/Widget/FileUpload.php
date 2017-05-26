@@ -65,8 +65,13 @@ class FileUpload extends EntityFormProxy {
     // it as the first validator, allowing it to accept only file extensions
     // associated with existing media bundles.
     if (empty($validators['file_validate_extensions'])) {
+      $target_bundles = [];
       $entity_browser_info = $form_state->get('entity_browser');
-      $target_bundles = !empty($entity_browser_info['widget_context']['target_bundles']) ? $entity_browser_info['widget_context']['target_bundles'] : [];
+      if (!empty($entity_browser_info['widget_context']['target_bundles'])) {
+        if (is_array($entity_browser_info['widget_context']['target_bundles'])) {
+          $target_bundles = $entity_browser_info['widget_context']['target_bundles'];
+        }
+      }
 
       $validators = array_merge([
         'file_validate_extensions' => [
