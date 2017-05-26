@@ -50,12 +50,7 @@ class MediaHelper {
     // one that adds an optional second parameter to loadMultiple().
     $storage = $this->entityTypeManager
       ->getStorage('media_bundle');
-    if (!empty($target_bundles)) {
-      $bundles = $storage->loadByProperties(['id' => $target_bundles], $check_access);
-    }
-    else {
-      $bundles = $storage->loadMultiple(NULL, $check_access);
-    }
+    $bundles = $storage->loadMultiple($target_bundles ?: NULL, $check_access);
 
     /** @var \Drupal\media_entity\MediaBundleInterface $bundle */
     foreach ($bundles as $bundle) {
