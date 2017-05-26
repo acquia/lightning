@@ -36,10 +36,9 @@ class MediaHelper {
    * @param bool $check_access
    *   (optional) Whether to filter the bundles by create access for the current
    *   user. Defaults to FALSE.
-   *
-   * @param array $target_bundles
+   * @param string[] $target_bundles
    *   (optional) An array of target bundles to retrieve source field extensions
-   *   for. Defaults to empty array.
+   *   for. If omitted, all bundles are allowed.
    *
    * @return string[]
    *   The file extensions accepted by all available bundles.
