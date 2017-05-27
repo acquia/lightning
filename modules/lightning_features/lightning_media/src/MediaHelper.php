@@ -62,7 +62,7 @@ class MediaHelper {
         // If the field is a FileItem or any of its descendants, we can consider
         // it a file field. This will automatically include things like image
         // fields, which extend file fields.
-        if (!empty($field) && is_a($field->getItemDefinition()->getClass(), FileItem::class, TRUE)) {
+        if (is_a($field->getItemDefinition()->getClass(), FileItem::class, TRUE)) {
           $extensions .= $field->getSetting('file_extensions') . ' ';
         }
       }

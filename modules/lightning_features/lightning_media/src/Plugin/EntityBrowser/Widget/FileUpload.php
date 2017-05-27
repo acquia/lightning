@@ -68,9 +68,7 @@ class FileUpload extends EntityFormProxy {
       $target_bundles = [];
       $entity_browser_info = $form_state->get('entity_browser');
       if (!empty($entity_browser_info['widget_context']['target_bundles'])) {
-        if (is_array($entity_browser_info['widget_context']['target_bundles'])) {
-          $target_bundles = $entity_browser_info['widget_context']['target_bundles'];
-        }
+        $target_bundles = $entity_browser_info['widget_context']['target_bundles'];
       }
 
       $validators = array_merge([
