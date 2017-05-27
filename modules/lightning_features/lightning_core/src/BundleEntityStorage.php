@@ -64,20 +64,4 @@ class BundleEntityStorage extends ConfigEntityStorage {
     return parent::loadMultiple($ids);
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  public function loadByProperties(array $values = [], $check_access = FALSE) {
-    // Build a query to fetch the entity IDs.
-    $entity_query = $this->getQuery();
-    $this->buildPropertyQuery($entity_query, $values);
-    $result = $entity_query->execute();
-
-    if ($check_access) {
-      $result = array_filter($result, [$this->accessHandler, 'createAccess']);
-    }
-
-    return $result ? parent::loadMultiple($result) : [];
-  }
-
 }
