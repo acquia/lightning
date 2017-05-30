@@ -213,4 +213,69 @@ class UtilityContext extends DrupalSubContextBase {
     }
   }
 
+  /**
+   * Asserts the existence of entities by running a count query.
+   *
+   * @param string $entity_type
+   *   The entity type ID.
+   * @param int $count
+   *   The expected number of entities.
+   * @param string $bundle
+   *   (optional) The bundle to filter by.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException if there are not exactly
+   * as many entities of the given type and bundle as expected.
+   *
+   * @Then there should be :count :entity_type entities
+   * @Then there should be :count :bundle :entity_type entities
+   */
+  public function assertEntityExistence($entity_type, $count, $bundle = NULL) {
+    $query = \Drupal::entityQuery($entity_type)->count();
+
+    if ($bundle) {
+      $query->condition(
+        \Drupal::entityTypeManager()->getDefinition($entity_type)->getKey('bundle'),
+        $bundle
+      );
+    }
+    $exists = (int) $query->execute();
+
+    if ($exists !== $count) {
+      throw new ExpectationException(
+        "Expected {$count} {$entity_type} entities, but found {$exists}.",
+        $this->getSession()->getDriver()
+      );
+    }
+  }
+
+  /**
+   * Asserts the existence of a single entity by running a count query.
+   *
+   * @param string $entity_type
+   *   The entity type ID.
+   * @param string $bundle
+   *   (optional) The bundle to filter by.
+   *
+   * @Then there should be one :entity_type entity
+   * @Then there should be one :bundle :entity_type entity
+   */
+  public function assertEntityExistenceOne($entity_type, $bundle = NULL) {
+    $this->assertEntityExistence($entity_type, 1, $bundle);
+  }
+
+  /**
+   * Asserts the non-existence of entities by running a count query.
+   *
+   * @param string $entity_type
+   *   The entity type ID.
+   * @param string $bundle
+   *   (optional) The bundle to filter by.
+   *
+   * @Then there should be no :entity_type entities
+   * @Then there should be no :bundle :entity_type entities
+   */
+  public function assertEntityNonExistence($entity_type, $bundle = NULL) {
+    $this->assertEntityExistence($entity_type, 0, $bundle);
+  }
+
 }

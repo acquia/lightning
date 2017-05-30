@@ -8,7 +8,6 @@
 use Drupal\Core\Form\FormState;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\entity_browser\Element\EntityBrowserElement;
-use Drupal\multiversion\Entity\Storage\ContentEntityStorageInterface;
 
 /**
  * Implements hook_install().
@@ -26,6 +25,7 @@ function lightning_test_install() {
         'open' => TRUE,
         'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
       ],
+      'region' => 'content',
     ])
     ->setComponent('field_hero_image', [
       'type' => 'entity_browser_file',
@@ -38,6 +38,7 @@ function lightning_test_install() {
         'open' => TRUE,
         'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
       ],
+      'region' => 'content',
     ])
     ->setComponent('field_lightweight_image', [
       'type' => 'entity_browser_file',
@@ -50,6 +51,7 @@ function lightning_test_install() {
         'open' => TRUE,
         'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
       ],
+      'region' => 'content',
     ])
     ->setComponent('field_unlimited_images', [
       'type' => 'entity_browser_file',
@@ -62,6 +64,7 @@ function lightning_test_install() {
         'open' => TRUE,
         'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
       ],
+      'region' => 'content',
     ])
     ->setComponent('field_media_reference', [
       'type' => 'entity_browser_entity_reference',
@@ -76,6 +79,22 @@ function lightning_test_install() {
         ],
         'open' => TRUE,
       ],
+      'region' => 'content',
+    ])
+    ->setComponent('field_z_image', [
+      'type' => 'entity_browser_entity_reference',
+      'settings' => [
+        'entity_browser' => 'media_browser',
+        'field_widget_display' => 'rendered_entity',
+        'field_widget_edit' => TRUE,
+        'field_widget_remove' => TRUE,
+        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
+        'field_widget_display_settings' => [
+          'view_mode' => 'embedded',
+        ],
+        'open' => TRUE,
+      ],
+      'region' => 'content',
     ])
     ->save();
 
@@ -109,12 +128,6 @@ function lightning_test_uninstall() {
     $storage = \Drupal::entityTypeManager()->getStorage($entity_type);
     $entities = $storage->loadMultiple($entities);
     $storage->delete($entities);
-
-    // If this is a Multiversion-aware entity type, we need to explicitly purge
-    // the entities from the database.
-    if ($storage instanceof ContentEntityStorageInterface) {
-      $storage->purge($entities);
-    }
   }
   $state->delete('_delete');
 
@@ -131,4 +144,9 @@ function lightning_test_uninstall() {
     }
   }
   $state->delete('_fields');
+
+  \Drupal::entityTypeManager()
+    ->getStorage('media_bundle')
+    ->load('z_image')
+    ->delete();
 }

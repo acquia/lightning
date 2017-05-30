@@ -114,6 +114,10 @@
       </then>
     </if>
 
+    <!-- Generate Behat configuration. -->
+    <exec command="${project.basedir}/bin/drupal behat:init ${url} --merge=${project.basedir}/tests/behat.yml" dir="${docroot}" />
+    <exec command="${project.basedir}/bin/drupal behat:include ${project.basedir}/tests/features --with-subcontexts=${project.basedir}/tests/features/bootstrap --with-subcontexts=${project.basedir}/src/LightningExtension/Context" dir="${docroot}" />
+
     <!-- Export configuration for archaeological purposes. -->
     <property name="config_fixture" value="${project.basedir}/tests/config" />
     <exec command="${drush} config-export --destination=${config_fixture} --yes" dir="${docroot}" />
