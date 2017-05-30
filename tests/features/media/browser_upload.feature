@@ -63,4 +63,5 @@ Feature: Uploading media assets through the media browser
     And I upload "test.jpg"
     And I enter "Z Image Test" for "Media name"
     And I submit the entity browser
-    Then there should be one z_image media entity
+    Then there should be 1 z_image media entity
+    And there should be 0 image media entities

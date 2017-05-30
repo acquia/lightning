@@ -36,21 +36,21 @@ class MediaHelper {
    * @param bool $check_access
    *   (optional) Whether to filter the bundles by create access for the current
    *   user. Defaults to FALSE.
-   * @param string[] $target_bundles
-   *   (optional) An array of target bundles to retrieve source field extensions
-   *   for. If omitted, all bundles are allowed.
+   * @param string[] $bundles
+   *   (optional) An array of bundle IDs from which to retrieve source field
+   *   extensions. If omitted, all available bundles are allowed.
    *
    * @return string[]
    *   The file extensions accepted by all available bundles.
    */
-  public function getFileExtensions($check_access = FALSE, array $target_bundles = []) {
+  public function getFileExtensions($check_access = FALSE, array $bundles = []) {
     $extensions = '';
 
     // Lightning Media overrides the media_bundle storage handler with a special
     // one that adds an optional second parameter to loadMultiple().
     $storage = $this->entityTypeManager
       ->getStorage('media_bundle');
-    $bundles = $storage->loadMultiple($target_bundles ?: NULL, $check_access);
+    $bundles = $storage->loadMultiple($bundles ?: NULL, $check_access);
 
     /** @var \Drupal\media_entity\MediaBundleInterface $bundle */
     foreach ($bundles as $bundle) {
@@ -79,6 +79,9 @@ class MediaHelper {
    * @param bool $check_access
    *   (optional) Whether to filter the bundles by create access for the current
    *   user. Defaults to TRUE.
+   * @param string[] $bundles
+   *   (optional) A set of media bundle IDs which might match the input. If
+   *   omitted, all available bundles are checked.
    *
    * @return \Drupal\media_entity\MediaBundleInterface
    *   A media bundle that can accept the input value.
@@ -86,12 +89,12 @@ class MediaHelper {
    * @throws \Drupal\lightning_media\Exception\IndeterminateBundleException if
    * no bundle can be matched to the input value.
    */
-  public function getBundleFromInput($value, $check_access = TRUE) {
+  public function getBundleFromInput($value, $check_access = TRUE, array $bundles = []) {
     // Lightning Media overrides the media_bundle storage handler with a special
     // one that adds an optional second parameter to loadMultiple().
     $bundles = $this->entityTypeManager
       ->getStorage('media_bundle')
-      ->loadMultiple(NULL, $check_access);
+      ->loadMultiple($bundles ?: NULL, $check_access);
 
     /** @var \Drupal\media_entity\MediaBundleInterface $bundle */
     foreach ($bundles as $bundle) {
@@ -109,16 +112,19 @@ class MediaHelper {
    *
    * @param mixed $value
    *   The input value.
+   * @param string[] $bundles
+   *   (optional) A set of media bundle IDs which might match the input value.
+   *   If omitted, all bundles to which the user has create access are checked.
    *
    * @return \Drupal\media_entity\MediaInterface
    *   The unsaved media entity.
    */
-  public function createFromInput($value) {
+  public function createFromInput($value, array $bundles = []) {
     /** @var \Drupal\media_entity\MediaInterface $entity */
     $entity = $this->entityTypeManager
       ->getStorage('media')
       ->create([
-        'bundle' => $this->getBundleFromInput($value)->id(),
+        'bundle' => $this->getBundleFromInput($value, TRUE, $bundles)->id(),
       ]);
 
     $field = static::getSourceField($entity);
