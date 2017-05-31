@@ -57,7 +57,7 @@ class BundleEntityStorage extends ConfigEntityStorage {
   public function loadMultiple(array $ids = NULL, $check_access = FALSE) {
     if ($check_access) {
       $ids = array_filter(
-        $this->getQuery()->execute(),
+        $ids ?: $this->getQuery()->execute(),
         [$this->accessHandler, 'createAccess']
       );
     }

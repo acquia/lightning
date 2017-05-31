@@ -1,0 +1,27 @@
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.storage.node.field_z_image
+    - media_entity.bundle.z_image
+    - node.type.page
+id: node.page.field_z_image
+field_name: field_z_image
+entity_type: node
+bundle: page
+label: 'Z Image'
+description: ''
+required: false
+translatable: false
+default_value: {  }
+default_value_callback: ''
+settings:
+  handler: 'default:media'
+  handler_settings:
+    target_bundles:
+      z_image: z_image
+    sort:
+      field: _none
+    auto_create: false
+    auto_create_bundle: ''
+field_type: entity_reference

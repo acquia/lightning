@@ -96,13 +96,16 @@ function lightning_media_inline_entity_form_entity_form_alter(array &$entity_for
  *
  * @param \Drupal\file\FileInterface $file
  *   The file to validate.
+ * @param string[] $bundles
+ *   (optional) A set of media bundle IDs which might match the input. If
+ *   omitted, all bundles to which the user has create access will be checked.
  *
  * @return string[]
  *   An array of errors. If empty, the file passed validation.
  */
-function lightning_media_validate_upload(FileInterface $file) {
+function lightning_media_validate_upload(FileInterface $file, array $bundles = []) {
   try {
-    $entity = \Drupal::service('lightning.media_helper')->createFromInput($file);
+    $entity = \Drupal::service('lightning.media_helper')->createFromInput($file, $bundles);
   }
   catch (IndeterminateBundleException $e) {
     return [];
@@ -398,6 +401,7 @@ function lightning_media_entity_form_display_presave(EntityFormDisplayInterface 
         ],
         'open' => TRUE,
       ],
+      'region' => 'content',
     ]);
   }
 }
