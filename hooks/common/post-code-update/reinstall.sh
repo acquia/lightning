@@ -8,5 +8,6 @@ site="$1"
 target_env="$2"
 
 mkdir -p ./config/sync
+pwd
 ls -la
 drush @$site.$target_env site-install lightning --account-pass=admin --yes
