@@ -12,23 +12,28 @@ events:
       - setup:
           type: script
           script:
+            # Add Composer's local bin directory to the PATH so that we will be
+            # running our installed versions of Drush, PHPCS, Behat, etc.
+            - export PATH="$HOME/.composer/vendor/bin:$BUILD_DIR/bin:$PATH"
             - composer validate --no-check-all --ansi
             - composer install
       - install:
           type: script
           script:
+            - cd $BUILD_DIR
             - mysql -u root -proot -e 'CREATE DATABASE drupal;'
             - ./bin/phing install -Ddb.password=root -Ddb.database=drupal -Durl=http://127.0.0.1:8080
       - test:
           type: script
           script:
-            - cd docroot
-            - ../bin/drush runserver --default-server=builtin 8080 &>/dev/null &
-            - ../bin/phantomjs --webdriver=4444 > /dev/null &
+            - cd $BUILD_DIR/docroot
+            - drush runserver --default-server=builtin 8080 &>/dev/null &
+            - phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
-            - ../bin/behat --stop-on-failure --config ./sites/default/files/behat.yml --tags=~javascript
+            - behat --stop-on-failure --config ./sites/default/files/behat.yml --tags=~javascript
       - cleanup:
           type: script
           script:
             # Reset the settings file and add cloud DB snippet.
-            - ../bin/phing reset-settings
+            - cd $BUILD_DIR
+            - phing reset-settings
