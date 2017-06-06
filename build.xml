@@ -239,7 +239,7 @@
     <chmod file="${docroot}/sites/default/settings.php" mode="644" />
     <append destFile="${docroot}/sites/default/settings.php" text="${line.separator}if (file_exists('/var/www/site-php')) {${line.separator}  require '/var/www/site-php/${cloud.subscription}/${cloud.subscription}-settings.inc';${line.separator}}${line.separator}" />
     <append destFile="${docroot}/sites/default/settings.php" text="$settings['install_profile'] = 'lightning';${line.separator}" />
-    <append destFile="${docroot}/sites/default/settings.php" text="$config_directories['sync'] = '../config/sync';" />
+    <append destFile="${docroot}/sites/default/settings.php" text="$config_directories['sync'] = 'sites/default/files/config/sync';" />
   </target>
 
   <!-- Symlinks .git/hooks/pre-commit to our repo's pre-commit script -->
