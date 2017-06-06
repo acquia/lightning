@@ -19,9 +19,6 @@ events:
           script:
             - mysql -u root -proot -e 'CREATE DATABASE drupal;'
             - ./bin/phing install -Ddb.password=root -Ddb.database=drupal -Durl=http://127.0.0.1:8080
-            # Reset the settings file and add cloud DB snippet.
-            - ./bin/phing reset-settings
-            - mkdir -p ./config/default
       - test:
           type: script
           script:
@@ -30,3 +27,8 @@ events:
             - ../bin/phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
             - ../bin/behat --stop-on-failure --config ./sites/default/files/behat.yml --tags=~javascript
+      - cleanup:
+          type: script
+          script:
+            # Reset the settings file and add cloud DB snippet.
+            - ./bin/phing reset-settings
