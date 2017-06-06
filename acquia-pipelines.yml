@@ -19,8 +19,8 @@ events:
           script:
             - mysql -u root -proot -e 'CREATE DATABASE drupal;'
             - ./bin/phing install -Ddb.password=root -Ddb.database=drupal -Durl=http://127.0.0.1:8080
-            # Add the Acquia cloud database snippet to the settings file.
-            - ./bin/phing cloud-db-snippet
+            # Reset the settings file and add cloud DB snippet.
+            - ./bin/phing reset-settings
             - mkdir -p ./config/default
       - test:
           type: script
