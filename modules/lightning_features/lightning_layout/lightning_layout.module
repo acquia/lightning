@@ -209,3 +209,16 @@ function lightning_layout_node_type_delete(NodeTypeInterface $node_type) {
     ]);
   }
 }
+
+/**
+ * Implements hook_panels_ipe_blocks_alter().
+ */
+function lightning_layout_panels_ipe_blocks_alter(array &$blocks = []) {
+  // Lightning includes the Entity Block module, which renders CTools'
+  // entity_view block unnecessary. So don't show it in Panels IPE.
+  foreach ($blocks as $i => $block) {
+    if ($block['provider'] == 'ctools' && strpos($block['plugin_id'], 'entity_view:') === 0) {
+      unset($blocks[$i]);
+    }
+  }
+}
