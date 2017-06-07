@@ -8,7 +8,7 @@ site="$1"
 target_env="$2"
 
 # Create the config directories defined in the settings file by pipelines.
-mkdir -p /var/www/html/$site.$target_env/docroot/sites/default/files/config/sync
+chmod -R +w /var/www/html/$site.$target_env/config/
 mkdir -p /var/www/html/$site.$target_env/config/default
 
 # Fresh install of Lightning.
