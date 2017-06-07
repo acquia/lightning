@@ -26,7 +26,7 @@
   <property name="site" value="${docroot}/sites/default" />
   <property name="version" value="HEAD" />
   <property name="fixture" value="${project.basedir}/tests/fixtures/${version}.sql" />
-  <property name="cloud.subscription" value="cloudlightning201" />
+  <property name="cloud.subscription" value="lightningnightly" />
 
   <!-- Finds required binaries. -->
   <target name="env">
@@ -231,11 +231,14 @@
     <delete file=".reset.sql" />
   </target>
 
-  <!-- Writes the cloud database snippet to the settings file. -->
-  <target name="cloud-db-snippet">
-    <chmod file="${docroot}/sites/default/settings.php" mode="0644" verbose="true" />
-    <append destFile="${docroot}/sites/default/settings.php" text="${line.separator}if (file_exists('/var/www/site-php')) {${line.separator}  require '/var/www/site-php/${cloud.subscription}/${cloud.subscription}-settings.inc';${line.separator}}${line.separator}">
-    </append>
+  <!-- Replaces the existing settings file if it exists with the default and adds minimum necessary settings for cloud. -->
+  <target name="cloud-settings">
+    <delete file="${docroot}/sites/default/settings.php" />
+    <copy file="${docroot}/sites/default/default.settings.php" tofile="${docroot}/sites/default/settings.php" />
+    <append destFile="${docroot}/sites/default/settings.php" text="${line.separator}if (file_exists('/var/www/site-php')) {${line.separator}  require '/var/www/site-php/${cloud.subscription}/${cloud.subscription}-settings.inc';${line.separator}}${line.separator}" />
+    <append destFile="${docroot}/sites/default/settings.php" text="$settings['install_profile'] = 'lightning';${line.separator}" />
+    <mkdir dir="config/default" />
+    <touch file="config/default/.gitkeep" />
   </target>
 
   <!-- Symlinks .git/hooks/pre-commit to our repo's pre-commit script -->
