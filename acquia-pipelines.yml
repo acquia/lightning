@@ -34,6 +34,6 @@ events:
       - cleanup:
           type: script
           script:
-            # Reset the settings file and add cloud DB snippet.
+            # Setup settings file and codebase with minimum required for cloud.
             - cd $BUILD_DIR
-            - phing reset-settings
+            - phing cloud-settings
