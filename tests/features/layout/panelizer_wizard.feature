@@ -47,7 +47,7 @@ Feature: Panelizer Wizard
       | Foo  | foo@localhost | landing_page_creator,layout_manager |
     And I am logged in as Foo
     And I visit "/admin/structure/panelizer/edit/node__landing_page__full__two_column/content"
-    And I place the "Authored by" block into the left panelizer region
+    And I place the "Authored by" block into the first panelizer region
     And I press "Update and save"
     And landing_page content:
       | title  | path    | moderation_state | author |
@@ -62,7 +62,7 @@ Feature: Panelizer Wizard
     And press "Save"
     And I should not see "Authored by"
     And I visit "/admin/structure/panelizer/edit/node__landing_page__full__two_column/content"
-    And I remove the "Authored by" block from the left panelizer region
+    And I remove the "Authored by" block from the first panelizer region
 
   @landing-page @javascript @415e9f49
   Scenario: The default layout select list should be disabled on entities whose layout has been customized via the IPE.

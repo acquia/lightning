@@ -1,8 +1,34 @@
+## 2.1.4
+* Implemented UX improvements for media reference fields using Lightning's
+  media browser -- the maximum number of items you can select will be displayed
+  above the field. (GitHub #363)
+* Fixed a bug where the media browser's upload widget, when used with an entity
+  reference field, would not respect the media bundles that the field could
+  reference. (GitHub #370)
+* Fixed a bug where content types that do not use Workbench Moderation would not
+  display their "Create new revision" checkbox. (Issue #2876698)
+* All of the entity view and form displays bundled with Lightning now include
+  region information. (GitHub #366)
+* Patched Drupal core to suppress non-actionable warnings about expected
+  behavior. (Issue #2878149 and GitHub #372)
+* Various default configuration bundled with Lightning Media was updated.
+  (GitHub #365)
+* Hid the "Entity View" block provided by CTools from Panels IPE, since it was
+  not compatible anyway. (Issue #2834173)
+* Acquia Connector, Media Entity Instagram, Metatag, and Search API were
+  updated to their latest versions. (GitHub #376)
+* Patched Panels to include three UI/UX improvements. (Issue #2884163)
+* Implemented a system to continuously generate configuration snapshots so that
+  config schema changes made by modules can be propagated into Lightning's
+  bundled default configuration. (GitHub #368)
+* Implemented a safeguard to ensure that dependencies which Lightning is
+  patching are always be pinned to a specific version. (GitHub #361)
+
 ## 2.1.3
-* Created new DrupalConsole commands that generate and customize behat.yml
-  configuration files for functional testing. (Issue #2812775 and GH #350) 
+* Created new Drupal Console commands that generate and customize behat.yml
+  configuration files for functional testing. (Issue #2812775 and GitHub #350)
 * Fixed a bug where the media library filter was hidden when the contextual
-  filter value was "all". (GH #352 and #354)
+  filter value was "all". (GitHub #352 and #354)
 * Updated Panels, Panelizer, Page Manage, and CTools to stable releases.
   (Issue #2874521)
 * Fixed a bug where Lightning could, under certain circumstances, break Drupal's

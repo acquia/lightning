@@ -54,6 +54,23 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+## 2.1.3 to 2.1.4
+There are no manual update steps for this version.
+
+**Note:**  
+There is a known issue with Metatag version 8.x-1.1 where you might need to
+clear your site's cache after updating. See [Metatag 8.x-1.1 Release notes][metatag8.x-1.1]
+and this [related issue][2882954].
+
+As per our Dependency Constraint Policy, Lightning doesn't pin to a specific
+version of Metatag, so depending on your your setup, Metatag is likely to be
+updated when you update to Lightning 2.1.4. For Composer users, we recommend
+pinning to Metatag version 1.0.0. Alternatively, you can be prepared to clear
+your site's cache immediately after running `update.php`.
+
+[metatag8.x-1.1]: https://www.drupal.org/project/metatag/releases/8.x-1.1 "Metatag 8.x-1.1 Release notes"
+[2882954]: https://www.drupal.org/node/2882954 "Error when updating to 8.x-1.1"
+
 ## 2.1.2 to 2.1.3
 There are no manual update steps for this version.
 
