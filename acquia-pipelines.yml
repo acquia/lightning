@@ -22,7 +22,7 @@ events:
           script:
             - cd $SOURCE_DIR
             - mysql -u root -proot -e 'CREATE DATABASE drupal;'
-            - ../bin/phing install -Ddb.password=root -Ddb.database=drupal -Durl=http://127.0.0.1:8080
+            - phing install -Ddb.password=root -Ddb.database=drupal -Durl=http://127.0.0.1:8080
       - test:
           type: script
           script:
