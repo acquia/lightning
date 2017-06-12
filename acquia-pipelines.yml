@@ -20,13 +20,13 @@ events:
       - install:
           type: script
           script:
-            - cd $BUILD_DIR
+            - cd $SOURCE_DIR
             - mysql -u root -proot -e 'CREATE DATABASE drupal;'
-            - phing install -Ddb.password=root -Ddb.database=drupal -Durl=http://127.0.0.1:8080
+            - ../bin/phing install -Ddb.password=root -Ddb.database=drupal -Durl=http://127.0.0.1:8080
       - test:
           type: script
           script:
-            - cd $BUILD_DIR/docroot
+            - cd $SOURCE_DIR/docroot
             - drush runserver --default-server=builtin 8080 &>/dev/null &
             - phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
@@ -35,5 +35,5 @@ events:
           type: script
           script:
             # Setup settings file and codebase with minimum required for cloud.
-            - cd $BUILD_DIR
+            - cd $SOURCE_DIR
             - phing cloud-settings
