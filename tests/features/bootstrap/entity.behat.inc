@@ -88,6 +88,21 @@ class EntitySubContext extends DrupalSubContextBase {
   }
 
   /**
+   * Returns all entities created during the scenario.
+   *
+   * @param string $entity_type
+   *   Entity type for entities to be retrieved.
+   * @return array|mixed
+   *   Entities.
+   */
+  public function getEntities($entity_type = '') {
+    if (empty($entity_type) && !empty($this->entities[$entity_type])) {
+      return $this->entities[$entity_type];
+    }
+    return $this->entities;
+  }
+
+  /**
    * Marks any automatically created node as belonging to the current user.
    *
    * @param \Drupal\DrupalExtension\Hook\Scope\EntityScope $scope
