@@ -96,7 +96,7 @@ class EntitySubContext extends DrupalSubContextBase {
    *   Entities.
    */
   public function getEntities($entity_type = '') {
-    if (empty($entity_type) && !empty($this->entities[$entity_type])) {
+    if (!empty($entity_type) && !empty($this->entities[$entity_type])) {
       return $this->entities[$entity_type];
     }
     return $this->entities;
