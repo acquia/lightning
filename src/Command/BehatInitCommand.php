@@ -68,7 +68,7 @@ class BehatInitCommand extends BehatCommandBase {
           ],
         ],
       ];
-      $config['default']['extensions']['DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension'] = '~';
+      $config['default']['extensions']['DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension'] = NULL;
     }
 
     // Use the Drupal Extension, if available.
