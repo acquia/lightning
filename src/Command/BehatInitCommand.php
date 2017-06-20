@@ -60,10 +60,6 @@ class BehatInitCommand extends BehatCommandBase {
         'javascript_session' => 'default',
         'base_url' => $input->getArgument('base_url'),
         'goutte' => NULL,
-        'selenium2' => [
-          'wd_host' => 'http://127.0.0.1:4444/wd/hub',
-          'browser' => 'chrome',
-        ],
         'sessions' => [
           'default' => [
             'chrome' => [
@@ -72,6 +68,7 @@ class BehatInitCommand extends BehatCommandBase {
           ],
         ],
       ];
+      $config['default']['extensions']['DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension'] = '~';
     }
 
     // Use the Drupal Extension, if available.
