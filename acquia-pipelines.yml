@@ -16,7 +16,7 @@ events:
             # running our installed versions of Drush, PHPCS, Behat, etc.
             - export PATH="$HOME/.composer/vendor/bin:$SOURCE_DIR/bin:$PATH"
             - composer validate --no-check-all --ansi
-            - composer install
+            - composer install --ansi
       - install:
           type: script
           script:
@@ -30,7 +30,7 @@ events:
             - drush runserver --default-server=builtin 8080 &>/dev/null &
             - phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
-            - behat --stop-on-failure --config ./sites/default/files/behat.yml --tags=~javascript
+            - behat --stop-on-failure --config ./sites/default/files/behat.yml --tags=~javascript --colors
       - cleanup:
           type: script
           script:
