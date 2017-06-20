@@ -56,11 +56,20 @@ class BehatInitCommand extends BehatCommandBase {
     // Use the Mink Extension, if available.
     if (class_exists('\Behat\MinkExtension\ServiceContainer\MinkExtension')) {
       $config['default']['extensions']['Behat\MinkExtension'] = [
+        'browser_name' => 'chrome',
+        'javascript_session' => 'default',
         'base_url' => $input->getArgument('base_url'),
         'goutte' => NULL,
         'selenium2' => [
           'wd_host' => 'http://127.0.0.1:4444/wd/hub',
           'browser' => 'chrome',
+        ],
+        'sessions' => [
+          'default' => [
+            'chrome' => [
+              'api_url' => 'http://localhost:9222',
+            ],
+          ],
         ],
       ];
     }

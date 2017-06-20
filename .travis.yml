@@ -60,7 +60,7 @@ install:
 
 before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
-  - google-chrome --headless --disable-gpu --remote-debugging-port=9222 https://www.chromestatus.com & 
+  - google-chrome --headless --disable-gpu --remote-debugging-port=9222 https://www.chromestatus.com &
 
 script:
   - composer validate ./profiles/lightning/composer.json --no-check-all --ansi
