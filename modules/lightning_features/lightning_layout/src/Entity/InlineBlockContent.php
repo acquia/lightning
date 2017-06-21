@@ -13,7 +13,7 @@ use Drupal\ctools_entity_mask\MaskEntityTrait;
  *   label = @Translation("Inline custom block"),
  *   bundle_label = @Translation("Custom block type"),
  *   handlers = {
- *     "storage" = "Drupal\Core\Entity\Sql\SqlContentEntityStorage",
+ *     "storage" = "Drupal\lightning_layout\InlineBlockContentStorage",
  *     "access" = "Drupal\block_content\BlockContentAccessControlHandler",
  *     "view_builder" = "Drupal\block_content\BlockContentViewBuilder",
  *     "form" = {

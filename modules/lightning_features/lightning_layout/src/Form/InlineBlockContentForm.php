@@ -72,16 +72,26 @@ class InlineBlockContentForm extends BlockContentForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    parent::save($form, $form_state);
+    $entity = $this->getEntity();
 
     $display = $this->ensureDisplay($form_state);
-    $display->addBlock([
+
+    $entity->storageInfo = [
+      'storage_type' => $display->getStorageType(),
+      'storage_id' => $display->getStorageId(),
+      'temp_store_key' => $display->getTempStoreId(),
+    ];
+    $entity->storageInfo['block_id'] = $display->addBlock([
       'id' => 'inline_entity',
       'region' => $form_state->getValue('_region'),
-      'entity' => serialize($this->getEntity()),
+      'entity' => serialize($entity),
     ]);
+    parent::save($form, $form_state);
 
-    $this->tempStore->set($display->getTempStoreId(), $display->getConfiguration());
+    $this->tempStore->set(
+      $entity->storageInfo['temp_store_key'],
+      $display->getConfiguration()
+    );
 
     if ($form_state->has('referrer')) {
       $redirect = $form_state->get('referrer');

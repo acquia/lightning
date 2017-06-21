@@ -67,7 +67,7 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
   /**
    * @return \Drupal\Core\Entity\EntityInterface
    */
-  protected function getEntity() {
+  public function getEntity() {
     $configuration = $this->getConfiguration();
 
     $entity = isset($configuration['entity'])
