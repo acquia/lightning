@@ -1,3 +1,13 @@
+## 2.1.5
+* Drupal core was security updated to 8.3.4.
+* Layout Plugin is no longer included with Lightning. (Issue #2873728)
+* Lightning is now pinned to the 3.2.x line of the Drupal Extension for Behat
+  due to an incompatibility between the latest versions of it and Behat. See
+  https://github.com/jhedstrom/drupalextension/issues/386 for more information
+  (GitHub #389)
+* Lightning now tests its bundled configuration for proper conformance to
+  configuration schema. (GitHub #383 and #388)
+
 ## 2.1.4
 * Implemented UX improvements for media reference fields using Lightning's
   media browser -- the maximum number of items you can select will be displayed
