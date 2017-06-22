@@ -4,6 +4,7 @@ namespace Drupal\lightning_layout\Entity;
 
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
+use Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant;
 
 /**
  * Defines the inline block entity class.
@@ -39,5 +40,55 @@ use Drupal\ctools_entity_mask\MaskEntityTrait;
 class InlineBlockContent extends BlockContent {
 
   use MaskEntityTrait;
+
+  /**
+   * The Panels display of which this block is an intrinsic part.
+   *
+   * Inline blocks do not have any existence outside of a Panels display, so
+   * this is always required in order to save or load an inline block.
+   *
+   * @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant
+   */
+  protected $display;
+
+  /**
+   * The UUID of the block in the Panels display.
+   *
+   * If this is not set, it can be assumed that the block has not yet been added
+   * to the Panels display.
+   *
+   * @var string
+   */
+  protected $blockId;
+
+  /**
+   * The temp store ID of the Panels display.
+   *
+   * A given display's temp store ID can vary depending on which automatic
+   * contexts are available and what their values are. Generally an inline block
+   * will be associated with a specific temp store ID, so although we can ask
+   * the Panels display for its temp store ID, we cannot be certain that it will
+   * be the temp store ID which is associated with this block. Therefore this
+   * may need to be explicitly set.
+   *
+   * @var string
+   */
+  protected $tempStoreKey;
+
+  public function getStorageContext() {
+    return [
+      $this->display,
+      $this->blockId,
+      $this->tempStoreKey ?: $this->display->getTempStoreId(),
+    ];
+  }
+
+  public function setStorageContext(PanelsDisplayVariant $display, $block_id = NULL, $temp_store_key = NULL) {
+    $this->display = $display;
+    $this->blockId = $block_id;
+    $this->tempStoreKey = $temp_store_key;
+
+    return $this;
+  }
 
 }

@@ -5,76 +5,20 @@ namespace Drupal\lightning_layout\Form;
 use Drupal\block_content\BlockContentForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
-use Drupal\user\SharedTempStore;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class InlineBlockContentForm extends BlockContentForm {
-
-  /**
-   * The Panels IPE temp store.
-   *
-   * @var \Drupal\user\SharedTempStore
-   */
-  protected $tempStore;
-
-  /**
-   * InlineBlockContentForm constructor.
-   *
-   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
-   *   The entity manager.
-   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
-   *   The entity type bundle service.
-   * @param \Drupal\Component\Datetime\TimeInterface $time
-   *   The time service.
-   * @param \Drupal\user\SharedTempStore $temp_store
-   *   The Panels IPE temp store.
-   */
-  public function __construct($entity_manager, $entity_type_bundle_info = NULL, $time = NULL, SharedTempStore $temp_store) {
-    parent::__construct($entity_manager, $entity_type_bundle_info, $time);
-    $this->tempStore = $temp_store;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container) {
-    return new static(
-      $container->get('entity.manager'),
-      $container->get('entity_type.bundle.info'),
-      $container->get('datetime.time'),
-      $container->get('user.shared_tempstore')->get('panels_ipe')
-    );
-  }
-
-  /**
-   * @param \Drupal\Core\Form\FormStateInterface $form_state
-   *
-   * @return \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant
-   * @throws \Exception
-   */
-  protected function ensureDisplay(FormStateInterface $form_state) {
-    /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
-    $display = $form_state->get('panels_display');
-
-    if ($display) {
-      $configuration = $this->tempStore->get($display->getTempStoreId());
-
-      return $configuration
-        ? $display->setConfiguration($configuration)
-        : $display;
-    }
-    else {
-      throw new \Exception('The Panels display variant is unavailable.');
-    }
-  }
 
   /**
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    /** @var \Drupal\lightning_layout\Entity\InlineBlockContent $entity */
     $entity = $this->getEntity();
 
-    $display = $this->ensureDisplay($form_state);
+    if ($block_id) {
+      $configuration = $display->getBlock($block_id)->getConfiguration();
+      $configuration['region'] = $form_state->getValue('_region');
+    }
 
     $entity->storageInfo = [
       'storage_type' => $display->getStorageType(),
@@ -107,15 +51,22 @@ class InlineBlockContentForm extends BlockContentForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    $regions = $this->ensureDisplay($form_state)->getRegionNames();
+    /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
+    list ($display, $block_id) = $this->getEntity()->getStorageContext();
 
     $form['_region'] = [
       '#type' => 'select',
       '#title' => $this->t('Region'),
       '#required' => TRUE,
-      '#options' => $regions,
-      '#default_value' => key($regions),
+      '#options' => $display->getRegionNames(),
     ];
+    if ($block_id) {
+      $configuration = $display->getBlock($block_id)->getConfiguration();
+      $form['_region']['#default_value'] = $configuration['region'];
+    }
+    else {
+      $form['_region']['#default_value'] = key($form['_region']['#options']);
+    }
 
     return $form;
   }

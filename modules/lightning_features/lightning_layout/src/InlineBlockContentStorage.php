@@ -4,6 +4,7 @@ namespace Drupal\lightning_layout;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\ctools_entity_mask\MaskContentEntityStorage;
 use Drupal\panels\Storage\PanelsStorageManagerInterface;
@@ -88,16 +89,20 @@ class InlineBlockContentStorage extends MaskContentEntityStorage {
   protected function mapFromStorageRecords(array $records) {
     $blocks = [];
 
-    foreach ($records as $block) {
-      $display = $this->panelsStorage->load($block->storage_type, $block->storage_id);
+    foreach ($records as $record) {
+      $display = $this->panelsStorage->load($record->storage_type, $record->storage_id);
 
-      if ($block->temp_store_key) {
-        $configuration = $this->tempStore->get($block->temp_store_key);
+      if ($record->temp_store_key) {
+        $configuration = $this->tempStore->get($record->temp_store_key);
         if ($configuration) {
           $display->setConfiguration($configuration);
         }
       }
-      $blocks[$block->uuid] = $display->getBlock($block->block_id)->getEntity();
+
+      $blocks[$record->uuid] = $display
+        ->getBlock($record->block_id)
+        ->getEntity()
+        ->setStorageContext($display, $record->block_id, $record->temp_store_key);
     }
 
     return $blocks;
@@ -106,16 +111,46 @@ class InlineBlockContentStorage extends MaskContentEntityStorage {
   /**
    * {@inheritdoc}
    */
-  protected function doPostSave(EntityInterface $entity, $update) {
-    parent::doPostSave($entity, $update);
+  protected function doSave($id, EntityInterface $entity) {
+    /** @var \Drupal\lightning_layout\Entity\InlineBlockContent $entity */
+    $ret = parent::doSave($id, $entity);
 
-    if (isset($entity->storageInfo)) {
-      $this->database
-        ->merge('inline_block')
-        ->key('uuid', $entity->uuid())
-        ->fields($entity->storageInfo)
-        ->execute();
+    list ($display, $block_id, $temp_store_key) = $entity->getStorageContext();
+
+    if ($block_id) {
+      $configuration = $display->getBlock($block_id)->getConfiguration();
+      $configuration['entity'] = serialize($entity);
+      $display->updateBlock($block_id, $configuration);
     }
+    else {
+      $regions = $display->getRegionNames();
+
+      $block_id = $display->addBlock([
+        'id' => 'inline_entity',
+        'region' => key($regions),
+        'entity' => serialize($entity),
+      ]);
+    }
+
+    if ($temp_store_key) {
+      $this->tempStore->set($temp_store_key, $display->getConfiguration());
+    }
+    else {
+      $this->panelsStorage->save($display);
+    }
+
+    $this->database
+      ->merge('inline_block')
+      ->key('uuid', $entity->uuid())
+      ->fields([
+        'storage_type' => $display->getStorageType(),
+        'storage_id' => $display->getStorageId(),
+        'temp_store_key' => $temp_store_key,
+        'block_id' => $block_id,
+      ])
+      ->execute();
+
+    return $ret;
   }
 
 }
