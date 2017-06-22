@@ -18,29 +18,6 @@ use Drupal\user\Entity\Role;
 use Drupal\user\RoleInterface;
 
 /**
- * Implements hook_layout_alter().
- */
-function lightning_layout_layout_alter(array &$definitions) {
-  // TODO: This entire function can be removed when Layout Plugin is no longer
-  // packaged with Lightning.
-  $map = [
-    'onecol' => 'layout_onecol',
-    'threecol_25_50_25' => 'layout_threecol_25_50_25',
-    'threecol_25_50_25_stacked' => 'layout_threecol_25_50_25',
-    'threecol_33_34_33' => 'layout_threecol_33_34_33',
-    'threecol_33_34_33_stacked' => 'layout_threecol_33_34_33',
-    'twocol' => 'layout_twocol',
-    'twocol_bricks' => 'layout_twocol_bricks',
-    'twocol_stacked' => 'layout_twocol',
-  ];
-  foreach ($map as $original_id => $new_id) {
-    if (isset($definitions[$new_id]) && empty($definitions[$original_id])) {
-      $definitions[$original_id] = $definitions[$new_id];
-    }
-  }
-}
-
-/**
  * Implements hook_modules_installed().
  */
 function lightning_layout_modules_installed(array $modules) {
