@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lightning_media_image\Plugin\entity_embed\EntityEmbedDisplay;
+namespace Drupal\lightning_media\Plugin\entity_embed\EntityEmbedDisplay;
 
 use Drupal\Core\Access\AccessResult;
 use Drupal\entity_embed\Plugin\entity_embed\EntityEmbedDisplay\ImageFieldFormatter;
