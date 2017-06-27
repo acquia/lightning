@@ -22,10 +22,12 @@ use Drupal\path\Plugin\Field\FieldType\PathFieldItemList;
  * Implements hook_config_schema_info_alter().
  */
 function lightning_core_config_schema_info_alter(array &$definitions) {
-  $definitions['views_filter']['mapping']['expose']['mapping']['argument'] = [
-    'type' => 'string',
-    'label' => 'Yield to argument',
-  ];
+  if (isset($definitions['views_filter'])) {
+    $definitions['views_filter']['mapping']['expose']['mapping']['argument'] = [
+      'type' => 'string',
+      'label' => 'Yield to argument',
+    ];
+  }
 }
 
 /**
