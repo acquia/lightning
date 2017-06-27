@@ -47,6 +47,15 @@ class MediaImage extends ImageFieldFormatter {
   /**
    * {@inheritdoc}
    */
+  public function getAttributeValues() {
+    return parent::getAttributeValues() + [
+      'alt' => $this->getEntityFromContext()->label(),
+    ];
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function isValidImage() {
     // This display plugin works for any media entity. And media items always
     // have at least a thumbnail. So, we can bypass this access gate.
