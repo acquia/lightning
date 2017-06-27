@@ -1,0 +1,42 @@
+<?php
+
+use Drupal\entity_browser\Element\EntityBrowserElement;
+use Drupal\lightning_core\ConfigHelper as Config;
+
+/**
+ * Implements hook_install().
+ */
+function upload_bundles_test_install() {
+  entity_get_form_display('node', 'page', 'default')
+    ->setComponent('field_z_image', [
+      'type' => 'entity_browser_entity_reference',
+      'settings' => [
+        'entity_browser' => 'media_browser',
+        'field_widget_display' => 'rendered_entity',
+        'field_widget_edit' => TRUE,
+        'field_widget_remove' => TRUE,
+        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
+        'field_widget_display_settings' => [
+          'view_mode' => 'embedded',
+        ],
+        'open' => TRUE,
+      ],
+      'region' => 'content',
+    ])
+    ->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function upload_bundles_test_uninstall() {
+  entity_get_form_display('node', 'page', 'default')
+    ->removeComponent('field_z_image')
+    ->save();
+
+  $storage = \Drupal::entityTypeManager()->getStorage('media');
+  $junk = $storage->loadByProperties(['bundle' => 'z_image']);
+  $storage->delete($junk);
+
+  Config::forModule('upload_bundles_test')->deleteAll();
+}

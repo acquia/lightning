@@ -1,4 +1,4 @@
-@lightning @media @image @api @javascript @errors @test_module
+@lightning @media @image @api @javascript @errors @with-module:lightning_test
 Feature: An entity browser for image fields
 
   @10a21ffe

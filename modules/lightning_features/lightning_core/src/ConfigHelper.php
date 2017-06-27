@@ -128,7 +128,7 @@ class ConfigHelper extends InstallStorage {
       if (Unicode::strpos($id, $prefix) === 0) {
         $entity = $this->getEntity(
           $entity_type,
-          Unicode::substr($id, Unicode::strlen($prefix) + 1)
+          Unicode::substr($id, Unicode::strlen($prefix))
         );
         return $entity->delete();
       }

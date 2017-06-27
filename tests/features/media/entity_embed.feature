@@ -1,7 +1,7 @@
 @lightning @api @media @javascript
 Feature: Embedding entities in a WYSIWYG editor
 
-  @test_module
+  @with-module:lightning_test
   Scenario: Embedded images use the Media Image display plugin by default
     Given I am logged in as a user with the page_creator,media_creator roles
     And a random image
@@ -25,7 +25,7 @@ Feature: Embedding entities in a WYSIWYG editor
     Then I should see a "form.entity-embed-dialog" element
     And the "Display as" field should contain "view_mode:media.embedded"
 
-  @test_module
+  @with-module:lightning_test
   Scenario: Embedding an image with embed-specific alt text and image style
     Given I am logged in as a user with the page_creator,media_creator roles
     And a random image

@@ -47,7 +47,7 @@ Feature: An entity browser for media assets
     # No choices are ever disabled in a single-cardinality entity browser.
     And I should see 0 "[data-selectable].disabled" elements
 
-  @test_module @93e7dcf1
+  @with-module:lightning_test @93e7dcf1
   Scenario: Using the media browser for a new media reference field
     Given I am logged in as a user with the administrator role
     And I visit "/admin/structure/types/manage/page/fields/add-field"
