@@ -7,6 +7,7 @@
 
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\field\Entity\FieldConfig;
+use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\user\Entity\User;
 use Drupal\user\RoleInterface;
 
@@ -457,7 +458,8 @@ function lightning_update_8001() {
   // Install the body field on the basic block_content type.
   $field = FieldConfig::load('block_content.basic.body');
   if (empty($field)) {
-    lightning_core_create_config('field_config', 'block_content.basic.body', 'lightning');
+    $config = Config::forModule('lightning');
+    $config->getEntity('field_config', 'block_content.basic.body')->save();
 
     $display = EntityViewDisplay::load('block_content.basic.default');
     if ($display) {
@@ -471,7 +473,7 @@ function lightning_update_8001() {
       ])->save();
     }
     else {
-      lightning_core_create_config('entity_view_display', 'block_content.basic.default', 'lightning');
+      $config->getEntity('entity_view_display', 'block_content.basic.default')->save();
     }
   }
 
