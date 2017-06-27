@@ -129,9 +129,4 @@ function lightning_test_uninstall() {
     }
   }
   $state->delete('_fields');
-
-  \Drupal::entityTypeManager()
-    ->getStorage('media_bundle')
-    ->load('z_image')
-    ->delete();
 }
