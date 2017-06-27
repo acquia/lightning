@@ -3,6 +3,7 @@
 namespace Drupal\lightning_media\Plugin\entity_embed\EntityEmbedDisplay;
 
 use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\entity_embed\Plugin\entity_embed\EntityEmbedDisplay\ImageFieldFormatter;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
 use Drupal\lightning_media\MediaHelper;
@@ -29,6 +30,18 @@ class MediaImage extends ImageFieldFormatter {
    */
   public function getFieldFormatterId() {
     return 'image';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
+    $form = parent::buildConfigurationForm($form, $form_state);
+
+    // Don't allow linking directly to the content.
+    unset($form['image_link']['#options']['content']);
+
+    return $form;
   }
 
   /**
