@@ -5,9 +5,11 @@
  * Contains installation and update routines for Lightning Dev.
  */
 
+use Drupal\embed\Entity\EmbedButton;
 use Drupal\entity_browser\Entity\EntityBrowser;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\filter\Entity\FilterFormat;
 use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\media_entity\Entity\MediaBundle;
 use Drupal\scheduled_updates\Entity\ScheduledUpdateType;
@@ -191,4 +193,21 @@ function lightning_dev_update_8005() {
   $display['display_options']['defaults']['arguments'] = FALSE;
   $display['display_options']['filters']['bundle']['expose']['argument'] = 'bundle';
   $view->save();
+}
+
+/**
+ * Executes manual updates for Lightning 2.1.5 --> 2.1.6.
+ */
+function lightning_dev_update_8006() {
+  \Drupal::service('plugin.manager.embed.type')->clearCachedDefinitions();
+
+  $button = EmbedButton::load('media_browser');
+  $settings = $button->getTypeSettings();
+  $settings['display_plugins'][] = 'media_image';
+  $button->set('type_settings', $settings)->save();
+
+  $format = FilterFormat::load('rich_text');
+  $configuration = $format->filters('filter_html')->getConfiguration();
+  $configuration['settings']['allowed_html'] = str_replace('<drupal-entity data-*>', '<drupal-entity data-* title alt>', $configuration['settings']['allowed_html']);
+  $format->setFilterConfig('filter_html', $configuration)->save();
 }
