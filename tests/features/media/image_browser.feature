@@ -38,4 +38,4 @@ Feature: An entity browser for image fields
     And I submit the entity browser
     And I open the "Unlimited Images" image browser
     And I select item 4
-    Then nothing should match "[data-selectable].disabled"
+    Then I should see 0 "[data-selectable].disabled" elements

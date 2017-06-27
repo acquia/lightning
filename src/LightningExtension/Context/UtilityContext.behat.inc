@@ -27,33 +27,6 @@ class UtilityContext extends DrupalSubContextBase {
   }
 
   /**
-   * Asserts that a certain number of elements match a CSS selector.
-   *
-   * @param string $selector
-   *   The selector.
-   * @param int $count
-   *   The number of elements expected to match the selector.
-   *
-   * @throws ExpectationException
-   *   If the number of elements that match the selector is not the expected
-   *   number.
-   *
-   * @Then :count element(s) should match :selector
-   */
-  public function assertSelectorMatch($selector, $count) {
-    $session = $this->getSession();
-
-    $result = count($session->getPage()->findAll('css', $selector));
-
-    if ($result != $count) {
-      throw new ExpectationException(
-        '"' . $selector . '" matched ' . $result . ' element(s), expected ' . $count . '.',
-        $session->getDriver()
-      );
-    }
-  }
-
-  /**
    * Asserts that a minimum number of elements match a CSS selector.
    *
    * @param string $selector
@@ -77,19 +50,6 @@ class UtilityContext extends DrupalSubContextBase {
         $session->getDriver()
       );
     }
-  }
-
-  /**
-   * Asserts that no elements match a CSS selector.
-   *
-   * @param string $selector
-   *   The selector.
-   *
-   * @Then no elements should match :selector
-   * @Then nothing should match :selector
-   */
-  public function assertSelectorMatchNothing($selector) {
-    $this->assertSelectorMatch($selector, 0);
   }
 
   /**

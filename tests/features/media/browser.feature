@@ -43,9 +43,9 @@ Feature: An entity browser for media assets
     And I wait for AJAX to finish
     And I select item 1 in the media browser
     And I select item 2 in the media browser
-    Then 1 element should match "[data-selectable].selected"
+    Then I should see a "[data-selectable].selected" element
     # No choices are ever disabled in a single-cardinality entity browser.
-    And nothing should match "[data-selectable].disabled"
+    And I should see 0 "[data-selectable].disabled" elements
 
   @test_module @93e7dcf1
   Scenario: Using the media browser for a new media reference field
