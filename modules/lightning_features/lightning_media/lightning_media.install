@@ -265,6 +265,19 @@ function lightning_media_update_8015() {
 }
 
 /**
+ * Creates the lightning_media.settings config object.
+ */
+function lightning_media_update_8016() {
+  Config::forModule('lightning_media')
+    ->get('lightning_media.settings')
+    // The default value of this setting changes the behavior of the Entity
+    // Embed dialog. Rather than break an existing workflow, change the new
+    // configuration to preserve the old behavior.
+    ->set('entity_embed.choose_display', TRUE)
+    ->save();
+}
+
+/**
  * Implements hook_update_dependencies().
  */
 function lightning_media_update_dependencies() {

@@ -70,6 +70,11 @@ that needing to rely on view modes. To enable this functionality:
 6. Under "Allowed Entity Embed Display plugins", ensure that the "Media Image"
    checkbox is checked.
 7. Save the embed button.
+8. If you would like to prevent authors from choosing how media items embedded
+   in WYSIWYG editors should be displayed (a change from the default behavior
+   in previous versions of Lightning), go to *Configuration > System >
+   Lightning > Media* and uncheck the box labeled "Allow users to choose how to
+   display embedded media", then submit the form.
 
 ## 2.1.4 to 2.1.5
 There are no manual update steps for this version.

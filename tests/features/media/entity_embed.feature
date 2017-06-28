@@ -9,7 +9,6 @@ Feature: Embedding entities in a WYSIWYG editor
     And I select item 1
     And I submit the entity browser
     Then I should see a "form.entity-embed-dialog" element
-    And the "Display as" field should contain "media_image"
     # Assert that the default alt text is whatever is in the media item.
     And the "Alternate text" field should contain "I am the greetest"
     # There are two "Title" fields on the page once we reach this assertion --
@@ -18,18 +17,29 @@ Feature: Embedding entities in a WYSIWYG editor
     And the "attributes[title]" field should contain "Foobar"
     And I queue the latest media entity for deletion
 
-  Scenario: Embedded videos use the Embedded display plugin by default
+  Scenario Outline: Embed code-based media types use the Embedded display plugin by default
     Given I am logged in as a user with the page_creator,media_creator roles
-    And video media from embed code:
+    And <bundle> media from embed code:
       """
-      https://www.youtube.com/watch?v=N2_HkWs7OM0
+      <embed_code>
       """
     When I visit "/node/add/page"
     And I open the media browser
     And I select item 1
     And I submit the entity browser
     Then I should see a "form.entity-embed-dialog" element
-    And the "Display as" field should contain "view_mode:media.embedded"
+    And I should not see an "Alternate text" field
+    # There are two "Title" fields on the page once we reach this assertion --
+    # the node title, and the image's title attribute. We need to specify the
+    # actual name of the field or Mink will get confused.
+    And I should not see an "attributes[title]" field
+
+    Examples:
+      | bundle    | embed_code                                                   |
+      | video     | https://www.youtube.com/watch?v=N2_HkWs7OM0                  |
+      | video     | https://vimeo.com/14782834                                   |
+      | tweet     | https://twitter.com/djphenaproxima/status/879739227617079296 |
+      | instagram | https://www.instagram.com/p/lV3WqOoNDD                       |
 
   Scenario: Embedding an image with embed-specific alt text and image style
     Given I am logged in as a user with the page_creator,media_creator roles

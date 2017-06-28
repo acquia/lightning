@@ -28,7 +28,16 @@ class EntityEmbedDialog extends BaseEntityEmbedDialog {
         $form_state->set('entity_element', $element);
       }
     }
-    return parent::buildEmbedStep($form, $form_state);
+
+    $form = parent::buildEmbedStep($form, $form_state);
+
+    // If the user can choose the display plugin, allow Lightning Media's
+    // settings to override that access.
+    $element = &$form['attributes']['data-entity-embed-display'];
+    if ($element['#access']) {
+      $element['#access'] = $this->config('lightning_media.settings')->get('entity_embed.choose_display');
+    }
+    return $form;
   }
 
 }
