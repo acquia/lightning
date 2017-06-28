@@ -12,7 +12,10 @@ Feature: Embedding entities in a WYSIWYG editor
     And the "Display as" field should contain "media_image"
     # Assert that the default alt text is whatever is in the media item.
     And the "Alternate text" field should contain "I am the greetest"
-    And the "Title" field should contain "Foobar"
+    # There are two "Title" fields on the page once we reach this assertion --
+    # the node title, and the image's title attribute. We need to specify the
+    # actual name of the field or Mink will get confused.
+    And the "attributes[title]" field should contain "Foobar"
     And I queue the latest media entity for deletion
 
   Scenario: Embedded videos use the Embedded display plugin by default
@@ -37,7 +40,10 @@ Feature: Embedding entities in a WYSIWYG editor
     And I submit the entity browser
     And I select "medium" from "Image style"
     And I enter "Behold my image of randomness" for "Alternate text"
-    And I enter "Ye gods!" for "Title"
+    # There are two "Title" fields on the page at this point -- the node title,
+    # and the image's title attribute. We need to specify the actual name of
+    # the field or Mink will get confused.
+    And I enter "Ye gods!" for "attributes[title]"
     # We can't simply use the "I press Embed" step, because Drupal's dialog box
     # implementation wraps the text of the buttons in <span> tags, which trips
     # that step up.

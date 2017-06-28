@@ -84,24 +84,25 @@ class MediaImage extends ImageFieldFormatter {
    */
   public function getFieldValue() {
     $value = parent::getFieldValue();
+
     $value['target_id'] = $this->getItem()->target_id;
 
     return $value;
   }
 
   /**
-   * Returns the image field item list to use for the embedded entity.
+   * Returns the image field item to use for the embedded entity.
    *
-   * @return \Drupal\Core\Field\FieldItemListInterface
-   *   The field item list.
+   * @return \Drupal\image\Plugin\Field\FieldType\ImageItem
+   *   The image field item.
    */
   protected function getItem() {
     /** @var \Drupal\media_entity\MediaInterface $entity */
     $entity = $this->getEntityFromContext();
 
-    $field = MediaHelper::getSourceField($entity);
+    $item = MediaHelper::getSourceField($entity)->first();
 
-    return $field instanceof ImageItem ? $field : $entity->get('thumbnail');
+    return $item instanceof ImageItem ? $item : $entity->get('thumbnail')->first();
   }
 
 }
