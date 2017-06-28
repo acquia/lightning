@@ -22,7 +22,7 @@ class UtilityContext extends DrupalSubContextBase {
    * @param string $field
    *   The field locator.
    *
-   * @Then I should not see an? :field field
+   * @Then I should not see a(n) :field field
    */
   public function assertFieldNotExists($field) {
     $this->assertSession()->fieldNotExists($field);

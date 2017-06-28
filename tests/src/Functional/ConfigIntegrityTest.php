@@ -5,7 +5,6 @@ namespace Drupal\lightning\Tests\Functional;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
-use Drupal\user\Entity\User;
 
 /**
  * Ensures the integrity and correctness of Lightning's bundled config.
@@ -41,16 +40,16 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertContains('view media', Role::load('anonymous')->getPermissions());
     $this->assertContains('view media', Role::load('authenticated')->getPermissions());
 
-    $account = User::load(1);
-    $account->setPassword('foo')->save();
-    $account->passRaw = 'foo';
+    $account = $this->drupalCreateUser();
     $this->drupalLogin($account);
 
     $this->assertForbidden('/admin/config/system/lightning');
     $this->assertForbidden('/admin/config/system/lightning/layout');
     $this->assertForbidden('/admin/config/system/lightning/media');
 
-    Role::load('authenticated')->setIsAdmin(TRUE)->save();
+    $this->drupalLogout();
+    $account = $this->drupalCreateUser([], NULL, TRUE);
+    $this->drupalLogin($account);
 
     $this->assertAllowed('/admin/config/system/lightning');
     $assert->linkByHrefExists('/admin/config/system/lightning/layout');
