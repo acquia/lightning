@@ -54,6 +54,23 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+## 2.1.5 to 2.1.6
+This version of Lightning adds the ability to choose an image style, alt text,
+and other settings each time you embed an image in a WYSIWYG editor, rather
+that needing to rely on view modes. To enable this functionality:
+1. Clear all caches.
+2. Under *Configuration > Content Authoring > Text formats and editors*, edit
+   the **Rich Text** filter format. Under "Filter settings", open the tab
+   labeled "Limit allowed HTML tags and correct faulty HTML".
+3. In the "Allowed HTML tags" text field, you should see a tag like
+   `<drupal-entity data-*>`. Change it to `<drupal-entity data-* alt title>`.
+4. Save the filter format.
+5. Under *Configuration > Content Authoring > Text editor embed buttons*,  edit
+   the "Media browser" embed button.
+6. Under "Allowed Entity Embed Display plugins", ensure that the "Media Image"
+   checkbox is checked.
+7. Save the embed button.
+
 ## 2.1.4 to 2.1.5
 There are no manual update steps for this version.
 
