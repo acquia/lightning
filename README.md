@@ -146,10 +146,11 @@ your environment, but generally you will not need to do this.
 ### Workflow
 * Lightning Workflow is based on Workbench Moderation, which is incompatible
   with the experimental Content Moderation module included with Drupal core
-  8.3.0 and later, which serves the same purpose as Workbench Moderation. We
-  plan to seamlessly migrate Lightning to Content Moderation when it becomes
-  stable, most likely in Drupal 8.4.0. But for the moment, the incompatibility
-  between Workbench Moderation and Content Moderation remains a known issue.
+  8.3.0 and later and serves the same purpose as Workbench Moderation. We plan
+  to seamlessly migrate Lightning Workflow to Content Moderation once it is
+  stable, most likely in Drupal 8.4.0. But for now, installing Content
+  Moderation alongside Lightning Workflow may have unpredictable and dangerous
+  effects, and is best avoided.
 
 [issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
 [meta_release]: https://www.drupal.org/node/2670686 "Lightning Meta Releases Issue"
