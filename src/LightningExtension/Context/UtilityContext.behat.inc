@@ -22,7 +22,7 @@ class UtilityContext extends DrupalSubContextBase {
    * @param string $field
    *   The field locator.
    *
-   * @Then I should not see a :field field
+   * @Then I should not see an? :field field
    */
   public function assertFieldNotExists($field) {
     $this->assertSession()->fieldNotExists($field);
@@ -154,6 +154,39 @@ class UtilityContext extends DrupalSubContextBase {
         $media->image->alt = $alt;
       }
       $media->save();
+    }
+  }
+
+  /**
+   * Generates random document media assets.
+   *
+   * @param int $count
+   *   (optional) How many to generate. Defaults to 1.
+   *
+   * @Given a random document
+   * @Given :count random documents
+   */
+  public function generateRandomDocument($count = 1) {
+    $random = new Random();
+
+    for ($i = 0; $i < $count; $i++) {
+      $uri = uniqid('public://random_') . '.txt';
+      file_put_contents($uri, $random->paragraphs(2));
+
+      $file = File::create([
+        'uri' => $uri,
+      ]);
+      $file->setMimeType('text/plain');
+      $file->setTemporary();
+      $file->save();
+
+      Media::create([
+        'bundle' => 'document',
+        'name' => $random->name(32),
+        'status' => TRUE,
+        'image' => $file->id(),
+        'field_media_in_library' => TRUE,
+      ])->save();
     }
   }
 

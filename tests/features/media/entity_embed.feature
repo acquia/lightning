@@ -17,6 +17,20 @@ Feature: Embedding entities in a WYSIWYG editor
     And the "attributes[title]" field should contain "Foobar"
     And I queue the latest media entity for deletion
 
+  Scenario: The document media type uses the Embedded display plugin by default
+    Given I am logged in as a user with the page_creator,media_creator roles
+    And a random document
+    When I visit "/node/add/page"
+    And I open the media browser
+    And I select item 1
+    And I submit the entity browser
+    Then I should see a "form.entity-embed-dialog" element
+    And I should not see an "Alternate text" field
+    # There are two "Title" fields on the page once we reach this assertion --
+    # the node title, and the image's title attribute. We need to specify the
+    # actual name of the field or Mink will get confused.
+    And I should not see an "attributes[title]" field
+
   Scenario Outline: Embed code-based media types use the Embedded display plugin by default
     Given I am logged in as a user with the page_creator,media_creator roles
     And <bundle> media from embed code:
