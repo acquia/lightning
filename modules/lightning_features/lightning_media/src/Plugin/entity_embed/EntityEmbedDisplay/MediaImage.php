@@ -48,8 +48,16 @@ class MediaImage extends ImageFieldFormatter {
    * {@inheritdoc}
    */
   public function getAttributeValues() {
+    $field = $this->getItem();
+    $label = $field->getEntity()->label();
+
+    // Try to default to the alt and title attributes set on the field item, but
+    // fall back to the entity label for both.
     return parent::getAttributeValues() + [
-      'alt' => $this->getEntityFromContext()->label(),
+      'alt' =>
+        $field->alt ?: $label,
+      'title' =>
+        $field->title ?: $label,
     ];
   }
 
@@ -76,16 +84,24 @@ class MediaImage extends ImageFieldFormatter {
    */
   public function getFieldValue() {
     $value = parent::getFieldValue();
+    $value['target_id'] = $this->getItem()->target_id;
 
+    return $value;
+  }
+
+  /**
+   * Returns the image field item list to use for the embedded entity.
+   *
+   * @return \Drupal\Core\Field\FieldItemListInterface
+   *   The field item list.
+   */
+  protected function getItem() {
     /** @var \Drupal\media_entity\MediaInterface $entity */
     $entity = $this->getEntityFromContext();
 
     $field = MediaHelper::getSourceField($entity);
-    $field = $field instanceof ImageItem ? $field : $entity->get('thumbnail');
 
-    $value['target_id'] = $field->target_id;
-
-    return $value;
+    return $field instanceof ImageItem ? $field : $entity->get('thumbnail');
   }
 
 }
