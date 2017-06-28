@@ -37,6 +37,16 @@ class ConfigIntegrityTest extends BrowserTestBase {
     // All users should be able to view media items.
     $this->assertContains('view media', Role::load('anonymous')->getPermissions());
     $this->assertContains('view media', Role::load('authenticated')->getPermissions());
+
+    // Assert that media-related roles exist.
+    $this->assertInstanceOf(Role::class, Role::load('media_creator'));
+    $this->assertInstanceOf(Role::class, Role::load('media_manager'));
+
+    // Assert that page creators have expected permissions.
+    $permissions = Role::load('page_creator')->getPermissions();
+    $this->assertContains('use text format rich_text', $permissions);
+    $this->assertContains('access media_browser entity browser pages', $permissions);
+    $this->assertContains('access image_browser entity browser pages', $permissions);
   }
 
 }

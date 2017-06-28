@@ -1,24 +1,6 @@
 @lightning @core @media @api
 Feature: Responsibility-based user roles for creating and managing media assets
 
-  @beta5 @80dd53a1
-  Scenario: Media-related user roles should exist
-    Given I am logged in as a user with the "administer permissions" permission
-    When I visit "/admin/people/roles"
-    Then I should see "Media Creator"
-    And I should see "Media Manager"
-
-  @beta5 @68d467b4
-  Scenario: Content creators have access to the rich_text input format and entity browsers
-    Given I am logged in as a user with the "administer permissions" permission
-    When I visit "/admin/people/permissions"
-    Then the page_creator role should have permission to:
-      """
-      use text format rich_text
-      access media_browser entity browser pages
-      access image_browser entity browser pages
-      """
-
   @video @beta5 @d2a26938
   Scenario: Creating media as a media creator
     Given I am logged in as a user with the media_creator role
