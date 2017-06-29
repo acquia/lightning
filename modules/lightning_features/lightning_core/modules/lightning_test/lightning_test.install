@@ -81,21 +81,6 @@ function lightning_test_install() {
       ],
       'region' => 'content',
     ])
-    ->setComponent('field_z_image', [
-      'type' => 'entity_browser_entity_reference',
-      'settings' => [
-        'entity_browser' => 'media_browser',
-        'field_widget_display' => 'rendered_entity',
-        'field_widget_edit' => TRUE,
-        'field_widget_remove' => TRUE,
-        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
-        'field_widget_display_settings' => [
-          'view_mode' => 'embedded',
-        ],
-        'open' => TRUE,
-      ],
-      'region' => 'content',
-    ])
     ->save();
 
   $display = entity_get_form_display('media', 'video', 'default');
@@ -144,9 +129,4 @@ function lightning_test_uninstall() {
     }
   }
   $state->delete('_fields');
-
-  \Drupal::entityTypeManager()
-    ->getStorage('media_bundle')
-    ->load('z_image')
-    ->delete();
 }

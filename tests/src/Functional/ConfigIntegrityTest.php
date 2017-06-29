@@ -19,6 +19,8 @@ class ConfigIntegrityTest extends BrowserTestBase {
   protected $profile = 'lightning';
 
   public function testConfig() {
+    $assert = $this->assertSession();
+
     // lightning_core_update_8002() marks a couple of core view modes as
     // internal.
     $view_modes = EntityViewMode::loadMultiple(['node.rss', 'node.search_index']);
@@ -37,6 +39,45 @@ class ConfigIntegrityTest extends BrowserTestBase {
     // All users should be able to view media items.
     $this->assertContains('view media', Role::load('anonymous')->getPermissions());
     $this->assertContains('view media', Role::load('authenticated')->getPermissions());
+
+    $account = $this->drupalCreateUser();
+    $this->drupalLogin($account);
+
+    $this->assertForbidden('/admin/config/system/lightning');
+    $this->assertForbidden('/admin/config/system/lightning/layout');
+    $this->assertForbidden('/admin/config/system/lightning/media');
+
+    $this->drupalLogout();
+    $account = $this->drupalCreateUser([], NULL, TRUE);
+    $this->drupalLogin($account);
+
+    $this->assertAllowed('/admin/config/system/lightning');
+    $assert->linkByHrefExists('/admin/config/system/lightning/layout');
+    $assert->linkByHrefExists('/admin/config/system/lightning/media');
+    $this->assertAllowed('/admin/config/system/lightning/layout');
+    $this->assertAllowed('/admin/config/system/lightning/media');
+  }
+
+  /**
+   * Asserts that the current user can access a Drupal route.
+   *
+   * @param string $path
+   *   The route path to visit.
+   */
+  protected function assertAllowed($path) {
+    $this->drupalGet($path);
+    $this->assertSession()->statusCodeEquals(200);
+  }
+
+  /**
+   * Asserts that the current user cannot access a Drupal route.
+   *
+   * @param string $path
+   *   The route path to visit.
+   */
+  protected function assertForbidden($path) {
+    $this->drupalGet($path);
+    $this->assertSession()->statusCodeEquals(403);
   }
 
 }
