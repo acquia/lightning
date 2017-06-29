@@ -7,6 +7,8 @@ use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\Component\Utility\Random;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
+use Drupal\file\Entity\File;
+use Drupal\media_entity\Entity\Media;
 use WebDriver\Exception\NoAlertOpenError;
 
 /**
@@ -20,37 +22,10 @@ class UtilityContext extends DrupalSubContextBase {
    * @param string $field
    *   The field locator.
    *
-   * @Then I should not see a :field field
+   * @Then I should not see a(n) :field field
    */
   public function assertFieldNotExists($field) {
     $this->assertSession()->fieldNotExists($field);
-  }
-
-  /**
-   * Asserts that a certain number of elements match a CSS selector.
-   *
-   * @param string $selector
-   *   The selector.
-   * @param int $count
-   *   The number of elements expected to match the selector.
-   *
-   * @throws ExpectationException
-   *   If the number of elements that match the selector is not the expected
-   *   number.
-   *
-   * @Then :count element(s) should match :selector
-   */
-  public function assertSelectorMatch($selector, $count) {
-    $session = $this->getSession();
-
-    $result = count($session->getPage()->findAll('css', $selector));
-
-    if ($result != $count) {
-      throw new ExpectationException(
-        '"' . $selector . '" matched ' . $result . ' element(s), expected ' . $count . '.',
-        $session->getDriver()
-      );
-    }
   }
 
   /**
@@ -77,19 +52,6 @@ class UtilityContext extends DrupalSubContextBase {
         $session->getDriver()
       );
     }
-  }
-
-  /**
-   * Asserts that no elements match a CSS selector.
-   *
-   * @param string $selector
-   *   The selector.
-   *
-   * @Then no elements should match :selector
-   * @Then nothing should match :selector
-   */
-  public function assertSelectorMatchNothing($selector) {
-    $this->assertSelectorMatch($selector, 0);
   }
 
   /**
@@ -156,31 +118,75 @@ class UtilityContext extends DrupalSubContextBase {
    *
    * @param int $count
    *   (optional) How many to generate. Defaults to 1.
+   * @param string $name
+   *   (optional) The label of the media item wrapping the image. Defaults to
+   *   a random string.
+   * @param string $alt
+   *   (optional) The alt text for the image.
    *
    * @Given a random image
+   * @Given a random image named :name
+   * @Given a random image with alt text :alt
+   * @Given a random image named :name with alt text :alt
    * @Given :count random images
    */
-  public function generateRandomImages($count = 1) {
+  public function generateRandomImages($count = 1, $name = NULL, $alt = NULL) {
     $random = new Random();
-    $entity_type_manager = \Drupal::entityTypeManager();
 
     for ($i = 0; $i < $count; $i++) {
       $uri = $random->image(uniqid('public://random_') . '.png', '240x240', '640x480');
 
-      /** @var \Drupal\file\FileInterface $file */
-      $file = $entity_type_manager->getStorage('file')->create(['uri' => $uri]);
+      $file = File::create([
+        'uri' => $uri,
+      ]);
       $file->setMimeType('image/png');
       $file->setTemporary();
       $file->save();
 
-      $media = $entity_type_manager->getStorage('media')->create([
+      $media = Media::create([
         'bundle' => 'image',
-        'name' => $random->name(32),
+        'name' => $name ?: $random->name(32),
         'status' => TRUE,
         'image' => $file->id(),
         'field_media_in_library' => TRUE,
       ]);
+      if ($alt) {
+        $media->image->alt = $alt;
+      }
       $media->save();
+    }
+  }
+
+  /**
+   * Generates random document media assets.
+   *
+   * @param int $count
+   *   (optional) How many to generate. Defaults to 1.
+   *
+   * @Given a random document
+   * @Given :count random documents
+   */
+  public function generateRandomDocument($count = 1) {
+    $random = new Random();
+
+    for ($i = 0; $i < $count; $i++) {
+      $uri = uniqid('public://random_') . '.txt';
+      file_put_contents($uri, $random->paragraphs(2));
+
+      $file = File::create([
+        'uri' => $uri,
+      ]);
+      $file->setMimeType('text/plain');
+      $file->setTemporary();
+      $file->save();
+
+      Media::create([
+        'bundle' => 'document',
+        'name' => $random->name(32),
+        'status' => TRUE,
+        'image' => $file->id(),
+        'field_media_in_library' => TRUE,
+      ])->save();
     }
   }
 

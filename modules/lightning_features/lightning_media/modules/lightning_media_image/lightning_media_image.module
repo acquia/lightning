@@ -38,6 +38,11 @@ function lightning_media_image_modules_installed(array $modules) {
 function lightning_media_image_media_entity_type_info_alter(array &$types) {
   $types['image']['input_match']['field_types'] = ['image'];
   Override::pluginClass($types['image'], Image::class);
+
+  // When a media item that uses the Image plugin is embedded in a text editor,
+  // prefer the media_image display plugin.
+  // @see \Drupal\lightning_media\Form\EntityEmbedDialog::buildEmbedStep()
+  $types['image']['entity_embed_display'] = 'media_image';
 }
 
 /**

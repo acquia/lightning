@@ -36,7 +36,7 @@ Feature: Media assets based on embed codes
       | instagram | https://www.instagram.com/p/lV3WqOoNDD                 |
       | video     | https://www.youtube.com/watch?v=ktCgVopf7D0            |
 
-  @video @test_module @javascript @c74eadd0
+  @video @with-module:lightning_test @javascript @c74eadd0
   Scenario: Clearing an image field on a media item
     Given I am logged in as a user with the media_creator role
     When I visit "/media/add/video"

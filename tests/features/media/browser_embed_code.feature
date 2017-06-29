@@ -1,7 +1,7 @@
 @lightning @media @api @javascript @errors
 Feature: Creating media assets from within the media browser using embed codes
 
-  @video @twitter @instagram @test_module @2c43f38c
+  @video @twitter @instagram @with-module:lightning_test @2c43f38c
   Scenario Outline: Creating media assets from within the media browser using embed codes
     Given I am logged in as a user with the media_creator role
     When I visit "/entity-browser/iframe/media_browser"
