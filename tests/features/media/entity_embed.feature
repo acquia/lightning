@@ -1,6 +1,7 @@
 @lightning @api @media @javascript
 Feature: Embedding entities in a WYSIWYG editor
 
+  @0b5444c1
   Scenario: Embedded images use the Media Image display plugin by default
     Given I am logged in as a user with the page_creator,media_creator roles
     And a random image named "Foobar" with alt text "I am the greetest"
@@ -9,6 +10,7 @@ Feature: Embedding entities in a WYSIWYG editor
     And I select item 1
     And I submit the entity browser
     Then I should see a "form.entity-embed-dialog" element
+    And I should see an "Image style" field
     # Assert that the default alt text is whatever is in the media item.
     And the "Alternate text" field should contain "I am the greetest"
     # There are two "Title" fields on the page once we reach this assertion --
@@ -17,6 +19,7 @@ Feature: Embedding entities in a WYSIWYG editor
     And the "attributes[title]" field should contain "Foobar"
     And I queue the latest media entity for deletion
 
+  @d44b6a50
   Scenario: The document media type uses the Embedded display plugin by default
     Given I am logged in as a user with the page_creator,media_creator roles
     And a random document
@@ -25,12 +28,15 @@ Feature: Embedding entities in a WYSIWYG editor
     And I select item 1
     And I submit the entity browser
     Then I should see a "form.entity-embed-dialog" element
+    And I should not see an "Image style" field
     And I should not see an "Alternate text" field
     # There are two "Title" fields on the page once we reach this assertion --
     # the node title, and the image's title attribute. We need to specify the
     # actual name of the field or Mink will get confused.
     And I should not see an "attributes[title]" field
+    And I queue the latest media entity for deletion
 
+  @917d6aa6
   Scenario Outline: Embed code-based media types use the Embedded display plugin by default
     Given I am logged in as a user with the page_creator,media_creator roles
     And <bundle> media from embed code:
@@ -42,6 +48,7 @@ Feature: Embedding entities in a WYSIWYG editor
     And I select item 1
     And I submit the entity browser
     Then I should see a "form.entity-embed-dialog" element
+    And I should not see an "Image style" field
     And I should not see an "Alternate text" field
     # There are two "Title" fields on the page once we reach this assertion --
     # the node title, and the image's title attribute. We need to specify the
@@ -55,10 +62,15 @@ Feature: Embedding entities in a WYSIWYG editor
       | tweet     | https://twitter.com/djphenaproxima/status/879739227617079296 |
       | instagram | https://www.instagram.com/p/lV3WqOoNDD                       |
 
+  @cd742161
   Scenario: Embedding an image with embed-specific alt text and image style
     Given I am logged in as a user with the page_creator,media_creator roles
     And a random image
-    When I visit "/node/add/page"
+    And page content:
+      | type | title  | path    |
+      | page | Foobar | /foobar |
+    When I visit "/foobar"
+    And I click "Edit"
     And I open the media browser
     And I select item 1
     And I submit the entity browser
@@ -78,4 +90,3 @@ Feature: Embedding entities in a WYSIWYG editor
     Then the response should contain "Behold my image of randomness"
     And the response should contain "Ye gods!"
     And I queue the latest media entity for deletion
-    And I queue the latest node entity for deletion

@@ -377,7 +377,7 @@ class LightningSubContext extends DrupalSubContextBase {
    * @param string $locator
    *   The field ID, name, label, or value.
    *
-   * @Then I should see a :locator field
+   * @Then I should see a(n) :locator field
    */
   public function assertFieldExists($locator) {
     $this->assertSession()->fieldExists($locator);
