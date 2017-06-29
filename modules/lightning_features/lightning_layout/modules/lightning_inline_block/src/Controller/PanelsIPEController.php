@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lightning_layout\Controller;
+namespace Drupal\lightning_inline_block\Controller;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\AppendCommand;

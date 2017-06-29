@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lightning_layout\Form;
+namespace Drupal\lightning_inline_block\Form;
 
 use Drupal\block_content\BlockContentForm;
 use Drupal\Core\Form\FormStateInterface;
@@ -12,7 +12,7 @@ class InlineBlockContentForm extends BlockContentForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    /** @var \Drupal\lightning_layout\Entity\InlineBlockContent $entity */
+    /** @var \Drupal\lightning_inline_block\Entity\InlineBlockContent $entity */
     $entity = $this->getEntity();
 
     if ($block_id) {

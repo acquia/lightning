@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lightning_layout\Entity;
+namespace Drupal\lightning_inline_block\Entity;
 
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
@@ -14,11 +14,11 @@ use Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant;
  *   label = @Translation("Inline custom block"),
  *   bundle_label = @Translation("Custom block type"),
  *   handlers = {
- *     "storage" = "Drupal\lightning_layout\InlineBlockContentStorage",
+ *     "storage" = "Drupal\lightning_inline_block\InlineBlockContentStorage",
  *     "access" = "Drupal\block_content\BlockContentAccessControlHandler",
  *     "view_builder" = "Drupal\block_content\BlockContentViewBuilder",
  *     "form" = {
- *       "panels_ipe" = "Drupal\lightning_layout\Form\InlineBlockContentForm"
+ *       "panels_ipe" = "Drupal\lightning_inline_block\Form\InlineBlockContentForm"
  *     },
  *     "translation" = "Drupal\block_content\BlockContentTranslationHandler"
  *   },

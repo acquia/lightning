@@ -9,43 +9,6 @@ use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
 
 /**
- * Implements hook_schema().
- */
-function lightning_layout_schema() {
-  return [
-    'inline_block' => [
-      'fields' => [
-        'uuid' => [
-          'type' => 'varchar',
-          'length' => 64,
-          'not null' => TRUE,
-        ],
-        'storage_type' => [
-          'type' => 'varchar',
-          'length' => 255,
-          'not null' => TRUE,
-        ],
-        'storage_id' => [
-          'type' => 'varchar',
-          'length' => 255,
-          'not null' => TRUE,
-        ],
-        'temp_store_key' => [
-          'type' => 'varchar',
-          'length' => 255,
-        ],
-        'block_id' => [
-          'type' => 'varchar',
-          'length' => 64,
-          'not null' => TRUE,
-        ],
-      ],
-      'primary key' => ['uuid'],
-    ],
-  ];
-}
-
-/**
  * Implements hook_install().
  */
 function lightning_layout_install() {

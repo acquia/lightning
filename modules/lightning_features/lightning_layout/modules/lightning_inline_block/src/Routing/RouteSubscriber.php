@@ -1,9 +1,9 @@
 <?php
 
-namespace Drupal\lightning_layout\Routing;
+namespace Drupal\lightning_inline_block\Routing;
 
 use Drupal\Core\Routing\RouteSubscriberBase;
-use Drupal\lightning_layout\Controller\PanelsIPEController;
+use Drupal\lightning_inline_block\Controller\PanelsIPEController;
 use Symfony\Component\Routing\RouteCollection;
 
 class RouteSubscriber extends RouteSubscriberBase {

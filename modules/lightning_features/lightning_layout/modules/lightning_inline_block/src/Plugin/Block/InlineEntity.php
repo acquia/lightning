@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lightning_layout\Plugin\Block;
+namespace Drupal\lightning_inline_block\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;

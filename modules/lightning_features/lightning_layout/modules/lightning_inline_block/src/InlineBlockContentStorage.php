@@ -1,10 +1,9 @@
 <?php
 
-namespace Drupal\lightning_layout;
+namespace Drupal\lightning_inline_block;
 
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityStorageException;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\ctools_entity_mask\MaskContentEntityStorage;
 use Drupal\panels\Storage\PanelsStorageManagerInterface;
