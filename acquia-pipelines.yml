@@ -14,19 +14,19 @@ events:
           script:
             # Add Composer's local bin directory to the PATH so that we will be
             # running our installed versions of Drush, PHPCS, Behat, etc.
-            - export PATH="$HOME/.composer/vendor/bin:$BUILD_DIR/bin:$PATH"
+            - export PATH="$HOME/.composer/vendor/bin:$SOURCE_DIR/bin:$PATH"
             - composer validate --no-check-all --ansi
             - composer install
       - install:
           type: script
           script:
-            - cd $BUILD_DIR
+            - cd $SOURCE_DIR
             - mysql -u root -proot -e 'CREATE DATABASE drupal;'
             - phing install -Ddb.password=root -Ddb.database=drupal -Durl=http://127.0.0.1:8080
       - test:
           type: script
           script:
-            - cd $BUILD_DIR/docroot
+            - cd $SOURCE_DIR/docroot
             - drush runserver --default-server=builtin 8080 &>/dev/null &
             - phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
@@ -35,5 +35,5 @@ events:
           type: script
           script:
             # Setup settings file and codebase with minimum required for cloud.
-            - cd $BUILD_DIR
+            - cd $SOURCE_DIR
             - phing cloud-settings
