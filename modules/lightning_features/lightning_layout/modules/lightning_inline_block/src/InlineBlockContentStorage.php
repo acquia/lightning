@@ -6,6 +6,7 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\ctools_entity_mask\MaskContentEntityStorage;
+use Drupal\lightning_inline_block\Entity\InlineBlockContent;
 use Drupal\panels\Storage\PanelsStorageManagerInterface;
 use Drupal\user\SharedTempStore;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -98,10 +99,12 @@ class InlineBlockContentStorage extends MaskContentEntityStorage {
         }
       }
 
-      $blocks[$record->uuid] = $display
-        ->getBlock($record->block_id)
-        ->getEntity()
-        ->setStorageContext($display, $record->block_id, $record->temp_store_key);
+      /** @var InlineBlockContent $block */
+      $block = $display->getBlock($record->block_id)->getEntity();
+      $block->display = $display;
+      $block->blockId = $record->block_id;
+      $block->tempStoreKey = $record->temp_store_key;
+      $blocks[$record->uuid] = $block;
     }
 
     return $blocks;
@@ -110,46 +113,68 @@ class InlineBlockContentStorage extends MaskContentEntityStorage {
   /**
    * {@inheritdoc}
    */
-  protected function doSave($id, EntityInterface $entity) {
-    /** @var \Drupal\lightning_layout\Entity\InlineBlockContent $entity */
-    $ret = parent::doSave($id, $entity);
+  protected function doPostSave(EntityInterface $entity, $update) {
+    /** @var \Drupal\lightning_inline_block\Entity\InlineBlockContent $entity */
+    parent::doPostSave($entity, $update);
 
-    list ($display, $block_id, $temp_store_key) = $entity->getStorageContext();
+    $update ? $this->updateBlock($entity) : $this->insertBlock($entity);
+  }
 
-    if ($block_id) {
-      $configuration = $display->getBlock($block_id)->getConfiguration();
-      $configuration['entity'] = serialize($entity);
-      $display->updateBlock($block_id, $configuration);
-    }
-    else {
-      $regions = $display->getRegionNames();
+  /**
+   * Reacts when an inline block is 'inserted'.
+   *
+   * @param \Drupal\lightning_inline_block\Entity\InlineBlockContent $block
+   *   The inline block entity.
+   */
+  protected function insertBlock(InlineBlockContent $block) {
+    // We expect $block->display to be set because inline blocks cannot be saved
+    // without a Panels display. If it's not set, this will fatal. Good.
+    $display = $block->display;
 
-      $block_id = $display->addBlock([
-        'id' => 'inline_entity',
-        'region' => key($regions),
-        'entity' => serialize($entity),
-      ]);
-    }
+    // List the regions in the layout so that we can choose a default region if
+    // the block doesn't specify one.
+    $regions = $display->getRegionNames();
 
-    if ($temp_store_key) {
-      $this->tempStore->set($temp_store_key, $display->getConfiguration());
+    $block->blockId = $display->addBlock([
+      'id' => 'inline_entity',
+      'region' => $block->region ?: key($regions),
+      'entity' => serialize($block),
+    ]);
+
+    $temp_store_key = $display->getTempStoreId();
+    $this->database
+      ->insert('inline_block')
+      ->fields([
+        'uuid' => $block->uuid(),
+        'storage_type' => $display->getStorageType(),
+        'storage_id' => $display->getStorageId(),
+        'temp_store_key' => $temp_store_key,
+        'block_id' => $block->blockId,
+      ])
+      ->execute();
+
+    $this->tempStore->set($temp_store_key, $display->getConfiguration());
+  }
+
+  /**
+   * Reacts when an inline block is 'updated'.
+   *
+   * @param \Drupal\lightning_inline_block\Entity\InlineBlockContent $block
+   *   The inline block entity.
+   */
+  protected function updateBlock(InlineBlockContent $block) {
+    $display = $block->display;
+
+    $configuration = $display->getBlock($block->blockId)->getConfiguration();
+    $configuration['entity'] = serialize($block);
+    $display->updateBlock($block->blockId, $configuration);
+
+    if ($block->tempStoreKey) {
+      $this->tempStore->set($block->tempStoreKey, $display->getConfiguration());
     }
     else {
       $this->panelsStorage->save($display);
     }
-
-    $this->database
-      ->merge('inline_block')
-      ->key('uuid', $entity->uuid())
-      ->fields([
-        'storage_type' => $display->getStorageType(),
-        'storage_id' => $display->getStorageId(),
-        'temp_store_key' => $temp_store_key,
-        'block_id' => $block_id,
-      ])
-      ->execute();
-
-    return $ret;
   }
 
 }

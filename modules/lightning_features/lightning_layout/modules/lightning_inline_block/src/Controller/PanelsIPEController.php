@@ -23,7 +23,7 @@ class PanelsIPEController extends PanelsIPEPageController {
       throw new AccessDeniedHttpException();
     }
 
-    /** @var \Drupal\lightning_layout\Entity\InlineBlockContent $block */
+    /** @var \Drupal\lightning_inline_block\Entity\InlineBlockContent $block */
     $block = $this
       ->entityTypeManager()
       ->getStorage('inline_block_content')
@@ -31,8 +31,7 @@ class PanelsIPEController extends PanelsIPEPageController {
         'type' => $type,
       ]);
 
-    $display = $this->loadPanelsDisplay($panels_storage_type, $panels_storage_id);
-    $block->setStorageContext($display);
+    $block->display = $this->loadPanelsDisplay($panels_storage_type, $panels_storage_id);
 
     $extra = [];
     if ($request && $request->headers->has('referer')) {

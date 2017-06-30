@@ -4,7 +4,6 @@ namespace Drupal\lightning_inline_block\Entity;
 
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
-use Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant;
 
 /**
  * Defines the inline block entity class.
@@ -49,7 +48,7 @@ class InlineBlockContent extends BlockContent {
    *
    * @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant
    */
-  protected $display;
+  public $display;
 
   /**
    * The UUID of the block in the Panels display.
@@ -59,7 +58,7 @@ class InlineBlockContent extends BlockContent {
    *
    * @var string
    */
-  protected $blockId;
+  public $blockId;
 
   /**
    * The temp store ID of the Panels display.
@@ -73,22 +72,23 @@ class InlineBlockContent extends BlockContent {
    *
    * @var string
    */
-  protected $tempStoreKey;
+  public $tempStoreKey;
 
-  public function getStorageContext() {
-    return [
-      $this->display,
-      $this->blockId,
-      $this->tempStoreKey ?: $this->display->getTempStoreId(),
-    ];
-  }
+  /**
+   * The region of the Panels display in which this block is to be placed.
+   *
+   * @var string
+   */
+  public $region;
 
-  public function setStorageContext(PanelsDisplayVariant $display, $block_id = NULL, $temp_store_key = NULL) {
-    $this->display = $display;
-    $this->blockId = $block_id;
-    $this->tempStoreKey = $temp_store_key;
-
-    return $this;
+  /**
+   * {@inheritdoc}
+   */
+  public function __sleep() {
+    return array_diff(
+      parent::__sleep(),
+      ['display', 'blockId', 'tempStoreKey', 'region']
+    );
   }
 
 }
