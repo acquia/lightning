@@ -10,7 +10,7 @@ use Drupal\ctools_entity_mask\MaskEntityTrait;
  *
  * @ContentEntityType(
  *   id = "inline_block_content",
- *   label = @Translation("Inline custom block"),
+ *   label = @Translation("Custom block"),
  *   bundle_label = @Translation("Custom block type"),
  *   handlers = {
  *     "storage" = "Drupal\lightning_inline_block\InlineBlockContentStorage",
@@ -40,39 +40,24 @@ class InlineBlockContent extends BlockContent {
 
   use MaskEntityTrait;
 
-  /**
-   * The Panels display of which this block is an intrinsic part.
-   *
-   * Inline blocks do not have any existence outside of a Panels display, so
-   * this is always required in order to save or load an inline block.
-   *
-   * @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant
-   */
-  public $display;
+  protected $storage = [];
 
-  /**
-   * The UUID of the block in the Panels display.
-   *
-   * If this is not set, it can be assumed that the block has not yet been added
-   * to the Panels display.
-   *
-   * @var string
-   */
-  public $blockId;
+  public function getStorage() {
+    $this->storage['uuid'] = $this->uuid();
+    return $this->storage;
+  }
 
-  /**
-   * The temp store ID of the Panels display.
-   *
-   * A given display's temp store ID can vary depending on which automatic
-   * contexts are available and what their values are. Generally an inline block
-   * will be associated with a specific temp store ID, so although we can ask
-   * the Panels display for its temp store ID, we cannot be certain that it will
-   * be the temp store ID which is associated with this block. Therefore this
-   * may need to be explicitly set.
-   *
-   * @var string
-   */
-  public $tempStoreKey;
+  public function setStorage(array $storage) {
+    $this->storage = $storage;
+    return $this;
+  }
+
+  public function getDisplay() {
+    $storage = $this->getStorage();
+
+    return \Drupal::service('panels.storage_manager')
+      ->load($storage['storage_type'], $storage['storage_id']);
+  }
 
   /**
    * The region of the Panels display in which this block is to be placed.
@@ -85,10 +70,7 @@ class InlineBlockContent extends BlockContent {
    * {@inheritdoc}
    */
   public function __sleep() {
-    return array_diff(
-      parent::__sleep(),
-      ['display', 'blockId', 'tempStoreKey', 'region']
-    );
+    return array_diff(parent::__sleep(), ['storage']);
   }
 
 }

@@ -46,11 +46,11 @@ class LayoutSubscriber implements EventSubscriberInterface {
     $configuration = $variant->getConfiguration();
 
     $blocks = array_filter($configuration['blocks'], function (array $block) {
-      return $block['id'] == 'inline_entity';
+      return strpos($block['id'], 'inline_entity:') === 0;
     });
 
     $this->database
-      ->update('inline_block')
+      ->update('inline_entity')
       ->fields([
         'storage_type' => $variant->getStorageType(),
         'storage_id' => $variant->getStorageId(),

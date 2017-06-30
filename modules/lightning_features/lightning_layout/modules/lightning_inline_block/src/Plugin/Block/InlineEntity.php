@@ -7,15 +7,13 @@ use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant;
-use Drupal\panels\Storage\PanelsStorageManagerInterface;
-use Drupal\user\SharedTempStore;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @Block(
  *   id = "inline_entity",
- *   admin_label = @Translation("Inline entity")
+ *   admin_label = @Translation("Inline entity"),
+ *   deriver = "\Drupal\lightning_inline_block\Plugin\Block\InlineEntityDeriver",
  * )
  */
 class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface {
@@ -29,13 +27,6 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
 
   protected $database;
 
-  protected $panelsStorage;
-
-  protected $tempStore;
-
-  /**
-   * @var \Drupal\lightning_inline_block\Entity\InlineBlockContent
-   */
   protected $entity;
 
   /**
@@ -50,12 +41,10 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, Connection $database, PanelsStorageManagerInterface $panels_storage, SharedTempStore $temp_store) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
     $this->database = $database;
-    $this->panelsStorage = $panels_storage;
-    $this->tempStore = $temp_store;
   }
 
   /**
@@ -67,29 +56,15 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
       $plugin_id,
       $plugin_definition,
       $container->get('entity_type.manager'),
-      $container->get('database'),
-      $container->get('panels.storage_manager'),
-      $container->get('user.shared_tempstore')->get('panels_ipe')
+      $container->get('database')
     );
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function defaultConfiguration() {
-    $configuration = parent::defaultConfiguration();
-
-    $configuration['entity_type'] = 'inline_block_content';
-    $configuration['bundle'] = 'basic';
-
-    return $configuration;
   }
 
   /**
    * @return \Drupal\Core\Entity\EntityInterface
    */
-  public function getEntity(\stdClass $storage = NULL, PanelsDisplayVariant $display = NULL) {
-    if (is_null($this->entity)) {
+  public function getEntity() {
+    if (empty($this->entity)) {
       $configuration = $this->getConfiguration();
 
       if (isset($configuration['entity'])) {
@@ -102,23 +77,14 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
           // uses it (IEF, for example).
           $entity->original = $entity;
 
-          if (empty($storage)) {
-            $storage = $this->database
-              ->select('inline_block', 'ib')
-              ->fields('ib')
-              ->condition('uuid', $entity->uuid())
-              ->execute()
-              ->fetch();
+          $storage = $this->database
+            ->select('inline_entity', 'ie')
+            ->fields('ie')
+            ->condition('uuid', $entity->uuid())
+            ->execute()
+            ->fetchAssoc();
 
-            $entity->blockId = $storage->block_id;
-            $entity->tempStoreKey = $storage->temp_store_key;
-          }
-          if (empty($display)) {
-            $display = $this->panelsStorage->load($storage->storage_type, $storage->storage_id);
-          }
-          $entity->display = $display;
-
-          $this->entity = $entity;
+          $this->entity = $entity->setStorage($storage);
         }
       }
     }
@@ -140,9 +106,9 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
       $form['entity']['#default_value'] = $entity;
     }
     else {
-      $configuration = $this->getConfiguration();
-      $form['entity']['#entity_type'] = $configuration['entity_type'];
-      $form['entity']['#bundle'] = $configuration['bundle'];
+      list ($entity_type, $bundle) = explode(':', $this->getDerivativeId());
+      $form['entity']['#entity_type'] = $entity_type;
+      $form['entity']['#bundle'] = $bundle;
     }
 
     return $form;

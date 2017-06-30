@@ -56,6 +56,12 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $assert->linkByHrefExists('/admin/config/system/lightning/media');
     $this->assertAllowed('/admin/config/system/lightning/layout');
     $this->assertAllowed('/admin/config/system/lightning/media');
+
+    // Assert that all expected inline entity plugins exist.
+    $this->assertArrayHasKey(
+      'inline_entity:inline_block_content:basic',
+      $this->container->get('plugin.manager.block')->getDefinitions()
+    );
   }
 
   /**

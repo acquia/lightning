@@ -75,7 +75,7 @@ class InlineBlockContentStorage extends MaskContentEntityStorage {
    * {@inheritdoc}
    */
   protected function doLoadMultiple(array $ids = NULL) {
-    $query = $this->database->select('inline_block', 'ib')->fields('ib');
+    $query = $this->database->select('inline_entity', 'ie')->fields('ie');
 
     if ($ids) {
       $query->condition('uuid', $ids, 'IN');
@@ -98,9 +98,9 @@ class InlineBlockContentStorage extends MaskContentEntityStorage {
           $display->setConfiguration($configuration);
         }
       }
-      $blocks[$record->uuid] = $display
-        ->getBlock($record->block_id)
-        ->getEntity($record, $display);
+
+      $configuration = $display->getConfiguration();
+      $blocks[$record->uuid] = unserialize($configuration['blocks'][$record->block_id]['entity'])->setStorage((array) $record);
     }
 
     return $blocks;
@@ -125,31 +125,26 @@ class InlineBlockContentStorage extends MaskContentEntityStorage {
   protected function insertBlock(InlineBlockContent $block) {
     // We expect $block->display to be set because inline blocks cannot be saved
     // without a Panels display. If it's not set, this will fatal. Good.
-    $display = $block->display;
+    $display = $block->getDisplay();
 
     // List the regions in the layout so that we can choose a default region if
     // the block doesn't specify one.
     $regions = $display->getRegionNames();
 
-    $block->blockId = $display->addBlock([
-      'id' => 'inline_entity',
+    $storage = $block->getStorage();
+
+    $storage['block_id'] = $display->addBlock([
+      'id' => 'inline_entity:' . $block->getEntityTypeId() . ':' . $block->bundle(),
       'region' => $block->region ?: key($regions),
       'entity' => serialize($block),
     ]);
 
-    $temp_store_key = $display->getTempStoreId();
     $this->database
-      ->insert('inline_block')
-      ->fields([
-        'uuid' => $block->uuid(),
-        'storage_type' => $display->getStorageType(),
-        'storage_id' => $display->getStorageId(),
-        'temp_store_key' => $temp_store_key,
-        'block_id' => $block->blockId,
-      ])
+      ->insert('inline_entity')
+      ->fields($storage)
       ->execute();
 
-    $this->tempStore->set($temp_store_key, $display->getConfiguration());
+    $this->tempStore->set($storage['temp_store_key'], $display->getConfiguration());
   }
 
   /**
@@ -159,14 +154,16 @@ class InlineBlockContentStorage extends MaskContentEntityStorage {
    *   The inline block entity.
    */
   protected function updateBlock(InlineBlockContent $block) {
-    $display = $block->display;
+    $display = $block->getDisplay();
 
-    $configuration = $display->getBlock($block->blockId)->getConfiguration();
+    $storage = $block->getStorage();
+
+    $configuration = $display->getBlock($storage['block_id'])->getConfiguration();
     $configuration['entity'] = serialize($block);
-    $display->updateBlock($block->blockId, $configuration);
+    $display->updateBlock($storage['block_id'], $configuration);
 
-    if ($block->tempStoreKey) {
-      $this->tempStore->set($block->tempStoreKey, $display->getConfiguration());
+    if ($storage['temp_store_key']) {
+      $this->tempStore->set($storage['temp_store_key'], $display->getConfiguration());
     }
     else {
       $this->panelsStorage->save($display);
