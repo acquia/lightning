@@ -10,7 +10,7 @@ use Drupal\panels\Storage\PanelsStorageManagerInterface;
 use Drupal\user\SharedTempStore;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class InlineEntityStorage extends MaskContentEntityStorage {
+class InlineEntityStorage extends MaskContentEntityStorage implements InlineEntityStorageInterface {
 
   /**
    * The database connection.
@@ -85,6 +85,18 @@ class InlineEntityStorage extends MaskContentEntityStorage {
   /**
    * {@inheritdoc}
    */
+  public function getStorageInfo(InlineEntityInterface $entity) {
+    return $this->database
+      ->select('inline_entity', 'ie')
+      ->fields('ie')
+      ->condition('uuid', $entity->uuid())
+      ->execute()
+      ->fetch();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function mapFromStorageRecords(array $records) {
     $blocks = [];
 
@@ -120,7 +132,7 @@ class InlineEntityStorage extends MaskContentEntityStorage {
     // Ensure that the block configuration has at least a region and plugin ID.
     $configuration = $entity->getConfiguration();
     if (empty($configuration['id'])) {
-      $configuration['id'] = 'inline_entity:' . $entity->getEntityTypeId() . ':' . $entity->bundle();
+      $configuration['id'] = 'inline_entity';
     }
     if (empty($configuration['region'])) {
       $regions = $display->getRegionNames();

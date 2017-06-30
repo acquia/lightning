@@ -4,6 +4,7 @@ namespace Drupal\lightning_inline_block\Entity;
 
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
+use Drupal\lightning_inline_block\InlineEntityInterface;
 use Drupal\lightning_inline_block\InlineEntityTrait;
 
 /**
@@ -37,7 +38,7 @@ use Drupal\lightning_inline_block\InlineEntityTrait;
  *   mask = "block_content",
  * )
  */
-class InlineBlockContent extends BlockContent {
+class InlineBlockContent extends BlockContent implements InlineEntityInterface {
 
   use MaskEntityTrait;
   use InlineEntityTrait;

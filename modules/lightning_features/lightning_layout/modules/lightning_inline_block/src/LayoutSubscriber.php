@@ -46,7 +46,7 @@ class LayoutSubscriber implements EventSubscriberInterface {
     $configuration = $variant->getConfiguration();
 
     $blocks = array_filter($configuration['blocks'], function (array $block) {
-      return strpos($block['id'], 'inline_entity:') === 0;
+      return $block['id'] == 'inline_entity';
     });
 
     $this->database

@@ -3,7 +3,6 @@
 namespace Drupal\lightning_inline_block\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
-use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
@@ -13,7 +12,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @Block(
  *   id = "inline_entity",
  *   admin_label = @Translation("Inline entity"),
- *   deriver = "\Drupal\lightning_inline_block\Plugin\Block\InlineEntityDeriver",
  * )
  */
 class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface {
@@ -24,13 +22,6 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
-
-  /**
-   * The database connection.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $database;
 
   /**
    * The inline entity.
@@ -50,13 +41,10 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    *   The plugin definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
-   * @param \Drupal\Core\Database\Connection $database
-   *   The database connection.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, Connection $database) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
-    $this->database = $database;
   }
 
   /**
@@ -67,8 +55,7 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager'),
-      $container->get('database')
+      $container->get('entity_type.manager')
     );
   }
 
@@ -79,32 +66,25 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
     if (empty($this->entity)) {
       $configuration = $this->getConfiguration();
 
-      if (isset($configuration['entity'])) {
-        /** @var \Drupal\Core\Entity\EntityInterface|\Drupal\lightning_inline_block\InlineEntityInterface $entity */
-        $entity = unserialize($configuration['entity']);
+      /** @var \Drupal\lightning_inline_block\InlineEntityInterface $entity */
+      $entity = unserialize($configuration['entity']);
 
-        if ($entity) {
-          // Inline blocks are not loadable, so their storage handler never sets
-          // $entity->original. Which breaks the Entity API, and anything that
-          // uses it (IEF, for example).
-          $entity->original = $entity;
+      // Inline blocks are not loadable, so their storage handler never sets
+      // $entity->original. Which breaks the Entity API, and anything that
+      // uses it (IEF, for example).
+      $entity->original = $entity;
 
-          $storage = $this->database
-            ->select('inline_entity', 'ie')
-            ->fields('ie')
-            ->condition('uuid', $entity->uuid())
-            ->execute()
-            ->fetch();
+      $storage = $this->entityTypeManager
+        ->getStorage($entity->getEntityTypeId())
+        ->getStorageInfo($entity);
 
-          $this->entity = $entity
-            ->setStorage(
-              $storage->storage_type,
-              $storage->storage_id,
-              $storage->temp_store_id
-            )
-            ->setConfiguration($configuration);
-        }
-      }
+      $this->entity = $entity
+        ->setStorage(
+          $storage->storage_type,
+          $storage->storage_id,
+          $storage->temp_store_id
+        )
+        ->setConfiguration($configuration);
     }
     return $this->entity;
   }
@@ -113,21 +93,16 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
+    $entity = $this->getEntity();
+
     $form = parent::blockForm($form, $form_state);
 
-    $form['entity']['#type'] = 'inline_entity_form';
-
-    $entity = $this->getEntity();
-    if ($entity) {
-      $form['entity']['#entity_type'] = $entity->getEntityTypeId();
-      $form['entity']['#bundle'] = $entity->bundle();
-      $form['entity']['#default_value'] = $entity;
-    }
-    else {
-      list ($entity_type, $bundle) = explode(':', $this->getDerivativeId());
-      $form['entity']['#entity_type'] = $entity_type;
-      $form['entity']['#bundle'] = $bundle;
-    }
+    $form['entity'] = [
+      '#type' => 'inline_entity_form',
+      '#entity_type' => $entity->getEntityTypeId(),
+      '#bundle' => $entity->bundle(),
+      '#default_value' => $entity,
+    ];
 
     return $form;
   }

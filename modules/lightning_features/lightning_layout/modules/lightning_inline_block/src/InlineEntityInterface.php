@@ -2,12 +2,13 @@
 
 namespace Drupal\lightning_inline_block;
 
+use Drupal\Core\Entity\ContentEntityInterface;
 use Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant;
 
 /**
- * An interface for entities that can be stored in a Panels display.
+ * An interface for content entities that can be stored in a Panels display.
  */
-interface InlineEntityInterface {
+interface InlineEntityInterface extends ContentEntityInterface {
 
   /**
    * Returns the Panels display which contains the entity.
