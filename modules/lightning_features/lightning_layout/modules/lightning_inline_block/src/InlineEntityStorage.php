@@ -101,6 +101,9 @@ class InlineEntityStorage extends MaskContentEntityStorage implements InlineEnti
     $blocks = [];
 
     foreach ($records as $record) {
+      // Inline entities are by definition part of a Panels display, so load the
+      // display in question, checking to see if its configuration is currently
+      // overridden in temp store.
       $display = $this->panelsStorage->load($record->storage_type, $record->storage_id);
 
       if ($record->temp_store_id) {
@@ -110,13 +113,18 @@ class InlineEntityStorage extends MaskContentEntityStorage implements InlineEnti
         }
       }
 
+      // Inline entities are always embedded using the inline_entity plugin,
+      // which is expected to have an 'entity' configuration value containing
+      // the full, serialized entity.
       $configuration = $display->getConfiguration();
       $configuration = $configuration['blocks'][$record->block_id];
+
+      // Unserialize the entity, tell it which Panels display it's part of,
+      // and provide the current configuration for the associated block.
       $blocks[$record->uuid] = unserialize($configuration['entity'])
         ->setDisplay($display, $record->temp_store_id)
         ->setConfiguration($configuration);
     }
-
     return $blocks;
   }
 
@@ -128,27 +136,30 @@ class InlineEntityStorage extends MaskContentEntityStorage implements InlineEnti
     parent::doPostSave($entity, $update);
 
     $display = $entity->getDisplay();
-
-    // Ensure that the block configuration has at least a region and plugin ID.
     $configuration = $entity->getConfiguration();
-    if (empty($configuration['id'])) {
-      $configuration['id'] = 'inline_entity';
-    }
+
+    // If the block has no region, put it in the first available one.
     if (empty($configuration['region'])) {
       $regions = $display->getRegionNames();
       $configuration['region'] = key($regions);
     }
+    $configuration['id'] = 'inline_entity';
     $configuration['entity'] = serialize($entity);
 
+    // If the block has a UUID, it is already in the display and should be
+    // updated. Otherwise, add the block to the display and store the generated
+    // UUID.
     if (isset($configuration['uuid'])) {
       $display->updateBlock($configuration['uuid'], $configuration);
     }
     else {
       $configuration['uuid'] = $display->addBlock($configuration);
+      // Keep the inline entity up-to-date.
       $entity->setConfiguration($configuration);
     }
 
     $temp_store_id = $entity->getTempStoreId();
+    // Make the inline entity loadable by referencing it in the tracking table.
     $this->database
       ->merge('inline_entity')
       ->key('uuid', $entity->uuid())
@@ -160,6 +171,7 @@ class InlineEntityStorage extends MaskContentEntityStorage implements InlineEnti
       ])
       ->execute();
 
+    // Stage the changes in temp store.
     $this->tempStore->set($temp_store_id, $display->getConfiguration());
   }
 
