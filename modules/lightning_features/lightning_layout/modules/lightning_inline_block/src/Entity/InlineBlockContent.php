@@ -4,6 +4,7 @@ namespace Drupal\lightning_inline_block\Entity;
 
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
+use Drupal\lightning_inline_block\InlineEntityTrait;
 
 /**
  * Defines the inline block entity class.
@@ -13,11 +14,11 @@ use Drupal\ctools_entity_mask\MaskEntityTrait;
  *   label = @Translation("Custom block"),
  *   bundle_label = @Translation("Custom block type"),
  *   handlers = {
- *     "storage" = "Drupal\lightning_inline_block\InlineBlockContentStorage",
+ *     "storage" = "Drupal\lightning_inline_block\InlineEntityStorage",
  *     "access" = "Drupal\block_content\BlockContentAccessControlHandler",
  *     "view_builder" = "Drupal\block_content\BlockContentViewBuilder",
  *     "form" = {
- *       "panels_ipe" = "Drupal\lightning_inline_block\Form\InlineBlockContentForm"
+ *       "panels_ipe" = "Drupal\lightning_inline_block\Form\InlineContentForm"
  *     },
  *     "translation" = "Drupal\block_content\BlockContentTranslationHandler"
  *   },
@@ -39,38 +40,16 @@ use Drupal\ctools_entity_mask\MaskEntityTrait;
 class InlineBlockContent extends BlockContent {
 
   use MaskEntityTrait;
-
-  protected $storage = [];
-
-  public function getStorage() {
-    $this->storage['uuid'] = $this->uuid();
-    return $this->storage;
-  }
-
-  public function setStorage(array $storage) {
-    $this->storage = $storage;
-    return $this;
-  }
-
-  public function getDisplay() {
-    $storage = $this->getStorage();
-
-    return \Drupal::service('panels.storage_manager')
-      ->load($storage['storage_type'], $storage['storage_id']);
-  }
-
-  /**
-   * The region of the Panels display in which this block is to be placed.
-   *
-   * @var string
-   */
-  public $region;
+  use InlineEntityTrait;
 
   /**
    * {@inheritdoc}
    */
   public function __sleep() {
-    return array_diff(parent::__sleep(), ['storage']);
+    return array_diff(
+      parent::__sleep(),
+      ['display', 'tempStore', 'tempStoreId', 'configuration']
+    );
   }
 
 }

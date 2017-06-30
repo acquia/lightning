@@ -6,13 +6,22 @@ use Drupal\block_content\BlockContentForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 
-class InlineBlockContentForm extends BlockContentForm {
+class InlineContentForm extends BlockContentForm {
+
+  /**
+   * @return \Drupal\Core\Entity\EntityInterface|\Drupal\lightning_inline_block\InlineEntityInterface
+   */
+  public function getEntity() {
+    return parent::getEntity();
+  }
 
   /**
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $this->getEntity()->region = $form_state->getValue('_region');
+    $this->getEntity()->setConfiguration([
+      'region' => $form_state->getValue('_region'),
+    ]);
 
     parent::save($form, $form_state);
 
@@ -30,17 +39,16 @@ class InlineBlockContentForm extends BlockContentForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
-    /** @var \Drupal\lightning_inline_block\Entity\InlineBlockContent $block */
-    $block = $this->getEntity();
+    $entity = $this->getEntity();
 
-    $form['_region'] = [
-      '#type' => 'select',
-      '#title' => $this->t('Region'),
-      '#required' => TRUE,
-      '#options' => $block->display->getRegionNames(),
-      '#access' => $block->isNew(),
-    ];
-    $form['_region']['#default_value'] = key($form['_region']['#options']);
+    if ($entity->isNew()) {
+      $form['_region'] = [
+        '#type' => 'select',
+        '#title' => $this->t('Region'),
+        '#required' => TRUE,
+        '#options' => $entity->getDisplay()->getRegionNames(),
+      ];
+    }
 
     return $form;
   }

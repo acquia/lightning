@@ -54,7 +54,7 @@ class LayoutSubscriber implements EventSubscriberInterface {
       ->fields([
         'storage_type' => $variant->getStorageType(),
         'storage_id' => $variant->getStorageId(),
-        'temp_store_key' => $variant->getTempStoreId(),
+        'temp_store_id' => $variant->getTempStoreId(),
       ])
       ->condition('block_id', array_keys($blocks), 'IN')
       ->execute();

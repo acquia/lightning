@@ -29,11 +29,9 @@ class PanelsIPEController extends PanelsIPEPageController {
       ->create([
         'type' => $type,
       ])
-      ->setStorage([
-        'storage_type' => $panels_storage_type,
-        'storage_id' => $panels_storage_id,
-        'temp_store_key' => $this->loadPanelsDisplay($panels_storage_type, $panels_storage_id)->getTempStoreId(),
-      ]);
+      ->setDisplay(
+        $this->panelsStorage->load($panels_storage_type, $panels_storage_id)
+      );
 
     $extra = [];
     if ($request && $request->headers->has('referer')) {

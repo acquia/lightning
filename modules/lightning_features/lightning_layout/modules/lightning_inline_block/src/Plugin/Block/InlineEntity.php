@@ -25,8 +25,18 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    */
   protected $entityTypeManager;
 
+  /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
   protected $database;
 
+  /**
+   * The inline entity.
+   *
+   * @var \Drupal\lightning_inline_block\InlineEntityInterface|\Drupal\Core\Entity\EntityInterface
+   */
   protected $entity;
 
   /**
@@ -40,6 +50,8 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    *   The plugin definition.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
@@ -68,7 +80,7 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
       $configuration = $this->getConfiguration();
 
       if (isset($configuration['entity'])) {
-        /** @var \Drupal\lightning_inline_block\Entity\InlineBlockContent $entity */
+        /** @var \Drupal\Core\Entity\EntityInterface|\Drupal\lightning_inline_block\InlineEntityInterface $entity */
         $entity = unserialize($configuration['entity']);
 
         if ($entity) {
@@ -82,9 +94,15 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
             ->fields('ie')
             ->condition('uuid', $entity->uuid())
             ->execute()
-            ->fetchAssoc();
+            ->fetch();
 
-          $this->entity = $entity->setStorage($storage);
+          $this->entity = $entity
+            ->setStorage(
+              $storage->storage_type,
+              $storage->storage_id,
+              $storage->temp_store_id
+            )
+            ->setConfiguration($configuration);
         }
       }
     }
@@ -130,17 +148,6 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
     // not trigger IEF. We need to ensure that it does.
     $complete_form['submit']['#executes_submit_callback'] = TRUE;
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function blockSubmit($form, FormStateInterface $form_state) {
-    parent::blockSubmit($form, $form_state);
-
-    $configuration = $this->getConfiguration();
-    $configuration['entity'] = serialize($form['entity']['#entity']);
-    $this->setConfiguration($configuration);
   }
 
   /**
