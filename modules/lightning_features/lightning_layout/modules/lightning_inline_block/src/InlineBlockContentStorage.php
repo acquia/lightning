@@ -98,13 +98,9 @@ class InlineBlockContentStorage extends MaskContentEntityStorage {
           $display->setConfiguration($configuration);
         }
       }
-
-      /** @var InlineBlockContent $block */
-      $block = $display->getBlock($record->block_id)->getEntity();
-      $block->display = $display;
-      $block->blockId = $record->block_id;
-      $block->tempStoreKey = $record->temp_store_key;
-      $blocks[$record->uuid] = $block;
+      $blocks[$record->uuid] = $display
+        ->getBlock($record->block_id)
+        ->getEntity($record, $display);
     }
 
     return $blocks;

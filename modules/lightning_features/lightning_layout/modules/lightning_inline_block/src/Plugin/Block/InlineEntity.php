@@ -3,9 +3,13 @@
 namespace Drupal\lightning_inline_block\Plugin\Block;
 
 use Drupal\Core\Block\BlockBase;
+use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant;
+use Drupal\panels\Storage\PanelsStorageManagerInterface;
+use Drupal\user\SharedTempStore;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -23,6 +27,17 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    */
   protected $entityTypeManager;
 
+  protected $database;
+
+  protected $panelsStorage;
+
+  protected $tempStore;
+
+  /**
+   * @var \Drupal\lightning_inline_block\Entity\InlineBlockContent
+   */
+  protected $entity;
+
   /**
    * InlineEntity constructor.
    *
@@ -35,9 +50,12 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager, Connection $database, PanelsStorageManagerInterface $panels_storage, SharedTempStore $temp_store) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
+    $this->database = $database;
+    $this->panelsStorage = $panels_storage;
+    $this->tempStore = $temp_store;
   }
 
   /**
@@ -48,7 +66,10 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
       $configuration,
       $plugin_id,
       $plugin_definition,
-      $container->get('entity_type.manager')
+      $container->get('entity_type.manager'),
+      $container->get('database'),
+      $container->get('panels.storage_manager'),
+      $container->get('user.shared_tempstore')->get('panels_ipe')
     );
   }
 
@@ -67,20 +88,41 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
   /**
    * @return \Drupal\Core\Entity\EntityInterface
    */
-  public function getEntity() {
-    $configuration = $this->getConfiguration();
+  public function getEntity(\stdClass $storage = NULL, PanelsDisplayVariant $display = NULL) {
+    if (is_null($this->entity)) {
+      $configuration = $this->getConfiguration();
 
-    $entity = isset($configuration['entity'])
-      ? unserialize($configuration['entity'])
-      : NULL;
+      if (isset($configuration['entity'])) {
+        /** @var \Drupal\lightning_inline_block\Entity\InlineBlockContent $entity */
+        $entity = unserialize($configuration['entity']);
 
-    if ($entity) {
-      // Inline blocks are not loadable, so their storage handler never sets
-      // $entity->original. Which breaks the Entity API, and anything that uses
-      // it (IEF, for example).
-      $entity->original = $entity;
+        if ($entity) {
+          // Inline blocks are not loadable, so their storage handler never sets
+          // $entity->original. Which breaks the Entity API, and anything that
+          // uses it (IEF, for example).
+          $entity->original = $entity;
+
+          if (empty($storage)) {
+            $storage = $this->database
+              ->select('inline_block', 'ib')
+              ->fields('ib')
+              ->condition('uuid', $entity->uuid())
+              ->execute()
+              ->fetch();
+
+            $entity->blockId = $storage->block_id;
+            $entity->tempStoreKey = $storage->temp_store_key;
+          }
+          if (empty($display)) {
+            $display = $this->panelsStorage->load($storage->storage_type, $storage->storage_id);
+          }
+          $entity->display = $display;
+
+          $this->entity = $entity;
+        }
+      }
     }
-    return $entity;
+    return $this->entity;
   }
 
   /**
