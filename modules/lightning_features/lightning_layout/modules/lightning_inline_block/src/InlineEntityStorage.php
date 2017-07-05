@@ -70,9 +70,8 @@ class InlineEntityStorage extends MaskContentEntityStorage {
       $context = StorageContext::fromStorageRecord($record);
 
       $configuration = $context->getConfiguration();
-      $entity = unserialize($configuration['entity']);
-      $entity->setStorageContext($context);
-      $blocks[$record->uuid] = $entity;
+      $blocks[$record->uuid] = unserialize($configuration['entity'])
+        ->setStorageContext($context);
     }
     return $blocks;
   }

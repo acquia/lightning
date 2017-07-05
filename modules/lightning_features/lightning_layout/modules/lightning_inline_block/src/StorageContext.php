@@ -33,6 +33,10 @@ class StorageContext {
     }
   }
 
+  public function __sleep() {
+    return array_diff(array_keys(get_object_vars($this)), ['display']);
+  }
+
   public static function fromPanelsDisplay(PanelsDisplayVariant $display) {
     return new static(
       $display->getStorageType(),
