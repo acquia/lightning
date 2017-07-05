@@ -3,7 +3,6 @@
 namespace Drupal\lightning_inline_block\Entity;
 
 use Drupal\block_content\Entity\BlockContent;
-use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
 use Drupal\lightning_inline_block\InlineEntityInterface;
 use Drupal\lightning_inline_block\StorageContext;
@@ -65,8 +64,6 @@ class InlineBlockContent extends BlockContent implements InlineEntityInterface {
    * {@inheritdoc}
    */
   public function __sleep() {
-    $this->tempStore()->set($this->uuid(), $this->getStorageContext());
-
     return array_diff(parent::__sleep(), ['original', 'storageContext']);
   }
 
@@ -75,23 +72,8 @@ class InlineBlockContent extends BlockContent implements InlineEntityInterface {
    */
   public function __wakeup() {
     parent::__wakeup();
-
+    StorageContext::fromEntity($this);
     $this->original = $this;
-
-    $temp_store = $this->tempStore();
-    $key = $this->uuid();
-
-    $context = $temp_store->get($key);
-    if ($context) {
-      $this->setStorageContext($context);
-    }
-  }
-
-  /**
-   * @return \Drupal\user\SharedTempStore
-   */
-  private function tempStore() {
-    return \Drupal::service('user.shared_tempstore')->get('inline_entity');
   }
 
 }
