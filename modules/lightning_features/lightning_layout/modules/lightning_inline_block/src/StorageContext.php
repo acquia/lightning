@@ -2,7 +2,6 @@
 
 namespace Drupal\lightning_inline_block;
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant;
 
 class StorageContext {
@@ -77,7 +76,7 @@ class StorageContext {
         $this->tempStoreId = $display->getTempStoreId();
       }
 
-      $configuration = $this->tempStore()->get($this->getTempStoreId());
+      $configuration = $this->tempStore()->get($this->tempStoreId);
       if ($configuration) {
         $display->setConfiguration($configuration);
       }
@@ -95,7 +94,7 @@ class StorageContext {
     $this->configuration = $configuration;
   }
 
-  public function commit(EntityInterface $entity) {
+  public function commit(InlineEntityInterface $entity) {
     $display = $this->getDisplay();
 
     $configuration = $this->getConfiguration();
@@ -104,7 +103,6 @@ class StorageContext {
       $regions = $display->getRegionNames();
       $configuration['region'] = key($regions);
     }
-    // The entity will always use the inline_entity block plugin.
     $configuration['id'] = 'inline_entity';
     $configuration['entity'] = serialize($entity);
 
@@ -128,6 +126,8 @@ class StorageContext {
       ->execute();
 
     $this->tempStore()->set($this->tempStoreId, $display->getConfiguration());
+
+    $entity->setStorageContext($this);
   }
 
   /**

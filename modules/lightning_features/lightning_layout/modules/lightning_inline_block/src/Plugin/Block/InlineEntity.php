@@ -67,9 +67,10 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
     if (empty($this->entity)) {
       $configuration = $this->getConfiguration();
 
-      $this->entity = unserialize($configuration['entity']);
-      $context = StorageContext::fromEntity($this->entity);
-      $context->setConfiguration($configuration);
+      $entity = unserialize($configuration['entity']);
+      StorageContext::fromEntity($entity)->setConfiguration($configuration);
+
+      $this->entity = $entity;
     }
     return $this->entity;
   }

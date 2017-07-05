@@ -9,7 +9,7 @@ use Drupal\Core\Url;
 class InlineContentForm extends BlockContentForm {
 
   /**
-   * @return \Drupal\Core\Entity\EntityInterface|\Drupal\lightning_inline_block\InlineEntityInterface
+   * @return \Drupal\lightning_inline_block\InlineEntityInterface
    */
   public function getEntity() {
     return parent::getEntity();
@@ -19,9 +19,11 @@ class InlineContentForm extends BlockContentForm {
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $this->getEntity()->setConfiguration([
-      'region' => $form_state->getValue('_region'),
-    ]);
+    $this->getEntity()
+      ->getStorageContext()
+      ->setConfiguration([
+        'region' => $form_state->getValue('_region'),
+      ]);
 
     parent::save($form, $form_state);
 
@@ -46,10 +48,9 @@ class InlineContentForm extends BlockContentForm {
         '#type' => 'select',
         '#title' => $this->t('Region'),
         '#required' => TRUE,
-        '#options' => $entity->getDisplay()->getRegionNames(),
+        '#options' => $entity->getStorageContext()->getDisplay()->getRegionNames(),
       ];
     }
-
     return $form;
   }
 
