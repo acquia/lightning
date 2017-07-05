@@ -6,6 +6,7 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
+use Drupal\lightning_inline_block\StorageContext;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -66,25 +67,9 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
     if (empty($this->entity)) {
       $configuration = $this->getConfiguration();
 
-      /** @var \Drupal\lightning_inline_block\InlineEntityInterface $entity */
-      $entity = unserialize($configuration['entity']);
-
-      // Inline blocks are not loadable, so their storage handler never sets
-      // $entity->original. Which breaks the Entity API, and anything that
-      // uses it (IEF, for example).
-      $entity->original = $entity;
-
-      $storage = $this->entityTypeManager
-        ->getStorage($entity->getEntityTypeId())
-        ->getStorageInfo($entity);
-
-      $this->entity = $entity
-        ->setStorage(
-          $storage->storage_type,
-          $storage->storage_id,
-          $storage->temp_store_id
-        )
-        ->setConfiguration($configuration);
+      $this->entity = unserialize($configuration['entity']);
+      $context = StorageContext::fromEntity($this->entity);
+      $context->setConfiguration($configuration);
     }
     return $this->entity;
   }

@@ -4,6 +4,7 @@ namespace Drupal\lightning_inline_block\Controller;
 
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Ajax\AppendCommand;
+use Drupal\lightning_inline_block\StorageContext;
 use Drupal\panels_ipe\Controller\PanelsIPEPageController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -29,8 +30,8 @@ class PanelsIPEController extends PanelsIPEPageController {
       ->create([
         'type' => $type,
       ])
-      ->setDisplay(
-        $this->panelsStorage->load($panels_storage_type, $panels_storage_id)
+      ->setStorageContext(
+        new StorageContext($panels_storage_type, $panels_storage_id)
       );
 
     $extra = [];

@@ -5,7 +5,7 @@ namespace Drupal\lightning_inline_block\Entity;
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
 use Drupal\lightning_inline_block\InlineEntityInterface;
-use Drupal\lightning_inline_block\InlineEntityTrait;
+use Drupal\lightning_inline_block\StorageContext;
 
 /**
  * Defines the inline block entity class.
@@ -17,8 +17,9 @@ use Drupal\lightning_inline_block\InlineEntityTrait;
  *   handlers = {
  *     "storage" = "Drupal\lightning_inline_block\InlineEntityStorage",
  *     "access" = "Drupal\block_content\BlockContentAccessControlHandler",
- *     "view_builder" = "Drupal\block_content\BlockContentViewBuilder",
+ *     "view_builder" = "Drupal\lightning_inline_block\InlineBlockContentViewBuilder",
  *     "form" = {
+ *       "edit" = "\Drupal\block_content\BlockContentForm",
  *       "panels_ipe" = "Drupal\lightning_inline_block\Form\InlineContentForm"
  *     },
  *     "translation" = "Drupal\block_content\BlockContentTranslationHandler"
@@ -41,16 +42,56 @@ use Drupal\lightning_inline_block\InlineEntityTrait;
 class InlineBlockContent extends BlockContent implements InlineEntityInterface {
 
   use MaskEntityTrait;
-  use InlineEntityTrait;
+
+  protected $storageContext;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getStorageContext() {
+    return $this->storageContext;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function setStorageContext(StorageContext $context) {
+    $this->storageContext = $context;
+    return $this;
+  }
 
   /**
    * {@inheritdoc}
    */
   public function __sleep() {
-    return array_diff(
-      parent::__sleep(),
-      ['display', 'tempStore', 'tempStoreId', 'configuration']
-    );
+    $this->tempStore()->set($this->uuid(), $this->getStorageContext());
+
+    return array_diff(parent::__sleep(), ['storageContext']);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function __wakeup() {
+    parent::__wakeup();
+
+    $this->original = $this;
+
+    $temp_store = $this->tempStore();
+    $key = $this->uuid();
+
+    $context = $temp_store->get($key);
+    if ($context) {
+      $this->setStorageContext($context);
+      $temp_store->delete($key);
+    }
+  }
+
+  /**
+   * @return \Drupal\user\SharedTempStore
+   */
+  private function tempStore() {
+    return \Drupal::service('user.shared_tempstore')->get('inline_entity');
   }
 
 }
