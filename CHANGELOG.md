@@ -1,3 +1,14 @@
+## 2.1.6
+* Lightning now provides a Display Plugin for images embedded via CKEditor that
+  allows editors to select an image style, alt text, and other settings each
+  time an image is embedded. (Issue #2784699) 
+* You can now select and insert media items from a single-cardinality media
+  browser with a double-click. (Issue #2888535)
+* Added documentation about the known incompatibility between Workbench
+  Moderation and Content Moderation. (Issue #2869257)
+* Fixed a bug where Lightning Core might try to alter the value of a
+  non-existent array key for unit tests. (GitHub #394)
+
 ## 2.1.5
 * Drupal core was security updated to 8.3.4.
 * Layout Plugin is no longer included with Lightning. (Issue #2873728)

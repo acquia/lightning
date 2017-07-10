@@ -10,7 +10,8 @@
   var Selection = Backbone.View.extend({
 
     events: {
-      'click [data-selectable]': 'onClick'
+      'click [data-selectable]': 'onClick',
+      'dblclick [data-selectable]': 'onClick'
     },
 
     initialize: function () {
@@ -82,6 +83,10 @@
       else if (this.cardinality === 1) {
         this.deselectAll();
         this.select(chosen_one);
+
+        if (event.type === 'dblclick') {
+          this.$('.form-actions input').click().prop('disabled', true);
+        }
       }
       else if (chosen_one.hasClass('selected')) {
         this.deselect(chosen_one);
