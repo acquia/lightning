@@ -1,0 +1,16 @@
+<?php
+
+use Drupal\node\Entity\NodeType;
+
+/**
+ * Implements hook_install().
+ */
+function lightning_scheduled_updates_install() {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
+  $node_types = NodeType::loadMultiple();
+  array_walk($node_types, 'lightning_scheduled_updates_node_type_insert');
+}

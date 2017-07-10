@@ -25,11 +25,13 @@ function lightning_workflow_install() {
 }
 
 /**
- * Applies workflow permissions to content management roles.
+ * Removed in Lightning 8.x-2.17.
+ *
+ * Formerly applied workflow permissions to content management roles.
+ *
+ * @deprecated
  */
 function lightning_workflow_update_8001() {
-  $node_types = NodeType::loadMultiple();
-  array_walk($node_types, 'lightning_workflow_node_type_insert');
 }
 
 /**
@@ -37,4 +39,21 @@ function lightning_workflow_update_8001() {
  */
 function lightning_workflow_update_8002() {
   \Drupal::entityTypeManager()->clearCachedDefinitions();
+}
+
+/**
+ * Moves third-party settings for all node types.
+ */
+function lightning_workflow_update_8003() {
+  /** @var \Drupal\node\Entity\NodeType $node_type */
+  foreach (NodeType::loadMultiple() as $node_type) {
+    $embargo = $node_type->getThirdPartySetting('lightning_workflow', 'embargo');
+
+    if (isset($embargo)) {
+      $node_type
+        ->unsetThirdPartySetting('lightning_workflow', 'embargo')
+        ->setThirdPartySetting('lightning_scheduled_updates', 'embargo', $embargo)
+        ->save();
+    }
+  }
 }
