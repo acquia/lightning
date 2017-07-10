@@ -46,6 +46,11 @@ function lightning_workflow_update_8002() {
  * Installs the Lightning Scheduled Updates sub-component.
  */
 function lightning_workflow_update_8003() {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
   $config_factory = \Drupal::configFactory();
 
   $config = array_map(
