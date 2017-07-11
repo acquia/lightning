@@ -5,14 +5,10 @@
  * Provides workflow enhancements for Drupal.
  */
 
-use Drupal\Core\Datetime\DrupalDateTime;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\field\Entity\FieldConfig;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_workflow\Form\NodeForm;
 use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
-use Drupal\node\NodeTypeInterface;
-use Drupal\scheduled_updates\ScheduledUpdateInterface;
 use Drupal\views\ViewEntityInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
@@ -54,43 +50,6 @@ function lightning_workflow_entity_type_alter(array &$entity_types) {
 }
 
 /**
- * Implements hook_inline_entity_form_table_fields_alter().
- */
-function lightning_workflow_inline_entity_form_table_fields_alter(array &$fields, array $context) {
-  if ($context['entity_type'] == 'scheduled_update') {
-    $fields['label']['type'] = 'callback';
-    $fields['label']['callback'] = 'lightning_workflow_scheduled_update_ief_label';
-    // We're generating a pretty, informative label...so there's no need to use
-    // the spartan, default column label.
-    $fields['label']['label'] = NULL;
-  }
-}
-
-/**
- * Generates pretty labels for scheduled updates in an IEF.
- *
- * @param ScheduledUpdateInterface $entity
- *   The scheduled update entity.
- *
- * @return array
- *   The entity label, as a renderable array.
- */
-function lightning_workflow_scheduled_update_ief_label(ScheduledUpdateInterface $entity) {
-  $label = $entity->label();
-
-  if ($entity->bundle() == 'node_embargo') {
-    $when = DrupalDateTime::createFromTimestamp($entity->update_timestamp->value);
-
-    $label = t('Move to <strong>@moderation_state</strong> state on @date at @time', [
-      '@moderation_state' => $entity->field_moderation_state->entity->label(),
-      '@date' => $when->format('F j, Y'),
-      '@time' => $when->format('g:i:s A'),
-    ]);
-  }
-  return ['#markup' => $label];
-}
-
-/**
  * Implements hook_modules_installed().
  */
 function lightning_workflow_modules_installed(array $modules) {
@@ -115,46 +74,6 @@ function lightning_workflow_modules_installed(array $modules) {
         'use published_archived transition',
         'view moderation states',
       ]);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
-  $id = $node_type->id();
-
-  // Don't do anything during config sync.
-  if (\Drupal::isConfigSyncing()) {
-    return;
-  }
-  elseif ($node_type->getThirdPartySetting('lightning_workflow', 'embargo')) {
-    FieldConfig::create([
-      'field_name' => 'scheduled_update',
-      'entity_type' => 'node',
-      'bundle' => $id,
-      'label' => t('Scheduled updates'),
-      'settings' => [
-        'handler' => 'default:scheduled_update',
-        'handler_settings' => [
-          'target_bundles' => ['node_embargo'],
-        ],
-      ],
-    ])->save();
-
-    entity_get_form_display('node', $id, 'default')
-      ->setComponent('scheduled_update', [
-        'type' => 'inline_entity_form_complex',
-        'settings' => [
-          'override_labels' => FALSE,
-          'label_singular' => '',
-          'label_plural' => '',
-          'allow_new' => TRUE,
-          'allow_existing' => FALSE,
-          'match_operator' => 'CONTAINS',
-        ],
-      ])
-      ->save();
   }
 }
 
