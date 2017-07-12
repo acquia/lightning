@@ -30,13 +30,9 @@ class PanelsIPEController extends PanelsIPEPageController {
         'type' => $type,
       ]);
 
-    $extra = [
+    $form = $this->entityFormBuilder()->getForm($block, 'panels_ipe', [
       'display' =>  $this->loadPanelsDisplay($panels_storage_type, $panels_storage_id),
-    ];
-    if ($request && $request->headers->has('referer')) {
-      $extra['referrer'] = $request->headers->get('referer');
-    }
-    $form = $this->entityFormBuilder()->getForm($block, 'panels_ipe', $extra);
+    ]);
 
     return (new AjaxResponse())
       ->addCommand(

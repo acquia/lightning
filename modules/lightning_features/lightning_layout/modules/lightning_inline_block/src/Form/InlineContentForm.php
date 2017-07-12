@@ -4,7 +4,6 @@ namespace Drupal\lightning_inline_block\Form;
 
 use Drupal\block_content\BlockContentForm;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Core\Url;
 use Drupal\user\SharedTempStore;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -62,12 +61,10 @@ class InlineContentForm extends BlockContentForm {
     ]);
     $this->tempStore->set($display->getTempStoreId(), $display->getConfiguration());
 
-    if ($form_state->has('referrer')) {
-      $redirect = $form_state->get('referrer');
-      $redirect = Url::fromUri($redirect);
-
-      $form_state->setRedirectUrl($redirect);
-    }
+    $contexts = $display->getContexts();
+    $form_state->setRedirectUrl(
+      $contexts['@panelizer.entity_context:entity']->getContextValue()->toUrl()
+    );
   }
 
 }
