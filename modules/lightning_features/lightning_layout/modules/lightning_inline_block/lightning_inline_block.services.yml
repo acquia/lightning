@@ -3,7 +3,5 @@ services:
     class: '\Drupal\lightning_inline_block\LayoutSubscriber'
     arguments:
       - '@database'
-      - '@entity_type.manager'
     tags:
-      -
-        name: event_subscriber
+      - { name: event_subscriber }

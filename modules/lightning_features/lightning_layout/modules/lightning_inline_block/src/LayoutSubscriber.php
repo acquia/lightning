@@ -3,7 +3,6 @@
 namespace Drupal\lightning_inline_block;
 
 use Drupal\Core\Database\Connection;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Drupal\ctools\Event\BlockVariantEvent;
 use Drupal\ctools\Event\BlockVariantEvents;
@@ -22,23 +21,13 @@ class LayoutSubscriber extends RouteSubscriberBase {
   protected $database;
 
   /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * LayoutSubscriber constructor.
    *
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
-   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
    */
-  public function __construct(Connection $database, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(Connection $database) {
     $this->database = $database;
-    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
