@@ -24,9 +24,7 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
   protected $entityTypeManager;
 
   /**
-   * The inline entity.
-   *
-   * @var \Drupal\lightning_inline_block\InlineEntityInterface|\Drupal\Core\Entity\EntityInterface
+   * @var \Drupal\Core\Entity\EntityInterface
    */
   protected $entity;
 
@@ -45,6 +43,13 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
   public function __construct(array $configuration, $plugin_id, $plugin_definition, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition);
     $this->entityTypeManager = $entity_type_manager;
+
+    if (empty($configuration['entity'])) {
+      throw new \InvalidArgumentException("$plugin_id block cannot be instantiated without a serialized entity");
+    }
+    else {
+      $this->entity = unserialize($configuration['entity']);
+    }
   }
 
   /**
@@ -63,10 +68,6 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    * @return \Drupal\Core\Entity\EntityInterface
    */
   public function getEntity() {
-    if (empty($this->entity)) {
-      $configuration = $this->getConfiguration();
-      $this->entity = unserialize($configuration['entity']);
-    }
     return $this->entity;
   }
 
@@ -74,9 +75,9 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    * {@inheritdoc}
    */
   public function blockForm($form, FormStateInterface $form_state) {
-    $entity = $this->getEntity();
-
     $form = parent::blockForm($form, $form_state);
+
+    $entity = $this->getEntity();
 
     $form['entity'] = [
       '#type' => 'inline_entity_form',
@@ -108,14 +109,13 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
   public function blockSubmit($form, FormStateInterface $form_state) {
     parent::blockSubmit($form, $form_state);
 
-    $entity = $this->getEntity();
     $configuration = $this->getConfiguration();
-    $configuration['label'] = $entity->label();
+    $configuration['label'] = $this->getEntity()->label();
     $configuration['label_display'] = $configuration['label'] ? static::BLOCK_LABEL_VISIBLE : FALSE;
     $this->setConfiguration($configuration);
   }
 
-  public static function ensureSubmit($form, $form_state, array &$complete_form) {
+  public static function ensureSubmit($form, FormStateInterface $form_state, array &$complete_form) {
     // The submit button is a standard button, not a submit button, so it will
     // not trigger IEF. We need to ensure that it does.
     $complete_form['submit']['#executes_submit_callback'] = TRUE;
@@ -127,17 +127,7 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    */
   public function build() {
     $entity = $this->getEntity();
-
-    if ($entity) {
-      $entity_type = $entity->getEntityTypeId();
-
-      return $this->entityTypeManager
-        ->getViewBuilder($entity_type)
-        ->view($entity);
-    }
-    else {
-      return [];
-    }
+    return $this->entityTypeManager->getViewBuilder($entity->getEntityTypeId())->view($entity);
   }
 
 }
