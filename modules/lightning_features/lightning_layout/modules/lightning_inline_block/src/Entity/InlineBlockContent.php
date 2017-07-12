@@ -3,6 +3,7 @@
 namespace Drupal\lightning_inline_block\Entity;
 
 use Drupal\block_content\Entity\BlockContent;
+use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
 
 /**
@@ -41,9 +42,23 @@ class InlineBlockContent extends BlockContent {
 
   use MaskEntityTrait;
 
+  /**
+   * {@inheritdoc}
+   */
   public function __wakeup() {
     parent::__wakeup();
     $this->original = $this;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+    $fields = parent::baseFieldDefinitions($entity_type);
+
+    $fields['info']->setRequired(FALSE);
+
+    return $fields;
   }
 
 }
