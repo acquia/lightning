@@ -14,8 +14,6 @@ class InlineBlockContentViewBuilder extends BlockContentViewBuilder {
   public function alterBuild(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
     parent::alterBuild($build, $entity, $display, $view_mode);
 
-    $build['#attached']['library'][] = 'lightning_inline_block/quickedit';
-
     if (isset($build['#contextual_links']['block_content'])) {
       $build['#contextual_links']['inline_block_content'] = [
         'route_parameters' => [

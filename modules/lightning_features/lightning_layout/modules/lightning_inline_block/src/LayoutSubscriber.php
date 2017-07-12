@@ -7,6 +7,7 @@ use Drupal\Core\Routing\RouteSubscriberBase;
 use Drupal\ctools\Event\BlockVariantEvent;
 use Drupal\ctools\Event\BlockVariantEvents;
 use Drupal\lightning_inline_block\Controller\PanelsIPEController;
+use Drupal\lightning_inline_block\Controller\QuickEditController;
 use Drupal\lightning_inline_block\Plugin\Block\InlineEntity;
 use Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant;
 use Symfony\Component\Routing\RouteCollection;
@@ -49,6 +50,11 @@ class LayoutSubscriber extends RouteSubscriberBase {
     $collection
       ->get('panels_ipe.block_content.form')
       ->setDefault('_controller', PanelsIPEController::class . '::getBlockContentForm');
+
+    $route = $collection->get('quickedit.entity_save');
+    if ($route) {
+      $route->setDefault('_controller', QuickEditController::class . '::entitySave');
+    }
   }
 
   public function onAddBlock(BlockVariantEvent $event) {
