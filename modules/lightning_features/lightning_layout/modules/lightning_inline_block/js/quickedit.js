@@ -1,25 +1,22 @@
 (function (Drupal) {
 
-  Drupal.behaviors.quickEdit4PanelsIPE = {
+  Drupal.behaviors.inlineEntityQuickEdit = {
 
     attach: function () {
-      var ipe = Drupal.panels_ipe.app_view;
-
-      Drupal.quickedit.collections.entities.on('change:state', function () {
-        console.log(arguments);
-      });
-
-      /* Drupal.quickedit.collections.entities.on('add', function (model) {
-        if (model.get('entityID').indexOf('inline_block_content/') === 0) {
-          model.on('change:state', function (undefined, state) {
-            if (state === 'closed') {
-              ipe.model.set('unsaved', true);
-
-              ipe.tabsView.render();
-            }
-          });
+      function onModelStateChange (undefined, state) {
+        if (state === 'closed') {
+          Drupal.panels_ipe.app_view.model.set('unsaved', true).tabsView.render();
         }
-      }); */
+      }
+
+      if (Drupal.panels_ipe && Drupal.quickedit)
+      {
+        Drupal.quickedit.collections.entities.on('add', function (model) {
+          if (model.get('entityID').indexOf('inline_block_content/') === 0) {
+            model.on('change:state', onModelStateChange);
+          }
+        });
+      }
     }
 
   };

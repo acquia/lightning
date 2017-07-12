@@ -96,9 +96,7 @@ class InlineEntityStorage extends MaskContentEntityStorage {
    * {@inheritdoc}
    */
   protected function doLoadMultiple(array $ids = NULL) {
-    $query = $this->database
-      ->select('inline_entity', 'ie')
-      ->fields('ie');
+    $query = $this->database->select('inline_entity', 'ie')->fields('ie');
 
     if ($ids) {
       $query->condition('uuid', $ids, 'IN');
@@ -106,7 +104,7 @@ class InlineEntityStorage extends MaskContentEntityStorage {
 
     return array_map(
       [$this, 'mapFromStorageRecord'],
-      $query->execute()->fetchAllKeyed()
+      $query->execute()->fetchAllAssoc('uuid')
     );
   }
 
