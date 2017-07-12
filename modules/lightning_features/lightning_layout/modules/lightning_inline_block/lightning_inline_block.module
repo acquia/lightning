@@ -18,14 +18,12 @@ function lightning_inline_block_entity_delete(EntityInterface $entity) {
 }
 
 /**
- * Implements hook_page_attachments().
+ * Implements hook_panels_ipe_blocks_alter().
  */
-function lightning_inline_block_page_attachments(array &$attachments) {
-  $attach =
-    \Drupal::moduleHandler()->moduleExists('quickedit') &&
-    preg_match('/^entity\.[a-z0-9_]+\.latest_version$/', \Drupal::routeMatch()->getRouteName());
-
-  if ($attach) {
-    $attachments['#attached']['library'][] = 'lightning_inline_block/quickedit';
+function lightning_inline_block_panels_ipe_blocks_alter(array &$blocks = []) {
+  foreach ($blocks as $i => $block) {
+    if ($block['provider'] == 'lightning_inline_block') {
+      unset($blocks[$i]);
+    }
   }
 }
