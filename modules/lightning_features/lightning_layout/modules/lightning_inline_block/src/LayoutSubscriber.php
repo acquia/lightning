@@ -9,6 +9,8 @@ use Drupal\ctools\Event\BlockVariantEvents;
 use Drupal\lightning_inline_block\Controller\PanelsIPEController;
 use Drupal\lightning_inline_block\Controller\QuickEditController;
 use Drupal\lightning_inline_block\Plugin\Block\InlineEntity;
+use Drupal\panels\PanelsEvents;
+use Drupal\panels\PanelsVariantEvent;
 use Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant;
 use Symfony\Component\Routing\RouteCollection;
 
@@ -39,6 +41,7 @@ class LayoutSubscriber extends RouteSubscriberBase {
       parent::getSubscribedEvents(),
       [
         BlockVariantEvents::ADD_BLOCK => 'onAddBlock',
+        PanelsEvents::VARIANT_POST_SAVE => 'onVariantPostSave',
       ]
     );
   }
@@ -76,6 +79,29 @@ class LayoutSubscriber extends RouteSubscriberBase {
           'entity_type' => $entity->getEntityTypeId(),
           'entity_id' => $entity->id(),
         ])
+        ->execute();
+    }
+  }
+
+  public function onVariantPostSave(PanelsVariantEvent $event) {
+    $variant = $event->getVariant();
+    $contexts = $variant->getContexts();
+
+    if (isset($contexts['@panelizer.entity_context:entity'])) {
+      $configuration = $variant->getConfiguration();
+
+      $blocks = array_filter($configuration['blocks'], function (array $block) {
+        return $block['id'] == 'inline_entity';
+      });
+
+      /** @var \Drupal\Core\Entity\EntityInterface $entity */
+      $entity = $contexts['@panelizer.entity_context:entity']->getContextValue();
+
+      $this->database
+        ->delete('inline_entity')
+        ->condition('entity_type', $entity->getEntityTypeId())
+        ->condition('entity_id', $entity->id())
+        ->condition('block_id', array_keys($blocks), 'NOT IN')
         ->execute();
     }
   }
