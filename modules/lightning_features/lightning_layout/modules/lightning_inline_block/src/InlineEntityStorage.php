@@ -5,7 +5,11 @@ namespace Drupal\lightning_inline_block;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Plugin\Context\ContextDefinition;
+use Drupal\ctools\Context\AutomaticContext;
 use Drupal\ctools_entity_mask\MaskContentEntityStorage;
+use Drupal\panelizer\PanelizerInterface;
+use Drupal\user\SharedTempStore;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class InlineEntityStorage extends MaskContentEntityStorage {
@@ -18,6 +22,20 @@ class InlineEntityStorage extends MaskContentEntityStorage {
   protected $database;
 
   /**
+   * The Panels IPE temp store.
+   *
+   * @var \Drupal\user\SharedTempStore
+   */
+  protected $tempStore;
+
+  /**
+   * The Panelizer service.
+   *
+   * @var \Drupal\panelizer\PanelizerInterface
+   */
+  protected $panelizer;
+
+  /**
    * InlineBlockContentStorage constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeInterface $entity_type
@@ -28,10 +46,16 @@ class InlineEntityStorage extends MaskContentEntityStorage {
    *   The cache backend to be used.
    * @param \Drupal\Core\Database\Connection $database
    *   The database connection.
+   * @param \Drupal\user\SharedTempStore $temp_store
+   *   The Panels IPE temp store.
+   * @param \Drupal\panelizer\PanelizerInterface $panelizer
+   *   The Panelizer service.
    */
-  public function __construct($entity_type, $entity_manager, $cache, Connection $database) {
+  public function __construct($entity_type, $entity_manager, $cache, Connection $database, SharedTempStore $temp_store, PanelizerInterface $panelizer) {
     parent::__construct($entity_type, $entity_manager, $cache);
     $this->database = $database;
+    $this->tempStore = $temp_store;
+    $this->panelizer = $panelizer;
   }
 
   /**
@@ -42,8 +66,30 @@ class InlineEntityStorage extends MaskContentEntityStorage {
       $entity_type,
       $container->get('entity.manager'),
       $container->get('cache.entity'),
-      $container->get('database')
+      $container->get('database'),
+      $container->get('user.shared_tempstore')->get('panels_ipe'),
+      $container->get('panelizer')
     );
+  }
+
+  protected function getDisplay(EntityInterface $entity) {
+    $display = $this->panelizer->getPanelsDisplay($entity, 'full');
+
+    // Ensure that the display has an automatic Panelizer entity context so that
+    // the temp store ID will be consistent.
+    $key = '@panelizer.entity_context:entity';
+    $contexts = $display->getContexts();
+    if (empty($contexts[$key])) {
+      $contexts[$key] = new AutomaticContext(new ContextDefinition('entity:' . $entity->getEntityTypeId(), NULL, TRUE), $entity);
+      $display->setContexts($contexts);
+    }
+
+    $configuration = $this->tempStore->get($display->getTempStoreId());
+    if ($configuration) {
+      $display->setConfiguration($configuration);
+    }
+
+    return $display;
   }
 
   /**
@@ -57,33 +103,65 @@ class InlineEntityStorage extends MaskContentEntityStorage {
     if ($ids) {
       $query->condition('uuid', $ids, 'IN');
     }
-    return $this->mapFromStorageRecords($query->execute()->fetchAll());
+
+    return array_map(
+      [$this, 'mapFromStorageRecord'],
+      $query->execute()->fetchAllKeyed()
+    );
   }
 
-  /**
-   * {@inheritdoc}
-   */
-  protected function mapFromStorageRecords(array $records) {
-    $blocks = [];
+  protected function loadEntity($entity_type, $id) {
+    $storage = $this->entityManager->getStorage($entity_type);
 
-    foreach ($records as $record) {
-      $context = StorageContext::fromStorageRecord($record);
+    $keys = $storage->getEntityType()->getKeys();
 
-      $configuration = $context->getConfiguration();
-      $blocks[$record->uuid] = unserialize($configuration['entity'])
-        ->setStorageContext($context);
+    if ($keys['revision']) {
+      $revisions = $storage
+        ->getQuery()
+        ->allRevisions()
+        ->condition($keys['id'], $id)
+        ->sort($keys['revision'], 'DESC')
+        ->range(0, 1)
+        ->execute();
+
+      $revision_id = key($revisions);
     }
-    return $blocks;
+
+    return isset($revision_id)
+      ? $storage->loadRevision($revision_id)
+      : $storage->load($id);
+  }
+
+  protected function mapFromStorageRecord(\stdClass $record) {
+    $entity = $this->loadEntity($record->entity_type, $record->entity_id);
+
+    $configuration = $this->getDisplay($entity)->getConfiguration();
+
+    return unserialize($configuration['blocks'][$record->block_id]['entity']);
   }
 
   /**
    * {@inheritdoc}
    */
   protected function doPostSave(EntityInterface $entity, $update) {
-    /** @var \Drupal\lightning_inline_block\InlineEntityInterface $entity */
     parent::doPostSave($entity, $update);
 
-    $entity->getStorageContext()->commit($entity);
+    if ($update) {
+      $record = $this->database
+        ->select('inline_entity', 'ie')
+        ->fields('ie')
+        ->condition('uuid', $entity->uuid())
+        ->execute()
+        ->fetch();
+
+      $host = $this->loadEntity($record->entity_type, $record->entity_id);
+
+      $display = $this->getDisplay($host);
+      $configuration = $display->getBlock($record->block_id)->getConfiguration();
+      $configuration['entity'] = serialize($entity);
+      $display->updateBlock($record->block_id, $configuration);
+      $this->tempStore->set($display->getTempStoreId(), $display->getConfiguration());
+    }
   }
 
 }

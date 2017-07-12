@@ -12,23 +12,18 @@ function lightning_inline_block_schema() {
           'length' => 64,
           'not null' => TRUE,
         ],
-        'storage_type' => [
-          'type' => 'varchar',
-          'length' => 255,
-          'not null' => TRUE,
-        ],
-        'storage_id' => [
-          'type' => 'varchar',
-          'length' => 255,
-          'not null' => TRUE,
-        ],
-        'temp_store_id' => [
-          'type' => 'varchar',
-          'length' => 255,
-        ],
         'block_id' => [
           'type' => 'varchar',
           'length' => 64,
+          'not null' => TRUE,
+        ],
+        'entity_type' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'entity_id' => [
+          'type' => 'int',
           'not null' => TRUE,
         ],
       ],

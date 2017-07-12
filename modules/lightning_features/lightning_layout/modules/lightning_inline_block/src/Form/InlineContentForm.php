@@ -5,27 +5,62 @@ namespace Drupal\lightning_inline_block\Form;
 use Drupal\block_content\BlockContentForm;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\user\SharedTempStore;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class InlineContentForm extends BlockContentForm {
 
   /**
-   * @return \Drupal\lightning_inline_block\InlineEntityInterface
+   * The Panels IPE temp store.
+   *
+   * @var \Drupal\user\SharedTempStore
    */
-  public function getEntity() {
-    return parent::getEntity();
+  protected $tempStore;
+
+  /**
+   * InlineContentForm constructor.
+   *
+   * @param \Drupal\user\SharedTempStore $temp_store
+   *   The Panels IPE temp store.
+   * @param \Drupal\Core\Entity\EntityManagerInterface $entity_manager
+   *   The entity manager service.
+   * @param \Drupal\Core\Entity\EntityTypeBundleInfoInterface $entity_type_bundle_info
+   *   The entity type bundle info service.
+   * @param \Drupal\Component\Datetime\TimeInterface $time
+   *   The time service.
+   */
+  public function __construct(SharedTempStore $temp_store, $entity_manager, $entity_type_bundle_info = NULL, $time = NULL) {
+    $this->tempStore = $temp_store;
+    parent::__construct($entity_manager, $entity_type_bundle_info, $time);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function create(ContainerInterface $container) {
+    return new static(
+      $container->get('user.shared_tempstore')->get('panels_ipe'),
+      $container->get('entity.manager'),
+      $container->get('entity_type.bundle.info'),
+      $container->get('datetime.time')
+    );
   }
 
   /**
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    $this->getEntity()
-      ->getStorageContext()
-      ->setConfiguration([
-        'region' => $form_state->getValue('_region'),
-      ]);
-
     parent::save($form, $form_state);
+
+    /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
+    $display = $form_state->get('display');
+
+    $display->addBlock([
+      'id' => 'inline_entity',
+      'region' => $display->getLayout()->getPluginDefinition()->getDefaultRegion(),
+      'entity' => serialize($this->getEntity()),
+    ]);
+    $this->tempStore->set($display->getTempStoreId(), $display->getConfiguration());
 
     if ($form_state->has('referrer')) {
       $redirect = $form_state->get('referrer');
@@ -33,25 +68,6 @@ class InlineContentForm extends BlockContentForm {
 
       $form_state->setRedirectUrl($redirect);
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function form(array $form, FormStateInterface $form_state) {
-    $form = parent::form($form, $form_state);
-
-    $entity = $this->getEntity();
-
-    if ($entity->isNew()) {
-      $form['_region'] = [
-        '#type' => 'select',
-        '#title' => $this->t('Region'),
-        '#required' => TRUE,
-        '#options' => $entity->getStorageContext()->getDisplay()->getRegionNames(),
-      ];
-    }
-    return $form;
   }
 
 }

@@ -1,14 +1,9 @@
 services:
-  lightning_inline_block.route_subscriber:
-    class: '\Drupal\lightning_inline_block\Routing\RouteSubscriber'
-    tags:
-      -
-        name: event_subscriber
-
   lightning_inline_block.layout_subscriber:
     class: '\Drupal\lightning_inline_block\LayoutSubscriber'
     arguments:
       - '@database'
+      - '@entity_type.manager'
     tags:
       -
         name: event_subscriber

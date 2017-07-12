@@ -6,7 +6,6 @@ use Drupal\Core\Block\BlockBase;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
-use Drupal\lightning_inline_block\StorageContext;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -66,11 +65,7 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
   public function getEntity() {
     if (empty($this->entity)) {
       $configuration = $this->getConfiguration();
-
-      $entity = unserialize($configuration['entity']);
-      StorageContext::fromEntity($entity)->setConfiguration($configuration);
-
-      $this->entity = $entity;
+      $this->entity = unserialize($configuration['entity']);
     }
     return $this->entity;
   }

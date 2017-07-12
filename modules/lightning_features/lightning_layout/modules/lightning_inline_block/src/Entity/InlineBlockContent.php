@@ -4,8 +4,6 @@ namespace Drupal\lightning_inline_block\Entity;
 
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
-use Drupal\lightning_inline_block\InlineEntityInterface;
-use Drupal\lightning_inline_block\StorageContext;
 
 /**
  * Defines the inline block entity class.
@@ -39,40 +37,12 @@ use Drupal\lightning_inline_block\StorageContext;
  *   mask = "block_content",
  * )
  */
-class InlineBlockContent extends BlockContent implements InlineEntityInterface {
+class InlineBlockContent extends BlockContent {
 
   use MaskEntityTrait;
 
-  protected $storageContext;
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getStorageContext() {
-    return $this->storageContext;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setStorageContext(StorageContext $context) {
-    $this->storageContext = $context;
-    return $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __sleep() {
-    return array_diff(parent::__sleep(), ['original', 'storageContext']);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function __wakeup() {
     parent::__wakeup();
-    StorageContext::fromEntity($this);
     $this->original = $this;
   }
 

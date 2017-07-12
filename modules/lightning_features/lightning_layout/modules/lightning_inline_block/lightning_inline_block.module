@@ -1,0 +1,31 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+
+/**
+ * Implements hook_entity_delete().
+ */
+function lightning_inline_block_entity_delete(EntityInterface $entity) {
+  $entity_id = $entity->id();
+
+  if (is_numeric($entity_id)) {
+    \Drupal::database()
+      ->delete('inline_entity')
+      ->condition('entity_type', $entity->getEntityTypeId())
+      ->condition('entity_id', $entity_id)
+      ->execute();
+  }
+}
+
+/**
+ * Implements hook_page_attachments().
+ */
+function lightning_inline_block_page_attachments(array &$attachments) {
+  $attach =
+    \Drupal::moduleHandler()->moduleExists('quickedit') &&
+    preg_match('/^entity\.[a-z0-9_]+\.latest_version$/', \Drupal::routeMatch()->getRouteName());
+
+  if ($attach) {
+    $attachments['#attached']['library'][] = 'lightning_inline_block/quickedit';
+  }
+}
