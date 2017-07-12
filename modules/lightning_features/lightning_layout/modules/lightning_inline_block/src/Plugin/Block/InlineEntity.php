@@ -93,6 +93,8 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
    */
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
+    $form['admin_label']['#access'] = FALSE;
+    $form['label']['#required'] = FALSE;
 
     $form['#process'][] = [static::class, 'ensureSubmit'];
 

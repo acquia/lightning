@@ -51,13 +51,16 @@ class InlineContentForm extends BlockContentForm {
   public function save(array $form, FormStateInterface $form_state) {
     parent::save($form, $form_state);
 
+    $entity = $this->getEntity();
+
     /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
     $display = $form_state->get('display');
 
     $display->addBlock([
       'id' => 'inline_entity',
+      'label' => $entity->label(),
       'region' => $display->getLayout()->getPluginDefinition()->getDefaultRegion(),
-      'entity' => serialize($this->getEntity()),
+      'entity' => serialize($entity),
     ]);
     $this->tempStore->set($display->getTempStoreId(), $display->getConfiguration());
 
