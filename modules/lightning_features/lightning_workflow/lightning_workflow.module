@@ -7,8 +7,8 @@
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\lightning_core\Element;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_core\Routing\RouteSubscriber;
 use Drupal\lightning_workflow\Form\NodeForm;
@@ -53,24 +53,26 @@ function lightning_workflow_module_implements_alter(array &$implementations, $ho
   // We have to check for hook_node_view_alter() because of absolute insanity
   // in ModuleHandler::alter() and the way it determines the implementations of
   // 'secondary' alter hooks. It's weird logic that is pretty close to
-  // inexplicable...but trust me, to run our hook_entity_view_alter()
-  // implementation after Quick Edit's, we need to alter the implementations
-  // of hook_node_view_alter(). Granted, this will only work for nodes. If we
-  // want to do this for another entity type, we'll have to check for its
-  // entity type-specific view_alter hook as well.
+  // inexplicable...but trust me, to wrap around quickedit_entity_view_alter(),
+  // we need to alter the implementations of hook_node_view_alter(). Granted,
+  // this will only work for nodes. If we want to do this for another entity
+  // type, we'll have to check for its entity type-specific view_alter hook as
+  // well.
   if ($hook == 'node_view_alter') {
-    $order = array_diff(array_keys($implementations), ['lightning_workflow']);
-    array_push($order, 'lightning_workflow');
-    Element::order($implementations, $order);
+    unset($implementations['quickedit']);
   }
 }
 
 /**
  * Implements hook_entity_view_alter().
  */
-function lightning_workflow_entity_view_alter(array &$build, EntityInterface $entity) {
-  if ($entity instanceof EntityPublishedInterface && $entity->isPublished() && RouteSubscriber::isViewing($entity)) {
-    unset($build['#attributes']['data-quickedit-entity-id']);
+function lightning_workflow_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if (\Drupal::moduleHandler()->moduleExists('quickedit')) {
+    quickedit_entity_view_alter($build, $entity, $display);
+
+    if ($entity instanceof EntityPublishedInterface && $entity->isPublished() && RouteSubscriber::isViewing($entity)) {
+      unset($build['#attributes']['data-quickedit-entity-id']);
+    }
   }
 }
 
