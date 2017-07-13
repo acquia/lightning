@@ -54,6 +54,13 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+## 2.1.6. to 2.1.7
+* If Lightning's content role functionality is available, grant all "creator"
+  content roles the following permissions, as desired:
+  * **Toolbar**: Use the administration toolbar
+  * **Quick Edit**: Access in-place editing
+  * **Contextual Links**: Use contextual links
+
 ## 2.1.5 to 2.1.6
 This version of Lightning adds the ability to choose an image style, alt text,
 and other settings each time you embed an image in a WYSIWYG editor, rather
