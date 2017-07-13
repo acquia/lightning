@@ -34,10 +34,15 @@ function lightning_workflow_theme_registry_alter(array &$theme_registry) {
  * Implements template_preprocess_field().
  */
 function lightning_workflow_preprocess_field(array &$variables) {
-  $parent = 'quickedit_preprocess_field';
-  if (function_exists($parent)) {
-    $parent($variables);
-    unset($variables['attributes']['data-quickedit-field-id']);
+  if (\Drupal::moduleHandler()->moduleExists('quickedit')) {
+    quickedit_preprocess_field($variables);
+
+    /** @var \Drupal\Core\Entity\EntityInterface $entity */
+    $entity = $variables['element']['#object'];
+
+    if ($entity instanceof EntityPublishedInterface && $entity->isPublished() && RouteSubscriber::isViewing($entity)) {
+      unset($variables['attributes']['data-quickedit-field-id']);
+    }
   }
 }
 
