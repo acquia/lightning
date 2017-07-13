@@ -18,9 +18,33 @@ use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
 
 /**
+ * Implements hook_theme_registry_alter().
+ */
+function lightning_workflow_theme_registry_alter(array &$theme_registry) {
+  foreach ($theme_registry as $hook => &$info) {
+    if ($hook == 'field' || (isset($info['base hook']) && $info['base hook'] == 'field')) {
+      // We wrap around Quick Edit's preprocess function, so it should not be
+      // run directly.
+      $info['preprocess functions'] = array_diff($info['preprocess functions'], ['quickedit_preprocess_field']);
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_field().
+ */
+function lightning_workflow_preprocess_field(array &$variables) {
+  $parent = 'quickedit_preprocess_field';
+  if (function_exists($parent)) {
+    $parent($variables);
+    unset($variables['attributes']['data-quickedit-field-id']);
+  }
+}
+
+/**
  * Implements hook_module_implements_alter().
  */
-function lightning_workflow_module_implements_alter(&$implementations, $hook) {
+function lightning_workflow_module_implements_alter(array &$implementations, $hook) {
   // We have to check for hook_node_view_alter() because of absolute insanity
   // in ModuleHandler::alter() and the way it determines the implementations of
   // 'secondary' alter hooks. It's weird logic that is pretty close to
