@@ -14,11 +14,9 @@ class LightningInlineBlockServiceProvider extends ServiceProviderBase {
   public function register(ContainerBuilder $container) {
     parent::register($container);
 
-    $service_id = 'lightning.quickedit_access';
-
-    if ($container->hasDefinition($service_id)) {
+    if ($container->hasDefinition('lightning.quickedit_access')) {
       $container
-        ->getDefinition($service_id)
+        ->getDefinition('lightning.quickedit_access')
         ->setClass(QuickEditAccess::class)
         ->addArgument(new Reference('database'))
         ->addArgument(new Reference('entity_type.manager'));

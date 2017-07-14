@@ -60,7 +60,10 @@ class QuickEditAccess implements EventSubscriberInterface {
    */
   public function getAccess(EntityInterface $entity) {
     $event = new QuickEditAccessEvent($entity);
+
+    // An event subscriber that dispatches events! Ain't mad science fun?
     $this->eventDispatcher->dispatch(QuickEditEvents::ACCESS, $event);
+
     return $event->getAccess();
   }
 

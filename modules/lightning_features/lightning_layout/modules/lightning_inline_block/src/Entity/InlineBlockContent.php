@@ -61,6 +61,12 @@ class InlineBlockContent extends BlockContent {
     return $fields;
   }
 
+  /**
+   * Returns the entity of which this inline block is an intrinsic part.
+   *
+   * @return \Drupal\Core\Entity\EntityInterface
+   *   The host entity.
+   */
   public function getHostEntity() {
     $record = $this->database()
       ->select('inline_entity', 'ie')
@@ -77,6 +83,12 @@ class InlineBlockContent extends BlockContent {
       ->load($record->entity_id);
   }
 
+  /**
+   * Returns the database connection.
+   *
+   * @return \Drupal\Core\Database\Connection
+   *   The database connection.
+   */
   protected function database() {
     return \Drupal::database();
   }
