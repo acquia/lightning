@@ -61,4 +61,24 @@ class InlineBlockContent extends BlockContent {
     return $fields;
   }
 
+  public function getHostEntity() {
+    $record = $this->database()
+      ->select('inline_entity', 'ie')
+      ->fields('ie', [
+        'entity_type',
+        'entity_id',
+      ])
+      ->condition('uuid', $this->uuid())
+      ->execute()
+      ->fetch();
+
+    return $this->entityTypeManager()
+      ->getStorage($record->entity_type)
+      ->load($record->entity_id);
+  }
+
+  protected function database() {
+    return \Drupal::database();
+  }
+
 }
