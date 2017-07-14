@@ -123,43 +123,6 @@ function lightning_core_modules_installed(array $modules) {
 }
 
 /**
- * Implements hook_entity_load().
- */
-function lightning_core_entity_load(array $entities) {
-  // Maintain a list of entity UUIDs whose aliases we've already looked up.
-  // We only want to look up a particular entity's alias once per request in
-  // order to prevent infinite loops (see issue #2831550).
-  static $looked_up = [];
-
-  /** @var \Drupal\Core\Path\AliasStorageInterface $alias_storage */
-  $alias_storage = \Drupal::service('path.alias_storage');
-
-  foreach ($entities as $entity) {
-    $uuid = $entity->uuid();
-
-    // If the entity has an empty path field, try to set its value. Amazingly,
-    // Path does not do this on its freaking own.
-    if (
-      empty($looked_up[$uuid]) &&
-      $entity instanceof FieldableEntityInterface &&
-      $entity->hasField('path') &&
-      $entity->path instanceof PathFieldItemList &&
-      $entity->path->isEmpty()
-    ) {
-      $looked_up[$uuid] = TRUE;
-
-      $alias = $alias_storage->load([
-        'source' => '/' . $entity->toUrl()->getInternalPath(),
-      ]);
-
-      if ($alias) {
-        $entity->path->setValue($alias);
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_block_view_alter().
  */
 function lightning_core_block_view_alter(array &$build, BlockPluginInterface $block) {
