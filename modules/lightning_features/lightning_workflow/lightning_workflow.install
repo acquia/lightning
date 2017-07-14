@@ -5,31 +5,26 @@
  * Contains installation and update routines for Lightning Workflow.
  */
 
+use Drupal\Core\Config\ImmutableConfig;
 use Drupal\node\Entity\NodeType;
 
 /**
  * Implements hook_install().
  */
 function lightning_workflow_install() {
-  // Don't do anything during config sync.
-  if (\Drupal::isConfigSyncing()) {
-    return;
-  }
-
-  // Set up content type-specific permissions.
-  lightning_workflow_update_8001();
-
   if (\Drupal::moduleHandler()->moduleExists('lightning_roles')) {
     lightning_workflow_modules_installed(['lightning_roles']);
   }
 }
 
 /**
- * Applies workflow permissions to content management roles.
+ * Removed in Lightning 8.x-2.17.
+ *
+ * Formerly applied workflow permissions to content management roles.
+ *
+ * @deprecated
  */
 function lightning_workflow_update_8001() {
-  $node_types = NodeType::loadMultiple();
-  array_walk($node_types, 'lightning_workflow_node_type_insert');
 }
 
 /**
@@ -37,4 +32,54 @@ function lightning_workflow_update_8001() {
  */
 function lightning_workflow_update_8002() {
   \Drupal::entityTypeManager()->clearCachedDefinitions();
+}
+
+/**
+ * Installs the Lightning Scheduled Updates sub-component.
+ */
+function lightning_workflow_update_8003() {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
+  $config_factory = \Drupal::configFactory();
+
+  $config = array_map(
+    function (ImmutableConfig $item) {
+      return $item->getRawData();
+    },
+    $config_factory->loadMultiple([
+      'core.entity_form_display.scheduled_update.multiple_node_embargo.default',
+      'core.entity_form_display.scheduled_update.node_embargo.default',
+      'field.field.scheduled_update.multiple_node_embargo.field_moderation_state',
+      'field.field.scheduled_update.node_embargo.field_moderation_state',
+      'field.storage.node.scheduled_update',
+      'field.storage.scheduled_update.field_moderation_state',
+      'scheduled_updates.scheduled_update_type.multiple_node_embargo',
+      'scheduled_updates.scheduled_update_type.node_embargo',
+    ])
+  );
+
+  foreach (array_keys($config) as $id) {
+    $config_factory->getEditable($id)->delete();
+  }
+
+  \Drupal::service('module_installer')->install(['lightning_scheduled_updates']);
+
+  foreach ($config as $id => $data) {
+    $config_factory->getEditable($id)->setData($data)->save(TRUE);
+  }
+
+  /** @var \Drupal\node\Entity\NodeType $node_type */
+  foreach (NodeType::loadMultiple() as $node_type) {
+    $embargo = $node_type->getThirdPartySetting('lightning_workflow', 'embargo');
+
+    if (isset($embargo)) {
+      $node_type
+        ->unsetThirdPartySetting('lightning_workflow', 'embargo')
+        ->setThirdPartySetting('lightning_scheduled_updates', 'embargo', $embargo)
+        ->save();
+    }
+  }
 }

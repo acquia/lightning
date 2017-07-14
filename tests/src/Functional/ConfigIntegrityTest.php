@@ -40,6 +40,29 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertContains('view media', Role::load('anonymous')->getPermissions());
     $this->assertContains('view media', Role::load('authenticated')->getPermissions());
 
+    foreach (\Drupal::entityQuery('node_type')->execute() as $node_type) {
+      $needles = [
+        "create $node_type content",
+        "edit own $node_type content",
+        "view $node_type revisions",
+        'view own unpublished content',
+        'create url aliases',
+        'access in-place editing',
+        'access contextual links',
+        'access toolbar',
+      ];
+      $haystack = Role::load("{$node_type}_creator")->getPermissions();
+      $this->assertContainsAll($needles, $haystack);
+
+      $needles = [
+        'access content overview',
+        "edit any $node_type content",
+        "delete any $node_type content",
+      ];
+      $haystack = Role::load("{$node_type}_reviewer")->getPermissions();
+      $this->assertContainsAll($needles, $haystack);
+    }
+
     $account = $this->drupalCreateUser();
     $this->drupalLogin($account);
 
@@ -62,6 +85,19 @@ class ConfigIntegrityTest extends BrowserTestBase {
       'inline_entity:inline_block_content:basic',
       $this->container->get('plugin.manager.block')->getDefinitions()
     );
+  }
+
+  /**
+   * Asserts that a haystack contains a set of needles.
+   *
+   * @param mixed[] $needles
+   *   The needles expected to be in the haystack.
+   * @param mixed[] $haystack
+   *   The haystack.
+   */
+  protected function assertContainsAll(array $needles, array $haystack) {
+    $diff = array_diff($needles, $haystack);
+    $this->assertEmpty($diff);
   }
 
   /**

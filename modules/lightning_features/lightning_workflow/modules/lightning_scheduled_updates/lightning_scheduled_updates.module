@@ -1,0 +1,86 @@
+<?php
+
+/**
+ * @file
+ * Contains support code for scheduling updates to content.
+ */
+
+use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\field\Entity\FieldConfig;
+use Drupal\node\NodeTypeInterface;
+use Drupal\scheduled_updates\ScheduledUpdateInterface;
+
+/**
+ * Implements hook_inline_entity_form_table_fields_alter().
+ */
+function lightning_scheduled_updates_inline_entity_form_table_fields_alter(array &$fields, array $context) {
+  if ($context['entity_type'] == 'scheduled_update') {
+    $fields['label']['type'] = 'callback';
+    $fields['label']['callback'] = 'lightning_scheduled_updates_ief_label';
+    // We're generating a pretty, informative label...so there's no need to use
+    // the spartan, default column label.
+    $fields['label']['label'] = NULL;
+  }
+}
+
+/**
+ * Generates pretty labels for scheduled updates in an IEF.
+ *
+ * @param \Drupal\scheduled_updates\ScheduledUpdateInterface $entity
+ *   The scheduled update entity.
+ *
+ * @return array
+ *   The entity label, as a renderable array.
+ */
+function lightning_scheduled_updates_ief_label(ScheduledUpdateInterface $entity) {
+  $label = $entity->label();
+
+  if ($entity->bundle() == 'node_embargo') {
+    $when = DrupalDateTime::createFromTimestamp($entity->update_timestamp->value);
+
+    $label = t('Move to <strong>@moderation_state</strong> state on @date at @time', [
+      '@moderation_state' => $entity->field_moderation_state->entity->label(),
+      '@date' => $when->format('F j, Y'),
+      '@time' => $when->format('g:i:s A'),
+    ]);
+  }
+  return ['#markup' => $label];
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_scheduled_updates_node_type_insert(NodeTypeInterface $node_type) {
+  // Don't do anything during config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  elseif ($node_type->getThirdPartySetting('lightning_scheduled_updates', 'embargo')) {
+    FieldConfig::create([
+      'field_name' => 'scheduled_update',
+      'entity_type' => 'node',
+      'bundle' => $node_type->id(),
+      'label' => t('Scheduled updates'),
+      'settings' => [
+        'handler' => 'default:scheduled_update',
+        'handler_settings' => [
+          'target_bundles' => ['node_embargo'],
+        ],
+      ],
+    ])->save();
+
+    entity_get_form_display('node', $node_type->id(), 'default')
+      ->setComponent('scheduled_update', [
+        'type' => 'inline_entity_form_complex',
+        'settings' => [
+          'override_labels' => FALSE,
+          'label_singular' => '',
+          'label_plural' => '',
+          'allow_new' => TRUE,
+          'allow_existing' => FALSE,
+          'match_operator' => 'CONTAINS',
+        ],
+      ])
+      ->save();
+  }
+}

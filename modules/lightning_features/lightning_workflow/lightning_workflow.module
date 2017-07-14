@@ -5,17 +5,76 @@
  * Provides workflow enhancements for Drupal.
  */
 
-use Drupal\Core\Datetime\DrupalDateTime;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityPublishedInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\field\Entity\FieldConfig;
 use Drupal\lightning_core\OverrideHelper as Override;
+use Drupal\lightning_core\Routing\RouteSubscriber;
 use Drupal\lightning_workflow\Form\NodeForm;
 use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
-use Drupal\node\NodeTypeInterface;
-use Drupal\scheduled_updates\ScheduledUpdateInterface;
 use Drupal\views\ViewEntityInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function lightning_workflow_theme_registry_alter(array &$theme_registry) {
+  foreach ($theme_registry as $hook => &$info) {
+    if ($hook == 'field' || (isset($info['base hook']) && $info['base hook'] == 'field')) {
+      // We wrap around Quick Edit's preprocess function, so it should not be
+      // run directly.
+      $info['preprocess functions'] = array_diff($info['preprocess functions'], ['quickedit_preprocess_field']);
+    }
+  }
+}
+
+/**
+ * Implements template_preprocess_field().
+ */
+function lightning_workflow_preprocess_field(array &$variables) {
+  if (\Drupal::moduleHandler()->moduleExists('quickedit')) {
+    quickedit_preprocess_field($variables);
+
+    /** @var \Drupal\Core\Entity\EntityInterface $entity */
+    $entity = $variables['element']['#object'];
+
+    if ($entity instanceof EntityPublishedInterface && $entity->isPublished() && RouteSubscriber::isViewing($entity)) {
+      unset($variables['attributes']['data-quickedit-field-id']);
+    }
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function lightning_workflow_module_implements_alter(array &$implementations, $hook) {
+  // We have to check for hook_node_view_alter() because of absolute insanity
+  // in ModuleHandler::alter() and the way it determines the implementations of
+  // 'secondary' alter hooks. It's weird logic that is pretty close to
+  // inexplicable...but trust me, to wrap around quickedit_entity_view_alter(),
+  // we need to alter the implementations of hook_node_view_alter(). Granted,
+  // this will only work for nodes. If we want to do this for another entity
+  // type, we'll have to check for its entity type-specific view_alter hook as
+  // well.
+  if ($hook == 'node_view_alter') {
+    unset($implementations['quickedit']);
+  }
+}
+
+/**
+ * Implements hook_entity_view_alter().
+ */
+function lightning_workflow_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
+  if (\Drupal::moduleHandler()->moduleExists('quickedit')) {
+    quickedit_entity_view_alter($build, $entity, $display);
+
+    if ($entity instanceof EntityPublishedInterface && $entity->isPublished() && RouteSubscriber::isViewing($entity)) {
+      unset($build['#attributes']['data-quickedit-entity-id']);
+    }
+  }
+}
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
@@ -54,43 +113,6 @@ function lightning_workflow_entity_type_alter(array &$entity_types) {
 }
 
 /**
- * Implements hook_inline_entity_form_table_fields_alter().
- */
-function lightning_workflow_inline_entity_form_table_fields_alter(array &$fields, array $context) {
-  if ($context['entity_type'] == 'scheduled_update') {
-    $fields['label']['type'] = 'callback';
-    $fields['label']['callback'] = 'lightning_workflow_scheduled_update_ief_label';
-    // We're generating a pretty, informative label...so there's no need to use
-    // the spartan, default column label.
-    $fields['label']['label'] = NULL;
-  }
-}
-
-/**
- * Generates pretty labels for scheduled updates in an IEF.
- *
- * @param ScheduledUpdateInterface $entity
- *   The scheduled update entity.
- *
- * @return array
- *   The entity label, as a renderable array.
- */
-function lightning_workflow_scheduled_update_ief_label(ScheduledUpdateInterface $entity) {
-  $label = $entity->label();
-
-  if ($entity->bundle() == 'node_embargo') {
-    $when = DrupalDateTime::createFromTimestamp($entity->update_timestamp->value);
-
-    $label = t('Move to <strong>@moderation_state</strong> state on @date at @time', [
-      '@moderation_state' => $entity->field_moderation_state->entity->label(),
-      '@date' => $when->format('F j, Y'),
-      '@time' => $when->format('g:i:s A'),
-    ]);
-  }
-  return ['#markup' => $label];
-}
-
-/**
  * Implements hook_modules_installed().
  */
 function lightning_workflow_modules_installed(array $modules) {
@@ -115,46 +137,6 @@ function lightning_workflow_modules_installed(array $modules) {
         'use published_archived transition',
         'view moderation states',
       ]);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_insert().
- */
-function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
-  $id = $node_type->id();
-
-  // Don't do anything during config sync.
-  if (\Drupal::isConfigSyncing()) {
-    return;
-  }
-  elseif ($node_type->getThirdPartySetting('lightning_workflow', 'embargo')) {
-    FieldConfig::create([
-      'field_name' => 'scheduled_update',
-      'entity_type' => 'node',
-      'bundle' => $id,
-      'label' => t('Scheduled updates'),
-      'settings' => [
-        'handler' => 'default:scheduled_update',
-        'handler_settings' => [
-          'target_bundles' => ['node_embargo'],
-        ],
-      ],
-    ])->save();
-
-    entity_get_form_display('node', $id, 'default')
-      ->setComponent('scheduled_update', [
-        'type' => 'inline_entity_form_complex',
-        'settings' => [
-          'override_labels' => FALSE,
-          'label_singular' => '',
-          'label_plural' => '',
-          'allow_new' => TRUE,
-          'allow_existing' => FALSE,
-          'match_operator' => 'CONTAINS',
-        ],
-      ])
-      ->save();
   }
 }
 

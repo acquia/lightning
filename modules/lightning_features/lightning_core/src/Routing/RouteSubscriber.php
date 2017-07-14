@@ -2,8 +2,9 @@
 
 namespace Drupal\lightning_core\Routing;
 
-use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Drupal\Core\Routing\RoutingEvents;
 use Drupal\lightning_core\Controller\FieldUiTitleController;
@@ -15,49 +16,67 @@ use Symfony\Component\Routing\RouteCollection;
 class RouteSubscriber extends RouteSubscriberBase {
 
   /**
-   * The affected entity type IDs.
+   * The entity type manager service.
    *
-   * @var string[]
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
-  protected $entityTypes;
+  protected $entityTypeManager;
 
   /**
    * RouteSubscriber constructor.
    *
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager.
+   *   The entity type manager service.
    */
   public function __construct(EntityTypeManagerInterface $entity_type_manager) {
-    $definitions = $entity_type_manager->getDefinitions();
-
-    $filter = function (EntityTypeInterface $entity_type) {
-      return (bool) $entity_type->get('field_ui_base_route');
-    };
-    $definitions = array_filter($definitions, $filter);
-
-    $this->entityTypes = array_keys($definitions);
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
    * {@inheritdoc}
    */
   public function alterRoutes(RouteCollection $collection) {
-    foreach ($this->entityTypes as $entity_type) {
+    foreach ($this->entityTypeManager->getDefinitions() as $id => $entity_type) {
+      if ($entity_type->get('field_ui_base_route') == NULL) {
+        continue;
+      }
+
       // The 'Manage fields' page.
-      $this->setBundleAsTitle('entity.' . $entity_type . '.field_ui_fields', $collection);
+      $this->setBundleAsTitle("entity.$id.field_ui_fields", $collection);
 
       // The default view display under 'Manage display'.
-      $this->setBundleAsTitle('entity.entity_view_display.' . $entity_type . '.default', $collection);
+      $this->setBundleAsTitle("entity.entity_view_display.$id.default", $collection);
 
       // A customized view display under 'Manage display'.
-      $this->setBundleAsTitle('entity.entity_view_display.' . $entity_type . '.view_mode', $collection);
+      $this->setBundleAsTitle("entity.entity_view_display.$id.view_mode", $collection);
 
       // The default form display under 'Manage display'.
-      $this->setBundleAsTitle('entity.entity_form_display.' . $entity_type . '.default', $collection);
+      $this->setBundleAsTitle("entity.entity_form_display.$id.default", $collection);
 
       // A customized form display under 'Manage display'.
-      $this->setBundleAsTitle('entity.entity_form_display.' . $entity_type . '.form_mode', $collection);
+      $this->setBundleAsTitle("entity.entity_form_display.$id.form_mode", $collection);
     }
+  }
+
+  /**
+   * Checks if we are currently viewing an entity at its canonical route.
+   *
+   * @param \Drupal\Core\Entity\EntityInterface $entity
+   *   The entity.
+   * @param \Drupal\Core\Routing\RouteMatchInterface|NULL $route_match
+   *   (optional) The current route match.
+   *
+   * @return bool
+   *   TRUE if we are at the entity's canonical route, FALSE otherwise.
+   */
+  public static function isViewing(EntityInterface $entity, RouteMatchInterface $route_match = NULL) {
+    $route_match = $route_match ?: \Drupal::routeMatch();
+
+    $entity_type = $entity->getEntityTypeId();
+
+    return
+      $route_match->getRouteName() == "entity.$entity_type.canonical" &&
+      $route_match->getRawParameter($entity_type) == $entity->id();
   }
 
   /**
