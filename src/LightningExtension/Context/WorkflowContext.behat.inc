@@ -24,6 +24,9 @@ class WorkflowContext extends DrupalSubContextBase {
    *
    * @param int $n
    *   How many forward revisions to create. Defaults to 1.
+   * @param string $moderation_state
+   *   The moderation state that the forward revision(s) should have. Defaults
+   *   to 'draft'.
    *
    * @When I create a forward revision
    * @When I create :n forward revisions

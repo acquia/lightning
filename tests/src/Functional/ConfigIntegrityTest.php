@@ -45,7 +45,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
       'administer blocks',
     ]);
     $haystack = Role::load('layout_manager')->getPermissions();
-    $this->assertContainsAll($haystack, $needles);
+    $this->assertContainsAll($needles, $haystack);
 
     // All users should be able to view media items.
     $this->assertContains('view media', Role::load('anonymous')->getPermissions());
