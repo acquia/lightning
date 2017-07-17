@@ -29,15 +29,21 @@ class ConfigIntegrityTest extends BrowserTestBase {
       $this->assertTrue($view_mode->getThirdPartySetting('lightning_core', 'internal'));
     }
 
+    $node_types = \Drupal::entityQuery('node_type')->execute();
+
     // lightning_layout_update_8003() grants layout_manager role Panelizer
     // permissions for every node type.
     $needles = array_map(
       function ($node_type) {
         return "administer panelizer node $node_type  defaults";
       },
-      \Drupal::entityQuery('node_type')->execute()
+      $node_types
     );
-    array_push($needles, 'administer blocks');
+    $needles = array_merge($needles, [
+      'administer node display',
+      'administer panelizer',
+      'administer blocks',
+    ]);
     $haystack = Role::load('layout_manager')->getPermissions();
     $this->assertContainsAll($haystack, $needles);
 
@@ -45,7 +51,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertContains('view media', Role::load('anonymous')->getPermissions());
     $this->assertContains('view media', Role::load('authenticated')->getPermissions());
 
-    foreach (\Drupal::entityQuery('node_type')->execute() as $node_type) {
+    foreach ($node_types as $node_type) {
       $needles = [
         "create $node_type content",
         "edit own $node_type content",

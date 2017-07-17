@@ -17,6 +17,23 @@ use WebDriver\Exception\NoAlertOpenError;
 class UtilityContext extends DrupalSubContextBase {
 
   /**
+   * Visits the edit form for the current node.
+   *
+   * This takes advantage of the rel="edit-form" attribute Lightning Core adds
+   * to the 'Edit' local task defined by the Node module, so that we can always
+   * click the correct edit link regardless of its text.
+   *
+   * @see lightning_core_local_tasks_alter()
+   *
+   * @When I edit the node
+   */
+  public function editContent() {
+    $this->assertSession()
+      ->elementExists('named', ['link', 'edit-form'])
+      ->click();
+  }
+
+  /**
    * Asserts that a form field is not present.
    *
    * @param string $field

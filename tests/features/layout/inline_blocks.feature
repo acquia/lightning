@@ -28,9 +28,7 @@ Feature: Inline content blocks in a Panels layout
     And I put "Here be dragons." into CKEditor
     And I press "Save"
     And I save the layout
-    And I click "Edit draft"
-    And I select "published" from "Moderation state"
-    And I press "Save"
+    And I publish the page
     Then I should see "Here be dragons."
 
   @1ab316e6
@@ -46,12 +44,8 @@ Feature: Inline content blocks in a Panels layout
     And I scroll to the '.ipe-block-form form input[name="op"]' element
     And I press "Save"
     And I save the layout
-    And I click "Edit draft"
-    And I select "published" from "Moderation state"
-    And I press "Save"
-    And I click "New draft"
-    And I select "draft" from "Moderation state"
-    And I press "Save"
+    And I publish the page
+    And I create a forward revision
     And I configure the "I am inline" block
     And I put "Here be dragonflies." into CKEditor
     And I scroll to the '.ipe-block-form form input[name="op"]' element
@@ -89,7 +83,7 @@ Feature: Inline content blocks in a Panels layout
     And I put "Here be dragons." into CKEditor
     And I scroll to the '.ipe-block-form form input[name="op"]' element
     And I press "Save"
-    And I enter edit mode
+    And I show all contextual links
     And I quick edit "I am inline"
     And I edit the body field
     Then the body field should contain "Here be dragons."
@@ -107,18 +101,14 @@ Feature: Inline content blocks in a Panels layout
     And I scroll to the '.ipe-block-form form input[name="op"]' element
     And I press "Save"
     And I save the layout
-    And I click "Edit draft"
-    And I select "published" from "Moderation state"
-    And I press "Save"
-    And I click "New draft"
-    And I select "draft" from "Moderation state"
-    And I press "Save"
+    And I publish the page
+    And I create a forward revision
     And I configure the "I am inline" block
     And I put "Here be dragonflies." into CKEditor
     And I scroll to the '.ipe-block-form form input[name="op"]' element
     And I press "Update"
     And I save the layout
-    And I enter edit mode
+    And I show all contextual links
     And I quick edit "I am inline"
     And I edit the body field
     Then the body field should contain "Here be dragonflies."

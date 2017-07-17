@@ -70,17 +70,6 @@ class QuickEditContext extends DrupalSubContextBase {
   }
 
   /**
-   * @When I enter edit mode
-   */
-  public function enterEditMode() {
-    $this->assertSession()
-      ->elementExists('css', '#toolbar-bar .contextual-toolbar-tab button')
-      ->click();
-
-    sleep(1);
-  }
-
-  /**
    * Asserts that Quick Edit is enabled for at least one entity on the page.
    *
    * @Then Quick Edit should be enabled
