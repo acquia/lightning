@@ -248,4 +248,21 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
     $this->minkContext->iWaitForAjaxToFinish();
   }
 
+  /**
+   * @param $title
+   *
+   * @When I configure the :title block
+   */
+  public function configureBlock($title) {
+    $this->openTab('Edit');
+
+    $this->assertSession()
+      ->elementExists('named_exact', ['content', "Block: $title"])
+      ->getParent()
+      ->find('css', '[data-action-id="configure"] a')
+      ->click();
+
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
 }
