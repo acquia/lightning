@@ -24,6 +24,9 @@ Feature: Inline content blocks in a Panels layout
       | landing_page | Foobar | /foobar | draft            |
     When I visit "/foobar"
     And I create a basic block
+    # I don't know why, but the CKEditor step is failing on Travis CI. This is
+    # a flail to try and get it to pass.
+    And I wait 3 seconds
     And I enter "I am inline" for "Block description"
     And I put "Here be dragons." into CKEditor
     And I scroll to the '.ipe-block-form form input[name="op"]' element

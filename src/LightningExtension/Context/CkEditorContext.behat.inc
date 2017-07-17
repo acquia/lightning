@@ -26,8 +26,6 @@ class CkEditorContext extends DrupalSubContextBase {
    * @Then CKEditor :id should exist
    */
   public function assertEditor($id = NULL) {
-    $this->assertInitialized();
-
     $js = "CKEDITOR.instances['" . ($id ?: $this->getDefault()) . "']";
 
     $this->getSession()->wait(10000, "$js.status === 'ready'");
@@ -169,25 +167,6 @@ class CkEditorContext extends DrupalSubContextBase {
       ->evaluateScript('Object.keys(CKEDITOR.instances).join(",")');
 
     return explode(',', $keys);
-  }
-
-  /**
-   * Asserts that CKEditor is initialized.
-   *
-   * @throws \Behat\Mink\Exception\ExpectationException
-   *   If CKEditor is not loaded on the page.
-   */
-  protected function assertInitialized() {
-    $session = $this->getSession();
-
-    $victory = $session->wait(10000, 'CKEDITOR');
-
-    if (empty($victory)) {
-      throw new ExpectationException(
-        'Expected CKEditor to be initialized but it is not.',
-        $session->getDriver()
-      );
-    }
   }
 
 }
