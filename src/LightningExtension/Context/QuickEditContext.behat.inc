@@ -86,13 +86,15 @@ class QuickEditContext extends DrupalSubContextBase {
   /**
    * Asserts that a Quick Edit field contains text.
    *
+   * @param string $field
+   *   The machine name of the field.
    * @param string $expected_text
    *   The text that the field is expected to contain.
    *
    * @throws \Behat\Mink\Exception\ExpectationException
    *   If the field does not contain the expected text.
    *
-   * @Then the :field field should contain :expected_text
+   * @Then the editable :field field should contain :expected_text
    */
   public function assertQuickEditFieldContains($field, $expected_text) {
     $actual_text = $this->assertQuickEditField($field)->getText();

@@ -35,7 +35,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
     // permissions for every node type.
     $needles = array_map(
       function ($node_type) {
-        return "administer panelizer node $node_type  defaults";
+        return "administer panelizer node $node_type defaults";
       },
       $node_types
     );

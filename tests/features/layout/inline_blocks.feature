@@ -110,4 +110,4 @@ Feature: Inline content blocks in a Panels layout
     And I show all contextual links
     And I quick edit "I am inline"
     And I edit the body field
-    Then the body field should contain "Here be dragonflies."
+    Then the editable body field should contain "Here be dragonflies."
