@@ -31,10 +31,15 @@ class ConfigIntegrityTest extends BrowserTestBase {
 
     // lightning_layout_update_8003() grants layout_manager role Panelizer
     // permissions for every node type.
-    $permissions = Role::load('layout_manager')->getPermissions();
-    foreach (\Drupal::entityQuery('node_type')->execute() as $node_type) {
-      $this->assertContains('administer panelizer node ' . $node_type . ' defaults', $permissions);
-    }
+    $needles = array_map(
+      function ($node_type) {
+        return "administer panelizer node $node_type  defaults";
+      },
+      \Drupal::entityQuery('node_type')->execute()
+    );
+    array_push($needles, 'administer blocks');
+    $haystack = Role::load('layout_manager')->getPermissions();
+    $this->assertContainsAll($haystack, $needles);
 
     // All users should be able to view media items.
     $this->assertContains('view media', Role::load('anonymous')->getPermissions());

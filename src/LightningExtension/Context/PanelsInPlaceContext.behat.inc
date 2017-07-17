@@ -227,4 +227,25 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
     $utility->acceptAlerts([$this->minkContext, 'iWaitForAjaxToFinish']);
   }
 
+  /**
+   * @param $block_type
+   *
+   * @When I create a :block_type block
+   */
+  public function createBlock($block_type) {
+    $assert = $this->assertSession();
+
+    $tab = $this->openTab('Manage Content');
+
+    $assert
+      ->elementExists('named', ['link', 'Create Content'], $tab)
+      ->click();
+    $this->minkContext->iWaitForAjaxToFinish();
+
+    $assert
+      ->elementExists('css', 'a[data-block-type = "' . $block_type . '"]', $tab)
+      ->click();
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
 }

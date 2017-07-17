@@ -60,6 +60,8 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
   * **Toolbar**: Use the administration toolbar
   * **Quick Edit**: Access in-place editing
   * **Contextual Links**: Use contextual links
+* Grant the "Administer blocks" permission to the **Layout manager** role, if
+  it exists.
 
 ## 2.1.5 to 2.1.6
 This version of Lightning adds the ability to choose an image style, alt text,
