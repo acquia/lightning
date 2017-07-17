@@ -1,6 +1,15 @@
 <?php
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\lightning_core\OverrideHelper as Override;
+use Drupal\lightning_inline_block\Plugin\DisplayBuilder\InPlaceEditorDisplayBuilder;
+
+/**
+ * Implements hook_display_builder_alter().
+ */
+function lightning_inline_block_display_builder_alter(array &$definitions) {
+  Override::pluginClass($definitions['ipe'], InPlaceEditorDisplayBuilder::class);
+}
 
 /**
  * Implements hook_entity_delete().
