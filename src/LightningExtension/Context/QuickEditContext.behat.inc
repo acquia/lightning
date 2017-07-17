@@ -3,6 +3,7 @@
 namespace Acquia\LightningExtension\Context;
 
 use Acquia\LightningExtension\AwaitTrait;
+use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
@@ -10,60 +11,96 @@ class QuickEditContext extends DrupalSubContextBase {
 
   use AwaitTrait;
 
-  protected $currentTarget;
+  /**
+   * The entity currently being quick edited.
+   *
+   * @var \Behat\Mink\Element\NodeElement
+   */
+  protected $target;
 
   /**
-   * @param $field
+   * Activates Quick Edit on a specific field of the current target.
+   *
+   * @param string $field
+   *   The machine name of the field to edit.
    *
    * @When I edit the :field field
    */
   public function quickEditField($field) {
-    $this->assertSession()
-      ->elementExists('css', '[data-quickedit-field-id*="/' . $field . '/"]', $this->currentTarget)
-      ->click();
-
+    $this->assertQuickEditField($field)->click();
     $this->awaitAjax();
   }
 
   /**
-   * @param $label
+   * Asserts the presence of a quick editable field.
+   *
+   * @param string $field
+   *   The machine name of the field.
+   *
+   * @return \Behat\Mink\Element\NodeElement
+   *   The quick editable field element.
+   */
+  protected function assertQuickEditField($field) {
+    $selector = sprintf('[data-quickedit-field-id *= "/%s/"]', $field);
+
+    return $this->assertSession()
+      ->elementExists('css', $selector, $this->target);
+  }
+
+  /**
+   * Activates Quick Edit for an entity.
+   *
+   * @param string $label
+   *   The entity label, which must be present on the page.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   *   If the entity (identified by the presence of a data-quickedit-entity-id
+   *   attribute) is not found on the page.
    *
    * @When I quick edit :label
    */
-  public function quickEditEntity($label) {
+  public function startQuickEdit($label) {
     $elements = $this->getSession()
       ->getPage()
       ->findAll('named_exact', ['content', $label]);
 
-    $this->currentTarget = end($elements)->getParent();
+    $elements = array_filter($elements, function (NodeElement $element) {
+      return $element->getParent()->hasAttribute('data-quickedit-entity-id');
+    });
+    if ($elements) {
+      $element = reset($elements);
 
-    $assert = $this->assertSession();
+      /** @var ContextualContext $context */
+      $context = $this->getContext(ContextualContext::class);
+      $context->assertContextualLink($element, 'Quick edit')->click();
 
-    $contextual = $assert->elementExists('css', '.contextual', $this->currentTarget);
-
-    $assert->elementExists('css', 'button', $contextual)->press();
-
-    $assert
-      ->elementExists(
-        'named',
-        ['link', 'Quick edit'],
-        $assert->elementExists('css', 'ul.contextual-links', $contextual)
-      )
-      ->click();
+      $this->target = $element;
+    }
+    else {
+      throw new ExpectationException(
+        'Expected to a quick editable entity called "' . $label . '" to exist.',
+        $this->getSession()->getDriver()
+      );
+    }
   }
 
   /**
-   * @param $value
+   * Asserts that a Quick Edit field contains text.
    *
-   * @Then the :field field should contain :value
+   * @param string $expected_text
+   *   The text that the field is expected to contain.
+   *
+   * @throws \Behat\Mink\Exception\ExpectationException
+   *   If the field does not contain the expected text.
+   *
+   * @Then the :field field should contain :expected_text
    */
-  public function assertQuickEditFieldContains($field, $value) {
-    $element = $this->assertSession()
-      ->elementExists('css', '[data-quickedit-field-id*="/' . $field . '/"]', $this->currentTarget);
+  public function assertQuickEditFieldContains($field, $expected_text) {
+    $actual_text = $this->assertQuickEditField($field)->getText();
 
-    if (strpos($element->getText(), $value) === FALSE) {
+    if (strpos($actual_text, $expected_text) === FALSE) {
       throw new ExpectationException(
-        'Expected field ' . $field . ' to contain "' . $value . '", but it does not.',
+        "Expected $field field to contain \"$expected_text\", but it does not.",
         $this->getSession()->getDriver()
       );
     }

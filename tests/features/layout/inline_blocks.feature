@@ -66,7 +66,6 @@ Feature: Inline content blocks in a Panels layout
     And I create a basic block
     And I enter "I am inline" for "Block description"
     And I put "Here be dragons." into CKEditor
-    And I wait 10 seconds
     And select "second" from "Region"
     And I press "Save"
     Then I should see an inline_entity block in the second region
