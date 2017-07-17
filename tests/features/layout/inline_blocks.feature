@@ -18,15 +18,12 @@ Feature: Inline content blocks in a Panels layout
 
   @a98dca7a
   Scenario: Inline blocks should be rendered in the published content
-    Given I am logged in as a user with the landing_page_creator,landing_page_reviewer role
+    Given I am logged in as a user with the landing_page_creator,landing_page_reviewer roles
     And landing_page content:
       | type         | title  | path    | moderation_state |
       | landing_page | Foobar | /foobar | draft            |
     When I visit "/foobar"
     And I create a basic block
-    # I don't know why, but the CKEditor step is failing on Travis CI. This is
-    # a flail to try and get it to pass.
-    And I wait 3 seconds
     And I enter "I am inline" for "Block description"
     And I put "Here be dragons." into CKEditor
     And I scroll to the '.ipe-block-form form input[name="op"]' element

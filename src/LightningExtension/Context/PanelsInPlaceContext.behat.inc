@@ -207,9 +207,9 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
       ->elementExists('named', ['link', 'Revert to default'], $this->assertTray())
       ->click();
 
-    /** @var \Acquia\LightningExtension\Context\UtilityContext $utility */
-    $utility = $this->getContext(UtilityContext::class);
-    $utility->acceptAlerts([$this, 'awaitAjax']);
+    $this->getContext(UtilityContext::class)->acceptAlerts(function () {
+      $this->awaitAjax();
+    });
   }
 
   /**

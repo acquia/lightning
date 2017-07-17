@@ -224,6 +224,7 @@ function lightning_dev_update_8007() {
     ]);
 
   \Drupal::service('module_installer')->install(['lightning_inline_block']);
+  \Drupal::service('entity_field.manager')->clearCachedFieldDefinitions();
 
   user_role_grant_permissions('layout_manager', ['administer blocks']);
 }
