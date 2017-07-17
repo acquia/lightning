@@ -115,11 +115,10 @@ Feature: Inline content blocks in a Panels layout
     And I press "Save"
     And I configure the "I am inline" block
     And I put "Here be dragonflies." into CKEditor
-    And I press "Update"
     And I scroll to the '.ipe-block-form form input[name="op"]' element
+    And I press "Update"
     And I save the layout
     And I enter edit mode
     And I quick edit "I am inline"
     And I edit the body field
-    And I wait 10 seconds
     Then the body field should contain "Here be dragonflies."

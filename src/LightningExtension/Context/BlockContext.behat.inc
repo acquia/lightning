@@ -12,22 +12,6 @@ use Drupal\DrupalExtension\Context\MinkContext;
 class BlockContext extends DrupalSubContextBase {
 
   /**
-   * The Mink context.
-   *
-   * @var MinkContext
-   */
-  protected $minkContext;
-
-  /**
-   * Gathers required contexts.
-   *
-   * @BeforeScenario
-   */
-  public function gatherContexts() {
-    $this->minkContext = $this->getContext(MinkContext::class);
-  }
-
-  /**
    * Instantiates a specific block plugin in a specific theme.
    *
    * @param string $plugin_id
@@ -41,7 +25,10 @@ class BlockContext extends DrupalSubContextBase {
     $this->visitPath('/admin/structure/block/add/' . $plugin_id . '/' . $theme);
 
     $id = uniqid($theme . '_');
-    $this->minkContext->fillField('id', $id);
+
+    /** @var MinkContext $context */
+    $context = $this->getContext(MinkContext::class);
+    $context->fillField('id', $id);
 
     /** @var UndoContext $undo */
     $undo = $this->getContext(UndoContext::class);
