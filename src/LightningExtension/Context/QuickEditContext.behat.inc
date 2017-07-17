@@ -2,11 +2,13 @@
 
 namespace Acquia\LightningExtension\Context;
 
+use Acquia\LightningExtension\AwaitTrait;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\MinkContext;
 
 class QuickEditContext extends DrupalSubContextBase {
+
+  use AwaitTrait;
 
   protected $currentTarget;
 
@@ -20,11 +22,7 @@ class QuickEditContext extends DrupalSubContextBase {
       ->elementExists('css', '[data-quickedit-field-id*="/' . $field . '/"]', $this->currentTarget)
       ->click();
 
-    /** @var MinkContext $mink_context */
-    $mink_context = $this->getContext(MinkContext::class);
-    if ($mink_context) {
-      $mink_context->iWaitForAjaxToFinish();
-    }
+    $this->awaitAjax();
   }
 
   /**
@@ -63,7 +61,7 @@ class QuickEditContext extends DrupalSubContextBase {
     $element = $this->assertSession()
       ->elementExists('css', '[data-quickedit-field-id*="/' . $field . '/"]', $this->currentTarget);
 
-    if ($element->getText() != $value) {
+    if (strpos($element->getText(), $value) === FALSE) {
       throw new ExpectationException(
         'Expected field ' . $field . ' to contain "' . $value . '", but it does not.',
         $this->getSession()->getDriver()

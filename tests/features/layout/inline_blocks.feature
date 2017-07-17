@@ -10,6 +10,7 @@ Feature: Inline content blocks in a Panels layout
     When I visit "/foobar"
     And I create a basic block
     And I enter "I am inline" for "Block description"
+    And I scroll to the '.ipe-block-form form input[name="op"]' element
     And I press "Save"
     And I save the layout
     And I visit "/admin/structure/block"
@@ -52,7 +53,8 @@ Feature: Inline content blocks in a Panels layout
     And I select "draft" from "Moderation state"
     And I press "Save"
     And I configure the "I am inline" block
-    And I put "Here be dragonfiles." into CKEditor
+    And I put "Here be dragonflies." into CKEditor
+    And I scroll to the '.ipe-block-form form input[name="op"]' element
     And I press "Update"
     And I save the layout
     And I click "View"
@@ -91,3 +93,33 @@ Feature: Inline content blocks in a Panels layout
     And I quick edit "I am inline"
     And I edit the body field
     Then the body field should contain "Here be dragons."
+
+  @cea9cfef
+  Scenario: The most recent revision should be loaded when quick editing an inline block
+    Given I am logged in as a user with the administrator role
+    And landing_page content:
+      | type         | title  | path    | moderation_state |
+      | landing_page | Foobar | /foobar | draft            |
+    When I visit "/foobar"
+    And I create a basic block
+    And I enter "I am inline" for "Block description"
+    And I put "Here be dragons." into CKEditor
+    And I scroll to the '.ipe-block-form form input[name="op"]' element
+    And I press "Save"
+    And I save the layout
+    And I click "Edit draft"
+    And I select "published" from "Moderation state"
+    And I press "Save"
+    And I click "New draft"
+    And I select "draft" from "Moderation state"
+    And I press "Save"
+    And I configure the "I am inline" block
+    And I put "Here be dragonflies." into CKEditor
+    And I press "Update"
+    And I scroll to the '.ipe-block-form form input[name="op"]' element
+    And I save the layout
+    And I enter edit mode
+    And I quick edit "I am inline"
+    And I edit the body field
+    And I wait 10 seconds
+    Then the body field should contain "Here be dragonflies."
