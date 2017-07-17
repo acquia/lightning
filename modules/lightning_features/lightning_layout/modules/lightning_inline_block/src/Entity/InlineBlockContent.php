@@ -4,6 +4,7 @@ namespace Drupal\lightning_inline_block\Entity;
 
 use Drupal\block_content\Entity\BlockContent;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
 
 /**
@@ -41,6 +42,13 @@ use Drupal\ctools_entity_mask\MaskEntityTrait;
 class InlineBlockContent extends BlockContent {
 
   use MaskEntityTrait;
+
+  /**
+   * {@inheritdoc}
+   */
+  public function access($operation, AccountInterface $account = NULL, $return_as_object = FALSE) {
+    return $this->getHostEntity()->access($operation, $account, $return_as_object);
+  }
 
   /**
    * {@inheritdoc}

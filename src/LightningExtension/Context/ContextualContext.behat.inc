@@ -11,7 +11,7 @@ class ContextualContext extends DrupalSubContextBase {
    *
    * @When I show all contextual links
    */
-  public function activateContextual() {
+  public function activate() {
     $assert = $this->assertSession();
 
     $button = $assert->elementExists(
@@ -34,7 +34,7 @@ class ContextualContext extends DrupalSubContextBase {
    * @return \Behat\Mink\Element\NodeElement
    *   The contextual area element.
    */
-  public function assertContextualArea($element) {
+  public function assertArea($element) {
     $assert = $this->assertSession();
 
     if (is_string($element)) {
@@ -52,8 +52,8 @@ class ContextualContext extends DrupalSubContextBase {
    * @return \Behat\Mink\Element\NodeElement
    *   The list of contextual links.
    */
-  public function assertContextualLinks($element) {
-    $contextual = $this->assertContextualArea($element);
+  public function assertLinks($element) {
+    $contextual = $this->assertArea($element);
 
     $assert = $this->assertSession();
 
@@ -76,12 +76,12 @@ class ContextualContext extends DrupalSubContextBase {
    * @return \Behat\Mink\Element\NodeElement
    *   The contextual link element.
    */
-  public function assertContextualLink($element, $link) {
+  public function assertLink($element, $link) {
     return $this->assertSession()
       ->elementExists(
         'named',
         ['link', $link],
-        $this->assertContextualLinks($element)
+        $this->assertLinks($element)
       );
   }
 

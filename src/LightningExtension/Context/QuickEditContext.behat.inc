@@ -60,6 +60,9 @@ class QuickEditContext extends DrupalSubContextBase {
    * @When I quick edit :label
    */
   public function startQuickEdit($label) {
+    /** @var ContextualContext $contextual */
+    $contextual = $this->getContext(ContextualContext::class);
+
     $elements = $this->getSession()
       ->getPage()
       ->findAll('named_exact', ['content', $label]);
@@ -68,13 +71,9 @@ class QuickEditContext extends DrupalSubContextBase {
       return $element->getParent()->hasAttribute('data-quickedit-entity-id');
     });
     if ($elements) {
-      $element = reset($elements);
-
-      /** @var ContextualContext $context */
-      $context = $this->getContext(ContextualContext::class);
-      $context->assertContextualLink($element, 'Quick edit')->click();
-
-      $this->target = $element;
+      $this->target = reset($elements)->getParent();
+      $contextual->activate();
+      $contextual->assertLink($this->target, 'Quick edit')->click();
     }
     else {
       throw new ExpectationException(
