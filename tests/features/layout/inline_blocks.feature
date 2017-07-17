@@ -74,3 +74,20 @@ Feature: Inline content blocks in a Panels layout
     And select "second" from "Region"
     And I press "Save"
     Then I should see an inline_entity block in the second region
+
+  @0946f50a
+  Scenario: Quick editing an inline block immediately after creating it
+    Given I am logged in as a user with the landing_page_creator role
+    And landing_page content:
+      | type         | title  | path    | moderation_state |
+      | landing_page | Foobar | /foobar | draft            |
+    When I visit "/foobar"
+    And I create a basic block
+    And I enter "I am inline" for "Block description"
+    And I put "Here be dragons." into CKEditor
+    And I scroll to the '.ipe-block-form form input[name="op"]' element
+    And I press "Save"
+    And I enter edit mode
+    And I quick edit "I am inline"
+    And I edit the body field
+    Then the body field should contain "Here be dragons."
