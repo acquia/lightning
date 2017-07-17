@@ -22,18 +22,15 @@ class WorkflowContext extends DrupalSubContextBase {
   /**
    * Creates forward revisions of the current content.
    *
+   * @param string $moderation_state
+   *   The moderation state that the forward revision(s) should have.
    * @param int $n
    *   How many forward revisions to create. Defaults to 1.
-   * @param string $moderation_state
-   *   The moderation state that the forward revision(s) should have. Defaults
-   *   to 'draft'.
    *
-   * @When I create a forward revision
-   * @When I create :n forward revisions
    * @When I create a(n) :moderation_state revision
    * @When I create :n :moderation_state revisions
    */
-  public function createForwardRevisions($n = 1, $moderation_state = 'draft') {
+  public function createForwardRevisions($moderation_state, $n = 1) {
     $page = $this->getSession()->getPage();
 
     for ($i = 0; $i < $n; $i++) {

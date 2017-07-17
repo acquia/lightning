@@ -45,7 +45,7 @@ Feature: Inline content blocks in a Panels layout
     And I press "Save"
     And I save the layout
     And I publish the page
-    And I create a forward revision
+    And I create a draft revision
     And I configure the "I am inline" block
     And I put "Here be dragonflies." into CKEditor
     And I scroll to the '.ipe-block-form form input[name="op"]' element
@@ -101,7 +101,7 @@ Feature: Inline content blocks in a Panels layout
     And I press "Save"
     And I save the layout
     And I publish the page
-    And I create a forward revision
+    And I create a draft revision
     And I configure the "I am inline" block
     And I put "Here be dragonflies." into CKEditor
     And I scroll to the '.ipe-block-form form input[name="op"]' element
