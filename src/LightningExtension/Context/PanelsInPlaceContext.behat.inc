@@ -265,4 +265,39 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
     $this->minkContext->iWaitForAjaxToFinish();
   }
 
+  /**
+   * @param $layout
+   * @param $category
+   *
+   * @When I switch to the :layout layout from the :category category
+   */
+  public function switchLayout($layout, $category) {
+    $assert = $this->assertSession();
+
+    $tab = $this->openTab('Change Layout');
+
+    $assert
+      ->elementExists('css', 'a.ipe-category[data-category = "' . $category . '"]', $tab)
+      ->click();
+
+    $this->minkContext->iWaitForAjaxToFinish();
+
+    $assert
+      ->elementExists('named', ['content', $layout], $tab)
+      ->click();
+
+    $this->minkContext->iWaitForAjaxToFinish();
+  }
+
+  /**
+   * @param $plugin_id
+   * @param $region
+   *
+   * @Then I should see a(n) :plugin_id block in the :region region
+   */
+  public function assertBlockPluginInRegion($plugin_id, $region) {
+    $this->assertSession()
+      ->elementExists('css', '[data-region-name="' . $region . '"] [data-block-plugin-id="' . $plugin_id . '"]');
+  }
+
 }
