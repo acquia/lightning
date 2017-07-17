@@ -26,9 +26,9 @@ class WorkflowContext extends DrupalSubContextBase {
    *   How many forward revisions to create. Defaults to 1.
    *
    * @When I create a forward revision
-   * @When I create :n forward revision(s)
+   * @When I create :n forward revisions
    * @When I create a(n) :moderation_state revision
-   * @When I create :n :moderation_state revision(s)
+   * @When I create :n :moderation_state revisions
    */
   public function createForwardRevisions($n = 1, $moderation_state = 'draft') {
     $page = $this->getSession()->getPage();
