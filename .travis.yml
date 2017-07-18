@@ -81,6 +81,7 @@ install:
   - cd docroot
   # Execute database updates, if there are any.
   - drush updatedb --yes
+  - drush cache-rebuild
 
 before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
