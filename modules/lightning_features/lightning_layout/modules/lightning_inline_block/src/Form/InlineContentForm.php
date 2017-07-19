@@ -46,27 +46,54 @@ class InlineContentForm extends BlockContentForm {
     );
   }
 
+  protected function toInline() {
+    $entity = $this->getEntity();
+
+    $values = array_filter($entity->toArray());
+
+    foreach ($entity->getEntityType()->getKeys() as $key) {
+      if (isset($values[$key])) {
+        $values[$key] = reset($values[$key][0]);
+      }
+    }
+
+    $entity = $this->entityTypeManager
+      ->getStorage('inline_block_content')
+      ->create($values);
+
+    $this->setEntity($entity);
+  }
+
   /**
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
+    if ($form_state->getValue('global')) {
+      $this->toInline();
+    }
     parent::save($form, $form_state);
 
     $entity = $this->getEntity();
 
-    /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
-    $display = $form_state->get('display');
-
-    $display->addBlock([
-      'id' => 'inline_entity',
+    $configuration = [
       'label' => $entity->label(),
       'region' => $form_state->getValue('region'),
-      'entity' => serialize($entity),
-    ]);
+    ];
+    if ($form_state->getValue('global')) {
+      $configuration['id'] = 'block_content:' . $entity->uuid();
+    }
+    else {
+      $configuration['id'] = 'inline_entity';
+      $configuration['entity'] = serialize($entity);
+    }
+
+    /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
+    $display = $form_state->get('panels_display');
+
+    $display->addBlock($configuration);
     $this->tempStore->set($display->getTempStoreId(), $display->getConfiguration());
 
     $contexts = $display->getContexts();
-    /** @var \Drupal\Core\Entity\EntityInterface $entity */
     $entity = $contexts['@panelizer.entity_context:entity']->getContextValue();
 
     if ($entity instanceof RevisionableInterface && !$entity->isDefaultRevision() && $entity->getEntityType()->hasLinkTemplate('latest-version')) {
@@ -85,7 +112,7 @@ class InlineContentForm extends BlockContentForm {
     $form = parent::form($form, $form_state);
 
     /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
-    $display = $form_state->get('display');
+    $display = $form_state->get('panels_display');
 
     $form['region'] = [
       '#type' => 'select',
@@ -93,6 +120,10 @@ class InlineContentForm extends BlockContentForm {
       '#required' => TRUE,
       '#options' => $display->getRegionNames(),
       '#default_value' => $display->getLayout()->getPluginDefinition()->getDefaultRegion(),
+    ];
+    $form['global'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Make this content reusable'),
     ];
     return $form;
   }

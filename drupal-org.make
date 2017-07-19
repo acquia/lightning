@@ -54,6 +54,7 @@ projects[panels][patch][] = https://www.drupal.org/files/issues/panels-ipe-28786
 projects[panels][patch][] = https://www.drupal.org/files/issues/panels-ipe-layout-picker-styling.patch
 projects[panels][patch][] = https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch
 projects[panels][patch][] = https://www.drupal.org/files/issues/2877024-10.patch
+projects[panels][patch][] = https://www.drupal.org/files/issues/2895705-2.patch
 projects[panels][version] = 4.1
 projects[pathauto][type] = module
 projects[pathauto][version] = 1.0

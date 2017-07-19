@@ -13,7 +13,7 @@ Feature: Inline content blocks in a Panels layout
     And I scroll to the '.ipe-block-form form input[name="op"]' element
     And I press "Save"
     And I save the layout
-    And I visit "/admin/structure/block"
+    And I visit "/admin/structure/block/library/seven"
     Then I should not see "I am inline"
 
   @a98dca7a
