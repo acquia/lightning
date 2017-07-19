@@ -2,13 +2,14 @@
 
 namespace Drupal\lightning_inline_block\Form;
 
-use Drupal\block_content\BlockContentForm;
-use Drupal\Core\Entity\RevisionableInterface;
+use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\lightning_inline_block\Ajax\RefreshCommand;
+use Drupal\panels_ipe\Form\PanelsIPEBlockContentForm;
 use Drupal\user\SharedTempStore;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
-class InlineContentForm extends BlockContentForm {
+class InlineContentForm extends PanelsIPEBlockContentForm {
 
   /**
    * The Panels IPE temp store.
@@ -46,63 +47,59 @@ class InlineContentForm extends BlockContentForm {
     );
   }
 
-  protected function toInline() {
-    $entity = $this->getEntity();
+  /**
+   * {@inheritdoc}
+   */
+  public function buildEntity(array $form, FormStateInterface $form_state) {
+    $entity = parent::buildEntity($form, $form_state);
 
-    $values = array_filter($entity->toArray());
-
-    foreach ($entity->getEntityType()->getKeys() as $key) {
-      if (isset($values[$key])) {
-        $values[$key] = reset($values[$key][0]);
-      }
+    if ($form_state->getValue('global')) {
+      return $entity;
     }
+    else {
+      $values = array_filter($entity->toArray());
 
-    $entity = $this->entityTypeManager
-      ->getStorage('inline_block_content')
-      ->create($values);
-
-    $this->setEntity($entity);
+      foreach ($entity->getEntityType()->getKeys() as $key) {
+        if (isset($values[$key])) {
+          $values[$key] = reset($values[$key][0]);
+        }
+      }
+      return $this->entityTypeManager
+        ->getStorage('inline_block_content')
+        ->create($values);
+    }
   }
 
   /**
    * {@inheritdoc}
    */
   public function save(array $form, FormStateInterface $form_state) {
-    if ($form_state->getValue('global')) {
-      $this->toInline();
-    }
-    parent::save($form, $form_state);
-
     $entity = $this->getEntity();
 
-    $configuration = [
-      'label' => $entity->label(),
-      'region' => $form_state->getValue('region'),
-    ];
     if ($form_state->getValue('global')) {
-      $configuration['id'] = 'block_content:' . $entity->uuid();
+      parent::save($form, $form_state);
+
+      $configuration = [
+        'id' => 'block_content:' . $entity->uuid(),
+        'label' => $entity->label(),
+      ];
     }
     else {
-      $configuration['id'] = 'inline_entity';
-      $configuration['entity'] = serialize($entity);
+      $entity->save();
+
+      $configuration = [
+        'id' => 'inline_entity',
+        'label' => $form_state->getValue(['info', 0, 'value']),
+        'entity' => serialize($entity),
+      ];
     }
+    $configuration['region'] = $form_state->getValue('region');
 
     /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
     $display = $form_state->get('panels_display');
 
     $display->addBlock($configuration);
     $this->tempStore->set($display->getTempStoreId(), $display->getConfiguration());
-
-    $contexts = $display->getContexts();
-    $entity = $contexts['@panelizer.entity_context:entity']->getContextValue();
-
-    if ($entity instanceof RevisionableInterface && !$entity->isDefaultRevision() && $entity->getEntityType()->hasLinkTemplate('latest-version')) {
-      $rel = 'latest-version';
-    }
-    else {
-      $rel = 'canonical';
-    }
-    $form_state->setRedirectUrl($entity->toUrl($rel));
   }
 
   /**
@@ -126,6 +123,17 @@ class InlineContentForm extends BlockContentForm {
       '#title' => $this->t('Make this content reusable'),
     ];
     return $form;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function submitForm(array &$form, FormStateInterface $form_state) {
+    $return = parent::submitForm($form, $form_state);
+
+    return $form_state->hasAnyErrors()
+      ? $return
+      : (new AjaxResponse)->addCommand(new RefreshCommand);
   }
 
 }

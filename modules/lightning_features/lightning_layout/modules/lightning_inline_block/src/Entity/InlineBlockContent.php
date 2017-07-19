@@ -2,8 +2,7 @@
 
 namespace Drupal\lightning_inline_block\Entity;
 
-use Drupal\block_content\Entity\BlockContent;
-use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\ContentEntityBase;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
 
@@ -16,22 +15,16 @@ use Drupal\ctools_entity_mask\MaskEntityTrait;
  *   bundle_label = @Translation("Custom block type"),
  *   handlers = {
  *     "storage" = "Drupal\lightning_inline_block\InlineEntityStorage",
- *     "access" = "Drupal\block_content\BlockContentAccessControlHandler",
- *     "view_builder" = "Drupal\lightning_inline_block\InlineBlockContentViewBuilder",
+ *     "access" = "Drupal\Core\Entity\EntityAccessControlHandler",
+ *     "view_builder" = "Drupal\lightning_inline_block\InlineEntityViewBuilder",
  *     "form" = {
- *       "edit" = "\Drupal\block_content\BlockContentForm",
- *       "panels_ipe" = "Drupal\lightning_inline_block\Form\InlineContentForm"
+ *       "edit" = "\Drupal\Core\Entity\ContentEntityForm",
  *     },
- *     "translation" = "Drupal\block_content\BlockContentTranslationHandler"
  *   },
  *   admin_permission = "administer blocks",
- *   translatable = TRUE,
  *   entity_keys = {
  *     "id" = "id",
- *     "revision" = "revision_id",
  *     "bundle" = "type",
- *     "label" = "info",
- *     "langcode" = "langcode",
  *     "uuid" = "uuid"
  *   },
  *   bundle_entity_type = "block_content_type",
@@ -39,7 +32,7 @@ use Drupal\ctools_entity_mask\MaskEntityTrait;
  *   mask = "block_content",
  * )
  */
-class InlineBlockContent extends BlockContent {
+class InlineBlockContent extends ContentEntityBase {
 
   use MaskEntityTrait;
 
@@ -48,25 +41,6 @@ class InlineBlockContent extends BlockContent {
    */
   public function access($operation, AccountInterface $account = NULL, $return_as_object = FALSE) {
     return $this->getHostEntity()->access($operation, $account, $return_as_object);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function __wakeup() {
-    parent::__wakeup();
-    $this->original = $this;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
-    $fields = parent::baseFieldDefinitions($entity_type);
-
-    $fields['info']->setRequired(FALSE);
-
-    return $fields;
   }
 
   /**
@@ -99,6 +73,10 @@ class InlineBlockContent extends BlockContent {
    */
   protected function database() {
     return \Drupal::database();
+  }
+
+  public function getTheme() {
+    return '';
   }
 
 }

@@ -95,24 +95,10 @@ class InlineEntity extends BlockBase implements ContainerFactoryPluginInterface 
   public function buildConfigurationForm(array $form, FormStateInterface $form_state) {
     $form = parent::buildConfigurationForm($form, $form_state);
     $form['admin_label']['#access'] = FALSE;
-    $form['label']['#access'] = FALSE;
-    $form['label_display']['#access'] = FALSE;
 
     $form['#process'][] = [static::class, 'ensureSubmit'];
 
     return $form;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function blockSubmit($form, FormStateInterface $form_state) {
-    parent::blockSubmit($form, $form_state);
-
-    $configuration = $this->getConfiguration();
-    $configuration['label'] = $this->getEntity()->label();
-    $configuration['label_display'] = $configuration['label'] ? static::BLOCK_LABEL_VISIBLE : FALSE;
-    $this->setConfiguration($configuration);
   }
 
   public static function ensureSubmit($form, FormStateInterface $form_state, array &$complete_form) {

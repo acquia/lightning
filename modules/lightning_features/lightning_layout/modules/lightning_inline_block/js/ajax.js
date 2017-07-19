@@ -8,4 +8,9 @@
     }
   };
 
+  Drupal.AjaxCommands.prototype.refresh = function ()
+  {
+    window.location.reload();
+  }
+
 })(Drupal);
