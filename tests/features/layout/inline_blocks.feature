@@ -30,6 +30,7 @@ Feature: Inline content blocks in a Panels layout
     And I check the box "Make this content reusable"
     And I press "Create and Place"
     And I wait for AJAX to finish
+    And I wait for AJAX to finish
     And I save the layout
     And I visit "/admin/structure/block/block-content"
     Then I should see "I am inline"
@@ -46,6 +47,7 @@ Feature: Inline content blocks in a Panels layout
     And I put "Here be dragons." into CKEditor
     And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
     And I press "Create and Place"
+    And I wait for AJAX to finish
     And I save the layout
     And I publish the page
     Then I should see "Here be dragons."
@@ -62,6 +64,7 @@ Feature: Inline content blocks in a Panels layout
     And I put "Here be dragons." into CKEditor
     And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
     And I press "Create and Place"
+    And I wait for AJAX to finish
     And I save the layout
     And I publish the page
     And I create a draft revision
@@ -101,6 +104,7 @@ Feature: Inline content blocks in a Panels layout
     And I put "Here be dragons." into CKEditor
     And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
     And I press "Create and Place"
+    And I wait for AJAX to finish
     And I show all contextual links
     And I quick edit "I am inline"
     And I edit the body field
@@ -118,6 +122,7 @@ Feature: Inline content blocks in a Panels layout
     And I put "Here be dragons." into CKEditor
     And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
     And I press "Create and Place"
+    And I wait for AJAX to finish
     And I save the layout
     And I publish the page
     And I create a draft revision
@@ -130,3 +135,20 @@ Feature: Inline content blocks in a Panels layout
     And I quick edit "I am inline"
     And I edit the body field
     Then the editable body field should contain "Here be dragonflies."
+
+  @08b4be03
+  Scenario: Creating an inline block with the same label as a reusable block
+    Given I am logged in as a user with the landing_page_creator,layout_manager roles
+    And block_content entities:
+      | type  | info        |
+      | basic | I am inline |
+    And landing_page content:
+      | type         | title  | path    | moderation_state |
+      | landing_page | Foobar | /foobar | draft            |
+    When I visit "/foobar"
+    And I create a basic block
+    And I enter "I am inline" for "Block description"
+    And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
+    And I press "Create and Place"
+    And I wait for AJAX to finish
+    Then I should not see the error message containing "A custom block with block description"
