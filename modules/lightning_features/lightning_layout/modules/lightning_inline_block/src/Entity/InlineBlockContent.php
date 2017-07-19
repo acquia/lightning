@@ -44,6 +44,17 @@ class InlineBlockContent extends ContentEntityBase {
   }
 
   /**
+   * {@inheritdoc}
+   */
+  public function __wakeup() {
+    parent::__wakeup();
+    // $this->original must be present so ContentEntityStorageBase::doPreSave()
+    // doesn't think that we're trying to change the ID (in which case it will
+    // throw an exception).
+    $this->original = $this;
+  }
+
+  /**
    * Returns the entity of which this inline block is an intrinsic part.
    *
    * @return \Drupal\Core\Entity\EntityInterface
