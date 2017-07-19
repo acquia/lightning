@@ -81,7 +81,6 @@ class InlineContentForm extends PanelsIPEBlockContentForm {
 
       $configuration = [
         'id' => 'block_content:' . $entity->uuid(),
-        'label' => $entity->label(),
       ];
     }
     else {
@@ -89,10 +88,10 @@ class InlineContentForm extends PanelsIPEBlockContentForm {
 
       $configuration = [
         'id' => 'inline_entity',
-        'label' => $form_state->getValue(['info', 0, 'value']),
         'entity' => serialize($entity),
       ];
     }
+    $configuration['label'] = $entity->label();
     $configuration['region'] = $form_state->getValue('region');
 
     /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */

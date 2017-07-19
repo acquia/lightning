@@ -3,6 +3,8 @@
 namespace Drupal\lightning_inline_block\Entity;
 
 use Drupal\Core\Entity\ContentEntityBase;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
 use Drupal\Core\Session\AccountInterface;
 use Drupal\ctools_entity_mask\MaskEntityTrait;
 
@@ -25,6 +27,7 @@ use Drupal\ctools_entity_mask\MaskEntityTrait;
  *   entity_keys = {
  *     "id" = "id",
  *     "bundle" = "type",
+ *     "label" = "info",
  *     "uuid" = "uuid"
  *   },
  *   bundle_entity_type = "block_content_type",
@@ -74,6 +77,23 @@ class InlineBlockContent extends ContentEntityBase {
     return $this->entityTypeManager()
       ->getStorage($record->entity_type)
       ->load($record->entity_id);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static function baseFieldDefinitions(EntityTypeInterface $entity_type) {
+    $base_fields = parent::baseFieldDefinitions($entity_type);
+
+    $base_fields['info'] = BaseFieldDefinition::create('string')
+      ->setLabel(t('Title'))
+      ->setDisplayOptions('form', [
+        'type' => 'string_textfield',
+        'weight' => -5,
+      ])
+      ->setDisplayConfigurable('form', TRUE);
+
+    return $base_fields;
   }
 
   /**
