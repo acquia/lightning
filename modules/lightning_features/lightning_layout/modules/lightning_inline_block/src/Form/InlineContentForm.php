@@ -121,6 +121,8 @@ class InlineContentForm extends PanelsIPEBlockContentForm {
       '#type' => 'checkbox',
       '#title' => $this->t('Make this content reusable'),
     ];
+    $form['#attached']['library'][] = 'lightning_inline_block/inline-block-form';
+
     return $form;
   }
 
