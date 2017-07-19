@@ -12,6 +12,18 @@ class InlineEntityViewBuilder extends EntityViewBuilder {
   /**
    * {@inheritdoc}
    */
+  public function viewMultiple(array $entities = [], $view_mode = 'full', $langcode = NULL) {
+    $build_list = parent::viewMultiple($entities, $view_mode, $langcode);
+    // Apply the buildMultiple() #pre_render callback immediately, to make
+    // bubbling of attributes and contextual links to the actual block work.
+    // @see \Drupal\block\BlockViewBuilder::buildBlock()
+    unset($build_list['#pre_render'][0]);
+    return $this->buildMultiple($build_list);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function alterBuild(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
     parent::alterBuild($build, $entity, $display, $view_mode);
 

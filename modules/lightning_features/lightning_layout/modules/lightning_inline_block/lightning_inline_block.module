@@ -1,22 +1,13 @@
 <?php
 
 use Drupal\Core\Entity\EntityInterface;
-use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_inline_block\Form\InlineContentForm;
-use Drupal\lightning_inline_block\Plugin\DisplayBuilder\InPlaceEditorDisplayBuilder;
 
 /**
  * Implements hook_entity_type_alter().
  */
 function lightning_inline_block_entity_type_alter(array &$entity_types) {
   $entity_types['block_content']->setFormClass('panels_ipe', InlineContentForm::class);
-}
-
-/**
- * Implements hook_display_builder_alter().
- */
-function lightning_inline_block_display_builder_alter(array &$definitions) {
-  Override::pluginClass($definitions['ipe'], InPlaceEditorDisplayBuilder::class);
 }
 
 /**

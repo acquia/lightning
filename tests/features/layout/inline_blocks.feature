@@ -10,15 +10,33 @@ Feature: Inline content blocks in a Panels layout
     When I visit "/foobar"
     And I create a basic block
     And I enter "I am inline" for "Block description"
-    And I scroll to the '.ipe-block-form form input[name="op"]' element
-    And I press "Save"
+    And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
+    And I press "Create and Place"
+    And I wait for AJAX to finish
     And I save the layout
     And I visit "/admin/structure/block/block-content"
     Then I should not see "I am inline"
 
+  @ffae2123 @with-module:cleaner
+  Scenario: Creating a reusable content block from the in-place editor
+    Given I am logged in as a user with the landing_page_creator,layout_manager roles
+    And landing_page content:
+      | type         | title  | path    | moderation_state |
+      | landing_page | Foobar | /foobar | draft            |
+    When I visit "/foobar"
+    And I create a basic block
+    And I enter "I am inline" for "Block description"
+    And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
+    And I check the box "Make this content reusable"
+    And I press "Create and Place"
+    And I wait for AJAX to finish
+    And I save the layout
+    And I visit "/admin/structure/block/block-content"
+    Then I should see "I am inline"
+
   @a98dca7a
   Scenario: Inline blocks should be rendered in the published content
-    Given I am logged in as a user with the landing_page_creator,landing_page_reviewer roles
+    Given I am logged in as a user with the "landing_page_creator,landing_page_reviewer,layout_manager" roles
     And landing_page content:
       | type         | title  | path    | moderation_state |
       | landing_page | Foobar | /foobar | draft            |
@@ -26,8 +44,8 @@ Feature: Inline content blocks in a Panels layout
     And I create a basic block
     And I enter "I am inline" for "Block description"
     And I put "Here be dragons." into CKEditor
-    And I scroll to the '.ipe-block-form form input[name="op"]' element
-    And I press "Save"
+    And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
+    And I press "Create and Place"
     And I save the layout
     And I publish the page
     Then I should see "Here be dragons."
@@ -42,14 +60,14 @@ Feature: Inline content blocks in a Panels layout
     And I create a basic block
     And I enter "I am inline" for "Block description"
     And I put "Here be dragons." into CKEditor
-    And I scroll to the '.ipe-block-form form input[name="op"]' element
-    And I press "Save"
+    And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
+    And I press "Create and Place"
     And I save the layout
     And I publish the page
     And I create a draft revision
     And I configure the "I am inline" block
     And I put "Here be dragonflies." into CKEditor
-    And I scroll to the '.ipe-block-form form input[name="op"]' element
+    And I scroll to the '.panels-ipe-block-plugin-form input[name="op"]' element
     And I press "Update"
     And I save the layout
     And I click "View"
@@ -58,7 +76,7 @@ Feature: Inline content blocks in a Panels layout
 
   @d98cbdaf
   Scenario: Inline blocks can be placed into a specific region
-    Given I am logged in as a user with the landing_page_creator role
+    Given I am logged in as a user with the landing_page_creator,layout_manager roles
     And landing_page content:
       | type         | title  | path    | moderation_state |
       | landing_page | Foobar | /foobar | draft            |
@@ -68,12 +86,12 @@ Feature: Inline content blocks in a Panels layout
     And I enter "I am inline" for "Block description"
     And I put "Here be dragons." into CKEditor
     And select "second" from "Region"
-    And I press "Save"
+    And I press "Create and Place"
     Then I should see an inline_entity block in the second region
 
   @0946f50a
   Scenario: Quick editing an inline block immediately after creating it
-    Given I am logged in as a user with the landing_page_creator role
+    Given I am logged in as a user with the landing_page_creator,layout_manager roles
     And landing_page content:
       | type         | title  | path    | moderation_state |
       | landing_page | Foobar | /foobar | draft            |
@@ -81,8 +99,8 @@ Feature: Inline content blocks in a Panels layout
     And I create a basic block
     And I enter "I am inline" for "Block description"
     And I put "Here be dragons." into CKEditor
-    And I scroll to the '.ipe-block-form form input[name="op"]' element
-    And I press "Save"
+    And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
+    And I press "Create and Place"
     And I show all contextual links
     And I quick edit "I am inline"
     And I edit the body field
@@ -98,14 +116,14 @@ Feature: Inline content blocks in a Panels layout
     And I create a basic block
     And I enter "I am inline" for "Block description"
     And I put "Here be dragons." into CKEditor
-    And I scroll to the '.ipe-block-form form input[name="op"]' element
-    And I press "Save"
+    And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
+    And I press "Create and Place"
     And I save the layout
     And I publish the page
     And I create a draft revision
     And I configure the "I am inline" block
     And I put "Here be dragonflies." into CKEditor
-    And I scroll to the '.ipe-block-form form input[name="op"]' element
+    And I scroll to the '.panels-ipe-block-plugin-form input[name="op"]' element
     And I press "Update"
     And I save the layout
     And I show all contextual links

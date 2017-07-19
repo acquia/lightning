@@ -92,12 +92,14 @@ class LayoutSubscriber extends RouteSubscriberBase {
       /** @var \Drupal\Core\Entity\EntityInterface $entity */
       $entity = $contexts['@panelizer.entity_context:entity']->getContextValue();
 
-      $this->database
-        ->delete('inline_entity')
-        ->condition('entity_type', $entity->getEntityTypeId())
-        ->condition('entity_id', $entity->id())
-        ->condition('block_id', array_keys($blocks), 'NOT IN')
-        ->execute();
+      if ($blocks) {
+        $this->database
+          ->delete('inline_entity')
+          ->condition('entity_type', $entity->getEntityTypeId())
+          ->condition('entity_id', $entity->id())
+          ->condition('block_id', array_keys($blocks), 'NOT IN')
+          ->execute();
+      }
     }
   }
 
