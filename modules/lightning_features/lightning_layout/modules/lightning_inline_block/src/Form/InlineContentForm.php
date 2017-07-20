@@ -133,6 +133,7 @@ class InlineContentForm extends PanelsIPEBlockContentForm {
       $form_state->set('panelized_entity', $contexts['@panelizer.entity_context:entity']->getContextValue());
     }
 
+    // @see lightning_inline_block_entity_extra_field_info()
     $form['region'] = [
       '#type' => 'select',
       '#title' => $this->t('Region'),

@@ -4,6 +4,31 @@ use Drupal\Core\Entity\EntityInterface;
 use Drupal\lightning_inline_block\Form\InlineContentForm;
 
 /**
+ * Implements hook_entity_extra_field_info().
+ */
+function lightning_inline_block_entity_extra_field_info() {
+  // @see InlineContentForm::form()
+  $fields = [
+    'region' => [
+      'label' => t('Region'),
+      'description' => t('The region into which the block should be placed.'),
+      'weight' => 10,
+    ],
+    'global' => [
+      'label' => t('Reusable'),
+      'description' => t('Whether the block should be reusable.'),
+      'weight' => 11,
+    ],
+  ];
+  $extra_fields = [];
+
+  foreach (\Drupal::entityQuery('block_content_type')->execute() as $block_type) {
+    $extra_fields['block_content'][$block_type]['form'] = $fields;
+  }
+  return $extra_fields;
+}
+
+/**
  * Implements hook_entity_type_alter().
  */
 function lightning_inline_block_entity_type_alter(array &$entity_types) {
