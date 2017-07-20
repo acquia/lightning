@@ -1,0 +1,24 @@
+<?php
+
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_install().
+ */
+function lightning_api_install() {
+  // Add a nice path alias to the API documentation.
+  /** @var \Drupal\Core\Path\AliasStorageInterface $alias_storage */
+  $alias_storage = \Drupal::service('path.alias_storage');
+
+  $path = $alias_storage->lookupPathSource(
+    '/api-docs',
+    LanguageInterface::LANGCODE_NOT_SPECIFIED
+  );
+  if (empty($path)) {
+    $alias_storage->save(
+      '/' . Url::fromRoute('openapi_redoc.jsonapi')->getInternalPath(),
+      '/api-docs'
+    );
+  }
+}
