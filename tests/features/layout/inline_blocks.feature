@@ -152,3 +152,20 @@ Feature: Inline content blocks in a Panels layout
     And I press "Create and Place"
     And I wait for AJAX to finish
     Then I should not see the error message containing "A custom block with block description"
+
+  @4954967c @with-module:inline_block_test
+  Scenario: Creating an inline block with an image
+    Given I am logged in as a user with the "landing_page_creator,layout_manager,media_manager" roles
+    And landing_page content:
+      | type         | title  | path    | moderation_state |
+      | landing_page | Foobar | /foobar | draft            |
+    When I visit "/foobar"
+    And I create a basic block
+    And I enter "I am inline" for "Block description"
+    And I switch to the "entity_browser_iframe_media_browser" frame
+    And I select item 1 from the entity browser
+    And I submit the entity browser
+    And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
+    And I press "Create and Place"
+    And I wait for AJAX to finish
+    Then I should see the link "LIGHTNING SLOTH TEST IMAGE 2000-01-01 PASTAFAZOUL WAMBOOLI"

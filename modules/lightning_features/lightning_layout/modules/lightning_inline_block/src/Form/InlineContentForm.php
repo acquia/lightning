@@ -125,8 +125,13 @@ class InlineContentForm extends PanelsIPEBlockContentForm {
 
     // Ensure that we have a copy of the panelized entity squirreled away. See
     // ::save() for more info...
-    $contexts = $display->getContexts();
-    $form_state->set('panelized_entity', $contexts['@panelizer.entity_context:entity']->getContextValue());
+    if ($form_state->has('panelized_entity')) {
+      $this->ensureEntityContext($display, $form_state->get('panelized_entity'));
+    }
+    else {
+      $contexts = $display->getContexts();
+      $form_state->set('panelized_entity', $contexts['@panelizer.entity_context:entity']->getContextValue());
+    }
 
     $form['region'] = [
       '#type' => 'select',
