@@ -120,6 +120,10 @@ class InlineContentForm extends PanelsIPEBlockContentForm {
   public function form(array $form, FormStateInterface $form_state) {
     $form = parent::form($form, $form_state);
 
+    // Inline blocks don't require a title, so let the entity validation system
+    // take care of checking it.
+    $form['info']['widget'][0]['value']['#required'] = FALSE;
+
     /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
     $display = $form_state->get('panels_display');
 
