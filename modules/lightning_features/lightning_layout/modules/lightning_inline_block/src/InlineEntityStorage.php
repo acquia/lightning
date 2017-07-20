@@ -5,14 +5,14 @@ namespace Drupal\lightning_inline_block;
 use Drupal\Core\Database\Connection;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
-use Drupal\Core\Plugin\Context\ContextDefinition;
-use Drupal\ctools\Context\AutomaticContext;
 use Drupal\ctools_entity_mask\MaskContentEntityStorage;
 use Drupal\panelizer\PanelizerInterface;
 use Drupal\user\SharedTempStore;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class InlineEntityStorage extends MaskContentEntityStorage {
+
+  use PanelizedEntityContextTrait;
 
   /**
    * The database connection.
@@ -75,14 +75,7 @@ class InlineEntityStorage extends MaskContentEntityStorage {
   protected function getDisplay(EntityInterface $entity) {
     $display = $this->panelizer->getPanelsDisplay($entity, 'full');
 
-    // Ensure that the display has an automatic Panelizer entity context so that
-    // the temp store ID will be consistent.
-    $key = '@panelizer.entity_context:entity';
-    $contexts = $display->getContexts();
-    if (empty($contexts[$key])) {
-      $contexts[$key] = new AutomaticContext(new ContextDefinition('entity:' . $entity->getEntityTypeId(), NULL, TRUE), $entity);
-      $display->setContexts($contexts);
-    }
+    $this->ensureEntityContext($display, $entity);
 
     $configuration = $this->tempStore->get($display->getTempStoreId());
     if ($configuration) {

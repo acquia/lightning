@@ -5,11 +5,14 @@ namespace Drupal\lightning_inline_block\Form;
 use Drupal\Core\Ajax\AjaxResponse;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\lightning_inline_block\Ajax\RefreshCommand;
+use Drupal\lightning_inline_block\PanelizedEntityContextTrait;
 use Drupal\panels_ipe\Form\PanelsIPEBlockContentForm;
 use Drupal\user\SharedTempStore;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class InlineContentForm extends PanelsIPEBlockContentForm {
+
+  use PanelizedEntityContextTrait;
 
   /**
    * The Panels IPE temp store.
@@ -97,6 +100,16 @@ class InlineContentForm extends PanelsIPEBlockContentForm {
     /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
     $display = $form_state->get('panels_display');
 
+    // Block display variants (of which Panels display are a type) drop their
+    // gathered contexts upon serialization. Therefore, under certain
+    // circumstances, the Panels display stored in $form_state may not have its
+    // contexts. For our purposes, all we care about is the panelized entity,
+    // so we store that separately in $form_state and retrieve it here if
+    // needed.
+    if ($form_state->has('panelized_entity')) {
+      $this->ensureEntityContext($display, $form_state->get('panelized_entity'));
+    }
+
     $display->addBlock($configuration);
     $this->tempStore->set($display->getTempStoreId(), $display->getConfiguration());
   }
@@ -109,6 +122,11 @@ class InlineContentForm extends PanelsIPEBlockContentForm {
 
     /** @var \Drupal\panels\Plugin\DisplayVariant\PanelsDisplayVariant $display */
     $display = $form_state->get('panels_display');
+
+    // Ensure that we have a copy of the panelized entity squirreled away. See
+    // ::save() for more info...
+    $contexts = $display->getContexts();
+    $form_state->set('panelized_entity', $contexts['@panelizer.entity_context:entity']->getContextValue());
 
     $form['region'] = [
       '#type' => 'select',
