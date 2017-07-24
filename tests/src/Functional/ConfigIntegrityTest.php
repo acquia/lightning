@@ -79,6 +79,17 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $assert->linkByHrefExists('/admin/config/system/lightning/media');
     $this->assertAllowed('/admin/config/system/lightning/layout');
     $this->assertAllowed('/admin/config/system/lightning/media');
+
+    // Assert that public and private keys were generated for OAuth.
+    $oauth = $this->config('simple_oauth.settings');
+
+    $private_key = $oauth->get('private_key');
+    $this->assertNotEmpty($private_key);
+    $this->assertFileExists($private_key);
+
+    $public_key = $oauth->get('public_key');
+    $this->assertNotEmpty($public_key);
+    $this->assertFileExists($public_key);
   }
 
   /**

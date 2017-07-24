@@ -7,18 +7,24 @@ use Drupal\Core\Url;
  * Implements hook_install().
  */
 function lightning_api_install() {
-  // Add a nice path alias to the API documentation.
-  /** @var \Drupal\Core\Path\AliasStorageInterface $alias_storage */
-  $alias_storage = \Drupal::service('path.alias_storage');
+  // This route will only exist if the openapi_redoc and jsonapi modules are
+  // installed. If they are, give the API documentation a nice path alias.
+  $url = Url::fromRoute('openapi_redoc.jsonapi');
 
-  $path = $alias_storage->lookupPathSource(
-    '/api-docs',
-    LanguageInterface::LANGCODE_NOT_SPECIFIED
-  );
-  if (empty($path)) {
-    $alias_storage->save(
-      '/' . Url::fromRoute('openapi_redoc.jsonapi')->getInternalPath(),
-      '/api-docs'
+  if ($url->isRouted()) {
+    /** @var \Drupal\Core\Path\AliasStorageInterface $alias_storage */
+    $alias_storage = \Drupal::service('path.alias_storage');
+
+    $path = $alias_storage->lookupPathSource(
+      '/api-docs',
+      LanguageInterface::LANGCODE_NOT_SPECIFIED
     );
+    if (empty($path)) {
+      $alias_storage->save('/' . $url->getInternalPath(), '/api-docs');
+    }
+  }
+
+  if (\Drupal::moduleHandler()->moduleExists('simple_oauth')) {
+    lightning_api_modules_installed(['simple_oauth']);
   }
 }
