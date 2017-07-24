@@ -222,4 +222,6 @@ function lightning_dev_update_8007() {
       'access contextual links',
       'access toolbar',
     ]);
+
+  \Drupal::service('module_installer')->uninstall(['page_manager']);
 }
