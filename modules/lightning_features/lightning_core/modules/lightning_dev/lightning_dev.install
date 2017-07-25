@@ -223,5 +223,12 @@ function lightning_dev_update_8007() {
       'access toolbar',
     ]);
 
-  \Drupal::service('module_installer')->uninstall(['page_manager']);
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $installer */
+  $installer = \Drupal::service('module_installer');
+  $installer->uninstall(['page_manager']);
+  $installer->install([
+    'jsonapi',
+    'openapi_redoc',
+    'lightning_api',
+  ]);
 }
