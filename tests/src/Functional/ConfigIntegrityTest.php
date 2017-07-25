@@ -29,19 +29,21 @@ class ConfigIntegrityTest extends BrowserTestBase {
       $this->assertTrue($view_mode->getThirdPartySetting('lightning_core', 'internal'));
     }
 
-    // lightning_layout_update_8003() grants layout_manager role Panelizer
-    // permissions for every node type.
-    $permissions = Role::load('layout_manager')->getPermissions();
-    foreach (\Drupal::entityQuery('node_type')->execute() as $node_type) {
-      $this->assertContains('administer panelizer node ' . $node_type . ' defaults', $permissions);
-    }
-
     // All users should be able to view media items.
-    $this->assertContains('view media', Role::load('anonymous')->getPermissions());
-    $this->assertContains('view media', Role::load('authenticated')->getPermissions());
+    $this->assertPermissions('anonymous', 'view media');
+    $this->assertPermissions('authenticated', 'view media');
+
+    $this->assertEntityExists('node_type', [
+      'page',
+      'landing_page',
+    ]);
 
     foreach (\Drupal::entityQuery('node_type')->execute() as $node_type) {
-      $needles = [
+      // lightning_layout_update_8003() grants layout_manager role Panelizer
+      // permissions for every node type.
+      $this->assertPermissions('layout_manager', "administer panelizer node $node_type defaults");
+
+      $this->assertPermissions("{$node_type}_creator", [
         "create $node_type content",
         "edit own $node_type content",
         "view $node_type revisions",
@@ -50,27 +52,60 @@ class ConfigIntegrityTest extends BrowserTestBase {
         'access in-place editing',
         'access contextual links',
         'access toolbar',
-      ];
-      $haystack = Role::load("{$node_type}_creator")->getPermissions();
-      $this->assertContainsAll($needles, $haystack);
-
-      $needles = [
+      ]);
+      $this->assertPermissions("{$node_type}_reviewer", [
         'access content overview',
         "edit any $node_type content",
         "delete any $node_type content",
-      ];
-      $haystack = Role::load("{$node_type}_reviewer")->getPermissions();
-      $this->assertContainsAll($needles, $haystack);
+      ]);
     }
 
+    // Assert that the site-wide contact form has the expected fields.
+    $this->assertAllowed('/contact');
+    $assert->fieldExists('Your name');
+    $assert->fieldExists('Your email address');
+    $assert->fieldExists('Subject');
+    $assert->fieldExists('Message');
+
+    // The name and e-mail fields should not be present for authenticated users.
     $account = $this->drupalCreateUser();
     $this->drupalLogin($account);
+    $this->assertAllowed('/contact');
+    $assert->fieldNotExists('Your name');
+    $assert->fieldNotExists('Your email address');
+    $assert->fieldExists('Subject');
+    $assert->fieldExists('Message');
+    $this->drupalLogout();
+
+    // Assert that the meta tag fields are present when creating pages.
+    $account = $this->drupalCreateUser(['create page content']);
+    $this->drupalLogin($account);
+    $this->assertAllowed('/node/add/page');
+    $assert->fieldExists('field_meta_tags[0][basic][title]');
+    $assert->fieldExists('field_meta_tags[0][basic][description]');
+    $this->drupalLogout();
+
+    // Assert that basic blocks expose a Body field.
+    $account = $this->drupalCreateUser(['administer blocks']);
+    $this->drupalLogin($account);
+    $this->assertAllowed('/block/add');
+    $assert->fieldExists('Body');
+    $this->drupalLogout();
+
+    // When a node type is created, creator and reviewer roles should be too.
+    $node_type = $this->drupalCreateContentType()->id();
+    $this->assertEntityExists('user_role', [
+      "{$node_type}_creator",
+      "{$node_type}_reviewer",
+    ]);
+
+    $this->assertPermissions('page_reviewer', 'view moderation states');
+    $this->assertPermissions('landing_page_reviewer', 'view moderation states');
 
     $this->assertForbidden('/admin/config/system/lightning');
     $this->assertForbidden('/admin/config/system/lightning/layout');
     $this->assertForbidden('/admin/config/system/lightning/media');
 
-    $this->drupalLogout();
     $account = $this->drupalCreateUser([], NULL, TRUE);
     $this->drupalLogin($account);
 
@@ -79,6 +114,36 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $assert->linkByHrefExists('/admin/config/system/lightning/media');
     $this->assertAllowed('/admin/config/system/lightning/layout');
     $this->assertAllowed('/admin/config/system/lightning/media');
+  }
+
+  /**
+   * Asserts the existence of an entity.
+   *
+   * @param string $entity_type
+   *   The entity type ID.
+   * @param mixed|mixed[] $id
+   *   The entity ID, or a set of IDs.
+   */
+  protected function assertEntityExists($entity_type, $id) {
+    $this->assertContainsAll(
+      (array) $id,
+      \Drupal::entityQuery($entity_type)->execute()
+    );
+  }
+
+  /**
+   * Asserts that a user role has a set of permissions.
+   *
+   * @param \Drupal\user\RoleInterface|string $role
+   *   The user role, or its ID.
+   * @param string|string[] $permissions
+   *   The permission(s) to check.
+   */
+  protected function assertPermissions($role, $permissions) {
+    if (is_string($role)) {
+      $role = Role::load($role);
+    }
+    $this->assertContainsAll((array) $permissions, $role->getPermissions());
   }
 
   /**
