@@ -23,4 +23,8 @@ function lightning_api_install() {
       $alias_storage->save('/' . Url::fromRoute('openapi_redoc.jsonapi')->getInternalPath(), '/api-docs');
     }
   }
+
+  if ($module_handler->moduleExists('simple_oauth')) {
+    lightning_api_modules_installed(['simple_oauth']);
+  }
 }
