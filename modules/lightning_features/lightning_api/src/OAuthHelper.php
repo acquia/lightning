@@ -60,10 +60,10 @@ class OAuthHelper {
   }
 
   protected static function storeKey($key) {
-    $uri = 'temporary://' . hash('sha256', $key) . '.key';
+    $path = sprintf('%s/%s.key', sys_get_temp_dir(), hash('sha256', $key));
 
-    if (file_put_contents($uri, $key)) {
-      return $uri;
+    if (file_put_contents($path, $key)) {
+      return $path;
     }
     else {
       throw new \Exception('The key could not be saved');

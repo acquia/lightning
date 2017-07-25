@@ -12,12 +12,12 @@ function lightning_api_modules_installed(array $modules) {
   }
   elseif (in_array('simple_oauth', $modules)) {
     try {
-      list ($private_key, $public_key) = OAuthHelper::generateKeyPair(TRUE);
+      list ($private, $public) = OAuthHelper::generateKeyPair(TRUE);
 
       \Drupal::configFactory()
         ->getEditable('simple_oauth.settings')
-        ->set('private_key', $private_key)
-        ->set('public_key', $public_key)
+        ->set('private_key', $private)
+        ->set('public_key', $public)
         ->save();
 
       drupal_set_message(t('Generated an initial key pair for OAuth authentication. To keep your site secure, be sure to change it before going into production!'), 'warning');

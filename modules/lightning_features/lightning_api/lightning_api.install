@@ -7,11 +7,11 @@ use Drupal\Core\Url;
  * Implements hook_install().
  */
 function lightning_api_install() {
-  $module_exists = [\Drupal::moduleHandler(), 'moduleExists'];
+  $module_handler = \Drupal::moduleHandler();
 
   // If the openapi_redoc and jsonapi modules are installed, give the API
   // documentation a nice path alias.
-  if ($module_exists('openapi_redoc') && $module_exists('jsonapi')) {
+  if ($module_handler->moduleExists('openapi_redoc') && $module_handler->moduleExists('jsonapi')) {
     /** @var \Drupal\Core\Path\AliasStorageInterface $alias_storage */
     $alias_storage = \Drupal::service('path.alias_storage');
 
@@ -24,7 +24,7 @@ function lightning_api_install() {
     }
   }
 
-  if (\Drupal::moduleHandler()->moduleExists('simple_oauth')) {
+  if ($module_handler->moduleExists('simple_oauth')) {
     lightning_api_modules_installed(['simple_oauth']);
   }
 }
