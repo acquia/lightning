@@ -130,6 +130,8 @@
     <exec command="${yaml-cli} unset:key ${config_fixture}/embed.button.media_browser.yml dependencies.content" />
     <exec command="${yaml-cli} update:value ${config_fixture}/embed.button.media_browser.yml icon_uuid ''" />
     <exec command="${yaml-cli} update:value ${config_fixture}/system.date.yml timezone.default UTC" />
+    <exec command="${yaml-cli} unset:key ${config_fixture}/simple_oauth.settings.yml private_key" />
+    <exec command="${yaml-cli} unset:key ${config_fixture}/simple_oauth.settings.yml public_key" />
 
     <if>
       <isset property="www.group" />
