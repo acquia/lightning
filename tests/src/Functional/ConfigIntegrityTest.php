@@ -37,12 +37,38 @@ class ConfigIntegrityTest extends BrowserTestBase {
       'page',
       'landing_page',
     ]);
+    $this->assertEntityExists('user_role', [
+      'landing_page_creator',
+      'landing_page_reviewer',
+      'layout_manager',
+      'media_creator',
+      'media_manager',
+      'page_creator',
+      'page_reviewer',
+    ]);
 
-    foreach (\Drupal::entityQuery('node_type')->execute() as $node_type) {
-      // lightning_layout_update_8003() grants layout_manager role Panelizer
-      // permissions for every node type.
-      $this->assertPermissions('layout_manager', "administer panelizer node $node_type defaults");
+    $permissions = [
+      'use text format rich_text',
+      'access media_browser entity browser pages',
+      'access image_browser entity browser pages',
+    ];
+    $this->assertPermissions('page_creator', $permissions);
+    $this->assertPermissions('landing_page_creator', $permissions);
 
+    $node_types = \Drupal::entityQuery('node_type')->execute();
+
+    $permissions = [
+      'administer node display',
+      'administer panelizer',
+    ];
+    // lightning_layout_update_8003() grants layout_manager role Panelizer
+    // permissions for every node type.
+    foreach ($node_types as $node_type) {
+      $permissions[] = "administer panelizer node $node_type defaults";
+    }
+    $this->assertPermissions('layout_manager', $permissions);
+
+    foreach ($node_types as $node_type) {
       $this->assertPermissions("{$node_type}_creator", [
         "create $node_type content",
         "edit own $node_type content",
@@ -98,6 +124,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
       "{$node_type}_creator",
       "{$node_type}_reviewer",
     ]);
+    $this->assertPermissions('layout_manager', "administer panelizer node $node_type defaults");
 
     $this->assertPermissions('page_reviewer', 'view moderation states');
     $this->assertPermissions('landing_page_reviewer', 'view moderation states');
