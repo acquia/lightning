@@ -3,6 +3,13 @@
 use Drupal\lightning_api\OAuthHelper;
 
 /**
+ * Implements hook_menu_links_discovered_alter().
+ */
+function lightning_api_menu_links_discovered_alter(array &$links) {
+  unset($links['openapi_redoc.rest']);
+}
+
+/**
  * Implements hook_modules_installed().
  */
 function lightning_api_modules_installed(array $modules) {
