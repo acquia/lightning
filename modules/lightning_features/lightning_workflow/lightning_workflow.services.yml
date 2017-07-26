@@ -8,11 +8,3 @@ services:
     class: '\Drupal\lightning_workflow\Routing\RouteSubscriber'
     tags:
       - { name: event_subscriber }
-
-  lightning.quickedit_access:
-    class: '\Drupal\lightning_workflow\QuickEditAccess'
-    arguments:
-      - '@current_route_match'
-      - '@event_dispatcher'
-    tags:
-      - { name: event_subscriber }
