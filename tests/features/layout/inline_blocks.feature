@@ -17,6 +17,36 @@ Feature: Inline content blocks in a Panels layout
     And I visit "/admin/structure/block/block-content"
     Then I should not see "I am inline"
 
+  @d6f1addd
+  Scenario: Creating an inline block without a title
+    Given I am logged in as a user with the landing_page_creator,layout_manager roles
+    And landing_page content:
+      | type         | title  | path    | moderation_state |
+      | landing_page | Foobar | /foobar | draft            |
+    When I visit "/foobar"
+    And I create a basic block
+    And I put "Here be dragons." into CKEditor
+    And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
+    And I press "Create and Place"
+    And I wait for AJAX to finish
+    Then I should not see the error message "Block description field is required."
+    And I should see "Here be dragons."
+
+  @95eea046 @with-module:cleaner
+  Scenario: Creating an reusable block without a title
+    Given I am logged in as a user with the landing_page_creator,layout_manager roles
+    And landing_page content:
+      | type         | title  | path    | moderation_state |
+      | landing_page | Foobar | /foobar | draft            |
+    When I visit "/foobar"
+    And I create a basic block
+    And I put "Here be dragons." into CKEditor
+    And I scroll to the '.block-content-form input[name="panels_ipe_submit"]' element
+    And I check the box "Make this content reusable"
+    And I press "Create and Place"
+    And I wait for AJAX to finish
+    Then I should see the error message "This value should not be null."
+
   @ffae2123 @with-module:cleaner
   Scenario: Creating a reusable content block from the in-place editor
     Given I am logged in as a user with the landing_page_creator,layout_manager roles
