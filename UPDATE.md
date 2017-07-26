@@ -62,6 +62,11 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
   * **Contextual Links**: Use contextual links
 * Grant the "Administer blocks" permission to the **Layout manager** role, if
   it exists.
+* Page Manager is no longer a dependency of Lightning Layout, and it will no
+  longer ship with Lightning as of the next release. Therefore, if you are
+  actively using Page Manager, you must add it to your project as an explicit
+  dependency in order to continue to using it. Otherwise, you should uninstall
+  it before updating to the next version of Lightning.
 
 ## 2.1.5 to 2.1.6
 This version of Lightning adds the ability to choose an image style, alt text,
