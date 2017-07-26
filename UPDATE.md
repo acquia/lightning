@@ -21,7 +21,9 @@ If you've installed Lightning using our [Composer-based project template](https:
 
 * ```cd /path/to/YOUR_PROJECT```
 * ```composer update```
-* Run ```drush updatedb``` or visit ```update.php``` to perform automatic database updates.
+* Run ```drush updatedb && drush cache-rebuild```, or visit ```update.php```,
+  to perform automatic database updates. You can also use Drupal Console's
+  ```update:execute``` command.
 * Perform any necessary manual updates (see below).
 
 ### Tarball
