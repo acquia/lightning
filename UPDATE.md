@@ -68,8 +68,7 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
   dependency in order to continue to using it. Otherwise, you should uninstall
   it before updating to the next version of Lightning.
 * Lightning now supports exposing all Drupal entities as JSON, in the standard
-  JSON API format. To enable this feature, install the OpenAPI, OpenAPI Redoc
-  Documentation, and JSON API modules. Then install the Content API module from
+  JSON API format. To enable this feature, install the Content API module from
   the Lightning package.
 
 ## 2.1.5 to 2.1.6
