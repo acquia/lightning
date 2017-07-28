@@ -118,21 +118,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $assert->fieldExists('Body');
     $this->drupalLogout();
 
-    // When a node type is created, creator and reviewer roles should be too...
-    $node_type = $this->drupalCreateContentType();
-    $roles = [
-      "{$node_type->id()}_creator",
-      "{$node_type->id()}_reviewer",
-    ];
-    $permission = "administer panelizer node {$node_type->id()} defaults";
-    $this->assertEntityExists('user_role', $roles);
-    $this->assertPermissions('layout_manager', $permission);
-
-    // ...and when the node type is deleted, the roles should be gone.
-    $node_type->delete();
-    $this->assertEntityNotExists('user_role', $roles);
-    $this->assertNoPermissions('layout_manager', $permission);
-
     $permission = 'view moderation states';
     $this->assertPermissions('page_reviewer', $permission);
     $this->assertPermissions('landing_page_reviewer', $permission);
@@ -178,21 +163,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
   }
 
   /**
-   * Asserts the non-existence of an entity.
-   *
-   * @param string $entity_type
-   *   The entity type ID.
-   * @param mixed|mixed[] $id
-   *   The entity ID, or a set of IDs.
-   */
-  protected function assertEntityNotExists($entity_type, $id) {
-    $this->assertContainsNone(
-      (array) $id,
-      \Drupal::entityQuery($entity_type)->execute()
-    );
-  }
-
-  /**
    * Asserts that a user role has a set of permissions.
    *
    * @param \Drupal\user\RoleInterface|string $role
@@ -208,21 +178,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
   }
 
   /**
-   * Asserts that a user role does not have a set of permissions.
-   *
-   * @param \Drupal\user\RoleInterface|string $role
-   *   The user role, or its ID.
-   * @param string|string[] $permissions
-   *   The permission(s) to check.
-   */
-  protected function assertNoPermissions($role, $permissions) {
-    if (is_string($role)) {
-      $role = Role::load($role);
-    }
-    $this->assertContainsNone((array) $permissions, $role->getPermissions());
-  }
-
-  /**
    * Asserts that a haystack contains a set of needles.
    *
    * @param mixed[] $needles
@@ -233,19 +188,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
   protected function assertContainsAll(array $needles, array $haystack) {
     $diff = array_diff($needles, $haystack);
     $this->assertEmpty($diff);
-  }
-
-  /**
-   * Asserts that a haystack does not contains a set of needles.
-   *
-   * @param mixed[] $needles
-   *   The needles expected not to be in the haystack.
-   * @param mixed[] $haystack
-   *   The haystack.
-   */
-  protected function assertContainsNone(array $needles, array $haystack) {
-    $intersect = array_intersect($needles, $haystack);
-    $this->assertEmpty($intersect);
   }
 
   /**
