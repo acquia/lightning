@@ -1,0 +1,10 @@
+<?php
+
+use Drupal\lightning_core\ConfigHelper as Config;
+
+/**
+ * Implements hook_uninstall().
+ */
+function internal_display_mode_test_uninstall() {
+  Config::forModule('internal_display_mode_test')->deleteAll();
+}
