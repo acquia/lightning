@@ -1,0 +1,42 @@
+<?php
+
+use Drupal\Core\Language\LanguageInterface;
+use Drupal\Core\Url;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+
+/**
+ * Implements hook_install().
+ */
+function lightning_api_install() {
+  $module_handler = \Drupal::moduleHandler();
+
+  // If the openapi_redoc and jsonapi modules are installed, give the API
+  // documentation a nice path alias.
+  if ($module_handler->moduleExists('openapi_redoc') && $module_handler->moduleExists('jsonapi')) {
+    /** @var \Drupal\Core\Path\AliasStorageInterface $alias_storage */
+    $alias_storage = \Drupal::service('path.alias_storage');
+
+    $path = $alias_storage->lookupPathSource(
+      '/api-docs',
+      LanguageInterface::LANGCODE_NOT_SPECIFIED
+    );
+    if (empty($path)) {
+      $route = 'openapi_redoc.jsonapi';
+      try {
+        \Drupal::urlGenerator()->getPathFromRoute($route);
+      }
+      catch (RouteNotFoundException $e) {
+        \Drupal::service('router.builder')->rebuild();
+      }
+
+      $alias_storage->save(
+        '/' . Url::fromRoute($route)->getInternalPath(),
+        '/api-docs'
+      );
+    }
+  }
+
+  if ($module_handler->moduleExists('simple_oauth')) {
+    lightning_api_modules_installed(['simple_oauth']);
+  }
+}

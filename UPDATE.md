@@ -21,7 +21,9 @@ If you've installed Lightning using our [Composer-based project template](https:
 
 * ```cd /path/to/YOUR_PROJECT```
 * ```composer update```
-* Run ```drush updatedb``` or visit ```update.php``` to perform automatic database updates.
+* Run ```drush updatedb && drush cache-rebuild```, or visit ```update.php```,
+  to perform automatic database updates. You can also use Drupal Console's
+  ```update:execute``` command.
 * Perform any necessary manual updates (see below).
 
 ### Tarball
@@ -65,6 +67,9 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
   actively using Page Manager, you must add it to your project as an explicit
   dependency in order to continue to using it. Otherwise, you should uninstall
   it before updating to the next version of Lightning.
+* Lightning now supports exposing all Drupal entities as JSON, in the standard
+  JSON API format. To enable this feature, install the Content API module from
+  the Lightning package.
 
 ## 2.1.5 to 2.1.6
 This version of Lightning adds the ability to choose an image style, alt text,
