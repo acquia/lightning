@@ -85,31 +85,24 @@ as many additional states as you like and define transitions between them. It's
 also possible to schedule content (either a single node or many at once) to be
 transitioned between states at a specific future date and time.
 
-### Preview (Experimental)
-The Workspace Preview System (WPS) gives site builders, editors, authors, and
-reviews the ability to send collections of content through an editorial
-workflow and preview that content within the context of the current live site.
-WPS is a collection of contributed Drupal modules with additional configuration
-UX improvements that all just works out of the box.
+### API-First
+Lightning ships with several modules which, together, quickly set up Drupal to
+deliver data to decoupled applications via a standardized API. By default,
+Lightning installs the OpenAPI and JSON API modules, plus the Simple OAuth
+module, as a toolkit for authentication, authorization, and delivery of data
+to API consumers. Currently, Lightning includes no default configuration for
+any of these modules, because it does not make any assumptions about how the
+API data will be consumed, but we might add support for standard use cases as
+they present themselves.
 
-Note that **the Workspace Preview System is experimental** and is not currently
-included in stable releases of Lightning. If you would like to use it, see
-"Experimental Features" below.
+If you have PHP's OpenSSL extension enabled, Lightning will attempt to create
+an asymmetric key pair for use with OAuth. You should generate a new key pair
+before putting your site into production; instructions for that can be found
+[here](https://www.drupal.org/project/simple_oauth).
 
 ## Project Roadmap
 We publish sprint plans for each patch release. You can find a link to the
 current one in [this meta-issue][meta_releases] on Drupal.org.
-
-## Experimental Features
-Some components of Lightning (such as the Workspace Preview System) are
-currently experimental until they stabilize. Experimental features should be
-considered bleeding-edge and are **not safe for production environments.**
-
-Experimental features are kept in Lightning's ```8.x-2.x-experimental```
-development branch. To use experimental features, you will need to create your
-Lightning code base from this branch. This can be done only with the Composer-
-based [project template][template] -- check there for more information on how
-to use experimental features.
 
 ## Resources
 You can find general best practices documentation inside the `help` directory of
