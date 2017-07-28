@@ -81,6 +81,7 @@ class BehatInitCommand extends BehatCommandBase {
         ],
         'selectors' => [
           'error_message_selector' => '.messages [role="alert"]',
+          'warning_message_selector' => '.messages--warning',
           'login_form_selector' => '#user-login-form',
         ],
       ];

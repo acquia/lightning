@@ -116,4 +116,3 @@ Feature: Workflow moderation states
     When I visit "/deft-zebra"
     And I click "Edit"
     Then I should see "Create new revision"
-    
