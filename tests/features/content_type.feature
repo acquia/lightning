@@ -18,18 +18,6 @@ Feature: Lightning Content Types
     And I check the box "content_roles[reviewer]"
     And I press "Save configuration"
 
-  @7c58fcdd
-  Scenario: Automatically deleting creator and manager roles for a content type
-    Given I am logged in as a user with the administrator role
-    And node_type entities:
-      | type | name |
-      | foo  | foo  |
-    When I visit "/admin/structure/types/manage/foo/delete"
-    And I press "Delete"
-    And I visit "/admin/people/roles"
-    Then I should not see "foo Creator"
-    And I should not see "foo Reviewer"
-
   @workflow @d364fb3a
   Scenario: Removing access to workflow actions that do not make sense with moderated content
     Given I am logged in as a user with the administrator role
