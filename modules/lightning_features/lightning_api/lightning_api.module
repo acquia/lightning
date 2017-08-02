@@ -1,5 +1,7 @@
 <?php
 
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Url;
 use Drupal\lightning_api\OAuthHelper;
 
 /**
@@ -29,4 +31,28 @@ function lightning_api_modules_installed(array $modules) {
       drupal_set_message($error, 'error');
     }
   }
+}
+
+/**
+ * Implements hook_entity_operation().
+ */
+function lightning_api_entity_operation(EntityInterface $entity) {
+  $operations = [];
+
+  $bundle_of = $entity->getEntityType()->getBundleOf();
+  if ($bundle_of) {
+    $fragment = str_replace(' ', '-', sprintf(
+      'tag/%s-%s',
+      \Drupal::entityTypeManager()->getDefinition($bundle_of)->getLabel(),
+      $entity->label()
+    ));
+
+    $operations['api-documentation'] = [
+      'title' => t('View API documentation'),
+      'url' => Url::fromRoute('openapi_redoc.jsonapi', [], ['fragment' => $fragment]),
+      'weight' => 50,
+    ];
+  }
+
+  return $operations;
 }
