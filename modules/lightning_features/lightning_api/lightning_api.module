@@ -33,11 +33,43 @@ function lightning_api_modules_installed(array $modules) {
   }
 }
 
+function lightning_api_entity_json(EntityInterface $entity) {
+  $allowed = \Drupal::config('lightning_api.settings')
+    ->get('entity_json');
+
+  $uuid = $entity->uuid();
+
+  /** @var \Drupal\jsonapi\ResourceType\ResourceType $resource_type */
+  $resource_type = \Drupal::service('jsonapi.resource_type.repository')
+    ->get(
+      $entity->getEntityTypeId(),
+      $entity->bundle()
+    );
+
+  if ($allowed && $uuid && $resource_type) {
+    return Url::fromRoute(
+      'jsonapi.' . $resource_type->getTypeName() . '.individual',
+      [
+        $resource_type->getEntityTypeId() => $uuid,
+      ]
+    );
+  }
+}
+
 /**
  * Implements hook_entity_operation().
  */
 function lightning_api_entity_operation(EntityInterface $entity) {
   $operations = [];
+
+  $url = lightning_api_entity_json($entity);
+  if ($url) {
+    $operations['view-json'] = [
+      'title' => t('View JSON'),
+      'url' => $url,
+      'weight' => 50,
+    ];
+  }
 
   $bundle_of = $entity->getEntityType()->getBundleOf();
   if ($bundle_of) {
@@ -50,7 +82,7 @@ function lightning_api_entity_operation(EntityInterface $entity) {
     $operations['api-documentation'] = [
       'title' => t('View API documentation'),
       'url' => Url::fromRoute('openapi_redoc.jsonapi', [], ['fragment' => $fragment]),
-      'weight' => 50,
+      'weight' => 51,
     ];
   }
 
