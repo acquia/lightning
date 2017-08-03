@@ -1,5 +1,3 @@
-@import "compass/css3";
-
 nav.eb-tabs {
   ul {
     border-bottom-color: #d0d0d0;
@@ -40,15 +38,15 @@ nav.eb-tabs {
 
   .views-row {
     margin-bottom: 1em;
-    @include display-flex();
-    @include align-items(flex-start);
+    display: flex;
+    align-items: flex-start;
   }
 
   .views-col {
     margin: 0 0 0 1em;
     position: relative;
     border: 10px solid #ebebeb;
-    @include transition(border-color .6s);
+    transition: border-color .6s;
 
     html[dir = "rtl"] & {
       margin: 0 1em 0 0;
@@ -59,8 +57,8 @@ nav.eb-tabs {
     }
 
     &.disabled {
-      @include opacity(.3);
-      @include filter(saturate(10%));
+      opacity: .3;
+      filter: saturate(10%);
     }
 
     &.selected {
@@ -72,8 +70,8 @@ nav.eb-tabs {
         height: 100%;
         position: absolute;
         background: transparent url(../images/selected.svg) no-repeat center;
-        @include animation(selected 1.5s 1);
-        @include opacity(0);
+        animation: selected 1.5s 1;
+        opacity: 0;
       }
     }
 
@@ -85,13 +83,13 @@ nav.eb-tabs {
   }
 }
 
-@include keyframes(selected) {
+@keyframes selected {
   0% {
-    @include opacity(1);
+    opacity: 1;
     background-size: 70%;
   }
   100% {
-    @include opacity(0);
+    opacity: 0;
     background-size: 55%;
   }
 }
