@@ -232,4 +232,9 @@ function lightning_dev_update_8007() {
   $installer = \Drupal::service('module_installer');
   $installer->uninstall(['page_manager']);
   $installer->install(['lightning_api']);
+
+  \Drupal::configFactory()
+    ->getEditable('lightning_api.settings')
+    ->set('entity_json', TRUE)
+    ->save();
 }
