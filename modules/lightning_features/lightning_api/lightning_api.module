@@ -3,6 +3,7 @@
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\lightning_api\OAuthHelper;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * Implements hook_modules_installed().
@@ -33,9 +34,19 @@ function lightning_api_modules_installed(array $modules) {
   }
 }
 
+/**
+ * Implements hook_entity_insert().
+ */
+function lightning_api_entity_insert(EntityInterface $entity) {
+  $allowed = \Drupal::config('lightning_api.settings')->get('entity_json');
+
+  if ($entity->getEntityType()->getBundleOf() && $allowed) {
+    \Drupal::service('router.builder')->setRebuildNeeded();
+  }
+}
+
 function lightning_api_entity_json(EntityInterface $entity) {
-  $allowed = \Drupal::config('lightning_api.settings')
-    ->get('entity_json');
+  $allowed = \Drupal::config('lightning_api.settings')->get('entity_json');
 
   $uuid = $entity->uuid();
 
@@ -47,12 +58,22 @@ function lightning_api_entity_json(EntityInterface $entity) {
     );
 
   if ($allowed && $uuid && $resource_type) {
-    return Url::fromRoute(
-      'jsonapi.' . $resource_type->getTypeName() . '.individual',
-      [
+    $route = 'jsonapi.' . $resource_type->getTypeName() . '.individual';
+
+    // JSON API routes are built dynamically per entity bundle. If for whatever
+    // reason the appropriate route does not exist yet, fail silently.
+    // @see lightning_api_entity_insert().
+    try {
+      \Drupal::service('router.route_provider')->getRouteByName($route);
+
+      return Url::fromRoute($route, [
         $resource_type->getEntityTypeId() => $uuid,
-      ]
-    );
+      ]);
+    }
+    catch (RouteNotFoundException $e) {
+      // No worries. The route will probably be built soon, most likely during
+      // the next general cache rebuild.
+    }
   }
 }
 
