@@ -123,6 +123,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertPermissions('landing_page_reviewer', $permission);
 
     $this->assertForbidden('/admin/config/system/lightning');
+    $this->assertForbidden('/admin/config/system/lightning/api');
     $this->assertForbidden('/admin/config/system/lightning/layout');
     $this->assertForbidden('/admin/config/system/lightning/media');
 
