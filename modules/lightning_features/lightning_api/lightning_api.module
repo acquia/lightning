@@ -3,6 +3,7 @@
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
 use Drupal\lightning_api\OAuthHelper;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * Implements hook_modules_installed().
@@ -34,10 +35,62 @@ function lightning_api_modules_installed(array $modules) {
 }
 
 /**
+ * Implements hook_entity_insert().
+ */
+function lightning_api_entity_insert(EntityInterface $entity) {
+  $allowed = \Drupal::config('lightning_api.settings')->get('entity_json');
+
+  if ($entity->getEntityType()->getBundleOf() && $allowed) {
+    \Drupal::service('router.builder')->setRebuildNeeded();
+  }
+}
+
+function lightning_api_entity_json(EntityInterface $entity) {
+  $allowed = \Drupal::config('lightning_api.settings')->get('entity_json');
+
+  $uuid = $entity->uuid();
+
+  /** @var \Drupal\jsonapi\ResourceType\ResourceType $resource_type */
+  $resource_type = \Drupal::service('jsonapi.resource_type.repository')
+    ->get(
+      $entity->getEntityTypeId(),
+      $entity->bundle()
+    );
+
+  if ($allowed && $uuid && $resource_type) {
+    $route = 'jsonapi.' . $resource_type->getTypeName() . '.individual';
+
+    // JSON API routes are built dynamically per entity bundle. If for whatever
+    // reason the appropriate route does not exist yet, fail silently.
+    // @see lightning_api_entity_insert().
+    try {
+      \Drupal::service('router.route_provider')->getRouteByName($route);
+
+      return Url::fromRoute($route, [
+        $resource_type->getEntityTypeId() => $uuid,
+      ]);
+    }
+    catch (RouteNotFoundException $e) {
+      // No worries. The route will probably be built soon, most likely during
+      // the next general cache rebuild.
+    }
+  }
+}
+
+/**
  * Implements hook_entity_operation().
  */
 function lightning_api_entity_operation(EntityInterface $entity) {
   $operations = [];
+
+  $url = lightning_api_entity_json($entity);
+  if ($url) {
+    $operations['view-json'] = [
+      'title' => t('View JSON'),
+      'url' => $url,
+      'weight' => 50,
+    ];
+  }
 
   $bundle_of = $entity->getEntityType()->getBundleOf();
   if ($bundle_of) {
@@ -50,7 +103,7 @@ function lightning_api_entity_operation(EntityInterface $entity) {
     $operations['api-documentation'] = [
       'title' => t('View API documentation'),
       'url' => Url::fromRoute('openapi_redoc.jsonapi', [], ['fragment' => $fragment]),
-      'weight' => 50,
+      'weight' => 51,
     ];
   }
 

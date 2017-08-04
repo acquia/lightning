@@ -123,6 +123,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertPermissions('landing_page_reviewer', $permission);
 
     $this->assertForbidden('/admin/config/system/lightning');
+    $this->assertForbidden('/admin/config/system/lightning/api');
     $this->assertForbidden('/admin/config/system/lightning/layout');
     $this->assertForbidden('/admin/config/system/lightning/media');
 
@@ -130,8 +131,10 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->drupalLogin($account);
 
     $this->assertAllowed('/admin/config/system/lightning');
+    $assert->linkByHrefExists('/admin/config/system/lightning/api');
     $assert->linkByHrefExists('/admin/config/system/lightning/layout');
     $assert->linkByHrefExists('/admin/config/system/lightning/media');
+    $this->assertAllowed('/admin/config/system/lightning/api');
     $this->assertAllowed('/admin/config/system/lightning/layout');
     $this->assertAllowed('/admin/config/system/lightning/media');
 
