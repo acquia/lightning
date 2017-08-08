@@ -1,7 +1,7 @@
-@lightning @api @media
+@lightning @api @media @javascript
 Feature: Bulk uploading media assets
 
-  @test_module @javascript @72286b5d
+  @72286b5d @with-module:lightning_test
   Scenario: Bulk uploading media assets
     Given I am logged in as a user with the media_creator role
     When I visit "/admin/content/media"

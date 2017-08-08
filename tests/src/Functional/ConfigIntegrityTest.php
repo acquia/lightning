@@ -32,6 +32,8 @@ class ConfigIntegrityTest extends BrowserTestBase {
     // All users should be able to view media items.
     $this->assertPermissions('anonymous', 'view media');
     $this->assertPermissions('authenticated', 'view media');
+    // Media creators can use bulk upload.
+    $this->assertPermissions('media_creator', 'dropzone upload files');
 
     $this->assertEntityExists('node_type', [
       'page',

@@ -70,6 +70,8 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
 * Lightning now supports exposing all Drupal entities as JSON, in the standard
   JSON API format. To enable this feature, install the Content API module from
   the Lightning package.
+* Lightning now has support for bulk uploading media assets. To enable this
+  feature, install the Bulk Media Upload module.
 
 ## 2.1.5 to 2.1.6
 This version of Lightning adds the ability to choose an image style, alt text,
