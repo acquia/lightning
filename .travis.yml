@@ -91,7 +91,7 @@ before_script:
   - sleep 5
 
 script:
-  - composer validate ./profiles/lightning/composer.json --no-check-all --ansi
+  - composer validate ../composer.json --no-check-all --ansi --no-interaction
   - phpunit --configuration ./core --group lightning
   - behat --strict --stop-on-failure --config ./sites/default/files/behat.yml
 
