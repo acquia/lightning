@@ -103,13 +103,8 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $assert->fieldExists('Message');
     $this->drupalLogout();
 
-    // Assert that the meta tag fields are present when creating pages.
-    $account = $this->drupalCreateUser(['create page content']);
-    $this->drupalLogin($account);
-    $this->assertAllowed('/node/add/page');
-    $assert->fieldExists('field_meta_tags[0][basic][title]');
-    $assert->fieldExists('field_meta_tags[0][basic][description]');
-    $this->drupalLogout();
+    // Assert that bundled content types have meta tags enabled.
+    $this->assertMetatag(['page', 'landing_page']);
 
     // Assert that basic blocks expose a Body field.
     $account = $this->drupalCreateUser(['administer blocks']);
@@ -118,10 +113,13 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $assert->fieldExists('Body');
     $this->drupalLogout();
 
+    // Assert that reviewer roles can view moderation states.
     $permission = 'view moderation states';
     $this->assertPermissions('page_reviewer', $permission);
     $this->assertPermissions('landing_page_reviewer', $permission);
 
+    // Assert that Lightning configuration pages are accessible to users who
+    // have an administrative role.
     $this->assertForbidden('/admin/config/system/lightning');
     $this->assertForbidden('/admin/config/system/lightning/api');
     $this->assertForbidden('/admin/config/system/lightning/layout');
@@ -148,6 +146,32 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $public_key = $oauth->get('public_key');
     $this->assertNotEmpty($public_key);
     $this->assertFileExists($public_key);
+  }
+
+  /**
+   * Asserts that meta tags are enabled for specific content types.
+   *
+   * @param string[] $node_types
+   *   The node type IDs to check.
+   */
+  protected function assertMetatag(array $node_types) {
+    $assert = $this->assertSession();
+
+    $permissions = array_map(
+      function ($node_type) {
+        return "create $node_type content";
+      },
+      $node_types
+    );
+    $account = $this->drupalCreateUser($permissions);
+    $this->drupalLogin($account);
+
+    foreach ($node_types as $node_type) {
+      $this->assertAllowed("/node/add/$node_type");
+      $assert->fieldExists('field_meta_tags[0][basic][title]');
+      $assert->fieldExists('field_meta_tags[0][basic][description]');
+    }
+    $this->drupalLogout();
   }
 
   /**
