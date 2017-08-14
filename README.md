@@ -15,6 +15,7 @@ The preferred way to install Lightning is using our
 [Composer-based project template][template]. It's easy!
 
 ```
+$ composer self-update
 $ composer create-project acquia/lightning-project MY_PROJECT
 ```
 

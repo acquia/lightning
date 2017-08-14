@@ -1,0 +1,8 @@
+<?php
+
+/**
+ * Implements hook_install().
+ */
+function lightning_media_bulk_upload_install() {
+  user_role_grant_permissions('media_creator', ['dropzone upload files']);
+}
