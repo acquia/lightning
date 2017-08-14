@@ -58,12 +58,32 @@ final class AssetPackagist {
 
     $package = $file->read();
 
-    $package['repositories']['asset-packagist'] = [
-      'type' => 'composer',
-      'url' => 'https://asset-packagist.org',
-    ];
-    unset($package['require']['composer/installers']);
-    $package['require']['oomphinc/composer-installers-extender'] = '^1.1';
+    // Add the Asset Packagist repository if it does not already exist.
+    if (isset($package['repositories'])) {
+      $repository_key = NULL;
+
+      foreach ($package['repositories'] as $key => $repository) {
+        if ($repository['type'] == 'composer' && strpos($repository['url'], 'https://asset-packagist.org') === 0) {
+          $repository_key = $key;
+          break;
+        }
+      }
+
+      if (is_null($repository_key)) {
+        $package['repositories']['asset-packagist'] = [
+          'type' => 'composer',
+          'url' => 'https://asset-packagist.org',
+        ];
+      }
+    }
+
+    // oomphinc/composer-installers-extender is required by Lightning and
+    // depends on composer/installers, so it does not need to be specifically
+    // included.
+    unset(
+      $package['require']['composer/installers'],
+      $package['require']['oomphinc/composer-installers-extender']
+    );
 
     $package['extra']['installer-types'][] = 'bower-asset';
     $package['extra']['installer-types'][] = 'npm-asset';
