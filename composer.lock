@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7170a4a1629185ced5aee809ef66122f",
+    "content-hash": "addfa7590c9aac9e3fa29662d57cdb29",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -116,16 +116,16 @@
         },
         {
             "name": "composer/installers",
-            "version": "v1.3.0",
+            "version": "v1.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "79ad876c7498c0bbfe7eed065b8651c93bfd6045"
+                "reference": "9ce17fb70e9a38dd8acff0636a29f5cf4d575c1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/79ad876c7498c0bbfe7eed065b8651c93bfd6045",
-                "reference": "79ad876c7498c0bbfe7eed065b8651c93bfd6045",
+                "url": "https://api.github.com/repos/composer/installers/zipball/9ce17fb70e9a38dd8acff0636a29f5cf4d575c1b",
+                "reference": "9ce17fb70e9a38dd8acff0636a29f5cf4d575c1b",
                 "shasum": ""
             },
             "require": {
@@ -171,6 +171,7 @@
                 "Hurad",
                 "ImageCMS",
                 "Kanboard",
+                "Lan Management System",
                 "MODX Evo",
                 "Mautic",
                 "Maya",
@@ -194,6 +195,7 @@
                 "croogo",
                 "dokuwiki",
                 "drupal",
+                "eZ Platform",
                 "elgg",
                 "expressionengine",
                 "fuelphp",
@@ -210,6 +212,7 @@
                 "mediawiki",
                 "modulework",
                 "moodle",
+                "osclass",
                 "phpbb",
                 "piwik",
                 "ppi",
@@ -226,7 +229,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2017-04-24T06:37:16+00:00"
+            "time": "2017-08-09T07:53:48+00:00"
         },
         {
             "name": "composer/semver",
@@ -839,17 +842,17 @@
         },
         {
             "name": "drupal/acquia_connector",
-            "version": "1.12.0",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/acquia_connector",
-                "reference": "8.x-1.12"
+                "reference": "8.x-1.13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.12.zip",
-                "reference": null,
-                "shasum": "ac8e7a955dd92dc8dc0d3476f2e3c2b0dcb3855a"
+                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.13.zip",
+                "reference": "8.x-1.13",
+                "shasum": "e1d1b4b7c9cb270370800ed4f883d5f505ceb268"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -863,8 +866,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.12",
-                    "datestamp": "1496931843"
+                    "version": "8.x-1.13",
+                    "datestamp": "1502725444",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -872,6 +879,10 @@
                 "GPL-2.0+"
             ],
             "authors": [
+                {
+                    "name": "CharuAg",
+                    "homepage": "https://www.drupal.org/user/2923221"
+                },
                 {
                     "name": "Dries",
                     "homepage": "https://www.drupal.org/user/1"
@@ -881,16 +892,8 @@
                     "homepage": "https://www.drupal.org/user/4166"
                 },
                 {
-                    "name": "Nick_vh",
-                    "homepage": "https://www.drupal.org/user/122682"
-                },
-                {
                     "name": "Stanislav Mixnovich",
                     "homepage": "https://www.drupal.org/user/2859977"
-                },
-                {
-                    "name": "bjaspan",
-                    "homepage": "https://www.drupal.org/user/46413"
                 },
                 {
                     "name": "dmitrii",
@@ -4023,6 +4026,48 @@
             "time": "2016-07-25T17:07:32+00:00"
         },
         {
+            "name": "oomphinc/composer-installers-extender",
+            "version": "v1.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/oomphinc/composer-installers-extender.git",
+                "reference": "ca1c4b16b0905c81d1e77e608f36a2eff1a56f56"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/oomphinc/composer-installers-extender/zipball/ca1c4b16b0905c81d1e77e608f36a2eff1a56f56",
+                "reference": "ca1c4b16b0905c81d1e77e608f36a2eff1a56f56",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0",
+                "composer/installers": "^1.0"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "OomphInc\\ComposerInstallersExtender\\Plugin"
+            },
+            "autoload": {
+                "psr-4": {
+                    "OomphInc\\ComposerInstallersExtender\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stephen Beemsterboer",
+                    "email": "stephen@oomphinc.com",
+                    "homepage": "https://github.com/balbuf"
+                }
+            ],
+            "description": "Extend the composer/installers plugin to accept any arbitrary package type.",
+            "homepage": "http://www.oomphinc.com/",
+            "time": "2017-03-31T16:57:39+00:00"
+        },
+        {
             "name": "paragonie/random_compat",
             "version": "v2.0.10",
             "source": {
@@ -6280,6 +6325,22 @@
             "time": "2017-04-04T11:38:05+00:00"
         },
         {
+            "name": "bower-asset/dropzone",
+            "version": "v5.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/enyo/dropzone.git",
+                "reference": "7d0792d1346d83a8b0c0d2919121bdd2b8e7fee4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/enyo/dropzone/zipball/7d0792d1346d83a8b0c0d2919121bdd2b8e7fee4",
+                "reference": "7d0792d1346d83a8b0c0d2919121bdd2b8e7fee4",
+                "shasum": null
+            },
+            "type": "bower-asset"
+        },
+        {
             "name": "composer/ca-bundle",
             "version": "1.0.7",
             "source": {
@@ -6340,16 +6401,16 @@
         },
         {
             "name": "composer/composer",
-            "version": "1.4.3",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/composer.git",
-                "reference": "62c17fdf79a1f7f42778aed376da9c8cb03e5f62"
+                "reference": "d60a1ff0cb421fcd2811c3f2b57f7e3e2b6c9d0e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/composer/zipball/62c17fdf79a1f7f42778aed376da9c8cb03e5f62",
-                "reference": "62c17fdf79a1f7f42778aed376da9c8cb03e5f62",
+                "url": "https://api.github.com/repos/composer/composer/zipball/d60a1ff0cb421fcd2811c3f2b57f7e3e2b6c9d0e",
+                "reference": "d60a1ff0cb421fcd2811c3f2b57f7e3e2b6c9d0e",
                 "shasum": ""
             },
             "require": {
@@ -6382,7 +6443,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -6413,7 +6474,7 @@
                 "dependency",
                 "package"
             ],
-            "time": "2017-08-06T13:00:25+00:00"
+            "time": "2017-08-09T14:07:22+00:00"
         },
         {
             "name": "composer/spdx-licenses",
@@ -7168,17 +7229,17 @@
         },
         {
             "name": "drupal/devel",
-            "version": "1.0.0-rc2",
+            "version": "1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/devel",
-                "reference": "8.x-1.0-rc2"
+                "reference": "8.x-1.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/devel-8.x-1.0-rc2.zip",
-                "reference": null,
-                "shasum": "011322bf9c263dab29f94640829f4b654e9c5632"
+                "url": "https://ftp.drupal.org/files/projects/devel-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "e629b130a58d8f6c8f82cffb5a2a6240d70d6740"
             },
             "require": {
                 "drupal/core": "~8.0"
@@ -7192,8 +7253,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc2",
-                    "datestamp": "1492989244"
+                    "version": "8.x-1.0",
+                    "datestamp": "1502732044",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -7241,6 +7306,93 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/devel",
                 "issues": "http://drupal.org/project/devel",
+                "irc": "irc://irc.freenode.org/drupal-contribute"
+            }
+        },
+        {
+            "name": "drupal/dropzonejs",
+            "version": "1.0.0-alpha7",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/dropzonejs",
+                "reference": "8.x-1.0-alpha7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/dropzonejs-8.x-1.0-alpha7.zip",
+                "reference": "8.x-1.0-alpha7",
+                "shasum": "62fc6d46cee1d5fa9885bab3e65b3638172311f6"
+            },
+            "require": {
+                "drupal/core": "*"
+            },
+            "require-dev": {
+                "drupal/entity_browser": "*"
+            },
+            "suggest": {
+                "enyo/dropzone": "Required to user drupal/dropzonejs. Dropzone is an easy to use drag'n'drop library."
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-alpha7",
+                    "datestamp": "1495200183",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Janez Urevc",
+                    "homepage": "https://drupal.org/u/slashrsm",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Christian Fritsch",
+                    "homepage": "https://drupal.org/u/chrfritsch",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "Primoz Hmeljak",
+                    "homepage": "https://drupal.org/u/Primsi",
+                    "role": "Maintainer"
+                },
+                {
+                    "name": "See other contributors",
+                    "homepage": "https://www.drupal.org/node/1998478/committers",
+                    "role": "contributor"
+                },
+                {
+                    "name": "slashrsm",
+                    "homepage": "https://www.drupal.org/user/744628"
+                },
+                {
+                    "name": "wouters_f",
+                    "homepage": "https://www.drupal.org/user/721548"
+                },
+                {
+                    "name": "zkday",
+                    "homepage": "https://www.drupal.org/user/888644"
+                }
+            ],
+            "description": "Drupal integration for DropzoneJS - An open source library that provides drag’n’drop file uploads with image previews.",
+            "homepage": "https://www.drupal.org/project/dropzonejs",
+            "keywords": [
+                "DropzoneJS",
+                "Drupal"
+            ],
+            "support": {
+                "source": "https://www.drupal.org/project/dropzonejs",
+                "issues": "https://www.drupal.org/project/issues/dropzonejs",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
             }
         },
@@ -7409,6 +7561,9 @@
             "extra": {
                 "branch-alias": {
                     "dev-master": "8.0.x-dev"
+                },
+                "patches_applied": {
+                    "2697 - Don't add profile dependencies to required_by array of modules": "https://patch-diff.githubusercontent.com/raw/drush-ops/drush/pull/2697.patch"
                 }
             },
             "autoload": {
