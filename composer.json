@@ -36,6 +36,10 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         }
     ],
     "scripts": {
@@ -53,15 +57,22 @@
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
         "package": "Acquia\\Lightning\\Composer\\Package::execute",
         "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
-        "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute"
+        "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute",
+        "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute"
     },
     "extra": {
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
         "installer-paths": {
             "docroot/core": [
                 "type:drupal-core"
             ],
             "docroot/libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
             ],
             "docroot/profiles/lightning/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -120,7 +131,6 @@
     },
     "require": {
         "cweagans/composer-patches": "^1.5.0",
-        "composer/installers": "^1.2",
         "drupal/core": "~8.3.1",
         "drupal/embed": "^1.0",
         "drupal/entity_embed": "1.0.0-beta2",
@@ -152,7 +162,8 @@
         "drupal/search_api": "^1.0",
         "drupal/jsonapi": "^1.1",
         "drupal/openapi": "1.0-alpha1",
-        "drupal/simple_oauth": "^2.0@RC"
+        "drupal/simple_oauth": "^2.0@RC",
+        "oomphinc/composer-installers-extender": "^1.1"
     },
     "autoload": {
         "psr-4": {
