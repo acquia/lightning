@@ -5,6 +5,7 @@ dependencies:
     - search_api.index.content
   module:
     - search_api
+_core: {  }
 id: search
 label: Search
 module: views
@@ -19,12 +20,222 @@ display:
     id: default
     display_title: Master
     position: 0
-    display_options: { access: { type: none, options: {  } }, cache: { type: search_api_time, options: { results_lifespan: 3600, results_lifespan_custom: 0, output_lifespan: 3600, output_lifespan_custom: 0 } }, query: { type: views_query }, exposed_form: { type: input_required, options: { submit_button: Search, reset_button: false, reset_button_label: Reset, exposed_sorts_label: 'Sort by', expose_sort_order: true, sort_asc_label: Asc, sort_desc_label: Desc, text_input_required: 'Enter keywords to search the site.', text_input_required_format: rich_text } }, pager: { type: mini, options: { items_per_page: 10, offset: 0, id: 0, total_pages: null, expose: { items_per_page: false, items_per_page_label: 'Items per page', items_per_page_options: '5, 10, 25, 50', items_per_page_options_all: false, items_per_page_options_all_label: '- All -', offset: false, offset_label: Offset }, tags: { previous: ‹‹, next: ›› } } }, style: { type: default, options: { grouping: {  }, row_class: '', default_row_class: true, uses_fields: false } }, row: { type: search_api, options: { view_modes: { 'entity:node': { page: teaser, landing_page: teaser } } } }, fields: { rendered: { table: search_api_index_content, field: rendered, id: rendered, entity_type: null, entity_field: null, plugin_id: search_api, relationship: none, group_type: group, admin_label: '', label: '', exclude: false, alter: { alter_text: false, text: '', make_link: false, path: '', absolute: false, external: false, replace_spaces: false, path_case: none, trim_whitespace: false, alt: '', rel: '', link_class: '', prefix: '', suffix: '', target: '', nl2br: false, max_length: 0, word_boundary: true, ellipsis: true, more_link: false, more_link_text: '', more_link_path: '', strip_tags: false, trim: false, preserve_tags: '', html: false }, element_type: '', element_class: '', element_label_type: '', element_label_class: '', element_label_colon: true, element_wrapper_type: '', element_wrapper_class: '', element_default_classes: true, empty: '', hide_empty: false, empty_zero: false, hide_alter_empty: true, link_to_item: false, multi_type: separator, multi_separator: ', ' } }, filters: { search_api_fulltext: { id: search_api_fulltext, table: search_api_index_content, field: search_api_fulltext, relationship: none, group_type: group, admin_label: '', operator: or, value: '', group: 1, exposed: true, expose: { operator_id: search_api_fulltext_op, label: Keywords, description: '', use_operator: false, operator: search_api_fulltext_op, identifier: keywords, required: false, remember: false, multiple: false, remember_roles: { authenticated: authenticated, anonymous: '0', administrator: '0', layout_manager: '0', media_creator: '0', media_manager: '0', page_creator: '0', page_reviewer: '0', landing_page_creator: '0', landing_page_reviewer: '0', workspace_creator: '0', workspace_reviewer: '0' } }, is_grouped: false, group_info: { label: '', description: '', identifier: '', optional: true, widget: select, multiple: false, remember: false, default_group: All, default_group_multiple: {  }, group_items: {  } }, parse_mode: terms, min_length: 2, fields: {  }, plugin_id: search_api_fulltext } }, sorts: { search_api_relevance: { id: search_api_relevance, table: search_api_index_content, field: search_api_relevance, relationship: none, group_type: group, admin_label: '', order: DESC, exposed: false, expose: { label: '' }, plugin_id: search_api } }, header: {  }, footer: {  }, empty: { area: { id: area, table: views, field: area, relationship: none, group_type: group, admin_label: '', empty: true, tokenize: false, content: { value: 'Your search did not return any results.', format: rich_text }, plugin_id: text } }, relationships: {  }, arguments: {  }, display_extenders: {  }, title: Search }
-    cache_metadata: { max-age: -1, contexts: ['languages:language_interface', url, url.query_args], tags: {  } }
+    display_options:
+      access:
+        type: none
+        options: {  }
+      cache:
+        type: search_api_time
+        options:
+          results_lifespan: 3600
+          results_lifespan_custom: 0
+          output_lifespan: 3600
+          output_lifespan_custom: 0
+      query:
+        type: views_query
+      exposed_form:
+        type: input_required
+        options:
+          submit_button: Search
+          reset_button: false
+          reset_button_label: Reset
+          exposed_sorts_label: 'Sort by'
+          expose_sort_order: true
+          sort_asc_label: Asc
+          sort_desc_label: Desc
+          text_input_required: 'Enter keywords to search the site.'
+          text_input_required_format: rich_text
+      pager:
+        type: mini
+        options:
+          items_per_page: 10
+          offset: 0
+          id: 0
+          total_pages: null
+          expose:
+            items_per_page: false
+            items_per_page_label: 'Items per page'
+            items_per_page_options: '5, 10, 25, 50'
+            items_per_page_options_all: false
+            items_per_page_options_all_label: '- All -'
+            offset: false
+            offset_label: Offset
+          tags:
+            previous: ‹‹
+            next: ››
+      style:
+        type: default
+        options:
+          grouping: {  }
+          row_class: ''
+          default_row_class: true
+          uses_fields: false
+      row:
+        type: search_api
+        options:
+          view_modes:
+            'entity:node':
+              page: teaser
+              landing_page: teaser
+      fields:
+        rendered:
+          table: search_api_index_content
+          field: rendered
+          id: rendered
+          entity_type: null
+          entity_field: null
+          plugin_id: search_api
+          relationship: none
+          group_type: group
+          admin_label: ''
+          label: ''
+          exclude: false
+          alter:
+            alter_text: false
+            text: ''
+            make_link: false
+            path: ''
+            absolute: false
+            external: false
+            replace_spaces: false
+            path_case: none
+            trim_whitespace: false
+            alt: ''
+            rel: ''
+            link_class: ''
+            prefix: ''
+            suffix: ''
+            target: ''
+            nl2br: false
+            max_length: 0
+            word_boundary: true
+            ellipsis: true
+            more_link: false
+            more_link_text: ''
+            more_link_path: ''
+            strip_tags: false
+            trim: false
+            preserve_tags: ''
+            html: false
+          element_type: ''
+          element_class: ''
+          element_label_type: ''
+          element_label_class: ''
+          element_label_colon: true
+          element_wrapper_type: ''
+          element_wrapper_class: ''
+          element_default_classes: true
+          empty: ''
+          hide_empty: false
+          empty_zero: false
+          hide_alter_empty: true
+          link_to_item: false
+          multi_type: separator
+          multi_separator: ', '
+      filters:
+        search_api_fulltext:
+          id: search_api_fulltext
+          table: search_api_index_content
+          field: search_api_fulltext
+          relationship: none
+          group_type: group
+          admin_label: ''
+          operator: or
+          value: ''
+          group: 1
+          exposed: true
+          expose:
+            operator_id: search_api_fulltext_op
+            label: Keywords
+            description: ''
+            use_operator: false
+            operator: search_api_fulltext_op
+            identifier: keywords
+            required: false
+            remember: false
+            multiple: false
+            remember_roles:
+              authenticated: authenticated
+              anonymous: '0'
+              administrator: '0'
+              layout_manager: '0'
+              media_creator: '0'
+              media_manager: '0'
+              page_creator: '0'
+              page_reviewer: '0'
+              landing_page_creator: '0'
+              landing_page_reviewer: '0'
+              workspace_creator: '0'
+              workspace_reviewer: '0'
+          is_grouped: false
+          group_info:
+            label: ''
+            description: ''
+            identifier: ''
+            optional: true
+            widget: select
+            multiple: false
+            remember: false
+            default_group: All
+            default_group_multiple: {  }
+            group_items: {  }
+          parse_mode: terms
+          min_length: 2
+          fields: {  }
+          plugin_id: search_api_fulltext
+      sorts:
+        search_api_relevance:
+          id: search_api_relevance
+          table: search_api_index_content
+          field: search_api_relevance
+          relationship: none
+          group_type: group
+          admin_label: ''
+          order: DESC
+          exposed: false
+          expose:
+            label: ''
+          plugin_id: search_api
+      header: {  }
+      footer: {  }
+      empty:
+        area:
+          id: area
+          table: views
+          field: area
+          relationship: none
+          group_type: group
+          admin_label: ''
+          empty: true
+          tokenize: false
+          content:
+            value: 'Your search did not return any results.'
+            format: rich_text
+          plugin_id: text
+      relationships: {  }
+      arguments: {  }
+      display_extenders: {  }
+      title: Search
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+      tags: {  }
   page:
     display_plugin: page
     id: page
     display_title: Page
     position: 1
-    display_options: { display_extenders: {  }, path: search, exposed_block: true }
-    cache_metadata: { max-age: -1, contexts: ['languages:language_interface', url, url.query_args], tags: {  } }
+    display_options:
+      display_extenders: {  }
+      path: search
+      exposed_block: true
+    cache_metadata:
+      max-age: -1
+      contexts:
+        - 'languages:language_interface'
+        - url
+        - url.query_args
+      tags: {  }

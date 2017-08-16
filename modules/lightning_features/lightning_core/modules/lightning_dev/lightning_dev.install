@@ -51,10 +51,9 @@ function lightning_dev_install() {
   $entity_browser->set('widgets', $widgets);
   $entity_browser->save();
 
-  \Drupal::configFactory()
-    ->getEditable('lightning_api.settings')
-    ->set('entity_json', TRUE)
-    ->save();
+  if (\Drupal::moduleHandler()->moduleExists('lightning_api')) {
+    lightning_dev_modules_installed(['lightning_api']);
+  }
 }
 
 /**
@@ -232,9 +231,4 @@ function lightning_dev_update_8007() {
   $installer = \Drupal::service('module_installer');
   $installer->uninstall(['page_manager']);
   $installer->install(['lightning_api', 'lightning_media_bulk_upload']);
-
-  \Drupal::configFactory()
-    ->getEditable('lightning_api.settings')
-    ->set('entity_json', TRUE)
-    ->save();
 }

@@ -8,6 +8,7 @@ dependencies:
   module:
     - file
     - workbench_moderation
+_core: {  }
 id: media.document.default
 targetEntityType: media
 bundle: document
@@ -15,20 +16,24 @@ mode: default
 content:
   field_document:
     weight: 0
-    settings: { progress_indicator: throbber }
+    settings:
+      progress_indicator: throbber
     third_party_settings: {  }
     type: file_generic
     region: content
   field_media_in_library:
     type: boolean_checkbox
-    settings: { display_label: true }
+    settings:
+      display_label: true
     weight: 3
     third_party_settings: {  }
     region: content
   name:
     type: string_textfield
     weight: 2
-    settings: { size: 60, placeholder: '' }
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
     region: content
 hidden:

@@ -57,21 +57,29 @@ to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
 ## 2.1.6. to 2.1.7
+* **IMPORTANT!** Page Manager is no longer a dependency of Lightning Layout,
+  and it will no longer ship with Lightning as of the next release. Therefore,
+  if you are actively using Page Manager, you must add it to your project as an
+  explicit dependency in order to continue to using it. Otherwise, **you must
+  uninstall it before updating to the next version of Lightning, or your site
+  may break.**
+* **IMPORTANT!** Lightning has added support for pulling front-end JavaScript
+  libraries into your project using Composer, via [Asset Packagist](https://asset-packagist.org).
+  This requires a few simple, one-time changes to your project's root
+  composer.json. Note that, **without these changes, some functionality in
+  future Lightning releases will not work.** The required changes, and
+  instructions on how to make them (either manually, or automatically using a
+  Lightning-provided script) are [documented here](http://lightning.acquia.com/blog/round-your-front-end-javascript-libraries-composer).
+* Lightning now supports exposing all Drupal entities as JSON, in the standard
+  JSON API format. To enable this feature, install the Content API module from
+  the Lightning package.
+* Lightning now has support for bulk uploading media assets. To enable this
+  feature, install the Bulk Media Upload module from the Lightning Package.
 * If Lightning's content role functionality is available, grant all "creator"
   content roles the following permissions, as desired:
   * **Toolbar**: Use the administration toolbar
   * **Quick Edit**: Access in-place editing
   * **Contextual Links**: Use contextual links
-* Page Manager is no longer a dependency of Lightning Layout, and it will no
-  longer ship with Lightning as of the next release. Therefore, if you are
-  actively using Page Manager, you must add it to your project as an explicit
-  dependency in order to continue to using it. Otherwise, you should uninstall
-  it before updating to the next version of Lightning.
-* Lightning now supports exposing all Drupal entities as JSON, in the standard
-  JSON API format. To enable this feature, install the Content API module from
-  the Lightning package.
-* Lightning now has support for bulk uploading media assets. To enable this
-  feature, install the Bulk Media Upload module.
 
 ## 2.1.5 to 2.1.6
 This version of Lightning adds the ability to choose an image style, alt text,
