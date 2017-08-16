@@ -13,7 +13,7 @@
         "mikey179/vfsStream": "~1.2",
         "phpunit/phpunit": "~4.8",
         "symfony/css-selector": "~2.8",
-        "drush/drush": "8.1.11",
+        "drush/drush": "8.1.12",
         "drupal/drupal-extension": "~3.2.0",
         "behat/behat": "^3.0",
         "drupal/coder": "~8.2.0",
@@ -36,6 +36,10 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         }
     ],
     "scripts": {
@@ -53,15 +57,22 @@
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
         "package": "Acquia\\Lightning\\Composer\\Package::execute",
         "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
-        "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute"
+        "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute",
+        "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute"
     },
     "extra": {
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
         "installer-paths": {
             "docroot/core": [
                 "type:drupal-core"
             ],
             "docroot/libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
             ],
             "docroot/profiles/lightning/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -80,7 +91,7 @@
                 "2652138 - ImageFormatter does not support SVGs":
                 "https://www.drupal.org/files/issues/2652138-41.patch",
                 "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order":
-                "https://www.drupal.org/files/issues/1356276-356.patch",
+                "https://www.drupal.org/files/issues/1356276-360.patch",
                 "2880374 - Experimental modules should not have warnings after being installed":
                 "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
                 "2880445 - Config sync should not throw a warning when not being writable":
@@ -115,12 +126,15 @@
                 "https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch",
                 "2825034 - Form error messages do not appear in IPE":
                 "https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch"
+            },
+            "drupal/simple_oauth": {
+                "2901180 - thephpleague/oauth2-server now requires an EncryptionKey to be set on all instances of AuthorizationServer":
+                "https://www.drupal.org/files/issues/2901180-8.patch"
             }
         }
     },
     "require": {
         "cweagans/composer-patches": "^1.5.0",
-        "composer/installers": "^1.2",
         "drupal/core": "~8.3.1",
         "drupal/embed": "^1.0",
         "drupal/entity_embed": "1.0.0-beta2",
@@ -152,7 +166,8 @@
         "drupal/search_api": "^1.0",
         "drupal/jsonapi": "^1.1",
         "drupal/openapi": "1.0-alpha1",
-        "drupal/simple_oauth": "^2.0@RC"
+        "drupal/simple_oauth": "2.0.0-rc3",
+        "oomphinc/composer-installers-extender": "^1.1"
     },
     "autoload": {
         "psr-4": {
