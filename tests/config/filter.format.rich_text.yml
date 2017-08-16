@@ -4,6 +4,7 @@ dependencies:
   module:
     - editor
     - entity_embed
+_core: {  }
 name: 'Rich Text'
 format: rich_text
 weight: 1
@@ -43,7 +44,10 @@ filters:
     provider: filter
     status: true
     weight: -50
-    settings: { allowed_html: '<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <p> <br> <h1> <pre> <drupal-entity data-* title alt>', filter_html_help: true, filter_html_nofollow: false }
+    settings:
+      allowed_html: '<a href hreflang> <em> <strong> <cite> <blockquote cite> <code> <ul type> <ol start type> <li> <dl> <dt> <dd> <h2 id> <h3 id> <h4 id> <h5 id> <h6 id> <s> <sup> <sub> <img src alt data-entity-type data-entity-uuid data-align data-caption> <table> <caption> <tbody> <thead> <tfoot> <th> <td> <tr> <hr> <p> <br> <h1> <pre> <drupal-entity data-* title alt>'
+      filter_html_help: true
+      filter_html_nofollow: false
   filter_autop:
     id: filter_autop
     provider: filter
@@ -67,4 +71,5 @@ filters:
     provider: filter
     status: false
     weight: -42
-    settings: { filter_url_length: 72 }
+    settings:
+      filter_url_length: 72

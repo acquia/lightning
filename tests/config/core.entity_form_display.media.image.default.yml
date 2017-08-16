@@ -9,6 +9,7 @@ dependencies:
   module:
     - image
     - workbench_moderation
+_core: {  }
 id: media.image.default
 targetEntityType: media
 bundle: image
@@ -17,19 +18,24 @@ content:
   field_media_in_library:
     type: boolean_checkbox
     weight: 4
-    settings: { display_label: true }
+    settings:
+      display_label: true
     third_party_settings: {  }
     region: content
   image:
     type: image_image
     weight: 0
-    settings: { progress_indicator: throbber, preview_image_style: thumbnail }
+    settings:
+      progress_indicator: throbber
+      preview_image_style: thumbnail
     third_party_settings: {  }
     region: content
   name:
     type: string_textfield
     weight: 3
-    settings: { size: 60, placeholder: '' }
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
     region: content
 hidden:

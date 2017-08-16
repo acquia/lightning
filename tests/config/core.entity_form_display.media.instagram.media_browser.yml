@@ -8,6 +8,7 @@ dependencies:
     - media_entity.bundle.instagram
   module:
     - workbench_moderation
+_core: {  }
 id: media.instagram.media_browser
 targetEntityType: media
 bundle: instagram
@@ -16,13 +17,16 @@ content:
   field_media_in_library:
     type: boolean_checkbox
     weight: 1
-    settings: { display_label: true }
+    settings:
+      display_label: true
     third_party_settings: {  }
     region: content
   name:
     type: string_textfield
     weight: 0
-    settings: { size: 60, placeholder: '' }
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
     region: content
   preview:

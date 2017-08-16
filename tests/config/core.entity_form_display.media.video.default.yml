@@ -8,6 +8,7 @@ dependencies:
   module:
     - video_embed_field
     - workbench_moderation
+_core: {  }
 id: media.video.default
 targetEntityType: media
 bundle: video
@@ -16,7 +17,8 @@ content:
   field_media_in_library:
     type: boolean_checkbox
     weight: 1
-    settings: { display_label: true }
+    settings:
+      display_label: true
     third_party_settings: {  }
     region: content
   field_media_video_embed_field:
@@ -28,7 +30,9 @@ content:
   name:
     type: string_textfield
     weight: 0
-    settings: { size: 60, placeholder: '' }
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
     region: content
   preview:

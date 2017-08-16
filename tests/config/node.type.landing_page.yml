@@ -6,12 +6,18 @@ dependencies:
     - workbench_moderation
 third_party_settings:
   menu_ui:
-    available_menus: [main]
+    available_menus:
+      - main
     parent: 'main:'
   workbench_moderation:
     enabled: true
-    allowed_moderation_states: [archived, draft, needs_review, published]
+    allowed_moderation_states:
+      - archived
+      - draft
+      - needs_review
+      - published
     default_moderation_state: draft
+_core: {  }
 name: 'Landing page'
 type: landing_page
 description: 'A special page with its own one-off layout and content.'

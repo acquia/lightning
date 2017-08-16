@@ -8,6 +8,7 @@ dependencies:
     - media_entity.bundle.video
   module:
     - video_embed_field
+_core: {  }
 id: media.video.embedded
 targetEntityType: media
 bundle: video
@@ -17,7 +18,11 @@ content:
     type: video_embed_field_video
     weight: 2
     label: hidden
-    settings: { responsive: true, width: 854, height: 480, autoplay: true }
+    settings:
+      responsive: true
+      width: 854
+      height: 480
+      autoplay: true
     third_party_settings: {  }
     region: content
 hidden:
