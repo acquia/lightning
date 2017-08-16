@@ -63,6 +63,7 @@ projects[schemata][version] = 1.0-alpha2
 projects[search_api][type] = module
 projects[search_api][version] = 1.3
 projects[simple_oauth][type] = module
+projects[simple_oauth][patch][] = https://www.drupal.org/files/issues/2901180-8.patch
 projects[simple_oauth][version] = 2.0-rc3
 projects[token][type] = module
 projects[token][version] = 1.0
