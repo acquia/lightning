@@ -28,10 +28,17 @@ class SettingsForm extends ConfigFormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $config = $this->config('lightning_api.settings');
+
     $form['entity_json'] = [
       '#type' => 'checkbox',
       '#title' => $this->t('Expose a "View JSON" link in entity operations'),
-      '#default_value' => $this->config('lightning_api.settings')->get('entity_json'),
+      '#default_value' => $config->get('entity_json'),
+    ];
+    $form['bundle_docs'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Expose a "View API Documentation" link in bundle entity operations'),
+      '#default_value' => $config->get('bundle_docs'),
     ];
     return parent::buildForm($form, $form_state);
   }
@@ -42,6 +49,7 @@ class SettingsForm extends ConfigFormBase {
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $this->config('lightning_api.settings')
       ->set('entity_json', (bool) $form_state->getValue('entity_json'))
+      ->set('bundle_docs', (bool) $form_state->getValue('bundle_docs'))
       ->save();
 
     parent::submitForm($form, $form_state);
