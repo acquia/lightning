@@ -5,76 +5,13 @@
  * Provides workflow enhancements for Drupal.
  */
 
-use Drupal\Core\Entity\EntityInterface;
-use Drupal\Core\Entity\EntityPublishedInterface;
-use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\lightning_core\OverrideHelper as Override;
-use Drupal\lightning_core\Routing\RouteSubscriber;
 use Drupal\lightning_workflow\Form\NodeForm;
 use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
 use Drupal\views\ViewEntityInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
-
-/**
- * Implements hook_theme_registry_alter().
- */
-function lightning_workflow_theme_registry_alter(array &$theme_registry) {
-  foreach ($theme_registry as $hook => &$info) {
-    if ($hook == 'field' || (isset($info['base hook']) && $info['base hook'] == 'field')) {
-      // We wrap around Quick Edit's preprocess function, so it should not be
-      // run directly.
-      $info['preprocess functions'] = array_diff($info['preprocess functions'], ['quickedit_preprocess_field']);
-    }
-  }
-}
-
-/**
- * Implements template_preprocess_field().
- */
-function lightning_workflow_preprocess_field(array &$variables) {
-  if (\Drupal::moduleHandler()->moduleExists('quickedit')) {
-    quickedit_preprocess_field($variables);
-
-    /** @var \Drupal\Core\Entity\EntityInterface $entity */
-    $entity = $variables['element']['#object'];
-
-    if ($entity instanceof EntityPublishedInterface && $entity->isPublished() && RouteSubscriber::isViewing($entity)) {
-      unset($variables['attributes']['data-quickedit-field-id']);
-    }
-  }
-}
-
-/**
- * Implements hook_module_implements_alter().
- */
-function lightning_workflow_module_implements_alter(array &$implementations, $hook) {
-  // We have to check for hook_node_view_alter() because of absolute insanity
-  // in ModuleHandler::alter() and the way it determines the implementations of
-  // 'secondary' alter hooks. It's weird logic that is pretty close to
-  // inexplicable...but trust me, to wrap around quickedit_entity_view_alter(),
-  // we need to alter the implementations of hook_node_view_alter(). Granted,
-  // this will only work for nodes. If we want to do this for another entity
-  // type, we'll have to check for its entity type-specific view_alter hook as
-  // well.
-  if ($hook == 'node_view_alter') {
-    unset($implementations['quickedit']);
-  }
-}
-
-/**
- * Implements hook_entity_view_alter().
- */
-function lightning_workflow_entity_view_alter(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display) {
-  if (\Drupal::moduleHandler()->moduleExists('quickedit')) {
-    quickedit_entity_view_alter($build, $entity, $display);
-
-    if ($entity instanceof EntityPublishedInterface && $entity->isPublished() && RouteSubscriber::isViewing($entity)) {
-      unset($build['#attributes']['data-quickedit-entity-id']);
-    }
-  }
-}
 
 /**
  * Implements hook_ENTITY_TYPE_presave().

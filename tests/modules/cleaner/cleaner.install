@@ -1,0 +1,14 @@
+<?php
+
+/**
+ * Implements hook_uninstall().
+ */
+function cleaner_uninstall() {
+  $delete = \Drupal::state()->get('cleaner', []);
+
+  foreach ($delete as $entity) {
+    entity_load($entity[0], $entity[1])->delete();
+  }
+
+  \Drupal::state()->delete('cleaner');
+}

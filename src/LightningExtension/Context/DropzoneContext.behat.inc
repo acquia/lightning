@@ -38,7 +38,9 @@ class DropzoneContext extends DrupalSubContextBase {
     $this->getSession()
       ->executeScript('Dropzone.instances[0].hiddenFileInput.name = "file"');
 
-    $this->minkContext->attachFileToField('file', $file);
+    /** @var MinkContext $context */
+    $this->getContext(MinkContext::class);
+    $context->attachFileToField('file', $file);
 
     // TODO: React when the upload actually completes.
     sleep(3);

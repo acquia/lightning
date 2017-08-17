@@ -120,9 +120,7 @@ Feature: Panelizer
     And I press "Save block"
     And I visit "/admin/content"
     And I click "Fox"
-    And I click "New draft"
-    And I select "Archived" from "Moderation state"
-    And I press "Save"
+    And I create an archived revision
     And I am an anonymous user
     And I visit "/"
     Then I should not see "The quick brown Fox jumps over the lazy Dana."

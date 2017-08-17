@@ -1,0 +1,33 @@
+<?php
+
+/**
+ * Implements hook_schema().
+ */
+function lightning_inline_block_schema() {
+  return [
+    'inline_entity' => [
+      'fields' => [
+        'uuid' => [
+          'type' => 'varchar',
+          'length' => 64,
+          'not null' => TRUE,
+        ],
+        'block_id' => [
+          'type' => 'varchar',
+          'length' => 64,
+          'not null' => TRUE,
+        ],
+        'entity_type' => [
+          'type' => 'varchar',
+          'length' => 255,
+          'not null' => TRUE,
+        ],
+        'entity_id' => [
+          'type' => 'int',
+          'not null' => TRUE,
+        ],
+      ],
+      'primary key' => ['uuid'],
+    ],
+  ];
+}

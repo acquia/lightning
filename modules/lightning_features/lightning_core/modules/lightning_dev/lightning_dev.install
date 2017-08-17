@@ -227,8 +227,17 @@ function lightning_dev_update_8007() {
       'access toolbar',
     ]);
 
-  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $installer */
-  $installer = \Drupal::service('module_installer');
-  $installer->uninstall(['page_manager']);
-  $installer->install(['lightning_api']);
+  user_role_grant_permissions('layout_manager', ['administer blocks']);
+
+  /** @var \Drupal\Core\Extension\ModuleInstallerInterface $module_installer */
+  $module_installer = \Drupal::service('module_installer');
+  $module_installer->uninstall(['page_manager']);
+  $module_installer->install(['lightning_api']);
+}
+
+/**
+ * Executes manual update steps for Lightning 2.1.7 --> 2.1.8.
+ */
+function lightning_dev_update_8008() {
+  \Drupal::service('module_installer')->install(['lightning_inline_block']);
 }

@@ -2,30 +2,15 @@
 
 namespace Acquia\LightningExtension\Context;
 
-use Behat\Mink\Driver\Selenium2Driver;
+use Acquia\LightningExtension\AwaitTrait;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\MinkContext;
 
 /**
  * A context for working with the Panels in-place editor.
  */
 class PanelsInPlaceContext extends DrupalSubContextBase {
 
-  /**
-   * The Mink context.
-   *
-   * @var MinkContext
-   */
-  protected $minkContext;
-
-  /**
-   * Gathers required contexts.
-   *
-   * @BeforeScenario
-   */
-  public function gatherContexts() {
-    $this->minkContext = $this->getContext(MinkContext::class);
-  }
+  use AwaitTrait;
 
   /**
    * Returns the active Panels IPE tab's contents.
@@ -74,7 +59,7 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
     // ...but only open it if not already active.
     if ($link->getParent()->hasClass('active') == FALSE) {
       $link->click();
-      $this->minkContext->iWaitForAjaxToFinish();
+      $this->awaitAjax();
     }
 
     return $this->getActiveTab();
@@ -104,7 +89,7 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
     // ...but only open it if not already active.
     if ($link->hasClass('active') == FALSE) {
       $link->click();
-      $this->minkContext->iWaitForAjaxToFinish();
+      $this->awaitAjax();
     }
 
     return $tab;
@@ -171,7 +156,7 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
     $this->assertBlockPluginExists($plugin_id, $category)
       ->click();
 
-    $this->minkContext->iWaitForAjaxToFinish();
+    $this->awaitAjax();
 
     return $this->assertSession()
       ->elementExists('css', '.panels-ipe-block-plugin-form', $this->getActiveTab());
@@ -191,7 +176,7 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
       )
       ->click();
 
-    $this->minkContext->iWaitForAjaxToFinish();
+    $this->awaitAjax();
   }
 
   /**
@@ -209,7 +194,7 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
     $this->instantiateBlock($plugin_id, $category)
       ->pressButton('Add');
 
-    $this->minkContext->iWaitForAjaxToFinish();
+    $this->awaitAjax();
   }
 
   /**
@@ -222,9 +207,82 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
       ->elementExists('named', ['link', 'Revert to default'], $this->assertTray())
       ->click();
 
-    /** @var \Acquia\LightningExtension\Context\UtilityContext $utility */
-    $utility = $this->getContext(UtilityContext::class);
-    $utility->acceptAlerts([$this->minkContext, 'iWaitForAjaxToFinish']);
+    $this->getContext(UtilityContext::class)->acceptAlerts(function () {
+      $this->awaitAjax();
+    });
+  }
+
+  /**
+   * @param $block_type
+   *
+   * @When I create a :block_type block
+   */
+  public function createBlock($block_type) {
+    $assert = $this->assertSession();
+
+    $tab = $this->openTab('Manage Content');
+
+    $assert
+      ->elementExists('named', ['link', 'Create Content'], $tab)
+      ->click();
+    $this->awaitAjax();
+
+    $assert
+      ->elementExists('css', 'a[data-block-type = "' . $block_type . '"]', $tab)
+      ->click();
+    $this->awaitAjax();
+  }
+
+  /**
+   * @param $title
+   *
+   * @When I configure the :title block
+   */
+  public function configureBlock($title) {
+    $this->openTab('Edit');
+
+    $this->assertSession()
+      ->elementExists('named_exact', ['content', "Block: $title"])
+      ->getParent()
+      ->find('css', '[data-action-id="configure"] a')
+      ->click();
+
+    $this->awaitAjax();
+  }
+
+  /**
+   * @param $layout
+   * @param $category
+   *
+   * @When I switch to the :layout layout from the :category category
+   */
+  public function switchLayout($layout, $category) {
+    $assert = $this->assertSession();
+
+    $tab = $this->openTab('Change Layout');
+
+    $assert
+      ->elementExists('css', 'a.ipe-category[data-category = "' . $category . '"]', $tab)
+      ->click();
+
+    $this->awaitAjax();
+
+    $assert
+      ->elementExists('named', ['content', $layout], $tab)
+      ->click();
+
+    $this->awaitAjax();
+  }
+
+  /**
+   * @param $plugin_id
+   * @param $region
+   *
+   * @Then I should see a(n) :plugin_id block in the :region region
+   */
+  public function assertBlockPluginInRegion($plugin_id, $region) {
+    $this->assertSession()
+      ->elementExists('css', '[data-region-name="' . $region . '"] [data-block-plugin-id="' . $plugin_id . '"]');
   }
 
 }

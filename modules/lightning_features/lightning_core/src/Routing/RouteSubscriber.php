@@ -2,9 +2,7 @@
 
 namespace Drupal\lightning_core\Routing;
 
-use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Routing\RouteMatchInterface;
 use Drupal\Core\Routing\RouteSubscriberBase;
 use Drupal\Core\Routing\RoutingEvents;
 use Drupal\lightning_core\Controller\FieldUiTitleController;
@@ -56,27 +54,6 @@ class RouteSubscriber extends RouteSubscriberBase {
       // A customized form display under 'Manage display'.
       $this->setBundleAsTitle("entity.entity_form_display.$id.form_mode", $collection);
     }
-  }
-
-  /**
-   * Checks if we are currently viewing an entity at its canonical route.
-   *
-   * @param \Drupal\Core\Entity\EntityInterface $entity
-   *   The entity.
-   * @param \Drupal\Core\Routing\RouteMatchInterface|NULL $route_match
-   *   (optional) The current route match.
-   *
-   * @return bool
-   *   TRUE if we are at the entity's canonical route, FALSE otherwise.
-   */
-  public static function isViewing(EntityInterface $entity, RouteMatchInterface $route_match = NULL) {
-    $route_match = $route_match ?: \Drupal::routeMatch();
-
-    $entity_type = $entity->getEntityTypeId();
-
-    return
-      $route_match->getRouteName() == "entity.$entity_type.canonical" &&
-      $route_match->getRawParameter($entity_type) == $entity->id();
   }
 
   /**

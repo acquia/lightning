@@ -56,6 +56,10 @@ use. For example, if you are currently running Beta 1 and are trying to update
 to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
+## 2.1.7 to 2.1.8
+* Grant the "Administer blocks" permission to the **Layout manager** role, if
+  it exists.
+
 ## 2.1.6. to 2.1.7
 * **IMPORTANT!** Page Manager is no longer a dependency of Lightning Layout,
   and it will no longer ship with Lightning as of the next release. Therefore,

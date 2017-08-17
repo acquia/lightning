@@ -2,31 +2,17 @@
 
 namespace Acquia\LightningExtension\Context;
 
+use Acquia\LightningExtension\AwaitTrait;
 use Behat\Mink\Exception\ElementNotFoundException;
 use Drupal\Component\Utility\Html;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\MinkContext;
 
 /**
  * Contains step definitions for working with entity browsers.
  */
 class EntityBrowserContext extends DrupalSubContextBase {
 
-  /**
-   * The Mink context.
-   *
-   * @var MinkContext
-   */
-  protected $minkContext;
-
-  /**
-   * Gathers required contexts.
-   *
-   * @BeforeScenario
-   */
-  public function gatherContexts() {
-    $this->minkContext = $this->getContext(MinkContext::class);
-  }
+  use AwaitTrait;
 
   /**
    * Submits the entity browser.
@@ -44,7 +30,7 @@ class EntityBrowserContext extends DrupalSubContextBase {
     // exists at all, or that it's the correct submit button.
     $session->executeScript('frames["' . $frame . '"].document.forms[0].querySelector("#edit-submit").click()');
     sleep(10);
-    $this->minkContext->iWaitForAjaxToFinish();
+    $this->awaitAjax();
   }
 
   /**
@@ -67,7 +53,7 @@ class EntityBrowserContext extends DrupalSubContextBase {
     $details = $context->findCollapsible($field);
     if ($details) {
       $details->pressButton('Select Image(s)');
-      $this->minkContext->iWaitForAjaxToFinish();
+      $this->awaitAjax();
       $session->switchToIFrame('entity_browser_iframe_image_browser');
       // This might be vestigial.
       sleep(10);

@@ -1,0 +1,77 @@
+<?php
+
+use Drupal\file\Entity\File;
+use Drupal\entity_browser\Element\EntityBrowserElement;
+use Drupal\lightning_core\ConfigHelper as Config;
+use Drupal\media_entity\Entity\Media;
+
+/**
+ * Implements hook_install().
+ */
+function inline_block_test_install() {
+  entity_get_form_display('block_content', 'basic', 'default')
+    ->setComponent('field_image', [
+      'type' => 'entity_browser_entity_reference',
+      'settings' => [
+        'entity_browser' => 'media_browser',
+        'field_widget_display' => 'rendered_entity',
+        'field_widget_edit' => TRUE,
+        'field_widget_remove' => TRUE,
+        'selection_mode' => EntityBrowserElement::SELECTION_MODE_APPEND,
+        'field_widget_display_settings' => [
+          'view_mode' => 'thumbnail',
+        ],
+        'open' => TRUE,
+      ],
+      'region' => 'content',
+    ])
+    ->save();
+
+  entity_get_display('block_content', 'basic', 'default')
+    ->setComponent('field_image', [
+      'type' => 'entity_reference_label',
+      'settings' => [
+        'link' => TRUE,
+      ],
+      'region' => 'content',
+    ])
+    ->save();
+
+  $uri = file_unmanaged_copy(__DIR__ . '/images/sloth.jpg');
+  if (empty($uri)) {
+    throw new Exception('Could not copy test image.');
+  }
+
+  $image = File::create([
+    'uri' => $uri,
+  ]);
+  $image->setTemporary();
+  $image->save();
+
+  Media::create([
+    'name' => 'LIGHTNING SLOTH TEST IMAGE 2000-01-01 PASTAFAZOUL WAMBOOLI',
+    'bundle' => 'image',
+    'image' => $image->id(),
+  ])->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function inline_block_test_uninstall() {
+  entity_get_form_display('block_content', 'basic', 'default')
+    ->removeComponent('field_image')
+    ->save();
+
+  entity_get_display('block_content', 'basic', 'default')
+    ->removeComponent('field_image')
+    ->save();
+
+  $storage = \Drupal::entityTypeManager()->getStorage('media');
+  $junk = $storage->loadByProperties([
+    'name' => 'LIGHTNING SLOTH TEST IMAGE 2000-01-01 PASTAFAZOUL WAMBOOLI',
+  ]);
+  $storage->delete($junk);
+
+  Config::forModule('inline_block_test')->deleteAll();
+}

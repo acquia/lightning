@@ -1,0 +1,17 @@
+<?php
+
+use Drupal\block_content\BlockContentInterface;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function cleaner_block_content_insert(BlockContentInterface $entity) {
+  $delete = \Drupal::state()->get('cleaner', []);
+
+  array_push($delete, [
+    $entity->getEntityTypeId(),
+    $entity->id(),
+  ]);
+
+  \Drupal::state()->set('cleaner', $delete);
+}

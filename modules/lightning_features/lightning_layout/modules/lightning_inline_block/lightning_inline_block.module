@@ -1,0 +1,74 @@
+<?php
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\lightning_inline_block\Form\InlineContentForm;
+
+/**
+ * Implements hook_entity_extra_field_info().
+ */
+function lightning_inline_block_entity_extra_field_info() {
+  // @see InlineContentForm::form()
+  $fields = [
+    'region' => [
+      'label' => t('Region'),
+      'description' => t('The region into which the block should be placed.'),
+      'weight' => 10,
+    ],
+    'global' => [
+      'label' => t('Reusable'),
+      'description' => t('Whether the block should be reusable.'),
+      'weight' => 11,
+    ],
+  ];
+  $extra_fields = [];
+
+  foreach (\Drupal::entityQuery('block_content_type')->execute() as $block_type) {
+    $extra_fields['block_content'][$block_type]['form'] = $fields;
+  }
+  return $extra_fields;
+}
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function lightning_inline_block_entity_type_alter(array &$entity_types) {
+  $entity_types['block_content']->setFormClass('panels_ipe', InlineContentForm::class);
+}
+
+/**
+ * Implements hook_entity_delete().
+ */
+function lightning_inline_block_entity_delete(EntityInterface $entity) {
+  $entity_id = $entity->id();
+
+  if (is_numeric($entity_id)) {
+    \Drupal::database()
+      ->delete('inline_entity')
+      ->condition('entity_type', $entity->getEntityTypeId())
+      ->condition('entity_id', $entity_id)
+      ->execute();
+  }
+}
+
+/**
+ * Implements hook_library_info_alter().
+ */
+function lightning_inline_block_library_info_alter(&$libraries, $extension) {
+  if ($extension == 'panels_ipe') {
+    $js = drupal_get_path('module', 'lightning_inline_block') . '/js/ajax.js';
+    $js = file_create_url($js);
+    $js = file_url_transform_relative($js);
+    $libraries['panels_ipe']['js'][$js] = [];
+  }
+}
+
+/**
+ * Implements hook_panels_ipe_blocks_alter().
+ */
+function lightning_inline_block_panels_ipe_blocks_alter(array &$blocks = []) {
+  foreach ($blocks as $i => $block) {
+    if ($block['provider'] == 'lightning_inline_block') {
+      unset($blocks[$i]);
+    }
+  }
+}
