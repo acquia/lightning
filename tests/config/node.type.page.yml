@@ -7,14 +7,20 @@ dependencies:
     - workbench_moderation
 third_party_settings:
   menu_ui:
-    available_menus: [main]
+    available_menus:
+      - main
     parent: 'main:'
   workbench_moderation:
     enabled: true
-    allowed_moderation_states: [archived, draft, needs_review, published]
+    allowed_moderation_states:
+      - archived
+      - draft
+      - needs_review
+      - published
     default_moderation_state: draft
   lightning_scheduled_updates:
     embargo: true
+_core: {  }
 name: 'Basic page'
 type: page
 description: 'Use <em>basic pages</em> for your static content, such as an ''About us'' page.'

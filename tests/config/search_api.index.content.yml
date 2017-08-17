@@ -7,6 +7,7 @@ dependencies:
   module:
     - search_api
     - node
+_core: {  }
 id: content
 name: Content
 description: 'An index of all content in your site.'
@@ -16,12 +17,21 @@ field_settings:
     label: Rendered
     property_path: rendered_item
     type: text
-    configuration: { roles: { anonymous: anonymous }, view_mode: { 'entity:node': { page: default, landing_page: full } } }
+    configuration:
+      roles:
+        anonymous: anonymous
+      view_mode:
+        'entity:node':
+          page: default
+          landing_page: full
   label:
     label: Label
     property_path: aggregated_field
     type: text
-    configuration: { type: first, fields: ['entity:node/title'] }
+    configuration:
+      type: first
+      fields:
+        - 'entity:node/title'
   status:
     label: null
     datasource_id: 'entity:node'
@@ -45,40 +55,105 @@ field_settings:
     hidden: true
 datasource_settings:
   'entity:node':
-    bundles: { default: true, selected: {  } }
-    languages: { default: true, selected: {  } }
+    bundles:
+      default: true
+      selected: {  }
+    languages:
+      default: true
+      selected: {  }
 processor_settings:
   add_url: {  }
   aggregated_field: {  }
   content_access:
-    weights: { preprocess_query: -10 }
+    weights:
+      preprocess_query: -10
   html_filter:
-    fields: [rendered, label]
+    fields:
+      - rendered
+      - label
     title: true
     alt: true
-    tags: { h1: 5, h2: 3, h3: 2, strong: 2, b: 2 }
-    weights: { preprocess_index: -10, preprocess_query: -9 }
+    tags:
+      h1: 5
+      h2: 3
+      h3: 2
+      strong: 2
+      b: 2
+    weights:
+      preprocess_index: -10
+      preprocess_query: -9
     all_fields: false
   ignorecase:
-    fields: [rendered, label]
-    weights: { preprocess_index: -9, preprocess_query: -8 }
+    fields:
+      - rendered
+      - label
+    weights:
+      preprocess_index: -9
+      preprocess_query: -8
     all_fields: false
   rendered_item: {  }
   stopwords:
-    fields: [rendered, label]
-    stopwords: [a, an, and, are, as, at, be, but, by, for, if, in, into, is, it, 'no', not, of, 'on', or, s, such, t, that, the, their, then, there, these, they, this, to, was, will, with]
-    weights: { preprocess_index: -5, preprocess_query: -4 }
+    fields:
+      - rendered
+      - label
+    stopwords:
+      - a
+      - an
+      - and
+      - are
+      - as
+      - at
+      - be
+      - but
+      - by
+      - for
+      - if
+      - in
+      - into
+      - is
+      - it
+      - 'no'
+      - not
+      - of
+      - 'on'
+      - or
+      - s
+      - such
+      - t
+      - that
+      - the
+      - their
+      - then
+      - there
+      - these
+      - they
+      - this
+      - to
+      - was
+      - will
+      - with
+    weights:
+      preprocess_index: -5
+      preprocess_query: -4
     all_fields: false
   tokenizer:
-    fields: [rendered, label]
+    fields:
+      - rendered
+      - label
     spaces: ''
     overlap_cjk: 1
     minimum_word_size: '3'
-    weights: { preprocess_index: -6, preprocess_query: -5 }
+    weights:
+      preprocess_index: -6
+      preprocess_query: -5
     all_fields: false
   transliteration:
-    fields: [rendered, label]
-    weights: { preprocess_index: -4, preprocess_query: -3 }
+    fields:
+      - rendered
+      - label
+    weights:
+      preprocess_index: -4
+      preprocess_query: -3
     all_fields: false
 tracker_settings:
   default: {  }

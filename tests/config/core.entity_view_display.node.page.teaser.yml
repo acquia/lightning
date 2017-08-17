@@ -4,11 +4,11 @@ dependencies:
   config:
     - core.entity_view_mode.node.teaser
     - field.field.node.page.body
-    - field.field.node.page.field_meta_tags
     - node.type.page
   module:
     - text
     - user
+_core: {  }
 id: node.page.teaser
 targetEntityType: node
 bundle: page
@@ -18,7 +18,8 @@ content:
     label: hidden
     type: text_summary_or_trimmed
     weight: 100
-    settings: { trim_length: 600 }
+    settings:
+      trim_length: 600
     third_party_settings: {  }
     region: content
   links:
@@ -27,5 +28,4 @@ content:
   workbench_moderation_control:
     weight: -20
     region: content
-hidden:
-  field_meta_tags: true
+hidden: {  }

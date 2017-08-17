@@ -36,6 +36,10 @@
         {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
+        },
+        {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
         }
     ],
     "scripts": {
@@ -53,15 +57,22 @@
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
         "package": "Acquia\\Lightning\\Composer\\Package::execute",
         "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
-        "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute"
+        "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute",
+        "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute"
     },
     "extra": {
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
         "installer-paths": {
             "docroot/core": [
                 "type:drupal-core"
             ],
             "docroot/libraries/{$name}": [
-                "type:drupal-library"
+                "type:drupal-library",
+                "type:bower-asset",
+                "type:npm-asset"
             ],
             "docroot/profiles/lightning/modules/contrib/{$name}": [
                 "type:drupal-module"
@@ -80,7 +91,7 @@
                 "2652138 - ImageFormatter does not support SVGs":
                 "https://www.drupal.org/files/issues/2652138-41.patch",
                 "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order":
-                "https://www.drupal.org/files/issues/1356276-303.patch",
+                "https://www.drupal.org/files/issues/1356276-360.patch",
                 "2880374 - Experimental modules should not have warnings after being installed":
                 "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
                 "2880445 - Config sync should not throw a warning when not being writable":
@@ -102,13 +113,13 @@
             },
             "drush/drush": {
                 "2697 - Don't add profile dependencies to required_by array of modules":
-                "https://patch-diff.githubusercontent.com/raw/drush-ops/drush/pull/2697.patch"
+                "https://www.drupal.org/files/issues/2902643-2--drush-8.x.patch"
             },
             "drupal/entity_browser": {
                 "2865928 - The View widget should filter based on field settings":
                 "https://www.drupal.org/files/issues/entity-browser-view-context-2865928-8.patch",
                 "2877751 - Inform users how many items they can add to a field that uses an entity browser":
-                "https://www.drupal.org/files/issues/2877751-10.patch"
+                "https://www.drupal.org/files/issues/2877751-17.patch"
             },
             "drupal/panels": {
                 "2878684 - Use String.match to correlate regions when switching Layouts in Panels IPE":
@@ -117,18 +128,18 @@
                 "https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch"
             },
             "drupal/ctools": {
-                "2876732 - Implement an API to \"mask\" entity types":
-                "https://www.drupal.org/files/issues/2876732-21.patch",
-                "2883103 - BlockVariantTrait should fire events":
-                "https://www.drupal.org/files/issues/2883103-8.patch",
-                "2893595 - Mask entity types should be aware of masked entity types' display modes":
-                "https://www.drupal.org/files/issues/2893595-2.patch"
+                "2876732 - Implement an API to \"mask\" entity types": "https://www.drupal.org/files/issues/2876732-21.patch",
+                "2883103 - BlockVariantTrait should fire events": "https://www.drupal.org/files/issues/2883103-8.patch",
+                "2893595 - Mask entity types should be aware of masked entity types' display modes": "https://www.drupal.org/files/issues/2893595-2.patch"
+            },
+            "drupal/simple_oauth": {
+                "2901180 - thephpleague/oauth2-server now requires an EncryptionKey to be set on all instances of AuthorizationServer":
+                "https://www.drupal.org/files/issues/2901180-8.patch"
             }
         }
     },
     "require": {
         "cweagans/composer-patches": "^1.5.0",
-        "composer/installers": "^1.2",
         "drupal/core": "~8.3.1",
         "drupal/embed": "^1.0",
         "drupal/entity_embed": "1.0.0-beta2",
@@ -150,7 +161,7 @@
         "drupal/token": "^1.0",
         "drupal-composer/drupal-scaffold": "^2.0.0",
         "drupal/pathauto": "^1.0",
-        "drupal/entity_browser": "1.0.0",
+        "drupal/entity_browser": "1.1.0",
         "drupal/views_infinite_scroll": "^1.1",
         "drupal/media_entity_document": "^1.0",
         "drupal/video_embed_field": "^1.0",
@@ -160,7 +171,8 @@
         "drupal/search_api": "^1.0",
         "drupal/jsonapi": "^1.1",
         "drupal/openapi": "1.0-alpha1",
-        "drupal/simple_oauth": "^2.0@RC"
+        "drupal/simple_oauth": "2.0.0-rc3",
+        "oomphinc/composer-installers-extender": "^1.1"
     },
     "autoload": {
         "psr-4": {

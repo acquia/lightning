@@ -7,6 +7,7 @@ dependencies:
   module:
     - text
     - workbench_moderation
+_core: {  }
 id: block_content.basic.default
 targetEntityType: block_content
 bundle: basic
@@ -15,7 +16,10 @@ content:
   body:
     type: text_textarea_with_summary
     weight: 0
-    settings: { rows: 9, summary_rows: 3, placeholder: '' }
+    settings:
+      rows: 9
+      summary_rows: 3
+      placeholder: ''
     third_party_settings: {  }
     region: content
   global:
@@ -24,7 +28,9 @@ content:
   info:
     type: string_textfield
     weight: -5
-    settings: { size: 60, placeholder: '' }
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
     region: content
   region:

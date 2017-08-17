@@ -10,6 +10,7 @@ dependencies:
     - file
     - image
     - user
+_core: {  }
 id: media.document.default
 targetEntityType: media
 bundle: document
@@ -19,7 +20,10 @@ content:
     label: hidden
     type: timestamp
     weight: 0
-    settings: { date_format: medium, custom_date_format: '', timezone: '' }
+    settings:
+      date_format: medium
+      custom_date_format: ''
+      timezone: ''
     third_party_settings: {  }
     region: content
   field_document:
@@ -33,14 +37,17 @@ content:
     label: hidden
     type: string
     weight: -5
-    settings: { link_to_entity: false }
+    settings:
+      link_to_entity: false
     third_party_settings: {  }
     region: content
   thumbnail:
     type: image
     weight: 1
     label: hidden
-    settings: { image_style: thumbnail, image_link: '' }
+    settings:
+      image_style: thumbnail
+      image_link: ''
     third_party_settings: {  }
     region: content
   uid:

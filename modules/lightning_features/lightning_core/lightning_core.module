@@ -24,6 +24,19 @@ function lightning_core_local_tasks_alter(array &$local_tasks) {
 }
 
 /**
+ * Implements hook_library_info_alter().
+ */
+function lightning_core_library_info_alter(array &$libraries, $extension) {
+  if ($extension == 'seven') {
+    $url = drupal_get_path('module', 'lightning_core') . '/css/admin-list.grid.css';
+    $url = file_create_url($url);
+    $url = file_url_transform_relative($url);
+
+    $libraries['global-styling']['css']['component'][$url] = [];
+  }
+}
+
+/**
  * Implements hook_config_schema_info_alter().
  */
 function lightning_core_config_schema_info_alter(array &$definitions) {

@@ -50,6 +50,10 @@ function lightning_dev_install() {
   $widgets['8b142f33-59d1-47b1-9e3a-4ae85d8376fa']['label'] = 'Create embed';
   $entity_browser->set('widgets', $widgets);
   $entity_browser->save();
+
+  if (\Drupal::moduleHandler()->moduleExists('lightning_api')) {
+    lightning_dev_modules_installed(['lightning_api']);
+  }
 }
 
 /**

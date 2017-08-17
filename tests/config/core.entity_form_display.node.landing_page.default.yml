@@ -12,6 +12,7 @@ dependencies:
     - path
     - text
     - workbench_moderation
+_core: {  }
 id: node.landing_page.default
 targetEntityType: node
 bundle: landing_page
@@ -20,7 +21,10 @@ content:
   body:
     type: text_textarea_with_summary
     weight: 1
-    settings: { rows: 5, placeholder: '', summary_rows: 2 }
+    settings:
+      rows: 5
+      placeholder: ''
+      summary_rows: 2
     third_party_settings: {  }
     region: content
   created:
@@ -30,11 +34,11 @@ content:
     third_party_settings: {  }
     region: content
   field_meta_tags:
-    weight: 6
-    settings: {  }
-    third_party_settings: {  }
     type: metatag_firehose
     region: content
+    weight: 26
+    settings: {  }
+    third_party_settings: {  }
   panelizer:
     type: panelizer
     weight: 5
@@ -50,13 +54,18 @@ content:
   title:
     type: string_textfield
     weight: 0
-    settings: { size: 60, placeholder: '' }
+    settings:
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
     region: content
   uid:
     type: entity_reference_autocomplete
     weight: 2
-    settings: { match_operator: CONTAINS, size: 60, placeholder: '' }
+    settings:
+      match_operator: CONTAINS
+      size: 60
+      placeholder: ''
     third_party_settings: {  }
     region: content
 hidden:
