@@ -40,3 +40,13 @@ function lightning_api_install() {
     lightning_api_modules_installed(['simple_oauth']);
   }
 }
+
+/**
+ * Sets a default value for lightning_api.settings:bundle_docs.
+ */
+function lightning_api_update_8001() {
+  \Drupal::configFactory()
+    ->getEditable('lightning_api.settings')
+    ->set('bundle_docs', TRUE)
+    ->save();
+}
