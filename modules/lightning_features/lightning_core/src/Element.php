@@ -51,6 +51,24 @@ class Element {
   }
 
   /**
+   * Moves element(s) to the end of an associative array.
+   *
+   * @param array $values
+   *   The array to modify.
+   * @param mixed $key
+   *   The key(s) of the element(s) to move.
+   */
+  public static function toTail(array &$values, $key) {
+    $key = (array) $key;
+
+    $keys = array_keys($values);
+    $keys = array_diff($keys, $key);
+    $keys = array_merge($keys, $key);
+
+    static::order($values, $keys);
+  }
+
+  /**
    * Pre-render function to disable all buttons in a renderable element.
    *
    * @param array $element
