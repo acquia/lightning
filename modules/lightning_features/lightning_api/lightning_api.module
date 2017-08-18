@@ -93,7 +93,7 @@ function lightning_api_entity_operation(EntityInterface $entity) {
   }
 
   $bundle_of = $entity->getEntityType()->getBundleOf();
-  if ($bundle_of) {
+  if ($bundle_of && \Drupal::config('lightning_api.settings')->get('bundle_docs')) {
     $fragment = str_replace(' ', '-', sprintf(
       'tag/%s-%s',
       \Drupal::entityTypeManager()->getDefinition($bundle_of)->getLabel(),
