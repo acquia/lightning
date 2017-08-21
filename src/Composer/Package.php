@@ -30,22 +30,22 @@ class Package {
     $executor->execute($bin_dir . '/drush make-convert composer.lock', $make);
     $make = Yaml::parse($make);
 
-    // Include any drupal-library packages in the make file.
-    $libraries = $composer
-      ->getRepositoryManager()
-      ->getLocalRepository()
-      ->getPackages();
-
-    $libraries = array_filter($libraries, function (PackageInterface $package) {
-      return $package->getType() == 'drupal-library';
-    });
+    // Include any library packages in the make file.
+    $library_types = [
+      'drupal-library',
+      'bower-asset',
+      'npm-asset',
+    ];
+    $packages = $composer->getRepositoryManager()->getLocalRepository()->getPackages();
 
     // Drop the vendor prefixes.
-    foreach ($libraries as $library) {
-      $old_key = $library->getName();
-      $new_key = basename($old_key);
-      $make['libraries'][$new_key] = $make['libraries'][$old_key];
-      unset($make['libraries'][$old_key]);
+    foreach ($packages as $package) {
+      if (in_array($package->getType(), $library_types)) {
+        $old_key = $package->getName();
+        $new_key = basename($old_key);
+        $make['libraries'][$new_key] = $make['libraries'][$old_key];
+        unset($make['libraries'][$old_key]);
+      }
     }
 
     if (isset($make['projects']['drupal'])) {
