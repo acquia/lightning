@@ -54,6 +54,12 @@ class ConfigIntegrityTest extends BrowserTestBase {
       'square',
       'widescreen',
     ]);
+    $this->assertEntityExists('image_style', [
+      'crop_freeform',
+      'crop_fullscreen',
+      'crop_square',
+      'crop_widescreen',
+    ]);
 
     $permissions = [
       'use text format rich_text',

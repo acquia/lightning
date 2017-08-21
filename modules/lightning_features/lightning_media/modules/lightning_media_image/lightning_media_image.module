@@ -8,8 +8,36 @@
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_image\Plugin\MediaEntity\Type\Image;
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_media_image_crop_type_insert($crop_type) {
+  // Don't do anything during a config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  else {
+    // Create a dedicated image style to display images using this crop type.
+    /** @var \Drupal\crop\CropTypeInterface $crop_type */
+    $image_style = ImageStyle::create([
+      'name' => 'crop_' . $crop_type->id(),
+      'label' => t('Cropped: @crop_type', [
+        '@crop_type' => $crop_type->label(),
+      ]),
+    ]);
+    $image_style->addImageEffect([
+      'id' => 'crop_crop',
+      'data' => [
+        'crop_type' => $crop_type->id(),
+      ],
+    ]);
+    $image_style->save();
+  }
+}
 
 /**
  * Implements hook_modules_installed().
