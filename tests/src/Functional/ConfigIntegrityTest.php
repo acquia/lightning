@@ -48,6 +48,12 @@ class ConfigIntegrityTest extends BrowserTestBase {
       'page_creator',
       'page_reviewer',
     ]);
+    $this->assertEntityExists('crop_type', [
+      'freefrom',
+      'fullscreen',
+      'square',
+      'widescreen',
+    ]);
 
     $permissions = [
       'use text format rich_text',
