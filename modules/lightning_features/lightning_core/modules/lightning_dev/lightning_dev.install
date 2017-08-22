@@ -10,6 +10,7 @@ use Drupal\entity_browser\Entity\EntityBrowser;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\filter\Entity\FilterFormat;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\media_entity\Entity\MediaBundle;
 use Drupal\scheduled_updates\Entity\ScheduledUpdateType;
@@ -53,6 +54,25 @@ function lightning_dev_install() {
 
   if (\Drupal::moduleHandler()->moduleExists('lightning_api')) {
     lightning_dev_modules_installed(['lightning_api']);
+  }
+
+  // Normalize the effect UUIDs of the image styles generated for crop types.
+  $image_styles = array_map(
+    function ($crop_type) {
+      return 'crop_' . $crop_type;
+    },
+    \Drupal::entityQuery('crop_type')->execute()
+  );
+  $image_styles = ImageStyle::loadMultiple($image_styles);
+
+  /** @var ImageStyle $image_style */
+  foreach ($image_styles as $image_style) {
+    $effects = $image_style->getEffects();
+    $configuration = $effects->getConfiguration();
+    $effect = array_shift($configuration);
+    $effect['uuid'] = 'crop';
+    $effects->setConfiguration(['crop' => $effect]);
+    $image_style->save();
   }
 }
 
