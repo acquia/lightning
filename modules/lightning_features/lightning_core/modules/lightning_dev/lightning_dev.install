@@ -56,7 +56,6 @@ function lightning_dev_install() {
     lightning_dev_modules_installed(['lightning_api']);
   }
 
-  // Normalize the effect UUIDs of the image styles generated for crop types.
   $image_styles = array_map(
     function ($crop_type) {
       return 'crop_' . $crop_type;
