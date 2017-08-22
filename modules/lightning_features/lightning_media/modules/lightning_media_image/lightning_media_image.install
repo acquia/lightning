@@ -616,9 +616,9 @@ function lightning_media_image_update_8007() {
 
   $config = Config::forModule('lightning_media_image')->optional();
   $config->getEntity('crop_type', 'freeform')->save();
-  $config->getEntity('crop_type', 'fullscreen')->save();
+  $config->getEntity('crop_type', 'landscape')->save();
+  $config->getEntity('crop_type', 'portrait')->save();
   $config->getEntity('crop_type', 'square')->save();
-  $config->getEntity('crop_type', 'widescreen')->save();
 }
 
 /**

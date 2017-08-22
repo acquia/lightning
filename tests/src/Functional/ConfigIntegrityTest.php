@@ -50,15 +50,15 @@ class ConfigIntegrityTest extends BrowserTestBase {
     ]);
     $this->assertEntityExists('crop_type', [
       'freefrom',
-      'fullscreen',
+      'landscape',
+      'portrait',
       'square',
-      'widescreen',
     ]);
     $this->assertEntityExists('image_style', [
       'crop_freeform',
-      'crop_fullscreen',
+      'crop_landscape',
+      'crop_portrait',
       'crop_square',
-      'crop_widescreen',
     ]);
 
     $permissions = [
