@@ -29,27 +29,15 @@ use Drupal\media_entity\MediaBundleInterface;
  * Implements hook_config_schema_info_alter().
  */
 function lightning_media_config_schema_info_alter(array &$definitions) {
-  $properties = &$definitions['field.widget.settings.image_image']['mapping'];
-
-  $properties['file_links'] = [
-    'type' => 'boolean',
-    'label' => 'Show link(s) to uploaded file(s)',
-  ];
-  $properties['remove_button'] = [
-    'type' => 'boolean',
-    'label' => 'Show Remove button',
-  ];
+  $definitions['field.widget.settings.image_image']['mapping'] += ImageWidget::configSchema();
 }
 
 /**
  * Implements hook_field_widget_info_alter().
  */
 function lightning_media_field_widget_info_alter(array &$info) {
-  $info['image_image']['class'] = ImageWidget::class;
-
-  if (isset($info['entity_browser_entity_reference'])) {
-    Override::pluginClass($info['entity_browser_entity_reference'], EntityReferenceBrowserWidget::class);
-  }
+  Override::pluginClass($info['image_image'], ImageWidget::class);
+  Override::pluginClass($info['entity_browser_entity_reference'], EntityReferenceBrowserWidget::class);
 }
 
 /**

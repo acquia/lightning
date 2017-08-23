@@ -23,10 +23,31 @@ function lightning_media_image_install() {
   // Create the image browser display of the media view.
   lightning_media_image_update_8003();
 
+  $module_exists = [\Drupal::moduleHandler(), 'moduleExists'];
+
   // Grants image browser access to the creator content role and the
   // media_creator and media_manager roles.
-  if (\Drupal::moduleHandler()->moduleExists('lightning_roles')) {
+  if ($module_exists('lightning_roles')) {
     lightning_media_image_modules_installed(['lightning_roles']);
+  }
+
+  if ($module_exists('image_widget_crop') && !\Drupal::isConfigSyncing()) {
+    $form_displays = \Drupal::entityTypeManager()
+      ->getStorage('entity_form_display')
+      ->loadByProperties([
+        'targetEntityType' => 'media',
+        'bundle' => 'image',
+      ]);
+
+    /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
+    foreach ($form_displays as $form_display) {
+      $component = $form_display->getComponent('image');
+
+      if ($component && $component['type'] == 'image_image') {
+        $component['type'] = 'image_widget_crop';
+        $form_display->setComponent('image', $component)->save();
+      }
+    }
   }
 }
 
