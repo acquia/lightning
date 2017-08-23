@@ -45,6 +45,7 @@ function lightning_media_image_install() {
 
       if ($component && $component['type'] == 'image_image') {
         $component['type'] = 'image_widget_crop';
+        $component['settings']['show_crop_area'] = TRUE;
         $form_display->setComponent('image', $component)->save();
       }
     }
