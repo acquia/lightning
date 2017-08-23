@@ -59,6 +59,11 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
 ## 2.1.7 to 2.1.8
 * Lightning now has support for bulk uploading media assets. To enable this
   feature, install the Bulk Media Upload module from the Lightning Package.
+* New installs of Lightning that include the Workflow component will now place
+  the Operations drop-button as the last column of the /admin/content view.
+  To make this change in your existing Lightning installation, edit the
+  **content** view, move the Operations field to the end of the list of fields,
+  and save the changes.
 
 ## 2.1.6. to 2.1.7
 * **IMPORTANT!** Page Manager is no longer a dependency of Lightning Layout,
