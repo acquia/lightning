@@ -35,5 +35,13 @@ entity_browser.browser.widget.file_upload:
       type: boolean
       label: 'Return underlying file entity'
 
-field.widget.settings.image_immutable:
-  type: field.widget.settings.image_image
+field.widget.third_party.lightning_media:
+  type: mapping
+  label: 'Lightning Media settings'
+  mapping:
+    file_links:
+      type: boolean
+      label: 'Show links to uploaded files'
+    remove_button:
+      type: boolean
+      label: 'Show Remove button'

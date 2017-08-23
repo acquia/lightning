@@ -5,19 +5,22 @@
  * Core media asset support for Lightning.
  */
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
+use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Field\WidgetInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\PluralTranslatableMarkup as Plural;
 use Drupal\entity_browser\Element\EntityBrowserElement;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
+use Drupal\image\Plugin\Field\FieldWidget\ImageWidget;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\lightning_core\BundleEntityStorage;
 use Drupal\lightning_media\Exception\IndeterminateBundleException;
-use Drupal\lightning_media\Plugin\Field\FieldWidget\EntityReferenceBrowserWidget;
-use Drupal\lightning_media\Plugin\Field\FieldWidget\ImageWidget;
 use Drupal\lightning_media\MediaHelper;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media\Form\MediaForm;
@@ -26,18 +29,99 @@ use Drupal\media_entity\MediaInterface;
 use Drupal\media_entity\MediaBundleInterface;
 
 /**
- * Implements hook_config_schema_info_alter().
+ * Implements hook_field_widget_third_party_settings_form().
  */
-function lightning_media_config_schema_info_alter(array &$definitions) {
-  $definitions['field.widget.settings.image_image']['mapping'] += ImageWidget::configSchema();
+function lightning_media_field_widget_third_party_settings_form(WidgetInterface $plugin, FieldDefinitionInterface $field_definition, $form_mode, $form, FormStateInterface $form_state) {
+  $element = [];
+
+  if ($plugin instanceof ImageWidget) {
+    $element['file_links'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Show links to uploaded files'),
+      '#default_value' => $plugin->getThirdPartySetting('lightning_media', 'file_links', TRUE),
+    ];
+    $element['remove_button'] = [
+      '#type' => 'checkbox',
+      '#title' => t('Show Remove button'),
+      '#default_value' => $plugin->getThirdPartySetting('lightning_media', 'remove_button', TRUE),
+    ];
+  }
+  return $element;
 }
 
 /**
- * Implements hook_field_widget_info_alter().
+ * Implements hook_field_widget_settings_summary_alter().
  */
-function lightning_media_field_widget_info_alter(array &$info) {
-  Override::pluginClass($info['image_image'], ImageWidget::class);
-  Override::pluginClass($info['entity_browser_entity_reference'], EntityReferenceBrowserWidget::class);
+function lightning_media_field_widget_settings_summary_alter(array &$summary, array $context) {
+  /** @var WidgetInterface $widget */
+  $widget = $context['widget'];
+
+  if ($widget instanceof ImageWidget) {
+    $summary[] = t('@link to uploaded files', [
+      '@link' =>
+        t($widget->getThirdPartySetting('lightning_media', 'file_links', TRUE) ? 'Link' : 'Do not link'),
+    ]);
+
+    $summary[] = t('Remove button @status', [
+      '@status' =>
+        t($widget->getThirdPartySetting('lightning_media', 'remove_button', TRUE) ? 'enabled' : 'disabled'),
+    ]);
+  }
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function lightning_media_field_widget_image_image_form_alter(array &$element, FormStateInterface $form_state, array $context) {
+  /** @var WidgetInterface $widget */
+  $widget = $context['widget'];
+
+  $element['#settings'] = $widget->getThirdPartySettings('lightning_media');
+  $element['#process'][] = 'lightning_media_process_image_widget_managed_file';
+}
+
+/**
+ * {@inheritdoc}
+ */
+function lightning_media_process_image_widget_managed_file(array $element, FormStateInterface $form_state, array $form) {
+  // Get the settings stored by lightning_media_field_widget_image_image_form_alter().
+  $settings = $element['#array_parents'];
+  array_push($settings, '#settings');
+  $settings = NestedArray::getValue($form, $settings);
+
+  foreach ($element['fids']['#value'] as $fid) {
+    $element['file_' . $fid]['#access'] = $settings['file_links'];
+  }
+  $element['remove_button']['#access'] = $settings['remove_button'];
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function lightning_media_field_widget_entity_browser_entity_reference_form_alter(array &$element, FormStateInterface $form_state, array $context) {
+  // Move the remaining number of selections to the details summary.
+  $element['#description'] .= $element['current']['#prefix'];
+  unset($element['current']['#prefix']);
+
+  /** @var \Drupal\Core\Field\FieldItemListInterface $items */
+  $items = $context['items'];
+
+  // Wrap the current selections in a nice <details> element.
+  $cardinality = $items
+    ->getFieldDefinition()
+    ->getFieldStorageDefinition()
+    ->getCardinality();
+
+  $element['current']['#theme_wrappers'] = [
+    'details' => [
+      '#attributes' => [
+        'open' => TRUE,
+      ],
+      '#title' => new Plural($cardinality, 'Current selection', 'Current selections'),
+    ],
+  ];
 }
 
 /**

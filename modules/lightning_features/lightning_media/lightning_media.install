@@ -288,9 +288,12 @@ function lightning_media_update_8017() {
   foreach (EntityFormDisplay::loadMultiple() as $form_display) {
     foreach ($form_display->getComponents() as $key => $component) {
       if ($component['type'] == 'image_immutable') {
+        $component['third_party_settings']['lightning_media'] = [
+          'file_links' => FALSE,
+          'remove_button' => FALSE,
+        ];
         $component['type'] = 'image_image';
-        $component['settings']['file_links'] = FALSE;
-        $component['settings']['remove_button'] = FALSE;
+
         $form_display->setComponent($key, $component);
       }
     }

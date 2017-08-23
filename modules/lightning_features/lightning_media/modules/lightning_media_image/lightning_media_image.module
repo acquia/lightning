@@ -14,14 +14,10 @@ use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_image\Plugin\MediaEntity\Type\Image;
 
 /**
- * Implements hook_config_schema_info_alter().
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
  */
-function lightning_media_image_config_schema_info_alter(array &$definitions) {
-  if (isset($definitions['field.widget.settings.image_widget_crop'])) {
-    // We cannot import the class with a use statement, because it will blow up
-    // if Image Widget Crop is not installed.
-    $definitions['field.widget.settings.image_widget_crop']['mapping'] += \Drupal\lightning_media_image\Plugin\Field\FieldWidget\ImageCropWidget::configSchema();
-  }
+function lightning_media_image_field_widget_image_widget_crop_form_alter(array &$element, FormStateInterface $form_state, array $context) {
+  lightning_media_field_widget_image_image_form_alter($element, $form_state, $context);
 }
 
 /**

@@ -6,11 +6,8 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Drupal\crop\Entity\CropType;
 use Drupal\image_widget_crop\Plugin\Field\FieldWidget\ImageCropWidget as BaseImageCropWidget;
-use Drupal\lightning_media\Plugin\Field\FieldWidget\ExtendedImageWidgetTrait;
 
 class ImageCropWidget extends BaseImageCropWidget {
-
-  use ExtendedImageWidgetTrait;
 
   /**
    * {@inheritdoc}
