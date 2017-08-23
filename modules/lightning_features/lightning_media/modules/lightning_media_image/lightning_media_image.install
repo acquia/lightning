@@ -602,22 +602,19 @@ function lightning_media_image_update_8004() {
 }
 
 /**
- * Uses the static_image widget on the media_browser form display.
+ * Removes the file link(s) and Remove button from the media_browser form.
  */
 function lightning_media_image_update_8005() {
-  $display = EntityFormDisplay::load('media.image.media_browser');
+  $display = entity_get_form_display('media', 'image', 'media_browser');
 
-  if ($display) {
-    $component = $display->getComponent('image');
+  $component = $display->getComponent('image');
 
-    if ($component && $component['type'] == 'image_image') {
-      // Just in case Drupal is under the mistaken impression that the
-      // image_immutable plugin doesn't exist...
-      \Drupal::service('plugin.manager.field.widget')->clearCachedDefinitions();
-
-      $component['type'] = 'image_immutable';
-      $display->setComponent('image', $component)->save();
-    }
+  if ($component && $component['type'] == 'image_image') {
+    $component['third_party_settings']['lightning_media'] = [
+      'file_links' => FALSE,
+      'remove_button' => FALSE,
+    ];
+    $display->setComponent('image', $component)->save();
   }
 }
 
