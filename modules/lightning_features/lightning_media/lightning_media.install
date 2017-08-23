@@ -5,6 +5,7 @@
  * Contains install and update routines for Lightning Media.
  */
 
+use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\editor\Entity\Editor;
 use Drupal\embed\Entity\EmbedButton;
 use Drupal\entity_browser\Entity\EntityBrowser;
@@ -275,6 +276,26 @@ function lightning_media_update_8016() {
     // configuration to preserve the old behavior.
     ->set('entity_embed.choose_display', TRUE)
     ->save();
+}
+
+/**
+ * Changes all image_immutable field widgets to image_image.
+ */
+function lightning_media_update_8017() {
+  \Drupal::service('plugin.manager.field.widget')->clearCachedDefinitions();
+
+  /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
+  foreach (EntityFormDisplay::loadMultiple() as $form_display) {
+    foreach ($form_display->getComponents() as $key => $component) {
+      if ($component['type'] == 'image_immutable') {
+        $component['type'] = 'image_image';
+        $component['settings']['file_links'] = FALSE;
+        $component['settings']['remove_button'] = FALSE;
+        $form_display->setComponent($key, $component);
+      }
+    }
+    $form_display->save();
+  }
 }
 
 /**

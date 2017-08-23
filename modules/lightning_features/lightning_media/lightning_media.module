@@ -17,6 +17,7 @@ use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\lightning_core\BundleEntityStorage;
 use Drupal\lightning_media\Exception\IndeterminateBundleException;
 use Drupal\lightning_media\Plugin\Field\FieldWidget\EntityReferenceBrowserWidget;
+use Drupal\lightning_media\Plugin\Field\FieldWidget\ImageWidget;
 use Drupal\lightning_media\MediaHelper;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media\Form\MediaForm;
@@ -25,9 +26,27 @@ use Drupal\media_entity\MediaInterface;
 use Drupal\media_entity\MediaBundleInterface;
 
 /**
+ * Implements hook_config_schema_info_alter().
+ */
+function lightning_media_config_schema_info_alter(array &$definitions) {
+  $properties = &$definitions['field.widget.settings.image_image']['mapping'];
+
+  $properties['file_links'] = [
+    'type' => 'boolean',
+    'label' => 'Show link(s) to uploaded file(s)',
+  ];
+  $properties['remove_button'] = [
+    'type' => 'boolean',
+    'label' => 'Show Remove button',
+  ];
+}
+
+/**
  * Implements hook_field_widget_info_alter().
  */
 function lightning_media_field_widget_info_alter(array &$info) {
+  $info['image_image']['class'] = ImageWidget::class;
+
   if (isset($info['entity_browser_entity_reference'])) {
     Override::pluginClass($info['entity_browser_entity_reference'], EntityReferenceBrowserWidget::class);
   }
