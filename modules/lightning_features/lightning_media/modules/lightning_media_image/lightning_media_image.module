@@ -14,13 +14,6 @@ use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_image\Plugin\MediaEntity\Type\Image;
 
 /**
- * Implements hook_field_widget_WIDGET_TYPE_form_alter().
- */
-function lightning_media_image_field_widget_image_widget_crop_form_alter(array &$element, FormStateInterface $form_state, array $context) {
-  lightning_media_field_widget_image_image_form_alter($element, $form_state, $context);
-}
-
-/**
  * Implements hook_field_widget_info_alter().
  */
 function lightning_media_image_field_widget_info_alter(array &$info) {
