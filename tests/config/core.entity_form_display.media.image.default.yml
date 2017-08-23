@@ -7,7 +7,7 @@ dependencies:
     - image.style.thumbnail
     - media_entity.bundle.image
   module:
-    - image
+    - image_widget_crop
     - workbench_moderation
 _core: {  }
 id: media.image.default
@@ -23,11 +23,18 @@ content:
     third_party_settings: {  }
     region: content
   image:
-    type: image_image
+    type: image_widget_crop
     weight: 0
     settings:
       progress_indicator: throbber
       preview_image_style: thumbnail
+      crop_preview_image_style: crop_thumbnail
+      crop_list: null
+      show_crop_area: false
+      show_default_crop: true
+      warn_multiple_usages: true
+      file_links: true
+      remove_button: true
     third_party_settings: {  }
     region: content
   name:

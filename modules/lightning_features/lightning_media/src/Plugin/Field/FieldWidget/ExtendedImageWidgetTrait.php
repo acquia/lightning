@@ -6,8 +6,17 @@ use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Field\FieldItemListInterface;
 use Drupal\Core\Form\FormStateInterface;
 
+/**
+ * Generic improvements for any image field widget based on image_image.
+ */
 trait ExtendedImageWidgetTrait {
 
+  /**
+   * Returns config schema for settings defined by this trait.
+   *
+   * @return array
+   *   The config schema properties.
+   */
   public static function configSchema() {
     return [
       'file_links' => [

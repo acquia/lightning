@@ -37,7 +37,9 @@ class ImageCropWidget extends BaseImageCropWidget {
 
     // If no crop types are chosen, allow all of them.
     if ($key == 'crop_list' && empty($value)) {
-      $value = $this->imageWidgetCropManager->getAvailableCropType(CropType::getCropTypeNames());
+      $value = CropType::getCropTypeNames();
+      $value = $this->imageWidgetCropManager->getAvailableCropType($value);
+      $value = array_keys($value);
     }
     return $value;
   }

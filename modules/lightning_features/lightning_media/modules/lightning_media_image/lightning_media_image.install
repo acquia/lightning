@@ -31,7 +31,7 @@ function lightning_media_image_install() {
     lightning_media_image_modules_installed(['lightning_roles']);
   }
 
-  if ($module_exists('image_widget_crop') && !\Drupal::isConfigSyncing()) {
+  if ($module_exists('image_widget_crop')) {
     $form_displays = \Drupal::entityTypeManager()
       ->getStorage('entity_form_display')
       ->loadByProperties([
@@ -627,19 +627,6 @@ function lightning_media_image_update_8006() {
   Config::forModule('lightning_media_image')
     ->getEntity('entity_view_display', 'media.image.thumbnail')
     ->save();
-}
-
-/**
- * Installs Image Widget Crop and default configuration for it.
- */
-function lightning_media_image_update_8007() {
-  \Drupal::service('module_installer')->install(['image_widget_crop']);
-
-  $config = Config::forModule('lightning_media_image')->optional();
-  $config->getEntity('crop_type', 'freeform')->save();
-  $config->getEntity('crop_type', 'landscape')->save();
-  $config->getEntity('crop_type', 'portrait')->save();
-  $config->getEntity('crop_type', 'square')->save();
 }
 
 /**

@@ -9,6 +9,7 @@ use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\image\Entity\ImageStyle;
+use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_image\Plugin\MediaEntity\Type\Image;
 
@@ -79,6 +80,14 @@ function lightning_media_image_modules_installed(array $modules) {
     // Any content creator can as well.
     \Drupal::service('lightning.content_roles')
       ->grantPermissions('creator', $permissions);
+  }
+  elseif (in_array('image_widget_crop', $modules)) {
+    $config = Config::forModule('lightning_media_image')->optional();
+
+    $config->getEntity('crop_type', 'freeform')->save();
+    $config->getEntity('crop_type', 'landscape')->save();
+    $config->getEntity('crop_type', 'portrait')->save();
+    $config->getEntity('crop_type', 'square')->save();
   }
 }
 
