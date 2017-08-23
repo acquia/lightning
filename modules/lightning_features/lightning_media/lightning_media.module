@@ -5,10 +5,8 @@
  * Core media asset support for Lightning.
  */
 
-use Drupal\Component\Utility\NestedArray;
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
-use Drupal\Core\Field\FieldDefinitionInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Field\WidgetInterface;
 use Drupal\Core\Form\FormStateInterface;
@@ -31,19 +29,26 @@ use Drupal\media_entity\MediaBundleInterface;
 /**
  * Implements hook_field_widget_third_party_settings_form().
  */
-function lightning_media_field_widget_third_party_settings_form(WidgetInterface $plugin, FieldDefinitionInterface $field_definition, $form_mode, $form, FormStateInterface $form_state) {
+function lightning_media_field_widget_third_party_settings_form(WidgetInterface $widget) {
   $element = [];
 
-  if ($plugin instanceof ImageWidget) {
+  if ($widget instanceof ImageWidget) {
+    $settings = $widget->getThirdPartySettings('lightning_media') ?: [];
+
+    $settings += [
+      'file_links' => TRUE,
+      'remove_button' => TRUE,
+    ];
+
     $element['file_links'] = [
       '#type' => 'checkbox',
       '#title' => t('Show links to uploaded files'),
-      '#default_value' => $plugin->getThirdPartySetting('lightning_media', 'file_links', TRUE),
+      '#default_value' => $settings['file_links'],
     ];
     $element['remove_button'] = [
       '#type' => 'checkbox',
       '#title' => t('Show Remove button'),
-      '#default_value' => $plugin->getThirdPartySetting('lightning_media', 'remove_button', TRUE),
+      '#default_value' => $settings['remove_button'],
     ];
   }
   return $element;
@@ -57,15 +62,20 @@ function lightning_media_field_widget_settings_summary_alter(array &$summary, ar
   $widget = $context['widget'];
 
   if ($widget instanceof ImageWidget) {
-    $summary[] = t('@link to uploaded files', [
-      '@link' =>
-        t($widget->getThirdPartySetting('lightning_media', 'file_links', TRUE) ? 'Link' : 'Do not link'),
-    ]);
+    $settings = $widget->getThirdPartySettings('lightning_media') ?: [];
 
-    $summary[] = t('Remove button @status', [
-      '@status' =>
-        t($widget->getThirdPartySetting('lightning_media', 'remove_button', TRUE) ? 'enabled' : 'disabled'),
-    ]);
+    $settings += [
+      'file_links' => TRUE,
+      'remove_button' => TRUE,
+    ];
+
+    $summary[] = $settings['file_links']
+      ? t('Link to uploaded files')
+      : t('Do not link to uploaded files');
+
+    $summary[] = $settings['remove_button']
+      ? t('Remove button enabled')
+      : t('Remove button disabled');
   }
 }
 
@@ -76,23 +86,21 @@ function lightning_media_field_widget_image_image_form_alter(array &$element, Fo
   /** @var WidgetInterface $widget */
   $widget = $context['widget'];
 
+  // Store the widget settings where the process function can see them.
   $element['#settings'] = $widget->getThirdPartySettings('lightning_media');
+  $element['#settings'] += [
+    'file_links' => TRUE,
+    'remove_button' => TRUE,
+  ];
+
   $element['#process'][] = 'lightning_media_process_image_widget_managed_file';
 }
 
-/**
- * {@inheritdoc}
- */
 function lightning_media_process_image_widget_managed_file(array $element, FormStateInterface $form_state, array $form) {
-  // Get the settings stored by lightning_media_field_widget_image_image_form_alter().
-  $settings = $element['#array_parents'];
-  array_push($settings, '#settings');
-  $settings = NestedArray::getValue($form, $settings);
-
   foreach ($element['fids']['#value'] as $fid) {
-    $element['file_' . $fid]['#access'] = $settings['file_links'];
+    $element['file_' . $fid]['#access'] = $element['#settings']['file_links'];
   }
-  $element['remove_button']['#access'] = $settings['remove_button'];
+  $element['remove_button']['#access'] = $element['#settings']['remove_button'];
 
   return $element;
 }
