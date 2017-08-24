@@ -14,7 +14,7 @@ Feature: Embedding entities in a WYSIWYG editor
     # Assert that image styles are available for all crop types.
     And the "Image style" field should have options:
       """
-      Cropped: Freefrom
+      Cropped: Freeform
       Cropped: Landscape
       Cropped: Portrait
       Cropped: Square
