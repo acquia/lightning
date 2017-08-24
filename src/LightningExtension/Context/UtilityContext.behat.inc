@@ -18,6 +18,20 @@ use WebDriver\Exception\NoAlertOpenError;
 class UtilityContext extends DrupalSubContextBase {
 
   /**
+   * Visits the edit form for a node.
+   *
+   * @see lightning_core_local_tasks_alter()
+   *
+   * @When I visit the edit form
+   */
+  public function editContent() {
+    $this
+      ->assertSession()
+      ->elementExists('named', ['link', 'edit-form'])
+      ->click();
+  }
+
+  /**
    * Asserts that a select field has a particular option.
    *
    * @param string $select
