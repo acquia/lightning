@@ -300,18 +300,3 @@ function lightning_media_update_8017() {
     $form_display->save();
   }
 }
-
-/**
- * Implements hook_update_dependencies().
- */
-function lightning_media_update_dependencies() {
-  return [
-    'lightning_media' => [
-      // 8012 adds the field_media_in_library filter to the Entity Browser
-      // display of the media view, which is created by 8008.
-      8012 => [
-        'lightning_media' => 8008,
-      ],
-    ],
-  ];
-}

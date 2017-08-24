@@ -262,7 +262,7 @@ function lightning_dev_update_8008() {
   ]);
 
   // Use the cropping widgets for every form display of the Image media type.
-  // This code is lifted directly from lightning_media_image_install().
+  // This code is lifted (almost) directly from lightning_media_image_install().
   $form_displays = \Drupal::entityTypeManager()
     ->getStorage('entity_form_display')
     ->loadByProperties([
@@ -273,12 +273,9 @@ function lightning_dev_update_8008() {
   /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
   foreach ($form_displays as $form_display) {
     $component = $form_display->getComponent('image');
-
-    if ($component && $component['type'] == 'image_image') {
-      $component['type'] = 'image_widget_crop';
-      $component['settings']['crop_list'] = [];
-      $component['settings']['show_crop_area'] = TRUE;
-      $form_display->setComponent('image', $component)->save();
-    }
+    $component['type'] = 'image_widget_crop';
+    $component['settings']['crop_list'] = [];
+    $component['settings']['show_crop_area'] = TRUE;
+    $form_display->setComponent('image', $component)->save();
   }
 }
