@@ -2,6 +2,7 @@
 
 namespace Acquia\LightningExtension\Context;
 
+use Acquia\LightningExtension\DetailsTrait;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
@@ -10,6 +11,10 @@ use Drupal\DrupalExtension\Context\DrupalSubContextBase;
  * Contains step definitions for working with collapsible <details> elements.
  */
 class DetailsContext extends DrupalSubContextBase {
+
+  use DetailsTrait {
+    assertDetails as doAssertDetails;
+  }
 
   /**
    * Asserts the existence of a details element by its summary text.
@@ -28,21 +33,8 @@ class DetailsContext extends DrupalSubContextBase {
    * @Then I should see a(n) :summary details element
    */
   public function assertDetails($summary, NodeElement $container = NULL) {
-    $session = $this->getSession();
-
-    $container = $container ?: $session->getPage();
-
-    /** @var \Behat\Mink\Element\NodeElement $element */
-    foreach ($container->findAll('css', 'details > summary') as $element) {
-      if ($element->getText() == $summary) {
-        return $element->getParent();
-      }
-    }
-
-    throw new ExpectationException(
-      "Could not find a details element with summary '$summary'.",
-      $session->getDriver()
-    );
+    $container = $container ?: $this->getSession()->getPage();
+    return $this->doAssertDetails($summary, $container);
   }
 
   /**
