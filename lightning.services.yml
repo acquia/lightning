@@ -36,3 +36,7 @@ services:
     arguments: []
     tags:
       - { name: drupal.generator }
+
+  plugin.manager.lightning.update:
+    class: '\Drupal\lightning\UpdateManager'
+    parent: default_plugin_manager
