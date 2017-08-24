@@ -150,6 +150,18 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertAllowed('/admin/config/system/lightning/layout');
     $this->assertAllowed('/admin/config/system/lightning/media');
 
+    $this->drupalGet('/admin/config/people/accounts');
+    $assert->pageTextContains('This role will be automatically assigned new permissions whenever a module is enabled.');
+
+    $account = $this->drupalCreateUser([
+      'roles' => [
+        'page_reviewer',
+        'landing_page_reviewer',
+      ],
+    ]);
+    $this->drupalLogin($account);
+    $this->assertAllowed('/admin/content');
+
     // Assert that public and private keys were generated for OAuth.
     $oauth = $this->config('simple_oauth.settings');
 

@@ -78,7 +78,7 @@ Feature: Embedding entities in a WYSIWYG editor
       | type | title  | path    |
       | page | Foobar | /foobar |
     When I visit "/foobar"
-    And I visit the edit form
+    And I click "Edit draft"
     And I open the media browser
     And I select item 1
     And I submit the entity browser
