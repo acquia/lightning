@@ -2,6 +2,7 @@
 
 namespace Acquia\LightningExtension\Context;
 
+use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Exception\ExpectationException;
@@ -15,6 +16,38 @@ use WebDriver\Exception\NoAlertOpenError;
  * A context with miscellaneous helpers.
  */
 class UtilityContext extends DrupalSubContextBase {
+
+  /**
+   * Asserts that a select field has a particular option.
+   *
+   * @param string $select
+   *   The select field to check.
+   * @param string $option
+   *   The option to look for.
+   *
+   * @Then the :select field should have a(n) :option option
+   */
+  public function assertSelectOption($select, $option) {
+    $assert = $this->assertSession();
+    $select = $assert->fieldExists($select);
+    $assert->elementExists('named', ['option', $option], $select);
+  }
+
+  /**
+   * Asserts that a select field has a set of options.
+   *
+   * @param string $select
+   *   The select field to check.
+   * @param \Behat\Gherkin\Node\PyStringNode $options
+   *   The options to look for.
+   *
+   * @Then the :select field should have options:
+   */
+  public function assertSelectOptions($select, PyStringNode $options) {
+    foreach ($options->getStrings() as $option) {
+      $this->assertSelectOption($select, $option);
+    }
+  }
 
   /**
    * Asserts that a form field is not present.
@@ -88,29 +121,6 @@ class UtilityContext extends DrupalSubContextBase {
    */
   public function clearField($field, ElementInterface $container = NULL) {
     $this->assertSession()->fieldExists($field, $container)->setValue(FALSE);
-  }
-
-  /**
-   * Finds a collapsible details element by its summary text.
-   *
-   * @param string $summary_text
-   *   The summary text.
-   *
-   * @return \Behat\Mink\Element\NodeElement|null
-   *   The details element, or NULL if it was not found.
-   */
-  public function findCollapsible($summary_text) {
-    /** @var \Behat\Mink\Element\NodeElement[] $elements */
-    $elements = $this
-      ->getSession()
-      ->getPage()
-      ->findAll('css', 'details > summary');
-
-    foreach ($elements as $element) {
-      if ($element->getText() == $summary_text) {
-        return $element->getParent();
-      }
-    }
   }
 
   /**
