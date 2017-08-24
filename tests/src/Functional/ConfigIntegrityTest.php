@@ -49,7 +49,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
       'page_reviewer',
     ]);
     $this->assertEntityExists('crop_type', [
-      'freefrom',
+      'freeform',
       'landscape',
       'portrait',
       'square',
