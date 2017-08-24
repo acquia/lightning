@@ -13,6 +13,23 @@ Feature: An entity browser for image fields
     And I submit the entity browser
     Then I should not see a "table[drupal-data-selector='edit-image-current'] td.empty" element
 
+  @4aecebe8
+  Scenario: Cropping should be enabled in the image browser
+    Given I am logged in as a user with the page_creator,media_creator roles
+    When I visit "/node/add/page"
+    And I open the "Hero Image" image browser
+    And I click "Upload"
+    And I attach the file "test.jpg" to "File"
+    And I wait for AJAX to finish
+    Then I should see an open "Crop image" details element
+    And I should see vertical tabs:
+      """
+      Freeform
+      Landscape
+      Portrait
+      Square
+      """
+
   @c0a74801
   Scenario: Testing cardinality enforcement with a multi-value image field
     Given I am logged in as a user with the page_creator,media_creator roles

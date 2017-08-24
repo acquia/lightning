@@ -16,6 +16,20 @@ Feature: Uploading media assets through the media browser
       | test.jpg | Foobazzz    |
       | test.pdf | A test file |
 
+  @image @cdebd426
+  Scenario: Cropping should be enabled when upload an image in the media browser
+    Given I am logged in as a user with the media_creator role
+    When I visit "/entity-browser/iframe/media_browser"
+    And I upload "test.jpg"
+    Then I should see an open "Crop image" details element
+    And I should see vertical tabs:
+      """
+      Freeform
+      Landscape
+      Portrait
+      Square
+      """
+
   @b34126c1
   Scenario: The upload widget should require a file
     Given I am logged in as a user with the media_creator role

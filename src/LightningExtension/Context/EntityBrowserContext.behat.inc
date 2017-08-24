@@ -61,20 +61,14 @@ class EntityBrowserContext extends DrupalSubContextBase {
   public function openImageBrowser($field) {
     $session = $this->getSession();
 
-    /** @var UtilityContext $context */
-    $context = $this->getContext(UtilityContext::class);
+    /** @var \Acquia\LightningExtension\Context\DetailsContext $context */
+    $context = $this->getContext(DetailsContext::class);
 
-    $details = $context->findCollapsible($field);
-    if ($details) {
-      $details->pressButton('Select Image(s)');
-      $this->minkContext->iWaitForAjaxToFinish();
-      $session->switchToIFrame('entity_browser_iframe_image_browser');
-      // This might be vestigial.
-      sleep(10);
-    }
-    else {
-      throw new ElementNotFoundException($session->getDriver(), 'collapsible element');
-    }
+    $context->assertDetails($field)->pressButton('Select Image(s)');
+    $this->minkContext->iWaitForAjaxToFinish();
+    $session->switchToIFrame('entity_browser_iframe_image_browser');
+    // This might be vestigial.
+    sleep(10);
   }
 
   /**
