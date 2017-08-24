@@ -32,6 +32,7 @@ function lightning_media_image_install() {
   }
 
   if ($module_exists('image_widget_crop')) {
+    // Use the cropping widgets for every form display of the Image media type.
     $form_displays = \Drupal::entityTypeManager()
       ->getStorage('entity_form_display')
       ->loadByProperties([

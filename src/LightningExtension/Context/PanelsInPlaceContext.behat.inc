@@ -209,7 +209,9 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
 
     /** @var \Acquia\LightningExtension\Context\UtilityContext $utility */
     $utility = $this->getContext(UtilityContext::class);
-    $utility->acceptAlerts([$this, 'awaitAjax']);
+    $utility->acceptAlerts(function () {
+      $this->awaitAjax();
+    });
   }
 
 }

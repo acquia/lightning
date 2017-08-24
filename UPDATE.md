@@ -57,6 +57,24 @@ to Beta 3, you will need to follow the instructions for updating from Beta 1 to
 Beta 2, then from Beta 2 to Beta 3, in that order.
 
 ## 2.1.7 to 2.1.8
+* Lightning now ships with support for image cropping, using the Image Widget
+  Crop module. To use it for the Image media bundle (the default behavior in
+  new Lightning sites), do the following:
+  * Install the Image Widget Crop module.
+  * Visit *Structure > Media bundles*. For the Image media bundle, choose
+    "Manage form display".
+  * If the Image field is enabled, set its widget type to "ImageWidget crop",
+    and configure it like so:
+    * "Always expand crop area" should be checked.
+    * "Show links to uploaded files" should be checked.
+    * "Show Remove button" should be checked.
+  * Press "Update", then "Save".
+  * Go to the "Media browser" tab. If the Image field is enabled, set its
+    widget type to "ImageWidget crop" and configure it like so:
+    * "Always expand crop area" should be checked.
+    * "Show links to uploaded files" should NOT be checked.
+    * "Show Remove button" should NOT be checked.
+  * Press "Update", then "Save".
 * Lightning now has support for bulk uploading media assets. To enable this
   feature, install the Bulk Media Upload module from the Lightning Package.
 * New installs of Lightning that include the Workflow component will now place
