@@ -29,6 +29,16 @@ class UpdateManager extends DefaultPluginManager {
   /**
    * {@inheritdoc}
    */
+  protected function findDefinitions() {
+    $definitions = parent::findDefinitions();
+    ksort($definitions);
+
+    return $definitions;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   public function getFactory() {
     if (empty($this->factory)) {
       $this->factory = new UpdateFactory($this, $this->pluginInterface);

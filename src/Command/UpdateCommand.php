@@ -43,17 +43,16 @@ class UpdateCommand extends Command {
    * {@inheritdoc}
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $updates = array_filter(
-      $this->updateManager->getDefinitions(),
-      function (array $update) {
-        $provider = $update['provider'];
+    $filter = function (array $definition) {
+      $provider = $definition['provider'];
 
-        return version_compare(
-          $this->state->get("$provider.version", '0.0.0'),
-          $update['id']
-        );
-      }
-    );
+      $current_version = $this->state->get("$provider.version", '0.0.0');
+      $target_version = $definition['id'];
+
+      return version_compare($target_version, $current_version, '>');
+    };
+
+    $updates = array_filter($this->updateManager->getDefinitions(), $filter);
 
     if (empty($updates)) {
       return $output->writeln('There are no updates available.');
