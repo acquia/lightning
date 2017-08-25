@@ -31,6 +31,14 @@ services:
     tags:
       - { name: drupal.command }
 
+  lightning.command.update:
+    class: '\Drupal\lightning\Command\UpdateCommand'
+    arguments:
+      - '@plugin.manager.lightning.update'
+      - '@state'
+    tags:
+      - { name: drupal.command }
+
   lightning.subprofile_generator:
     class: '\Drupal\lightning\Generator\SubProfileGenerator'
     arguments: []

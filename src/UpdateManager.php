@@ -26,4 +26,14 @@ class UpdateManager extends DefaultPluginManager {
     parent::__construct('Plugin/Update', $namespaces, $module_handler, UpdateInterface::class, Update::class);
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function getFactory() {
+    if (empty($this->factory)) {
+      $this->factory = new UpdateFactory($this, $this->pluginInterface);
+    }
+    return $this->factory;
+  }
+
 }
