@@ -61,12 +61,14 @@ class Update202 extends UpdateBase {
    * {@inheritdoc}
    */
   public function execute() {
-    $proceed = $this->io->confirm(
-      $this->t('Do you want to add contact form functionality?')
-    );
-    if ($proceed) {
-      $this->moduleInstaller->install(['lightning_contact_form']);
-    }
+    $this->confirm('installContactForm');
+  }
+
+  /**
+   * @ask Do you want to install contact form functionality?
+   */
+  protected function installContactForm() {
+    $this->moduleInstaller->install(['lightning_contact_form']);
   }
 
 }

@@ -61,12 +61,14 @@ class Update203 extends UpdateBase {
    * {@inheritdoc}
    */
   public function execute() {
-    $proceed = $this->io->confirm(
-      $this->t('Do you want to add search functionality?')
-    );
-    if ($proceed) {
-      $this->moduleInstaller->install(['lightning_search']);
-    }
+    $this->confirm('installSearch');
+  }
+
+  /**
+   * @ask Do you want to add search functionality?
+   */
+  protected function installSearch() {
+    $this->moduleInstaller->install(['lightning_search']);
   }
 
 }

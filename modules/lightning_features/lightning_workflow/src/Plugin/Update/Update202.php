@@ -61,12 +61,14 @@ class Update202 extends UpdateBase {
    * {@inheritdoc}
    */
   public function execute() {
-    $proceed = $this->io->confirm(
-      $this->t('Do you want to install Diff?')
-    );
-    if ($proceed) {
-      $this->moduleInstaller->install(['diff']);
-    }
+    $this->confirm('installDiff');
+  }
+
+  /**
+   * @ask Do you want to install Diff?
+   */
+  protected function installDiff() {
+    $this->moduleInstaller->install(['diff']);
   }
 
 }

@@ -3,16 +3,18 @@
 namespace Drupal\lightning;
 
 use Drupal\Component\Plugin\PluginBase;
+use Drupal\Core\Executable\ExecutableInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
+use phpDocumentor\Reflection\DocBlock;
 use Symfony\Component\Console\Style\OutputStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Base class for interactive update plugins.
  */
-abstract class UpdateBase extends PluginBase implements UpdateInterface, ContainerFactoryPluginInterface {
+abstract class UpdateBase extends PluginBase implements ExecutableInterface, ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
 
@@ -54,6 +56,28 @@ abstract class UpdateBase extends PluginBase implements UpdateInterface, Contain
       $io,
       $container->get('string_translation')
     );
+  }
+
+  protected function confirm($method) {
+    $doc_comment = (new \ReflectionObject($this))
+      ->getMethod($method)
+      ->getDocComment();
+
+    $doc_block = new DocBlock($doc_comment);
+    $tags = $doc_block->getTagsByName('ask');
+
+    if ($tags) {
+      $question = str_replace(
+        ["\r", "\n"],
+        [NULL, ' '],
+        reset($tags)->getContent()
+      );
+
+      $proceed = $this->io->confirm($question);
+      if ($proceed) {
+        $this->$method();
+      }
+    }
   }
 
 }
