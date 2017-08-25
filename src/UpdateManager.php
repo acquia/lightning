@@ -3,6 +3,7 @@
 namespace Drupal\lightning;
 
 use Drupal\Core\Cache\CacheBackendInterface;
+use Drupal\Core\Executable\ExecutableInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\lightning\Annotation\Update;
@@ -23,7 +24,14 @@ class UpdateManager extends DefaultPluginManager {
    *   The module handler service.
    */
   public function __construct(\Traversable $namespaces, CacheBackendInterface $cache_backend, ModuleHandlerInterface $module_handler) {
-    parent::__construct('Plugin/Update', $namespaces, $module_handler, UpdateInterface::class, Update::class);
+    parent::__construct(
+      'Plugin/Update',
+      $namespaces,
+      $module_handler,
+      ExecutableInterface::class,
+      Update::class
+    );
+    $this->factory = new UpdateFactory($this, $this->pluginInterface);
   }
 
   /**
@@ -40,10 +48,7 @@ class UpdateManager extends DefaultPluginManager {
    * {@inheritdoc}
    */
   public function getFactory() {
-    if (empty($this->factory)) {
-      $this->factory = new UpdateFactory($this, $this->pluginInterface);
-    }
-    return $this->factory;
+    return parent::getFactory();
   }
 
 }
