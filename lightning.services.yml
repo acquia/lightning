@@ -34,6 +34,7 @@ services:
   lightning.command.update:
     class: '\Drupal\lightning\Command\UpdateCommand'
     arguments:
+      - '@class_resolver'
       - '@plugin.manager.lightning.update'
       - '@state'
     tags:

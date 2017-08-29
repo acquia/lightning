@@ -4,13 +4,22 @@ namespace Drupal\lightning\Command;
 
 use Drupal\Console\Core\Command\Command;
 use Drupal\Console\Core\Style\DrupalStyle;
+use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Drupal\Core\State\StateInterface;
+use Drupal\lightning\ConsoleAwareInterface;
 use Drupal\lightning\UpdateManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateCommand extends Command {
+
+  /**
+   * The class resolver service.
+   *
+   * @var \Drupal\Core\DependencyInjection\ClassResolverInterface
+   */
+  protected $classResolver;
 
   /**
    * The interactive update plugin manager service.
@@ -29,13 +38,16 @@ class UpdateCommand extends Command {
   /**
    * UpdateCommand constructor.
    *
+   * @param ClassResolverInterface $class_resolver
+   *   The class resolver service.
    * @param \Drupal\lightning\UpdateManager $update_manager
    *   The interactive update plugin manager service.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
    */
-  public function __construct(UpdateManager $update_manager, StateInterface $state) {
+  public function __construct(ClassResolverInterface $class_resolver, UpdateManager $update_manager, StateInterface $state) {
     parent::__construct('update:lightning');
+    $this->classResolver = $class_resolver;
     $this->updateManager = $update_manager;
     $this->state = $state;
   }
@@ -89,12 +101,7 @@ class UpdateCommand extends Command {
       return $output->writeln('There are no updates available.');
     }
 
-    $this->updateManager
-      ->getFactory()
-      ->setIO(
-        new DrupalStyle($input, $output)
-      );
-
+    $io = new DrupalStyle($input, $output);
     $module_info = system_rebuild_module_data();
     $provider = NULL;
 
@@ -103,7 +110,15 @@ class UpdateCommand extends Command {
         $provider = $update['provider'];
         $output->writeln($module_info[$provider]->info['name'] . ' ' . $update['id']);
       }
-      $this->updateManager->createInstance($id)->execute();
+
+      $handler = $this->classResolver
+        ->getInstanceFromDefinition($update['class']);
+
+      if ($handler instanceof ConsoleAwareInterface) {
+        $handler->setIO($io);
+      }
+      $handler->execute();
+
       $this->state->set("$provider.version", $update['id']);
     }
   }

@@ -2,10 +2,9 @@
 
 namespace Drupal\lightning_workflow\Plugin\Update;
 
+use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
-use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\lightning\UpdateBase;
-use Symfony\Component\Console\Style\OutputStyle;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -13,7 +12,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *
  * @Update("2.0.3")
  */
-class Update203 extends UpdateBase {
+class Update203 extends UpdateBase implements ContainerInjectionInterface {
 
   /**
    * The view entity storage handler.
@@ -25,34 +24,18 @@ class Update203 extends UpdateBase {
   /**
    * Update203 constructor.
    *
-   * @param array $configuration
-   *   Plugin configuration.
-   * @param string $plugin_id
-   *   The plugin ID.
-   * @param mixed $plugin_definition
-   *   The plugin definition.
-   * @param \Symfony\Component\Console\Style\OutputStyle $io
-   *   The console output driver.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface $translation
-   *   The string translation service.
    * @param \Drupal\Core\Entity\EntityStorageInterface $view_storage
    *   The view entity storage handler.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, OutputStyle $io, TranslationInterface $translation, EntityStorageInterface $view_storage) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition, $io, $translation);
+  public function __construct(EntityStorageInterface $view_storage) {
     $this->viewStorage = $view_storage;
   }
 
   /**
    * {@inheritdoc}
    */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition, OutputStyle $io = NULL) {
+  public static function create(ContainerInterface $container) {
     return new static(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $io,
-      $container->get('string_translation'),
       $container->get('entity_type.manager')->getStorage('view')
     );
   }
