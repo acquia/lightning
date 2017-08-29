@@ -35,7 +35,7 @@ services:
     class: '\Drupal\lightning\Command\UpdateCommand'
     arguments:
       - '@class_resolver'
-      - '@plugin.manager.lightning.update'
+      - '@container.namespaces'
       - '@state'
     tags:
       - { name: drupal.command }

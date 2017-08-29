@@ -5,9 +5,10 @@ namespace Drupal\lightning\Command;
 use Drupal\Console\Core\Command\Command;
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
+use Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery;
 use Drupal\Core\State\StateInterface;
+use Drupal\lightning\Annotation\Update;
 use Drupal\lightning\ConsoleAwareInterface;
-use Drupal\lightning\UpdateManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,13 +23,6 @@ class UpdateCommand extends Command {
   protected $classResolver;
 
   /**
-   * The interactive update plugin manager service.
-   *
-   * @var \Drupal\lightning\UpdateManager
-   */
-  protected $updateManager;
-
-  /**
    * The state service.
    *
    * @var \Drupal\Core\State\StateInterface
@@ -36,20 +30,27 @@ class UpdateCommand extends Command {
   protected $state;
 
   /**
+   * The annotated class discovery handler.
+   *
+   * @var \Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery
+   */
+  protected $discovery;
+
+  /**
    * UpdateCommand constructor.
    *
    * @param ClassResolverInterface $class_resolver
    *   The class resolver service.
-   * @param \Drupal\lightning\UpdateManager $update_manager
-   *   The interactive update plugin manager service.
+   * @param \Traversable $namespaces
+   *   The namespaces to scan for updates.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
    */
-  public function __construct(ClassResolverInterface $class_resolver, UpdateManager $update_manager, StateInterface $state) {
+  public function __construct(ClassResolverInterface $class_resolver, \Traversable $namespaces, StateInterface $state) {
     parent::__construct('update:lightning');
     $this->classResolver = $class_resolver;
-    $this->updateManager = $update_manager;
     $this->state = $state;
+    $this->discovery = new AnnotatedClassDiscovery('Plugin/Update', $namespaces, Update::class);
   }
 
   /**
@@ -95,7 +96,9 @@ class UpdateCommand extends Command {
       return version_compare($target_version, $current_version, '>');
     };
 
-    $updates = array_filter($this->updateManager->getDefinitions(), $filter);
+    $updates = $this->discovery->getDefinitions();
+    ksort($updates);
+    $updates = array_filter($updates, $filter);
 
     if (empty($updates)) {
       return $output->writeln('There are no updates available.');
