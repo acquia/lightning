@@ -7,6 +7,7 @@ use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Core\State\StateInterface;
 use Drupal\lightning\UpdateManager;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class UpdateCommand extends Command {
@@ -42,11 +43,41 @@ class UpdateCommand extends Command {
   /**
    * {@inheritdoc}
    */
+  protected function configure() {
+    parent::configure();
+
+    $this
+      ->addOption(
+        'force',
+        NULL,
+        InputOption::VALUE_NONE
+      )
+      ->addOption(
+        'since',
+        NULL,
+        InputOption::VALUE_REQUIRED
+      );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function initialize(InputInterface $input, OutputInterface $output) {
+    parent::initialize($input, $output);
+
+    if ($input->getOption('force')) {
+      $input->setOption('since', '0.0.0');
+    }
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $filter = function (array $definition) {
+    $filter = function (array $definition) use ($input) {
       $provider = $definition['provider'];
 
-      $current_version = $this->state->get("$provider.version", '0.0.0');
+      $current_version = $input->getOption('since') ?: $this->state->get("$provider.version", '0.0.0');
       $target_version = $definition['id'];
 
       return version_compare($target_version, $current_version, '>');
@@ -65,10 +96,13 @@ class UpdateCommand extends Command {
       );
 
     $module_info = system_rebuild_module_data();
+    $provider = NULL;
 
     foreach ($updates as $id => $update) {
-      $provider = $update['provider'];
-      $output->writeln($module_info[$provider]->info['name'] . ' ' . $update['id']);
+      if ($update['provider'] != $provider) {
+        $provider = $update['provider'];
+        $output->writeln($module_info[$provider]->info['name'] . ' ' . $update['id']);
+      }
       $this->updateManager->createInstance($id)->execute();
       $this->state->set("$provider.version", $update['id']);
     }
