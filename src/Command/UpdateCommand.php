@@ -5,11 +5,13 @@ namespace Drupal\lightning\Command;
 use Drupal\Console\Core\Command\Command;
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
-use Drupal\Core\Executable\ExecutableInterface;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery;
 use Drupal\Core\State\StateInterface;
 use Drupal\lightning\Annotation\Update;
 use Drupal\lightning\ConsoleAwareInterface;
+use phpDocumentor\Reflection\DocBlock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,6 +31,20 @@ class UpdateCommand extends Command {
    * @var \Drupal\Core\State\StateInterface
    */
   protected $state;
+
+  /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * The entity type manager service.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
 
   /**
    * The annotated class discovery handler.
@@ -53,11 +69,17 @@ class UpdateCommand extends Command {
    *   The namespaces to scan for updates.
    * @param \Drupal\Core\State\StateInterface $state
    *   The state service.
+   * @param ModuleHandlerInterface $module_handler
+   *   The module handler service.
+   * @param EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager service.
    */
-  public function __construct(ClassResolverInterface $class_resolver, \Traversable $namespaces, StateInterface $state) {
+  public function __construct(ClassResolverInterface $class_resolver, \Traversable $namespaces, StateInterface $state, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct('update:lightning');
     $this->classResolver = $class_resolver;
     $this->state = $state;
+    $this->moduleHandler = $module_handler;
+    $this->entityTypeManager = $entity_type_manager;
     $this->discovery = new AnnotatedClassDiscovery('Plugin/Update', $namespaces, Update::class);
   }
 
@@ -70,7 +92,7 @@ class UpdateCommand extends Command {
     $this
       ->addOption(
         'force',
-        NULL,
+        FALSE,
         InputOption::VALUE_NONE
       )
       ->addOption(
@@ -86,10 +108,7 @@ class UpdateCommand extends Command {
   protected function initialize(InputInterface $input, OutputInterface $output) {
     parent::initialize($input, $output);
 
-    if ($input->getOption('force')) {
-      $input->setOption('since', '0.0.0');
-    }
-    $this->since = $input->getOption('since');
+    $this->since = $input->getOption('force') ? '0.0.0' : $input->getOption('since');
   }
 
   protected function getDefinitions() {
@@ -123,7 +142,7 @@ class UpdateCommand extends Command {
     $module_info = system_rebuild_module_data();
     $provider = NULL;
 
-    foreach ($updates as $id => $update) {
+    foreach ($definitions as $id => $update) {
       if ($update['provider'] != $provider) {
         $provider = $update['provider'];
         $output->writeln($module_info[$provider]->info['name'] . ' ' . $update['id']);
@@ -142,6 +161,91 @@ class UpdateCommand extends Command {
   }
 
   protected function runTasks($handler) {
+    /** @var object $handler */
+    $tasks = $this->discoverTasks($handler);
+  }
+
+  protected function discoverTasks($handler) {
+    /** @var object $handler */
+    $tasks = [];
+
+    $methods = (new \ReflectionObject($handler))->getMethods(\ReflectionMethod::IS_PUBLIC);
+
+    foreach ($methods as $method) {
+      $doc_comment = trim($method->getDocComment());
+
+      if (empty($doc_comment)) {
+        continue;
+      }
+
+      $doc_block = new DocBlock($doc_comment);
+
+      if ($doc_block->hasTag('update')) {
+        array_push($tasks, [$method, $doc_block]);
+      }
+    }
+    return array_filter($tasks, [$this, 'filterTask']);
+  }
+
+  protected function filterTask(array $task) {
+    /** @var DocBlock $doc_block */
+    list (, $doc_block) = $task;
+
+    $result = 1;
+
+    foreach ($doc_block->getTagsByName('requires') as $requirement) {
+      $requirement = trim($requirement->getContent());
+      list ($requirement, $arguments) = preg_split('/\s+/', $requirement, 2);
+
+      switch ($requirement) {
+        case 'module':
+          $result &= (int) $this->checkModuleRequirement($arguments);
+          break;
+
+        case 'entity':
+          $result &= (int) $this->checkEntityRequirement($arguments);
+          break;
+
+        default:
+          break;
+      }
+
+      if ($result === 0) {
+        break;
+      }
+    }
+    return (bool) $result;
+  }
+
+  protected function checkModuleRequirement($module) {
+    $negate = $module{0} == '!';
+
+    $exists = $this->moduleHandler->moduleExists(ltrim($module, '!'));
+    if ($negate) {
+      $exists = !$exists;
+    }
+    return $exists;
+  }
+
+  protected function checkEntityRequirement($entity) {
+    list ($entity_type, $entity_id) = preg_split('/\s+/', $entity, 2);
+
+    $negate = $entity_id{0} == '!';
+
+    $exists = (bool) $this->entityTypeManager
+      ->getStorage($entity_type)
+      ->getQuery()
+      ->count()
+      ->condition(
+        $this->entityTypeManager->getDefinition($entity_type)->getKey('id'),
+        ltrim($entity_id, '!')
+      )
+      ->execute();
+
+    if ($negate) {
+      $exists = !$exists;
+    }
+    return $exists;
   }
 
 }

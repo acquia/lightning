@@ -17,6 +17,8 @@ class Update202 extends UpdateBase {
   /**
    * @update
    *
+   * @requires module !diff
+   *
    * @ask Do you want to install Diff?
    */
   public function installDiff() {

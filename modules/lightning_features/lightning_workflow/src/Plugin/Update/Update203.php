@@ -43,7 +43,7 @@ class Update203 extends UpdateBase implements ContainerInjectionInterface {
   /**
    * @update
    *
-   * @require entity view content
+   * @requires entity view content
    *
    * @ask Do you want to add a column to the administrative content view to
    * indicate the presence of forward revisions?
