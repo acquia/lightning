@@ -15,13 +15,8 @@ class Update203 extends UpdateBase {
   use ModuleInstallerTrait;
 
   /**
-   * {@inheritdoc}
-   */
-  public function execute() {
-    $this->confirm('installSearch');
-  }
-
-  /**
+   * @update
+   *
    * @ask Do you want to add search functionality?
    */
   protected function installSearch() {

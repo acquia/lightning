@@ -41,21 +41,14 @@ class Update203 extends UpdateBase implements ContainerInjectionInterface {
   }
 
   /**
-   * {@inheritdoc}
-   */
-  public function execute() {
-    $views = $this->viewStorage->getQuery()->execute();
-
-    if (in_array('content', $views)) {
-      $this->confirm('addForwardRevisionIndicator');
-    }
-  }
-
-  /**
+   * @update
+   *
+   * @require entity view content
+   *
    * @ask Do you want to add a column to the administrative content view to
    * indicate the presence of forward revisions?
    */
-  protected function addForwardRevisionIndicator() {
+  public function addForwardRevisionIndicator() {
     /** @var \Drupal\views\ViewEntityInterface $view */
     $view = $this->viewStorage->load('content');
 

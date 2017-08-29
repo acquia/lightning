@@ -15,16 +15,11 @@ class Update202 extends UpdateBase {
   use ModuleInstallerTrait;
 
   /**
-   * {@inheritdoc}
-   */
-  public function execute() {
-    $this->confirm('installContactForm');
-  }
-
-  /**
+   * @update
+   *
    * @ask Do you want to install contact form functionality?
    */
-  protected function installContactForm() {
+  public function installContactForm() {
     $this->moduleInstaller()->install(['lightning_contact_form']);
   }
 

@@ -5,6 +5,7 @@ namespace Drupal\lightning\Command;
 use Drupal\Console\Core\Command\Command;
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
+use Drupal\Core\Executable\ExecutableInterface;
 use Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery;
 use Drupal\Core\State\StateInterface;
 use Drupal\lightning\Annotation\Update;
@@ -35,6 +36,13 @@ class UpdateCommand extends Command {
    * @var \Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery
    */
   protected $discovery;
+
+  /**
+   * The version from which we are updating.
+   *
+   * @var string
+   */
+  protected $since = NULL;
 
   /**
    * UpdateCommand constructor.
@@ -81,26 +89,33 @@ class UpdateCommand extends Command {
     if ($input->getOption('force')) {
       $input->setOption('since', '0.0.0');
     }
+    $this->since = $input->getOption('since');
+  }
+
+  protected function getDefinitions() {
+    $definitions = $this->discovery->getDefinitions();
+    ksort($definitions);
+
+    $filter = function (array $definition) {
+      $provider = $definition['provider'];
+
+      return version_compare(
+        $definition['id'],
+        $this->since ?: $this->state->get("$provider.version", '0.0.0'),
+        '>'
+      );
+    };
+
+    return array_filter($definitions, $filter);
   }
 
   /**
    * {@inheritdoc}
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $filter = function (array $definition) use ($input) {
-      $provider = $definition['provider'];
+    $definitions = $this->getDefinitions();
 
-      $current_version = $input->getOption('since') ?: $this->state->get("$provider.version", '0.0.0');
-      $target_version = $definition['id'];
-
-      return version_compare($target_version, $current_version, '>');
-    };
-
-    $updates = $this->discovery->getDefinitions();
-    ksort($updates);
-    $updates = array_filter($updates, $filter);
-
-    if (empty($updates)) {
+    if (sizeof($definitions) === 0) {
       return $output->writeln('There are no updates available.');
     }
 
@@ -120,10 +135,13 @@ class UpdateCommand extends Command {
       if ($handler instanceof ConsoleAwareInterface) {
         $handler->setIO($io);
       }
-      $handler->execute();
+      $this->runTasks($handler);
 
       $this->state->set("$provider.version", $update['id']);
     }
+  }
+
+  protected function runTasks($handler) {
   }
 
 }

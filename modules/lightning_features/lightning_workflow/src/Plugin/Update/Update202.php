@@ -15,16 +15,11 @@ class Update202 extends UpdateBase {
   use ModuleInstallerTrait;
 
   /**
-   * {@inheritdoc}
-   */
-  public function execute() {
-    $this->confirm('installDiff');
-  }
-
-  /**
+   * @update
+   *
    * @ask Do you want to install Diff?
    */
-  protected function installDiff() {
+  public function installDiff() {
     $this->moduleInstaller()->install(['diff']);
   }
 
