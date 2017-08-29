@@ -3,7 +3,6 @@
 namespace Drupal\lightning;
 
 use Drupal\Component\Plugin\PluginBase;
-use Drupal\Core\Executable\ExecutableInterface;
 use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
@@ -14,7 +13,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 /**
  * Base class for interactive update plugins.
  */
-abstract class UpdateBase extends PluginBase implements ExecutableInterface, ContainerFactoryPluginInterface {
+abstract class UpdateBase extends PluginBase implements ContainerFactoryPluginInterface {
 
   use StringTranslationTrait;
 

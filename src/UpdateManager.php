@@ -3,7 +3,6 @@
 namespace Drupal\lightning;
 
 use Drupal\Core\Cache\CacheBackendInterface;
-use Drupal\Core\Executable\ExecutableInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\DefaultPluginManager;
 use Drupal\lightning\Annotation\Update;
@@ -28,7 +27,7 @@ class UpdateManager extends DefaultPluginManager {
       'Plugin/Update',
       $namespaces,
       $module_handler,
-      ExecutableInterface::class,
+      NULL,
       Update::class
     );
     $this->factory = new UpdateFactory($this, $this->pluginInterface);
