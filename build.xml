@@ -9,6 +9,7 @@
   <property name="rsync" value="/usr/bin/rsync" />
   <property name="bzip2" value="/usr/bin/bzip2" />
   <property name="bunzip2" value="/usr/bin/bunzip2" />
+  <property name="tar" value="/usr/bin/tar" />
   <property name="yaml-cli" value="${project.basedir}/bin/yaml-cli" />
 
   <!-- Database credentials. -->
@@ -42,12 +43,14 @@
     <exec command="which rsync" outputProperty="rsync" />
     <exec command="which bzip2" outputProperty="bzip2" />
     <exec command="which bunzip2" outputProperty="bunzip2" />
+    <exec command="which tar" outputProperty="tar" />
 
     <echo message="Found Drush: ${drush}" />
     <echo message="Found Composer: ${composer}" />
     <echo message="Found rsync: ${rsync}" />
     <echo message="Found bzip2: ${bzip2}" />
     <echo message="Found bunzip2: ${bunzip2}" />
+    <echo message="Found tar: ${tar}" />
   </target>
 
   <!-- Syncs the Lightning profile into the Drupal code base. -->
@@ -148,9 +151,24 @@
     <exec command="${drush} make drupal-org.make ${docroot} --no-core --yes" />
     <!-- Because legacy builds are not Composer-aware, we need to explicitly
     require dependencies. Eugh. -->
-    <exec command="${composer} require drush/drush drupal/drupal-extension j7mbo/twitter-api-php" dir="${docroot}" />
+    <exec command="${composer} require j7mbo/twitter-api-php league/oauth2-server" dir="${docroot}" />
 
     <phingcall target="push" />
+  </target>
+
+  <!-- Generates a tarball of current docroot and saves it to the current user's
+  home directory. -->
+  <target name="tarball" depends="env">
+    <phingcall target="uninstall" />
+    <exec command="${tar} --exclude='.DS_Store' --exclude='._*' -zcf ~/lightning-${version}.tar.gz -s /^${docroot}/lightning-${version}/ ${docroot}" />
+  </target>
+
+  <!-- Creates a legacy-built tarball with composer dependencies suitable for
+  cloud. -->
+  <target name="cloud-tarball">
+    <phingcall target="destroy" />
+    <phingcall target="build-legacy" />
+    <phingcall target="tarball" />
   </target>
 
   <!-- Destroys the Drupal installation, but leaves the code base intact. -->
