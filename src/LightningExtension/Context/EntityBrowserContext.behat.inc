@@ -3,6 +3,7 @@
 namespace Acquia\LightningExtension\Context;
 
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Drupal\Component\Utility\Html;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\MinkContext;
@@ -104,6 +105,42 @@ class EntityBrowserContext extends DrupalSubContextBase {
       ->findAll('css', '[data-selectable]');
 
     $items[$n - 1]->click();
+  }
+
+  /**
+   * Asserts a certain number of items are visible in the entity browser.
+   *
+   * @param int $n
+   *   The number of media items that should be visible.
+   * @param string $browser_id
+   *   (optional) The entity browser ID.
+   *
+   * @throws ExpectationException
+   *   If actual number of in the entity browser does not match the expected.
+   *
+   * @Then I should see :n items in the entity browser
+   */
+  public function assertNumberVisible(int $n, $browser_id = NULL) {
+    if ($browser_id) {
+      $selector = 'form#entity-browser-' . Html::cleanCssIdentifier($browser_id) . '-form';
+    }
+    else {
+      $selector = 'form[data-entity-browser-uuid]';
+    }
+
+    /** @var \Behat\Mink\Element\NodeElement[] $items */
+    $items = $this
+      ->assertSession()
+      ->elementExists('css', $selector)
+      ->findAll('css', '[data-selectable]');
+    $actual = count($items);
+
+    if ($actual !== $n) {
+      throw new ExpectationException(
+        'Expected entity browser to contain ' . $n . ' items, ' . $actual . ' items found.',
+        $this->getSession()->getDriver()
+      );
+    }
   }
 
 }
