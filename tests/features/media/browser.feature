@@ -84,4 +84,4 @@ Feature: An entity browser for media assets
     And I enter "Code Wisdom 1" for "Keywords"
     And I press "Apply"
     And I wait for AJAX to finish
-    Then I should see 1 items in the entity browser
+    Then I should see 1 item in the entity browser
