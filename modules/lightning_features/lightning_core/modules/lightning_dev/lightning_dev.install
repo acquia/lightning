@@ -274,7 +274,7 @@ function lightning_dev_update_8008() {
   foreach ($form_displays as $form_display) {
     $component = $form_display->getComponent('image');
     $component['type'] = 'image_widget_crop';
-    $component['settings']['crop_list'] = [];
+    $component['settings']['crop_list'] = ['freeform'];
     $component['settings']['show_crop_area'] = TRUE;
     $form_display->setComponent('image', $component)->save();
   }
