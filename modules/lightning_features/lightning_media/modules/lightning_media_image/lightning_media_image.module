@@ -59,7 +59,8 @@ function lightning_media_image_modules_installed(array $modules) {
   if (\Drupal::isConfigSyncing()) {
     return;
   }
-  elseif (in_array('lightning_roles', $modules)) {
+
+  if (in_array('lightning_roles', $modules)) {
     $permissions = ['access image_browser entity browser pages'];
 
     // Media creators and managers can always access the image browser.
@@ -70,13 +71,29 @@ function lightning_media_image_modules_installed(array $modules) {
     \Drupal::service('lightning.content_roles')
       ->grantPermissions('creator', $permissions);
   }
-  elseif (in_array('image_widget_crop', $modules)) {
-    $config = Config::forModule('lightning_media_image')->optional();
+  if (in_array('image_widget_crop', $modules)) {
+    Config::forModule('lightning_media_image')
+      ->optional()
+      ->getEntity('crop_type', 'freeform')
+      ->save();
 
-    $config->getEntity('crop_type', 'freeform')->save();
-    $config->getEntity('crop_type', 'landscape')->save();
-    $config->getEntity('crop_type', 'portrait')->save();
-    $config->getEntity('crop_type', 'square')->save();
+    // Try to use a local copy of the Cropper over the CDN-hosted fallback.
+    $lib = 'libraries/cropper/dist';
+    $lib = [
+      $lib,
+      drupal_get_path('module', 'lightning') . "/$lib",
+    ];
+    $lib = array_filter($lib, 'is_dir');
+
+    if ($lib) {
+      $lib = reset($lib);
+
+      \Drupal::configFactory()
+        ->getEditable('image_widget_crop.settings')
+        ->set('settings.library_url', "$lib/cropper.min.js")
+        ->set('settings.css_url', "$lib/cropper.min.css")
+        ->save();
+    }
   }
 }
 

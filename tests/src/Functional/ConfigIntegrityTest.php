@@ -233,6 +233,12 @@ class ConfigIntegrityTest extends BrowserTestBase {
    * Tests that cropping is enabled for image media.
    */
   private function testCropping() {
+    // Assert that a local copy of the Cropper library is being used.
+    $settings = $this->config('image_widget_crop.settings')->get('settings');
+    $lib = 'libraries/cropper/dist';
+    $this->assertContains("$lib/cropper.min.js", $settings['library_url']);
+    $this->assertContains("$lib/cropper.min.css", $settings['css_url']);
+
     $form_displays = $this->container
       ->get('entity_type.manager')
       ->getStorage('entity_form_display')
