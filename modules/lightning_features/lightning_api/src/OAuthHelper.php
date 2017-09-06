@@ -31,13 +31,13 @@ class OAuthHelper {
       ]);
 
       if (empty($pk)) {
-        throw new \Exception($error);
+        throw new \Exception(openssl_error_string() ?: $error);
       }
 
       $key_pair[0] = NULL;
       $victory = openssl_pkey_export($pk, $key_pair[0]);
       if (empty($victory)) {
-        throw new \Exception($error);
+        throw new \Exception(openssl_error_string() ?: $error);
       }
 
       $details = openssl_pkey_get_details($pk);
@@ -45,7 +45,7 @@ class OAuthHelper {
         $key_pair[1] = $details['key'];
       }
       else {
-        throw new \Exception($error);
+        throw new \Exception(openssl_error_string() ?: $error);
       }
 
       openssl_pkey_free($pk);
