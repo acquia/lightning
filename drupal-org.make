@@ -24,6 +24,7 @@ projects[entity_block][version] = 1.0-alpha2
 projects[entity_browser][type] = module
 projects[entity_browser][patch][] = https://www.drupal.org/files/issues/entity-browser-view-context-2865928-8.patch
 projects[entity_browser][patch][] = https://www.drupal.org/files/issues/2877751-17.patch
+projects[entity_browser][patch][] = https://www.drupal.org/files/issues/d8_entity_browser-2902831.patch
 projects[entity_browser][version] = 1.1
 projects[entity_embed][type] = module
 projects[entity_embed][patch][] = https://www.drupal.org/files/issues/2832504-2.patch
