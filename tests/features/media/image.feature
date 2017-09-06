@@ -24,12 +24,6 @@ Feature: Image media assets
     And I wait for AJAX to finish
     Then I should see an open "Crop image" details element
     And I should see a "Freeform" vertical tab
-    And I should not see the vertical tabs:
-      """
-      Landscape
-      Portrait
-      Square
-      """
 
   @b23435a5
   Scenario: Uploading an image to be ignored by the media library

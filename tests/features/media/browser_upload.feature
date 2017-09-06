@@ -23,12 +23,6 @@ Feature: Uploading media assets through the media browser
     And I upload "test.jpg"
     Then I should see an open "Crop image" details element
     And I should see a "Freeform" vertical tab
-    And I should not see the vertical tabs:
-      """
-      Landscape
-      Portrait
-      Square
-      """
 
   @b34126c1
   Scenario: The upload widget should require a file

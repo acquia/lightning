@@ -48,18 +48,8 @@ class ConfigIntegrityTest extends BrowserTestBase {
       'page_creator',
       'page_reviewer',
     ]);
-    $this->assertEntityExists('crop_type', [
-      'freeform',
-      'landscape',
-      'portrait',
-      'square',
-    ]);
-    $this->assertEntityExists('image_style', [
-      'crop_freeform',
-      'crop_landscape',
-      'crop_portrait',
-      'crop_square',
-    ]);
+    $this->assertEntityExists('crop_type', 'freeform');
+    $this->assertEntityExists('image_style', 'crop_freeform');
 
     $permissions = [
       'use text format rich_text',
