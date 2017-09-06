@@ -22,9 +22,9 @@ Feature: Uploading media assets through the media browser
     When I visit "/entity-browser/iframe/media_browser"
     And I upload "test.jpg"
     Then I should see an open "Crop image" details element
-    And I should see vertical tabs:
+    And I should see a "Freeform" vertical tab
+    And I should see the vertical tabs:
       """
-      Freeform
       Landscape
       Portrait
       Square

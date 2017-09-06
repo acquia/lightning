@@ -39,7 +39,8 @@ class VerticalTabsContext extends DrupalSubContextBase {
    * @return \Behat\Mink\Element\NodeElement
    *   The vertical tab.
    *
-   * @Then I should see (a|the) :tab vertical tab
+   * @Then I should see a :tab vertical tab
+   * @Then I should see the :tab vertical tab
    */
   public function assertVerticalTab($tab, NodeElement $container = NULL) {
     return $this
@@ -62,7 +63,8 @@ class VerticalTabsContext extends DrupalSubContextBase {
    * @return \Behat\Mink\Element\NodeElement
    *   The vertical tab.
    *
-   * @Then I should not see (a|the) :tab vertical tab
+   * @Then I should not see a :tab vertical tab
+   * @Then I should not see the :tab vertical tab
    */
   public function assertNoVerticalTab($tab, NodeElement $container = NULL) {
     $this
