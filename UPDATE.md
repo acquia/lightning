@@ -77,6 +77,16 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
     * "Show links to uploaded files" should NOT be checked.
     * "Show Remove button" should NOT be checked.
   * Press "Update", then "Save".
+  * By default, Image Widget Crop uses a CDN-hosted copy of the Cropper
+    JavaScript library. Lightning includes a copy of Cropper as well, which
+    you can use instead of the CDN-hosted version if you prefer to. To use
+    Lightning's included copy of the library, visit *Configuration > Media >
+    ImageWidgetCrop settings* and make the following changes under "Cropper
+    library settings":
+    * Set "Custom Cropper library" to
+    ```libraries/cropper/dist/cropper.min.js```.
+    * Set "Custom Cropper CSS file" to
+   ```libraries/cropper/dist/cropper.min.css```.
 * Lightning now has support for bulk uploading media assets. To enable this
   feature, install the Bulk Media Upload module from the Lightning Package.
 * New installs of Lightning that include the Workflow component will now place

@@ -71,29 +71,12 @@ function lightning_media_image_modules_installed(array $modules) {
     \Drupal::service('lightning.content_roles')
       ->grantPermissions('creator', $permissions);
   }
+
   if (in_array('image_widget_crop', $modules)) {
     Config::forModule('lightning_media_image')
       ->optional()
       ->getEntity('crop_type', 'freeform')
       ->save();
-
-    // Try to use a local copy of the Cropper over the CDN-hosted fallback.
-    $lib = 'libraries/cropper/dist';
-    $lib = [
-      $lib,
-      drupal_get_path('module', 'lightning') . "/$lib",
-    ];
-    $lib = array_filter($lib, 'is_dir');
-
-    if ($lib) {
-      $lib = reset($lib);
-
-      \Drupal::configFactory()
-        ->getEditable('image_widget_crop.settings')
-        ->set('settings.library_url', "$lib/cropper.min.js")
-        ->set('settings.css_url', "$lib/cropper.min.css")
-        ->save();
-    }
   }
 }
 

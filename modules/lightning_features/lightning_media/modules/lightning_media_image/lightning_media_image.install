@@ -51,6 +51,24 @@ function lightning_media_image_install() {
         $form_display->setComponent('image', $component)->save();
       }
     }
+
+    // Try to use a local copy of Cropper over the CDN-hosted fallback.
+    $lib = 'libraries/cropper/dist';
+    $lib = [
+      $lib,
+      drupal_get_path('module', 'lightning') . "/$lib",
+    ];
+    $lib = array_filter($lib, 'is_dir');
+
+    if ($lib) {
+      $lib = reset($lib);
+
+      \Drupal::configFactory()
+        ->getEditable('image_widget_crop.settings')
+        ->set('settings.library_url', "$lib/cropper.min.js")
+        ->set('settings.css_url', "$lib/cropper.min.css")
+        ->save();
+    }
   }
 }
 
