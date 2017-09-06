@@ -15,6 +15,7 @@ class ImageCropWidget extends BaseImageCropWidget {
   public static function defaultSettings() {
     $settings = parent::defaultSettings();
     $settings['crop_list'] = [];
+    $settings['warn_multiple_usages'] = FALSE;
     return $settings;
   }
 

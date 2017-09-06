@@ -65,12 +65,14 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
     "Manage form display".
   * If the Image field is enabled, set its widget type to "ImageWidget crop",
     and configure it like so:
+    * Only "Freeform" should be selected for "Crop Type".
     * "Always expand crop area" should be checked.
     * "Show links to uploaded files" should be checked.
     * "Show Remove button" should be checked.
   * Press "Update", then "Save".
   * Go to the "Media browser" tab. If the Image field is enabled, set its
     widget type to "ImageWidget crop" and configure it like so:
+    * Only "Freeform" should be selected for "Crop Type".
     * "Always expand crop area" should be checked.
     * "Show links to uploaded files" should NOT be checked.
     * "Show Remove button" should NOT be checked.
