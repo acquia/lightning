@@ -22,9 +22,9 @@ Feature: An entity browser for image fields
     And I attach the file "test.jpg" to "File"
     And I wait for AJAX to finish
     Then I should see an open "Crop image" details element
-    And I should see vertical tabs:
+    And I should see a "Freeform" vertical tab
+    And I should not see the vertical tabs:
       """
-      Freeform
       Landscape
       Portrait
       Square
