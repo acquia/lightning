@@ -66,6 +66,7 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
   * If the Image field is enabled, set its widget type to "ImageWidget crop",
     and configure it like so:
     * Only "Freeform" should be selected for "Crop Type".
+    * "Crop thumbnail" should be selected for "Preview image style".
     * "Always expand crop area" should be checked.
     * "Show links to uploaded files" should be checked.
     * "Show Remove button" should be checked.
@@ -73,6 +74,7 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
   * Go to the "Media browser" tab. If the Image field is enabled, set its
     widget type to "ImageWidget crop" and configure it like so:
     * Only "Freeform" should be selected for "Crop Type".
+    * "Crop thumbnail" should be selected for "Preview image style".
     * "Always expand crop area" should be checked.
     * "Show links to uploaded files" should NOT be checked.
     * "Show Remove button" should NOT be checked.

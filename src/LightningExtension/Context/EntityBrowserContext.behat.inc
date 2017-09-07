@@ -5,6 +5,7 @@ namespace Acquia\LightningExtension\Context;
 use Acquia\LightningExtension\AwaitTrait;
 use Acquia\LightningExtension\DetailsTrait;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Drupal\Component\Utility\Html;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
@@ -60,18 +61,15 @@ class EntityBrowserContext extends DrupalSubContextBase {
   }
 
   /**
-   * Selects an item in an entity browser view.
+   * Gets all items in an entity browser.
    *
-   * @param int $n
-   *   The one-based index of the item to select.
    * @param string $browser_id
    *   (optional) The entity browser ID.
    *
-   * @When I select item :n
-   * @When I select item :n from the entity browser
-   * @When I select item :n from the :browser_id entity browser
+   * @return \Behat\Mink\Element\NodeElement[]
+   *   An array of items in the entity browser.
    */
-  public function selectItem($n, $browser_id = NULL) {
+  protected function getEntityBrowserItems($browser_id = NULL) {
     if ($browser_id) {
       $selector = 'form#entity-browser-' . Html::cleanCssIdentifier($browser_id) . '-form';
     }
@@ -85,7 +83,48 @@ class EntityBrowserContext extends DrupalSubContextBase {
       ->elementExists('css', $selector)
       ->findAll('css', '[data-selectable]');
 
+    return $items;
+  }
+
+  /**
+   * Selects an item in an entity browser view.
+   *
+   * @param int $n
+   *   The one-based index of the item to select.
+   * @param string $browser_id
+   *   (optional) The entity browser ID.
+   *
+   * @When I select item :n
+   * @When I select item :n from the entity browser
+   * @When I select item :n from the :browser_id entity browser
+   */
+  public function selectItem($n, $browser_id = NULL) {
+    $items = $this->getEntityBrowserItems($browser_id);
     $items[$n - 1]->click();
+  }
+
+  /**
+   * Asserts a certain number of items are visible in the entity browser.
+   *
+   * @param int $n
+   *   The number of media items that should be visible.
+   * @param string $browser_id
+   *   (optional) The entity browser ID.
+   *
+   * @throws ExpectationException
+   *   If actual number of in the entity browser does not match the expected.
+   *
+   * @Then I should see :n item(s) in the entity browser
+   */
+  public function assertNumberVisible($n, $browser_id = NULL) {
+    $items = $this->getEntityBrowserItems($browser_id);
+    $actual = count($items);
+    if ($actual !== (int) $n) {
+      throw new ExpectationException(
+        'Expected entity browser to contain ' . $n . ' items, ' . $actual . ' items found.',
+        $this->getSession()->getDriver()
+      );
+    }
   }
 
 }

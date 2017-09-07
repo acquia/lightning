@@ -8,3 +8,4 @@ projects[drupal][patch][] = https://www.drupal.org/files/issues/2880374-remove-e
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2880445-remove-config-write-warning-2.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2885441-2.patch
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2904798-7.patch
