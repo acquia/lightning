@@ -14,7 +14,7 @@ Feature: An entity browser for media assets
     And I complete the media browser selection
     And I wait 5 seconds
     And I press "Save"
-    And I click "Edit draft"
+    And I visit the edit form
     And I wait 10 seconds
     And I open the media browser
     And I wait for AJAX to finish

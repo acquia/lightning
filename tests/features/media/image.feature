@@ -1,8 +1,8 @@
-@lightning @media @api @errors
+@lightning @api @media @image @errors @javascript
 Feature: Image media assets
   A media asset representing a locally hosted image.
 
-  @image @javascript @09232f9f
+  @09232f9f
   Scenario: Creating an image
     Given I am logged in as a user with the media_creator role
     When I visit "/media/add/image"
@@ -16,7 +16,16 @@ Feature: Image media assets
     Then I should be visiting a media entity
     And I should see "Foobaz"
 
-  @image @javascript @b23435a5
+  @13eacffd
+  Scenario: Cropping should be allowed when creating an image
+    Given I am logged in as a user with the media_creator role
+    When I visit "/media/add/image"
+    And I attach the file "test.jpg" to "Image"
+    And I wait for AJAX to finish
+    Then I should see an open "Crop image" details element
+    And I should see a "Freeform" vertical tab
+
+  @b23435a5
   Scenario: Uploading an image to be ignored by the media library
     Given I am logged in as a user with the media_creator role
     When I visit "/media/add/image"
