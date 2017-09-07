@@ -131,11 +131,11 @@ class ConfigIntegrityTest extends BrowserTestBase {
 
     $private_key = $oauth->get('private_key');
     $this->assertNotEmpty($private_key);
-    $this->assertFileExists($private_key);
+    $this->assertFilePermissions(0600, $private_key);
 
     $public_key = $oauth->get('public_key');
     $this->assertNotEmpty($public_key);
-    $this->assertFileExists($public_key);
+    $this->assertFilePermissions(0600, $public_key);
   }
 
   /**
@@ -227,6 +227,19 @@ class ConfigIntegrityTest extends BrowserTestBase {
   protected function assertForbidden($path) {
     $this->drupalGet($path);
     $this->assertSession()->statusCodeEquals(403);
+  }
+
+  /**
+   * Asserts that a file exists and has a specific permission mask.
+   *
+   * @param int $permissions
+   *   The permission mask as an octal number (0755, 0600, etc.)
+   * @param string $file
+   *   The path to the file.
+   */
+  protected function assertFilePermissions($permissions, $file) {
+    $this->assertFileExists($file);
+    $this->assertSame($permissions, fileperms($file) & 0777);
   }
 
   /**

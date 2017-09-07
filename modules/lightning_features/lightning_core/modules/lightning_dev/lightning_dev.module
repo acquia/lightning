@@ -29,10 +29,12 @@ function lightning_dev_modules_installed(array $modules) {
 
     $key = $oauth_settings->get('public_key');
     $key = file_unmanaged_move($key, '/tmp/simple_oauth.public.key', FILE_EXISTS_REPLACE);
+    drupal_chmod($key, 0600);
     $oauth_settings->set('public_key', $key);
 
     $key = $oauth_settings->get('private_key');
     $key = file_unmanaged_move($key, '/tmp/simple_oauth.private.key', FILE_EXISTS_REPLACE);
+    drupal_chmod($key, 0600);
     $oauth_settings->set('private_key', $key);
 
     $oauth_settings->save();

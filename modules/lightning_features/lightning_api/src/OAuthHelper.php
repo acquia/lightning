@@ -63,6 +63,7 @@ class OAuthHelper {
     $path = sprintf('%s/%s.key', sys_get_temp_dir(), hash('sha256', $key));
 
     if (file_put_contents($path, $key)) {
+      drupal_chmod($path, 0600);
       return $path;
     }
     else {
