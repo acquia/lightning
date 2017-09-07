@@ -17,6 +17,13 @@ use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_core\Plugin\views\filter\Bundle;
 
 /**
+ * Implements hook_local_tasks_alter().
+ */
+function lightning_core_local_tasks_alter(array &$local_tasks) {
+  $local_tasks['entity.node.edit_form']['options']['attributes']['rel'] = 'edit-form';
+}
+
+/**
  * Implements hook_library_info_alter().
  */
 function lightning_core_library_info_alter(array &$libraries, $extension) {

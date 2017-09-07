@@ -11,6 +11,8 @@ Feature: Embedding entities in a WYSIWYG editor
     And I submit the entity browser
     Then I should see a "form.entity-embed-dialog" element
     And I should see an "Image style" field
+    # Assert that the freeform crop type is exposed as an image style.
+    And the "Image style" field should have a "Cropped: Freeform" option
     # Assert that the default alt text is whatever is in the media item.
     And the "Alternate text" field should contain "I am the greetest"
     # There are two "Title" fields on the page once we reach this assertion --

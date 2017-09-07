@@ -48,6 +48,8 @@ class ConfigIntegrityTest extends BrowserTestBase {
       'page_creator',
       'page_reviewer',
     ]);
+    $this->assertEntityExists('crop_type', 'freeform');
+    $this->assertEntityExists('image_style', 'crop_freeform');
 
     $permissions = [
       'use text format rich_text',
@@ -88,22 +90,8 @@ class ConfigIntegrityTest extends BrowserTestBase {
       ]);
     }
 
-    // Assert that the site-wide contact form has the expected fields.
-    $this->assertAllowed('/contact');
-    $assert->fieldExists('Your name');
-    $assert->fieldExists('Your email address');
-    $assert->fieldExists('Subject');
-    $assert->fieldExists('Message');
-
-    // The name and e-mail fields should not be present for authenticated users.
-    $account = $this->drupalCreateUser();
-    $this->drupalLogin($account);
-    $this->assertAllowed('/contact');
-    $assert->fieldNotExists('Your name');
-    $assert->fieldNotExists('Your email address');
-    $assert->fieldExists('Subject');
-    $assert->fieldExists('Message');
-    $this->drupalLogout();
+    $this->testCropping();
+    $this->testContactForm();
 
     // Assert that bundled content types have meta tags enabled.
     $this->assertMetatag(['page', 'landing_page']);
@@ -239,6 +227,57 @@ class ConfigIntegrityTest extends BrowserTestBase {
   protected function assertForbidden($path) {
     $this->drupalGet($path);
     $this->assertSession()->statusCodeEquals(403);
+  }
+
+  /**
+   * Tests that cropping is enabled for image media.
+   */
+  private function testCropping() {
+    // Assert that a local copy of the Cropper library is being used.
+    $settings = $this->config('image_widget_crop.settings')->get('settings');
+    $lib = 'libraries/cropper/dist';
+    $this->assertContains("$lib/cropper.min.js", $settings['library_url']);
+    $this->assertContains("$lib/cropper.min.css", $settings['css_url']);
+
+    $form_displays = $this->container
+      ->get('entity_type.manager')
+      ->getStorage('entity_form_display')
+      ->loadByProperties([
+        'targetEntityType' => 'media',
+        'bundle' => 'image',
+      ]);
+
+    /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
+    foreach ($form_displays as $form_display) {
+      $component = $form_display->getComponent('image');
+      $this->assertInternalType('array', $component);
+      $this->assertEquals('image_widget_crop', $component['type']);
+      $this->assertEquals(['freeform'], $component['settings']['crop_list']);
+    }
+  }
+
+  /**
+   * Tests the site-wide contact form.
+   */
+  private function testContactForm() {
+    $assert = $this->assertSession();
+
+    $this->assertAllowed('/contact');
+
+    $assert->fieldExists('Your name');
+    $assert->fieldExists('Your email address');
+    $assert->fieldExists('Subject');
+    $assert->fieldExists('Message');
+
+    // The name and e-mail fields should not be present for authenticated users.
+    $account = $this->drupalCreateUser();
+    $this->drupalLogin($account);
+    $this->assertAllowed('/contact');
+    $assert->fieldNotExists('Your name');
+    $assert->fieldNotExists('Your email address');
+    $assert->fieldExists('Subject');
+    $assert->fieldExists('Message');
+    $this->drupalLogout();
   }
 
 }
