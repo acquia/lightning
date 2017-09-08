@@ -52,10 +52,6 @@ function lightning_dev_install() {
   $entity_browser->set('widgets', $widgets);
   $entity_browser->save();
 
-  if (\Drupal::moduleHandler()->moduleExists('lightning_api')) {
-    lightning_dev_modules_installed(['lightning_api']);
-  }
-
   $image_styles = array_map(
     function ($crop_type) {
       return 'crop_' . $crop_type;

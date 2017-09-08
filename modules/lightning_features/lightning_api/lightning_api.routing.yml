@@ -5,3 +5,11 @@ lightning_api.settings:
     _form: '\Drupal\lightning_api\Form\SettingsForm'
   requirements:
     _is_administrator: 'true'
+
+lightning_api.generate_keys:
+  path: '/admin/config/system/lightning/api/keys'
+  defaults:
+    _title: Generate keys
+    _form: '\Drupal\lightning_api\Form\OAuthKeyForm'
+  requirements:
+    _is_administrator: 'true'
