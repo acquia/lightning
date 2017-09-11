@@ -227,8 +227,11 @@ class OAuthKeyForm extends ConfigFormBase {
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     $conf = [];
-    if ($form_state->hasValue('conf')) {
-      $conf['config'] = $form_state->getValue('conf');
+
+    // Gather OpenSSL configuration values specified by the user.
+    $config = $form_state->getValue('conf');
+    if ($config) {
+      $conf['config'] = $config;
     }
 
     try {
