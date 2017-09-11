@@ -13,6 +13,13 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 class OAuthKeyForm extends ConfigFormBase {
 
   /**
+   * The UNIX permission bits to apply to the generated keys.
+   *
+   * @var integer
+   */
+  const PERMISSIONS = 0400;
+
+  /**
    * The file system service.
    *
    * @var \Drupal\Core\File\FileSystemInterface
@@ -72,7 +79,7 @@ class OAuthKeyForm extends ConfigFormBase {
   private function keyExists($which) {
     $key = $this->config('simple_oauth.settings')->get("{$which}_key");
 
-    return $key && file_exists($key) && (fileperms($key) & 0777) === 0600;
+    return $key && file_exists($key) && (fileperms($key) & 0777) === static::PERMISSIONS;
   }
 
   /**
@@ -96,7 +103,7 @@ class OAuthKeyForm extends ConfigFormBase {
     }
 
     if (file_put_contents($destination, $key)) {
-      $this->fileSystem->chmod($destination, 0600);
+      $this->fileSystem->chmod($destination, static::PERMISSIONS);
       return $destination;
     }
     else {
