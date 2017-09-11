@@ -69,6 +69,12 @@ function lightning_dev_install() {
     $effects->setConfiguration(['crop' => $effect]);
     $image_style->save();
   }
+
+  \Drupal::configFactory()
+    ->getEditable('lightning_api.settings')
+    ->set('entity_json', TRUE)
+    ->set('bundle_docs', TRUE)
+    ->save();
 }
 
 /**
