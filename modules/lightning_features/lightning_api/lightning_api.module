@@ -2,37 +2,7 @@
 
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Url;
-use Drupal\lightning_api\OAuthHelper;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
-
-/**
- * Implements hook_modules_installed().
- */
-function lightning_api_modules_installed(array $modules) {
-  // Don't do anything during a config sync.
-  if (\Drupal::isConfigSyncing()) {
-    return;
-  }
-  elseif (in_array('simple_oauth', $modules)) {
-    try {
-      list ($private, $public) = OAuthHelper::generateKeyPair(TRUE);
-
-      \Drupal::configFactory()
-        ->getEditable('simple_oauth.settings')
-        ->set('private_key', $private)
-        ->set('public_key', $public)
-        ->save();
-
-      drupal_set_message(t('Generated an initial key pair for OAuth authentication. To keep your site secure, be sure to change it before going into production!'), 'warning');
-    }
-    catch (\Exception $e) {
-      $error = t('Could not generate a key pair because @reason. Until this is done, OAuth authentication will not work.', [
-        '@reason' => lcfirst($e->getMessage()),
-      ]);
-      drupal_set_message($error, 'error');
-    }
-  }
-}
 
 /**
  * Implements hook_entity_insert().

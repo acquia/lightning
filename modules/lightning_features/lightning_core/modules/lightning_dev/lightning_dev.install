@@ -52,10 +52,6 @@ function lightning_dev_install() {
   $entity_browser->set('widgets', $widgets);
   $entity_browser->save();
 
-  if (\Drupal::moduleHandler()->moduleExists('lightning_api')) {
-    lightning_dev_modules_installed(['lightning_api']);
-  }
-
   $image_styles = array_map(
     function ($crop_type) {
       return 'crop_' . $crop_type;
@@ -73,6 +69,12 @@ function lightning_dev_install() {
     $effects->setConfiguration(['crop' => $effect]);
     $image_style->save();
   }
+
+  \Drupal::configFactory()
+    ->getEditable('lightning_api.settings')
+    ->set('entity_json', TRUE)
+    ->set('bundle_docs', TRUE)
+    ->save();
 }
 
 /**
@@ -250,6 +252,11 @@ function lightning_dev_update_8007() {
   $installer = \Drupal::service('module_installer');
   $installer->uninstall(['page_manager']);
   $installer->install(['lightning_api']);
+
+  \Drupal::configFactory()
+    ->getEditable('lightning_api.settings')
+    ->set('entity_json', TRUE)
+    ->save();
 }
 
 /**
@@ -278,4 +285,12 @@ function lightning_dev_update_8008() {
     $component['settings']['show_crop_area'] = TRUE;
     $form_display->setComponent('image', $component)->save();
   }
+
+  // This is not a manual update step, but it's required for the Travis CI tests
+  // to pass when testing the update path from 2.1.7.
+  \Drupal::configFactory()
+    ->getEditable('simple_oauth.settings')
+    ->clear('private_key')
+    ->clear('public_key')
+    ->save();
 }
