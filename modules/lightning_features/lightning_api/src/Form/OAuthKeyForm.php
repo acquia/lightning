@@ -3,42 +3,35 @@
 namespace Drupal\lightning_api\Form;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Form\ConfigFormBase;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\lightning_api\Exception\KeyGenerationException;
+use Drupal\lightning_api\OAuthKey;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class OAuthKeyForm extends ConfigFormBase {
 
   /**
-   * The UNIX permission bits to apply to the generated keys.
+   * The OAuth key service.
    *
-   * @var integer
+   * @var \Drupal\lightning_api\OAuthKey
    */
-  const PERMISSIONS = 0400;
-
-  /**
-   * The file system service.
-   *
-   * @var \Drupal\Core\File\FileSystemInterface
-   */
-  protected $fileSystem;
+  protected $key;
 
   /**
    * OAuthKeyForm constructor.
    *
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config factory service.
-   * @param \Drupal\Core\File\FileSystemInterface $file_system
-   *   The file system service.
+   * @param \Drupal\lightning_api\OAuthKey $key
+   *   The OAuth keys service.
    * @param TranslationInterface $translation
    *   The string translation service.
    */
-  public function __construct(ConfigFactoryInterface $config_factory, FileSystemInterface $file_system, TranslationInterface $translation) {
+  public function __construct(ConfigFactoryInterface $config_factory, OAuthKey $key, TranslationInterface $translation) {
     parent::__construct($config_factory);
-    $this->fileSystem = $file_system;
+    $this->key = $key;
     $this->setStringTranslation($translation);
   }
 
@@ -48,7 +41,7 @@ class OAuthKeyForm extends ConfigFormBase {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('config.factory'),
-      $container->get('file_system'),
+      $container->get('lightning_api.oauth_key'),
       $container->get('string_translation')
     );
   }
@@ -65,50 +58,6 @@ class OAuthKeyForm extends ConfigFormBase {
    */
   public function getFormId() {
     return 'oauth_key_form';
-  }
-
-  /**
-   * Ensures that a configured key exists and has correct permissions.
-   *
-   * @param string $which
-   *   The key to check. Can be 'public' or 'private'.
-   *
-   * @return bool
-   *   TRUE if the key exists and has 600 permissions, FALSE otherwise.
-   */
-  private function keyExists($which) {
-    $key = $this->config('simple_oauth.settings')->get("{$which}_key");
-
-    return $key && file_exists($key) && (fileperms($key) & 0777) === static::PERMISSIONS;
-  }
-
-  /**
-   * Writes a key to the file system.
-   *
-   * @param string $destination
-   *   The desired destination of the key. Can be a directory or a full path.
-   * @param string $key
-   *   The data to write.
-   *
-   * @return string
-   *   The final path of the written key.
-   *
-   * @throws \RuntimeException if an I/O error occurred while writing the key.
-   */
-  private function writeKey($destination, $key) {
-    $destination = rtrim($destination, '/');
-
-    if (is_dir($destination)) {
-      $destination .= '/' . hash('sha256', $key) . '.key';
-    }
-
-    if (file_put_contents($destination, $key)) {
-      $this->fileSystem->chmod($destination, static::PERMISSIONS);
-      return $destination;
-    }
-    else {
-      throw new \RuntimeException('The key could not be written.');
-    }
   }
 
   /**
@@ -133,13 +82,8 @@ class OAuthKeyForm extends ConfigFormBase {
       return $form;
     }
 
-    if ($form_state->isSubmitted() == FALSE) {
-      if ($this->keyExists('public')) {
-        drupal_set_message($this->t('A public key already exists and will be overwritten if you generate new keys.'), 'warning');
-      }
-      if ($this->keyExists('private')) {
-        drupal_set_message($this->t('A private key already exists and will be overwritten if you generate new keys.'), 'warning');
-      }
+    if ($this->key->exists() && $form_state->isSubmitted() == FALSE && $form_state->isRebuilding() == FALSE) {
+      drupal_set_message($this->t('A key pair already exists and will be overwritten if you generate new keys.'), 'warning');
     }
 
     $form['dir'] = [
@@ -235,7 +179,7 @@ class OAuthKeyForm extends ConfigFormBase {
     }
 
     try {
-      list ($private_key, $public_key) = static::generateKeyPair($conf);
+      list ($private_key, $public_key) = OAuthKey::generate($conf);
     }
     catch (KeyGenerationException $e) {
       return $this->onException($e, $form_state);
@@ -246,11 +190,11 @@ class OAuthKeyForm extends ConfigFormBase {
 
     try {
       $destination = $dir . '/' . trim($form_state->getValue('private_key'));
-      $destination = $this->writeKey($destination, $private_key);
+      $destination = $this->key->write($destination, $private_key);
       $config->set('private_key', $destination);
 
       $destination = $dir . '/' . trim($form_state->getValue('public_key'));
-      $destination = $this->writeKey($destination, $public_key);
+      $destination = $this->key->write($destination, $public_key);
       $config->set('public_key', $destination);
 
       $config->save();
@@ -260,51 +204,6 @@ class OAuthKeyForm extends ConfigFormBase {
     }
 
     drupal_set_message($this->t('A key pair was generated successfully.'));
-  }
-
-  /**
-   * Generates an asymmetric key pair for OAuth authentication.
-   *
-   * @param array $options
-   *   (optional) Additional configuration to pass to OpenSSL functions.
-   *
-   * @return string[]
-   *   Returns the private and public key components, in that order.
-   *
-   * @throws \Drupal\lightning_api\Exception\KeyGenerationException
-   *   If an error occurs during key generation or storage.
-   */
-  public static function generateKeyPair(array $options = []) {
-    if (extension_loaded('openssl') == FALSE) {
-      throw new KeyGenerationException('The OpenSSL PHP extension is unavailable');
-    }
-
-    $options += [
-      'private_key_bits' => 2048,
-      'private_key_type' => OPENSSL_KEYTYPE_RSA,
-    ];
-    $key_pair = [NULL];
-
-    $pk = openssl_pkey_new($options);
-    if (empty($pk)) {
-      throw new KeyGenerationException();
-    }
-
-    // Get the private key as a string.
-    $victory = openssl_pkey_export($pk, $key_pair[0], NULL, $options);
-    if (empty($victory)) {
-      throw new KeyGenerationException();
-    }
-
-    // Get the public key as a string.
-    $key = openssl_pkey_get_details($pk)['key'];
-    if (empty($key)) {
-      throw new KeyGenerationException();
-    }
-    array_push($key_pair, $key);
-
-    openssl_pkey_free($pk);
-    return $key_pair;
   }
 
 }

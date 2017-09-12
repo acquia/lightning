@@ -5,6 +5,7 @@ namespace Drupal\Tests\lightning_api\Kernel;
 use Drupal\Core\Form\FormState;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\lightning_api\Form\OAuthKeyForm;
+use Drupal\lightning_api\OAuthKey;
 
 /**
  * @group lightning
@@ -39,7 +40,7 @@ class OAuthKeyFormTest extends KernelTestBase {
 
   private function assertKey($path) {
     $this->assertFileExists($path);
-    $this->assertSame(0400, fileperms($path) & 0777);
+    $this->assertSame(OAuthKey::PERMISSIONS, fileperms($path) & 0777);
     drupal_unlink($path);
   }
 

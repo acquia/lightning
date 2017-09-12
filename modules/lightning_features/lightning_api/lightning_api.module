@@ -5,28 +5,6 @@ use Drupal\Core\Url;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
- * Implements hook_modules_installed().
- */
-function lightning_api_modules_installed(array $modules) {
-  if (in_array('simple_oauth', $modules)) {
-    $url = Url::fromRoute('lightning_api.generate_keys');
-    try {
-      $url = $url->toString();
-    }
-    catch (RouteNotFoundException $e) {
-      \Drupal::service('router.builder')->rebuild();
-    }
-
-    drupal_set_message(
-      t('You may wish to <a href=":generate_keys">generate a key pair</a> for OAuth authentication.', [
-        ':generate_keys' => $url instanceof Url ? $url->toString() : $url,
-      ]),
-      'warning'
-    );
-  }
-}
-
-/**
  * Implements hook_entity_insert().
  */
 function lightning_api_entity_insert(EntityInterface $entity) {
