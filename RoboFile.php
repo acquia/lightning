@@ -14,6 +14,13 @@ class RoboFile extends \Robo\Tasks {
   }
 
   public function testBehat($feature = NULL) {
+    $this
+      ->taskExec('bin/selenium-server-standalone')
+      ->rawArg('-port 4444')
+      ->rawArg('-log selenium.log')
+      ->background()
+      ->run();
+
     $task = $this->taskBehat();
 
     if ($feature) {
