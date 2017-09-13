@@ -93,6 +93,7 @@ before_script:
 script:
   - composer validate ../composer.json --no-check-all --ansi --no-interaction
   - phpunit --configuration ./core --group lightning
+  - cd ..
   - bin/robo test:behat
 
 matrix:
