@@ -14,7 +14,7 @@ class RoboFile extends \Robo\Tasks {
       ->stopOnFail();
   }
 
-  public function testBehat($feature = NULL) {
+  public function testBehat(array $arguments) {
     $this
       ->taskExec('bin/selenium-server-standalone')
       ->rawArg('-port 4444')
@@ -24,13 +24,18 @@ class RoboFile extends \Robo\Tasks {
 
     $task = $this->taskBehat();
 
-    if ($feature) {
-      $feature = "tests/features/$feature";
-
-      if (file_exists("$feature.feature")) {
-        $feature .= '.feature';
+    foreach ($arguments as $argument) {
+      if ($argument{0} == '-') {
+        $task->rawArg($argument);
       }
-      $task->arg($feature);
+      else {
+        $feature = "tests/features/$argument";
+
+        if (file_exists("$feature.feature")) {
+          $feature .= '.feature';
+        }
+        $task->arg($feature);
+      }
     }
     return $task;
   }
