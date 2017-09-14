@@ -56,6 +56,7 @@ projects[openapi][version] = 1.0-alpha1
 projects[page_manager][type] = module
 projects[page_manager][version] = 4.0-beta2
 projects[panelizer][type] = module
+projects[panelizer][patch][] = https://www.drupal.org/files/issues/2908917-2.patch
 projects[panelizer][version] = 4.0
 projects[panels][type] = module
 projects[panels][patch][] = https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch
