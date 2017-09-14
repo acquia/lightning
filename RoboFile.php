@@ -17,8 +17,8 @@ class RoboFile extends \Robo\Tasks {
   /**
    * Run Behat tests.
    *
-   * To run all tests, simply run 'test:behat'. To run a specific a specific
-   * feature, you can pass its path, relative to the tests/features directory:
+   * To run all tests, simply run 'test:behat'. To run a specific feature, you
+   * can pass its path, relative to the tests/features directory:
    *
    * test:behat -- media/image.feature
    *
