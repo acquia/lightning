@@ -1,16 +1,15 @@
 <?php
 
-namespace Drupal\lightning\Update;
+namespace Drupal\lightning_media\Update;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
-use Drupal\lightning_core\Element;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Executes interactive update steps for Lightning 2.1.8.
+ * Executes interactive update steps for Lightning Media 2.1.8.
  *
  * @Update("2.1.8")
  */
@@ -44,39 +43,23 @@ final class Update218 implements ContainerInjectionInterface {
    */
   protected $configFactory;
 
-  /**
-   * The view entity storage handler.
-   *
-   * @var \Drupal\Core\Entity\EntityStorageInterface
-   */
-  protected $viewStorage;
-
-  public function __construct(ModuleInstallerInterface $module_installer, EntityStorageInterface $form_display_storage, $app_root, ConfigFactoryInterface $config_factory, EntityStorageInterface $view_storage = NULL) {
+  public function __construct(ModuleInstallerInterface $module_installer, EntityStorageInterface $form_display_storage, $app_root, ConfigFactoryInterface $config_factory) {
     $this->moduleInstaller = $module_installer;
     $this->formDisplayStorage = $form_display_storage;
     $this->appRoot = (string) $app_root;
     $this->configFactory = $config_factory;
-    $this->viewStorage = $view_storage;
   }
 
   /**
    * {@inheritdoc}
    */
   public static function create(ContainerInterface $container) {
-    $entity_manager = $container->get('entity_type.manager');
-
-    $arguments = [
+    return new static(
       $container->get('module_installer'),
-      $entity_manager->getStorage('entity_form_display'),
+      $container->get('entity_type.manager')->getStorage('entity_form_display'),
       $container->get('app.root'),
-      $container->get('config.factory'),
-    ];
-
-    if ($container->get('module_handler')->moduleExists('views')) {
-      $arguments[] = $entity_manager->getStorage('view');
-    }
-
-    return (new \ReflectionClass(__CLASS__))->newInstanceArgs($arguments);
+      $container->get('config.factory')
+    );
   }
 
   /**
@@ -129,31 +112,6 @@ final class Update218 implements ContainerInjectionInterface {
    */
   public function bulkUpload() {
     $this->moduleInstaller->install(['lightning_media_bulk_upload']);
-  }
-
-  /**
-   * @update
-   *
-   * @ask Do you want to make the Operations drop-button the last column in each
-   * row of the Content view?
-   */
-  public function moveContentViewOperations() {
-    if (empty($this->viewStorage)) {
-      return;
-    }
-
-    /** @var \Drupal\views\ViewEntityInterface $view */
-    $view = $this->viewStorage->load('content');
-    if (empty($view)) {
-      return;
-    }
-
-    $display = &$view->getDisplay('default');
-
-    if (isset($display['display_options']['fields']['operations'])) {
-      Element::toTail($display['display_options']['fields'], 'operations');
-      $this->viewStorage->save($view);
-    }
   }
 
 }
