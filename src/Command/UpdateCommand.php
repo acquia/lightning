@@ -10,7 +10,6 @@ use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery;
 use Drupal\Core\State\StateInterface;
 use Drupal\lightning\Annotation\Update;
-use Drupal\lightning\ConsoleAwareInterface;
 use phpDocumentor\Reflection\DocBlock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -151,22 +150,32 @@ class UpdateCommand extends Command {
       $handler = $this->classResolver
         ->getInstanceFromDefinition($update['class']);
 
-      if ($handler instanceof ConsoleAwareInterface) {
-        $handler->setIO($io);
-      }
-      $this->runTasks($handler);
+      $this->runTasks($handler, $io);
 
       $this->state->set("$provider.version", $update['id']);
     }
   }
 
-  protected function runTasks($handler) {
-    /** @var object $handler */
+  protected function runTasks($handler, DrupalStyle $io) {
     $tasks = $this->discoverTasks($handler);
+
+    foreach ($tasks as $task) {
+      /** @var \ReflectionMethod $reflector */
+      /** @var DocBlock $doc_block */
+      list ($reflector, $doc_block) = $task;
+
+      if ($doc_block->hasTag('ask')) {
+        $tags = $doc_block->getTagsByName('ask');
+
+        $proceed = $io->confirm(reset($tags)->getContent());
+        if ($proceed) {
+          $reflector->invoke($handler, $io);
+        }
+      }
+    }
   }
 
   protected function discoverTasks($handler) {
-    /** @var object $handler */
     $tasks = [];
 
     $methods = (new \ReflectionObject($handler))->getMethods(\ReflectionMethod::IS_PUBLIC);
@@ -181,7 +190,7 @@ class UpdateCommand extends Command {
       $doc_block = new DocBlock($doc_comment);
 
       if ($doc_block->hasTag('update')) {
-        array_push($tasks, [$method, $doc_block]);
+        $tasks[] = [$method, $doc_block];
       }
     }
     return $tasks;
