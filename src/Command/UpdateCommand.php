@@ -6,8 +6,6 @@ use Drupal\Console\Core\Command\Command;
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery;
 use Drupal\lightning\Annotation\Update;
 use phpDocumentor\Reflection\DocBlock;
@@ -32,20 +30,6 @@ class UpdateCommand extends Command {
   protected $configFactory;
 
   /**
-   * The module handler service.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
-   * The entity type manager service.
-   *
-   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
-   */
-  protected $entityTypeManager;
-
-  /**
    * The annotated class discovery handler.
    *
    * @var \Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery
@@ -68,17 +52,11 @@ class UpdateCommand extends Command {
    *   The namespaces to scan for updates.
    * @param ConfigFactoryInterface $config_factory
    *   The config factory service.
-   * @param ModuleHandlerInterface $module_handler
-   *   The module handler service.
-   * @param EntityTypeManagerInterface $entity_type_manager
-   *   The entity type manager service.
    */
-  public function __construct(ClassResolverInterface $class_resolver, \Traversable $namespaces, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(ClassResolverInterface $class_resolver, \Traversable $namespaces, ConfigFactoryInterface $config_factory) {
     parent::__construct('update:lightning');
     $this->classResolver = $class_resolver;
     $this->configFactory = $config_factory;
-    $this->moduleHandler = $module_handler;
-    $this->entityTypeManager = $entity_type_manager;
     $this->discovery = new AnnotatedClassDiscovery('Update', $namespaces, Update::class);
   }
 
