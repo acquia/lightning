@@ -4,11 +4,11 @@ namespace Drupal\lightning\Command;
 
 use Drupal\Console\Core\Command\Command;
 use Drupal\Console\Core\Style\DrupalStyle;
+use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\DependencyInjection\ClassResolverInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery;
-use Drupal\Core\State\StateInterface;
 use Drupal\lightning\Annotation\Update;
 use phpDocumentor\Reflection\DocBlock;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,11 +25,11 @@ class UpdateCommand extends Command {
   protected $classResolver;
 
   /**
-   * The state service.
+   * The config factory service.
    *
-   * @var \Drupal\Core\State\StateInterface
+   * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $state;
+  protected $configFactory;
 
   /**
    * The module handler service.
@@ -66,17 +66,17 @@ class UpdateCommand extends Command {
    *   The class resolver service.
    * @param \Traversable $namespaces
    *   The namespaces to scan for updates.
-   * @param \Drupal\Core\State\StateInterface $state
-   *   The state service.
+   * @param ConfigFactoryInterface $config_factory
+   *   The config factory service.
    * @param ModuleHandlerInterface $module_handler
    *   The module handler service.
    * @param EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager service.
    */
-  public function __construct(ClassResolverInterface $class_resolver, \Traversable $namespaces, StateInterface $state, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(ClassResolverInterface $class_resolver, \Traversable $namespaces, ConfigFactoryInterface $config_factory, ModuleHandlerInterface $module_handler, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct('update:lightning');
     $this->classResolver = $class_resolver;
-    $this->state = $state;
+    $this->configFactory = $config_factory;
     $this->moduleHandler = $module_handler;
     $this->entityTypeManager = $entity_type_manager;
     $this->discovery = new AnnotatedClassDiscovery('Update', $namespaces, Update::class);
@@ -110,6 +110,14 @@ class UpdateCommand extends Command {
     $this->since = $input->getOption('force') ? '0.0.0' : $input->getOption('since');
   }
 
+  protected function getProviderVersion($provider) {
+    $versions = (array) $this->configFactory->get('lightning.versions');
+
+    return isset($versions[$provider])
+      ? $versions[$provider]
+      : '0.0.0';
+  }
+
   protected function getDefinitions() {
     $definitions = $this->discovery->getDefinitions();
     ksort($definitions);
@@ -119,7 +127,7 @@ class UpdateCommand extends Command {
 
       return version_compare(
         $definition['id'],
-        $this->since ?: $this->state->get("$provider.version", '0.0.0'),
+        $this->since ?: $this->getProviderVersion($provider),
         '>'
       );
     };
@@ -140,6 +148,7 @@ class UpdateCommand extends Command {
     $io = new DrupalStyle($input, $output);
     $module_info = system_rebuild_module_data();
     $provider = NULL;
+    $versions = $this->configFactory->getEditable('lightning.versions');
 
     foreach ($definitions as $id => $update) {
       if ($update['provider'] != $provider) {
@@ -151,9 +160,9 @@ class UpdateCommand extends Command {
         ->getInstanceFromDefinition($update['class']);
 
       $this->runTasks($handler, $io);
-
-      $this->state->set("$provider.version", $update['id']);
+      $versions->set($provider, $update['id']);
     }
+    $versions->save();
   }
 
   protected function runTasks($handler, DrupalStyle $io) {
