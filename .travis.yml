@@ -10,7 +10,7 @@ cache:
     - "$HOME/.drush/cache"
     - "$HOME/.npm"
 php:
-  - 7.0
+  - 7.0.22
 env:
   - VERSION=HEAD
   - VERSION=2.1.7
@@ -85,15 +85,13 @@ install:
 before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - jdk_switcher use oraclejdk8
-  # Start Selenium and dump its ginormous log into a temporary file.
-  - mkdir ../tmp
-  - selenium-server-standalone -port 4444 -log ../tmp/selenium2.log &
   - sleep 5
 
 script:
   - composer validate ../composer.json --no-check-all --ansi --no-interaction
   - phpunit --configuration ./core --group lightning
-  - behat --strict --stop-on-failure --config ./sites/default/files/behat.yml
+  - cd ..
+  - bin/robo test:behat
 
 matrix:
   fast_finish: true

@@ -8,15 +8,19 @@
 use Drupal\Component\Utility\Unicode;
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Field\WidgetInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\Core\StringTranslation\PluralTranslatableMarkup as Plural;
+use Drupal\ckeditor\Ajax\AddStyleSheetCommand;
 use Drupal\entity_browser\Element\EntityBrowserElement;
 use Drupal\file\FileInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\image\Plugin\Field\FieldType\ImageItem;
+use Drupal\image\Plugin\Field\FieldWidget\ImageWidget;
 use Drupal\image\Plugin\ImageEffect\ResizeImageEffect;
 use Drupal\lightning_core\BundleEntityStorage;
 use Drupal\lightning_media\Exception\IndeterminateBundleException;
-use Drupal\lightning_media\Plugin\Field\FieldWidget\EntityReferenceBrowserWidget;
+use Drupal\lightning_media\ImageWidgetHelper;
 use Drupal\lightning_media\MediaHelper;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media\Form\MediaForm;
@@ -25,12 +29,60 @@ use Drupal\media_entity\MediaInterface;
 use Drupal\media_entity\MediaBundleInterface;
 
 /**
- * Implements hook_field_widget_info_alter().
+ * Implements hook_field_widget_third_party_settings_form().
  */
-function lightning_media_field_widget_info_alter(array &$info) {
-  if (isset($info['entity_browser_entity_reference'])) {
-    Override::pluginClass($info['entity_browser_entity_reference'], EntityReferenceBrowserWidget::class);
+function lightning_media_field_widget_third_party_settings_form(WidgetInterface $widget) {
+  $element = [];
+
+  if ($widget instanceof ImageWidget) {
+    $element = ImageWidgetHelper::getSettingsForm($widget);
   }
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_settings_summary_alter().
+ */
+function lightning_media_field_widget_settings_summary_alter(array &$summary, array $context) {
+  if ($context['widget'] instanceof ImageWidget) {
+    ImageWidgetHelper::summarize($context['widget'], $summary);
+  }
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function lightning_media_field_widget_form_alter(array &$element, FormStateInterface $form_state, array $context) {
+  if ($context['widget'] instanceof ImageWidget) {
+    ImageWidgetHelper::alter($element, $context['widget']);
+  }
+}
+
+/**
+ * Implements hook_field_widget_WIDGET_TYPE_form_alter().
+ */
+function lightning_media_field_widget_entity_browser_entity_reference_form_alter(array &$element, FormStateInterface $form_state, array $context) {
+  // Move the remaining number of selections to the details summary.
+  $element['#description'] .= $element['current']['#prefix'];
+  unset($element['current']['#prefix']);
+
+  /** @var \Drupal\Core\Field\FieldItemListInterface $items */
+  $items = $context['items'];
+
+  // Wrap the current selections in a nice <details> element.
+  $cardinality = $items
+    ->getFieldDefinition()
+    ->getFieldStorageDefinition()
+    ->getCardinality();
+
+  $element['current']['#theme_wrappers'] = [
+    'details' => [
+      '#attributes' => [
+        'open' => TRUE,
+      ],
+      '#title' => new Plural($cardinality, 'Current selection', 'Current selections'),
+    ],
+  ];
 }
 
 /**
@@ -345,12 +397,8 @@ function lightning_media_ajax_render_alter(array &$data) {
       }
     }
 
-    // Gingerly check if the AJAX command class exists, so that we don't need
-    // to establish a hard dependency on CKEditor.
-    $command_class = '\Drupal\ckeditor\Ajax\AddStyleSheetCommand';
-    if ($style_sheets && class_exists($command_class)) {
-      /** @var \Drupal\ckeditor\Ajax\AddStyleSheetCommand $command */
-      $command = new $command_class($query->get('editor'), $style_sheets);
+    if ($style_sheets) {
+      $command = new AddStyleSheetCommand($query->get('editor'), $style_sheets);
       $data[] = $command->render();
     }
   }

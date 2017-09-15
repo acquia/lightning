@@ -1,0 +1,15 @@
+services:
+  lightning_api.oauth_key:
+    class: '\Drupal\lightning_api\OAuthKey'
+    arguments:
+      - '@config.factory'
+      - '@file_system'
+
+  lightning_api.request_subscriber:
+    class: '\Drupal\lightning_api\RequestSubscriber'
+    arguments:
+      - '@current_route_match'
+      - '@lightning_api.oauth_key'
+      - '@string_translation'
+    tags:
+      - { name: event_subscriber }

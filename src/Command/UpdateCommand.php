@@ -80,7 +80,7 @@ class UpdateCommand extends Command {
     $this->state = $state;
     $this->moduleHandler = $module_handler;
     $this->entityTypeManager = $entity_type_manager;
-    $this->discovery = new AnnotatedClassDiscovery('Plugin/Update', $namespaces, Update::class);
+    $this->discovery = new AnnotatedClassDiscovery('Update', $namespaces, Update::class);
   }
 
   /**
@@ -184,68 +184,7 @@ class UpdateCommand extends Command {
         array_push($tasks, [$method, $doc_block]);
       }
     }
-    return array_filter($tasks, [$this, 'filterTask']);
-  }
-
-  protected function filterTask(array $task) {
-    /** @var DocBlock $doc_block */
-    list (, $doc_block) = $task;
-
-    $result = 1;
-
-    foreach ($doc_block->getTagsByName('requires') as $requirement) {
-      $requirement = trim($requirement->getContent());
-      list ($requirement, $arguments) = preg_split('/\s+/', $requirement, 2);
-
-      switch ($requirement) {
-        case 'module':
-          $result &= (int) $this->checkModuleRequirement($arguments);
-          break;
-
-        case 'entity':
-          $result &= (int) $this->checkEntityRequirement($arguments);
-          break;
-
-        default:
-          break;
-      }
-
-      if ($result === 0) {
-        break;
-      }
-    }
-    return (bool) $result;
-  }
-
-  protected function checkModuleRequirement($module) {
-    $negate = $module{0} == '!';
-
-    $exists = $this->moduleHandler->moduleExists(ltrim($module, '!'));
-    if ($negate) {
-      $exists = !$exists;
-    }
-    return $exists;
-  }
-
-  protected function checkEntityRequirement($entity) {
-    list ($entity_type, $entity_id) = preg_split('/\s+/', $entity, 2);
-
-    $negate = $entity_id{0} == '!';
-
-    $exists = (bool) $this->entityTypeManager
-      ->getStorage($entity_type)
-      ->getQuery()
-      ->count()
-      ->condition(
-        $this->entityTypeManager->getDefinition($entity_type)->getKey('id'),
-        ltrim($entity_id, '!')
-      )
-      ->execute();
-
-    if ($negate) {
-      $exists = !$exists;
-    }
-    return $exists;
+    return $tasks;
   }
 
 }

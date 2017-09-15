@@ -14,17 +14,18 @@
         "phpunit/phpunit": "~4.8",
         "symfony/css-selector": "~2.8",
         "drush/drush": "8.1.12",
-        "drupal/drupal-extension": "~3.2.0",
+        "drupal/drupal-extension": "~3.3.0",
         "behat/behat": "^3.0",
         "drupal/coder": "~8.2.0",
         "phing/phing": "^2.14",
         "drupal/devel": "^1.0",
         "squizlabs/php_codesniffer": "2.*",
         "se/selenium-server-standalone": "^2.53",
-        "drupal/console": "^1.0",
+        "drupal/console": "1.0.1",
         "jakoch/phantomjs-installer": "1.9.8",
         "composer/composer": "^1.4",
-        "grasmash/yaml-cli": "^1.0"
+        "grasmash/yaml-cli": "^1.0",
+        "consolidation/robo": "^1.1"
     },
     "bin": [
       "lightning-subprofile"
@@ -99,7 +100,9 @@
                 "2869592 - Disabled update module shouldn't produce a status report warning":
                 "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                 "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer":
-                "https://www.drupal.org/files/issues/2885441-2.patch"
+                "https://www.drupal.org/files/issues/2885441-2.patch",
+                "2904798 - 8.3.7 Views SA patch should use ajaxEnabled() and not check option 'use_ajax' directly":
+                "https://www.drupal.org/files/issues/2904798-7.patch"
             },
             "drupal/entity_embed": {
                 "2832504 - Send the CKEditor instance ID to the embed.preview route":
@@ -125,11 +128,21 @@
                 "2878684 - Use String.match to correlate regions when switching Layouts in Panels IPE":
                 "https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch",
                 "2825034 - Form error messages do not appear in IPE":
-                "https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch"
+                "https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch",
+                "2908897 - CategoryView leaves AJAX request marked active":
+                "https://www.drupal.org/files/issues/2908897-2.patch"
+            },
+            "drupal/panelizer": {
+                "2908917 - SaveTabView blindly assumes a Revert tab exists":
+                "https://www.drupal.org/files/issues/2908917-2.patch"
             },
             "drupal/simple_oauth": {
                 "2901180 - thephpleague/oauth2-server now requires an EncryptionKey to be set on all instances of AuthorizationServer":
                 "https://www.drupal.org/files/issues/2901180-8.patch"
+            },
+            "drupal/crop": {
+                "2904514 - Crop API causes an error when adding a media bundle":
+                "https://www.drupal.org/files/issues/2904514-2.patch"
             }
         }
     },
@@ -145,7 +158,7 @@
         "drupal/ctools": "^3.0",
         "drupal/panels": "4.2.0",
         "drupal/page_manager": "^4.0",
-        "drupal/panelizer": "^4.0",
+        "drupal/panelizer": "4.0.0",
         "drupal/scheduled_updates": "1.0.0-alpha6",
         "drupal/workbench_moderation": "1.2.0",
         "drupal/acquia_connector": "^1.1",
@@ -169,7 +182,10 @@
         "drupal/simple_oauth": "2.0.0-rc3",
         "oomphinc/composer-installers-extender": "^1.1",
         "drupal/dropzonejs": "1.0.0-alpha7",
-        "bower-asset/dropzone": "^5.1"
+        "bower-asset/dropzone": "^5.1",
+        "drupal/crop": "1.2.0",
+        "drupal/image_widget_crop": "^2.0",
+        "bower-asset/cropper": "^2.3"
     },
     "autoload": {
         "psr-4": {

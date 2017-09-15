@@ -6,11 +6,11 @@ use Drupal\lightning\ModuleInstallerTrait;
 use Drupal\lightning\UpdateBase;
 
 /**
- * Executes interactive update steps for Lightning 2.0.2.
+ * Executes interactive update steps for Lightning 2.1.8.
  *
- * @Update("2.0.2")
+ * @Update("2.1.8")
  */
-class Update202 extends UpdateBase {
+class Update218 extends UpdateBase {
 
   use ModuleInstallerTrait;
 

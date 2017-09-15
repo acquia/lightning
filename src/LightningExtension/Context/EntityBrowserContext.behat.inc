@@ -2,31 +2,20 @@
 
 namespace Acquia\LightningExtension\Context;
 
+use Acquia\LightningExtension\AwaitTrait;
+use Acquia\LightningExtension\DetailsTrait;
 use Behat\Mink\Exception\ElementNotFoundException;
+use Behat\Mink\Exception\ExpectationException;
 use Drupal\Component\Utility\Html;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\DrupalExtension\Context\MinkContext;
 
 /**
  * Contains step definitions for working with entity browsers.
  */
 class EntityBrowserContext extends DrupalSubContextBase {
 
-  /**
-   * The Mink context.
-   *
-   * @var MinkContext
-   */
-  protected $minkContext;
-
-  /**
-   * Gathers required contexts.
-   *
-   * @BeforeScenario
-   */
-  public function gatherContexts() {
-    $this->minkContext = $this->getContext(MinkContext::class);
-  }
+  use AwaitTrait;
+  use DetailsTrait;
 
   /**
    * Submits the entity browser.
@@ -44,7 +33,7 @@ class EntityBrowserContext extends DrupalSubContextBase {
     // exists at all, or that it's the correct submit button.
     $session->executeScript('frames["' . $frame . '"].document.forms[0].querySelector("#edit-submit").click()');
     sleep(10);
-    $this->minkContext->iWaitForAjaxToFinish();
+    $this->awaitAjax();
   }
 
   /**
@@ -61,20 +50,40 @@ class EntityBrowserContext extends DrupalSubContextBase {
   public function openImageBrowser($field) {
     $session = $this->getSession();
 
-    /** @var UtilityContext $context */
-    $context = $this->getContext(UtilityContext::class);
+    $this
+      ->assertDetails($field, $session->getPage())
+      ->pressButton('Select Image(s)');
 
-    $details = $context->findCollapsible($field);
-    if ($details) {
-      $details->pressButton('Select Image(s)');
-      $this->minkContext->iWaitForAjaxToFinish();
-      $session->switchToIFrame('entity_browser_iframe_image_browser');
-      // This might be vestigial.
-      sleep(10);
+    $this->awaitAjax();
+    $session->switchToIFrame('entity_browser_iframe_image_browser');
+    // This might be vestigial.
+    sleep(10);
+  }
+
+  /**
+   * Gets all items in an entity browser.
+   *
+   * @param string $browser_id
+   *   (optional) The entity browser ID.
+   *
+   * @return \Behat\Mink\Element\NodeElement[]
+   *   An array of items in the entity browser.
+   */
+  protected function getEntityBrowserItems($browser_id = NULL) {
+    if ($browser_id) {
+      $selector = 'form#entity-browser-' . Html::cleanCssIdentifier($browser_id) . '-form';
     }
     else {
-      throw new ElementNotFoundException($session->getDriver(), 'collapsible element');
+      $selector = 'form[data-entity-browser-uuid]';
     }
+
+    /** @var \Behat\Mink\Element\NodeElement[] $items */
+    $items = $this
+      ->assertSession()
+      ->elementExists('css', $selector)
+      ->findAll('css', '[data-selectable]');
+
+    return $items;
   }
 
   /**
@@ -90,20 +99,32 @@ class EntityBrowserContext extends DrupalSubContextBase {
    * @When I select item :n from the :browser_id entity browser
    */
   public function selectItem($n, $browser_id = NULL) {
-    if ($browser_id) {
-      $selector = 'form#entity-browser-' . Html::cleanCssIdentifier($browser_id) . '-form';
-    }
-    else {
-      $selector = 'form[data-entity-browser-uuid]';
-    }
-
-    /** @var \Behat\Mink\Element\NodeElement[] $items */
-    $items = $this
-      ->assertSession()
-      ->elementExists('css', $selector)
-      ->findAll('css', '[data-selectable]');
-
+    $items = $this->getEntityBrowserItems($browser_id);
     $items[$n - 1]->click();
+  }
+
+  /**
+   * Asserts a certain number of items are visible in the entity browser.
+   *
+   * @param int $n
+   *   The number of media items that should be visible.
+   * @param string $browser_id
+   *   (optional) The entity browser ID.
+   *
+   * @throws ExpectationException
+   *   If actual number of in the entity browser does not match the expected.
+   *
+   * @Then I should see :n item(s) in the entity browser
+   */
+  public function assertNumberVisible($n, $browser_id = NULL) {
+    $items = $this->getEntityBrowserItems($browser_id);
+    $actual = count($items);
+    if ($actual !== (int) $n) {
+      throw new ExpectationException(
+        'Expected entity browser to contain ' . $n . ' items, ' . $actual . ' items found.',
+        $this->getSession()->getDriver()
+      );
+    }
   }
 
 }

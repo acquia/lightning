@@ -8,8 +8,48 @@
 use Drupal\Core\Entity\Display\EntityFormDisplayInterface;
 use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\Core\Form\FormStateInterface;
+use Drupal\image\Entity\ImageStyle;
+use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media_image\Plugin\MediaEntity\Type\Image;
+
+/**
+ * Implements hook_field_widget_info_alter().
+ */
+function lightning_media_image_field_widget_info_alter(array &$info) {
+  if (isset($info['image_widget_crop'])) {
+    // We cannot import the class with a use statement, because it will blow up
+    // if Image Widget Crop is not installed.
+    Override::pluginClass($info['image_widget_crop'], \Drupal\lightning_media_image\Plugin\Field\FieldWidget\ImageCropWidget::class);
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_insert().
+ */
+function lightning_media_image_crop_type_insert($crop_type) {
+  // Don't do anything during a config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+  else {
+    // Create a dedicated image style to display images using this crop type.
+    /** @var \Drupal\crop\CropTypeInterface $crop_type */
+    $image_style = ImageStyle::create([
+      'name' => 'crop_' . $crop_type->id(),
+      'label' => t('Cropped: @crop_type', [
+        '@crop_type' => $crop_type->label(),
+      ]),
+    ]);
+    $image_style->addImageEffect([
+      'id' => 'crop_crop',
+      'data' => [
+        'crop_type' => $crop_type->id(),
+      ],
+    ]);
+    $image_style->save();
+  }
+}
 
 /**
  * Implements hook_modules_installed().
@@ -19,7 +59,8 @@ function lightning_media_image_modules_installed(array $modules) {
   if (\Drupal::isConfigSyncing()) {
     return;
   }
-  elseif (in_array('lightning_roles', $modules)) {
+
+  if (in_array('lightning_roles', $modules)) {
     $permissions = ['access image_browser entity browser pages'];
 
     // Media creators and managers can always access the image browser.
@@ -29,6 +70,13 @@ function lightning_media_image_modules_installed(array $modules) {
     // Any content creator can as well.
     \Drupal::service('lightning.content_roles')
       ->grantPermissions('creator', $permissions);
+  }
+
+  if (in_array('image_widget_crop', $modules)) {
+    Config::forModule('lightning_media_image')
+      ->optional()
+      ->getEntity('crop_type', 'freeform')
+      ->save();
   }
 }
 

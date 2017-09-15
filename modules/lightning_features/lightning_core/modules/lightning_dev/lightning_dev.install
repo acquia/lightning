@@ -10,6 +10,7 @@ use Drupal\entity_browser\Entity\EntityBrowser;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\filter\Entity\FilterFormat;
+use Drupal\image\Entity\ImageStyle;
 use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\media_entity\Entity\MediaBundle;
 use Drupal\scheduled_updates\Entity\ScheduledUpdateType;
@@ -51,9 +52,29 @@ function lightning_dev_install() {
   $entity_browser->set('widgets', $widgets);
   $entity_browser->save();
 
-  if (\Drupal::moduleHandler()->moduleExists('lightning_api')) {
-    lightning_dev_modules_installed(['lightning_api']);
+  $image_styles = array_map(
+    function ($crop_type) {
+      return 'crop_' . $crop_type;
+    },
+    \Drupal::entityQuery('crop_type')->execute()
+  );
+  $image_styles = ImageStyle::loadMultiple($image_styles);
+
+  /** @var ImageStyle $image_style */
+  foreach ($image_styles as $image_style) {
+    $effects = $image_style->getEffects();
+    $configuration = $effects->getConfiguration();
+    $effect = array_shift($configuration);
+    $effect['uuid'] = 'crop';
+    $effects->setConfiguration(['crop' => $effect]);
+    $image_style->save();
   }
+
+  \Drupal::configFactory()
+    ->getEditable('lightning_api.settings')
+    ->set('entity_json', TRUE)
+    ->set('bundle_docs', TRUE)
+    ->save();
 }
 
 /**
@@ -221,11 +242,45 @@ function lightning_dev_update_8007() {
   $installer = \Drupal::service('module_installer');
   $installer->uninstall(['page_manager']);
   $installer->install(['lightning_api']);
+
+  \Drupal::configFactory()
+    ->getEditable('lightning_api.settings')
+    ->set('entity_json', TRUE)
+    ->save();
 }
 
 /**
  * Executes manual update steps for Lightning 2.1.7 --> 2.1.8.
  */
 function lightning_dev_update_8008() {
-  \Drupal::service('module_installer')->install(['lightning_media_bulk_upload']);
+  \Drupal::service('module_installer')->install([
+    'image_widget_crop',
+    'lightning_media_bulk_upload',
+  ]);
+
+  // Use the cropping widgets for every form display of the Image media type.
+  // This code is lifted (almost) directly from lightning_media_image_install().
+  $form_displays = \Drupal::entityTypeManager()
+    ->getStorage('entity_form_display')
+    ->loadByProperties([
+      'targetEntityType' => 'media',
+      'bundle' => 'image',
+    ]);
+
+  /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
+  foreach ($form_displays as $form_display) {
+    $component = $form_display->getComponent('image');
+    $component['type'] = 'image_widget_crop';
+    $component['settings']['crop_list'] = ['freeform'];
+    $component['settings']['show_crop_area'] = TRUE;
+    $form_display->setComponent('image', $component)->save();
+  }
+
+  // This is not a manual update step, but it's required for the Travis CI tests
+  // to pass when testing the update path from 2.1.7.
+  \Drupal::configFactory()
+    ->getEditable('simple_oauth.settings')
+    ->clear('private_key')
+    ->clear('public_key')
+    ->save();
 }

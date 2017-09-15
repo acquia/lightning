@@ -23,10 +23,52 @@ function lightning_media_image_install() {
   // Create the image browser display of the media view.
   lightning_media_image_update_8003();
 
+  $module_exists = [\Drupal::moduleHandler(), 'moduleExists'];
+
   // Grants image browser access to the creator content role and the
   // media_creator and media_manager roles.
-  if (\Drupal::moduleHandler()->moduleExists('lightning_roles')) {
+  if ($module_exists('lightning_roles')) {
     lightning_media_image_modules_installed(['lightning_roles']);
+  }
+
+  if ($module_exists('image_widget_crop')) {
+    // Use the cropping widgets for every form display of the Image media type.
+    $form_displays = \Drupal::entityTypeManager()
+      ->getStorage('entity_form_display')
+      ->loadByProperties([
+        'targetEntityType' => 'media',
+        'bundle' => 'image',
+      ]);
+
+    /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
+    foreach ($form_displays as $form_display) {
+      $component = $form_display->getComponent('image');
+
+      if ($component && $component['type'] == 'image_image') {
+        $component['type'] = 'image_widget_crop';
+        $component['settings']['crop_list'] = ['freeform'];
+        $component['settings']['show_crop_area'] = TRUE;
+        $form_display->setComponent('image', $component)->save();
+      }
+    }
+
+    // Try to use a local copy of Cropper over the CDN-hosted fallback.
+    $lib = 'libraries/cropper/dist';
+    $lib = [
+      $lib,
+      drupal_get_path('module', 'lightning') . "/$lib",
+    ];
+    $lib = array_filter($lib, 'is_dir');
+
+    if ($lib) {
+      $lib = reset($lib);
+
+      \Drupal::configFactory()
+        ->getEditable('image_widget_crop.settings')
+        ->set('settings.library_url', "$lib/cropper.min.js")
+        ->set('settings.css_url', "$lib/cropper.min.css")
+        ->save();
+    }
   }
 }
 
@@ -72,18 +114,18 @@ function lightning_media_image_update_8003() {
 
   $display_id = $view->addDisplay('entity_browser', 'Image Browser');
   $display = &$view->getDisplay($display_id);
-  $display = array_merge($display, array(
+  $display = array_merge($display, [
     'display_options' =>
-      array(
+      [
         'display_extenders' =>
-          array(),
+          [],
         'style' =>
-          array(
+          [
             'type' => 'grid',
             'options' =>
-              array(
+              [
                 'grouping' =>
-                  array(),
+                  [],
                 'columns' => 4,
                 'automatic_width' => TRUE,
                 'alignment' => 'horizontal',
@@ -91,10 +133,10 @@ function lightning_media_image_update_8003() {
                 'col_class_custom' => '',
                 'row_class_default' => TRUE,
                 'row_class_custom' => '',
-              ),
-          ),
+              ],
+          ],
         'defaults' =>
-          array(
+          [
             'style' => FALSE,
             'row' => FALSE,
             'fields' => FALSE,
@@ -104,17 +146,17 @@ function lightning_media_image_update_8003() {
             'pager' => FALSE,
             'css_class' => FALSE,
             'relationships' => FALSE,
-          ),
+          ],
         'row' =>
-          array(
+          [
             'type' => 'fields',
             'options' =>
-              array(),
-          ),
+              [],
+          ],
         'fields' =>
-          array(
+          [
             'thumbnail__target_id' =>
-              array(
+              [
                 'id' => 'thumbnail__target_id',
                 'table' => 'media_field_data',
                 'field' => 'thumbnail__target_id',
@@ -124,7 +166,7 @@ function lightning_media_image_update_8003() {
                 'label' => '',
                 'exclude' => FALSE,
                 'alter' =>
-                  array(
+                  [
                     'alter_text' => FALSE,
                     'text' => '',
                     'make_link' => FALSE,
@@ -151,7 +193,7 @@ function lightning_media_image_update_8003() {
                     'trim' => FALSE,
                     'preserve_tags' => '',
                     'html' => FALSE,
-                  ),
+                  ],
                 'element_type' => '',
                 'element_class' => '',
                 'element_label_type' => '',
@@ -167,13 +209,13 @@ function lightning_media_image_update_8003() {
                 'click_sort_column' => 'target_id',
                 'type' => 'image',
                 'settings' =>
-                  array(
+                  [
                     'image_style' => 'medium',
                     'image_link' => '',
-                  ),
+                  ],
                 'group_column' => '',
                 'group_columns' =>
-                  array(),
+                  [],
                 'group_rows' => TRUE,
                 'delta_limit' => 0,
                 'delta_offset' => 0,
@@ -185,9 +227,9 @@ function lightning_media_image_update_8003() {
                 'entity_type' => 'media',
                 'entity_field' => 'thumbnail',
                 'plugin_id' => 'field',
-              ),
+              ],
             'entity_browser_select' =>
-              array(
+              [
                 'id' => 'entity_browser_select',
                 'table' => 'file_managed',
                 'field' => 'entity_browser_select',
@@ -197,7 +239,7 @@ function lightning_media_image_update_8003() {
                 'label' => '',
                 'exclude' => FALSE,
                 'alter' =>
-                  array(
+                  [
                     'alter_text' => FALSE,
                     'text' => '',
                     'make_link' => FALSE,
@@ -224,7 +266,7 @@ function lightning_media_image_update_8003() {
                     'trim' => FALSE,
                     'preserve_tags' => '',
                     'html' => FALSE,
-                  ),
+                  ],
                 'element_type' => '',
                 'element_class' => '',
                 'element_label_type' => '',
@@ -239,12 +281,12 @@ function lightning_media_image_update_8003() {
                 'hide_alter_empty' => TRUE,
                 'entity_type' => 'file',
                 'plugin_id' => 'entity_browser_select',
-              ),
-          ),
+              ],
+          ],
         'filters' =>
-          array(
+          [
             'status' =>
-              array(
+              [
                 'id' => 'status',
                 'table' => 'media_field_data',
                 'field' => 'status',
@@ -256,7 +298,7 @@ function lightning_media_image_update_8003() {
                 'group' => 1,
                 'exposed' => FALSE,
                 'expose' =>
-                  array(
+                  [
                     'operator_id' => '',
                     'label' => 'True',
                     'description' => NULL,
@@ -267,13 +309,13 @@ function lightning_media_image_update_8003() {
                     'remember' => FALSE,
                     'multiple' => FALSE,
                     'remember_roles' =>
-                      array(
+                      [
                         'authenticated' => 'authenticated',
-                      ),
-                  ),
+                      ],
+                  ],
                 'is_grouped' => TRUE,
                 'group_info' =>
-                  array(
+                  [
                     'label' => 'Publishing status',
                     'description' => '',
                     'identifier' => 'status',
@@ -283,29 +325,29 @@ function lightning_media_image_update_8003() {
                     'remember' => FALSE,
                     'default_group' => 'All',
                     'default_group_multiple' =>
-                      array(),
+                      [],
                     'group_items' =>
-                      array(
+                      [
                         1 =>
-                          array(
+                          [
                             'title' => 'Published',
                             'operator' => '=',
                             'value' => '1',
-                          ),
+                          ],
                         2 =>
-                          array(
+                          [
                             'title' => 'Unpublished',
                             'operator' => '=',
                             'value' => '0',
-                          ),
-                      ),
-                  ),
+                          ],
+                      ],
+                  ],
                 'plugin_id' => 'boolean',
                 'entity_type' => 'media',
                 'entity_field' => 'status',
-              ),
+              ],
             'name' =>
-              array(
+              [
                 'id' => 'name',
                 'table' => 'media_field_data',
                 'field' => 'name',
@@ -317,7 +359,7 @@ function lightning_media_image_update_8003() {
                 'group' => 1,
                 'exposed' => TRUE,
                 'expose' =>
-                  array(
+                  [
                     'operator_id' => 'name_op',
                     'label' => 'Keywords',
                     'description' => '',
@@ -328,7 +370,7 @@ function lightning_media_image_update_8003() {
                     'remember' => FALSE,
                     'multiple' => FALSE,
                     'remember_roles' =>
-                      array(
+                      [
                         'authenticated' => 'authenticated',
                         'anonymous' => '0',
                         'administrator' => '0',
@@ -339,11 +381,11 @@ function lightning_media_image_update_8003() {
                         'landing_page_reviewer' => '0',
                         'media_creator' => '0',
                         'media_manager' => '0',
-                      ),
-                  ),
+                      ],
+                  ],
                 'is_grouped' => FALSE,
                 'group_info' =>
-                  array(
+                  [
                     'label' => '',
                     'description' => '',
                     'identifier' => '',
@@ -353,16 +395,16 @@ function lightning_media_image_update_8003() {
                     'remember' => FALSE,
                     'default_group' => 'All',
                     'default_group_multiple' =>
-                      array(),
+                      [],
                     'group_items' =>
-                      array(),
-                  ),
+                      [],
+                  ],
                 'entity_type' => 'media',
                 'entity_field' => 'name',
                 'plugin_id' => 'string',
-              ),
+              ],
             'bundle' =>
-              array(
+              [
                 'id' => 'bundle',
                 'table' => 'media_field_data',
                 'field' => 'bundle',
@@ -371,13 +413,13 @@ function lightning_media_image_update_8003() {
                 'admin_label' => '',
                 'operator' => 'in',
                 'value' =>
-                  array(
+                  [
                     'image' => 'image',
-                  ),
+                  ],
                 'group' => 1,
                 'exposed' => FALSE,
                 'expose' =>
-                  array(
+                  [
                     'operator_id' => 'bundle_op',
                     'label' => 'Type',
                     'description' => '',
@@ -388,7 +430,7 @@ function lightning_media_image_update_8003() {
                     'remember' => FALSE,
                     'multiple' => FALSE,
                     'remember_roles' =>
-                      array(
+                      [
                         'authenticated' => 'authenticated',
                         'anonymous' => '0',
                         'administrator' => '0',
@@ -399,12 +441,12 @@ function lightning_media_image_update_8003() {
                         'landing_page_reviewer' => '0',
                         'media_creator' => '0',
                         'media_manager' => '0',
-                      ),
+                      ],
                     'reduce' => FALSE,
-                  ),
+                  ],
                 'is_grouped' => FALSE,
                 'group_info' =>
-                  array(
+                  [
                     'label' => '',
                     'description' => '',
                     'identifier' => '',
@@ -414,16 +456,16 @@ function lightning_media_image_update_8003() {
                     'remember' => FALSE,
                     'default_group' => 'All',
                     'default_group_multiple' =>
-                      array(),
+                      [],
                     'group_items' =>
-                      array(),
-                  ),
+                      [],
+                  ],
                 'entity_type' => 'media',
                 'entity_field' => 'bundle',
                 'plugin_id' => 'bundle',
-              ),
+              ],
             'field_media_in_library_value' =>
-              array(
+              [
                 'id' => 'field_media_in_library_value',
                 'table' => 'media__field_media_in_library',
                 'field' => 'field_media_in_library_value',
@@ -435,7 +477,7 @@ function lightning_media_image_update_8003() {
                 'group' => 1,
                 'exposed' => FALSE,
                 'expose' =>
-                  array(
+                  [
                     'operator_id' => '',
                     'label' => '',
                     'description' => '',
@@ -446,13 +488,13 @@ function lightning_media_image_update_8003() {
                     'remember' => FALSE,
                     'multiple' => FALSE,
                     'remember_roles' =>
-                      array(
+                      [
                         'authenticated' => 'authenticated',
-                      ),
-                  ),
+                      ],
+                  ],
                 'is_grouped' => FALSE,
                 'group_info' =>
-                  array(
+                  [
                     'label' => '',
                     'description' => '',
                     'identifier' => '',
@@ -462,25 +504,25 @@ function lightning_media_image_update_8003() {
                     'remember' => FALSE,
                     'default_group' => 'All',
                     'default_group_multiple' =>
-                      array(),
+                      [],
                     'group_items' =>
-                      array(),
-                  ),
+                      [],
+                  ],
                 'plugin_id' => 'boolean',
-              ),
-          ),
+              ],
+          ],
         'filter_groups' =>
-          array(
+          [
             'operator' => 'AND',
             'groups' =>
-              array(
+              [
                 1 => 'AND',
-              ),
-          ),
+              ],
+          ],
         'empty' =>
-          array(
+          [
             'area_text_custom' =>
-              array(
+              [
                 'id' => 'area_text_custom',
                 'table' => 'views',
                 'field' => 'area_text_custom',
@@ -491,24 +533,24 @@ function lightning_media_image_update_8003() {
                 'tokenize' => FALSE,
                 'content' => 'There are no images to display.',
                 'plugin_id' => 'text_custom',
-              ),
-          ),
+              ],
+          ],
         'pager' =>
-          array(
+          [
             'type' => 'infinite_scroll',
             'options' =>
-              array(
+              [
                 'items_per_page' => 12,
                 'offset' => 0,
                 'id' => 0,
                 'total_pages' => NULL,
                 'tags' =>
-                  array(
+                  [
                     'previous' => '‹ Previous',
                     'next' => 'Next ›',
-                  ),
+                  ],
                 'expose' =>
-                  array(
+                  [
                     'items_per_page' => FALSE,
                     'items_per_page_label' => 'Items per page',
                     'items_per_page_options' => '5, 10, 25, 50',
@@ -516,20 +558,20 @@ function lightning_media_image_update_8003() {
                     'items_per_page_options_all_label' => '- All -',
                     'offset' => FALSE,
                     'offset_label' => 'Offset',
-                  ),
+                  ],
                 'views_infinite_scroll' =>
-                  array(
+                  [
                     'button_text' => 'Load More',
                     'automatically_load_content' => FALSE,
-                  ),
-              ),
-          ),
+                  ],
+              ],
+          ],
         'display_description' => '',
         'css_class' => 'eb-media',
         'relationships' =>
-          array(
+          [
             'image_target_id' =>
-              array(
+              [
                 'id' => 'image_target_id',
                 'table' => 'media__image',
                 'field' => 'image_target_id',
@@ -538,24 +580,24 @@ function lightning_media_image_update_8003() {
                 'admin_label' => 'Image',
                 'required' => TRUE,
                 'plugin_id' => 'standard',
-              ),
-          ),
-      ),
+              ],
+          ],
+      ],
     'cache_metadata' =>
-      array(
+      [
         'max-age' => -1,
         'contexts' =>
-          array(
+          [
             0 => 'languages:language_content',
             1 => 'languages:language_interface',
             2 => 'url',
             3 => 'url.query_args',
             4 => 'user.permissions',
-          ),
+          ],
         'tags' =>
-          array(),
-      ),
-  ));
+          [],
+      ],
+  ]);
   $view->save();
 
   $browser = EntityBrowser::load('image_browser');
@@ -580,22 +622,19 @@ function lightning_media_image_update_8004() {
 }
 
 /**
- * Uses the static_image widget on the media_browser form display.
+ * Removes the file link(s) and Remove button from the media_browser form.
  */
 function lightning_media_image_update_8005() {
-  $display = EntityFormDisplay::load('media.image.media_browser');
+  $display = entity_get_form_display('media', 'image', 'media_browser');
 
-  if ($display) {
-    $component = $display->getComponent('image');
+  $component = $display->getComponent('image');
 
-    if ($component && $component['type'] == 'image_image') {
-      // Just in case Drupal is under the mistaken impression that the
-      // image_immutable plugin doesn't exist...
-      \Drupal::service('plugin.manager.field.widget')->clearCachedDefinitions();
-
-      $component['type'] = 'image_immutable';
-      $display->setComponent('image', $component)->save();
-    }
+  if ($component && $component['type'] == 'image_image') {
+    $component['third_party_settings']['lightning_media'] = [
+      'file_links' => FALSE,
+      'remove_button' => FALSE,
+    ];
+    $display->setComponent('image', $component)->save();
   }
 }
 
@@ -617,11 +656,6 @@ function lightning_media_image_update_dependencies() {
       8003 => [
         // 8003 modifies the image_browser entity browser, which is created by
         // Lightning Media Image 8002.
-        'lightning_media_image' => 8002,
-      ],
-      8004 => [
-        // 8004 grants access the image_browser entity browser, which is created
-        // by Lightning Media Image 8002.
         'lightning_media_image' => 8002,
       ],
       // 8006 depends on the thumbnail view mode, which is created by

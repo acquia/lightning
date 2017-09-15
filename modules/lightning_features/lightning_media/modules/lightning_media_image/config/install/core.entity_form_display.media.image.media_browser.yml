@@ -22,12 +22,15 @@ content:
     third_party_settings: {  }
     region: content
   image:
-    type: image_immutable
+    type: image_image
     weight: 0
     settings:
       preview_image_style: medium
       progress_indicator: throbber
-    third_party_settings: {  }
+    third_party_settings:
+      lightning_media:
+        file_links: false
+        remove_button: false
     region: content
   name:
     type: string_textfield
