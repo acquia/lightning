@@ -12,7 +12,7 @@ cases, Lightning will attempt to safely update configuration that it depends on
 Otherwise, Lightning will leave your configuration alone, respecting the fact
 that your site owns it. So, to bring your site fully up-to-date with the latest
 default configuration, you must follow the appropriate set(s) of instructions in
-the "Manual update steps" section of this file.
+the "Configuration updates" section of this file.
 
 ## Updating Lightning
 
@@ -24,7 +24,7 @@ If you've installed Lightning using our [Composer-based project template](https:
 * Run ```drush updatedb && drush cache-rebuild```, or visit ```update.php```,
   to perform automatic database updates. You can also use Drupal Console's
   ```update:execute``` command.
-* Perform any necessary manual updates (see below).
+* Perform any necessary configuration updates (see below).
 
 ### Tarball
 **Do not use ```drush pm-update``` or ```drush up``` to update Lightning!**
@@ -42,21 +42,41 @@ To update Lightning safely:
    Lightning.
 4. Visit ```update.php``` or run ```drush updatedb``` to perform any necessary
    database updates.
-5. Perform any necessary manual updates (see below).
+5. Perform any necessary configuration updates (see below).
 
-## Manual update steps
+## Configuration updates
 
 These instructions describe how to update your site's configuration to bring
-it in line with a newer version of Lightning. These changes are never made
-automatically by Lightning because they have the potential to change the way
-your site works.
+it in line with a newer version of Lightning. Lightning does not make these
+changes automatically, because they may change the way your site works.
 
-Follow the instructions starting from the version of Lightning you currently
-use. For example, if you are currently running Beta 1 and are trying to update
-to Beta 3, you will need to follow the instructions for updating from Beta 1 to
-Beta 2, then from Beta 2 to Beta 3, in that order.
+However, as of version 2.1.8, Lightning provides a Drupal Console command which
+*can* perform these updates automatically, confirming each change interactively
+as it goes. If you intend to perform all the configuration updates documented
+here, this can save quite a bit of time!
 
-## 2.1.7 to 2.1.8
+### Automatic configuration updates
+
+Ensure Drupal Console is installed, then switch into the web root of your
+Lightning installation and run:
+
+```
+$ drupal update:lightning
+```
+
+To run all available configuration updates without any prompting, use:
+
+```
+$ drupal update:lightning --no-interaction
+```
+
+If you'd rather do the updates manually, follow the instructions below,
+starting from the version of Lightning you currently use. For example, if you
+are currently running Beta 1 and are trying to update to Beta 3, you will need
+to follow the instructions for updating from Beta 1 to Beta 2, then from Beta 2
+to Beta 3, in that order.
+
+### 2.1.7 to 2.1.8
 * Lightning now ships with support for image cropping, using the Image Widget
   Crop module. To use it for the Image media bundle (the default behavior in
   new Lightning sites), do the following:
@@ -95,7 +115,7 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
   **content** view, move the Operations field to the end of the list of fields,
   and save the changes.
 
-## 2.1.6. to 2.1.7
+### 2.1.6. to 2.1.7
 * **IMPORTANT!** Page Manager is no longer a dependency of Lightning Layout,
   and it will no longer ship with Lightning as of the next release. Therefore,
   if you are actively using Page Manager, you must add it to your project as an
@@ -118,7 +138,7 @@ Beta 2, then from Beta 2 to Beta 3, in that order.
   * **Quick Edit**: Access in-place editing
   * **Contextual Links**: Use contextual links
 
-## 2.1.5 to 2.1.6
+### 2.1.5 to 2.1.6
 This version of Lightning adds the ability to choose an image style, alt text,
 and other settings each time you embed an image in a WYSIWYG editor, rather
 that needing to rely on view modes. To enable this functionality:
@@ -144,10 +164,10 @@ that needing to rely on view modes. To enable this functionality:
    automatically choose a preferred display method (the recommended, default
    behavior).
 
-## 2.1.4 to 2.1.5
+### 2.1.4 to 2.1.5
 There are no manual update steps for this version.
 
-## 2.1.3 to 2.1.4
+### 2.1.3 to 2.1.4
 There are no manual update steps for this version.
 
 **Note:**  
@@ -164,13 +184,13 @@ your site's cache immediately after running `update.php`.
 [metatag8.x-1.1]: https://www.drupal.org/project/metatag/releases/8.x-1.1 "Metatag 8.x-1.1 Release notes"
 [2882954]: https://www.drupal.org/node/2882954 "Error when updating to 8.x-1.1"
 
-## 2.1.2 to 2.1.3
+### 2.1.2 to 2.1.3
 There are no manual update steps for this version.
 
-## 2.1.1 to 2.1.2
+### 2.1.1 to 2.1.2
 There are no manual update steps for this version.
 
-## 2.1.0 to 2.1.1
+### 2.1.0 to 2.1.1
 * To allow fields that use the media browser to filter to only the media types
   accepted by the field, do the following:
     * Edit the **Browser** display of the **Media** view.
@@ -195,13 +215,13 @@ There are no manual update steps for this version.
       caches and try again.
     * Save the view.
 
-## 2.0.6 to 2.1.0
+### 2.0.6 to 2.1.0
 There are no manual update steps for this version.
 
-## 2.0.5 to 2.0.6
+### 2.0.5 to 2.0.6
 There are no manual update steps for this version.
 
-## 2.0.4 to 2.0.5
+### 2.0.4 to 2.0.5
 There are no manual update steps for this version.
 
 If you previously used the lightning.extend.yml file to customize your
@@ -211,7 +231,7 @@ extend file into a sub-profile of Lightning. See the
 [Lightning as a base profile][sub-profile documentation] documentation for more
 information.
 
-## 2.0.3 to 2.0.4
+### 2.0.3 to 2.0.4
 * Edit the **Scheduled update** field on any content type that has it. Click
   **Field settings*, set "Allowed number of values" to "Unlimited" and save.
   Then click **Edit**, rename the field to "Scheduled updates", and save.
@@ -232,7 +252,7 @@ information.
     displays)**.
   * Save the view.
 
-## 2.0.2 to 2.0.3
+### 2.0.2 to 2.0.3
 * If you have the Landing Page content type installed, there are several manual
   update steps (to be performed in order):
   * Create a formatted text field on the Landing Page content type. You can
@@ -257,7 +277,7 @@ information.
   * The **Forward revision(s) exist** filter. For parity with a clean Lightning
     installation, label it "Has unpublished edit(s)".
 
-## 2.0.1 to 2.0.2
+### 2.0.1 to 2.0.2
 * Install the Diff module.
 * If you would like to use Lightning's simple contact form, install the
   Contact Form feature from the Lightning package. Alternatively, if you'd like
@@ -265,14 +285,14 @@ information.
   not Lightning's default configuration, simply install the Contact and
   Contact Storage modules.
 
-## 2.0.0 to 2.0.1
+### 2.0.0 to 2.0.1
 There are no manual update steps for this version.
 
-## 1.14 to 2.0.0
+### 1.14 to 2.0.0
 Once you have followed the instructions contained in 1.14 to update to 2.0.0,
 there are no further manual update steps.
 
-## 1.13 to 1.14
+### 1.13 to 1.14
 There are no manual update steps for this version. However, Lightning 1.14
 contains a script which will modify your root project's composer.json file in
 order to switch your project to the official Drupal.org Packagist and up date
@@ -281,16 +301,16 @@ you to Lightning 2.0.0.
 If you use the tarball to manage your codebase, you can update directly to the
 2.x branch with no manual update steps.
 
-## 1.12 to 1.13
+### 1.12 to 1.13
 There are no manual update steps for this version.
 
-## 1.11 to 1.12
+### 1.11 to 1.12
 There are no manual update steps for this version.
 
-## 1.10 to 1.11
+### 1.10 to 1.11
 There are no manual update steps for this version.
 
-## 1.06 to 1.10
+### 1.06 to 1.10
 There are no manual update steps for this version.
 
 If you would like to test the new Lightning Preview module and Workspace Preview
@@ -298,7 +318,7 @@ System in a development environment, enable the Lightning Preview module from
 module listing page. Note that Lightning Preview and WPS are not yet ready for
 production environments.
 
-## 1.05 to 1.06
+### 1.05 to 1.06
 There are no manual update steps for this version.
 
 ### 1.04 to 1.05
