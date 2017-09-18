@@ -282,6 +282,12 @@ function lightning_media_update_8016() {
  * Changes all image_immutable field widgets to image_image.
  */
 function lightning_media_update_8017() {
+  if (\Drupal::service('module_handler')->moduleExists('lightning_api')) {
+    // simple_oauth_update_8200 will also enable the Consumers module, but it
+    // might not have run yet.
+    \Drupal::service('module_installer')->install(['consumers']);
+  }
+
   \Drupal::service('plugin.manager.field.widget')->clearCachedDefinitions();
 
   /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
