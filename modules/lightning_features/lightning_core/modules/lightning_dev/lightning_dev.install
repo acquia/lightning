@@ -260,32 +260,9 @@ function lightning_dev_update_8007() {
 }
 
 /**
- * Executes manual update steps for Lightning 2.1.7 --> 2.1.8.
+ * Deletes stored key paths from Simple OAuth settings.
  */
 function lightning_dev_update_8008() {
-  \Drupal::service('module_installer')->install([
-    'image_widget_crop',
-    'lightning_media_bulk_upload',
-  ]);
-
-  // Use the cropping widgets for every form display of the Image media type.
-  // This code is lifted (almost) directly from lightning_media_image_install().
-  $form_displays = \Drupal::entityTypeManager()
-    ->getStorage('entity_form_display')
-    ->loadByProperties([
-      'targetEntityType' => 'media',
-      'bundle' => 'image',
-    ]);
-
-  /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
-  foreach ($form_displays as $form_display) {
-    $component = $form_display->getComponent('image');
-    $component['type'] = 'image_widget_crop';
-    $component['settings']['crop_list'] = ['freeform'];
-    $component['settings']['show_crop_area'] = TRUE;
-    $form_display->setComponent('image', $component)->save();
-  }
-
   // This is not a manual update step, but it's required for the Travis CI tests
   // to pass when testing the update path from 2.1.7.
   \Drupal::configFactory()
