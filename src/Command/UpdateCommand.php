@@ -89,7 +89,7 @@ class UpdateCommand extends Command {
   }
 
   protected function getProviderVersion($provider) {
-    $versions = (array) $this->configFactory->get('lightning.versions');
+    $versions = (array) $this->configFactory->get('lightning.versions')->get();
 
     return isset($versions[$provider])
       ? $versions[$provider]
@@ -121,6 +121,13 @@ class UpdateCommand extends Command {
 
     if (sizeof($definitions) === 0) {
       return $output->writeln('There are no updates available.');
+    }
+
+    if ($input->getOption('force')) {
+      $output->writeln('Executing all available updates.');
+    }
+    elseif ($this->since) {
+      $output->writeln("Executing all updates since version $this->since.");
     }
 
     $io = new DrupalStyle($input, $output);
