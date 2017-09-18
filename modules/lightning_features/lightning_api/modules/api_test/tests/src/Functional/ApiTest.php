@@ -3,11 +3,14 @@
 namespace Drupal\Tests\api_test\Functional;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Form\FormState;
 use Drupal\Tests\BrowserTestBase;
+use Drupal\lightning_api\Form\OAuthKeyForm;
 use GuzzleHttp\Exception\ClientException;
 
 /**
  * @group lightning
+ * @group lightning_api
  * @group headless
  * @group api_test
  */
@@ -47,6 +50,9 @@ class ApiTest extends BrowserTestBase {
    * Tests Getting data as anon and authenticated user.
    */
   public function testAllowed() {
+    // Generate and store keys for use by OAuth.
+    $this->generateKeys();
+
     // Get data that is available anonymously.
     $client = \Drupal::httpClient();
     $url = $this->buildUrl($this->paths['page_published_get']);
@@ -102,6 +108,9 @@ class ApiTest extends BrowserTestBase {
    * data.
    */
   public function testNotAllowed() {
+    // Generate and store keys for use by OAuth.
+    $this->generateKeys();
+    
     // Cannot get unauthorized data (not in role/scope) even when authenticated.
     $client = \Drupal::httpClient();
     $token = $this->getToken();
@@ -164,5 +173,22 @@ class ApiTest extends BrowserTestBase {
 
     $this->accessToken = $body['access_token'];
     return $this->accessToken;
+  }
+
+  /**
+   * Generates and store OAuth keys.
+   */
+  protected function generateKeys() {
+    $dir = drupal_realpath('temporary://');
+
+    $form_state = (new FormState)->setValues([
+      'dir' => $dir,
+      'private_key' => 'private.key',
+      'public_key' => 'public.key',
+    ]);
+
+    $this->container
+      ->get('form_builder')
+      ->submitForm(OAuthKeyForm::class, $form_state);
   }
 }
