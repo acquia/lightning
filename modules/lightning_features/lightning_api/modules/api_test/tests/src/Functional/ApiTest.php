@@ -99,7 +99,7 @@ class ApiTest extends BrowserTestBase {
     // The user, client, and content should be removed on uninstall.
     \Drupal::service('module_installer')->uninstall(['api_test']);
     $this->assertCount(0, \Drupal::entityQuery('user')->condition('uid', 1, '>')->execute());
-    $this->assertCount(0, \Drupal::entityQuery('oauth2_client')->execute());
+    $this->assertCount(0, \Drupal::entityQuery('consumer')->execute());
     $this->assertCount(0, \Drupal::entityQuery('node')->execute());
   }
 
@@ -110,7 +110,7 @@ class ApiTest extends BrowserTestBase {
   public function testNotAllowed() {
     // Generate and store keys for use by OAuth.
     $this->generateKeys();
-    
+
     // Cannot get unauthorized data (not in role/scope) even when authenticated.
     $client = \Drupal::httpClient();
     $token = $this->getToken();
