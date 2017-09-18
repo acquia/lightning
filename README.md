@@ -145,6 +145,16 @@ your environment, but generally you will not need to do this.
   stable, most likely in Drupal 8.4.0. But for now, installing Content
   Moderation alongside Lightning Workflow may have unpredictable and dangerous
   effects, and is best avoided.
+  
+### Inherited profiles
+Neither Drush nor Drupal Console are aware of the concept of inherited profiles
+and as a result, you will be unable to uninstall dependencies of any parent
+profile using either of those tools. You can still uninstall these dependencies
+via the UI at "/admin/modules/uninstall". We have provided patches [here](https://www.drupal.org/node/2902643)
+for both Drush and Drupal Console.
+
+* [Drupal Console inherited profile dependencies patch](https://www.drupal.org/files/issues/2902643-3-drupalconsole-master.patch).
+* [Drush 9 inherited profile dependencies patch](https://www.drupal.org/files/issues/2902643-2--drush-master.patch).
 
 [issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
 [meta_release]: https://www.drupal.org/node/2670686 "Lightning Meta Releases Issue"
