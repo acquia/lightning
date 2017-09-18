@@ -6,7 +6,7 @@
 
 use Drupal\node\Entity\Node;
 use Drupal\user\Entity\User;
-use Drupal\simple_oauth\Entity\Oauth2Client;
+use Drupal\consumers\Entity\Consumer;
 
 /**
  * Implements hook_install().
@@ -35,7 +35,7 @@ function api_test_install() {
     'roles' => 'page_creator',
   ];
 
-  $client = Oauth2Client::create($data);
+  $client = Consumer::create($data);
   $client->save();
 
   // Create some sample content for testing. One published and one unpublished
@@ -72,7 +72,7 @@ function api_test_uninstall() {
 
   // Delete the client created during install.
   $client_uuid = 'api_test-oauth2-client';
-  $storage = \Drupal::entityTypeManager()->getStorage('oauth2_client');
+  $storage = \Drupal::entityTypeManager()->getStorage('consumer');
   $clients = $storage->loadByProperties(['uuid' => $client_uuid]);
   $storage->delete($clients);
 

@@ -7,6 +7,7 @@ use Drupal\Tests\BrowserTestBase;
 use GuzzleHttp\Exception\ClientException;
 
 /**
+ * @group lightning
  * @group headless
  * @group api_test
  */
