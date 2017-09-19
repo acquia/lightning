@@ -1,3 +1,25 @@
+## 2.1.8
+* Added the ability to easily crop images contained in media entities and use
+  the cropped version when embedding or selecting the media item.
+* Lightning Media now includes a bulk upload form that allows you to create
+  multiple image media entities at once.
+* You can now run Lightning's manual update steps via an interactive Drupal
+  Console command.
+* OAuth key pairs:
+  * Lightning will no longer try to guess where keys should be stored and won't
+    generate the keys until an administrator triggers that action. 
+  * Key pairs are now generated with 600 permissions.
+  * Better error messages are shown if the system encounters an error when
+    generating OAuth key pairs.
+* Lightning no longer patches Drush and therefore has no opinion about which
+  version of Drush you use in your project. 
+* Page manager is no longer included in the codebase.
+* You can now choose to hide the links to API docs shown on entity bundles via a
+  config option.
+* Fixed a bug where Entity Browser filters might not work after updating to core
+  8.3.7.
+* Operations is now the last column on the admin/content view.
+
 ## 2.1.7
 * Security updated Drupal core to 8.3.7.
 * Updated Entity Browser to 1.1.
@@ -19,7 +41,7 @@
   themes. (Issue #2899017)
 * Page Manager is no longer required by Lightning Layout. It is still shipped
   with Lightning, but is not a dependency and will be removed from Lightning in
-  the next release. If you are using Page Manager, you must explicity include
+  the next release. If you are using Page Manager, you must explicitly include
   it as a dependency of your project. Otherwise, you should uninstall it as
   soon as possible. (GitHub #410)
 * Quick Edit is no longer visible on published content when Lightning Workflow

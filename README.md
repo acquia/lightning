@@ -46,7 +46,8 @@ The current version of media includes the following functionality:
   * Instagram posts
   * Videos (YouTube and Vimeo supported out of the box)
   * Images
-* Drag-and-drop image uploads
+* Drag-and-drop bulk image uploads.
+* Image cropping.
 * Ability to create new media through the media library (/media/add)
 * Ability to embed tweets, Instagrams, and YouTube/Vimeo videos directly into
   CKEditor by pasting the video URL
@@ -96,10 +97,8 @@ any of these modules, because it does not make any assumptions about how the
 API data will be consumed, but we might add support for standard use cases as
 they present themselves.
 
-If you have PHP's OpenSSL extension enabled, Lightning will attempt to create
-an asymmetric key pair for use with OAuth. You should generate a new key pair
-before putting your site into production; instructions for that can be found
-[here](https://www.drupal.org/project/simple_oauth).
+If you have PHP's OpenSSL extension enabled, Lightning can automatically create
+an asymmetric key pair for use with OAuth.
 
 ## Project Roadmap
 We publish sprint plans for each patch release. You can find a link to the
