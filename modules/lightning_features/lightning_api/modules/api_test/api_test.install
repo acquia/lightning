@@ -1,0 +1,83 @@
+<?php
+
+/**
+ * Creates a OAuth2 Client with the Page Creator role scope and a related user.
+ */
+
+use Drupal\node\Entity\Node;
+use Drupal\user\Entity\User;
+use Drupal\consumers\Entity\Consumer;
+
+/**
+ * Implements hook_install().
+ */
+function api_test_install() {
+  // Create a sample user to use with the client.
+  $edit = [
+    'name' => 'api-test-user',
+    'mail' => 'api-test-user@example.com',
+    'pass' => 'admin',
+  ];
+
+  $account = User::create($edit);
+  $account->addRole('page_creator');
+  $account->activate();
+  $account->save();
+  $api_test_user_id = $account->id();
+
+  // Create an example client to use for testing.
+  $data = [
+    'uuid' => 'api_test-oauth2-client',
+    'label' => 'API Test Client',
+    'secret' => 'oursecret',
+    'confidential' => 1,
+    'user_id' => $api_test_user_id,
+    'roles' => 'page_creator',
+  ];
+
+  $client = Consumer::create($data);
+  $client->save();
+
+  // Create some sample content for testing. One published and one unpublished
+  // basic page.
+  $data = [
+    'title' => 'Unpublished Page',
+    'type' => 'page',
+    'uuid' => 'api_test-unpublished-page-content',
+    'body' => '--TESTING--',
+    'moderation_state' => 'draft'
+  ];
+  $node = Node::create($data);
+  $node->save();
+  $data = [
+    'title' => 'Published Page',
+    'type' => 'page',
+    'uuid' => 'api_test-published-page-content',
+    'body' => '--TESTING--',
+    'moderation_state' => 'published',
+  ];
+  $node = Node::create($data);
+  $node->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function api_test_uninstall() {
+  // Delete the user created during install.
+  $username = 'api-test-user';
+  $storage = \Drupal::entityTypeManager()->getStorage('user');
+  $users = $storage->loadByProperties(['name' => $username]);
+  $storage->delete($users);
+
+  // Delete the client created during install.
+  $client_uuid = 'api_test-oauth2-client';
+  $storage = \Drupal::entityTypeManager()->getStorage('consumer');
+  $clients = $storage->loadByProperties(['uuid' => $client_uuid]);
+  $storage->delete($clients);
+
+  // Delete the nodes created during install.
+  $storage = \Drupal::entityTypeManager()->getStorage('node');
+  $nodes = $storage->loadByProperties(['body' => '--TESTING--']);
+  $storage->delete($nodes);
+}
