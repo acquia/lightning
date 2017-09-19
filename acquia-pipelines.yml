@@ -34,6 +34,13 @@ events:
       - cleanup:
           type: script
           script:
-            # Setup settings file and codebase with minimum required for cloud.
             - cd $SOURCE_DIR
-            - phing cloud-settings
+            # Move phing into require section so we still have it to manipulate
+            # the settings file after we build artifact.
+            - composer require phing/phing:^2.14
+            - phing destroy
+            # Install with no dev so that our version of Drush doesn't interfere
+            # with cloud.
+            - composer install --no-dev
+            # Setup settings file and codebase with minimum required for cloud.
+            - ./bin/phing cloud-settings
