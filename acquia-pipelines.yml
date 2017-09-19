@@ -2,9 +2,11 @@
 # Lightning and runs its functional tests. Upon success, an artifact is deployed
 # to the lightningnightly (92170259-5e36-4052-a2ad-0dd5ee5b3ec2) sub on Acquia
 # cloud.
-version: 1.0.0
+version: 1.1.0
 services:
   - mysql
+  - php:
+      version: 7.1
 
 events:
   build:
