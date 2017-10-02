@@ -12,7 +12,8 @@ Feature: Site search
     When I visit "/search"
     And I enter "zombie" for "Keywords"
     And I press "Search"
-    Then I should not see "Zombie 1"
+    Then the response status code should be 200
+    And I should not see "Zombie 1"
     And I should not see "Zombie 2"
     And I should see "Zombie 3"
 
