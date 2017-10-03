@@ -13,4 +13,17 @@ class EntityViewMode extends BaseEntityViewMode implements EntityDescriptionInte
 
   use ConfigEntityDescriptionTrait;
 
+  /**
+   * {@inheritdoc}
+   */
+  protected function urlRouteParameters($rel) {
+    $parameters = parent::urlRouteParameters($rel);
+
+    if (empty($parameters['entity_type_id'])) {
+      $parameters['entity_type_id'] = $this->getTargetType();
+    }
+
+    return $parameters;
+  }
+
 }
