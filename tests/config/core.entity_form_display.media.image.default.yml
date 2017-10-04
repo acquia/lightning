@@ -8,6 +8,7 @@ dependencies:
     - media_entity.bundle.image
   module:
     - image_widget_crop
+    - path
     - workbench_moderation
 _core: {  }
 id: media.image.default
@@ -44,6 +45,12 @@ content:
       placeholder: ''
     third_party_settings: {  }
     region: content
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   created: true
   uid: true

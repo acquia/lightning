@@ -141,9 +141,10 @@ your environment, but generally you will not need to do this.
   with the experimental Content Moderation module included with Drupal core
   8.3.0 and later and serves the same purpose as Workbench Moderation. We plan
   to seamlessly migrate Lightning Workflow to Content Moderation once it is
-  stable, most likely in Drupal 8.4.0. But for now, installing Content
-  Moderation alongside Lightning Workflow may have unpredictable and dangerous
-  effects, and is best avoided.
+  ready and an update path exists (see [Issue #2863059](https://www.drupal.org/node/2863059)
+  for more information). But for now, installing Content Moderation alongside
+  Lightning Workflow may have unpredictable and dangerous effects, an is best
+  avoided.
   
 ### Inherited profiles
 Neither Drush nor Drupal Console are aware of the concept of inherited profiles

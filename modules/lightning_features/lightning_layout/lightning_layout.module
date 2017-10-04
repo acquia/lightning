@@ -8,6 +8,7 @@
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
+use Drupal\block_content\BlockContentInterface;
 use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\lightning_core\Element;
 use Drupal\lightning_core\OverrideHelper as Override;
@@ -48,6 +49,13 @@ function lightning_layout_user_role_insert(RoleInterface $role) {
     $node_types = NodeType::loadMultiple();
     array_walk($node_types, 'lightning_layout_node_type_insert');
   }
+}
+
+/**
+ * Implements hook_block_content_delete().
+ */
+function lightning_layout_block_content_delete(BlockContentInterface $block_content) {
+  \Drupal::service('block_content.uuid_lookup')->delete($block_content->uuid());
 }
 
 /**
