@@ -10,6 +10,7 @@ dependencies:
   module:
     - image_widget_crop
     - lightning_media
+    - path
     - workbench_moderation
 _core: {  }
 id: media.image.media_browser
@@ -49,6 +50,12 @@ content:
       placeholder: ''
     third_party_settings: {  }
     region: content
+  path:
+    type: path
+    weight: 30
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden:
   created: true
   uid: true

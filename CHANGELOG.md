@@ -1,3 +1,6 @@
+## 2.2.0
+* Lightning has been updated to run on and now requires Drupal Core 8.4.x.
+
 ## 2.1.8
 * Added the ability to easily crop images contained in media entities and use
   the cropped version when embedding or selecting the media item.

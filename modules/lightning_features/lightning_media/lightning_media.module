@@ -405,6 +405,17 @@ function lightning_media_ajax_render_alter(array &$data) {
 }
 
 /**
+ * Implements hook_library_info_alter().
+ *
+ * This should be removed once Lightning uses the core Media module.
+ */
+function lightning_media_library_info_alter(array &$libraries, $extension) {
+  if ($extension == 'seven' && !\Drupal::moduleHandler()->moduleExists('media')) {
+    unset($libraries['media-form']);
+  }
+}
+
+/**
  * Preprocess function for grid views of the media library.
  *
  * @param array $variables
