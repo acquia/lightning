@@ -94,6 +94,21 @@ Feature: Workflow moderation states
     When I visit "admin/content"
     Then I should see "Lazy Lummox"
 
+  @084ca18d
+  Scenario: Content types do not display the Published checkbox once they are moderated
+    Given node_type entities:
+      | type   | name   |
+      | foobar | Foobar |
+    And I am logged in as a user with the administrator role
+    When I visit "/admin/structure/types/manage/foobar/moderation"
+    And I check the box "Enable moderation states."
+    And I press "Save"
+    And I visit "/node/add/foobar"
+    Then I should see the "Save" button
+    But I should not see a "status[value]" field
+    And I should not see the "Save and publish" button
+    And I should not see the "Save as unpublished" button
+
   @d0f9aaa8
   Scenario: Unmoderated content types have normal submit buttons
     Given node_type entities:
