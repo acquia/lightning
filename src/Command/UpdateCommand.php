@@ -158,13 +158,14 @@ class UpdateCommand extends Command {
       /** @var DocBlock $doc_block */
       list ($reflector, $doc_block) = $task;
 
+      $proceed = TRUE;
       if ($doc_block->hasTag('ask')) {
         $tags = $doc_block->getTagsByName('ask');
-
         $proceed = $io->confirm(reset($tags)->getContent());
-        if ($proceed) {
-          $reflector->invoke($handler, $io);
-        }
+      }
+
+      if ($proceed) {
+        $reflector->invoke($handler, $io);
       }
     }
   }
