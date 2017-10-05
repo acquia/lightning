@@ -83,7 +83,7 @@ final class Update221 implements ContainerInjectionInterface {
         '@node_type' => $node_type->label(),
       ]);
 
-      if ($io->ask($question, TRUE)) {
+      if ($io->confirm($question)) {
         entity_get_form_display('node', $node_type->id(), 'default')
           ->removeComponent('status')
           ->save();

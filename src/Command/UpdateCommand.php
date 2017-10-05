@@ -93,7 +93,7 @@ class UpdateCommand extends Command {
 
     return isset($versions[$provider])
       ? $versions[$provider]
-      : '0.0.0';
+      : '2.2.0';
   }
 
   protected function getDefinitions() {
