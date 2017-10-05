@@ -79,7 +79,7 @@ final class Update221 implements ContainerInjectionInterface {
   public function hideStatusCheckboxes(DrupalStyle $io) {
     /** @var NodeTypeInterface $node_type */
     foreach ($this->getNodeTypes() as $node_type) {
-      $question = (string) $this->t('Do you want to hide the "Publishing status" checkbox on the @node_type content type form?', [
+      $question = (string) $this->t('Do you want to ensure the "Publishing status" checkbox is hidden on the @node_type content type form?', [
         '@node_type' => $node_type->label(),
       ]);
 
