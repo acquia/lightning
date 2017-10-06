@@ -83,8 +83,9 @@ abstract class EntityFormProxy extends WidgetBase {
       return $form;
     }
 
+    $bundles = $this->getTargetBundles($form_state);
     try {
-      $entity = $this->helper->createFromInput($value);
+      $entity = $this->helper->createFromInput($value, $bundles);
     }
     catch (IndeterminateBundleException $e) {
       return $form;
@@ -126,8 +127,10 @@ abstract class EntityFormProxy extends WidgetBase {
     parent::validate($form, $form_state);
 
     $value = $this->getInputValue($form_state);
+    $bundles = $this->getTargetBundles($form_state);
+
     try {
-      $this->helper->getBundleFromInput($value);
+      $this->helper->getBundleFromInput($value, TRUE, $bundles);
     }
     catch (IndeterminateBundleException $e) {
       $form_state->setError($form['widget'], $e->getMessage());
@@ -174,6 +177,24 @@ abstract class EntityFormProxy extends WidgetBase {
    */
   protected function getInputValue(FormStateInterface $form_state) {
     return $form_state->getValue('input');
+  }
+
+  /**
+   * Returns an array of bundles from the entity browser's widget context.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current form state.
+   *
+   * @return array
+   *   The target media bundles.
+   */
+  protected function getTargetBundles(FormStateInterface $form_state) {
+    $bundles = [];
+    $entity_browser_info = $form_state->get('entity_browser');
+    if (!empty($entity_browser_info['widget_context']['target_bundles'])) {
+      $bundles = $entity_browser_info['widget_context']['target_bundles'];
+    }
+    return $bundles;
   }
 
   /**
