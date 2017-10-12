@@ -5,7 +5,7 @@ dependencies:
     - field.field.media.image.field_media_in_library
     - field.field.media.image.image
     - image.style.thumbnail
-    - media_entity.bundle.image
+    - media.type.image
   module:
     - image_widget_crop
     - path
@@ -50,6 +50,13 @@ content:
     weight: 30
     region: content
     settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 100
+    region: content
     third_party_settings: {  }
 hidden:
   created: true
