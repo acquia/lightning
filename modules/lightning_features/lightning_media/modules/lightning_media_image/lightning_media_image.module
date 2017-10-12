@@ -11,7 +11,7 @@ use Drupal\Core\Form\FormStateInterface;
 use Drupal\image\Entity\ImageStyle;
 use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\lightning_core\OverrideHelper as Override;
-use Drupal\lightning_media_image\Plugin\MediaEntity\Type\Image;
+use Drupal\lightning_media_image\Plugin\media\Source\Image;
 
 /**
  * Implements hook_field_widget_info_alter().
@@ -81,16 +81,16 @@ function lightning_media_image_modules_installed(array $modules) {
 }
 
 /**
- * Implements hook_media_entity_type_info_alter().
+ * Implements hook_media_source_info_alter().
  */
-function lightning_media_image_media_entity_type_info_alter(array &$types) {
-  $types['image']['input_match']['field_types'] = ['image'];
-  Override::pluginClass($types['image'], Image::class);
+function lightning_media_image_media_source_info_alter(array &$sources) {
+  $sources['image']['input_match']['field_types'] = ['image'];
+  Override::pluginClass($sources['image'], Image::class);
 
   // When a media item that uses the Image plugin is embedded in a text editor,
   // prefer the media_image display plugin.
   // @see \Drupal\lightning_media\Form\EntityEmbedDialog::buildEmbedStep()
-  $types['image']['entity_embed_display'] = 'media_image';
+  $sources['image']['entity_embed_display'] = 'media_image';
 }
 
 /**

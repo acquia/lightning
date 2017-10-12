@@ -24,9 +24,9 @@ use Drupal\lightning_media\ImageWidgetHelper;
 use Drupal\lightning_media\MediaHelper;
 use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_media\Form\MediaForm;
-use Drupal\media_entity\Entity\MediaBundle;
-use Drupal\media_entity\MediaInterface;
-use Drupal\media_entity\MediaBundleInterface;
+use Drupal\media\Entity\MediaType;
+use Drupal\media\MediaInterface;
+use Drupal\media\MediaTypeInterface;
 
 /**
  * Implements hook_field_widget_third_party_settings_form().
@@ -115,9 +115,9 @@ function lightning_media_element_info_alter(array &$info) {
 function lightning_media_entity_extra_field_info() {
   $extra_fields = [];
 
-  /** @var \Drupal\media_entity\MediaBundleInterface $media_type */
-  foreach (MediaBundle::loadMultiple() as $id => $media_type) {
-    $plugin_definition = $media_type->getType()->getPluginDefinition();
+  /** @var \Drupal\media\MediaTypeInterface $media_type */
+  foreach (MediaType::loadMultiple() as $id => $media_type) {
+    $plugin_definition = $media_type->getSource()->getPluginDefinition();
 
     if (isset($plugin_definition['preview'])) {
       $extra_fields['media'][$id]['form']['preview'] = [
@@ -294,13 +294,13 @@ function lightning_media_entity_type_alter(array &$entity_types) {
   Override::entityForm($entity_types['media'], MediaForm::class, 'edit');
 
   // Use our extended storage handler for media bundles.
-  Override::entityHandler($entity_types['media_bundle'], 'storage', BundleEntityStorage::class);
+  Override::entityHandler($entity_types['media_type'], 'storage', BundleEntityStorage::class);
 }
 
 /**
  * Implements hook_ENTITY_TYPE_insert().
  */
-function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
+function lightning_media_media_type_insert(MediaTypeInterface $media_type) {
   // Don't do anything during config sync.
   if (\Drupal::isConfigSyncing()) {
     return;
@@ -311,7 +311,7 @@ function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
     ->create([
       'field_name' => 'field_media_in_library',
       'entity_type' => 'media',
-      'bundle' => $bundle->id(),
+      'bundle' => $media_type->id(),
       'label' => t('Save to my media library'),
       'settings' => [
         'on_label' => t('Saved to my media library'),
@@ -323,7 +323,7 @@ function lightning_media_media_bundle_insert(MediaBundleInterface $bundle) {
     ])
     ->save();
 
-  entity_get_form_display('media', $bundle->id(), 'default')
+  entity_get_form_display('media', $media_type->id(), 'default')
     ->setComponent('field_media_in_library', [
       'type' => 'boolean_checkbox',
       'settings' => [
@@ -401,17 +401,6 @@ function lightning_media_ajax_render_alter(array &$data) {
       $command = new AddStyleSheetCommand($query->get('editor'), $style_sheets);
       $data[] = $command->render();
     }
-  }
-}
-
-/**
- * Implements hook_library_info_alter().
- *
- * This should be removed once Lightning uses the core Media module.
- */
-function lightning_media_library_info_alter(array &$libraries, $extension) {
-  if ($extension == 'seven' && !\Drupal::moduleHandler()->moduleExists('media')) {
-    unset($libraries['media-form']);
   }
 }
 
