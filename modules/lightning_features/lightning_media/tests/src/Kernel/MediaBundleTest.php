@@ -39,7 +39,7 @@ class MediaBundleTest extends KernelTestBase {
 
     $this->container
       ->get('entity_type.manager')
-      ->getStorage('media_bundle')
+      ->getStorage('media_type')
       ->create([
         'id' => 'foo',
         'label' => $this->randomString(),
@@ -51,7 +51,7 @@ class MediaBundleTest extends KernelTestBase {
    * Tests that field_media_in_library is auto-cloned for new media bundles.
    */
   public function testCloneMediaInLibraryField() {
-    /** @var \Drupal\media_entity\MediaInterface $media */
+    /** @var \Drupal\media\MediaInterface $media */
     $media = $this->container
       ->get('entity_type.manager')
       ->getStorage('media')

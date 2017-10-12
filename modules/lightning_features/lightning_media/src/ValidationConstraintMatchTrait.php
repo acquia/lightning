@@ -3,7 +3,7 @@
 namespace Drupal\lightning_media;
 
 use Drupal\Core\TypedData\Plugin\DataType\StringData;
-use Drupal\media_entity\MediaBundleInterface;
+use Drupal\media\MediaTypeInterface;
 
 /**
  * Implements InputMatchInterface for media types that use an embed code or URL.
@@ -23,7 +23,7 @@ trait ValidationConstraintMatchTrait {
   /**
    * Implements InputMatchInterface::appliesTo().
    */
-  public function appliesTo($value, MediaBundleInterface $bundle) {
+  public function appliesTo($value, MediaTypeInterface $media_type) {
     $plugin_definition = $this->getPluginDefinition();
 
     $definition = $this->typedDataManager()

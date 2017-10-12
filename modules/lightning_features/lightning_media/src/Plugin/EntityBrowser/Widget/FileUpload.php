@@ -7,7 +7,7 @@ use Drupal\Core\Ajax\ReplaceCommand;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\lightning_media\Element\AjaxUpload;
 use Drupal\lightning_media\MediaHelper;
-use Drupal\media_entity\MediaInterface;
+use Drupal\media\MediaInterface;
 
 /**
  * An Entity Browser widget for creating media entities from uploaded files.
@@ -105,7 +105,7 @@ class FileUpload extends EntityFormProxy {
    * {@inheritdoc}
    */
   public function submit(array &$element, array &$form, FormStateInterface $form_state) {
-    /** @var \Drupal\media_entity\MediaInterface $entity */
+    /** @var \Drupal\media\MediaInterface $entity */
     $entity = $element['entity']['#entity'];
 
     $file = MediaHelper::useFile(
