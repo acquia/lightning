@@ -36,10 +36,10 @@ Feature: An entity browser for media assets
     # behavior. So let's make an otherwise pointless AJAX request here to guard
     # against regressions...
     And I enter "Pastafazoul!" for "Keywords"
-    And I press "Apply"
+    And I press "Filter"
     And I wait for AJAX to finish
     And I clear "Keywords"
-    And I press "Apply"
+    And I press "Filter"
     And I wait for AJAX to finish
     And I select item 1 in the media browser
     And I select item 2 in the media browser
