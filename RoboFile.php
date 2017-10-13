@@ -10,7 +10,6 @@ class RoboFile extends \Robo\Tasks {
 
     return parent::taskBehat($behat)
       ->config('docroot/sites/default/files/behat.yml')
-      ->option('stop-on-failure')
       ->option('strict');
   }
 
@@ -20,17 +19,17 @@ class RoboFile extends \Robo\Tasks {
    * To run all tests, simply run 'test:behat'. To run a specific feature, you
    * can pass its path, relative to the tests/features directory:
    *
-   * test:behat -- media/image.feature
+   * test:behat media/image.feature
    *
    * You can omit the .feature extension. This example runs
    * tests/features/workflow/diff.feature:
    *
-   * test:behat -- workflow/diff
+   * test:behat workflow/diff
    *
    * This also works with a directory of features. This example runs everything
    * in tests/features/media:
    *
-   * test:behat -- media
+   * test:behat media
    *
    * Any command-line options after the initial -- will be passed unmodified to
    * Behat. So you can filter tests by tags, like normal:
@@ -39,8 +38,10 @@ class RoboFile extends \Robo\Tasks {
    *
    * This command will start Selenium Server in the background during the test
    * run, to support functional JavaScript tests.
+   *
+   * @option $all Run all selected tests without stopping on failure.
    */
-  public function testBehat(array $arguments) {
+  public function testBehat(array $arguments, array $options = ['all' => FALSE]) {
     $this
       ->taskExec('bin/selenium-server-standalone')
       ->rawArg('-port 4444')
@@ -49,6 +50,10 @@ class RoboFile extends \Robo\Tasks {
       ->run();
 
     $task = $this->taskBehat();
+
+    if (empty($options['all'])) {
+      $task->stopOnFail();
+    }
 
     foreach ($arguments as $argument) {
       if ($argument{0} == '-') {

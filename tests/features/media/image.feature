@@ -8,7 +8,7 @@ Feature: Image media assets
     When I visit "/media/add/image"
     And I attach the file "test.jpg" to "Image"
     And I wait for AJAX to finish
-    And I enter "Foobaz" for "Media name"
+    And I enter "Foobaz" for "Name"
     And I press "Save and publish"
     # Queue the image for deletion now so it will be deleted even if the
     # test fails.
@@ -31,7 +31,7 @@ Feature: Image media assets
     When I visit "/media/add/image"
     And I attach the file "test.jpg" to "Image"
     And I wait for AJAX to finish
-    And I enter "Blorg" for "Media name"
+    And I enter "Blorg" for "Name"
     And I uncheck the box "Save to my media library"
     And I press "Save and publish"
     # Queue the image for deletion now so it will be deleted even if the

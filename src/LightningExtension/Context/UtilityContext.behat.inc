@@ -9,7 +9,7 @@ use Behat\Mink\Exception\ExpectationException;
 use Drupal\Component\Utility\Random;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\file\Entity\File;
-use Drupal\media_entity\Entity\Media;
+use Drupal\media\Entity\Media;
 use WebDriver\Exception\NoAlertOpenError;
 
 /**
