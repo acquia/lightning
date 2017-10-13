@@ -9,7 +9,7 @@ Feature: Image media assets
     And I attach the file "test.jpg" to "Image"
     And I wait for AJAX to finish
     And I enter "Foobaz" for "Name"
-    And I press "Save and publish"
+    And I press "Save"
     # Queue the image for deletion now so it will be deleted even if the
     # test fails.
     And I queue the latest media entity for deletion
@@ -33,12 +33,12 @@ Feature: Image media assets
     And I wait for AJAX to finish
     And I enter "Blorg" for "Name"
     And I uncheck the box "Save to my media library"
-    And I press "Save and publish"
+    And I press "Save"
     # Queue the image for deletion now so it will be deleted even if the
     # test fails.
     And I queue the latest media entity for deletion
     And I visit "/entity-browser/iframe/media_browser"
     And I enter "Blorg" for "Keywords"
-    And I press "Apply"
+    And I press "Filter"
     And I wait for AJAX to finish
     Then I should see "There are no media items to display."
