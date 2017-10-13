@@ -208,26 +208,6 @@
     <exec command="${bzip2} --force ${fixture}" />
   </target>
 
-  <!-- Imports an existing database snapshot. -->
-  <target name="recall" depends="env">
-    <if>
-      <!-- Check if the fixture exists and exit gracefully if it doesn't. -->
-      <available property="fixture_exists" file="${fixture}.bz2" />
-      <then>
-        <!-- Import the fixture into a clean database to prevent table collisions. -->
-        <phingcall target="reset-db" />
-        <!-- Inflate and execute the fixture. -->
-        <exec command="${bunzip2} --keep ${fixture}.bz2" />
-        <pdosqlexec url="${db.type}:host=${db.host};dbname=${db.database}" userid="${db.user}" password="${db.password}" src="${fixture}" />
-        <!-- Delete the inflated fixture. -->
-        <delete file="${fixture}" />
-      </then>
-      <else>
-        <echo message="${version} fixture does not exist." />
-      </else>
-    </if>
-  </target>
-
   <!-- Empties the database by dropping and recreating it. -->
   <target name="reset-db">
     <!-- pdosqlexec requires an SQL file to execute. -->

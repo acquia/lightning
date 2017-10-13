@@ -13,6 +13,47 @@ class RoboFile extends \Robo\Tasks {
       ->option('strict');
   }
 
+  protected function taskDrupal($command, $console = NULL) {
+    $console = $console ?: '../bin/drupal';
+
+    return parent::taskExec($console)->rawArg($command)->dir('docroot');
+  }
+
+  public function update($version) {
+    $tasks = $this->restore($version);
+
+    if ($tasks) {
+      $tasks
+        ->addTask(
+          $this->taskDrupal('update:execute')
+        )
+        ->addTask(
+          $this->taskDrupal('update:lightning')->option('no-interaction')->option('since', $version)
+        );
+    }
+    return $tasks;
+  }
+
+  public function restore($version) {
+    $fixture = "tests/fixtures/$version.sql";
+
+    if (file_exists("$fixture.bz2")) {
+      return $this->collectionBuilder()
+        ->addTask(
+          $this->taskExec('bunzip2')->arg("$fixture.bz2")->option('keep')->option('force')
+        )
+        ->addTask(
+          $this->taskDrupal('database:restore')->option('file', "../$fixture")
+        )
+        ->completion(
+          $this->taskFilesystemStack()->remove($fixture)
+        );
+    }
+    else {
+      $this->say("$version fixture does not exist.");
+    }
+  }
+
   /**
    * Run Behat tests.
    *
