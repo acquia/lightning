@@ -6,7 +6,7 @@ Feature: Creating media assets from within the media browser using embed codes
     Given I am logged in as a user with the media_creator role
     When I visit "/entity-browser/iframe/media_browser"
     And I enter embed code "<embed_code>"
-    And I enter "<title>" for "Media name"
+    And I enter "<title>" for "Name"
     And I press "Place"
     And I visit "/admin/content/media"
     Then I should see "<title>"

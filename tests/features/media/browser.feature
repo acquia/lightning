@@ -82,6 +82,6 @@ Feature: An entity browser for media assets
     And I open the media browser
     And I wait 5 seconds
     And I enter "Code Wisdom 1" for "Keywords"
-    And I press "Apply"
+    And I press "Filter"
     And I wait for AJAX to finish
     Then I should see 1 item in the entity browser
