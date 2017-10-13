@@ -82,7 +82,7 @@ install:
   # Execute database updates, if there are any.
   - drupal update:execute
   # Execute manual updates.
-  - drupal update:lightning --no-interaction --since=$VERSION
+  - if [ $VERSION != "HEAD"]; then drupal update:lightning --no-interaction --since=$VERSION; fi
 
 before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
