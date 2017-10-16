@@ -7,13 +7,15 @@ use Drupal\user\Entity\User;
 use Drupal\consumers\Entity\Consumer;
 
 /**
+ * Tests the ability to create, read, and update content and config enitities
+ * via the API.
+ *
  * @group lightning
  * @group lightning_api
  * @group headless
  * @group api_test
- * @group foo
  */
-class EntityTest extends ApiTestBase {
+class EntityCrudTest extends ApiTestBase {
 
   /**
    * Options for the admin client.
@@ -36,7 +38,7 @@ class EntityTest extends ApiTestBase {
   protected function setUp() {
     parent::setUp();
 
-    // Create an admin OAuth client that has permission to do everything.
+    // Create an admin user that has permission to do everything.
     $edit = [
       'name' => 'api-admin-user',
       'mail' => 'api-admin-user@example.com',
@@ -49,7 +51,7 @@ class EntityTest extends ApiTestBase {
     $account->save();
     $api_admin_user_id = $account->id();
 
-    // Create an associated client to use for testing.
+    // Create an associated OAuth client to use for testing.
     $data = [
       'uuid' => 'api_test-admin-oauth2-client',
       'label' => 'API Test Admin Client',

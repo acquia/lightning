@@ -6,6 +6,9 @@ use Drupal\Component\Serialization\Json;
 use GuzzleHttp\Exception\ClientException;
 
 /**
+ * Tests that OAuth and json:api are working together to authenticate, authorize
+ * and allow interaction with entities as designed.
+ *
  * @group lightning
  * @group lightning_api
  * @group headless
