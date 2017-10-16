@@ -6,17 +6,21 @@ class RoboFile extends \Robo\Tasks {
    * {@inheritdoc}
    */
   protected function taskBehat($behat = NULL) {
-    $behat = $behat ?: 'bin/behat';
-
-    return parent::taskBehat($behat)
+    return parent::taskBehat($behat ?: 'bin/behat')
       ->config('docroot/sites/default/files/behat.yml')
       ->option('strict');
   }
 
   protected function taskDrupal($command, $console = NULL) {
-    $console = $console ?: '../bin/drupal';
+    return $this->taskExec($console ?: '../bin/drupal')
+      ->rawArg($command)
+      ->dir('docroot');
+  }
 
-    return parent::taskExec($console)->rawArg($command)->dir('docroot');
+  protected function taskDrush($command, $drush = NULL) {
+    return $this->taskExec($drush ?: '../bin/drush')
+      ->rawArg($command)
+      ->dir('docroot');
   }
 
   public function update($version) {
@@ -25,7 +29,7 @@ class RoboFile extends \Robo\Tasks {
     if ($tasks) {
       $tasks
         ->addTask(
-          $this->taskDrupal('update:execute')
+          $this->taskDrush('updatedb')->option('yes')
         )
         ->addTask(
           $this->taskDrupal('update:lightning')->option('no-interaction')->option('since', $version)

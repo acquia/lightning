@@ -317,16 +317,18 @@ function lightning_media_form_entity_browser_media_browser_form_alter(array &$fo
  * Implements hook_entity_type_alter().
  */
 function lightning_media_entity_type_alter(array &$entity_types) {
-  // Media items are a common reference target, and that's that...
-  $entity_types['media']->set('common_reference_target', TRUE);
+  if (\Drupal::moduleHandler()->moduleExists('media')) {
+    // Media items are a common reference target, and that's that...
+    $entity_types['media']->set('common_reference_target', TRUE);
 
-  // Use our specialized entity form for adding and editing media assets in
-  // order to support dynamic preview generation.
-  Override::entityForm($entity_types['media'], MediaForm::class);
-  Override::entityForm($entity_types['media'], MediaForm::class, 'edit');
+    // Use our specialized entity form for adding and editing media assets in
+    // order to support dynamic preview generation.
+    Override::entityForm($entity_types['media'], MediaForm::class);
+    Override::entityForm($entity_types['media'], MediaForm::class, 'edit');
 
-  // Use our extended storage handler for media bundles.
-  Override::entityHandler($entity_types['media_type'], 'storage', BundleEntityStorage::class);
+    // Use our extended storage handler for media bundles.
+    Override::entityHandler($entity_types['media_type'], 'storage', BundleEntityStorage::class);
+  }
 }
 
 /**
