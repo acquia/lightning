@@ -147,18 +147,20 @@ function lightning_media_element_info_alter(array &$info) {
 function lightning_media_entity_extra_field_info() {
   $extra_fields = [];
 
-  /** @var \Drupal\media\MediaTypeInterface $media_type */
-  foreach (MediaType::loadMultiple() as $id => $media_type) {
-    $plugin_definition = $media_type->getSource()->getPluginDefinition();
+  if (\Drupal::moduleHandler()->moduleExists('media')) {
+    /** @var \Drupal\media\MediaTypeInterface $media_type */
+    foreach (MediaType::loadMultiple() as $id => $media_type) {
+      $plugin_definition = $media_type->getSource()->getPluginDefinition();
 
-    if (isset($plugin_definition['preview'])) {
-      $extra_fields['media'][$id]['form']['preview'] = [
-        'label' => t('Preview'),
-        'description' => t('A live preview of the @media_type.', [
-          '@media_type' => $media_type->label(),
-        ]),
-        'weight' => 0,
-      ];
+      if (isset($plugin_definition['preview'])) {
+        $extra_fields['media'][$id]['form']['preview'] = [
+          'label' => t('Preview'),
+          'description' => t('A live preview of the @media_type.', [
+            '@media_type' => $media_type->label(),
+          ]),
+          'weight' => 0,
+        ];
+      }
     }
   }
   return $extra_fields;

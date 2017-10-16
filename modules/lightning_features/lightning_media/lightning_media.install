@@ -286,7 +286,13 @@ function lightning_media_update_8017() {
  * Implements hook_update_dependencies().
  */
 function lightning_media_update_dependencies() {
-  $dependencies = [];
+  $dependencies = [
+    'lightning_media' => [
+      8017 => [
+        'media_entity' => 8201,
+      ],
+    ],
+  ];
 
   if (\Drupal::moduleHandler()->moduleExists('lightning_api')) {
     $dependencies['lightning_media'][8017]['lightning_api'] = 8002;
