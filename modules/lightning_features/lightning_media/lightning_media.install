@@ -302,13 +302,23 @@ function lightning_media_update_8018() {
 function lightning_media_update_dependencies() {
   $dependencies = [
     'lightning_media' => [
+      8017 => [
+        'media_entity' => 8201,
+      ],
       8018 => [
         'media_entity' => 8201,
+      ],
+    ],
+    'media_entity' => [
+      // media_entity 8201
+      8201 => [
+        'system' => 8400,
       ],
     ],
   ];
 
   if (\Drupal::moduleHandler()->moduleExists('lightning_api')) {
+    $dependencies['media_entity'][8201]['lightning_api'] = 8002;
     $dependencies['lightning_media'][8017]['lightning_api'] = 8002;
   }
 
