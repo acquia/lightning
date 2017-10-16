@@ -11,6 +11,7 @@ use Drupal\embed\Entity\EmbedButton;
 use Drupal\entity_browser\Entity\EntityBrowser;
 use Drupal\file\Entity\File;
 use Drupal\lightning_core\ConfigHelper as Config;
+use Drupal\media\Entity\MediaType;
 use Drupal\views\Entity\View;
 
 /**
@@ -283,12 +284,25 @@ function lightning_media_update_8017() {
 }
 
 /**
+ * Re-saves all media types.
+ *
+ * This can be removed once media_entity_update_8201() re-saves media types
+ * unconditionally during the update path.
+ */
+function lightning_media_update_8018() {
+  /** @var \Drupal\media\MediaTypeInterface $media_type */
+  foreach (MediaType::loadMultiple() as $media_type) {
+    $media_type->save();
+  }
+}
+
+/**
  * Implements hook_update_dependencies().
  */
 function lightning_media_update_dependencies() {
   $dependencies = [
     'lightning_media' => [
-      8017 => [
+      8018 => [
         'media_entity' => 8201,
       ],
     ],
