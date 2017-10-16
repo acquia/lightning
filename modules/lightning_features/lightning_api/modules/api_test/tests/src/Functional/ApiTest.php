@@ -3,9 +3,6 @@
 namespace Drupal\Tests\api_test\Functional;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Form\FormState;
-use Drupal\Tests\BrowserTestBase;
-use Drupal\lightning_api\Form\OAuthKeyForm;
 use GuzzleHttp\Exception\ClientException;
 
 /**
@@ -14,91 +11,60 @@ use GuzzleHttp\Exception\ClientException;
  * @group headless
  * @group api_test
  */
-class ApiTest extends BrowserTestBase {
+class ApiTest extends ApiTestBase {
 
   /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'lightning_headless';
-
-  /**
-   * {@inheritdoc}
-   */
-  protected static $modules = ['api_test'];
-
-  /**
-   * The access token returned by the API.
+   * Options for the client created by the test module.
    *
-   * @var string
+   * @var array
    */
-  protected $accessToken;
-
-  /**
-   * URL strings for different endpoints.
-   *
-   * @var string[]
-   */
-  protected $paths = [
-    'page_published_get' => '/jsonapi/node/page/api_test-published-page-content',
-    'page_unpublished_get' => '/jsonapi/node/page/api_test-unpublished-page-content',
-    'page_post' => '/jsonapi/node/page',
-    'role_get' => '/jsonapi/user_role/user_role',
-    'token_get' => '/oauth/token',
+  protected $page_creator_client_options = [
+    'form_params' => [
+      'grant_type' => 'password',
+      'client_id' => 'api_test-oauth2-client',
+      'client_secret' => 'oursecret',
+      'username' => 'api-test-user',
+      'password' => 'admin',
+    ],
   ];
 
   /**
    * Tests Getting data as anon and authenticated user.
    */
   public function testAllowed() {
-    // Generate and store keys for use by OAuth.
-    $this->generateKeys();
-
     // Get data that is available anonymously.
-    $client = \Drupal::httpClient();
-    $url = $this->buildUrl($this->paths['page_published_get']);
-    $response = $client->get($url);
+    $response = $this->request('/jsonapi/node/page/api_test-published-page-content');
     $this->assertEquals(200, $response->getStatusCode());
     $body = Json::decode($response->getBody());
     $this->assertEquals('Published Page', $body['data']['attributes']['title']);
 
     // Get data that requires authentication.
-    $token = $this->getToken();
-    $url = $this->buildUrl($this->paths['page_unpublished_get']);
-    $options = [
-      'headers' => [
-        'Authorization' => 'Bearer ' . $token,
-        'Content-Type' => 'application/vnd.api+json'
-      ],
-    ];
-    $response = $client->get($url, $options);
+    $token = $this->getToken($this->page_creator_client_options);
+    $response = $this->request('/jsonapi/node/page/api_test-unpublished-page-content', 'get', $token);
     $this->assertEquals(200, $response->getStatusCode());
     $body = Json::decode($response->getBody());
     $this->assertEquals('Unpublished Page', $body['data']['attributes']['title']);
 
     // Post new content that requires authentication.
     $count = (int) \Drupal::entityQuery('node')->count()->execute();
-    $token = $this->getToken();
-    $url = $this->buildUrl($this->paths['page_post']);
-    $options = [
-      'headers' => [
-        'Authorization' => 'Bearer ' . $token,
-        'Content-Type' => 'application/vnd.api+json'
-      ],
-      'json' => [
-        'data' => [
-          'type' => 'node--page',
-          'attributes' => [
-            'title' => 'With my own two hands'
-          ]
+    $data = [
+      'data' => [
+        'type' => 'node--page',
+        'attributes' => [
+          'title' => 'With my own two hands'
         ]
       ]
     ];
-    $client->post($url, $options);
-    $this->assertSame(++$count, (int) \Drupal::entityQuery('node')->count()->execute());
+    $this->request('/jsonapi/node/page', 'post', $token, $data);
+    $this->assertSame(++$count, (int) \Drupal::entityQuery('node')
+      ->count()
+      ->execute());
 
     // The user, client, and content should be removed on uninstall.
     \Drupal::service('module_installer')->uninstall(['api_test']);
-    $this->assertCount(0, \Drupal::entityQuery('user')->condition('uid', 1, '>')->execute());
+    $this->assertCount(0, \Drupal::entityQuery('user')
+      ->condition('uid', 1, '>')
+      ->execute());
     $this->assertCount(0, \Drupal::entityQuery('consumer')->execute());
     $this->assertCount(0, \Drupal::entityQuery('node')->execute());
   }
@@ -108,20 +74,9 @@ class ApiTest extends BrowserTestBase {
    * data.
    */
   public function testNotAllowed() {
-    // Generate and store keys for use by OAuth.
-    $this->generateKeys();
-
     // Cannot get unauthorized data (not in role/scope) even when authenticated.
-    $client = \Drupal::httpClient();
-    $token = $this->getToken();
-    $url = $this->buildUrl($this->paths['role_get']);
-    $options = [
-      'headers' => [
-        'Authorization' => 'Bearer ' . $token,
-        'Content-Type' => 'application/vnd.api+json'
-      ],
-    ];
-    $response = $client->get($url, $options);
+    $token = $this->getToken($this->page_creator_client_options);
+    $response = $this->request('/jsonapi/user_role/user_role', 'get', $token);
     $body = Json::decode($response->getBody());
     $this->assertArrayHasKey('errors', $body['meta']);
     foreach ($body['meta']['errors'] as $error) {
@@ -131,64 +86,12 @@ class ApiTest extends BrowserTestBase {
     }
 
     // Cannot get unauthorized data anonymously.
-    $url = $this->buildUrl($this->paths['page_unpublished_get']);
+    $client = \Drupal::httpClient();
+    $url = $this->buildUrl('/jsonapi/node/page/api_test-unpublished-page-content');
     // Unlike the roles test which requests a list, JSON API sends a 403 status
     // code when requesting a specific unauthorized resource instead of list.
     $this->setExpectedException(ClientException::class, 'Client error: `GET ' . $url . '` resulted in a `403 Forbidden`');
     $client->get($url);
   }
 
-  /**
-   * Gets a token from the oauth endpoint using the client and user created in
-   * the API Test module. The client and user have the "Basic page creator" role
-   * so requests that use the token generated here should inherit those
-   * permissions.
-   *
-   * @return string
-   *   The OAuth2 password grant access token from the API.
-   */
-  protected function getToken() {
-    if ($this->accessToken) {
-      return $this->accessToken;
-    }
-    $client = \Drupal::httpClient();
-    // "api-test-user" user and "api_test-oauth2-client" oauth2_client have the
-    // "Basic page creator" role/scope.
-    $options = [
-      'form_params' => [
-        'grant_type' => 'password',
-        'client_id' => 'api_test-oauth2-client',
-        'client_secret' => 'oursecret',
-        'username' => 'api-test-user',
-        'password' => 'admin',
-      ],
-    ];
-    $url = $this->buildUrl($this->paths['token_get']);
-
-    $response = $client->post($url, $options);
-    $body = Json::decode($response->getBody());
-
-    // The response should have an access token.
-    $this->assertArrayHasKey('access_token', $body);
-
-    $this->accessToken = $body['access_token'];
-    return $this->accessToken;
-  }
-
-  /**
-   * Generates and store OAuth keys.
-   */
-  protected function generateKeys() {
-    $dir = drupal_realpath('temporary://');
-
-    $form_state = (new FormState)->setValues([
-      'dir' => $dir,
-      'private_key' => 'private.key',
-      'public_key' => 'public.key',
-    ]);
-
-    $this->container
-      ->get('form_builder')
-      ->submitForm(OAuthKeyForm::class, $form_state);
-  }
 }
