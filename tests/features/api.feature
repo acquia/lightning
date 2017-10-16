@@ -22,5 +22,5 @@ Feature: JSON API for decoupled applications
       | url                      |
       | /admin/structure/contact |
       | /admin/structure/media   |
-      | /admin/structure/types   |
+#      | /admin/structure/types   |
       | /admin/structure/views   |
