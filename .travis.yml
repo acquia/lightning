@@ -85,7 +85,8 @@ before_script:
   - sleep 5
 
 script:
-  - composer validate ../composer.json --no-check-all --ansi --no-interaction
+  - composer validate composer.json --no-check-all --ansi --no-interaction
+  - cd docroot
   - phpunit --configuration ./core --group lightning
   - cd ..
   - bin/robo test:behat

@@ -23,6 +23,17 @@ class RoboFile extends \Robo\Tasks {
       ->dir('docroot');
   }
 
+  /**
+   * Updates from a previous version of Lightning.
+   *
+   * @param string $version
+   *   The version from which to update.
+   *
+   * @see ::restore()
+   *
+   * @return \Robo\Contract\TaskInterface|NULL
+   *   The task(s) to run, or NULL if the specified version is invalid.
+   */
   public function update($version) {
     $tasks = $this->restore($version);
 
@@ -38,6 +49,17 @@ class RoboFile extends \Robo\Tasks {
     return $tasks;
   }
 
+  /**
+   * Restores a database dump of a previous version of Lightning.
+   *
+   * @param string $version
+   *   The semantic version from which to restore, e.g. 2.1.7. A dump of this
+   *   version must exist in the tests/fixtures directory, named like
+   *   $version.sql.bz2.
+   *
+   * @return \Robo\Contract\TaskInterface|NULL
+   *   The task(s) to run, or NULL if the fixture does not exist.
+   */
   public function restore($version) {
     $fixture = "tests/fixtures/$version.sql";
 
