@@ -127,7 +127,6 @@ class MediaLibrarySubContext extends DrupalSubContextBase {
   public function upload($file) {
     $this->minkContext->clickLink('Upload');
     $this->minkContext->attachFileToField('File', $file);
-    sleep(5);
     $this->awaitEntityForm();
   }
 
