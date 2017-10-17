@@ -91,5 +91,9 @@ script:
   - cd ..
   - bin/robo test:behat
 
+after_failure:
+  - cd docroot
+  - drush watchdog:show --count=100 --type=php
+
 matrix:
   fast_finish: true
