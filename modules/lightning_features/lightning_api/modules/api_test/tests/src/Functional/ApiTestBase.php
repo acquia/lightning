@@ -88,8 +88,8 @@ abstract class ApiTestBase extends BrowserTestBase {
    * @param array $data
    *   Additional json data to send with the request.
    *
-   * @return \GuzzleHttp\Client
-   *   A guzzle http client instance.
+   * @return \Psr\Http\Message\ResponseInterface
+   *   The response from the request.
    */
   protected function request($endpoint, $method = 'get', $token = NULL, $data = NULL) {
     $client = \Drupal::httpClient();
