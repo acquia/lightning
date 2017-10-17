@@ -188,18 +188,6 @@
     <phingcall target="reset-db" />
   </target>
 
-  <!-- Destroys the installed code base. -->
-  <target name="destroy">
-    <delete failonerror="true" includeemptydirs="true">
-      <fileset dir="." defaultexcludes="false">
-        <include name="bin/**" />
-        <include name="${docroot}/**" />
-        <include name="node_modules/**" />
-        <include name="vendor/**" />
-      </fileset>
-    </delete>
-  </target>
-
   <!-- Generates a database snapshot from the current code base. -->
   <target name="memorize" depends="env">
     <phingcall target="reset-db" />
