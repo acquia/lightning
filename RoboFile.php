@@ -40,9 +40,6 @@ class RoboFile extends \Robo\Tasks {
     if ($tasks) {
       $tasks
         ->addTask(
-          $this->taskDrush('sql:query')->arg('TRUNCATE TABLE batch;')
-        )
-        ->addTask(
           $this->taskDrush('updatedb')->option('yes')
         )
         ->addTask(
