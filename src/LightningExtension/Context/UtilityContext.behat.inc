@@ -2,6 +2,7 @@
 
 namespace Acquia\LightningExtension\Context;
 
+use Acquia\LightningExtension\AwaitTrait;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\ElementInterface;
@@ -16,6 +17,8 @@ use WebDriver\Exception\NoAlertOpenError;
  * A context with miscellaneous helpers.
  */
 class UtilityContext extends DrupalSubContextBase {
+
+  use AwaitTrait;
 
   /**
    * Visits the edit form for a node.
@@ -241,6 +244,19 @@ class UtilityContext extends DrupalSubContextBase {
     if ($then) {
       call_user_func_array($then, $arguments);
     }
+  }
+
+  /**
+   * Submits exposed Views filters.
+   *
+   * @When I apply the exposed filters
+   */
+  public function applyExposedFilters() {
+    $this->assertSession()
+      ->elementExists('css', '.views-exposed-form .form-actions input[type = "submit"]')
+      ->press();
+
+    $this->awaitAjax();
   }
 
   /**

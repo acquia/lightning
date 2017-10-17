@@ -39,6 +39,5 @@ Feature: Image media assets
     And I queue the latest media entity for deletion
     And I visit "/entity-browser/iframe/media_browser"
     And I enter "Blorg" for "Keywords"
-    And I press "Filter"
-    And I wait for AJAX to finish
+    And I apply the exposed filters
     Then I should see "There are no media items to display."
