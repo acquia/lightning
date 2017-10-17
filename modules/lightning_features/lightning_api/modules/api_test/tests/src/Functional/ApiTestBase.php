@@ -20,13 +20,6 @@ abstract class ApiTestBase extends BrowserTestBase {
   protected static $modules = ['api_test'];
 
   /**
-   * The access token returned by the API.
-   *
-   * @var string
-   */
-  protected $accessToken;
-
-  /**
    * {@inheritdoc}
    */
   protected function setUp() {

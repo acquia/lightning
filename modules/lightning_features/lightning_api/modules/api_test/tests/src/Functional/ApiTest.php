@@ -17,19 +17,29 @@ use GuzzleHttp\Exception\ClientException;
 class ApiTest extends ApiTestBase {
 
   /**
-   * Options for the client created by the test module.
+   * OAuth token for the test client.
    *
-   * @var array
+   * @var string
    */
-  protected $page_creator_client_options = [
-    'form_params' => [
-      'grant_type' => 'password',
-      'client_id' => 'api_test-oauth2-client',
-      'client_secret' => 'oursecret',
-      'username' => 'api-test-user',
-      'password' => 'admin',
-    ],
-  ];
+  private $token;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    $page_creator_client_options = [
+      'form_params' => [
+        'grant_type' => 'password',
+        'client_id' => 'api_test-oauth2-client',
+        'client_secret' => 'oursecret',
+        'username' => 'api-test-user',
+        'password' => 'admin',
+      ],
+    ];
+    $this->token = $this->getToken($page_creator_client_options);
+  }
 
   /**
    * Tests Getting data as anon and authenticated user.
@@ -42,8 +52,7 @@ class ApiTest extends ApiTestBase {
     $this->assertEquals('Published Page', $body['data']['attributes']['title']);
 
     // Get data that requires authentication.
-    $token = $this->getToken($this->page_creator_client_options);
-    $response = $this->request('/jsonapi/node/page/api_test-unpublished-page-content', 'get', $token);
+    $response = $this->request('/jsonapi/node/page/api_test-unpublished-page-content', 'get', $this->token);
     $this->assertEquals(200, $response->getStatusCode());
     $body = Json::decode($response->getBody());
     $this->assertEquals('Unpublished Page', $body['data']['attributes']['title']);
@@ -58,7 +67,7 @@ class ApiTest extends ApiTestBase {
         ]
       ]
     ];
-    $this->request('/jsonapi/node/page', 'post', $token, $data);
+    $this->request('/jsonapi/node/page', 'post', $this->token, $data);
     $this->assertSame(++$count, (int) \Drupal::entityQuery('node')
       ->count()
       ->execute());
@@ -78,8 +87,7 @@ class ApiTest extends ApiTestBase {
    */
   public function testNotAllowed() {
     // Cannot get unauthorized data (not in role/scope) even when authenticated.
-    $token = $this->getToken($this->page_creator_client_options);
-    $response = $this->request('/jsonapi/user_role/user_role', 'get', $token);
+    $response = $this->request('/jsonapi/user_role/user_role', 'get', $this->token);
     $body = Json::decode($response->getBody());
     $this->assertArrayHasKey('errors', $body['meta']);
     foreach ($body['meta']['errors'] as $error) {
