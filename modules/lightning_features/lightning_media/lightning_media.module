@@ -31,6 +31,15 @@ use Drupal\media\MediaTypeInterface;
 use Drupal\views\ViewEntityInterface;
 
 /**
+ * Implements hook_form_BASE_FORM_ID_alter().
+ */
+function lightning_media_form_media_type_form_alter(array &$form, FormStateInterface $form_state) {
+  $form['source_dependent'] += [
+    'source_configuration' => [],
+  ];
+}
+
+/**
  * Implements hook_ENTITY_TYPE_insert().
  */
 function lightning_media_view_insert(ViewEntityInterface $view) {
