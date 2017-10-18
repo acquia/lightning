@@ -9,7 +9,7 @@ Feature: Bulk uploading media assets
     # Wait for Dropzone to be fully initialized.
     And I wait 5 seconds
     And I attach the file "test.jpg" to the dropzone
-    And I attach the file "test.txt" to the dropzone
+    And I attach the file "test.pdf" to the dropzone
     And I press "Continue"
     And I press "Save"
     And I press "Save"
