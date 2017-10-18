@@ -91,7 +91,6 @@ class MediaHelper {
     $media_types = $this->entityTypeManager
       ->getStorage('media_type')
       ->loadMultiple($bundles ?: NULL, $check_access);
-    ksort($media_types);
 
     /** @var \Drupal\media\MediaTypeInterface $media_type */
     foreach ($media_types as $media_type) {
