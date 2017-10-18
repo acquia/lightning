@@ -1,25 +1,20 @@
 @lightning @media @api @javascript @errors
 Feature: Uploading media assets through the media browser
 
-  @image @with-module:lightning_test @1f81e59b
-  Scenario: Uploading an image from within the media browser
+  @image @document @with-module:lightning_test @1f81e59b
+  Scenario Outline: Uploading a file from within the media browser
     Given I am logged in as a user with the media_creator role
     When I visit "/entity-browser/iframe/media_browser"
-    And I upload "test.jpg"
-    And I enter "Foobazzz" for "Name"
+    And I upload "<file>"
+    And I enter "<title>" for "Name"
     And I press "Place"
     And I visit "/admin/content/media"
-    Then I should see "Foobazzz"
+    Then I should see "<title>"
 
-  @document @with-module:lightning_test @b9942efd
-  Scenario: Uploading a file from within the media browser
-    Given I am logged in as a user with the media_creator role
-    When I visit "/entity-browser/iframe/media_browser"
-    And I upload "test.pdf"
-    And I enter "A test file" for "Name"
-    And I press "Place"
-    And I visit "/admin/content/media"
-    Then I should see "A test file"
+    Examples:
+      | file     | title       |
+      | test.pdf | A test file |
+      | test.jpg | Foobazzz    |
 
   @image @cdebd426
   Scenario: Cropping should be enabled when upload an image in the media browser
