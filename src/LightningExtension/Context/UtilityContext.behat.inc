@@ -296,4 +296,13 @@ class UtilityContext extends DrupalSubContextBase {
     }
   }
 
+  /**
+   * Dumps the entire page contents to standard output.
+   *
+   * @When I dump the page contents
+   */
+  public function dumpPage() {
+    print_r($this->getSession()->getPage()->getContent());
+  }
+
 }

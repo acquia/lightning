@@ -6,6 +6,8 @@ Feature: Uploading media assets through the media browser
     Given I am logged in as a user with the media_creator role
     When I visit "/entity-browser/iframe/media_browser"
     And I upload "<file>"
+    # This is only for debugging failures on Travis CI.
+    And I dump the page contents
     And I enter "<title>" for "Name"
     And I press "Place"
     And I visit "/admin/content/media"
