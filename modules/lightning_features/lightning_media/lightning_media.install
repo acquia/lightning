@@ -5,13 +5,13 @@
  * Contains install and update routines for Lightning Media.
  */
 
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\editor\Entity\Editor;
 use Drupal\embed\Entity\EmbedButton;
 use Drupal\entity_browser\Entity\EntityBrowser;
 use Drupal\file\Entity\File;
 use Drupal\lightning_core\ConfigHelper as Config;
-use Drupal\media\Entity\MediaType;
 use Drupal\views\Entity\View;
 
 /**
@@ -284,12 +284,40 @@ function lightning_media_update_8017() {
 }
 
 /**
+ * Updates the media browser's argument validation.
+ */
+function lightning_media_update_8018() {
+  $browser = EntityBrowser::load('media_browser');
+  $view = View::load('media');
+  if (empty($browser) || empty($view)) {
+    return;
+  }
+
+  $widgets = $browser->get('widgets');
+  foreach ($widgets as &$widget) {
+    if ($widget['id'] == 'view' && $widget['settings']['view'] == 'media') {
+      $display = &$view->getDisplay($widget['settings']['view_display']);
+
+      $keys = ['display_options', 'arguments', 'bundle', 'validate', 'type'];
+      if (NestedArray::getValue($display, $keys) == 'entity:media_bundle') {
+        NestedArray::setValue($display, $keys, 'entity:media_type');
+      }
+      $view->save();
+      break;
+    }
+  }
+}
+
+/**
  * Implements hook_update_dependencies().
  */
 function lightning_media_update_dependencies() {
   $dependencies = [
     'lightning_media' => [
       8017 => [
+        'media_entity' => 8201,
+      ],
+      8018 => [
         'media_entity' => 8201,
       ],
     ],

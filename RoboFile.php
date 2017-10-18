@@ -105,10 +105,8 @@ class RoboFile extends \Robo\Tasks {
    *
    * This command will start Selenium Server in the background during the test
    * run, to support functional JavaScript tests.
-   *
-   * @option $all Run all selected tests without stopping on failure.
    */
-  public function testBehat(array $arguments, array $options = ['all' => FALSE]) {
+  public function testBehat(array $arguments) {
     $this
       ->taskExec('bin/selenium-server-standalone')
       ->rawArg('-port 4444')
@@ -117,10 +115,6 @@ class RoboFile extends \Robo\Tasks {
       ->run();
 
     $task = $this->taskBehat();
-
-    if (empty($options['all'])) {
-      $task->stopOnFail();
-    }
 
     foreach ($arguments as $argument) {
       if ($argument{0} == '-') {
