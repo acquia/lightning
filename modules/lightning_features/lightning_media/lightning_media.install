@@ -295,7 +295,7 @@ function lightning_media_update_8018() {
 
   $widgets = $browser->get('widgets');
   foreach ($widgets as &$widget) {
-    if ($widget['id'] == 'view' && $widget['settings']['view'] == 'media') {
+    if ($widget['id'] == 'view' && $widget['settings']['view'] == $view->id()) {
       $display = &$view->getDisplay($widget['settings']['view_display']);
 
       $keys = ['display_options', 'arguments', 'bundle', 'validate', 'type'];
