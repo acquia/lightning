@@ -80,7 +80,7 @@ install:
   - robo update $VERSION
 
 before_script:
-  - drush runserver --default-server=builtin 8080 &>/dev/null &
+  - drush runserver --default-server=builtin 8080 &>server.log &
   - jdk_switcher use oraclejdk8
   - sleep 5
 
@@ -94,6 +94,7 @@ script:
 after_failure:
   - cd docroot
   - drush watchdog:show --count=100 --severity=Error --extended
+  - cat server.log
 
 matrix:
   fast_finish: true
