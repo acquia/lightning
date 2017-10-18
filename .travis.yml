@@ -93,7 +93,7 @@ script:
 
 after_failure:
   - cd docroot
-  - drush watchdog:show --count=100 --type=php
+  - drush watchdog:show --count=100 --type=php --extended
 
 matrix:
   fast_finish: true
