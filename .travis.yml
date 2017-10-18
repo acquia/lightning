@@ -48,7 +48,7 @@ before_install:
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - sudo dpkg -i google-chrome-stable_current_amd64.deb
   - rm google-chrome-stable_current_amd64.deb
-  - google-chrome --version
+  - google-chrome --version --enable-logging=stderr
 
 install:
   # Add Composer's local bin directory to the PATH so that we will be running
@@ -80,7 +80,7 @@ install:
   - robo update $VERSION
 
 before_script:
-  - drush runserver --default-server=builtin 8080 &>server.log &
+  - drush runserver --default-server=builtin 8080 &>/dev/null &
   - jdk_switcher use oraclejdk8
   - sleep 5
 
@@ -94,7 +94,6 @@ script:
 after_failure:
   - cd docroot
   - drush watchdog:show --count=100 --severity=Error --extended
-  - cat ../server.log
 
 matrix:
   fast_finish: true
