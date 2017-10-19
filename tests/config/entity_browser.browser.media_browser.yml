@@ -1,11 +1,8 @@
 langcode: en
 status: true
 dependencies:
-  config:
-    - views.view.media
   module:
     - lightning_media
-    - views
 _core: {  }
 name: media_browser
 label: 'Media browser'
@@ -37,13 +34,3 @@ widgets:
     weight: -9
     label: Upload
     id: file_upload
-  b3f70bd7-c2f4-46f6-8d3d-223f1e10f172:
-    settings:
-      view: media
-      view_display: entity_browser_1
-      submit_text: Place
-      auto_select: false
-    uuid: b3f70bd7-c2f4-46f6-8d3d-223f1e10f172
-    weight: -10
-    label: Library
-    id: view
