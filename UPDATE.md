@@ -77,6 +77,8 @@ to follow the instructions for updating from Beta 1 to Beta 2, then from Beta 2
 to Beta 3, in that order.
 
 ### 2.2.0 to 2.2.1
+* Prior to running database updates, you will need to rebuild Drupal's caches in
+  order for the Media update to run properly.
 * Visit *Structure > Content types*. For each moderated content type, click
   "Manage form display", then drag the "Publishing status" field into the
   "Disabled" section and press "Save".

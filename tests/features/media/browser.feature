@@ -36,11 +36,9 @@ Feature: An entity browser for media assets
     # behavior. So let's make an otherwise pointless AJAX request here to guard
     # against regressions...
     And I enter "Pastafazoul!" for "Keywords"
-    And I press "Apply"
-    And I wait for AJAX to finish
+    And I apply the exposed filters
     And I clear "Keywords"
-    And I press "Apply"
-    And I wait for AJAX to finish
+    And I apply the exposed filters
     And I select item 1 in the media browser
     And I select item 2 in the media browser
     Then I should see a "[data-selectable].selected" element
@@ -82,6 +80,5 @@ Feature: An entity browser for media assets
     And I open the media browser
     And I wait 5 seconds
     And I enter "Code Wisdom 1" for "Keywords"
-    And I press "Apply"
-    And I wait for AJAX to finish
+    And I apply the exposed filters
     Then I should see 1 item in the entity browser

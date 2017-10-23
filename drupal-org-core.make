@@ -6,4 +6,6 @@ projects[drupal][patch][] = https://www.drupal.org/files/issues/2880374-remove-e
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2880445-remove-config-write-warning-2.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2885441-2.patch
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2883813-27.patch
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2877383-23.patch
 projects[drupal][version] = 8.4.0

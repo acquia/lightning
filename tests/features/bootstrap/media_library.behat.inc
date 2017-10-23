@@ -5,6 +5,7 @@
  * Contains \MediaLibrarySubContext.
  */
 
+use Acquia\LightningExtension\AwaitTrait;
 use Acquia\LightningExtension\Context\CkEditorContext;
 use Acquia\LightningExtension\Context\EntityBrowserContext;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
@@ -13,6 +14,8 @@ use Drupal\DrupalExtension\Context\DrupalSubContextBase;
  * Contains step definitions for testing the CKEditor media widget.
  */
 class MediaLibrarySubContext extends DrupalSubContextBase {
+
+  use AwaitTrait;
 
   /**
    * The Mink context.
@@ -66,7 +69,7 @@ class MediaLibrarySubContext extends DrupalSubContextBase {
       ->getContext(CkEditorContext::class)
       ->execute('editdrupalentity', NULL, ['id' => $button]);
 
-    $this->minkContext->iWaitForAjaxToFinish();
+    $this->awaitAjax();
     $frame = 'entity_browser_iframe_' . $button;
     $this->awaitElement('iframe[name="' . $frame . '"]', 30);
     $this->getSession()->switchToIFrame($frame);
@@ -99,17 +102,17 @@ class MediaLibrarySubContext extends DrupalSubContextBase {
     $session->switchToWindow();
     $session->executeScript('window.frames.entity_browser_iframe_media_browser.document.forms[0].elements.op.click()');
     $this->awaitExpression('!window.frames.entity_browser_iframe_media_browser');
-    $this->minkContext->iWaitForAjaxToFinish();
+    $this->awaitAjax();
     $this->awaitElement('form.entity-embed-dialog');
     $session->executeScript('document.querySelector("form.entity-embed-dialog").elements.op[1].click()');
-    $this->minkContext->iWaitForAjaxToFinish();
+    $this->awaitAjax();
   }
 
   /**
    * Waits for the inline entity form (containing required fields) to exist.
    */
   protected function awaitEntityForm() {
-    $this->minkContext->iWaitForAjaxToFinish();
+    $this->awaitAjax();
     $this->awaitExpression('jQuery("#entity").children().length');
   }
 

@@ -53,7 +53,10 @@ The current version of media includes the following functionality:
   CKEditor by pasting the video URL
 
 #### Extending Lightning Media (Contributed Modules)
-Drupal community members have contributed several modules which integrate Lightning Media with additional third-party media services. These modules are not packaged with Lightning or maintained by Acquia, but they are stable and you can use them in your Lightning site:
+Drupal community members have contributed several modules which integrate
+Lightning Media with additional third-party media services. These modules are
+not packaged with Lightning or maintained by Acquia, but they are stable and you
+can use them in your Lightning site:
 
   * [Facebook](https://www.drupal.org/project/lightning_media_facebook)
   * [Imgur](https://www.drupal.org/project/lightning_media_imgur)
@@ -135,6 +138,8 @@ your environment, but generally you will not need to do this.
   can set the image's alt text at upload time, but that text will not be
   replicated to the image field. This is due to a limitation of Entity Browser's
   API.
+* Some of the Lightning contributed media module listed above might not yet be
+  compatible with the Core Media entity.
 
 ### Workflow
 * Lightning Workflow is based on Workbench Moderation, which is incompatible
