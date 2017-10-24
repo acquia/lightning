@@ -44,6 +44,7 @@ projects[jsonapi][version] = 1.3
 projects[media_entity][type] = module
 projects[media_entity][patch][] = https://www.drupal.org/files/issues/media_entity-reset-packaging.patch
 projects[media_entity][patch][] = https://www.drupal.org/files/issues/media-entity-1.6--c564fc4.diff
+projects[media_entity][patch][] = https://www.drupal.org/files/issues/2918172-5.patch
 projects[media_entity][patch][] = https://www.drupal.org/files/issues/2918166-7.patch
 projects[media_entity][version] = 1.6
 projects[media_entity_document][type] = module
