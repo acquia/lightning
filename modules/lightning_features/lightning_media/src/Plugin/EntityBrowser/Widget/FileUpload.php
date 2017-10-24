@@ -65,20 +65,16 @@ class FileUpload extends EntityFormProxy {
     // it as the first validator, allowing it to accept only file extensions
     // associated with existing media bundles.
     if (empty($validators['file_validate_extensions'])) {
-      $bundles = [];
-      $entity_browser_info = $form_state->get('entity_browser');
-      if (!empty($entity_browser_info['widget_context']['target_bundles'])) {
-        $bundles = $entity_browser_info['widget_context']['target_bundles'];
-      }
+      $allowed_bundles = $this->getAllowedBundles($form_state);
 
       $validators = array_merge([
         'file_validate_extensions' => [
-          implode(' ', $this->helper->getFileExtensions(TRUE, $bundles)),
+          implode(' ', $this->helper->getFileExtensions(TRUE, $allowed_bundles)),
         ],
         // This must be a function because file_validate() still thinks that
         // function_exists() is a good way to ensure callability.
         'lightning_media_validate_upload' => [
-          $bundles,
+          $allowed_bundles,
         ],
       ], $validators);
     }

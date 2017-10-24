@@ -62,6 +62,20 @@ abstract class EntityFormProxy extends WidgetBase {
   }
 
   /**
+   * Returns the bundles that this widget may use.
+   *
+   * @param \Drupal\Core\Form\FormStateInterface $form_state
+   *   The current form state.
+   *
+   * @return string[]
+   *   The bundles that this widget may use. If all bundles may be used, the
+   *   returned array will be empty.
+   */
+  protected function getAllowedBundles(FormStateInterface $form_state) {
+    return (array) $form_state->get(['entity_browser', 'widget_context', 'target_bundles']);
+  }
+
+  /**
    * {@inheritdoc}
    */
   public function getForm(array &$original_form, FormStateInterface $form_state, array $additional_widget_parameters) {
@@ -84,7 +98,7 @@ abstract class EntityFormProxy extends WidgetBase {
     }
 
     try {
-      $entity = $this->helper->createFromInput($value);
+      $entity = $this->helper->createFromInput($value, $this->getAllowedBundles($form_state));
     }
     catch (IndeterminateBundleException $e) {
       return $form;
@@ -127,7 +141,7 @@ abstract class EntityFormProxy extends WidgetBase {
 
     $value = $this->getInputValue($form_state);
     try {
-      $this->helper->getBundleFromInput($value);
+      $this->helper->getBundleFromInput($value, TRUE, $this->getAllowedBundles($form_state));
     }
     catch (IndeterminateBundleException $e) {
       $form_state->setError($form['widget'], $e->getMessage());
