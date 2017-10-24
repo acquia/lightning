@@ -13,7 +13,7 @@ Feature: Uploading media assets through the media browser
 
     Examples:
       | file     | title       |
-      | test.pdf | A test file |
+#      | test.pdf | A test file |
       | test.jpg | Foobazzz    |
 
   @image @cdebd426
