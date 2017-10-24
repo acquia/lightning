@@ -87,7 +87,20 @@ Prior to running the database updates, you must:
 
 Due to a some unresolved bugs with the composer-patches plugin, you might need
 to delete your "/docroot/core" and "/docroot/modules" folders and your
-composer.lock file before running `composer update`.
+composer.lock file before running `composer update`. If your codebase has been
+updated properly, you should see the following four pending database updates:
+
+```
+lightning_api module : 
+  8002 -   Installs the Consumers module. 
+
+lightning_media module : 
+  8018 -   Updates the media browser's argument validation. 
+
+media_entity module : 
+  8200 -   Clears the module handler's hook implementation cache. 
+  8201 -   Replace Media Entity with Media. 
+```
 
 ##### Configuration updates
 * Visit *Structure > Content types*. For each moderated content type, click
