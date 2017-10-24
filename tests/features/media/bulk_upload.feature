@@ -12,5 +12,5 @@ Feature: Bulk uploading media assets
 #    And I attach the file "test.pdf" to the dropzone
     And I press "Continue"
     And I press "Save"
-    And I press "Save"
+#    And I press "Save"
     Then I should be visiting a media entity
