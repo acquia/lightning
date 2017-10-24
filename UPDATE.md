@@ -77,8 +77,19 @@ to follow the instructions for updating from Beta 1 to Beta 2, then from Beta 2
 to Beta 3, in that order.
 
 ### 2.2.0 to 2.2.1
-* Prior to running database updates, you will need to rebuild Drupal's caches in
-  order for the Media update to run properly.
+
+##### Special instructions for media entity migration
+This release will migrate your existing media entities to the core media module.
+Prior to running the database updates, you must:
+
+1. Ensure Composer properly downloaded and patched all dependencies.
+1. Rebuild Drupal's caches.
+
+Due to a some unresolved bugs with the composer-patches plugin, you might need
+to delete your "/docroot/core" and "/docroot/modules" folders and your
+composer.lock file before running `composer update`.
+
+##### Configuration updates
 * Visit *Structure > Content types*. For each moderated content type, click
   "Manage form display", then drag the "Publishing status" field into the
   "Disabled" section and press "Save".
