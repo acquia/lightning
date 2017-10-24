@@ -59,6 +59,7 @@ projects[media_entity_image][download][url] = https://git.drupal.org/project/med
 projects[media_entity_image][download][branch] = 1.x
 projects[media_entity_image][download][revision] = 3264d04a39d342ca4e8484e37f56154ef333c4a6
 projects[media_entity_instagram][type] = module
+projects[media_entity_instagram][patch][] = https://www.drupal.org/files/issues/2917454-2.patch
 projects[media_entity_instagram][version] = 2.0-alpha1
 projects[media_entity_twitter][type] = module
 projects[media_entity_twitter][version] = 2.0-alpha2
