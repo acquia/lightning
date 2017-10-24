@@ -46,6 +46,7 @@ projects[media_entity][download][type] = git
 projects[media_entity][download][url] = https://git.drupal.org/project/media_entity
 projects[media_entity][download][branch] = 2.x
 projects[media_entity][download][revision] = c564fc4d02a37f0f49710aa74c1e7fae50a8bf30
+projects[media_entity][patch][] = https://www.drupal.org/files/issues/2918172-5.patch
 projects[media_entity_document][type] = module
 projects[media_entity_document][download][type] = git
 projects[media_entity_document][download][url] = https://git.drupal.org/project/media_entity_document
