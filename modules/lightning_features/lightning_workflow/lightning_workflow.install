@@ -7,6 +7,7 @@
 
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\node\Entity\NodeType;
+use Drupal\workflows\Entity\Workflow;
 
 /**
  * Implements hook_install().
@@ -15,6 +16,34 @@ function lightning_workflow_install() {
   if (\Drupal::moduleHandler()->moduleExists('lightning_roles')) {
     lightning_workflow_modules_installed(['lightning_roles']);
   }
+
+  // Stop here during a config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
+  $workflow = Workflow::load('editorial');
+  $configuration = $workflow->get('type_settings');
+  $configuration['states']['review'] = [
+    'label' => 'In review',
+    'weight' => -1,
+    'published' => FALSE,
+    'default_revision' => FALSE,
+  ];
+  // Anything in the review state can be sent back to draft, kept in review,
+  // or published.
+  $configuration['transitions']['review'] = [
+    'label' => 'Review',
+    'from' => [
+      'draft',
+      'review',
+    ],
+    'to' => 'review',
+    'weight' => 0,
+  ];
+  $configuration['transitions']['publish']['from'][] = 'review';
+  $workflow->set('type_settings', $configuration);
+  $workflow->save();
 }
 
 /**

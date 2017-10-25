@@ -118,17 +118,14 @@ function lightning_workflow_modules_installed(array $modules) {
     \Drupal::service('lightning.content_roles')
       ->grantPermissions('creator', [
         'view any unpublished content',
-        'use draft_draft transition',
-        'use draft_needs_review transition',
-        'use needs_review_needs_review transition',
+        'use editorial transition create_new_draft',
+        'use editorial transition review',
         'view latest version',
       ])
       ->grantPermissions('reviewer', [
-        'use draft_published transition',
-        'use needs_review_draft transition',
-        'use needs_review_published transition',
-        'use published_published transition',
-        'use published_archived transition',
+        'use editorial transition publish',
+        'use editorial transition review',
+        'use editorial transition archive',
         'view moderation states',
       ]);
   }

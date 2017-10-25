@@ -24,6 +24,11 @@ type_settings:
       published: true
       default_revision: true
       weight: 0
+    review:
+      label: 'In review'
+      weight: -1
+      published: false
+      default_revision: false
   transitions:
     archive:
       label: Archive
@@ -57,4 +62,12 @@ type_settings:
       from:
         - draft
         - published
+        - review
+    review:
+      label: Review
+      from:
+        - draft
+        - review
+      to: review
+      weight: 0
   entity_types: {  }
