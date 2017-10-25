@@ -85,10 +85,29 @@ Prior to running the database updates, you must:
 1. Ensure Composer properly downloaded and patched all dependencies.
 1. Rebuild Drupal's caches.
 
-Due to a some unresolved bugs with the composer-patches plugin, you might need
-to delete your "/docroot/core" and "/docroot/modules" folders and your
-composer.lock file before running `composer update`. If your codebase has been
-updated properly, you should see the following four pending database updates:
+This release changes the set of patches that are applied to drupal/core without
+actually updating core, which exposes [this bug in the composer-patches plugin](https://github.com/cweagans/composer-patches/issues/71).
+As a result, you will likely need to run composer update twice. Specifically:
+
+```
+composer update acquia/lightning --with-dependencies
+composer update drupal/core
+```
+ 
+Alternatively, you can delete your "/docroot/core" and "/docroot/modules"
+folders and your composer.lock file before running `composer update`. If you use
+[BLT](http://blt.readthedocs.io/en/8.x/), the provided `composer nuke` command
+will do that for you.
+
+Once you have confirmed that your codebase has been update properly, you must
+rebuild your site's caches *before* running the database updates.
+
+```
+drush cache-rebuild
+```
+
+If your codebase has been updated properly, you should see the following four
+pending database updates when you run `drush updatedb`:
 
 ```
 lightning_api module : 
@@ -101,6 +120,7 @@ media_entity module :
   8200 -   Clears the module handler's hook implementation cache. 
   8201 -   Replace Media Entity with Media. 
 ```
+
 
 ##### Configuration updates
 * Visit *Structure > Content types*. For each moderated content type, click
