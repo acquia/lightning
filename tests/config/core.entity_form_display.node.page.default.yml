@@ -7,11 +7,11 @@ dependencies:
     - field.field.node.page.scheduled_update
     - node.type.page
   module:
+    - content_moderation
     - inline_entity_form
     - metatag
     - path
     - text
-    - workbench_moderation
 _core: {  }
 id: node.page.default
 targetEntityType: node
@@ -36,8 +36,14 @@ content:
   field_meta_tags:
     type: metatag_firehose
     region: content
-    weight: 27
+    weight: 102
     settings: {  }
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    settings: {  }
+    region: content
     third_party_settings: {  }
   path:
     type: path
@@ -62,7 +68,14 @@ content:
       allow_existing: false
       match_operator: CONTAINS
       form_mode: default
-    weight: 26
+    weight: 101
+    third_party_settings: {  }
+    region: content
+  status:
+    type: boolean_checkbox
+    weight: 10
+    settings:
+      display_label: true
     third_party_settings: {  }
     region: content
   sticky:
@@ -89,5 +102,4 @@ content:
       placeholder: ''
     third_party_settings: {  }
     region: content
-hidden:
-  status: true
+hidden: {  }

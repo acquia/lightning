@@ -10,34 +10,11 @@ use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
 use Drupal\Core\Form\FormStateInterface;
 use Drupal\lightning_core\Element;
-use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_core\Routing\RouteSubscriber;
-use Drupal\lightning_workflow\Form\NodeForm;
 use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
 use Drupal\views\ViewEntityInterface;
 use Drupal\views\ViewExecutable;
 use Drupal\workbench_moderation\Entity\ModerationState;
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function lightning_workflow_form_node_type_moderation_form_alter(array &$form, FormStateInterface $form_state) {
-  $form['actions']['submit']['#submit'][] = 'lightning_workflow_submit_node_type_moderation_form';
-}
-
-function lightning_workflow_submit_node_type_moderation_form(array &$form, FormStateInterface $form_state) {
-  $was_moderated = (bool) $form['enable_moderation_state']['#default_value'];
-  $now_moderated = (bool) $form_state->getValue('enable_moderation_state');
-
-  if (!$was_moderated && $now_moderated) {
-    /** @var \Drupal\Core\Entity\EntityFormInterface $form_object */
-    $form_object = $form_state->getFormObject();
-
-    entity_get_form_display('node', $form_object->getEntity()->id(), 'default')
-      ->removeComponent('status')
-      ->save();
-  }
-}
 
 /**
  * Implements hook_theme_registry_alter().
@@ -127,14 +104,6 @@ function lightning_workflow_view_presave(ViewEntityInterface $view) {
 
     Element::toTail($display_options['fields'], 'operations');
   }
-}
-
-/**
- * Implements hook_entity_type_alter().
- */
-function lightning_workflow_entity_type_alter(array &$entity_types) {
-  Override::entityForm($entity_types['node'], NodeForm::class);
-  Override::entityForm($entity_types['node'], NodeForm::class, 'edit');
 }
 
 /**

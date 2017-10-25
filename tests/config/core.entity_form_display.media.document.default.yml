@@ -6,9 +6,9 @@ dependencies:
     - field.field.media.document.field_media_in_library
     - media.type.document
   module:
+    - content_moderation
     - file
     - path
-    - workbench_moderation
 _core: {  }
 id: media.document.default
 targetEntityType: media
@@ -29,6 +29,12 @@ content:
     weight: 3
     third_party_settings: {  }
     region: content
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    settings: {  }
+    region: content
+    third_party_settings: {  }
   name:
     type: string_textfield
     weight: 2
