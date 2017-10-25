@@ -2,16 +2,16 @@
 
 /**
  * @file
- * Support for document media assets in Lightning.
+ * Support for file media assets in Lightning.
  */
 
 use Drupal\lightning_core\OverrideHelper as Override;
-use Drupal\lightning_media_document\Plugin\MediaEntity\Type\Document;
+use Drupal\lightning_media_document\Plugin\media\Source\File;
 
 /**
- * Implements hook_media_entity_type_info_alter().
+ * Implements hook_media_source_info_alter().
  */
-function lightning_media_document_media_entity_type_info_alter(array &$types) {
-  $types['document']['input_match']['field_types'] = ['file'];
-  Override::pluginClass($types['document'], Document::class);
+function lightning_media_document_media_source_info_alter(array &$sources) {
+  $sources['file']['input_match']['field_types'] = ['file'];
+  Override::pluginClass($sources['file'], File::class);
 }

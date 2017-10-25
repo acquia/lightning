@@ -3,7 +3,7 @@
 namespace Drupal\lightning_media;
 
 use Drupal\file\FileInterface;
-use Drupal\media_entity\MediaBundleInterface;
+use Drupal\media\MediaTypeInterface;
 
 /**
  * Implements InputMatchInterface for media types that use a file field.
@@ -23,12 +23,12 @@ trait FileInputExtensionMatchTrait {
   /**
    * Implements InputMatchInterface::appliesTo().
    */
-  public function appliesTo($value, MediaBundleInterface $bundle) {
+  public function appliesTo($value, MediaTypeInterface $media_type) {
     if (is_numeric($value)) {
       $value = $this->entityTypeManager()->getStorage('file')->load($value);
     }
 
-    if ($value instanceof FileInterface && $this instanceof SourceFieldInterface && ($field = $this->getSourceFieldDefinition($bundle))) {
+    if ($value instanceof FileInterface && ($field = $this->getSourceFieldDefinition($media_type))) {
       $extension = pathinfo($value->getFilename(), PATHINFO_EXTENSION);
       $extension = strtolower($extension);
 

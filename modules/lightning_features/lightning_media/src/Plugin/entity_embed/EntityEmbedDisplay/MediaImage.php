@@ -97,7 +97,7 @@ class MediaImage extends ImageFieldFormatter {
    *   The image field item.
    */
   protected function getItem() {
-    /** @var \Drupal\media_entity\MediaInterface $entity */
+    /** @var \Drupal\media\MediaInterface $entity */
     $entity = $this->getEntityFromContext();
 
     $item = MediaHelper::getSourceField($entity)->first();

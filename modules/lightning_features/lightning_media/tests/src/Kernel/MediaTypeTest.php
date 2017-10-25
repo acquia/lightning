@@ -4,27 +4,29 @@ namespace Drupal\Tests\lightning_media\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\lightning_core\ConfigHelper as Config;
+use Drupal\Tests\media\Functional\MediaFunctionalTestCreateMediaTypeTrait;
 
 /**
- * Tests of API-level Lightning functionality related to media bundles.
+ * Tests of API-level Lightning functionality related to media types.
  *
  * @group lightning
  * @group lightning_media
  */
-class MediaBundleTest extends KernelTestBase {
+class MediaTypeTest extends KernelTestBase {
+
+  use MediaFunctionalTestCreateMediaTypeTrait;
 
   /**
    * {@inheritdoc}
    */
-  public static $modules = [
+  protected static $modules = [
     'field',
     'file',
     'image',
     'lightning_core',
     'lightning_media',
-    'media_entity',
+    'media',
     'user',
-    'views',
   ];
 
   /**
@@ -36,35 +38,26 @@ class MediaBundleTest extends KernelTestBase {
     Config::forModule('lightning_media')
       ->getEntity('field_storage_config', 'media.field_media_in_library')
       ->save();
-
-    $this->container
-      ->get('entity_type.manager')
-      ->getStorage('media_bundle')
-      ->create([
-        'id' => 'foo',
-        'label' => $this->randomString(),
-      ])
-      ->save();
   }
 
   /**
    * Tests that field_media_in_library is auto-cloned for new media bundles.
    */
   public function testCloneMediaInLibraryField() {
-    /** @var \Drupal\media_entity\MediaInterface $media */
+    $type = $this->createMediaType([], 'file')->id();
+
+    /** @var \Drupal\media\MediaInterface $media */
     $media = $this->container
       ->get('entity_type.manager')
       ->getStorage('media')
       ->create([
-        'bundle' => 'foo',
+        'bundle' => $type,
       ]);
 
-    $this->assertTrue(
-      $media->hasField('field_media_in_library')
-    );
+    $this->assertTrue($media->hasField('field_media_in_library'));
 
     // The field should be present in the form as a checkbox.
-    $component = entity_get_form_display('media', 'foo', 'default')
+    $component = entity_get_form_display('media', $type, 'default')
       ->getComponent('field_media_in_library');
 
     $this->assertInternalType('array', $component);

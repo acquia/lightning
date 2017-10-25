@@ -9,7 +9,7 @@ Feature: An entity browser for image fields
     And I click "Upload"
     And I attach the file "test.jpg" to "File"
     And I wait for AJAX to finish
-    And I enter "Behold, a generic logo" for "Media name"
+    And I enter "Behold, a generic logo" for "Name"
     And I submit the entity browser
     Then I should not see a "table[drupal-data-selector='edit-image-current'] td.empty" element
 

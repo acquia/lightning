@@ -46,3 +46,10 @@ function lightning_api_update_8001() {
     ->set('bundle_docs', TRUE)
     ->save();
 }
+
+/**
+ * Installs the Consumers module.
+ */
+function lightning_api_update_8002() {
+  \Drupal::service('module_installer')->install(['consumers']);
+}

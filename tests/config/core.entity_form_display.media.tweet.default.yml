@@ -4,7 +4,7 @@ dependencies:
   config:
     - field.field.media.tweet.embed_code
     - field.field.media.tweet.field_media_in_library
-    - media_entity.bundle.tweet
+    - media.type.tweet
   module:
     - path
     - workbench_moderation
@@ -46,6 +46,13 @@ content:
   preview:
     weight: 0
     region: content
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 100
+    region: content
+    third_party_settings: {  }
 hidden:
   created: true
   uid: true

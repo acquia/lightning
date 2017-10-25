@@ -141,7 +141,7 @@ class BulkUploadForm extends FormBase {
     }
 
     if ($bulk_create) {
-      /** @var \Drupal\media_entity\MediaInterface $entity */
+      /** @var \Drupal\media\MediaInterface $entity */
       $redirect = array_shift($bulk_create)->toUrl('edit-form', [
         'query' => [
           'bulk_create' => $bulk_create,

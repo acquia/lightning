@@ -2,14 +2,14 @@ langcode: en
 status: true
 dependencies:
   module:
-    - media_entity_document
+    - media
 id: document
 label: Document
 description: 'A locally hosted document, such a PDF.'
-type: document
+source: file
 queue_thumbnail_downloads: false
 new_revision: false
-type_configuration:
+source_configuration:
   source_field: field_document
 field_map:
   mime: field_mime_type

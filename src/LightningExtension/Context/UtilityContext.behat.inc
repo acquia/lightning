@@ -2,6 +2,7 @@
 
 namespace Acquia\LightningExtension\Context;
 
+use Acquia\LightningExtension\AwaitTrait;
 use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Element\ElementInterface;
@@ -9,13 +10,15 @@ use Behat\Mink\Exception\ExpectationException;
 use Drupal\Component\Utility\Random;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\file\Entity\File;
-use Drupal\media_entity\Entity\Media;
+use Drupal\media\Entity\Media;
 use WebDriver\Exception\NoAlertOpenError;
 
 /**
  * A context with miscellaneous helpers.
  */
 class UtilityContext extends DrupalSubContextBase {
+
+  use AwaitTrait;
 
   /**
    * Visits the edit form for a node.
@@ -244,6 +247,19 @@ class UtilityContext extends DrupalSubContextBase {
   }
 
   /**
+   * Submits exposed Views filters.
+   *
+   * @When I apply the exposed filters
+   */
+  public function applyExposedFilters() {
+    $this->assertSession()
+      ->elementExists('css', '.views-exposed-form .form-actions input[type = "submit"]')
+      ->press();
+
+    $this->awaitAjax();
+  }
+
+  /**
    * Asserts the existence of entities by running a count query.
    *
    * @param string $entity_type
@@ -278,6 +294,15 @@ class UtilityContext extends DrupalSubContextBase {
         $this->getSession()->getDriver()
       );
     }
+  }
+
+  /**
+   * Dumps the entire page contents to standard output.
+   *
+   * @When I dump the page contents
+   */
+  public function dumpPage() {
+    print_r($this->getSession()->getPage()->getContent());
   }
 
 }
