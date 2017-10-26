@@ -5,6 +5,7 @@ namespace Drupal\lightning\Tests\Functional;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
+use Drupal\workflows\Entity\Workflow;
 
 /**
  * Ensures the integrity and correctness of Lightning's bundled config.
@@ -50,6 +51,22 @@ class ConfigIntegrityTest extends BrowserTestBase {
     ]);
     $this->assertEntityExists('crop_type', 'freeform');
     $this->assertEntityExists('image_style', 'crop_freeform');
+
+    // Assert that the editorial workflow exists and has the review state and
+    // transition.
+    $workflow = Workflow::load('editorial');
+    $this->assertInstanceOf(Workflow::class, $workflow);
+    /** @var \Drupal\workflows\WorkflowTypeInterface $type_plugin */
+    $type_plugin = $workflow->getTypePlugin();
+    // getState() throws an exception if the state does not exist.
+    $type_plugin->getState('review');
+    // getTransition() throws an exception if the transition does not exist.
+    /** @var \Drupal\workflows\TransitionInterface $transition */
+    $transition = $type_plugin->getTransition('review');
+    $this->assertEquals('review', $transition->to()->id());
+    $from = array_keys($transition->from());
+    $this->assertContainsAll(['draft', 'review'], $from);
+    $this->assertNotContains('published', $from);
 
     $permissions = [
       'use text format rich_text',

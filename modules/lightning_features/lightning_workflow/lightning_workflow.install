@@ -44,6 +44,10 @@ function lightning_workflow_install() {
   $configuration['transitions']['publish']['from'][] = 'review';
   $workflow->set('type_settings', $configuration);
   $workflow->save();
+
+  foreach (NodeType::loadMultiple() as $node_type) {
+    lightning_workflow_node_type_insert($node_type);
+  }
 }
 
 /**
