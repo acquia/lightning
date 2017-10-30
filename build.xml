@@ -96,7 +96,7 @@
   <!-- Installs Lightning and sets it up for development. -->
   <target name="install" depends="env">
     <!-- Use passthru() when executing drush site-install so that we'll know if errors occur. -->
-    <exec command="${drush} site-install lightning --yes --account-pass=admin --db-url=${db.url}" passthru="true" />
+    <exec command="${drush} site-install lightning --yes --account-pass=admin --db-url=${db.url}" dir="${docroot}" passthru="true" />
     <chmod file="${site}" mode="0755" />
 
     <!-- Install Lightning Dev. -->
