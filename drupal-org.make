@@ -46,6 +46,7 @@ projects[media_entity][patch][] = https://www.drupal.org/files/issues/media-enti
 projects[media_entity][patch][] = https://www.drupal.org/files/issues/2918172-5.patch
 projects[media_entity][patch][] = https://www.drupal.org/files/issues/2918166-7.patch
 projects[media_entity][patch][] = https://www.drupal.org/files/issues/2919381-2.patch
+projects[media_entity][patch][] = https://www.drupal.org/files/issues/media_entity-drush_updatedb-2919754-6-D8.patch
 projects[media_entity][version] = 1.6
 projects[media_entity_document][type] = module
 projects[media_entity_document][version] = 1.1
