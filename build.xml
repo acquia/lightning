@@ -167,7 +167,7 @@
   <!-- Creates a legacy-built tarball with composer dependencies suitable for
   cloud. -->
   <target name="cloud-tarball">
-    <phingcall target="destroy" />
+    <exec command="${composer} nuke" />
     <phingcall target="build-legacy" />
     <phingcall target="tarball" />
   </target>

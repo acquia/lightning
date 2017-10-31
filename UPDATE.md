@@ -76,6 +76,13 @@ are currently running Beta 1 and are trying to update to Beta 3, you will need
 to follow the instructions for updating from Beta 1 to Beta 2, then from Beta 2
 to Beta 3, in that order.
 
+### 2.2.1 to 2.2.2
+There are no manual update steps for this version.
+ 
+This release fixes some requirements problems with the 2.2.1 media migration.
+You *can* update directly from 2.2.0 to 2.2.2. When doing so, follow the
+"Special instructions for media entity migration" steps below.
+
 ### 2.2.0 to 2.2.1
 
 ##### Special instructions for media entity migration
