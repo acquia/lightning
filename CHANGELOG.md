@@ -1,5 +1,5 @@
 ## 2.2.1
-* Lightning Media has been updated to use the new Core Media entity.
+* Lightning Media has been updated to use the new Core Media system.
 * Fixed a bug where the "Publishing status" checkbox appeared on content edit
   forms when it should have been hidden. (GitHub #479)
 

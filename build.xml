@@ -5,6 +5,7 @@
 
   <!-- Locations of required binaries. -->
   <property name="drush" value="${project.basedir}/bin/drush" />
+  <property name="drupal" value="${project.basedir}/bin/drupal" />
   <property name="composer" value="/usr/local/bin/composer" />
   <property name="rsync" value="/usr/bin/rsync" />
   <property name="bzip2" value="/usr/bin/bzip2" />
@@ -95,12 +96,12 @@
 
   <!-- Installs Lightning and sets it up for development. -->
   <target name="install" depends="env">
-    <!-- Use passthru() when executing drush site-install so that we'll know if errors occur. -->
-    <exec command="${drush} site-install lightning --yes --account-pass=admin --db-url=${db.url}" dir="${docroot}" passthru="true" />
+    <!-- Use passthru() when executing drupal site-install so that we'll know if errors occur. -->
+    <exec command="${drupal} site:install lightning --db-type=${db.type} --db-host=${db.host} --db-name=${db.database} --db-user=${db.user} --db-pass=${db.password} --no-interaction --force" passthru="true" />
     <chmod file="${site}" mode="0755" />
 
     <!-- Install Lightning Dev. -->
-    <exec command="${drush} pm-enable lightning_dev --yes" dir="${docroot}" passthru="true" />
+    <exec command="${drupal} module:install lightning_dev --yes" dir="${docroot}" passthru="true" />
 
     <!-- Prepare PHPUnit. -->
     <mkdir dir="${docroot}/modules" />

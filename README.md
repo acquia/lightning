@@ -140,6 +140,9 @@ your environment, but generally you will not need to do this.
   API.
 * Some of the Lightning contributed media module listed above might not yet be
   compatible with the Core Media entity.
+* The Video Embed Field module, a dependency of Lightning Media, might report
+  that it is unsupported. We're working with the module maintainer to remove
+  this warning.
 
 ### Workflow
 * Lightning Workflow is based on Workbench Moderation, which is incompatible
