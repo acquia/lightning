@@ -76,6 +76,9 @@ are currently running Beta 1 and are trying to update to Beta 3, you will need
 to follow the instructions for updating from Beta 1 to Beta 2, then from Beta 2
 to Beta 3, in that order.
 
+### 2.2.2 to 2.2.3
+There are no manual update steps for thus version.
+
 ### 2.2.1 to 2.2.2
 There are no manual update steps for this version.
  

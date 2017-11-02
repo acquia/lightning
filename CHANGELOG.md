@@ -1,3 +1,6 @@
+## 2.2.3
+* Updated to and require a minimum of Drupal Core 8.4.1.
+
 ## 2.2.2
 * Fixed a bug where certain versions of Drush would erroneously report
   unfulfilled requirements when running database updates. (Issue #2919204)
