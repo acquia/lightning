@@ -1,3 +1,14 @@
+## 2.2.3
+* Updated to and require a minimum of Drupal Core 8.4.1.
+
+## 2.2.2
+* Fixed a bug where certain versions of Drush would erroneously report
+  unfulfilled requirements when running database updates. (Issue #2919204)
+* Removed a duplicate directory that caused problems when downloading via
+  Composer. (GitHub #502)
+* Worked around a bug where some versions of Drush run hooks that are provided
+  by uninstalled modules. (GitHub #496)
+
 ## 2.2.1
 * Lightning Media has been updated to use the new Core Media system.
 * Fixed a bug where the "Publishing status" checkbox appeared on content edit

@@ -92,7 +92,7 @@
             },
             "drupal/core": {
                 "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order":
-                "https://www.drupal.org/files/issues/1356276-360.patch",
+                "https://www.drupal.org/files/issues/1356276-408--8.4.x.patch",
                 "2880374 - Experimental modules should not have warnings after being installed":
                 "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
                 "2880445 - Config sync should not throw a warning when not being writable":
@@ -136,10 +136,6 @@
                 "2908917 - SaveTabView blindly assumes a Revert tab exists":
                 "https://www.drupal.org/files/issues/2908917-2.patch"
             },
-            "drupal/crop": {
-                "2904514 - Crop API causes an error when adding a media bundle":
-                "https://www.drupal.org/files/issues/2904514-2.patch"
-            },
             "drupal/media_entity": {
                 "Reset D.O packaging information so subsequent patches apply":
                 "https://www.drupal.org/files/issues/media_entity-reset-packaging--add-version.patch",
@@ -152,7 +148,9 @@
                 "2919381 - Don't cache media_entity_type_plugins":
                 "https://www.drupal.org/files/issues/2919381-2.patch",
                 "2921983 - Core upgrade path does not account for views that validate by media bundle":
-                "https://www.drupal.org/files/issues/2921983-2.patch"
+                "https://www.drupal.org/files/issues/2921983-2.patch",
+                "2919754 - non-existent service 'plugin.manager.media_entity.type'":
+                "https://www.drupal.org/files/issues/media_entity-drush_updatedb-2919754-6-D8.patch"
             },
             "drupal/media_entity_instagram": {
                 "2917454 - Field formatter test is broken":
@@ -162,7 +160,7 @@
     },
     "require": {
         "cweagans/composer-patches": "^1.5.0",
-        "drupal/core": "~8.4.0",
+        "drupal/core": "~8.4.1",
         "drupal/embed": "^1.0",
         "drupal/entity_embed": "1.0.0-beta2",
         "drupal/media_entity": "1.6.0",
@@ -194,7 +192,7 @@
         "oomphinc/composer-installers-extender": "^1.1",
         "drupal/dropzonejs": "1.0.0-alpha8",
         "bower-asset/dropzone": "^5.1",
-        "drupal/crop": "1.2.0",
+        "drupal/crop": "^1.3",
         "drupal/image_widget_crop": "^2.0",
         "bower-asset/cropper": "^2.3",
         "drupal/media_entity_document": "^1.0",
