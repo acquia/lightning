@@ -8,4 +8,4 @@ projects[drupal][patch][] = https://www.drupal.org/files/issues/2869592-remove-u
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2885441-2.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2883813-27.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2877383-23.patch
-projects[drupal][version] = 8.4.1
+projects[drupal][version] = 8.4.2
