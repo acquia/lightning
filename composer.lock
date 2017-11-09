@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "7bd519f95467c036d92c3ff5221914b2",
+    "content-hash": "3effb521175f17ae0fc63f2b966ff144",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1324,11 +1324,17 @@
         },
         {
             "name": "drupal/crop",
-            "version": "dev-2.x",
+            "version": "2.0.0-beta1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/crop",
-                "reference": "435fdaf28f6532965f8683222d845d730818787c"
+                "reference": "8.x-2.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/crop-8.x-2.0-beta1.zip",
+                "reference": "8.x-2.0-beta1",
+                "shasum": "74c8ac56ca8e75791f54906e359337291aa962bf"
             },
             "require": {
                 "drupal/core": "*"
@@ -1339,15 +1345,15 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-alpha1+2-dev",
-                    "datestamp": "1508927645",
+                    "version": "8.x-2.0-beta1",
+                    "datestamp": "1509015245",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
-                    "Make Crop API compatible with core Media": "https://www.drupal.org/files/issues/cleanup_of_code-2-x-2918441-14.patch"
+                    "Make Crop API compatible with core Media": "https://www.drupal.org/files/issues/2918441-beta1-packaged-info-file.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -1373,8 +1379,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/crop",
                 "issues": "https://www.drupal.org/project/issues/crop"
-            },
-            "time": "2017-10-25T10:32:16+00:00"
+            }
         },
         {
             "name": "drupal/ctools",
@@ -2135,15 +2140,21 @@
         },
         {
             "name": "drupal/image_widget_crop",
-            "version": "dev-2.x",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/image_widget_crop",
-                "reference": "1390552f4d7846b5963fa6518d350bddfdd18963"
+                "reference": "8.x-2.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/image_widget_crop-8.x-2.1.zip",
+                "reference": "8.x-2.1",
+                "shasum": "76bda9a8c8d3149149bb7812e48e9f14e9ce1ffb"
             },
             "require": {
                 "drupal/core": "*",
-                "drupal/crop": "^1.0 || ^2.0"
+                "drupal/crop": "1.0 - 2.0"
             },
             "require-dev": {
                 "drupal/crop": "*",
@@ -2159,11 +2170,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0+14-dev",
-                    "datestamp": "1510135385",
+                    "version": "8.x-2.1",
+                    "datestamp": "1510136887",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -2201,8 +2212,7 @@
                 "source": "https://www.drupal.org/project/image_widget_crop",
                 "issues": "https://www.drupal.org/project/issues/image_widget_crop",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
-            },
-            "time": "2017-11-09T16:08:20+00:00"
+            }
         },
         {
             "name": "drupal/inline_entity_form",
@@ -11004,8 +11014,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/crop": 20,
-        "drupal/image_widget_crop": 20,
         "drupal/media_entity_generic": 20
     },
     "prefer-stable": true,
