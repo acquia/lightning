@@ -143,6 +143,8 @@ your environment, but generally you will not need to do this.
 * The Video Embed Field module, a dependency of Lightning Media, might report
   that it is unsupported. We're working with the module maintainer to remove
   this warning.
+* Using the bulk upload feature in environments with a load balancer might
+  result in some images not being saved.
 
 ### Workflow
 * Lightning Workflow is based on Workbench Moderation, which is incompatible
