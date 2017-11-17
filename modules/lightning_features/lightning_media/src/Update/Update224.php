@@ -36,6 +36,8 @@ final class Update224 implements ContainerInjectionInterface {
   protected $mediaDefinition;
 
   /**
+   * The entity type manager.
+   *
    * @var \Drupal\Core\Entity\EntityTypeManager
    */
   protected $entityTypeManager;
