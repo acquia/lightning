@@ -31,8 +31,7 @@ Feature: Media bundles
     And I click "Edit draft"
     And I open the media browser
     And I select item 1
-    And I submit the entity browser
-    And I press "Embed"
+    And I complete the media browser selection
     And I wait 5 seconds
     And I press "Save"
     Then I should not see "Here be dragons"
