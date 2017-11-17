@@ -34,4 +34,5 @@ Feature: Media bundles
     And I complete the media browser selection
     And I wait 5 seconds
     And I press "Save"
-    Then I should not see "Here be dragons"
+    Then I should be on "/foo"
+    And I should not see "Here be dragons"
