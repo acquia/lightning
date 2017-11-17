@@ -6,6 +6,7 @@ use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Entity\EntityStorageInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\EntityTypeManager;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\media\MediaTypeInterface;
@@ -35,16 +36,15 @@ final class Update224 implements ContainerInjectionInterface {
   protected $mediaDefinition;
 
   /**
-   * The moderation information service.
-   *
-   * @var \Drupal\workbench_moderation\ModerationInformationInterface
+   * @var \Drupal\Core\Entity\EntityTypeManager
    */
-  protected $moderationInfo;
+  protected $entityTypeManager;
 
-  public function __construct(EntityStorageInterface $media_type_storage, EntityTypeInterface $media_definition, TranslationInterface $translation) {
+  public function __construct(EntityStorageInterface $media_type_storage, EntityTypeInterface $media_definition, TranslationInterface $translation, EntityTypeManager $entity_type_manager) {
     $this->mediaTypeStorage = $media_type_storage;
     $this->mediaDefinition = $media_definition;
     $this->setStringTranslation($translation);
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -54,7 +54,8 @@ final class Update224 implements ContainerInjectionInterface {
     return new static(
       $container->get('entity_type.manager')->getStorage('media_type'),
       $container->get('entity_type.manager')->getDefinition('media'),
-      $container->get('string_translation')
+      $container->get('string_translation'),
+      $container->get('entity_type.manager')
     );
   }
 
@@ -62,7 +63,8 @@ final class Update224 implements ContainerInjectionInterface {
    * @update
    */
   public function hideNameField(DrupalStyle $io) {
-    \Drupal::entityTypeManager()->clearCachedDefinitions();
+    $this->entityTypeManager->clearCachedDefinitions();
+
     /** @var MediaTypeInterface[] $media_types */
     $media_types = $this->mediaTypeStorage->loadMultiple();
     foreach ($media_types as $media_type) {
@@ -71,8 +73,7 @@ final class Update224 implements ContainerInjectionInterface {
       ]);
 
       if ($io->confirm($question)) {
-        $display = entity_get_display('media', $media_type->id(), 'embedded');
-        $display->removeComponent('name')->save();
+        entity_get_display('media', $media_type->id(), 'embedded')->removeComponent('name')->save();;
       }
     }
   }
