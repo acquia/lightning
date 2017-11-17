@@ -17,3 +17,22 @@ Feature: Media bundles
     # Clean up...
     And I visit "/admin/structure/media/manage/foobaz/delete"
     And I press "Delete"
+
+  @d63d19c4 @javascript
+  Scenario: Name field's display can be managed and is hidden by default
+    Given I am logged in as a user with the administrator role
+    And media entities:
+      | bundle | name            | embed_code                                                  | status | field_media_in_library |
+      | tweet  | Here be dragons | https://twitter.com/50NerdsofGrey/status/757319527151636480 | 1      | 1                      |
+    And node entities:
+      | type | title | moderation_state | path |
+      | page | Foo  | draft             | /foo |
+    When I visit "/foo"
+    And I click "Edit draft"
+    And I open the media browser
+    And I select item 1
+    And I complete the media browser selection
+    And I wait 5 seconds
+    And I press "Save"
+    Then I should be on "/foo"
+    And I should not see "Here be dragons"
