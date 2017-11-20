@@ -1,6 +1,9 @@
 langcode: en
 status: true
 dependencies:
+  config:
+    - node.type.landing_page
+    - node.type.page
   module:
     - content_moderation
 _core: {  }
@@ -70,4 +73,7 @@ type_settings:
         - review
       to: review
       weight: 0
-  entity_types: {  }
+  entity_types:
+    node:
+      - page
+      - landing_page
