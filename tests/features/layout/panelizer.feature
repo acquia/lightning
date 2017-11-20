@@ -119,9 +119,11 @@ Feature: Panelizer
     And I select "Content" from "Region"
     And I press "Save block"
     And I visit "/admin/content"
+    And I select "- Any -" from "Moderation state"
+    And I press "Filter"
     And I click "Fox"
-    And I click "New draft"
-    And I select "Archived" from "Moderation state"
+    And I visit the edit form
+    And I select "Archived" from "moderation_state[0][state]"
     And I press "Save"
     And I am an anonymous user
     And I visit "/"
