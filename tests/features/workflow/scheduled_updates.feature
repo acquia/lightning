@@ -15,7 +15,7 @@ Feature: Scheduled updates to content
       | title  | path    | moderation_state |
       | Foobar | /foobar | draft            |
     When I visit "/foobar"
-    And I click "Edit draft"
+    And I visit the edit form
     And I select "Needs Review" from "Moderation state"
     And I schedule the node to be published at "1984-09-19 08:57:00"
     And I press "Save"
