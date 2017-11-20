@@ -92,6 +92,8 @@ Feature: Workflow moderation states
       | Lazy Lummox |
     And I am logged in as a user with the administrator role
     When I visit "admin/content"
+    And I select "- Any -" from "Moderation state"
+    And I press "Filter"
     Then I should see "Lazy Lummox"
 
   @084ca18d
@@ -100,8 +102,8 @@ Feature: Workflow moderation states
       | type   | name   |
       | foobar | Foobar |
     And I am logged in as a user with the administrator role
-    When I visit "/admin/structure/types/manage/foobar/moderation"
-    And I check the box "Enable moderation states."
+    When I visit "/admin/config/workflow/workflows/manage/editorial/type/node"
+    And I check the box "bundles[foobar]"
     And I press "Save"
     And I visit "/node/add/foobar"
     Then I should see the "Save" button

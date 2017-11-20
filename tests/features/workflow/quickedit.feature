@@ -18,7 +18,7 @@ Feature: Integration of workflows with Quick Edit
       | page | Foobar | /foobar | draft            |
     When I visit "/foobar"
     And I visit the edit form
-    And I select "published" from "Moderation state"
+    And I select "published" from "moderation_state[0][state]"
     And I press "Save"
     Then Quick Edit should be disabled
 
@@ -32,10 +32,10 @@ Feature: Integration of workflows with Quick Edit
       | page | Foobar | /foobar | draft            |
     When I visit "/foobar"
     And I visit the edit form
-    And I select "published" from "Moderation state"
+    And I select "published" from "moderation_state[0][state]"
     And I press "Save"
     And I visit the edit form
-    And I select "draft" from "Moderation state"
+    And I select "draft" from "moderation_state[0][state]"
     And I press "Save"
     And I click "Latest version"
     Then Quick Edit should be enabled
