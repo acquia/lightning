@@ -165,6 +165,17 @@ function lightning_workflow_modules_installed(array $modules) {
 }
 
 /**
+ * Implements hook_views_data_alter().
+ */
+function lightning_workflow_views_data_alter(array &$data) {
+  foreach ($data as $table => $table_data) {
+    if (isset($table_data['moderation_state']['field'])) {
+      $data[$table]['moderation_state']['field'] += ['id' => 'null'];
+    }
+  }
+}
+
+/**
  * Implements hook_views_plugins_field_alter().
  */
 function lightning_workflow_views_plugins_field_alter(array &$plugins) {
