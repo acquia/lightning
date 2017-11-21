@@ -3,10 +3,10 @@
 namespace Drupal\Tests\api_test\Functional;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Form\FormState;
+use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\lightning_api\Form\OAuthKeyForm;
 use GuzzleHttp\Exception\ClientException;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * @group lightning
@@ -47,18 +47,25 @@ class ApiTest extends BrowserTestBase {
   ];
 
   /**
+   * {@inheritdoc}
+   */
+  protected function setUp() {
+    parent::setUp();
+
+    // Generate and store keys for use by OAuth.
+    $this->generateKeys();
+  }
+
+  /**
    * Tests Getting data as anon and authenticated user.
    */
   public function testAllowed() {
-    // Generate and store keys for use by OAuth.
-    $this->generateKeys();
-
     // Get data that is available anonymously.
     $client = \Drupal::httpClient();
     $url = $this->buildUrl($this->paths['page_published_get']);
     $response = $client->get($url);
     $this->assertEquals(200, $response->getStatusCode());
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
     $this->assertEquals('Published Page', $body['data']['attributes']['title']);
 
     // Get data that requires authentication.
@@ -72,7 +79,7 @@ class ApiTest extends BrowserTestBase {
     ];
     $response = $client->get($url, $options);
     $this->assertEquals(200, $response->getStatusCode());
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
     $this->assertEquals('Unpublished Page', $body['data']['attributes']['title']);
 
     // Post new content that requires authentication.
@@ -96,11 +103,14 @@ class ApiTest extends BrowserTestBase {
     $client->post($url, $options);
     $this->assertSame(++$count, (int) \Drupal::entityQuery('node')->count()->execute());
 
-    // The user, client, and content should be removed on uninstall.
+    // The user, client, and content should be removed on uninstall. The account
+    // created by generateKeys() will still be around, but that exists only in
+    // the test database, so we don't need to worry about it.
     \Drupal::service('module_installer')->uninstall(['api_test']);
-    $this->assertCount(0, \Drupal::entityQuery('user')->condition('uid', 1, '>')->execute());
-    $this->assertCount(0, \Drupal::entityQuery('consumer')->execute());
-    $this->assertCount(0, \Drupal::entityQuery('node')->execute());
+
+    $this->assertSame(1, (int) \Drupal::entityQuery('user')->condition('uid', 1, '>')->count()->execute());
+    $this->assertSame(0, (int) \Drupal::entityQuery('consumer')->count()->execute());
+    $this->assertSame(0, (int) \Drupal::entityQuery('node')->count()->execute());
   }
 
   /**
@@ -108,9 +118,6 @@ class ApiTest extends BrowserTestBase {
    * data.
    */
   public function testNotAllowed() {
-    // Generate and store keys for use by OAuth.
-    $this->generateKeys();
-
     // Cannot get unauthorized data (not in role/scope) even when authenticated.
     $client = \Drupal::httpClient();
     $token = $this->getToken();
@@ -122,7 +129,7 @@ class ApiTest extends BrowserTestBase {
       ],
     ];
     $response = $client->get($url, $options);
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
     $this->assertArrayHasKey('errors', $body['meta']);
     foreach ($body['meta']['errors'] as $error) {
       // This user/client should not have access to any of the roles' data. JSON
@@ -166,7 +173,7 @@ class ApiTest extends BrowserTestBase {
     $url = $this->buildUrl($this->paths['token_get']);
 
     $response = $client->post($url, $options);
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
 
     // The response should have an access token.
     $this->assertArrayHasKey('access_token', $body);
@@ -176,19 +183,49 @@ class ApiTest extends BrowserTestBase {
   }
 
   /**
+   * Decodes a JSON response from the server.
+   *
+   * @param \Psr\Http\Message\ResponseInterface $response
+   *   The response object.
+   *
+   * @return mixed
+   *   The decoded response data. If the JSON parser raises an error, the test
+   *   will fail, with the bad input as the failure message.
+   */
+  protected function decodeResponse(ResponseInterface $response) {
+    $body = (string) $response->getBody();
+    $data = Json::decode($body);
+
+    if (json_last_error() === JSON_ERROR_NONE) {
+      return $data;
+    }
+    else {
+      $this->fail($body);
+    }
+  }
+
+  /**
    * Generates and store OAuth keys.
    */
   protected function generateKeys() {
-    $dir = drupal_realpath('temporary://');
+    $account = $this->drupalCreateUser([], NULL, TRUE);
+    $this->drupalLogin($account);
 
-    $form_state = (new FormState)->setValues([
-      'dir' => $dir,
+    $url = Url::fromRoute('lightning_api.generate_keys');
+    $this->drupalGet($url);
+
+    $values = [
+      'dir' => drupal_realpath('temporary://'),
       'private_key' => 'private.key',
       'public_key' => 'public.key',
-    ]);
-
-    $this->container
-      ->get('form_builder')
-      ->submitForm(OAuthKeyForm::class, $form_state);
+    ];
+    $conf = getenv('OPENSSL_CONF');
+    if ($conf) {
+      $values['conf'] = $conf;
+    }
+    $this->drupalPostForm(NULL, $values, 'Generate keys');
+    $this->assertSession()->pageTextContains('A key pair was generated successfully.');
+    $this->drupalLogout();
   }
+
 }
