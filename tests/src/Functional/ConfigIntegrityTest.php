@@ -107,8 +107,8 @@ class ConfigIntegrityTest extends BrowserTestBase {
       ]);
     }
 
-    $this->testCropping();
-    $this->testContactForm();
+    $this->doTestCrop();
+    $this->doTestContactForm();
 
     // Assert that bundled content types have meta tags enabled.
     $this->assertMetatag(['page', 'landing_page']);
@@ -119,11 +119,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertAllowed('/block/add');
     $assert->fieldExists('Body');
     $this->drupalLogout();
-
-    // Assert that reviewer roles can view moderation states.
-    $permission = 'view moderation states';
-    $this->assertPermissions('page_reviewer', $permission);
-    $this->assertPermissions('landing_page_reviewer', $permission);
 
     // Assert that Lightning configuration pages are accessible to users who
     // have an administrative role.
@@ -252,7 +247,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
   /**
    * Tests that cropping is enabled for image media.
    */
-  private function testCropping() {
+  private function doTestCrop() {
     // Assert that a local copy of the Cropper library is being used.
     $settings = $this->config('image_widget_crop.settings')->get('settings');
     $lib = 'libraries/cropper/dist';
@@ -279,7 +274,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
   /**
    * Tests the site-wide contact form.
    */
-  private function testContactForm() {
+  private function doTestContactForm() {
     $assert = $this->assertSession();
 
     $this->assertAllowed('/contact');
