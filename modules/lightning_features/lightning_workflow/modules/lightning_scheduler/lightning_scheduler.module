@@ -76,6 +76,9 @@ function lightning_scheduler_entity_base_field_info(EntityTypeInterface $entity_
       )
       ->setDisplayConfigurable('view', TRUE)
       ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'datetime_default',
+      ])
       ->setTranslatable(TRUE)
       ->setRevisionable(TRUE);
 
