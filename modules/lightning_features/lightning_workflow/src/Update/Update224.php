@@ -45,20 +45,20 @@ final class Update224 implements ContainerInjectionInterface {
   public function migrate(DrupalStyle $io) {
     $io->writeln('Now is a good time to get a coffee: this may take a while.');
 
-    $io->writeln('Installing moderation_upgrade.');
-    $this->moduleInstaller->install(['moderation_upgrade']);
+    $io->writeln('Installing wbm2cm.');
+    $this->moduleInstaller->install(['wbm2cm']);
 
     /** @var \Drupal\migrate\Plugin\MigrationPluginManagerInterface $migration_manager */
     $migration_manager = \Drupal::service('plugin.manager.migration');
 
     $io->write('Saving existing moderation states...');
-    $migrations = $migration_manager->createInstances(['moderation_upgrade_save']);
+    $migrations = $migration_manager->createInstances(['wbm2cm_save']);
     $processed = $this->executeMigrations($migrations);
     $io->writeln("done! Processed $processed items.");
     $io->writeln('Moderation states were saved for all translations of all revisions of all moderated entities.');
 
     $io->writeln('Removing moderation states. This is necessary in order to uninstall Workbench Moderation.');
-    $migrations = $migration_manager->createInstances(['moderation_upgrade_clear']);
+    $migrations = $migration_manager->createInstances(['wbm2cm_clear']);
     $processed = $this->executeMigrations($migrations);
     $io->writeln("Done. Moderation states were removed from $processed items.");
 
@@ -71,12 +71,12 @@ final class Update224 implements ContainerInjectionInterface {
     $io->writeln('done!');
 
     $io->write('Restoring saved moderation states...');
-    $migrations = $migration_manager->createInstances(['moderation_upgrade_restore']);
+    $migrations = $migration_manager->createInstances(['wbm2cm_restore']);
     $processed = $this->executeMigrations($migrations);
     $io->writeln("done! Processed $processed items.");
 
-    $io->writeln('Uninstalling moderation_upgrade.');
-    $this->moduleInstaller->uninstall(['moderation_upgrade']);
+    $io->writeln('Uninstalling wbm2cm.');
+    $this->moduleInstaller->uninstall(['wbm2cm']);
 
     $io->writeln('Congratulations, you have been migrated to Content Moderation :) You may remove Workbench Moderation from your code base.');
   }
