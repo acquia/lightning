@@ -78,6 +78,7 @@ function lightning_scheduler_entity_base_field_info(EntityTypeInterface $entity_
       ->setDisplayConfigurable('form', TRUE)
       ->setDisplayOptions('form', [
         'type' => 'datetime_default',
+        'weight' => 20,
       ])
       ->setTranslatable(TRUE)
       ->setRevisionable(TRUE);
