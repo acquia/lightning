@@ -127,7 +127,7 @@ function lightning_workflow_update_8004() {
     return;
   }
   foreach (array_keys($config->get('display')) as $display_id) {
-    $config->clear($config->getName() . ".display.$display_id.display_options.relationships.latest_revision__node");
+    $config->clear("display.$display_id.display_options.relationships.latest_revision__node");
   }
   $config->save();
 }
