@@ -116,3 +116,18 @@ function lightning_workflow_update_8003() {
     }
   }
 }
+
+/**
+ * Removes the latest_revision__node relationship from the content view.
+ */
+function lightning_workflow_update_8004() {
+  $config = \Drupal::configFactory()->getEditable('views.view.content');
+
+  if ($config->isNew()) {
+    return;
+  }
+  foreach (array_keys($config->get('display')) as $display_id) {
+    $config->clear($config->getName() . ".display.$display_id.display_options.relationships.latest_revision__node");
+  }
+  $config->save();
+}
