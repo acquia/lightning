@@ -7,9 +7,9 @@ dependencies:
     - image.style.thumbnail
     - media.type.image
   module:
+    - content_moderation
     - image_widget_crop
     - path
-    - workbench_moderation
 _core: {  }
 id: media.image.default
 targetEntityType: media
@@ -37,6 +37,12 @@ content:
       warn_multiple_usages: false
     third_party_settings: {  }
     region: content
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    settings: {  }
+    region: content
+    third_party_settings: {  }
   name:
     type: string_textfield
     weight: 3

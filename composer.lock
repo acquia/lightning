@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "23258c87844cd7d6f5ef3348449bcb87",
+    "content-hash": "74f76e729b2bb0bcd2fd7cb103adb447",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -902,7 +902,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.13",
-                    "datestamp": "1502799051",
+                    "datestamp": "1502725444",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -915,16 +915,16 @@
             ],
             "authors": [
                 {
+                    "name": "CharuAg",
+                    "homepage": "https://www.drupal.org/user/2923221"
+                },
+                {
                     "name": "Dries",
                     "homepage": "https://www.drupal.org/user/1"
                 },
                 {
                     "name": "Gábor Hojtsy",
                     "homepage": "https://www.drupal.org/user/4166"
-                },
-                {
-                    "name": "Mark Trapp",
-                    "homepage": "https://www.drupal.org/user/212019"
                 },
                 {
                     "name": "Stanislav Mixnovich",
@@ -939,6 +939,10 @@
                     "homepage": "https://www.drupal.org/user/736644"
                 },
                 {
+                    "name": "janusman",
+                    "homepage": "https://www.drupal.org/user/153120"
+                },
+                {
                     "name": "kolafson",
                     "homepage": "https://www.drupal.org/user/822402"
                 },
@@ -949,10 +953,6 @@
                 {
                     "name": "paul.lovvik",
                     "homepage": "https://www.drupal.org/user/289213"
-                },
-                {
-                    "name": "vlad.pavlovic",
-                    "homepage": "https://www.drupal.org/user/92673"
                 }
             ],
             "description": "Allows Drupal to securely communicate with the Acquia Subscription, and checks for updates to Acquia Drupal.",
@@ -1297,7 +1297,9 @@
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
                     "2912298 - Make media name available on manage display": "https://www.drupal.org/files/issues/core-media-add-name-to-display-2912298-25.patch",
                     "2883813 - Move File/Image media type into Standard once Media is stable": "https://www.drupal.org/files/issues/2883813-27.patch",
-                    "2877383 - Add action support to Media module": "https://www.drupal.org/files/issues/2877383-23.patch"
+                    "2877383 - Add action support to Media module": "https://www.drupal.org/files/issues/2877383-23.patch",
+                    "2862041 - Provide useful Views filters for Content Moderation State fields": "https://www.drupal.org/files/issues/2862041-229.patch",
+                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2815221-69-8.4.x.patch"
                 }
             },
             "autoload": {
@@ -2372,7 +2374,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.6",
-                    "datestamp": "1510737185",
+                    "datestamp": "1480363983",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3402,6 +3404,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "2925369 - TokenAuthUser does not fulfill RevisionableInterface, causes fatals": "https://www.drupal.org/files/issues/2925369-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4473,6 +4478,80 @@
             "time": "2017-09-27T21:40:39+00:00"
         },
         {
+            "name": "phenaproxima/drupal-moderation",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phenaproxima/drupal-moderation.git",
+                "reference": "aaa0bdae9283116347e0a71cc7ff01d513eb4721"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phenaproxima/drupal-moderation/zipball/aaa0bdae9283116347e0a71cc7ff01d513eb4721",
+                "reference": "aaa0bdae9283116347e0a71cc7ff01d513eb4721",
+                "shasum": ""
+            },
+            "require": {
+                "drupal/core": "~8.4"
+            },
+            "require-dev": {
+                "behat/mink-goutte-driver": "^1.2",
+                "drupal-composer/drupal-scaffold": "^2.3",
+                "drupal/devel": "^1.2",
+                "drupal/media_entity": "^1",
+                "drupal/migrate_tools": "4.x-dev",
+                "drupal/workbench_moderation": "~1",
+                "drush/drush": "8.1.15",
+                "mikey179/vfsstream": "^1.6",
+                "oomphinc/composer-installers-extender": "dev-master",
+                "phpunit/phpunit": "~4"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "installer-paths": {
+                    "www/core": [
+                        "type:drupal-core"
+                    ],
+                    "www/modules/{$name}": [
+                        "type:drupal-module"
+                    ]
+                }
+            },
+            "scripts": {
+                "post-install-cmd": [
+                    "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+                    "mkdir -p ./www/themes ./www/profiles"
+                ],
+                "post-update-cmd": [
+                    "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+                    "mkdir -p ./www/themes ./www/profiles"
+                ],
+                "push": [
+                    "rm -rf ./www/modules/wbm2cm",
+                    "mkdir -p ./www/modules/wbm2cm",
+                    "cp -R -f wbm2cm.* migrations src tests ./www/modules/wbm2cm"
+                ],
+                "pull": [
+                    "cp -R -f ./www/modules/wbm2cm/* ."
+                ]
+            },
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Phéna Proxima",
+                    "email": "adam@phenaproxima.net"
+                }
+            ],
+            "description": "Migrating Workbench Moderation's configuration to Workflows, because I'm a sucker for pain.",
+            "support": {
+                "source": "https://github.com/phenaproxima/drupal-moderation/tree/master",
+                "issues": "https://github.com/phenaproxima/drupal-moderation/issues"
+            },
+            "time": "2017-11-22T14:20:36+00:00"
+        },
+        {
             "name": "psr/http-message",
             "version": "1.0.1",
             "source": {
@@ -4571,22 +4650,22 @@
         },
         {
             "name": "stack/builder",
-            "version": "v1.0.4",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stackphp/builder.git",
-                "reference": "59fcc9b448a8ce5e338a04c4e2e4aca893e83425"
+                "reference": "fb3d136d04c6be41120ebf8c0cc71fe9507d750a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stackphp/builder/zipball/59fcc9b448a8ce5e338a04c4e2e4aca893e83425",
-                "reference": "59fcc9b448a8ce5e338a04c4e2e4aca893e83425",
+                "url": "https://api.github.com/repos/stackphp/builder/zipball/fb3d136d04c6be41120ebf8c0cc71fe9507d750a",
+                "reference": "fb3d136d04c6be41120ebf8c0cc71fe9507d750a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0",
-                "symfony/http-foundation": "~2.1|~3.0",
-                "symfony/http-kernel": "~2.1|~3.0"
+                "symfony/http-foundation": "~2.1|~3.0|~4.0",
+                "symfony/http-kernel": "~2.1|~3.0|~4.0"
             },
             "require-dev": {
                 "silex/silex": "~1.0"
@@ -4616,7 +4695,7 @@
             "keywords": [
                 "stack"
             ],
-            "time": "2016-06-02T06:58:42+00:00"
+            "time": "2017-11-18T14:57:29+00:00"
         },
         {
             "name": "sunra/php-simple-html-dom-parser",
@@ -6066,16 +6145,16 @@
         },
         {
             "name": "behat/behat",
-            "version": "v3.4.1",
+            "version": "v3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Behat.git",
-                "reference": "cb51d4b0b11ea6d3897f3589a871a63a33632692"
+                "reference": "6ab36138434582b55c9d89ffa9f8d444543a758f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/cb51d4b0b11ea6d3897f3589a871a63a33632692",
-                "reference": "cb51d4b0b11ea6d3897f3589a871a63a33632692",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/6ab36138434582b55c9d89ffa9f8d444543a758f",
+                "reference": "6ab36138434582b55c9d89ffa9f8d444543a758f",
                 "shasum": ""
             },
             "require": {
@@ -6085,18 +6164,18 @@
                 "ext-mbstring": "*",
                 "php": ">=5.3.3",
                 "psr/container": "^1.0",
-                "symfony/class-loader": "~2.1||~3.0",
-                "symfony/config": "~2.3||~3.0",
-                "symfony/console": "~2.5||~3.0",
-                "symfony/dependency-injection": "~2.1||~3.0",
-                "symfony/event-dispatcher": "~2.1||~3.0",
-                "symfony/translation": "~2.3||~3.0",
-                "symfony/yaml": "~2.1||~3.0"
+                "symfony/class-loader": "~2.1||~3.0||~4.0",
+                "symfony/config": "~2.3||~3.0||~4.0",
+                "symfony/console": "~2.5||~3.0||~4.0",
+                "symfony/dependency-injection": "~2.1||~3.0||~4.0",
+                "symfony/event-dispatcher": "~2.1||~3.0||~4.0",
+                "symfony/translation": "~2.3||~3.0||~4.0",
+                "symfony/yaml": "~2.1||~3.0||~4.0"
             },
             "require-dev": {
                 "herrera-io/box": "~1.6.1",
-                "phpunit/phpunit": "~4.5",
-                "symfony/process": "~2.5|~3.0"
+                "phpunit/phpunit": "^4.8.36|^6.3",
+                "symfony/process": "~2.5|~3.0|~4.0"
             },
             "suggest": {
                 "behat/mink-extension": "for integration with Mink testing framework",
@@ -6145,7 +6224,7 @@
                 "symfony",
                 "testing"
             ],
-            "time": "2017-09-18T11:10:28+00:00"
+            "time": "2017-11-20T09:01:43+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -7748,16 +7827,16 @@
         },
         {
             "name": "drupal/drupal-driver",
-            "version": "v1.2.2",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jhedstrom/DrupalDriver.git",
-                "reference": "63d322d4474fe430366554f9548de3ea04caf536"
+                "reference": "a3940d6ee9a05de00e2ada9acaff48ce5542e7c5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/63d322d4474fe430366554f9548de3ea04caf536",
-                "reference": "63d322d4474fe430366554f9548de3ea04caf536",
+                "url": "https://api.github.com/repos/jhedstrom/DrupalDriver/zipball/a3940d6ee9a05de00e2ada9acaff48ce5542e7c5",
+                "reference": "a3940d6ee9a05de00e2ada9acaff48ce5542e7c5",
                 "shasum": ""
             },
             "require": {
@@ -7767,6 +7846,7 @@
             "require-dev": {
                 "drupal/coder": "~8.2.0",
                 "drush-ops/behat-drush-endpoint": "*",
+                "jakub-onderka/php-parallel-lint": "^0.9.2",
                 "mockery/mockery": "0.9.4",
                 "phpspec/phpspec": "~2.0",
                 "phpunit/phpunit": "~4.0"
@@ -7801,7 +7881,7 @@
                 "test",
                 "web"
             ],
-            "time": "2017-11-10T19:27:28+00:00"
+            "time": "2017-11-20T18:44:48+00:00"
         },
         {
             "name": "drupal/drupal-extension",
@@ -8025,24 +8105,27 @@
         },
         {
             "name": "fabpot/goutte",
-            "version": "v3.2.1",
+            "version": "v3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/Goutte.git",
-                "reference": "db5c28f4a010b4161d507d5304e28a7ebf211638"
+                "reference": "395f61d7c2e15a813839769553a4de16fa3b3c96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/Goutte/zipball/db5c28f4a010b4161d507d5304e28a7ebf211638",
-                "reference": "db5c28f4a010b4161d507d5304e28a7ebf211638",
+                "url": "https://api.github.com/repos/FriendsOfPHP/Goutte/zipball/395f61d7c2e15a813839769553a4de16fa3b3c96",
+                "reference": "395f61d7c2e15a813839769553a4de16fa3b3c96",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/guzzle": "^6.0",
                 "php": ">=5.5.0",
-                "symfony/browser-kit": "~2.1|~3.0",
-                "symfony/css-selector": "~2.1|~3.0",
-                "symfony/dom-crawler": "~2.1|~3.0"
+                "symfony/browser-kit": "~2.1|~3.0|~4.0",
+                "symfony/css-selector": "~2.1|~3.0|~4.0",
+                "symfony/dom-crawler": "~2.1|~3.0|~4.0"
+            },
+            "require-dev": {
+                "symfony/phpunit-bridge": "^3.3 || ^4"
             },
             "type": "application",
             "extra": {
@@ -8053,7 +8136,10 @@
             "autoload": {
                 "psr-4": {
                     "Goutte\\": "Goutte"
-                }
+                },
+                "exclude-from-classmap": [
+                    "Goutte/Tests"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -8070,7 +8156,7 @@
             "keywords": [
                 "scraper"
             ],
-            "time": "2017-01-03T13:21:43+00:00"
+            "time": "2017-11-19T08:45:40+00:00"
         },
         {
             "name": "gabordemooij/redbean",
@@ -11015,6 +11101,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "phenaproxima/drupal-moderation": 20,
         "drupal/media_entity_generic": 20
     },
     "prefer-stable": true,

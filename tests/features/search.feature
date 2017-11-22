@@ -7,8 +7,8 @@ Feature: Site search
     And page content:
       | title    | moderation_state | body                                                                   |
       | Zombie 1 | draft            | Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. |
-      | Zombie 2 | needs_review     | De carne lumbering animata corpora quaeritis.                          |
-      | Zombie 3 | published        | Summus brains sit, morbo vel maleficia?                              |
+      | Zombie 2 | review           | De carne lumbering animata corpora quaeritis.                          |
+      | Zombie 3 | published        | Summus brains sit, morbo vel maleficia?                                |
     When I visit "/search"
     And I enter "zombie" for "Keywords"
     And I press "Search"
@@ -29,8 +29,8 @@ Feature: Site search
     When I visit "/foobar"
     And I place the "block_content:dragons" block from the "Custom" category
     And I save the layout
-    And I click "Edit draft"
-    And I select "Published" from "Moderation state"
+    And I visit the edit form
+    And I select "Published" from "moderation_state[0][state]"
     And I press "Save"
     And I am an anonymous user
     And I visit "/search"

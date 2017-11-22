@@ -9,4 +9,6 @@ projects[drupal][patch][] = https://www.drupal.org/files/issues/2885441-2.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/core-media-add-name-to-display-2912298-25.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2883813-27.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2877383-23.patch
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2862041-229.patch
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2815221-69-8.4.x.patch
 projects[drupal][version] = 8.4.2

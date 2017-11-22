@@ -8,10 +8,10 @@ Feature: Diffing different revisions of content
       | title       | body           | path         | moderation_state |
       | Pastafazoul | First revision | /pastafazoul | draft            |
     When I visit "/pastafazoul"
-    And I click "Edit draft"
+    And I visit the edit form
     And I enter "Second revision" for "body[0][value]"
     And I press "Save"
-    And I click "Edit draft"
+    And I visit the edit form
     And I enter "Third revision" for "body[0][value]"
     And I press "Save"
     And I compare the 1st and 2nd revisions
