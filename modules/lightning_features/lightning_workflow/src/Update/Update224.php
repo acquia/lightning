@@ -9,6 +9,7 @@ use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Drupal\migrate\MigrateExecutable;
 use Drupal\migrate\MigrateMessage;
+use Drupal\node\Entity\NodeType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -63,6 +64,13 @@ final class Update224 implements ContainerInjectionInterface {
     $io->writeln("Done. Moderation states were removed from $processed items.");
 
     $io->write('Uninstalling Workbench Moderation...');
+    /** @var \Drupal\node\NodeTypeInterface $node_type */
+    foreach (NodeType::loadMultiple() as $node_type) {
+      $node_type->unsetThirdPartySetting('workbench_moderation', 'enabled');
+      $node_type->unsetThirdPartySetting('workbench_moderation', 'allowed_moderation_states');
+      $node_type->unsetThirdPartySetting('workbench_moderation', 'default_moderation_state');
+      $node_type->save();
+    }
     $this->moduleInstaller->uninstall(['workbench_moderation']);
     $io->writeln('done!');
 
