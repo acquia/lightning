@@ -144,6 +144,8 @@
     <exec command="${yaml-cli} unset:key ${config_fixture}/embed.button.media_browser.yml dependencies.content" />
     <exec command="${yaml-cli} update:value ${config_fixture}/embed.button.media_browser.yml icon_uuid ''" />
     <exec command="${yaml-cli} update:value ${config_fixture}/system.date.yml timezone.default UTC" />
+    <exec command="${yaml-cli} update:value ${config_fixture}/entity_browser.browser.image_browser.yml widgets ''" />
+    <exec command="${yaml-cli} update:value ${config_fixture}/entity_browser.browser.media_browser.yml widgets ''" />
 
     <if>
       <isset property="www.group" />
