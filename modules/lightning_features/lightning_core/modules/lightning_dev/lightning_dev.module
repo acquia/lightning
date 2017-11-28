@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\lightning_core\Element;
+use Drupal\user\Entity\Role;
 use Drupal\workflows\Entity\Workflow;
 
 /**
@@ -42,6 +43,33 @@ function lightning_dev_modules_installed(array $modules) {
       $workflow->delete();
     }
     $editorial->save();
+
+    $permission_map = [
+      'use 00c7e3ae transition archived_published' => 'use editorial transition archived_published',
+      'use 00c7e3ae transition draft_draft' => 'use editorial transition create_new_draft',
+      'use 00c7e3ae transition draft_needs_review' => 'use editorial transition review',
+      'use 00c7e3ae transition draft_published' => 'use editorial transition publish',
+      'use 00c7e3ae transition needs_review_draft' => 'use editorial transition create_new_draft',
+      'use 00c7e3ae transition needs_review_needs_review' => 'use editorial transition review',
+      'use 00c7e3ae transition needs_review_published' => 'use editorial transition publish',
+      'use 00c7e3ae transition published_archived' => 'use editorial transition archive',
+      'use 00c7e3ae transition published_draft' => 'use editorial transition create_new_draft',
+      'use 00c7e3ae transition published_published' => 'use editorial transition publish',
+    ];
+    /** @var \Drupal\user\RoleInterface $role */
+    foreach (Role::loadMultiple() as $role) {
+      $changed = FALSE;
+
+      foreach ($permission_map as $revoke => $grant) {
+        if ($role->hasPermission($revoke)) {
+          $role->revokePermission($revoke)->grantPermission($grant);
+          $changed = TRUE;
+        }
+      }
+      if ($changed) {
+        $role->save();
+      }
+    }
   }
 }
 
