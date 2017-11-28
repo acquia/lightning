@@ -70,6 +70,10 @@ function lightning_dev_modules_installed(array $modules) {
         $role->save();
       }
     }
+
+    // Make the needed changes to the editorial workflow.
+    module_load_install('lightning_workflow');
+    lightning_workflow_install();
   }
 }
 
