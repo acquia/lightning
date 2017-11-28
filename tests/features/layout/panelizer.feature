@@ -119,8 +119,8 @@ Feature: Panelizer
     And I select "Content" from "Region"
     And I press "Save block"
     And I visit "/admin/content"
-    And I select "- Any -" from "Moderation state"
-    And I press "Filter"
+    And I select "- Any -" from "moderation_state"
+    And I apply the exposed filters
     And I click "Fox"
     And I visit the edit form
     And I select "Archived" from "moderation_state[0][state]"
