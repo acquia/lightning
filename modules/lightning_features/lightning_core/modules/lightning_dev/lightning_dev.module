@@ -1,5 +1,8 @@
 <?php
 
+use Drupal\lightning_core\Element;
+use Drupal\workflows\Entity\Workflow;
+
 /**
  * Implements hook_modules_installed().
  */
@@ -17,5 +20,36 @@ function lightning_dev_modules_installed(array $modules) {
       ->getEditable('lightning_api.settings')
       ->set('entity_json', TRUE)
       ->save();
+  }
+  if (in_array('content_moderation', $modules)) {
+    $editorial = Workflow::load('editorial');
+
+    /** @var \Drupal\content_moderation\Plugin\WorkflowType\ContentModerationInterface $content_moderation */
+    $content_moderation = $editorial->getTypePlugin();
+
+    /** @var \Drupal\workflows\WorkflowInterface $workflow */
+    foreach (Workflow::loadMultiple() as $id => $workflow) {
+      if ($id == 'editorial') {
+        continue;
+      }
+      /** @var \Drupal\content_moderation\Plugin\WorkflowType\ContentModerationInterface $plugin */
+      $plugin = $workflow->getTypePlugin();
+      foreach ($plugin->getEntityTypes() as $entity_type) {
+        foreach ($plugin->getBundlesForEntityType($entity_type) as $bundle) {
+          $content_moderation->addEntityTypeAndBundle($entity_type, $bundle);
+        }
+      }
+      $workflow->delete();
+    }
+    $editorial->save();
+  }
+}
+
+/**
+ * Implements hook_module_implements_alter().
+ */
+function lightning_dev_module_implements_alter(array &$implementations, $hook) {
+  if ($hook == 'modules_installed' && isset($implementations['wbm2cm'])) {
+    Element::toTail($implementations, 'lightning_dev');
   }
 }
