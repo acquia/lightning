@@ -16,7 +16,9 @@ Feature: Scheduled updates to content
     And I run cron
     And I visit "/foobar"
     And I visit the edit form
-    Then the "moderation_state[0][state]" field should contain "review"
+    # The colon after "Current state" is added by CSS, so it cannot be asserted
+    # in this test.
+    Then I should see "Current state In review"
 
   # Lightning Scheduler doesn't support bulk updates yet, so this test is
   # disabled for now.
