@@ -41,6 +41,7 @@ function lightning_workflow_install() {
     'to' => 'review',
     'weight' => 0,
   ];
+  $configuration['transitions']['create_new_draft']['from'][] = 'review';
   $configuration['transitions']['publish']['from'][] = 'review';
   $workflow->set('type_settings', $configuration);
   $workflow->save();
