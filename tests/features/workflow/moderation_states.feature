@@ -60,8 +60,8 @@ Feature: Workflow moderation states
       | Terry Jones    | draft            |
       | Eric Idle      | review           |
     When I visit "/admin/content"
-    And I select "In review" from "Moderation state"
-    And I press "Filter"
+    And I select "In review" from "moderation_state"
+    And I apply the exposed filters
     Then I should see "John Cleese"
     And I should see "Terry Gilliam"
     And I should not see "Michael Palin"
@@ -92,8 +92,8 @@ Feature: Workflow moderation states
       | Lazy Lummox |
     And I am logged in as a user with the administrator role
     When I visit "admin/content"
-    And I select "- Any -" from "Moderation state"
-    And I press "Filter"
+    And I select "- Any -" from "moderation_state"
+    And I apply the exposed filters
     Then I should see "Lazy Lummox"
 
   @084ca18d
