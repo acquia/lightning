@@ -87,6 +87,11 @@ final class Update224 implements ContainerInjectionInterface {
     $this->moduleInstaller->uninstall(['wbm2cm']);
 
     $io->writeln('Congratulations, you have been migrated to Content Moderation :) You may remove Workbench Moderation from your code base.');
+
+    if (\Drupal::moduleHandler()->moduleExists('lightning_scheduled_updates')) {
+      $this->moduleInstaller->uninstall(['lightning_scheduled_updates']);
+      $this->moduleInstaller->install(['lightning_scheduler']);
+    }
   }
 
   protected function executeMigrations(array $migrations) {
