@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ec0d416b8638472326af29311179f0c6",
+    "content-hash": "46709250b6054bb1c69c6fb654ac12e2",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -902,7 +902,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.13",
-                    "datestamp": "1502725444",
+                    "datestamp": "1502799051",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -915,16 +915,16 @@
             ],
             "authors": [
                 {
-                    "name": "CharuAg",
-                    "homepage": "https://www.drupal.org/user/2923221"
-                },
-                {
                     "name": "Dries",
                     "homepage": "https://www.drupal.org/user/1"
                 },
                 {
                     "name": "Gábor Hojtsy",
                     "homepage": "https://www.drupal.org/user/4166"
+                },
+                {
+                    "name": "Mark Trapp",
+                    "homepage": "https://www.drupal.org/user/212019"
                 },
                 {
                     "name": "Stanislav Mixnovich",
@@ -939,10 +939,6 @@
                     "homepage": "https://www.drupal.org/user/736644"
                 },
                 {
-                    "name": "janusman",
-                    "homepage": "https://www.drupal.org/user/153120"
-                },
-                {
                     "name": "kolafson",
                     "homepage": "https://www.drupal.org/user/822402"
                 },
@@ -953,6 +949,10 @@
                 {
                     "name": "paul.lovvik",
                     "homepage": "https://www.drupal.org/user/289213"
+                },
+                {
+                    "name": "vlad.pavlovic",
+                    "homepage": "https://www.drupal.org/user/92673"
                 }
             ],
             "description": "Allows Drupal to securely communicate with the Acquia Subscription, and checks for updates to Acquia Drupal.",
@@ -2374,7 +2374,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.6",
-                    "datestamp": "1480363983",
+                    "datestamp": "1510737185",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3399,7 +3399,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.0",
-                    "datestamp": "1506893943",
+                    "datestamp": "1511480585",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3611,17 +3611,11 @@
         },
         {
             "name": "drupal/wbm2cm",
-            "version": "2.0.0-alpha2",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/wbm2cm",
-                "reference": "8.x-2.0-alpha2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/wbm2cm-8.x-2.0-alpha2.zip",
-                "reference": "8.x-2.0-alpha2",
-                "shasum": "dc4562cc68c4a88420a20e9e9f7022ec0ea0ef49"
+                "reference": "ecaaaf7d42031e3e4bb466f25ada3bb0235dffdf"
             },
             "require": {
                 "drupal/core": "~8.4"
@@ -3633,7 +3627,7 @@
                 "drupal/media_entity": "^1",
                 "drupal/migrate_tools": "4.x-dev",
                 "drupal/workbench_moderation": "~1",
-                "drush/drush": "8.1.15",
+                "drush/drush": "^9",
                 "mikey179/vfsstream": "^1.6",
                 "oomphinc/composer-installers-extender": "dev-master",
                 "phpunit/phpunit": "~4"
@@ -3644,8 +3638,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-alpha2",
-                    "datestamp": "1512007987",
+                    "version": "8.x-2.0-alpha2+1-dev",
+                    "datestamp": "1512068584",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -3658,6 +3652,11 @@
                     "www/modules/{$name}": [
                         "type:drupal-module"
                     ]
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
+                    }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3673,7 +3672,7 @@
                 "push": [
                     "rm -rf ./www/modules/wbm2cm",
                     "mkdir -p ./www/modules/wbm2cm",
-                    "cp -R -f wbm2cm.* migrations src tests ./www/modules/wbm2cm"
+                    "cp -R -f composer.json wbm2cm.* migrations src tests ./www/modules/wbm2cm"
                 ],
                 "pull": [
                     "cp -R -f ./www/modules/wbm2cm/* ."
@@ -3701,7 +3700,8 @@
             "homepage": "https://www.drupal.org/project/wbm2cm",
             "support": {
                 "source": "http://cgit.drupalcode.org/wbm2cm"
-            }
+            },
+            "time": "2017-11-30T19:46:31+00:00"
         },
         {
             "name": "drupal/workbench_moderation",
@@ -11121,6 +11121,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "drupal/wbm2cm": 20,
         "drupal/media_entity_generic": 20
     },
     "prefer-stable": true,
