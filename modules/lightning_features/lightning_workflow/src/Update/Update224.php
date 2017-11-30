@@ -65,7 +65,7 @@ final class Update224 implements ContainerInjectionInterface {
     /** @var \Drupal\wbm2cm\MigrationController $controller */
     $controller = \Drupal::service('wbm2cm.migration_controller');
 
-    $io->write('Saving existing moderation states...');
+    $io->writeln('Saving existing moderation states...');
     $controller->executeStep('save');
     $io->writeln('Removing moderation states. This is necessary in order to uninstall Workbench Moderation.');
     $controller->executeStep('clear');
@@ -79,11 +79,11 @@ final class Update224 implements ContainerInjectionInterface {
       $node_type->save();
     }
 
-    $io->write('Installing Content Moderation...');
+    $io->writeln('Installing Content Moderation...');
     $this->moduleInstaller->uninstall(['workbench_moderation']);
     $this->moduleInstaller->install(['content_moderation']);
 
-    $io->write('Restoring saved moderation states...');
+    $io->writeln('Restoring saved moderation states...');
     $controller->executeStep('restore');
 
     $io->writeln('Congratulations, you have been migrated to Content Moderation :)');
