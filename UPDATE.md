@@ -80,6 +80,9 @@ to Beta 3, in that order.
 * Visit *Structure > Media types*. For each media type, click "Manage display"
   and select the "Embedded" display. Then drag the "Name" field into the
   "Disabled" section and press "Save".
+* To migrate to Content Moderation, install the wbm2cm module and Drush (8.x or
+  9.x). **Back up your database**, then run ```drush wbm2cm-migrate``` to run
+  the migration.
 
 ### 2.2.2 to 2.2.3
 There are no manual update steps for thus version.

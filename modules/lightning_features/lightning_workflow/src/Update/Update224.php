@@ -4,11 +4,8 @@ namespace Drupal\lightning_workflow\Update;
 
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
+use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
-use Drupal\Core\StringTranslation\StringTranslationTrait;
-use Drupal\Core\StringTranslation\TranslationInterface;
-use Drupal\migrate\MigrateExecutable;
-use Drupal\migrate\MigrateMessage;
 use Drupal\node\Entity\NodeType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -19,13 +16,31 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 final class Update224 implements ContainerInjectionInterface {
 
-  use StringTranslationTrait;
-
+  /**
+   * The module installer service.
+   *
+   * @var \Drupal\Core\Extension\ModuleInstallerInterface
+   */
   protected $moduleInstaller;
 
-  public function __construct(TranslationInterface $translation, ModuleInstallerInterface $module_installer) {
-    $this->setStringTranslation($translation);
+  /**
+   * The module handler service.
+   *
+   * @var \Drupal\Core\Extension\ModuleHandlerInterface
+   */
+  protected $moduleHandler;
+
+  /**
+   * Update224 constructor.
+   *
+   * @param \Drupal\Core\Extension\ModuleInstallerInterface $module_installer
+   *   The module installer service.
+   * @param \Drupal\Core\Extension\ModuleHandlerInterface $module_handler
+   *   The module handler service.
+   */
+  public function __construct(ModuleInstallerInterface $module_installer, ModuleHandlerInterface $module_handler) {
     $this->moduleInstaller = $module_installer;
+    $this->moduleHandler = $module_handler;
   }
 
   /**
@@ -33,8 +48,8 @@ final class Update224 implements ContainerInjectionInterface {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('string_translation'),
-      $container->get('module_installer')
+      $container->get('module_installer'),
+      $container->get('module_handler')
     );
   }
 
@@ -44,26 +59,18 @@ final class Update224 implements ContainerInjectionInterface {
    * @ask Do you want to migrate your moderated content to Content Moderation?
    */
   public function migrate(DrupalStyle $io) {
-    $io->writeln('Now is a good time to get a coffee: this may take a while.');
-
     $io->writeln('Installing wbm2cm.');
     $this->moduleInstaller->install(['wbm2cm']);
 
-    /** @var \Drupal\migrate\Plugin\MigrationPluginManagerInterface $migration_manager */
-    $migration_manager = \Drupal::service('plugin.manager.migration');
+    /** @var \Drupal\wbm2cm\MigrationController $controller */
+    $controller = \Drupal::service('wbm2cm.migration_controller');
 
-    $io->write('Saving existing moderation states...');
-    $migrations = $migration_manager->createInstances(['wbm2cm_save']);
-    $processed = $this->executeMigrations($migrations);
-    $io->writeln("done! Processed $processed items.");
-    $io->writeln('Moderation states were saved for all translations of all revisions of all moderated entities.');
-
+    $io->writeln('Saving existing moderation states...');
+    $controller->executeStep('save');
     $io->writeln('Removing moderation states. This is necessary in order to uninstall Workbench Moderation.');
-    $migrations = $migration_manager->createInstances(['wbm2cm_clear']);
-    $processed = $this->executeMigrations($migrations);
-    $io->writeln("Done. Moderation states were removed from $processed items.");
+    $controller->executeStep('clear');
 
-    $io->write('Uninstalling Workbench Moderation...');
+    // @TODO: Move this to wbm2cm.
     /** @var \Drupal\node\NodeTypeInterface $node_type */
     foreach (NodeType::loadMultiple() as $node_type) {
       $node_type->unsetThirdPartySetting('workbench_moderation', 'enabled');
@@ -71,41 +78,21 @@ final class Update224 implements ContainerInjectionInterface {
       $node_type->unsetThirdPartySetting('workbench_moderation', 'default_moderation_state');
       $node_type->save();
     }
+
+    $io->writeln('Installing Content Moderation...');
     $this->moduleInstaller->uninstall(['workbench_moderation']);
-    $io->writeln('done!');
-
-    $io->write('Installing Content Moderation...');
     $this->moduleInstaller->install(['content_moderation']);
-    $io->writeln('done!');
 
-    $io->write('Restoring saved moderation states...');
-    $migrations = $migration_manager->createInstances(['wbm2cm_restore']);
-    $processed = $this->executeMigrations($migrations);
-    $io->writeln("done! Processed $processed items.");
+    $io->writeln('Restoring saved moderation states...');
+    $controller->executeStep('restore');
 
-    $io->writeln('Uninstalling wbm2cm.');
+    $io->writeln('Congratulations, you have been migrated to Content Moderation :)');
     $this->moduleInstaller->uninstall(['wbm2cm']);
 
-    $io->writeln('Congratulations, you have been migrated to Content Moderation :) You may remove Workbench Moderation from your code base.');
-
-    if (\Drupal::moduleHandler()->moduleExists('lightning_scheduled_updates')) {
+    if ($this->moduleHandler->moduleExists('lightning_scheduled_updates')) {
       $this->moduleInstaller->uninstall(['lightning_scheduled_updates']);
       $this->moduleInstaller->install(['lightning_scheduler']);
     }
-  }
-
-  protected function executeMigrations(array $migrations) {
-    $message = new MigrateMessage();
-
-    $total = 0;
-
-    /** @var \Drupal\migrate\Plugin\MigrationInterface $migration */
-    foreach ($migrations as $migration) {
-      $executable = new MigrateExecutable($migration, $message);
-      $executable->import();
-      $total += $migration->getIdMap()->processedCount();
-    }
-    return $total;
   }
 
 }
