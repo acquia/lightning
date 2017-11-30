@@ -5,7 +5,7 @@ namespace Drupal\lightning_workflow\Controller;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\panelizer\Controller\PanelizerPanelsIPEController;
 use Drupal\panelizer\PanelizerInterface;
-use Drupal\workbench_moderation\ModerationInformationInterface;
+use Drupal\content_moderation\ModerationInformationInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -39,7 +39,7 @@ class PanelizerIPEController extends PanelizerPanelsIPEController {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('panelizer'),
-      $container->get('workbench_moderation.moderation_information')
+      $container->get('content_moderation.moderation_information')
     );
   }
 

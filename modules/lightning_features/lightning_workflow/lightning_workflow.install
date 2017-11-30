@@ -7,6 +7,7 @@
 
 use Drupal\Core\Config\ImmutableConfig;
 use Drupal\node\Entity\NodeType;
+use Drupal\workflows\Entity\Workflow;
 
 /**
  * Implements hook_install().
@@ -14,6 +15,39 @@ use Drupal\node\Entity\NodeType;
 function lightning_workflow_install() {
   if (\Drupal::moduleHandler()->moduleExists('lightning_roles')) {
     lightning_workflow_modules_installed(['lightning_roles']);
+  }
+
+  // Stop here during a config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
+
+  $workflow = Workflow::load('editorial');
+  $configuration = $workflow->get('type_settings');
+  $configuration['states']['review'] = [
+    'label' => 'In review',
+    'weight' => -1,
+    'published' => FALSE,
+    'default_revision' => FALSE,
+  ];
+  // Anything in the review state can be sent back to draft, kept in review,
+  // or published.
+  $configuration['transitions']['review'] = [
+    'label' => 'Review',
+    'from' => [
+      'draft',
+      'review',
+    ],
+    'to' => 'review',
+    'weight' => 0,
+  ];
+  $configuration['transitions']['create_new_draft']['from'][] = 'review';
+  $configuration['transitions']['publish']['from'][] = 'review';
+  $workflow->set('type_settings', $configuration);
+  $workflow->save();
+
+  foreach (NodeType::loadMultiple() as $node_type) {
+    lightning_workflow_node_type_insert($node_type);
   }
 }
 
@@ -82,4 +116,19 @@ function lightning_workflow_update_8003() {
         ->save();
     }
   }
+}
+
+/**
+ * Removes the latest_revision__node relationship from the content view.
+ */
+function lightning_workflow_update_8004() {
+  $config = \Drupal::configFactory()->getEditable('views.view.content');
+
+  if ($config->isNew()) {
+    return;
+  }
+  foreach (array_keys($config->get('display')) as $display_id) {
+    $config->clear("display.$display_id.display_options.relationships.latest_revision__node");
+  }
+  $config->save();
 }

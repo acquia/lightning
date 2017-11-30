@@ -22,10 +22,12 @@ Feature: Lightning Content Types
   Scenario: Removing access to workflow actions that do not make sense with moderated content
     Given I am logged in as a user with the administrator role
     And page content:
-      | title |
-      | Foo   |
-      | Bar   |
-      | Baz   |
+      | title | moderation_state |
+      | Foo   | draft            |
+      | Bar   | draft            |
+      | Baz   | draft            |
     When I visit "/admin/content"
+    And I select "Draft" from "moderation_state"
+    And I apply the exposed filters
     Then "Action" should not have a "node_publish_action" option
     And "Action" should not have a "node_unpublish_action" option

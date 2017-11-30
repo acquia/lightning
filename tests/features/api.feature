@@ -5,9 +5,11 @@ Feature: JSON API for decoupled applications
   Scenario: Viewing a content entity as JSON
     Given I am logged in as a user with the administrator role
     And page content:
-      | title  |
-      | Foobar |
+      | title  | moderation_state |
+      | Foobar | draft            |
     When I visit "/admin/content"
+    And I select "Draft" from "moderation_state"
+    And I press "Filter"
     And I click "View JSON"
     Then the response status code should be 200
 

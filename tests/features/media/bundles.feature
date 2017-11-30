@@ -28,7 +28,7 @@ Feature: Media bundles
       | type | title | moderation_state | path |
       | page | Foo  | draft             | /foo |
     When I visit "/foo"
-    And I click "Edit draft"
+    And I visit the edit form
     And I open the media browser
     And I select item 1
     And I complete the media browser selection
