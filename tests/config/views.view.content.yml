@@ -285,7 +285,7 @@ display:
           id: moderation_state
           table: content_moderation_state_field_data
           field: moderation_state
-          relationship: moderation_state
+          relationship: none
           group_type: group
           admin_label: 'Moderation state'
           label: 'Moderation state'
@@ -528,6 +528,7 @@ display:
           admin_label: ''
           operator: in
           value:
+            all: all
             editorial-draft: editorial-draft
             editorial-review: editorial-review
             editorial-published: editorial-published
@@ -588,16 +589,6 @@ display:
           field: uid
           admin_label: author
           required: true
-          plugin_id: standard
-        moderation_state:
-          id: moderation_state
-          table: node_field_data
-          field: moderation_state
-          relationship: none
-          group_type: group
-          admin_label: 'Moderation state'
-          required: false
-          entity_type: node
           plugin_id: standard
       show_admin_links: false
       filter_groups:

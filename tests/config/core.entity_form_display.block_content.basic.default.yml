@@ -6,6 +6,7 @@ dependencies:
     - field.field.block_content.basic.body
   module:
     - content_moderation
+    - datetime
     - text
 _core: {  }
 id: block_content.basic.default
@@ -36,5 +37,10 @@ content:
     settings: {  }
     region: content
     third_party_settings: {  }
-hidden:
-  scheduled_publication: true
+  scheduled_publication:
+    type: datetime_default
+    weight: 20
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+hidden: {  }

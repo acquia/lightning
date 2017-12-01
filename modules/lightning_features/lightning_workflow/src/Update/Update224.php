@@ -6,7 +6,6 @@ use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\ModuleHandlerInterface;
 use Drupal\Core\Extension\ModuleInstallerInterface;
-use Drupal\node\Entity\NodeType;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -69,15 +68,6 @@ final class Update224 implements ContainerInjectionInterface {
     $controller->executeStep('save');
     $io->writeln('Removing moderation states. This is necessary in order to uninstall Workbench Moderation.');
     $controller->executeStep('clear');
-
-    // @TODO: Move this to wbm2cm.
-    /** @var \Drupal\node\NodeTypeInterface $node_type */
-    foreach (NodeType::loadMultiple() as $node_type) {
-      $node_type->unsetThirdPartySetting('workbench_moderation', 'enabled');
-      $node_type->unsetThirdPartySetting('workbench_moderation', 'allowed_moderation_states');
-      $node_type->unsetThirdPartySetting('workbench_moderation', 'default_moderation_state');
-      $node_type->save();
-    }
 
     $io->writeln('Installing Content Moderation...');
     $this->moduleInstaller->uninstall(['workbench_moderation']);
