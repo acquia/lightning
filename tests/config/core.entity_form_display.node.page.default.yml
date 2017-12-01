@@ -4,11 +4,10 @@ dependencies:
   config:
     - field.field.node.page.body
     - field.field.node.page.field_meta_tags
-    - field.field.node.page.scheduled_update
     - node.type.page
   module:
     - content_moderation
-    - inline_entity_form
+    - datetime
     - metatag
     - path
     - text
@@ -36,7 +35,7 @@ content:
   field_meta_tags:
     type: metatag_firehose
     region: content
-    weight: 102
+    weight: 101
     settings: {  }
     third_party_settings: {  }
   moderation_state:
@@ -58,19 +57,12 @@ content:
     weight: 3
     third_party_settings: {  }
     region: content
-  scheduled_update:
-    type: inline_entity_form_complex
-    settings:
-      override_labels: false
-      label_singular: ''
-      label_plural: ''
-      allow_new: true
-      allow_existing: false
-      match_operator: CONTAINS
-      form_mode: default
-    weight: 101
-    third_party_settings: {  }
+  scheduled_publication:
+    type: datetime_default
+    weight: 20
     region: content
+    settings: {  }
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
     weight: 10
@@ -102,5 +94,4 @@ content:
       placeholder: ''
     third_party_settings: {  }
     region: content
-hidden:
-  scheduled_publication: true
+hidden: {  }

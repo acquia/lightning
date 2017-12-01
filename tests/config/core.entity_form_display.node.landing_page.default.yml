@@ -8,6 +8,7 @@ dependencies:
     - node.type.landing_page
   module:
     - content_moderation
+    - datetime
     - metatag
     - panelizer
     - path
@@ -57,6 +58,12 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
+  scheduled_publication:
+    type: datetime_default
+    weight: 20
+    region: content
+    settings: {  }
+    third_party_settings: {  }
   status:
     type: boolean_checkbox
     weight: 10
@@ -83,5 +90,4 @@ content:
     region: content
 hidden:
   promote: true
-  scheduled_publication: true
   sticky: true
