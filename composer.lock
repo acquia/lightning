@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "46709250b6054bb1c69c6fb654ac12e2",
+    "content-hash": "5d5a9292f681ca72909154b67c4f3b83",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -902,7 +902,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.13",
-                    "datestamp": "1502799051",
+                    "datestamp": "1511982786",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1941,7 +1941,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha1",
-                    "datestamp": "1507712945",
+                    "datestamp": "1512118387",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -2347,46 +2347,37 @@
         },
         {
             "name": "drupal/media_entity",
-            "version": "1.6.0",
+            "version": "2.0.0-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/media_entity",
-                "reference": "8.x-1.6"
+                "reference": "8.x-2.0-alpha1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_entity-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "86fd1478f2448c034660faa30ef34c0e8519fecb"
+                "url": "https://ftp.drupal.org/files/projects/media_entity-8.x-2.0-alpha1.zip",
+                "reference": "8.x-2.0-alpha1",
+                "shasum": "c735c39c4715e802ad0b7f7aee7485a1f6bdbcbc"
             },
             "require": {
-                "drupal/core": "~8.1",
-                "drupal/entity": "^1.0.0-alpha3"
-            },
-            "require-dev": {
-                "drupal/entity": "*",
-                "drupal/inline_entity_form": "*"
+                "drupal/core": "*",
+                "drupal/entity": "*"
             },
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-1.x": "1.x-dev"
+                    "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1510737185",
+                    "version": "8.x-2.0-alpha1",
+                    "datestamp": "1512035585",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
-                    "Reset D.O packaging information so subsequent patches apply": "https://www.drupal.org/files/issues/media_entity-reset-packaging--add-version.patch",
-                    "2880334 - Add update path of media_entity config changes from 1.x to core media module": "https://www.drupal.org/files/issues/media-entity-1.6--c564fc4.diff",
-                    "2918172 - Media Entity upgrade -> core fails on absent column revision_uid": "https://www.drupal.org/files/issues/2918172-5.patch",
-                    "2918166 - Media Entity should uninstall itself after migration to core Media is complete": "https://www.drupal.org/files/issues/2918166-7.patch",
-                    "2919381 - Don't cache media_entity_type_plugins": "https://www.drupal.org/files/issues/2919381-2.patch",
-                    "2919754 - non-existent service 'plugin.manager.media_entity.type'": "https://www.drupal.org/files/issues/media_entity-drush_updatedb-2919754-6-D8.patch"
+                    "2918172 - Media Entity upgrade -> core fails on absent column revision_uid": "https://www.drupal.org/files/issues/2918172-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2447,33 +2438,23 @@
                     "homepage": "https://www.drupal.org/user/744628"
                 }
             ],
-            "description": "Provides a lean and simple way to store media on Drupal 8 sites.",
+            "description": "Media entity API.",
             "homepage": "https://www.drupal.org/project/media_entity",
-            "keywords": [
-                "Drupal"
-            ],
             "support": {
-                "source": "https://www.drupal.org/project/media_entity",
-                "issues": "https://www.drupal.org/project/issues/media_entity"
+                "source": "http://cgit.drupalcode.org/media_entity"
             }
         },
         {
             "name": "drupal/media_entity_document",
-            "version": "1.1.0",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/media_entity_document",
-                "reference": "8.x-1.1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_entity_document-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "88a45820cf0aeb5f8a3ade3338007771191508e4"
+                "reference": "b98ec72e303df00d0a9c2af500301828a0d6a160"
             },
             "require": {
                 "drupal/core": "~8.1",
-                "drupal/media_entity": "~1.0 || ~8.1.0"
+                "drupal/media_entity": "~1.0 || ~8.1.0 || ~2.0"
             },
             "type": "drupal-module",
             "extra": {
@@ -2481,11 +2462,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1470211995",
+                    "version": "8.x-1.1+4-dev",
+                    "datestamp": "1494160684",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -2500,35 +2481,31 @@
                     "role": "Maintainer"
                 }
             ],
-            "description": "Local documents integration for Drupal Media entity.",
+            "description": "Local file integration for Drupal Media entity.",
             "homepage": "https://www.drupal.org/project/media_entity_document",
             "keywords": [
                 "Drupal",
                 "document",
+                "file",
                 "media"
             ],
             "support": {
                 "source": "https://www.drupal.org/project/media_entity_document",
                 "issues": "https://www.drupal.org/project/issues/media_entity_document"
-            }
+            },
+            "time": "2017-10-24T14:14:45+00:00"
         },
         {
             "name": "drupal/media_entity_image",
-            "version": "1.2.0",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/media_entity_image",
-                "reference": "8.x-1.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_entity_image-8.x-1.2.zip",
-                "reference": "8.x-1.2",
-                "shasum": "d02d1d793a50ea3b9cb5a3219472fdd27980f4f3"
+                "reference": "3264d04a39d342ca4e8484e37f56154ef333c4a6"
             },
             "require": {
                 "drupal/core": "~8.1",
-                "drupal/media_entity": "~1.0 || ~8.1.0"
+                "drupal/media_entity": "~1.0 || ~8.1.0 || ~2.0"
             },
             "require-dev": {
                 "drupal/entity_browser": "*"
@@ -2539,11 +2516,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.2",
-                    "datestamp": "1470170939",
+                    "version": "8.x-1.2+7-dev",
+                    "datestamp": "1487497683",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -2575,7 +2552,8 @@
             "support": {
                 "source": "https://www.drupal.org/project/media_entity_image",
                 "issues": "https://www.drupal.org/project/issues/media_entity_image"
-            }
+            },
+            "time": "2017-10-24T13:23:24+00:00"
         },
         {
             "name": "drupal/media_entity_instagram",
@@ -3526,7 +3504,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x",
-                    "datestamp": "1506684843",
+                    "datestamp": "1510132368",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -3638,8 +3616,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-alpha2+2-dev",
-                    "datestamp": "1512070985",
+                    "version": "8.x-2.0-alpha2+3-dev",
+                    "datestamp": "1512138488",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -11121,6 +11099,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "drupal/media_entity_document": 20,
+        "drupal/media_entity_image": 20,
         "drupal/wbm2cm": 20,
         "drupal/media_entity_generic": 20
     },
