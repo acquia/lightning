@@ -22,6 +22,21 @@ function lightning_scheduler_entity_field_access($operation, FieldDefinitionInte
 }
 
 /**
+ * Implements hook_field_widget_form_alter().
+ */
+function lightning_scheduler_field_widget_form_alter(array &$element, $form_state, array $context) {
+  /** @var FieldItemListInterface $items */
+  $items = $context['items'];
+  /** @var FieldableEntityInterface $entity */
+  $entity = $items->getEntity();
+
+  if ($items->getFieldDefinition()->getName() === 'moderation_state' && $entity->hasField('scheduled_publication') && $entity->isNew() == FALSE) {
+    @$element['state']['#description'] .= '<span id="scheduled-publication-info"></span>';
+    $element['#attached']['library'][] = 'lightning_scheduler/publication-info';
+  }
+}
+
+/**
  * Implements hook_cron().
  */
 function lightning_scheduler_cron() {
