@@ -322,8 +322,10 @@ function lightning_media_preprocess_image_style(array &$variables) {
 /**
  * Implements hook_form_FORM_ID_alter().
  */
-function lightning_media_form_entity_browser_media_browser_form_alter(array &$form, FormStateInterface $form_state) {
-  $form['#attached']['library'][] = 'lightning_media/browser.styling';
+function lightning_media_form_alter(array &$form, FormStateInterface $form_state) {
+  if ($form_state->has('entity_browser')) {
+    $form['#attached']['library'][] = 'lightning_media/browser.styling';
+  }
 }
 
 /**
@@ -457,10 +459,15 @@ function lightning_media_ajax_render_alter(array &$data) {
  * @param array $variables
  *   Template variables.
  */
-function lightning_media_preprocess_views_view_grid__media(array &$variables) {
-  foreach ($variables['items'] as &$item) {
-    foreach ($item['content'] as &$column) {
-      $column['attributes']['data-selectable'] = 'true';
+function lightning_media_preprocess_views_view_grid(array &$variables) {
+  /** @var \Drupal\views\ViewExecutable $view */
+  $view = $variables['view'];
+
+  if ($view->display_handler->getPluginId() == 'entity_browser') {
+    foreach ($variables['items'] as &$item) {
+      foreach ($item['content'] as &$column) {
+        $column['attributes']['data-selectable'] = 'true';
+      }
     }
   }
 }
