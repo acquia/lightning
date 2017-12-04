@@ -1,10 +1,25 @@
 <?php
 
+use Drupal\Core\Access\AccessResult;
 use Drupal\Core\Datetime\DrupalDateTime as DateTime;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityTypeInterface;
 use Drupal\Core\Entity\FieldableEntityInterface;
 use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function lightning_scheduler_entity_field_access($operation, FieldDefinitionInterface $field_definition, $account, FieldItemListInterface $items = NULL) {
+  if ($field_definition instanceof BaseFieldDefinition && $field_definition->getName() == 'scheduled_publication' && (empty($items) || $items && $items->getEntity()->isNew())) {
+    return AccessResult::forbidden();
+  }
+  else {
+    return AccessResult::neutral();
+  }
+}
 
 /**
  * Implements hook_cron().
