@@ -2,6 +2,7 @@
 
 namespace Drupal\lightning\Command;
 
+use Drupal\Component\Plugin\Discovery\DiscoveryInterface;
 use Drupal\Console\Core\Command\Command;
 use Drupal\Console\Core\Style\DrupalStyle;
 use Drupal\Core\Config\ConfigFactoryInterface;
@@ -30,9 +31,9 @@ class UpdateCommand extends Command {
   protected $configFactory;
 
   /**
-   * The annotated class discovery handler.
+   * The update discovery object.
    *
-   * @var \Drupal\Core\Plugin\Discovery\AnnotatedClassDiscovery
+   * @var DiscoveryInterface
    */
   protected $discovery;
 
@@ -42,6 +43,13 @@ class UpdateCommand extends Command {
    * @var string
    */
   protected $since = NULL;
+
+  /**
+   * The parsed info file of the Lightning installation profile.
+   *
+   * @var array
+   */
+  protected $profileInfo;
 
   /**
    * The current version of the Lightning profile.
@@ -61,12 +69,14 @@ class UpdateCommand extends Command {
    *   The namespaces to scan for updates.
    * @param ConfigFactoryInterface $config_factory
    *   The config factory service.
+   * @param DiscoveryInterface $discovery
+   *   (optional) The update discovery handler.
    */
-  public function __construct(ClassResolverInterface $class_resolver, \Traversable $namespaces, ConfigFactoryInterface $config_factory) {
+  public function __construct(ClassResolverInterface $class_resolver, \Traversable $namespaces, ConfigFactoryInterface $config_factory, DiscoveryInterface $discovery = NULL) {
     parent::__construct('update:lightning');
     $this->classResolver = $class_resolver;
     $this->configFactory = $config_factory;
-    $this->discovery = new AnnotatedClassDiscovery('Update', $namespaces, Update::class);
+    $this->discovery = $discovery ?: new AnnotatedClassDiscovery('Update', $namespaces, Update::class);
   }
 
   /**
@@ -106,11 +116,15 @@ class UpdateCommand extends Command {
       return $this->profileVersion;
     }
 
-    $info = system_get_info('module', 'lightning');
-    if (empty($info)) {
+    if ($this->profileInfo === NULL) {
+      $this->profileInfo = system_get_info('module', 'lightning');
+    }
+    if (empty($this->profileInfo)) {
       throw new \UnexpectedValueException("Could not get info for the Lightning installation profile.");
     }
-    $version = preg_replace(['/^8\.x-/', '-dev$/'], NULL, $info['version']);
+
+    // Strip off the 8.x- prefix and -dev suffix.
+    $version = preg_replace(['/^8\.x-/', '/-dev$/'], NULL, $this->profileInfo['version']);
     // Convert to semver.
     $this->profileVersion = preg_replace('/^(\d)\.(\d)(\d)/', '$1.$2.$3', $version);
 
