@@ -13,12 +13,24 @@ use Drupal\Core\Field\FieldItemListInterface;
  * Implements hook_entity_field_access().
  */
 function lightning_scheduler_entity_field_access($operation, FieldDefinitionInterface $field_definition, $account, FieldItemListInterface $items = NULL) {
-  if ($field_definition instanceof BaseFieldDefinition && $field_definition->getName() == 'scheduled_publication' && (empty($items) || $items && $items->getEntity()->isNew())) {
-    return AccessResult::forbidden();
+  // We only have an opinion about the scheduled_publication field.
+  if ($field_definition instanceof BaseFieldDefinition && $field_definition->getName() == 'scheduled_publication') {
+    $nope = AccessResult::forbidden();
+
+    if (empty($items)) {
+      return $nope;
+    }
+
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+    $entity = $items->getEntity();
+
+    $workflow = \Drupal::service('content_moderation.moderation_information')->getWorkflowForEntity($entity);
+
+    if ($entity->isNew() || empty($workflow)) {
+      return $nope;
+    }
   }
-  else {
-    return AccessResult::neutral();
-  }
+  return AccessResult::neutral();
 }
 
 /**
