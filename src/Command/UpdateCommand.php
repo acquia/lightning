@@ -44,6 +44,15 @@ class UpdateCommand extends Command {
   protected $since = NULL;
 
   /**
+   * The current version of the Lightning profile.
+   *
+   * @see ::getProfileVersion()
+   *
+   * @var string
+   */
+  protected $profileVersion;
+
+  /**
    * UpdateCommand constructor.
    *
    * @param ClassResolverInterface $class_resolver
@@ -65,18 +74,9 @@ class UpdateCommand extends Command {
    */
   protected function configure() {
     parent::configure();
-
     $this
-      ->addOption(
-        'force',
-        FALSE,
-        InputOption::VALUE_NONE
-      )
-      ->addOption(
-        'since',
-        NULL,
-        InputOption::VALUE_REQUIRED
-      );
+      ->addOption('force', FALSE, InputOption::VALUE_NONE)
+      ->addOption('since', NULL, InputOption::VALUE_REQUIRED);
   }
 
   /**
@@ -84,16 +84,37 @@ class UpdateCommand extends Command {
    */
   protected function initialize(InputInterface $input, OutputInterface $output) {
     parent::initialize($input, $output);
-
     $this->since = $input->getOption('force') ? '0.0.0' : $input->getOption('since');
   }
 
   protected function getProviderVersion($provider) {
     $versions = (array) $this->configFactory->get('lightning.versions')->get();
+    return @$versions[$provider] ?: $this->getProfileVersion();
+  }
 
-    return isset($versions[$provider])
-      ? $versions[$provider]
-      : '2.2.0';
+  /**
+   * Returns the current version of the Lightning profile.
+   *
+   * @return string
+   *   The semantic version of the Lightning profile.
+   *
+   * @throws \UnexpectedValueException if the info for the Lightning profile
+   * cannot be retrieved.
+   */
+  protected function getProfileVersion() {
+    if (isset($this->profileVersion)) {
+      return $this->profileVersion;
+    }
+
+    $info = system_get_info('module', 'lightning');
+    if (empty($info)) {
+      throw new \UnexpectedValueException("Could not get info for the Lightning installation profile.");
+    }
+    $version = preg_replace(['/^8\.x-/', '-dev$/'], NULL, $info['version']);
+    // Convert to semver.
+    $this->profileVersion = preg_replace('/^(\d)\.(\d)(\d)/', '$1.$2.$3', $version);
+
+    return $this->getProfileVersion();
   }
 
   protected function getDefinitions() {
