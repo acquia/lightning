@@ -173,8 +173,15 @@ class Package {
       $info['download']['revision'] = $package['source']['reference'];
     }
     // Core should always use git branch + revision, or patches won't apply
-    // correctly. Any other type of package can use a standard version number.
-    elseif ($package['type'] != 'drupal-core') {
+    // correctly.
+    elseif ($package['type'] == 'drupal-core') {
+      $info['download']['url'] = 'https://git.drupal.org/project/drupal.git';
+      // 8.4.2 --> 8.4.x
+      $info['download']['branch'] = preg_replace('/\.\d$/', '.x', $package['version']);
+      $info['download']['revision'] = $package['version'];
+    }
+    // Any other type of package can use a standard Drupal version number.
+    else {
       // Drupalize the tag versioning, e.g. 8.1.0-alpha1 => 8.x-1.0-alpha1.
       $version = sprintf(
         '%d.x-%s',
