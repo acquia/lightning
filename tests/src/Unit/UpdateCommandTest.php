@@ -5,7 +5,7 @@ namespace Drupal\Tests\lightning\Unit;
 use Drupal\Component\Plugin\Discovery\DiscoveryInterface;
 use Drupal\Core\Config\Config;
 use Drupal\Core\Config\ConfigFactoryInterface;
-use Drupal\Core\DependencyInjection\ClassResolverInterface;
+use Drupal\Core\DependencyInjection\ClassResolver;
 use Drupal\lightning\Command\UpdateCommand;
 use Drupal\Tests\UnitTestCase;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,7 +60,7 @@ class UpdateCommandTest extends UnitTestCase {
     ]);
 
     $this->command = new TestUpdateCommand(
-      $this->prophesize(ClassResolverInterface::class)->reveal(),
+      new ClassResolver(),
       new \ArrayIterator(),
       $config_factory->reveal(),
       $discovery->reveal()
