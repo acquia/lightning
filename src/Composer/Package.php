@@ -172,18 +172,15 @@ class Package {
       }
       $info['download']['revision'] = $package['source']['reference'];
     }
-    else {
-      if ($package['type'] == 'drupal-core') {
-        $version = $package['version'];
-      }
-      else {
-        // Make tag versioning Drupal-friendly. 8.1.0-alpha1 => 8.x-1.0-alpha1.
-        $version = sprintf(
-          '%d.x-%s',
-          $package['version']{0},
-          substr($package['version'], 2)
-        );
-      }
+    // Core should always use git branch + revision, or patches won't apply
+    // correctly. Any other type of package can use a standard version number.
+    elseif ($package['type'] != 'drupal-core') {
+      // Drupalize the tag versioning, e.g. 8.1.0-alpha1 => 8.x-1.0-alpha1.
+      $version = sprintf(
+        '%d.x-%s',
+        $package['version']{0},
+        substr($package['version'], 2)
+      );
       // Make the version Drush make-compatible: 1.x-13.0-beta2 --> 1.13-beta2
       $info['version'] = preg_replace(
         '/^([0-9]+)\.x-([0-9]+)\.[0-9]+(-.+)?/',
@@ -192,7 +189,6 @@ class Package {
       );
       unset($info['download']);
     }
-
     return $info;
   }
 
