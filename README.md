@@ -145,16 +145,6 @@ your environment, but generally you will not need to do this.
   this warning.
 * Using the bulk upload feature in environments with a load balancer might
   result in some images not being saved.
-
-### Workflow
-* Lightning Workflow is based on Workbench Moderation, which is incompatible
-  with the experimental Content Moderation module included with Drupal core
-  8.3.0 and later and serves the same purpose as Workbench Moderation. We plan
-  to seamlessly migrate Lightning Workflow to Content Moderation once it is
-  ready and an update path exists (see [Issue #2863059](https://www.drupal.org/node/2863059)
-  for more information). But for now, installing Content Moderation alongside
-  Lightning Workflow may have unpredictable and dangerous effects, an is best
-  avoided.
   
 ### Inherited profiles
 Neither Drush nor Drupal Console are aware of the concept of inherited profiles

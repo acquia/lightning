@@ -83,6 +83,11 @@ to Beta 3, in that order.
 * To migrate to Content Moderation, install the wbm2cm module and Drush (8.x or
   9.x). **Back up your database**, then run ```drush wbm2cm-migrate``` to run
   the migration.
+* If you previously used a sub-profile to exclude Lightning Workflow's
+  "Schedule Publication" sub-component (its machine name is
+  lightning_scheduled_updates), you will need to update your sub-profile's
+  excluded dependencies to exclude lightning_scheduler instead, which
+  replaces lightning_scheduled_updates in this release.
 
 ### 2.2.2 to 2.2.3
 There are no manual update steps for thus version.
