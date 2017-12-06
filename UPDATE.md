@@ -61,13 +61,17 @@ Ensure Drupal Console is installed, then switch into the web root of your
 Lightning installation and run:
 
 ```
-$ drupal update:lightning
+$ drupal update:lightning CURRENT_VERSION
 ```
+
+...where `CURRENT_VERSION` is the version of Lightning you're currently using,
+in semantic version format (e.g., "8.x-2.24" should be "2.2.4", and
+"8.x-2.21-beta3" is "2.2.1-beta3").
 
 To run all available configuration updates without any prompting, use:
 
 ```
-$ drupal update:lightning --no-interaction
+$ drupal update:lightning CURRENT_VERSION --no-interaction
 ```
 
 If you'd rather do the updates manually, follow the instructions below,
@@ -96,8 +100,8 @@ You *can* update directly from 2.2.0 to 2.2.2. When doing so, follow the
 
 ### 2.2.0 to 2.2.1
 
-##### Special instructions for media entity migration
-This release will migrate your existing media entities to the core media module.
+##### Special instructions for Media Entity migration
+This release will migrate your existing media entities to the core Media module.
 Prior to running the database updates, you must:
 
 1. Ensure Composer properly downloaded and patched all dependencies.
@@ -138,7 +142,6 @@ media_entity module :
   8200 -   Clears the module handler's hook implementation cache. 
   8201 -   Replace Media Entity with Media. 
 ```
-
 
 ##### Configuration updates
 * Visit *Structure > Content types*. For each moderated content type, click
