@@ -87,7 +87,7 @@ before_script:
 script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
   - cd docroot
-  - phpunit --configuration ./core --group lightning
+  - phpunit --configuration ./core --group lightning,profiles
   - cd ..
   - bin/robo test:behat -- --stop-on-failure
 
