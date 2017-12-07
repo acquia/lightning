@@ -18,10 +18,6 @@ events:
             # running our installed versions of Drush, PHPCS, Behat, etc.
             - export PATH="$HOME/.composer/vendor/bin:$SOURCE_DIR/bin:$PATH"
             - composer validate --no-check-all --ansi --no-interaction
-            # The versions of patch and git on pipelines are incompatible with the latest
-            # composer-patches plugin.
-            - composer require cweagans/composer-patches:1.6.2 --no-update
-            - composer update cweagans/composer-patches
             - composer install
       - install:
           type: script
