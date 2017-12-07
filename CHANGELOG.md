@@ -1,3 +1,9 @@
+## 2.2.5
+* The `since` option used with the `update:lightning` console command has
+  been converted to an argument and is now required. See
+  "Automated configuration updates" in the UPDATE.md file for more information.
+* Drupal core has been updated to 8.4.3. (Issue #2929035)
+
 ## 2.2.4
 * Lightning Workflow has been updated to use core Workflows and Content
   moderation modules and existing sites will be migrated. (Issue #2863059)
