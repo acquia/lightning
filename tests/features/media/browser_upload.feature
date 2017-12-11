@@ -42,7 +42,7 @@ Feature: Uploading media assets through the media browser
     When I visit "/node/add/page"
     And I open the "Lightweight Image" image browser
     And I click "Upload"
-    And I wait 2 seconds
+    And I wait for AJAX to finish
     And I attach the file "test.jpg" to "input_file"
     And I wait for AJAX to finish
     # This is a weak-sauce assertion but I can't tell exactly what the error
