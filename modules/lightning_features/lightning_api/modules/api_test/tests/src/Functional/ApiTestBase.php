@@ -12,12 +12,12 @@ abstract class ApiTestBase extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $profile = 'lightning_headless';
+  protected static $modules = ['api_test'];
 
   /**
    * {@inheritdoc}
    */
-  protected static $modules = ['api_test'];
+  protected $profile = 'lightning';
 
   /**
    * {@inheritdoc}
@@ -40,7 +40,7 @@ abstract class ApiTestBase extends BrowserTestBase {
    *   The OAuth2 password grant access token from the API.
    */
   protected function getToken($client_options) {
-    $client = \Drupal::httpClient();
+    $client = $this->container->get('http_client');
     $url = $this->buildUrl('/oauth/token');
 
     $response = $client->post($url, $client_options);
@@ -90,7 +90,7 @@ abstract class ApiTestBase extends BrowserTestBase {
    *   The response from the request.
    */
   protected function request($endpoint, $method = 'get', $token = NULL, $data = NULL) {
-    $client = \Drupal::httpClient();
+    $client = $this->container->get('http_client');
 
     $options = NULL;
     if ($token) {

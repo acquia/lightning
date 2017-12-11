@@ -97,7 +97,7 @@ class ApiTest extends ApiTestBase {
     }
 
     // Cannot get unauthorized data anonymously.
-    $client = \Drupal::httpClient();
+    $client = $this->container->get('http_client');
     $url = $this->buildUrl('/jsonapi/node/page/api_test-unpublished-page-content');
     // Unlike the roles test which requests a list, JSON API sends a 403 status
     // code when requesting a specific unauthorized resource instead of list.

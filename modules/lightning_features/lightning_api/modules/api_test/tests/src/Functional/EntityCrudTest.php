@@ -14,7 +14,7 @@ use Drupal\consumers\Entity\Consumer;
  * @group headless
  * @group api_test
  */
-class EntityCRUTest extends ApiTestBase {
+class EntityCrudTest extends ApiTestBase {
 
   /**
    * OAuth token for the admin client.
@@ -171,8 +171,8 @@ class EntityCRUTest extends ApiTestBase {
     // Read the updated taxonomy term.
     $response = $this->request('/jsonapi/taxonomy_term/im_a_vocab/zebra_taxonomy_term', 'get', $this->token);
     $body = $this->decodeResponse($response);
-    $this->assertEquals('zebra', $body['data']['attributes']['name']);
-    $this->assertEquals($new_description, $body['data']['attributes']['description']['value']);
+    $this->assertSame('zebra', $body['data']['attributes']['name']);
+    $this->assertSame($new_description, $body['data']['attributes']['description']['value']);
   }
 
 }
