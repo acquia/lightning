@@ -61,6 +61,25 @@ class EntityBrowserContext extends DrupalSubContextBase {
   }
 
   /**
+   * Clicks on a tab with the specified text in an active entity browser and
+   * waits for it to load.
+   *
+   * @param string $tab
+   *   The text of the tab to switch to.
+   *
+   * @When I switch to the :tab Entity Browser tab
+   */
+  public function switchToEBTab($tab) {
+    $this
+      ->assertSession()
+      ->elementTextContains('css', 'nav.eb-tabs', $tab);
+    $this->getSession()->getPage()->clickLink($tab);
+    // I don't see any way to assert the tab specifically has loaded. So,
+    // instead we just wait a reasonable amount of time.
+    sleep(5);
+  }
+
+  /**
    * Gets all items in an entity browser.
    *
    * @param string $browser_id

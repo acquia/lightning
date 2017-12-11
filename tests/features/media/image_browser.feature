@@ -6,7 +6,7 @@ Feature: An entity browser for image fields
     Given I am logged in as a user with the page_creator,media_creator roles
     When I visit "/node/add/page"
     And I open the "Hero Image" image browser
-    And I click "Upload"
+    And I switch to the "Upload" Entity Browser tab
     And I attach the file "test.jpg" to "File"
     And I wait for AJAX to finish
     And I enter "Behold, a generic logo" for "Name"
@@ -18,7 +18,7 @@ Feature: An entity browser for image fields
     Given I am logged in as a user with the page_creator,media_creator roles
     When I visit "/node/add/page"
     And I open the "Hero Image" image browser
-    And I click "Upload"
+    And I switch to the "Upload" Entity Browser tab
     And I attach the file "test.jpg" to "File"
     And I wait for AJAX to finish
     Then I should see an open "Crop image" details element
