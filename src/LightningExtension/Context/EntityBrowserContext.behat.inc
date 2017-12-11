@@ -74,7 +74,9 @@ class EntityBrowserContext extends DrupalSubContextBase {
       ->assertSession()
       ->elementTextContains('css', 'nav.eb-tabs', $tab);
     $this->getSession()->getPage()->clickLink($tab);
-    $this->awaitAjax();
+    // I don't see any way to assert the tab specifically has loaded. So,
+    // instead we just wait a reasonable amount of time.
+    sleep(5);
   }
 
   /**
