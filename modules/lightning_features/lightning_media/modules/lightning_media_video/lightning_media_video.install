@@ -9,8 +9,7 @@ use Drupal\Core\Entity\Entity\EntityFormDisplay;
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\lightning_core\ConfigHelper as Config;
-use Drupal\media_entity\Entity\MediaBundle;
-use Drupal\video_embed_media\Plugin\MediaEntity\Type\VideoEmbedField;
+use Drupal\media\Entity\MediaType;
 
 /**
  * Installs video_embed_media and updates display settings for videos.
@@ -28,7 +27,7 @@ function lightning_media_video_update_8001() {
     $old_component = $form_display->getComponent('embed_code');
     $form_display
       ->removeComponent('field_embed_code')
-      ->setComponent(VideoEmbedField::VIDEO_EMBED_FIELD_DEFAULT_NAME, [
+      ->setComponent('field_media_video_embed_field', [
         'type' => 'video_embed_field_textfield',
         'weight' => $old_component['weight'],
         'settings' => array(),
@@ -45,7 +44,7 @@ function lightning_media_video_update_8001() {
       $old_component = $form_display->getComponent('embed_code');
       $view_display
         ->removeComponent('field_embed_code')
-        ->setComponent(VideoEmbedField::VIDEO_EMBED_FIELD_DEFAULT_NAME, [
+        ->setComponent('field_media_video_embed_field', [
           'type' => 'video_embed_field_video',
           'weight' => $old_component['weight'],
           'label' => $old_component['label'],
@@ -62,9 +61,9 @@ function lightning_media_video_update_8001() {
   }
 
   // Reconfigure the video media bundle.
-  MediaBundle::load('video')
-    ->set('type_configuration', [
-      'source_field' => VideoEmbedField::VIDEO_EMBED_FIELD_DEFAULT_NAME,
+  MediaType::load('video')
+    ->set('source_configuration', [
+      'source_field' => 'field_media_video_embed_field',
     ])
     ->save();
 

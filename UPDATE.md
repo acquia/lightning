@@ -61,13 +61,17 @@ Ensure Drupal Console is installed, then switch into the web root of your
 Lightning installation and run:
 
 ```
-$ drupal update:lightning
+$ drupal update:lightning CURRENT_VERSION
 ```
+
+...where `CURRENT_VERSION` is the version of Lightning you're currently using,
+in semantic version format (e.g., "8.x-2.24" should be "2.2.4", and
+"8.x-2.21-beta3" is "2.2.1-beta3").
 
 To run all available configuration updates without any prompting, use:
 
 ```
-$ drupal update:lightning --no-interaction
+$ drupal update:lightning CURRENT_VERSION --no-interaction
 ```
 
 If you'd rather do the updates manually, follow the instructions below,
@@ -76,7 +80,78 @@ are currently running Beta 1 and are trying to update to Beta 3, you will need
 to follow the instructions for updating from Beta 1 to Beta 2, then from Beta 2
 to Beta 3, in that order.
 
+### 2.2.4 to 2.2.5
+There are no manual update steps for this version.
+
+### 2.2.3 to 2.2.4
+* Visit *Structure > Media types*. For each media type, click "Manage display"
+  and select the "Embedded" display. Then drag the "Name" field into the
+  "Disabled" section and press "Save".
+* To migrate to Content Moderation, install the wbm2cm module and Drush (8.x or
+  9.x). **Back up your database**, then run ```drush wbm2cm-migrate``` to run
+  the migration.
+* If you previously used a sub-profile to exclude Lightning Workflow's
+  "Schedule Publication" sub-component (its machine name is
+  lightning_scheduled_updates), you will need to update your sub-profile's
+  excluded dependencies to exclude lightning_scheduler instead, which
+  replaces lightning_scheduled_updates in this release.
+
+### 2.2.2 to 2.2.3
+There are no manual update steps for this version.
+
+### 2.2.1 to 2.2.2
+There are no manual update steps for this version.
+ 
+This release fixes some requirements problems with the 2.2.1 media migration.
+You *can* update directly from 2.2.0 to 2.2.2. When doing so, follow the
+"Special instructions for media entity migration" steps below.
+
 ### 2.2.0 to 2.2.1
+
+##### Special instructions for Media Entity migration
+This release will migrate your existing media entities to the core Media module.
+Prior to running the database updates, you must:
+
+1. Ensure Composer properly downloaded and patched all dependencies.
+1. Rebuild Drupal's caches.
+
+This release changes the set of patches that are applied to drupal/core without
+actually updating core, which exposes [this bug in the composer-patches plugin](https://github.com/cweagans/composer-patches/issues/71).
+As a result, you will likely need to run composer update twice. Specifically:
+
+```
+composer update acquia/lightning --with-dependencies
+composer update drupal/core
+```
+ 
+Alternatively, you can delete your "/docroot/core" and "/docroot/modules"
+folders and your composer.lock file before running `composer update`. If you use
+[BLT](http://blt.readthedocs.io/en/8.x/), the provided `composer nuke` command
+will do that for you.
+
+Once you have confirmed that your codebase has been update properly, you must
+rebuild your site's caches *before* running the database updates.
+
+```
+drush cache-rebuild
+```
+
+If your codebase has been updated properly, you should see the following four
+pending database updates when you run `drush updatedb`:
+
+```
+lightning_api module : 
+  8002 -   Installs the Consumers module. 
+
+lightning_media module : 
+  8018 -   Updates the media browser's argument validation. 
+
+media_entity module : 
+  8200 -   Clears the module handler's hook implementation cache. 
+  8201 -   Replace Media Entity with Media. 
+```
+
+##### Configuration updates
 * Visit *Structure > Content types*. For each moderated content type, click
   "Manage form display", then drag the "Publishing status" field into the
   "Disabled" section and press "Save".

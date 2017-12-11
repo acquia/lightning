@@ -5,10 +5,10 @@ dependencies:
     - core.entity_form_mode.media.media_browser
     - field.field.media.instagram.embed_code
     - field.field.media.instagram.field_media_in_library
-    - media_entity.bundle.instagram
+    - media.type.instagram
   module:
+    - content_moderation
     - path
-    - workbench_moderation
 _core: {  }
 id: media.instagram.media_browser
 targetEntityType: media
@@ -22,6 +22,12 @@ content:
       display_label: true
     third_party_settings: {  }
     region: content
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    settings: {  }
+    region: content
+    third_party_settings: {  }
   name:
     type: string_textfield
     weight: 0
@@ -41,6 +47,13 @@ content:
     settings: {  }
     third_party_settings: {  }
     region: content
+  status:
+    type: boolean_checkbox
+    settings:
+      display_label: true
+    weight: 100
+    region: content
+    third_party_settings: {  }
 hidden:
   created: true
   embed_code: true

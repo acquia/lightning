@@ -7,8 +7,8 @@ Feature: Media assets based on embed codes
     When I visit "/media/add/<bundle>"
     And I enter "<embed_code>" for "<source_field>"
     And I wait for AJAX to finish
-    And I enter "<title>" for "Media name"
-    And I press "Save and publish"
+    And I enter "<title>" for "Name"
+    And I press "Save"
     Then I should be visiting a media entity
     And I should see "<title>"
     And I queue the latest media entity for deletion
@@ -40,12 +40,12 @@ Feature: Media assets based on embed codes
   Scenario: Clearing an image field on a media item
     Given I am logged in as a user with the media_creator role
     When I visit "/media/add/video"
-    And I enter "Foobaz" for "Media name"
+    And I enter "Foobaz" for "Name"
     And I enter "https://www.youtube.com/watch?v=z9qY4VUZzcY" for "Video URL"
     And I wait for AJAX to finish
     And I attach the file "test.jpg" to "Image"
     And I wait for AJAX to finish
-    And I press "Save and publish"
+    And I press "Save"
     And I click "Edit"
     And I press "field_image_0_remove_button"
     And I wait for AJAX to finish

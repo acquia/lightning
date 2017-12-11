@@ -5,31 +5,21 @@
  * Support for videos as media entities in Lightning.
  */
 
-use Drupal\media_entity\MediaInterface;
 use Drupal\lightning_core\OverrideHelper as Override;
-use Drupal\lightning_media_video\Plugin\MediaEntity\Type\Video;
+use Drupal\lightning_media_video\Plugin\media\Source\Video;
 
 /**
- * Implements hook_media_entity_type_info_alter().
+ * Implements hook_media_source_info_alter().
  */
-function lightning_media_video_media_entity_type_info_alter(array &$types) {
-  $types['video_embed_field']['input_match'] = [
+function lightning_media_video_media_source_info_alter(array &$sources) {
+  $sources['video_embed_field']['input_match'] = [
     'field_types' => [
       'string',
       'string_long',
       'video_embed_field',
     ],
   ];
-  $types['video_embed_field']['preview'] = TRUE;
+  $sources['video_embed_field']['preview'] = TRUE;
 
-  Override::pluginClass($types['video_embed_field'], Video::class);
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function lightning_media_video_media_presave(MediaInterface $entity) {
-  if ($entity->bundle() == 'video') {
-    $entity->automaticallySetThumbnail();
-  }
+  Override::pluginClass($sources['video_embed_field'], Video::class);
 }

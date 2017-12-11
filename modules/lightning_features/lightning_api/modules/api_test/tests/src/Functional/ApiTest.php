@@ -48,13 +48,13 @@ class ApiTest extends ApiTestBase {
     // Get data that is available anonymously.
     $response = $this->request('/jsonapi/node/page/api_test-published-page-content');
     $this->assertEquals(200, $response->getStatusCode());
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
     $this->assertEquals('Published Page', $body['data']['attributes']['title']);
 
     // Get data that requires authentication.
     $response = $this->request('/jsonapi/node/page/api_test-unpublished-page-content', 'get', $this->token);
     $this->assertEquals(200, $response->getStatusCode());
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
     $this->assertEquals('Unpublished Page', $body['data']['attributes']['title']);
 
     // Post new content that requires authentication.
@@ -72,13 +72,13 @@ class ApiTest extends ApiTestBase {
       ->count()
       ->execute());
 
-    // The user, client, and content should be removed on uninstall.
+    // The user, client, and content should be removed on uninstall. The account
+    // created by generateKeys() will still be around, but that exists only in
+    // the test database, so we don't need to worry about it.
     \Drupal::service('module_installer')->uninstall(['api_test']);
-    $this->assertCount(0, \Drupal::entityQuery('user')
-      ->condition('uid', 1, '>')
-      ->execute());
-    $this->assertCount(0, \Drupal::entityQuery('consumer')->execute());
-    $this->assertCount(0, \Drupal::entityQuery('node')->execute());
+    $this->assertSame(1, (int) \Drupal::entityQuery('user')->condition('uid', 1, '>')->count()->execute());
+    $this->assertSame(0, (int) \Drupal::entityQuery('consumer')->count()->execute());
+    $this->assertSame(0, (int) \Drupal::entityQuery('node')->count()->execute());
   }
 
   /**
@@ -88,7 +88,7 @@ class ApiTest extends ApiTestBase {
   public function testNotAllowed() {
     // Cannot get unauthorized data (not in role/scope) even when authenticated.
     $response = $this->request('/jsonapi/user_role/user_role', 'get', $this->token);
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
     $this->assertArrayHasKey('errors', $body['meta']);
     foreach ($body['meta']['errors'] as $error) {
       // This user/client should not have access to any of the roles' data. JSON

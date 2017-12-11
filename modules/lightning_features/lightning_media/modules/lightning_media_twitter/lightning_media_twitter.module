@@ -2,24 +2,24 @@
 
 /**
  * @file
- * Support for image tweets as media entities in Lightning.
+ * Support for tweets as media entities in Lightning.
  */
 
 use Drupal\lightning_core\OverrideHelper as Override;
-use Drupal\lightning_media_twitter\Plugin\MediaEntity\Type\Twitter;
+use Drupal\lightning_media_twitter\Plugin\media\Source\Twitter;
 
 /**
- * Implements hook_media_entity_type_info_alter().
+ * Implements hook_media_source_info_alter().
  */
-function lightning_media_twitter_media_entity_type_info_alter(array &$types) {
-  $types['twitter']['input_match'] = [
+function lightning_media_twitter_media_source_info_alter(array &$sources) {
+  $sources['twitter']['input_match'] = [
     'constraint' => 'TweetEmbedCode',
     'field_types' => [
       'string',
       'string_long',
     ],
   ];
-  $types['twitter']['preview'] = TRUE;
+  $sources['twitter']['preview'] = TRUE;
 
-  Override::pluginClass($types['twitter'], Twitter::class);
+  Override::pluginClass($sources['twitter'], Twitter::class);
 }

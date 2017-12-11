@@ -20,11 +20,12 @@ class PanelizerWidget extends BaseWidget {
     $element = parent::formElement($items, $delta, $element, $form, $form_state);
 
     foreach (Element::children($element) as $i) {
-      // If the layout can be chosen (from which we can infer that Panelizer is
-      // enabled for this view display), display the view mode description if no
-      // description set already.
-      if ($element[$i]['default']['#type'] == 'select' && empty($element[$i]['default']['#description'])) {
-        $view_mode = $items->getEntity()->getEntityTypeId() . '.' . $element[$i]['view_mode']['#value'];
+      $item = &$element[$i];
+
+      // If the item is associated with a view mode, display the view mode
+      // description if no description is set already.
+      if ($item['view_mode']['#value'] && empty($item['default']['#description'])) {
+        $view_mode = $items->getEntity()->getEntityTypeId() . '.' . $item['view_mode']['#value'];
 
         $element[$i]['default']['#description'] = EntityViewMode::load($view_mode)
           ->getThirdPartySetting('lightning_core', 'description');

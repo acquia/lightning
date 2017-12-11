@@ -2,12 +2,11 @@
 
 namespace Drupal\Tests\api_test\Functional;
 
-use Drupal\Component\Serialization\Json;
 use Drupal\user\Entity\User;
 use Drupal\consumers\Entity\Consumer;
 
 /**
- * Tests the ability to create, read, and update config and config entities via
+ * Tests the ability to Create, Read, and Update config and config entities via
  * the API.
  *
  * @group lightning
@@ -94,7 +93,7 @@ class EntityCRUTest extends ApiTestBase {
 
     // Read the newly created vocabulary.
     $response = $this->request('/jsonapi/taxonomy_vocabulary/taxonomy_vocabulary/taxonomy_test_vocabulary', 'get', $this->token);
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
     $this->assertEquals($description, $body['data']['attributes']['description']);
 
     $new_description = 'Refined by Johann Bartsch.';
@@ -112,7 +111,7 @@ class EntityCRUTest extends ApiTestBase {
 
     // Read the updated vocabulary.
     $response = $this->request('/jsonapi/taxonomy_vocabulary/taxonomy_vocabulary/taxonomy_test_vocabulary', 'get', $this->token);
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
     $this->assertEquals('I\'m a vocab', $body['data']['attributes']['name']);
     $this->assertEquals($new_description, $body['data']['attributes']['description']);
 
@@ -151,7 +150,7 @@ class EntityCRUTest extends ApiTestBase {
 
     // Read the taxonomy term.
     $response = $this->request('/jsonapi/taxonomy_term/im_a_vocab/zebra_taxonomy_term', 'get', $this->token);
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
     $this->assertEquals($description, $body['data']['attributes']['description']['value']);
 
     $new_description = 'Smart squid gives lazy lummox who asks for job pen.';
@@ -171,7 +170,7 @@ class EntityCRUTest extends ApiTestBase {
 
     // Read the updated taxonomy term.
     $response = $this->request('/jsonapi/taxonomy_term/im_a_vocab/zebra_taxonomy_term', 'get', $this->token);
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
     $this->assertEquals('zebra', $body['data']['attributes']['name']);
     $this->assertEquals($new_description, $body['data']['attributes']['description']['value']);
   }

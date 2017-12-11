@@ -3,9 +3,8 @@
 namespace Drupal\Tests\api_test\Functional;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Core\Form\FormState;
 use Drupal\Tests\BrowserTestBase;
-use Drupal\lightning_api\Form\OAuthKeyForm;
+use Psr\Http\Message\ResponseInterface;
 
 abstract class ApiTestBase extends BrowserTestBase {
 
@@ -44,7 +43,7 @@ abstract class ApiTestBase extends BrowserTestBase {
     $url = $this->buildUrl('/oauth/token');
 
     $response = $client->post($url, $client_options);
-    $body = Json::decode($response->getBody());
+    $body = $this->decodeResponse($response);
 
     // The response should have an access token.
     $this->assertArrayHasKey('access_token', $body);
@@ -56,17 +55,22 @@ abstract class ApiTestBase extends BrowserTestBase {
    * Generates and store OAuth keys.
    */
   protected function generateKeys() {
-    $dir = drupal_realpath('temporary://');
-
-    $form_state = (new FormState)->setValues([
-      'dir' => $dir,
+    $account = $this->drupalCreateUser([], NULL, TRUE);
+    $this->drupalLogin($account);
+    $url = Url::fromRoute('lightning_api.generate_keys');
+    $this->drupalGet($url);
+    $values = [
+      'dir' => drupal_realpath('temporary://'),
       'private_key' => 'private.key',
       'public_key' => 'public.key',
-    ]);
-
-    $this->container
-      ->get('form_builder')
-      ->submitForm(OAuthKeyForm::class, $form_state);
+    ];
+    $conf = getenv('OPENSSL_CONF');
+    if ($conf) {
+      $values['conf'] = $conf;
+    }
+    $this->drupalPostForm(NULL, $values, 'Generate keys');
+    $this->assertSession()->pageTextContains('A key pair was generated successfully.');
+    $this->drupalLogout();
   }
 
   /**
@@ -103,6 +107,27 @@ abstract class ApiTestBase extends BrowserTestBase {
     $url = $this->buildUrl($endpoint);
 
     return $client->$method($url, $options);
+  }
+
+  /**
+   * Decodes a JSON response from the server.
+   *
+   * @param \Psr\Http\Message\ResponseInterface $response
+   *   The response object.
+   *
+   * @return mixed
+   *   The decoded response data. If the JSON parser raises an error, the test
+   *   will fail, with the bad input as the failure message.
+   */
+  protected function decodeResponse(ResponseInterface $response) {
+    $body = (string) $response->getBody();
+    $data = Json::decode($body);
+    if (json_last_error() === JSON_ERROR_NONE) {
+      return $data;
+    }
+    else {
+      $this->fail($body);
+    }
   }
 
 }

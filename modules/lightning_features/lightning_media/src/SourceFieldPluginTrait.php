@@ -2,29 +2,21 @@
 
 namespace Drupal\lightning_media;
 
-use Drupal\media_entity\MediaBundleInterface;
+use Drupal\media\MediaTypeInterface;
 
 /**
  * Basic implementation of SourceFieldInterface.
+ *
+ * @deprecated in Lightning 2.2.1 and will be removed in Lightning 2.3.0. Use
+ * \Drupal\media\MediaSourceInterface::getSourceFieldDefinition() instead.
  */
 trait SourceFieldPluginTrait {
 
   /**
    * Implements InputMatchInterface::getSourceFieldDefinition().
    */
-  public function getSourceFieldDefinition(MediaBundleInterface $bundle) {
-    $configuration = $this->getConfiguration();
-
-    if (isset($configuration['source_field'])) {
-      $fields = $this->entityFieldManager->getFieldDefinitions(
-        $bundle->getEntityType()->getBundleOf(),
-        $bundle->id()
-      );
-      $field = $configuration['source_field'];
-
-      return $fields[$field];
-    }
-    return NULL;
+  public function getSourceFieldDefinition(MediaTypeInterface $media_type) {
+    return $this->getSourceFieldDefinition($media_type);
   }
 
 }

@@ -5,8 +5,9 @@ dependencies:
     - block_content.type.basic
     - field.field.block_content.basic.body
   module:
+    - content_moderation
+    - datetime
     - text
-    - workbench_moderation
 _core: {  }
 id: block_content.basic.default
 targetEntityType: block_content
@@ -30,4 +31,16 @@ content:
       placeholder: ''
     third_party_settings: {  }
     region: content
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    settings: {  }
+    region: content
+    third_party_settings: {  }
+  scheduled_publication:
+    type: datetime_default
+    weight: 20
+    region: content
+    settings: {  }
+    third_party_settings: {  }
 hidden: {  }

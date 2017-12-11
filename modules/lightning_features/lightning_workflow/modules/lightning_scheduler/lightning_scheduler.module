@@ -1,0 +1,138 @@
+<?php
+
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Datetime\DrupalDateTime as DateTime;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\EntityTypeInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function lightning_scheduler_entity_field_access($operation, FieldDefinitionInterface $field_definition, $account, FieldItemListInterface $items = NULL) {
+  // We only have an opinion about the scheduled_publication field.
+  if ($field_definition instanceof BaseFieldDefinition && $field_definition->getName() == 'scheduled_publication') {
+    $nope = AccessResult::forbidden();
+
+    if (empty($items)) {
+      return $nope;
+    }
+
+    /** @var \Drupal\Core\Entity\ContentEntityInterface $entity */
+    $entity = $items->getEntity();
+
+    $workflow = \Drupal::service('content_moderation.moderation_information')->getWorkflowForEntity($entity);
+
+    if ($entity->isNew() || empty($workflow)) {
+      return $nope;
+    }
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_field_widget_form_alter().
+ */
+function lightning_scheduler_field_widget_form_alter(array &$element, $form_state, array $context) {
+  /** @var FieldItemListInterface $items */
+  $items = $context['items'];
+  /** @var FieldableEntityInterface $entity */
+  $entity = $items->getEntity();
+
+  if ($items->getFieldDefinition()->getName() === 'moderation_state' && $entity->hasField('scheduled_publication') && $entity->isNew() == FALSE) {
+    @$element['state']['#description'] .= '<span id="scheduled-publication-info"></span>';
+    $element['#attached']['library'][] = 'lightning_scheduler/publication-info';
+  }
+}
+
+/**
+ * Implements hook_cron().
+ */
+function lightning_scheduler_cron() {
+  $filter = function (array $fields) {
+    return (
+      isset($fields['scheduled_publication']) &&
+      isset($fields['scheduled_moderation_state'])
+    );
+  };
+
+  $field_map = array_filter(
+    \Drupal::service('entity_field.manager')->getFieldMap(),
+    $filter
+  );
+
+  $now = (new DateTime('now', 'UTC'))->format('c');
+
+  /** @var \Drupal\content_moderation\ModerationInformationInterface $moderation */
+  $moderation = \Drupal::service('content_moderation.moderation_information');
+
+  foreach ($field_map as $entity_type_id => $fields) {
+    $result = \Drupal::entityTypeManager()
+      ->getStorage($entity_type_id)
+      ->getQuery()
+      ->condition('scheduled_publication', $now, '<=')
+      ->execute();
+
+    foreach ($result as $entity_id) {
+      $entity = $moderation->getLatestRevision($entity_type_id, $entity_id);
+      $entity->moderation_state->value = $entity->scheduled_moderation_state->value;
+      $entity->scheduled_moderation_state->value = NULL;
+      $entity->scheduled_publication->value = NULL;
+      $entity->save();
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function lightning_scheduler_entity_presave(EntityInterface $entity) {
+  if ($entity instanceof FieldableEntityInterface && $entity->hasField('scheduled_publication') && $entity->get('scheduled_publication')->count()) {
+    $entity->scheduled_moderation_state->value = $entity->moderation_state->value;
+
+    if (isset($entity->original)) {
+      $entity->moderation_state->value = $entity->original->moderation_state->value;
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_base_field_info().
+ */
+function lightning_scheduler_entity_base_field_info(EntityTypeInterface $entity_type) {
+  $fields = [];
+
+  /** @var \Drupal\content_moderation\ModerationInformationInterface $moderation */
+  $moderation = \Drupal::service('content_moderation.moderation_information');
+
+  if ($moderation->canModerateEntitiesOfEntityType($entity_type)) {
+    $fields['scheduled_publication'] = BaseFieldDefinition::create('datetime')
+      ->setLabel(
+        t('Scheduled publication')
+      )
+      ->setDescription(
+        t('A date and time when the moderation state should be changed automatically.')
+      )
+      ->setDisplayConfigurable('view', TRUE)
+      ->setDisplayConfigurable('form', TRUE)
+      ->setDisplayOptions('form', [
+        'type' => 'datetime_default',
+        'weight' => 20,
+      ])
+      ->setTranslatable(TRUE)
+      ->setRevisionable(TRUE);
+
+    $fields['scheduled_moderation_state'] = BaseFieldDefinition::create('string')
+      ->setLabel(
+        t('Scheduled moderation state')
+      )
+      ->setDisplayConfigurable('view', FALSE)
+      ->setDisplayConfigurable('form', FALSE)
+      ->setTranslatable(TRUE)
+      ->setRevisionable(TRUE);
+  }
+  return $fields;
+}

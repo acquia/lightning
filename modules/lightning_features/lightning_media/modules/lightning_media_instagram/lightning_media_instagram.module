@@ -6,20 +6,20 @@
  */
 
 use Drupal\lightning_core\OverrideHelper as Override;
-use Drupal\lightning_media_instagram\Plugin\MediaEntity\Type\Instagram;
+use Drupal\lightning_media_instagram\Plugin\media\Source\Instagram;
 
 /**
- * Implements hook_media_entity_type_info_alter().
+ * Implements hook_media_source_info_alter().
  */
-function lightning_media_instagram_media_entity_type_info_alter(array &$types) {
-  $types['instagram']['input_match'] = [
+function lightning_media_instagram_media_source_info_alter(array &$sources) {
+  $sources['instagram']['input_match'] = [
     'constraint' => 'InstagramEmbedCode',
     'field_types' => [
       'string',
       'string_long',
     ],
   ];
-  $types['instagram']['preview'] = TRUE;
+  $sources['instagram']['preview'] = TRUE;
 
-  Override::pluginClass($types['instagram'], Instagram::class);
+  Override::pluginClass($sources['instagram'], Instagram::class);
 }

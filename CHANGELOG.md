@@ -1,3 +1,42 @@
+## 2.2.5
+* The `since` option used with the `update:lightning` console command has
+  been converted to an argument and is now required. See
+  "Automated configuration updates" in the UPDATE.md file for more information.
+* Drupal core has been updated to 8.4.3. (Issue #2929035)
+* Security updated Configuration Update Manager module to 8.x-1.5.
+  (SA-CONTRIB-2017-091)
+
+## 2.2.4
+* Lightning Workflow has been updated to use core Workflows and Content
+  moderation modules and existing sites will be migrated. (Issue #2863059)
+* Added a new Scheduled Publications sub-component of Lightning Workflow which
+  replaces Scheduled Updates (which is incompatible with Content Moderation).
+* Fixed a bug where media names appeared in view modes where they had previously
+  been hidden after updating to core Media. (GitHub #521)
+* Crop API was updated to 2.x. (GitHub #519)
+* Media Entity was updated to 2.x. (Issue #2927823)
+* DropzoneJS was updated to 2.x (GitHub #528)
+* Fixed a bug where it was possible that old, irrelevant configuration updates
+  (see UPDATE.md) could be run. (GitHub #531)
+* Fixed a bug where Lightning's media browser enhancements could not be used on
+  any other view, including clones of the media browser. (Issue #2905876)
+
+## 2.2.3
+* Updated to and require a minimum of Drupal Core 8.4.1.
+
+## 2.2.2
+* Fixed a bug where certain versions of Drush would erroneously report
+  unfulfilled requirements when running database updates. (Issue #2919204)
+* Removed a duplicate directory that caused problems when downloading via
+  Composer. (GitHub #502)
+* Worked around a bug where some versions of Drush run hooks that are provided
+  by uninstalled modules. (GitHub #496)
+
+## 2.2.1
+* Lightning Media has been updated to use the new Core Media system.
+* Fixed a bug where the "Publishing status" checkbox appeared on content edit
+  forms when it should have been hidden. (GitHub #479)
+
 ## 2.2.0
 * Lightning has been updated to run on and now requires Drupal Core 8.4.x.
 

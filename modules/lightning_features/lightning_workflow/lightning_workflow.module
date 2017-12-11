@@ -5,37 +5,43 @@
  * Provides workflow enhancements for Drupal.
  */
 
+use Drupal\content_moderation\Plugin\WorkflowType\ContentModeration;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\Core\Entity\EntityPublishedInterface;
 use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
-use Drupal\Core\Form\FormStateInterface;
 use Drupal\lightning_core\Element;
-use Drupal\lightning_core\OverrideHelper as Override;
 use Drupal\lightning_core\Routing\RouteSubscriber;
-use Drupal\lightning_workflow\Form\NodeForm;
 use Drupal\lightning_workflow\Plugin\views\field\NodeBulkForm;
+use Drupal\node\NodeTypeInterface;
 use Drupal\views\ViewEntityInterface;
 use Drupal\views\ViewExecutable;
-use Drupal\workbench_moderation\Entity\ModerationState;
+use Drupal\workflows\Entity\Workflow;
 
 /**
- * Implements hook_form_FORM_ID_alter().
+ * Implements hook_ENTITY_TYPE_insert().
  */
-function lightning_workflow_form_node_type_moderation_form_alter(array &$form, FormStateInterface $form_state) {
-  $form['actions']['submit']['#submit'][] = 'lightning_workflow_submit_node_type_moderation_form';
-}
+function lightning_workflow_node_type_insert(NodeTypeInterface $node_type) {
+  // Don't do anything during a config sync.
+  if (\Drupal::isConfigSyncing()) {
+    return;
+  }
 
-function lightning_workflow_submit_node_type_moderation_form(array &$form, FormStateInterface $form_state) {
-  $was_moderated = (bool) $form['enable_moderation_state']['#default_value'];
-  $now_moderated = (bool) $form_state->getValue('enable_moderation_state');
+  $workflow = $node_type->getThirdPartySetting('lightning_workflow', 'workflow');
+  if (empty($workflow)) {
+    return;
+  }
 
-  if (!$was_moderated && $now_moderated) {
-    /** @var \Drupal\Core\Entity\EntityFormInterface $form_object */
-    $form_object = $form_state->getFormObject();
+  $workflow = Workflow::load($workflow);
+  if (empty($workflow)) {
+    return;
+  }
 
-    entity_get_form_display('node', $form_object->getEntity()->id(), 'default')
-      ->removeComponent('status')
-      ->save();
+  $plugin = $workflow->getTypePlugin();
+  if ($plugin instanceof ContentModeration) {
+    $configuration = $plugin->getConfiguration();
+    $configuration['entity_types']['node'][] = $node_type->id();
+    $plugin->setConfiguration($configuration);
+    $workflow->save();
   }
 }
 
@@ -100,6 +106,10 @@ function lightning_workflow_entity_view_alter(array &$build, EntityInterface $en
 
 /**
  * Implements hook_ENTITY_TYPE_presave().
+ *
+ * TODO: Re-implement a relationship to the latest revision, and add a field
+ * indicating if forward revisions exist. This is a known regression due to
+ * incomplete functionality in Content Moderation.
  */
 function lightning_workflow_view_presave(ViewEntityInterface $view) {
   // Don't do anything during config sync.
@@ -110,31 +120,21 @@ function lightning_workflow_view_presave(ViewEntityInterface $view) {
     $display = &$view->getDisplay('default');
     $display_options = &$display['display_options'];
 
-    // Add the moderation state as a field.
-    unset($display_options['fields']['status']);
-    $display_options['fields']['moderation_state'] = unserialize('a:37:{s:2:"id";s:16:"moderation_state";s:5:"table";s:15:"node_field_data";s:5:"field";s:16:"moderation_state";s:12:"relationship";s:4:"none";s:10:"group_type";s:5:"group";s:11:"admin_label";s:0:"";s:5:"label";s:6:"Status";s:7:"exclude";b:0;s:5:"alter";a:26:{s:10:"alter_text";b:0;s:4:"text";s:0:"";s:9:"make_link";b:0;s:4:"path";s:0:"";s:8:"absolute";b:0;s:8:"external";b:0;s:14:"replace_spaces";b:0;s:9:"path_case";s:4:"none";s:15:"trim_whitespace";b:0;s:3:"alt";s:0:"";s:3:"rel";s:0:"";s:10:"link_class";s:0:"";s:6:"prefix";s:0:"";s:6:"suffix";s:0:"";s:6:"target";s:0:"";s:5:"nl2br";b:0;s:10:"max_length";i:0;s:13:"word_boundary";b:1;s:8:"ellipsis";b:1;s:9:"more_link";b:0;s:14:"more_link_text";s:0:"";s:14:"more_link_path";s:0:"";s:10:"strip_tags";b:0;s:4:"trim";b:0;s:13:"preserve_tags";s:0:"";s:4:"html";b:0;}s:12:"element_type";s:0:"";s:13:"element_class";s:0:"";s:18:"element_label_type";s:0:"";s:19:"element_label_class";s:0:"";s:19:"element_label_colon";b:1;s:20:"element_wrapper_type";s:0:"";s:21:"element_wrapper_class";s:0:"";s:23:"element_default_classes";b:1;s:5:"empty";s:0:"";s:10:"hide_empty";b:0;s:10:"empty_zero";b:0;s:16:"hide_alter_empty";b:1;s:17:"click_sort_column";s:9:"target_id";s:4:"type";s:22:"entity_reference_label";s:8:"settings";a:1:{s:4:"link";b:0;}s:12:"group_column";s:9:"target_id";s:13:"group_columns";a:0:{}s:10:"group_rows";b:1;s:11:"delta_limit";i:0;s:12:"delta_offset";i:0;s:14:"delta_reversed";b:0;s:16:"delta_first_last";b:0;s:10:"multi_type";s:9:"separator";s:9:"separator";s:2:", ";s:17:"field_api_classes";b:0;s:11:"entity_type";s:4:"node";s:12:"entity_field";s:16:"moderation_state";s:9:"plugin_id";s:5:"field";}');
+    // Allow users to filter by moderation state.
+    $display_options['filters']['moderation_state'] = unserialize('a:15:{s:2:"id";s:16:"moderation_state";s:5:"table";s:15:"node_field_data";s:5:"field";s:16:"moderation_state";s:12:"relationship";s:4:"none";s:10:"group_type";s:5:"group";s:11:"admin_label";s:0:"";s:8:"operator";s:2:"in";s:5:"value";a:5:{s:3:"all";s:3:"all";s:15:"editorial-draft";s:15:"editorial-draft";s:16:"editorial-review";s:16:"editorial-review";s:19:"editorial-published";s:19:"editorial-published";s:18:"editorial-archived";s:18:"editorial-archived";}s:5:"group";i:1;s:7:"exposed";b:1;s:6:"expose";a:11:{s:11:"operator_id";s:19:"moderation_state_op";s:5:"label";s:16:"Moderation state";s:11:"description";s:0:"";s:12:"use_operator";b:0;s:8:"operator";s:19:"moderation_state_op";s:10:"identifier";s:16:"moderation_state";s:8:"required";b:0;s:8:"remember";b:0;s:8:"multiple";b:0;s:14:"remember_roles";a:10:{s:13:"authenticated";s:13:"authenticated";s:9:"anonymous";s:1:"0";s:13:"administrator";s:1:"0";s:12:"page_creator";s:1:"0";s:14:"layout_manager";s:1:"0";s:13:"page_reviewer";s:1:"0";s:20:"landing_page_creator";s:1:"0";s:21:"landing_page_reviewer";s:1:"0";s:13:"media_creator";s:1:"0";s:13:"media_manager";s:1:"0";}s:6:"reduce";b:0;}s:10:"is_grouped";b:0;s:10:"group_info";a:10:{s:5:"label";s:0:"";s:11:"description";s:0:"";s:10:"identifier";s:0:"";s:8:"optional";b:1;s:6:"widget";s:6:"select";s:8:"multiple";b:0;s:8:"remember";b:0;s:13:"default_group";s:3:"All";s:22:"default_group_multiple";a:0:{}s:11:"group_items";a:0:{}}s:11:"entity_type";s:4:"node";s:9:"plugin_id";s:23:"moderation_state_filter";}');
 
-    // Filter by moderation state instead of status.
-    unset($display_options['filters']['status']);
-    unset($display_options['filters']['status_extra']);
-    $display['display_options']['filters']['moderation_state'] = unserialize('a:16:{s:2:"id";s:16:"moderation_state";s:5:"table";s:15:"node_field_data";s:5:"field";s:16:"moderation_state";s:12:"relationship";s:4:"none";s:10:"group_type";s:5:"group";s:11:"admin_label";s:0:"";s:8:"operator";s:1:"=";s:5:"value";s:0:"";s:5:"group";i:1;s:7:"exposed";b:1;s:6:"expose";a:10:{s:11:"operator_id";s:19:"moderation_state_op";s:5:"label";s:6:"Status";s:11:"description";s:0:"";s:12:"use_operator";b:0;s:8:"operator";s:19:"moderation_state_op";s:10:"identifier";s:16:"moderation_state";s:8:"required";b:0;s:8:"remember";b:0;s:8:"multiple";b:0;s:14:"remember_roles";a:3:{s:13:"authenticated";s:13:"authenticated";s:9:"anonymous";s:1:"0";s:13:"administrator";s:1:"0";}}s:10:"is_grouped";b:0;s:10:"group_info";a:10:{s:5:"label";s:0:"";s:11:"description";s:0:"";s:10:"identifier";s:0:"";s:8:"optional";b:1;s:6:"widget";s:6:"select";s:8:"multiple";b:0;s:8:"remember";b:0;s:13:"default_group";s:3:"All";s:22:"default_group_multiple";a:0:{}s:11:"group_items";a:0:{}}s:11:"entity_type";s:4:"node";s:12:"entity_field";s:16:"moderation_state";s:9:"plugin_id";s:6:"string";}');
+    // Ditch status field and the "published"/"published or admin" filters.
+    unset(
+      $display_options['filters']['status'],
+      $display_options['filters']['status_extra'],
+      $display_options['fields']['status']
+    );
 
-    // Add a relationship to the latest revision.
-    $display_options['relationships']['latest_revision__node'] = unserialize('a:8:{s:2:"id";s:21:"latest_revision__node";s:5:"table";s:26:"workbench_revision_tracker";s:5:"field";s:21:"latest_revision__node";s:12:"relationship";s:4:"none";s:10:"group_type";s:5:"group";s:11:"admin_label";s:15:"latest revision";s:8:"required";b:0;s:9:"plugin_id";s:8:"standard";}');
-
-    // Add the forward revision indicator.
-    $display_options['fields']['forward_revision_exists'] = unserialize('a:23:{s:2:"id";s:23:"forward_revision_exists";s:5:"table";s:15:"node_field_data";s:5:"field";s:23:"forward_revision_exists";s:12:"relationship";s:4:"none";s:10:"group_type";s:5:"group";s:11:"admin_label";s:0:"";s:5:"label";s:21:"Has unpublished edits";s:7:"exclude";b:0;s:5:"alter";a:26:{s:10:"alter_text";b:0;s:4:"text";s:0:"";s:9:"make_link";b:0;s:4:"path";s:0:"";s:8:"absolute";b:0;s:8:"external";b:0;s:14:"replace_spaces";b:0;s:9:"path_case";s:4:"none";s:15:"trim_whitespace";b:0;s:3:"alt";s:0:"";s:3:"rel";s:0:"";s:10:"link_class";s:0:"";s:6:"prefix";s:0:"";s:6:"suffix";s:0:"";s:6:"target";s:0:"";s:5:"nl2br";b:0;s:10:"max_length";i:0;s:13:"word_boundary";b:1;s:8:"ellipsis";b:1;s:9:"more_link";b:0;s:14:"more_link_text";s:0:"";s:14:"more_link_path";s:0:"";s:10:"strip_tags";b:0;s:4:"trim";b:0;s:13:"preserve_tags";s:0:"";s:4:"html";b:0;}s:12:"element_type";s:0:"";s:13:"element_class";s:0:"";s:18:"element_label_type";s:0:"";s:19:"element_label_class";s:0:"";s:19:"element_label_colon";b:1;s:20:"element_wrapper_type";s:0:"";s:21:"element_wrapper_class";s:0:"";s:23:"element_default_classes";b:1;s:5:"empty";s:0:"";s:10:"hide_empty";b:0;s:10:"empty_zero";b:0;s:16:"hide_alter_empty";b:1;s:11:"entity_type";s:4:"node";s:9:"plugin_id";s:23:"forward_revision_exists";}');
+    // Add a field to display the moderation state.
+    $display_options['fields']['moderation_state'] = unserialize('a:37:{s:2:"id";s:16:"moderation_state";s:5:"table";s:35:"content_moderation_state_field_data";s:5:"field";s:16:"moderation_state";s:12:"relationship";s:4:"none";s:10:"group_type";s:5:"group";s:11:"admin_label";s:16:"Moderation state";s:5:"label";s:16:"Moderation state";s:7:"exclude";b:0;s:5:"alter";a:26:{s:10:"alter_text";b:0;s:4:"text";s:0:"";s:9:"make_link";b:0;s:4:"path";s:0:"";s:8:"absolute";b:0;s:8:"external";b:0;s:14:"replace_spaces";b:0;s:9:"path_case";s:4:"none";s:15:"trim_whitespace";b:0;s:3:"alt";s:0:"";s:3:"rel";s:0:"";s:10:"link_class";s:0:"";s:6:"prefix";s:0:"";s:6:"suffix";s:0:"";s:6:"target";s:0:"";s:5:"nl2br";b:0;s:10:"max_length";i:0;s:13:"word_boundary";b:1;s:8:"ellipsis";b:1;s:9:"more_link";b:0;s:14:"more_link_text";s:0:"";s:14:"more_link_path";s:0:"";s:10:"strip_tags";b:0;s:4:"trim";b:0;s:13:"preserve_tags";s:0:"";s:4:"html";b:0;}s:12:"element_type";s:0:"";s:13:"element_class";s:0:"";s:18:"element_label_type";s:0:"";s:19:"element_label_class";s:0:"";s:19:"element_label_colon";b:1;s:20:"element_wrapper_type";s:0:"";s:21:"element_wrapper_class";s:0:"";s:23:"element_default_classes";b:1;s:5:"empty";s:3:"N/A";s:10:"hide_empty";b:0;s:10:"empty_zero";b:0;s:16:"hide_alter_empty";b:1;s:17:"click_sort_column";s:5:"value";s:4:"type";s:6:"string";s:8:"settings";a:1:{s:14:"link_to_entity";b:0;}s:12:"group_column";s:5:"value";s:13:"group_columns";a:0:{}s:10:"group_rows";b:1;s:11:"delta_limit";i:0;s:12:"delta_offset";i:0;s:14:"delta_reversed";b:0;s:16:"delta_first_last";b:0;s:10:"multi_type";s:9:"separator";s:9:"separator";s:2:", ";s:17:"field_api_classes";b:0;s:11:"entity_type";s:24:"content_moderation_state";s:12:"entity_field";s:16:"moderation_state";s:9:"plugin_id";s:5:"field";}');
 
     Element::toTail($display_options['fields'], 'operations');
   }
-}
-
-/**
- * Implements hook_entity_type_alter().
- */
-function lightning_workflow_entity_type_alter(array &$entity_types) {
-  Override::entityForm($entity_types['node'], NodeForm::class);
-  Override::entityForm($entity_types['node'], NodeForm::class, 'edit');
 }
 
 /**
@@ -149,27 +149,27 @@ function lightning_workflow_modules_installed(array $modules) {
     \Drupal::service('lightning.content_roles')
       ->grantPermissions('creator', [
         'view any unpublished content',
-        'use draft_draft transition',
-        'use draft_needs_review transition',
-        'use needs_review_needs_review transition',
+        'use editorial transition create_new_draft',
+        'use editorial transition review',
         'view latest version',
       ])
       ->grantPermissions('reviewer', [
-        'use draft_published transition',
-        'use needs_review_draft transition',
-        'use needs_review_published transition',
-        'use published_published transition',
-        'use published_archived transition',
-        'view moderation states',
+        'use editorial transition publish',
+        'use editorial transition review',
+        'use editorial transition archive',
       ]);
   }
 }
 
 /**
- * Implements hook_views_data().
+ * Implements hook_views_data_alter().
  */
-function lightning_workflow_views_data() {
-  return \Drupal::service('lightning_workflow.views_data')->getAll();
+function lightning_workflow_views_data_alter(array &$data) {
+  foreach ($data as $table => $table_data) {
+    if (isset($table_data['moderation_state']['field'])) {
+      $data[$table]['moderation_state']['field'] += ['id' => 'null'];
+    }
+  }
 }
 
 /**
@@ -182,33 +182,10 @@ function lightning_workflow_views_plugins_field_alter(array &$plugins) {
 }
 
 /**
- * Implements hook_form_FORM_ID_alter().
- *
- * Transform the WBM status filter field on /admin/content from a text field to
- * a select list.
- */
-function lightning_workflow_form_views_exposed_form_alter(array &$form, FormStateInterface $form_state) {
-  if ($form_state->getStorage()['view']->storage->id() == 'content') {
-    if (isset($form['moderation_state'])) {
-      $form['moderation_state'] = [
-        '#type' => 'select',
-        '#options' => [
-          '' => \Drupal::translation()->translate('- any -'),
-        ],
-      ];
-      /** @var \Drupal\workbench_moderation\ModerationStateInterface $state */
-      foreach (ModerationState::loadMultiple() as $state) {
-        $form['moderation_state']['#options'][$state->id()] = $state->label();
-      }
-    }
-  }
-}
-
-/**
  * Implements hook_views_pre_render().
  */
 function lightning_workflow_views_pre_render(ViewExecutable $view) {
-  if ($view->storage->id() == 'moderation_history') {
+  if ($view->id() == 'moderation_history') {
     foreach ($view->result as $index => $row) {
       $entity = $row->_entity;
 

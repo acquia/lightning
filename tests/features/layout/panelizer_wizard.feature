@@ -12,7 +12,7 @@ Feature: Panelizer Wizard
 
   @landing-page @javascript @0e995113
   Scenario: Saving a panelized entity should not affect blocks placed via IPE
-    Given I am logged in as a user with the "access panels in-place editing,administer panelizer node landing_page content,edit any landing_page content,view any unpublished content,use draft_draft transition,view latest version,access user profiles,set panelizer default" permissions
+    Given I am logged in as a user with the "access panels in-place editing,administer panelizer node landing_page content,edit any landing_page content,view any unpublished content,use editorial transition create_new_draft,view latest version,access user profiles,set panelizer default" permissions
     And landing_page content:
       | title  | path    | moderation_state |
       | Foobar | /foobar | draft            |
@@ -20,7 +20,7 @@ Feature: Panelizer Wizard
     And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
     # Click IPE Save
     And I save the layout
-    And I click "Edit draft"
+    And I visit the edit form
     And I press "Save"
     Then I should see a "views_block:who_s_online-who_s_online_block" block
 
@@ -53,11 +53,11 @@ Feature: Panelizer Wizard
       | title  | path    | moderation_state | author |
       | Foobar | /foobar | draft            | Foo    |
     When I visit "/foobar"
-    And I click "Edit draft"
+    And I visit the edit form
     And I select "Two Column" from "Full content"
     And press "Save"
     Then I should see "Authored by"
-    And I click "Edit draft"
+    And I visit the edit form
     And I select "Single Column" from "Full content"
     And press "Save"
     And I should not see "Authored by"
@@ -76,7 +76,7 @@ Feature: Panelizer Wizard
     When I visit "/foobar"
     And I place the "views_block:who_s_online-who_s_online_block" block from the "Lists (Views)" category
     And I save the layout
-    And I click "Edit draft"
+    And I visit the edit form
     Then the "Full content" field should be disabled
 
   @landing-page @javascript @6025f79d
@@ -92,12 +92,12 @@ Feature: Panelizer Wizard
       | type  | info               | body    | uuid                  |
       | basic | Here be dragons... | RAWWWR! | test--here-be-dragons |
     When I visit "/foobar"
-    And I click "Edit draft"
+    And I visit the edit form
     And I select "two_column" from "Full content"
     And I press "Save"
     And I place the "block_content:test--here-be-dragons" block from the "Custom" category
     And I save the layout
-    And I click "Edit draft"
+    And I visit the edit form
     And I press "Save"
     Then I should see a "block_content:test--here-be-dragons" block
 

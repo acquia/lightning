@@ -14,7 +14,7 @@ Feature: Panelizer
 
   @landing-page @javascript @43f95224
   Scenario: One-off changes can be made to Landing Pages using the IPE out of the box.
-    Given I am logged in as a user with the "access panels in-place editing,administer panelizer node landing_page content,edit any landing_page content,view any unpublished content,use draft_draft transition,view latest version,access user profiles,set panelizer default" permissions
+    Given I am logged in as a user with the "access panels in-place editing,administer panelizer node landing_page content,edit any landing_page content,view any unpublished content,use editorial transition create_new_draft,view latest version,access user profiles,set panelizer default" permissions
     And landing_page content:
       | title  | path    | moderation_state |
       | Foobar | /foobar | draft            |
@@ -119,9 +119,11 @@ Feature: Panelizer
     And I select "Content" from "Region"
     And I press "Save block"
     And I visit "/admin/content"
+    And I select "- Any -" from "moderation_state"
+    And I apply the exposed filters
     And I click "Fox"
-    And I click "New draft"
-    And I select "Archived" from "Moderation state"
+    And I visit the edit form
+    And I select "Archived" from "moderation_state[0][state]"
     And I press "Save"
     And I am an anonymous user
     And I visit "/"

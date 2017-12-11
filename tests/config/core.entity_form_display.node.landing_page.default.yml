@@ -7,11 +7,12 @@ dependencies:
     - field.field.node.landing_page.panelizer
     - node.type.landing_page
   module:
+    - content_moderation
+    - datetime
     - metatag
     - panelizer
     - path
     - text
-    - workbench_moderation
 _core: {  }
 id: node.landing_page.default
 targetEntityType: node
@@ -36,8 +37,14 @@ content:
   field_meta_tags:
     type: metatag_firehose
     region: content
-    weight: 26
+    weight: 101
     settings: {  }
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    settings: {  }
+    region: content
     third_party_settings: {  }
   panelizer:
     type: panelizer
@@ -49,6 +56,19 @@ content:
     type: path
     weight: 4
     settings: {  }
+    third_party_settings: {  }
+    region: content
+  scheduled_publication:
+    type: datetime_default
+    weight: 20
+    region: content
+    settings: {  }
+    third_party_settings: {  }
+  status:
+    type: boolean_checkbox
+    weight: 10
+    settings:
+      display_label: true
     third_party_settings: {  }
     region: content
   title:
@@ -70,5 +90,4 @@ content:
     region: content
 hidden:
   promote: true
-  status: true
   sticky: true
