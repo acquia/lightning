@@ -3,6 +3,7 @@
 namespace Drupal\Tests\api_test\Functional;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Core\Url;
 use Drupal\Tests\BrowserTestBase;
 use Psr\Http\Message\ResponseInterface;
 
