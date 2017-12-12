@@ -4,7 +4,6 @@ namespace Drupal\lightning;
 
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\ExtensionDiscovery;
-use Drupal\field\Tests\reEnableModuleFieldTest;
 
 /**
  * Helper object to locate Lightning components and sub-components.
