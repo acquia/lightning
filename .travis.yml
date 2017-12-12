@@ -53,7 +53,7 @@ before_install:
 install:
   # Add Composer's local bin directory to the PATH so that we will be running
   # our installed versions of Drush, PHPCS, Behat, PhantomJS, etc.
-  - export PATH="$HOME/.composer/vendor/bin:$TRAVIS_BUILD_DIR/bin:$PATH"
+  - export PATH="$HOME/.composer/vendor/bin:$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
 
   # composer install should fail on bad patches.
   - export COMPOSER_EXIT_ON_PATCH_FAILURE=1
@@ -89,7 +89,7 @@ script:
   - cd docroot
   - phpunit --configuration ./core --group lightning,profiles
   - cd ..
-  - bin/robo test:behat -- --stop-on-failure
+  - robo test:behat -- --stop-on-failure
 
 after_failure:
   - cd docroot

@@ -6,19 +6,19 @@ class RoboFile extends \Robo\Tasks {
    * {@inheritdoc}
    */
   protected function taskBehat($behat = NULL) {
-    return parent::taskBehat($behat ?: 'bin/behat')
+    return parent::taskBehat($behat ?: 'vendor/bin/behat')
       ->config('docroot/sites/default/files/behat.yml')
       ->option('strict');
   }
 
   protected function taskDrupal($command, $console = NULL) {
-    return $this->taskExec($console ?: '../bin/drupal')
+    return $this->taskExec($console ?: '../vendor/bin/drupal')
       ->rawArg($command)
       ->dir('docroot');
   }
 
   protected function taskDrush($command, $drush = NULL) {
-    return $this->taskExec($drush ?: '../bin/drush')
+    return $this->taskExec($drush ?: '../vendor/bin/drush')
       ->rawArg($command)
       ->dir('docroot');
   }
@@ -108,7 +108,7 @@ class RoboFile extends \Robo\Tasks {
    */
   public function testBehat(array $arguments) {
     $this
-      ->taskExec('bin/selenium-server-standalone')
+      ->taskExec('vendor/bin/selenium-server-standalone')
       ->rawArg('-port 4444')
       ->rawArg('-log selenium.log')
       ->background()
