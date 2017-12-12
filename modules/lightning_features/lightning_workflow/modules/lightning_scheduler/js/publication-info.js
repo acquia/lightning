@@ -7,7 +7,7 @@
       var time_element = this.name.replace('[date]', '[time]');
       var date_value = this.form[date_element].value;
       var time_value = this.form[time_element].value;
-      var info_element = this.form.getElementById('scheduled-publication-info');
+      var info_element = this.form.querySelector('#scheduled-publication-info');
 
       if (date_value) {
         if (time_value) {
