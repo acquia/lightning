@@ -71,6 +71,7 @@ projects[panels][patch][] = https://www.drupal.org/files/issues/panels-ipe-28786
 projects[panels][patch][] = https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch
 projects[panels][patch][] = https://www.drupal.org/files/issues/2908897-2.patch
 projects[panels][patch][] = https://www.drupal.org/files/issues/2913353-2.patch
+projects[panels][patch][] = https://www.drupal.org/files/issues/panels-ipe-date-field-2825028-10.patch
 projects[panels][version] = 4.2
 projects[pathauto][type] = module
 projects[pathauto][version] = 1.0
