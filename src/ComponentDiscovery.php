@@ -11,6 +11,11 @@ use Drupal\Core\Extension\ExtensionDiscovery;
 class ComponentDiscovery {
 
   /**
+   * Prefix that Lightning components are expected to start with.
+   */
+  const COMPONENT_PREFIX = 'lightning_';
+
+  /**
    * The extension discovery iterator.
    *
    * @var \Drupal\Core\Extension\ExtensionDiscovery
@@ -70,7 +75,7 @@ class ComponentDiscovery {
    */
   public function getAll() {
     if (is_null($this->components)) {
-      $identifier = 'lightning_';
+      $identifier = self::COMPONENT_PREFIX;
 
       $filter = function (Extension $module) use ($identifier) {
         return strpos($module->getName(), $identifier) === 0;
@@ -88,7 +93,7 @@ class ComponentDiscovery {
    *   Array of extension objects for top-level Lightning components.
    */
   public function getMainComponents() {
-    $identifier = 'lightning_';
+    $identifier = self::COMPONENT_PREFIX;
 
     $filter = function (Extension $module) use ($identifier) {
       // Assumes that:
@@ -96,7 +101,7 @@ class ComponentDiscovery {
       //    main component.
       // 2. The main component's directory starts with "lightning_".
       // E.g.: "/lightning_core/modules/lightning_search".
-      $path = explode('/', $module->getPath());
+      $path = explode(DIRECTORY_SEPARATOR, $module->getPath());
       $parent = $path[count($path)-3];
       return strpos($parent, $identifier) !== 0;
     };
