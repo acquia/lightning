@@ -178,9 +178,9 @@ function lightning_workflow_update_8005() {
   $key = "$display_options.fields.moderation_state";
   $field = $config->get($key);
   if ($field) {
-    $field['table'] = $entity_type_manager
-      ->getDefinition('content_moderation_state')
-      ->getRevisionDataTable();
+    $field['table'] = $entity_type_manager->hasDefinition('content_moderation_state')
+      ? $entity_type_manager->getDefinition('content_moderation_state')->getRevisionDataTable()
+      : 'content_moderation_state_field_revision';
     $field['relationship'] = 'moderation_state';
     $field['admin_label'] = 'Moderation state';
     $field['click_sort_column'] = 'value';
