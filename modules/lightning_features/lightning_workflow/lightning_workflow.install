@@ -133,3 +133,80 @@ function lightning_workflow_update_8004() {
   }
   $config->save();
 }
+
+/**
+ * Updates the moderation_history view to work with Content Moderation.
+ */
+function lightning_workflow_update_8005() {
+  $config = \Drupal::configFactory()->getEditable('views.view.moderation_history');
+
+  if ($config->isNew()) {
+    return;
+  }
+  $entity_type_manager = \Drupal::entityTypeManager();
+
+  $display_options = 'display.default.display_options';
+
+  // Add a relationship to the moderation state.
+  $key = "$display_options.relationships.moderation_state";
+  $relationship = $config->get($key);
+  if (empty($relationship)) {
+    $config->set($key, [
+      'id' => 'moderation_state',
+      'table' => $entity_type_manager->getDefinition('node')->getRevisionDataTable(),
+      'field' => 'moderation_state',
+      'relationship' => 'none',
+      'group_type' => 'group',
+      'admin_label' => 'Moderation state',
+      'required' => TRUE,
+      'entity_type' => 'node',
+      'plugin_id' => 'standard',
+    ]);
+  }
+
+  // Update the nid argument, if it exists.
+  $key = "$display_options.arguments.nid";
+  $argument = $config->get($key);
+  if ($argument) {
+    $argument['default_action'] = 'default';
+    $argument['default_argument_type'] = 'node';
+    $argument['default_argument_options'] = [];
+    $config->set($key, $argument);
+  }
+
+  // Update the moderation_state field, if it exists.
+  $key = "$display_options.fields.moderation_state";
+  $field = $config->get($key);
+  if ($field) {
+    $field['table'] = $entity_type_manager
+      ->getDefinition('content_moderation_state')
+      ->getRevisionDataTable();
+    $field['relationship'] = 'moderation_state';
+    $field['admin_label'] = 'Moderation state';
+    $field['click_sort_column'] = 'value';
+    $field['type'] = 'content_moderation_state';
+    $field['settings'] = [];
+    $field['group_column'] = 'value';
+    $field['entity_type'] = 'content_moderation_state';
+    $config->set($key, $field);
+  }
+
+  // Update the path of the page display, if it exists, and add a menu link.
+  $key = 'display.page.display_options';
+  $display = $config->get($key);
+  if ($display) {
+    $display['path'] = str_replace('node/%/', 'node/%node/', $display['path']);
+    $display['menu'] = [
+      'type' => 'tab',
+      'title' => 'History',
+      'description' => '',
+      'expanded' => FALSE,
+      'parent' => '',
+      'weight' => 0,
+      'context' => 0,
+      'menu_name' => 'main',
+    ];
+    $config->set($key, $display);
+  }
+  $config->save();
+}
