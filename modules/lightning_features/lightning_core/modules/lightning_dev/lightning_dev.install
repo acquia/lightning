@@ -75,6 +75,9 @@ function lightning_dev_install() {
     ->set('entity_json', TRUE)
     ->set('bundle_docs', TRUE)
     ->save();
+
+  // Expose the moderation_history view in the UI.
+  lightning_dev_update_8009();
 }
 
 /**
@@ -270,4 +273,30 @@ function lightning_dev_update_8008() {
     ->clear('private_key')
     ->clear('public_key')
     ->save();
+}
+
+/**
+ * Exposes the moderation_history view as a tab on node pages.
+ */
+function lightning_dev_update_8009() {
+  $config = \Drupal::configFactory()->getEditable('views.view.moderation_history');
+
+  if ($config->isNew()) {
+    return;
+  }
+  $key = 'display.page.display_options';
+  $display = $config->get($key);
+  if ($display) {
+    $display['menu'] = [
+      'type' => 'tab',
+      'title' => 'History',
+      'description' => '',
+      'expanded' => FALSE,
+      'parent' => '',
+      'weight' => 0,
+      'context' => '0',
+      'menu_name' => 'main',
+    ];
+    $config->set($key, $display)->save();
+  }
 }

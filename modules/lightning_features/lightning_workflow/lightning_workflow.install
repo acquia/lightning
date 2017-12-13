@@ -191,21 +191,11 @@ function lightning_workflow_update_8005() {
     $config->set($key, $field);
   }
 
-  // Update the path of the page display, if it exists, and add a menu link.
+  // Update the path of the page display, if it exists.
   $key = 'display.page.display_options';
   $display = $config->get($key);
   if ($display) {
     $display['path'] = str_replace('node/%/', 'node/%node/', $display['path']);
-    $display['menu'] = [
-      'type' => 'tab',
-      'title' => 'History',
-      'description' => '',
-      'expanded' => FALSE,
-      'parent' => '',
-      'weight' => 0,
-      'context' => 0,
-      'menu_name' => 'main',
-    ];
     $config->set($key, $display);
   }
   $config->save();
