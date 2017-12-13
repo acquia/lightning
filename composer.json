@@ -31,9 +31,6 @@
     "bin": [
       "lightning-subprofile"
     ],
-    "config": {
-        "bin-dir": "bin/"
-    },
     "repositories": [
         {
             "type": "composer",
@@ -48,12 +45,12 @@
         "post-install-cmd": [
             "PhantomInstaller\\Installer::installPhantomJS",
             "@composer drupal-scaffold",
-            "./bin/phing push",
-            "./bin/phing symlink"
+            "./vendor/bin/phing push",
+            "./vendor/bin/phing symlink"
         ],
         "post-update-cmd": [
-            "./bin/phing push",
-            "./bin/phing symlink",
+            "./vendor/bin/phing push",
+            "./vendor/bin/phing symlink",
             "@composer package"
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
