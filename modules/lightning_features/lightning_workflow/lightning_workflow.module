@@ -189,7 +189,7 @@ function lightning_workflow_views_pre_render(ViewExecutable $view) {
     foreach ($view->result as $index => $row) {
       $entity = $row->_entity;
 
-      if (empty($previous) || $previous->moderation_state->target_id != $entity->moderation_state->target_id) {
+      if (empty($previous) || $previous->moderation_state->value != $entity->moderation_state->value) {
         $previous = $entity;
       }
       else {
