@@ -69,9 +69,27 @@ Feature: Workflow moderation states
     And I should not see "Terry Jones"
     And I should see "Eric Idle"
 
+  @6a1db3b1
+  Scenario: Examining the moderation history of a piece of content
+    Given I am logged in as a user with the administrator role
+    And page content:
+      | title           | moderation_state | path     |
+      | Samuel L. Ipsum | draft            | /slipsum |
+    When I visit "/slipsum"
+    And I visit the edit form
+    And I select "In review" from "moderation_state[0][state]"
+    And I press "Save"
+    And I visit the edit form
+    And I select "Published" from "moderation_state[0][state]"
+    And I press "Save"
+    And I click "History"
+    Then I should see "Set to draft"
+    And I should see "Set to review"
+    And I should see "Set to published"
+
   @javascript @763fbb2c
   Scenario: Quick edit a forward revision
-    Given I am logged in as a user with the "administrator" role
+    Given I am logged in as a user with the administrator role
     And page content:
       | title | moderation_state | path   |
       | Squid | published        | /squid |
