@@ -44,3 +44,10 @@ services:
     arguments: []
     tags:
       - { name: drupal.generator }
+
+  lightning.lightning_version:
+    class: 'Drupal\lightning\Command\VersionCommand'
+    arguments:
+            - '@app.root'
+    tags:
+      - { name: drupal.command }
