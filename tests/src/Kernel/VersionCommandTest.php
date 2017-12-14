@@ -5,6 +5,11 @@ namespace Drupal\Tests\lightning\Kernel;
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\lightning\Command\VersionCommand;
 
+/**
+ * @group lightning
+ *
+ * @coversDefaultClass \Drupal\lightning\Command\VersionCommand
+ */
 class VersionCommandTest extends KernelTestBase {
 
   /**

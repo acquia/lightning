@@ -77,14 +77,17 @@ class VersionCommand extends ContainerAwareCommand {
    * NOTE: This will break if the minor version number is greater than 9.
    *
    * @param $drupal_version
-   *   The version in 8.x-n.n format.
+   *   The version in 8.x-n.nn format.
    *
    * @return string
    *   Semantic version
    */
   public static function toSemanticVersion($drupal_version) {
     preg_match('/^8\.x-(\d+).(\d)(\d+)(-.+)?$/', $drupal_version, $matches);
-    $semver = "$matches[1].$matches[2]." . intval($matches[3]) . $matches[4];
+    $semver = "$matches[1].$matches[2]." . intval($matches[3]);
+    if (isset($matches[4])) {
+      $semver = $semver .$matches[4];
+    }
     return $semver;
   }
 
