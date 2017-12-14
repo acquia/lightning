@@ -28,12 +28,15 @@ class ReleaseVersion {
     $finder = (new Finder())
       ->name('*.info.yml')
       ->in('.')
-      ->exclude('docroot');
+      ->exclude(['docroot', 'vendor']);
 
     /** @var \Symfony\Component\Finder\SplFileInfo $info_file */
     foreach ($finder as $info_file) {
       $info = Yaml::parse($info_file->getContents());
 
+      if ($info['name'] == 'Lightning' && $info['type'] == 'profile') {
+        $info['datestamp'] = date('U');
+      }
       // Wrapping the version number in << and >> will cause the dumper to quote
       // the string, which is necessary for compliance with the strict PECL
       // parser.
