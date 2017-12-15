@@ -25,7 +25,7 @@ class VersionCommandTest extends KernelTestBase {
 
     foreach ($drupal_versions as $drupal_version => $expected_semantic_version) {
       $generated_semantic_version = VersionCommand::toSemanticVersion($drupal_version);
-      $this->assertEquals($expected_semantic_version, $generated_semantic_version);
+      $this->assertSame($expected_semantic_version, $generated_semantic_version);
     }
   }
 

@@ -8,12 +8,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
-use Drupal\Console\Annotations\DrupalCommand;
 
 /**
- * Class VersionCommand.
- *
- * @DrupalCommand
+ * A Drupal Console command that simply prints the semver converted version of
+ * the current Lightning codebase to stdout.
  */
 class VersionCommand extends Command {
 
@@ -38,13 +36,6 @@ class VersionCommand extends Command {
   /**
    * {@inheritdoc}
    */
-  protected function configure() {
-    $this->setName('lightning:version');
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $finder = (new Finder())
       ->files()
@@ -53,13 +44,16 @@ class VersionCommand extends Command {
 
     foreach ($finder as $info_file) {
       $info = Yaml::parse($info_file->getContents());
-      if (($info['distribution']['name'] == 'Lightning') && isset($info['version'])) {
+      if ($info['distribution']['name'] === 'Lightning' && isset($info['version'])) {
         // There should only be one file in docroot/profiles named
         // lightning.info.yml, but just to make sure we have the right file in
         // the iterator, break out when we have enough information to be
         // reasonably confident.
         break;
       }
+    }
+    if (!isset($info)) {
+      throw new \Exception('Lightning info file not found.');
     }
 
     $io = new DrupalStyle($input, $output);
@@ -76,7 +70,7 @@ class VersionCommand extends Command {
    *
    * NOTE: This will break if the minor version number is greater than 9.
    *
-   * @param $drupal_version
+   * @param string $drupal_version
    *   The version in 8.x-n.nn format.
    *
    * @return string
@@ -86,7 +80,10 @@ class VersionCommand extends Command {
     preg_match('/^8\.x-(\d+).(\d)(\d+)(-.+)?$/', $drupal_version, $matches);
     $semver = "$matches[1].$matches[2]." . intval($matches[3]);
     if (isset($matches[4])) {
-      $semver = $semver .$matches[4];
+      // $matches[4] is only populated if the version has a "-[prerelease]"
+      // string at the end so we must check to see if it exists before appending
+      // it back onto the end of the converted string.
+      $semver = $semver . $matches[4];
     }
     return $semver;
   }
