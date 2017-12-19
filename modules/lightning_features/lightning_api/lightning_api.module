@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Form\FormStateInterface;
 use Drupal\Core\Url;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
@@ -78,4 +79,18 @@ function lightning_api_entity_operation(EntityInterface $entity) {
   }
 
   return $operations;
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter.
+ */
+function lightning_api_form_oauth2_token_settings_alter(array &$form, FormStateInterface $form_state, $form_id) {
+  // The key generation form provided by Simple OAuth doesn't generate unique
+  // key names (or allow the user to override the names) and doesn't allow the
+  // user to specify the location of the OpenSSL config file. Specifically, the
+  // fact that the names are always the same could cause problems on systems
+  // where the home directory stores keys for more than one application. So hide
+  // the link to that form and users can continue to use the one provided by
+  // Lightning API.
+  $form['actions']['generate']['keys']['#access'] = FALSE;
 }
