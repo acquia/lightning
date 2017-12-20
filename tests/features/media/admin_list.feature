@@ -9,8 +9,8 @@ Feature: Media content list page
       | tweet     | I'm a tweet      | https://twitter.com/50NerdsofGrey/status/757319527151636480 | 1      | 1                      |
       | instagram | I'm an instagram | https://www.instagram.com/p/BaecNGYAYyP/                    | 1      | 1                      |
     When I visit "/admin/content/media"
-    Then I should see "Publishing status"
-    And I should see "Provider"
+    Then I should see "Published status"
+    And I should see "Source"
     And I should see "Media name"
     And I should see "Language"
 
