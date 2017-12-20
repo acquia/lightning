@@ -3,7 +3,7 @@
   fields via IPE. (Issue #2825028)
 * Fixed a problem with CKEditor caused by a bug in the new Lightning Scheduler.
   (Issue #2929997)
-* Lightning and Lightning Project  no longer override the default location of
+* Lightning and Lightning Project no longer override the default location of
   Composer's "bin" directory. (Issue #2927504)
 * Made the Moderation History view compatible with Content Moderation.
   (Issue #2930288)
