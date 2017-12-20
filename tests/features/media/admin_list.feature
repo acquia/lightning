@@ -23,7 +23,7 @@ Feature: Media content list page
       | instagram | I'm an instagram | https://www.instagram.com/p/BaecNGYAYyP/                    | 1      | 1                      |
     When I visit "/admin/content/media"
     And I select "Tweet" from "Source"
-    And I press the "Filter" button
+    And I apply the exposed filters
     Then I should see "I'm a tweet"
     And I should not see "I'm an instagram"
 
