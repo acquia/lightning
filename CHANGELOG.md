@@ -1,3 +1,21 @@
+## 2.2.6
+* Fixed a problem that caused errors when placing blocks that contained date
+  fields via IPE. (Issue #2825028)
+* Fixed a problem with CKEditor caused by a bug in the new Lightning Scheduler.
+  (Issue #2929997)
+* Lightning and Lightning Project no longer override the default location of
+  Composer's "bin" directory. (Issue #2927504)
+* Made the Moderation History view compatible with Content Moderation.
+  (Issue #2930288)
+* Added a Console command that will return the current version of Lightning in
+  SemVer format. (GitHub #543)
+* Upadated the following modules:
+  * DropzoneJS
+  * Media Entity (Only used by sites that have not migrated to core Media.)
+  * JSON API
+  * Simple OAuth
+  * Video Embed Field
+
 ## 2.2.5
 * The `since` option used with the `update:lightning` console command has
   been converted to an argument and is now required. See
