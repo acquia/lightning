@@ -22,7 +22,7 @@ Feature: Media content list page
       | tweet     | I'm a tweet      | https://twitter.com/50NerdsofGrey/status/757319527151636480 | 1      | 1                      |
       | instagram | I'm an instagram | https://www.instagram.com/p/BaecNGYAYyP/                    | 1      | 1                      |
     When I visit "/admin/content/media"
-    And I select "Tweet" from "Provider"
+    And I select "Tweet" from "Source"
     And I press the "Apply" button
     Then I should see "I'm a tweet"
     And I should not see "I'm an instagram"
