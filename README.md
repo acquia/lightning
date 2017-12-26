@@ -87,8 +87,8 @@ Lightning includes tools for building organization-specific content workflows.
 Out of the box, Lightning gives you the ability to manage content in one of four
 workflow states (draft, needs review, published, and archived). You can create
 as many additional states as you like and define transitions between them. It's
-also possible to schedule content (either a single node or many at once) to be
-transitioned between states at a specific future date and time.
+also possible to schedule content to be transitioned between states at a
+specific future date and time.
 
 ### API-First
 Lightning ships with several modules which, together, quickly set up Drupal to
