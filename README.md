@@ -78,9 +78,8 @@ for each view mode of that content type, which you can choose from (or override
 on a one-off basis) for individual pieces of content.
 
 Eight layouts are provided out of the box by Panels. You can create your own
-layouts (see the [Layout Plugin](https://www.drupal.org/project/layout_plugin)
-module) or install a contributed library of layouts like
-[Radix Layouts](https://www.drupal.org/project/radix_layouts).
+layouts (see the Layout Discovery module bundled with Core) or install a
+contributed library of layouts like [Radix Layouts](https://www.drupal.org/project/radix_layouts).
 
 ### Workflow
 Lightning includes tools for building organization-specific content workflows.
@@ -108,10 +107,6 @@ We publish sprint plans for each patch release. You can find a link to the
 current one in [this meta-issue][meta_releases] on Drupal.org.
 
 ## Resources
-You can find general best practices documentation inside the `help` directory of
-each Lightning "base" module. Integration with the
-[Advanced Help](https://www.drupal.org/project/advanced_help) module is planned.
-
 Demonstration videos for each of our user stories can be found [here][demo_videos].
 
 Please use the [Drupal.org issue queue][issue_queue] for latest information and

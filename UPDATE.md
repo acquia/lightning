@@ -80,6 +80,30 @@ are currently running Beta 1 and are trying to update to Beta 3, you will need
 to follow the instructions for updating from Beta 1 to Beta 2, then from Beta 2
 to Beta 3, in that order.
 
+### 2.2.6 to 3.0.0
+There are no manual update steps for this version.
+
+**Note:** If your application uses any of the following modules, you will need to add them
+to your project's composer.json file or include them in your codebase using
+another method:
+
+* Scheduled Updates
+* Lighting Scheduled Updates
+* Features
+* Configuration Update Manager
+* Media Entity
+* Media Entity Document
+* Media Entity Image
+
+**Note:** You will likely need to update Lightning's constraint to get the 3.x
+branch. The following is a good starting point, but additional commands might be
+needed depending on your specific requirements and constraints:
+
+```
+composer require acquia/lightning:~3.0.0 --no-update
+composer update acquia/lightning --with-dependencies
+```   
+
 ### 2.2.5 to 2.2.6
 There are no manual update steps for this version.
 

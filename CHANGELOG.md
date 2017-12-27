@@ -1,3 +1,17 @@
+## 3.0.0
+* Lightning's components are no longer bundled with the profile. They are now
+  packaged as separate components and located alongside other Drupal modules.
+  (Issue #2925010) 
+* The following unused modules have been removed from the build manifest
+  (Issue #2927527):
+  * Scheduled Updates
+  * Lighting Scheduled Updates
+  * Features
+  * Configuration Update Manager
+  * Media Entity
+  * Media Entity Document
+  * Media Entity Image
+
 ## 2.2.6
 * Fixed a problem that caused errors when placing blocks that contained date
   fields via IPE. (Issue #2825028)
