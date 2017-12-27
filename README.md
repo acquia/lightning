@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/acquia/lightning.svg?branch=8.x-1.x)](https://travis-ci.org/acquia/lightning)
+[![Build Status](https://travis-ci.org/acquia/lightning.svg?branch=8.x-3.x)](https://travis-ci.org/acquia/lightning)
 
 # Drupal Lightning
 Lightning's mission is to enable developers to create great authoring
