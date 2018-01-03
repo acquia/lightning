@@ -69,19 +69,6 @@
     <echo message="Found tar: ${tar}" />
   </target>
 
-  <!-- Syncs the Lightning profile into the Drupal code base. -->
-  <target name="push" depends="env">
-    <!-- Create the destination if it doesn't exist. -->
-    <mkdir dir="${profile}" />
-
-    <!-- rsync the profile, excluding developer flotsam. -->
-    <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},karma.conf.js,*.make,node_modules,.travis.yml,vendor" />
-  </target>
-
-  <target name="pull" depends="env">
-    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="modules/contrib" />
-  </target>
-
   <!-- Prepares the docroot for installation via the UI. -->
   <target name="preinstall" depends="uninstall">
     <if>
