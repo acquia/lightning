@@ -1,3 +1,6 @@
+## 2.2.7
+* Drupal Core has been updated to 8.4.4 (Issue #2934239)
+
 ## 2.2.6
 * Fixed a problem that caused errors when placing blocks that contained date
   fields via IPE. (Issue #2825028)
