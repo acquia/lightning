@@ -5,6 +5,7 @@ namespace Acquia\LightningExtension\Context;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
 use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Hook\Scope\ScenarioScope;
+use Drupal\Core\Site\Settings;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
 /**
@@ -49,6 +50,12 @@ class TestModuleContext extends DrupalSubContextBase {
 
     if ($modules) {
       $this->getDriver()->bootstrap();
+
+      // Ensure that test directories are scanned for modules.
+      $settings = Settings::getAll();
+      $settings['extension_discovery_scan_tests'] = TRUE;
+      new Settings($settings);
+
       \Drupal::service('module_installer')->install($modules);
     }
   }
