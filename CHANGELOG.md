@@ -1,3 +1,6 @@
+## 3.0.1
+* Drupal Core has been updated to 8.4.4 (Issue #2934239)
+
 ## 3.0.0
 * Lightning's components are no longer bundled with the profile. They are now
   packaged as separate components and located alongside other Drupal modules.
