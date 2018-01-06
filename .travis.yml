@@ -72,8 +72,8 @@ install:
 
   # We need Phing to execute our build steps.
   - composer global require phing/phing
-  # Build the Lightning code base.
-  - composer install
+  # Build the Lightning code base with the latest dependencies.
+  - composer update
   # Install Lightning cleanly so that settings.php will be created properly.
   - phing install -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1 -Durl=http://127.0.0.1:8080
   # Restore and update from the previous version.
