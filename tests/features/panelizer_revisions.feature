@@ -1,15 +1,15 @@
 @lightning @layout @workflow @api
 Feature: Showing the Panels IPE interface on the latest content revision only
 
-  @page @aef46ea6
+  @landing-page @5643849e
   Scenario: Showing the Panels IPE interface on the latest content revision only
-    Given I am logged in as a user with the "create landing_page content, edit own landing_page content, access panels in-place editing, administer panelizer node landing_page content, view own unpublished content, view landing_page revisions" permissions
+    Given I am logged in as a user with the "create landing_page content, edit own landing_page content, access panels in-place editing, administer panelizer node landing_page content, view own unpublished content, view landing_page revisions, use editorial transition create_new_draft" permissions
     And landing_page content:
-      | title  | body              | path    | moderation_state |
-      | Foobar | Initial revision. | /foobar | draft            |
+      | title  | path    | moderation_state |
+      | Foobar | /foobar | draft            |
     When I visit "/foobar"
     And I visit the edit form
-    And I enter "Second revision." for "body[0][value]"
+    And I enter "Second revision." for "Description"
     And I press "Save"
     And I visit the current revision
     Then I should see a "#panels-ipe-content" element
