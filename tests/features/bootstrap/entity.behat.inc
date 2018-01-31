@@ -5,8 +5,6 @@
  * Contains \EntitySubContext.
  */
 
-use Behat\Gherkin\Node\TableNode;
-use Behat\Mink\Exception\ExpectationException;
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\DrupalExtension\Context\DrupalContext;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
@@ -60,30 +58,6 @@ class EntitySubContext extends DrupalSubContextBase {
   protected function ensureBootstrap() {
     if ($this->getDriver()->isBootstrapped() == FALSE) {
       throw new \RuntimeException('Drupal is not bootstrapped.');
-    }
-  }
-
-  /**
-   * Creates a set of entities of a given type.
-   *
-   * @param string $entity_type
-   *   The entity type to create.
-   * @param \Behat\Gherkin\Node\TableNode $table
-   *   The entities to create.
-   *
-   * @Given :entity_type entities:
-   */
-  public function createEntities($entity_type, TableNode $table) {
-    $this->ensureBootstrap();
-
-    foreach ($table as $row) {
-      if ($entity_type == 'media' && empty($row['uid'])) {
-        $row['uid'] = $this->uid();
-      }
-
-      $entity = \Drupal::entityTypeManager()->getStorage($entity_type)->create($row);
-      $entity->save();
-      $this->queueEntity($entity);
     }
   }
 
@@ -178,25 +152,6 @@ class EntitySubContext extends DrupalSubContextBase {
   }
 
   /**
-   * Returns the uid of the currently logged-in user from the DrupalContext.
-   *
-   * Under certain circumstances (which I don't understand yet),
-   * \Drupal::currentUser() is anonymous even after logging in! If that's the
-   * case, we can pull the uid right out of the DrupalContext using reflection.
-   * This is a naughty hack and should eventually be removed.
-   *
-   * @return int
-   *   The ID of the logged-in user, according to the Drupal context.
-   */
-  protected function uid() {
-    $context = $this->getContext('Drupal\DrupalExtension\Context\DrupalContext');
-
-    $property = (new \ReflectionObject($context))->getProperty('user');
-    $property->setAccessible(TRUE);
-    return $property->getValue($context)->uid;
-  }
-
-  /**
    * Visits a random entity of a specific type and bundle.
    *
    * @param string $entity_type
@@ -229,79 +184,6 @@ class EntitySubContext extends DrupalSubContextBase {
     else {
       throw new \UnexpectedValueException("No $entity_type entities found.");
     }
-  }
-
-  /**
-   * Visits the current revision of a node.
-   *
-   * @When I visit the current revision
-   */
-  public function visitCurrentNodeRevision() {
-    $this->minkContext->clickLink('Revisions');
-
-    $session = $this->getSession();
-
-    $rows = $session->getPage()->findAll('css', '.diff-revisions tbody tr');
-    /** @var \Behat\Mink\Element\NodeElement $row */
-    foreach ($rows as $row) {
-      if ($row->find('css', 'td:last-child')->getText() == 'Current revision') {
-        return $row->find('css', 'td:first-child a')->click();
-      }
-    }
-
-    // WTF? None of the rows were the current revision.
-    throw new ExpectationException('Current revision not found.', $session->getDriver());
-  }
-
-  /**
-   * Compares two revisions of a node.
-   *
-   * @param string $a
-   *   The one-based index of a revision to compare. 1st is oldest.
-   * @param string $b
-   *   The one-based index of a revision to compare. 1st is oldest.
-   *
-   * @When I compare the :a and :b revisions
-   */
-  public function compareRevisions($a, $b) {
-    $re = '/^[0-9]+(st|nd|rd|th)$/i';
-
-    if (preg_match($re, $a)) {
-      $a = substr($a, 0, -2);
-    }
-    if (preg_match($re, $b)) {
-      $b = substr($b, 0, -2);
-    }
-    $a = ((int) $a) - 1;
-    $b = ((int) $b) - 1;
-
-    $this->minkContext->clickLink('Revisions');
-
-    /** @var \Behat\Mink\Element\NodeElement[] $rows */
-    $rows = $this->getSession()
-      ->getPage()
-      ->findAll('css', '.diff-revisions tbody tr');
-
-    $rows = array_reverse($rows);
-    $a = $rows[$a]->findField('radios_left')->getValue();
-    $b = $rows[$b]->findField('radios_right')->getValue();
-
-    $this->minkContext->selectOption('radios_left', $a);
-    $this->minkContext->selectOption('radios_right', $b);
-    $this->minkContext->pressButton('Compare');
-  }
-
-  /**
-   * Visits a specific revision of a node.
-   *
-   * @param int $n
-   *   The one-based index of the revision.
-   *
-   * @When /^I visit the (\d+)(?:st|nd|rd|th) revision$/
-   */
-  public function visitNthRevision($n) {
-    $this->minkContext->clickLink('Revisions');
-    $this->lightning->clickElementBySelector('main table tr:nth-child(' . $n . ') td:first-child a');
   }
 
   /**

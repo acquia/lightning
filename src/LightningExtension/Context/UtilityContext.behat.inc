@@ -21,64 +21,6 @@ class UtilityContext extends DrupalSubContextBase {
   use AwaitTrait;
 
   /**
-   * Visits the edit form for a node.
-   *
-   * @see lightning_core_local_tasks_alter()
-   *
-   * @When I visit the edit form
-   */
-  public function editContent() {
-    $this
-      ->assertSession()
-      ->elementExists('named', ['link', 'edit-form'])
-      ->click();
-  }
-
-  /**
-   * Asserts that a select field has a particular option.
-   *
-   * @param string $select
-   *   The select field to check.
-   * @param string $option
-   *   The option to look for.
-   *
-   * @Then the :select field should have a(n) :option option
-   */
-  public function assertSelectOption($select, $option) {
-    $assert = $this->assertSession();
-    $select = $assert->fieldExists($select);
-    $assert->elementExists('named', ['option', $option], $select);
-  }
-
-  /**
-   * Asserts that a select field has a set of options.
-   *
-   * @param string $select
-   *   The select field to check.
-   * @param \Behat\Gherkin\Node\PyStringNode $options
-   *   The options to look for.
-   *
-   * @Then the :select field should have options:
-   */
-  public function assertSelectOptions($select, PyStringNode $options) {
-    foreach ($options->getStrings() as $option) {
-      $this->assertSelectOption($select, $option);
-    }
-  }
-
-  /**
-   * Asserts that a form field is not present.
-   *
-   * @param string $field
-   *   The field locator.
-   *
-   * @Then I should not see a(n) :field field
-   */
-  public function assertFieldNotExists($field) {
-    $this->assertSession()->fieldNotExists($field);
-  }
-
-  /**
    * Asserts that a minimum number of elements match a CSS selector.
    *
    * @param string $selector
@@ -101,119 +43,6 @@ class UtilityContext extends DrupalSubContextBase {
         '"' . $selector . '" matched ' . $result . ' element(s), expected at least ' . $count . '.',
         $session->getDriver()
       );
-    }
-  }
-
-  /**
-   * Asserts than an element is empty.
-   *
-   * @param string $selector
-   *   The element's CSS selector.
-   *
-   * @throws ExpectationException
-   *   If the element has any HTML content.
-   *
-   * @Then the :selector element(s) should be empty
-   */
-  public function assertElementIsEmpty($selector) {
-    $content = $this->assertSession()->elementExists('css', $selector)->getHtml();
-
-    if (trim($content)) {
-      throw new ExpectationException(
-        'Expected ' . $selector . ' to be empty but it is not.',
-        $this->getSession()->getDriver()
-      );
-    }
-  }
-
-  /**
-   * Clears a field.
-   *
-   * @param string $field
-   *   The field to clear.
-   * @param ElementInterface $container
-   *   (optional) The containing element.
-   *
-   * @When I clear :field
-   */
-  public function clearField($field, ElementInterface $container = NULL) {
-    $this->assertSession()->fieldExists($field, $container)->setValue(FALSE);
-  }
-
-  /**
-   * Generates random image media assets.
-   *
-   * @param int $count
-   *   (optional) How many to generate. Defaults to 1.
-   * @param string $name
-   *   (optional) The label of the media item wrapping the image. Defaults to
-   *   a random string.
-   * @param string $alt
-   *   (optional) The alt text for the image.
-   *
-   * @Given a random image
-   * @Given a random image named :name
-   * @Given a random image with alt text :alt
-   * @Given a random image named :name with alt text :alt
-   * @Given :count random images
-   */
-  public function generateRandomImages($count = 1, $name = NULL, $alt = NULL) {
-    $random = new Random();
-
-    for ($i = 0; $i < $count; $i++) {
-      $uri = $random->image(uniqid('public://random_') . '.png', '240x240', '640x480');
-
-      $file = File::create([
-        'uri' => $uri,
-      ]);
-      $file->setMimeType('image/png');
-      $file->setTemporary();
-      $file->save();
-
-      $media = Media::create([
-        'bundle' => 'image',
-        'name' => $name ?: $random->name(32),
-        'status' => TRUE,
-        'image' => $file->id(),
-        'field_media_in_library' => TRUE,
-      ]);
-      if ($alt) {
-        $media->image->alt = $alt;
-      }
-      $media->save();
-    }
-  }
-
-  /**
-   * Generates random document media assets.
-   *
-   * @param int $count
-   *   (optional) How many to generate. Defaults to 1.
-   *
-   * @Given a random document
-   * @Given :count random documents
-   */
-  public function generateRandomDocument($count = 1) {
-    $random = new Random();
-
-    for ($i = 0; $i < $count; $i++) {
-      $uri = uniqid('public://random_') . '.txt';
-      file_put_contents($uri, $random->paragraphs(2));
-
-      $file = File::create([
-        'uri' => $uri,
-      ]);
-      $file->setMimeType('text/plain');
-      $file->setTemporary();
-      $file->save();
-
-      Media::create([
-        'bundle' => 'document',
-        'name' => $random->name(32),
-        'status' => TRUE,
-        'image' => $file->id(),
-        'field_media_in_library' => TRUE,
-      ])->save();
     }
   }
 
@@ -244,19 +73,6 @@ class UtilityContext extends DrupalSubContextBase {
     if ($then) {
       call_user_func_array($then, $arguments);
     }
-  }
-
-  /**
-   * Submits exposed Views filters.
-   *
-   * @When I apply the exposed filters
-   */
-  public function applyExposedFilters() {
-    $this->assertSession()
-      ->elementExists('css', '.views-exposed-form .form-actions input[type = "submit"]')
-      ->press();
-
-    $this->awaitAjax();
   }
 
   /**
