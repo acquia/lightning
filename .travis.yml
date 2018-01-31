@@ -87,7 +87,7 @@ script:
   - cd docroot
   - phpunit --configuration ./core --group lightning,profiles
   - cd ..
-  - robo test:behat -- --stop-on-failure
+  - behat --config .behat.yml --stop-on-failure
 
 after_failure:
   - cd docroot
