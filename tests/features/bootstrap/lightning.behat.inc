@@ -259,18 +259,6 @@ class LightningSubContext extends DrupalSubContextBase {
   }
 
   /**
-   * Assets that a field exists.
-   *
-   * @param string $locator
-   *   The field ID, name, label, or value.
-   *
-   * @Then I should see a(n) :locator field
-   */
-  public function assertFieldExists($locator) {
-    $this->assertSession()->fieldExists($locator);
-  }
-
-  /**
    * Asserts that we are visiting a media entity.
    *
    * @Then I should be visiting a media entity
