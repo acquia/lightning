@@ -81,6 +81,7 @@ before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - jdk_switcher use oraclejdk8
   - sleep 5
+  - selenium-server-standalone -port 4444 -log selenium.log &
 
 script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
