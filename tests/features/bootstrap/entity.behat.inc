@@ -8,6 +8,7 @@
 use Drupal\Core\Entity\EntityInterface;
 use Drupal\DrupalExtension\Context\DrupalContext;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
+use Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope;
 use Drupal\DrupalExtension\Hook\Scope\EntityScope;
 use Drupal\node\Entity\Node;
 use Drupal\taxonomy\Entity\Term;
@@ -212,6 +213,22 @@ class EntitySubContext extends DrupalSubContextBase {
       ->loadMultiple($entities);
 
     array_walk($entities, [$this, 'queueEntity']);
+  }
+
+  /**
+   * Alters a node before it is created.
+   *
+   * @param \Drupal\DrupalExtension\Hook\Scope\BeforeNodeCreateScope $scope
+   *   The hook scope.
+   *
+   * @BeforeNodeCreate
+   */
+  public function onNodeCreate(BeforeNodeCreateScope $scope) {
+    $node = $scope->getEntity();
+
+    if (isset($node->status) && empty($node->moderation_state)) {
+      $node->moderation_state = $node->status ? 'published' : 'draft';
+    }
   }
 
 }
