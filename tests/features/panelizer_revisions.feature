@@ -35,3 +35,18 @@ Feature: Showing the Panels IPE interface on the latest content revision only
     And I visit "/user/logout"
     And I visit "/foobar"
     Then I should see a "entity_field:node:uuid" block
+
+  @aef46ea6
+  Scenario: Showing the in-place editor on the latest content revision only
+    Given I am logged in as a user with the landing_page_creator role
+    And landing_page content:
+      | title  | body              | path    |
+      | Foobar | Initial revision. | /foobar |
+    When I visit "/foobar"
+    And I visit the edit form
+    And I enter "Second revision" for "Description"
+    And I press "Save"
+    And I visit the current revision
+    Then I should see a "#panels-ipe-content" element
+    And I visit the 2nd revision
+    And I should not see a "#panels-ipe-content" element
