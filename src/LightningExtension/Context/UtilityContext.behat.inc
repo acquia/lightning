@@ -3,14 +3,9 @@
 namespace Acquia\LightningExtension\Context;
 
 use Acquia\LightningExtension\AwaitTrait;
-use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Driver\Selenium2Driver;
-use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Exception\ExpectationException;
-use Drupal\Component\Utility\Random;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
-use Drupal\file\Entity\File;
-use Drupal\media\Entity\Media;
 use WebDriver\Exception\NoAlertOpenError;
 
 /**
@@ -19,32 +14,6 @@ use WebDriver\Exception\NoAlertOpenError;
 class UtilityContext extends DrupalSubContextBase {
 
   use AwaitTrait;
-
-  /**
-   * Asserts that a minimum number of elements match a CSS selector.
-   *
-   * @param string $selector
-   *   The selector.
-   * @param int $count
-   *   The number of elements expected to match the selector.
-   *
-   * @throws ExpectationException
-   *   If the number of elements that match the selector is less than expected.
-   *
-   * @Then at least :count element(s) should match :selector
-   */
-  public function assertSelectorMatchAtLeast($selector, $count) {
-    $session = $this->getSession();
-
-    $result = count($session->getPage()->findAll('css', $selector));
-
-    if ($result < $count) {
-      throw new ExpectationException(
-        '"' . $selector . '" matched ' . $result . ' element(s), expected at least ' . $count . '.',
-        $session->getDriver()
-      );
-    }
-  }
 
   /**
    * Accepts any currently open alert box(es), then optionally runs a callback.
