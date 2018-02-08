@@ -534,6 +534,20 @@ function lightning_update_8006() {
 }
 
 /**
+ * Triggers additional setup routines if Lightning is in development mode.
+ */
+function lightning_update_8007() {
+  $module_handler = \Drupal::moduleHandler();
+
+  if ($module_handler->moduleExists('lightning_dev')) {
+    $module_handler->resetImplementations();
+    $module_handler->invokeAll('modules_installed', [
+      ['lightning_dev']
+    ]);
+  }
+}
+
+/**
  * Implements hook_update_dependencies().
  */
 function lightning_update_dependencies() {
