@@ -24,7 +24,7 @@ events:
           script:
             - cd $SOURCE_DIR
             - mysql -u root -proot -e 'CREATE DATABASE drupal;'
-            - lightning install 'mysql\://root:root@localhost/drupal' 'http\://127.0.0.1:8080'
+            - lightning install 'mysql\://root:root@localhost/drupal' lightning 'http\://127.0.0.1:8080'
       - test:
           type: script
           script:
