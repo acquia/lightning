@@ -6,7 +6,6 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "phing/phing": "^2.14",
         "drupal/console": "^1.0.0",
         "grasmash/yaml-cli": "^1.0",
         "drupal/media_entity_generic": "1.x-dev",
@@ -34,11 +33,11 @@
             "PhantomInstaller\\Installer::installPhantomJS",
             "@composer drupal-scaffold",
             "@composer push",
-            "./vendor/bin/phing symlink"
+            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit"
         ],
         "post-update-cmd": [
             "@composer push",
-            "./vendor/bin/phing symlink",
+            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit",
             "@composer package"
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",

@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lightning\Tests\Functional;
+namespace Drupal\Tests\lightning\Functional;
 
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Tests\BrowserTestBase;
@@ -206,7 +206,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
    */
   protected function assertContainsAll(array $needles, array $haystack) {
     $diff = array_diff($needles, $haystack);
-    $this->assertEmpty($diff);
+    $this->assertSame([], $diff);
   }
 
   /**

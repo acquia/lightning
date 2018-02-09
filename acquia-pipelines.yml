@@ -24,7 +24,7 @@ events:
           script:
             - cd $SOURCE_DIR
             - mysql -u root -proot -e 'CREATE DATABASE drupal;'
-            - phing install -Ddb.password=root -Ddb.database=drupal -Durl=http://127.0.0.1:8080
+            - lightning install 'mysql\://root:root@localhost/drupal' lightning 'http://127.0.0.1:8080'
       - test:
           type: script
           script:
@@ -32,12 +32,13 @@ events:
             - drush runserver --default-server=builtin 8080 &>/dev/null &
             - phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
-            - behat --stop-on-failure --config ./sites/default/files/behat.yml --tags=~javascript
+            - cd $SOURCE_DIR
+            - behat --stop-on-failure --config .behat.yml --tags=~javascript
       - cleanup:
           type: script
           script:
             - cd $SOURCE_DIR
-            # Remove drush so our version doesn't interfere with cloud commands.
-            - composer remove drush/drush --dev
             # Setup settings file and codebase with minimum required for cloud.
-            - phing cloud-settings
+            - lightning configure:cloud
+            # Remove dev tools from the Cloud build.
+            - composer remove acquia/lightning_dev --dev
