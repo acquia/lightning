@@ -41,4 +41,6 @@ events:
             # Remove drush so our version doesn't interfere with cloud commands.
             - composer remove drush/drush --dev
             # Setup settings file and codebase with minimum required for cloud.
+            - chmod u+w docroot/sites/default
+            - chmod u+w docroot/sites/default/settings.php
             - lightning configure:cloud
