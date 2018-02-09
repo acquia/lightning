@@ -38,7 +38,7 @@ events:
           type: script
           script:
             - cd $SOURCE_DIR
-            # Remove drush so our version doesn't interfere with cloud commands.
-            - composer remove drush/drush --dev
             # Setup settings file and codebase with minimum required for cloud.
             - lightning configure:cloud
+            # Remove dev tools from the Cloud build.
+            - composer remove acquia/lightning_dev --dev
