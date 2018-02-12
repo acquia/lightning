@@ -5,12 +5,10 @@
  * Contains \LightningSubContext.
  */
 
-use Behat\Behat\Hook\Scope\BeforeScenarioScope;
 use Behat\Behat\Hook\Scope\AfterScenarioScope;
-use Behat\Gherkin\Node\PyStringNode;
-use Behat\Mink\Exception\ExpectationException;
 use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
+use Drupal\DrupalExtension\Context\MinkContext;
 
 /**
  * Sub context for Lightning step definitions.
@@ -18,29 +16,11 @@ use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 class LightningSubContext extends DrupalSubContextBase {
 
   /**
-   * The Mink context.
-   *
-   * @var \Drupal\DrupalExtension\Context\MinkContext
-   */
-  protected $minkContext;
-
-  /**
    * Start time for each scenario.
    *
    * @var int
    */
   protected $startTime;
-
-  /**
-   * Pre-scenario hook.
-   *
-   * @BeforeScenario
-   */
-  public function gatherContexts(BeforeScenarioScope $scope) {
-    $environment = $scope->getEnvironment();
-
-    $this->minkContext = $environment->getContext('Drupal\DrupalExtension\Context\MinkContext');
-  }
 
   /**
    * Store current time.
@@ -97,94 +77,6 @@ class LightningSubContext extends DrupalSubContextBase {
   }
 
   /**
-   * Asserts that a role as a set of permissions.
-   *
-   * @param string $rid
-   *   The role ID.
-   * @param \Behat\Gherkin\Node\PyStringNode $permissions
-   *   The permissions to check for.
-   *
-   * @Then the :role role should have permissions:
-   * @Then the :role role should have permission to:
-   */
-  public function assertPermissions($rid, PyStringNode $permissions) {
-    foreach ($permissions->getStrings() as $permission) {
-      $this->assertPermission($rid, $permission);
-    }
-  }
-
-  /**
-   * Asserts that a role does NOT have a set of permissions.
-   *
-   * @param string $rid
-   *   The role ID.
-   * @param \Behat\Gherkin\Node\PyStringNode $permissions
-   *   The permissions to check for.
-   *
-   * @Then the :role role should not have permissions:
-   * @Then the :role role should not have permission to:
-   */
-  public function assertNoPermissions($rid, PyStringNode $permissions) {
-    foreach ($permissions->getStrings() as $permission) {
-      $this->assertNoPermission($rid, $permission);
-    }
-  }
-
-  /**
-   * Asserts that a role has a specific permission.
-   *
-   * @param string $rid
-   *   The role ID.
-   * @param string $permission
-   *   The permission to check for.
-   *
-   * @Given the :role role has the :permission permission
-   * @Given the :role role has permission to :permission
-   *
-   * @Then the :role role should have the :permission permission
-   * @Then the :role role should have permission to :permission
-   */
-  public function assertPermission($rid, $permission) {
-    $this->minkContext->assertAtPath('/admin/people/permissions/' . $rid);
-    $this->assertSession()->checkboxChecked($rid . '[' . $permission . ']');
-  }
-
-  /**
-   * Asserts that a role does not have a specific permission.
-   *
-   * @param string $rid
-   *   The role ID.
-   * @param string $permission
-   *   The permission to check for.
-   *
-   * @Given the :role role does not have the :permission permission
-   * @Given the :role role does not have permission to :permission
-   *
-   * @Then the :role role should not have the :permission permission
-   * @Then the :role role should not have permission to :permission
-   */
-  public function assertNoPermission($rid, $permission) {
-    $this->minkContext->assertAtPath('/admin/people/permissions/' . $rid);
-
-    $field = $rid . '[' . $permission . ']';
-    try {
-      $this->assertSession()->fieldNotExists($field);
-    }
-    catch (ExpectationException $e) {
-      $this->assertSession()->checkboxNotChecked($field);
-    }
-  }
-
-  /**
-   * Maximizes the window (probably for debugging purposes).
-   *
-   * @When I maximize the window
-   */
-  public function maximize() {
-    $this->getSession()->getDriver()->maximizeWindow();
-  }
-
-  /**
    * Takes a screenshot for debugging purposes.
    *
    * @param string $filename
@@ -204,7 +96,6 @@ class LightningSubContext extends DrupalSubContextBase {
    * @When I view the HTML
    */
   public function viewTheHtml() {
-
     $html_data = $this->getSession()->getDriver()->getContent();
     echo $html_data;
     $file_and_path = '/tmp/behat_page.html';
@@ -213,49 +104,6 @@ class LightningSubContext extends DrupalSubContextBase {
     if (PHP_OS === "Darwin" && PHP_SAPI === "cli") {
       exec('open -a "Safari.app" ' . $file_and_path);
     };
-  }
-
-  /**
-   * Fills in an autocompleting entity reference field.
-   *
-   * @param string $entity_type
-   *   The target entity type.
-   * @param string $label
-   *   The target entity's label.
-   * @param string $field
-   *   Entity reference field locator.
-   *
-   * @throws \Exception
-   *   If no entities of the given type, with the given label, are found.
-   *
-   * @When I reference :entity_type :label in :field
-   */
-  public function referenceEntityByLabel($entity_type, $label, $field) {
-    $label_property = \Drupal::entityTypeManager()
-      ->getDefinition($entity_type)
-      ->getKey('label');
-
-    $entities = \Drupal::entityTypeManager()
-      ->getStorage($entity_type)
-      ->loadByProperties([
-        $label_property => $label,
-      ]);
-
-    if ($entities) {
-      $this->minkContext->fillField($field, $label . ' (' . reset($entities)->id() . ')');
-    }
-    else {
-      throw new \Exception("No $entity_type labeled '$label' was found.");
-    }
-  }
-
-  /**
-   * Asserts the presence of a live preview element.
-   *
-   * @Then I should see a preview
-   */
-  public function assertPreviewElement() {
-    $this->assertSession()->elementExists('css', '#edit-preview article');
   }
 
   /**
@@ -280,20 +128,13 @@ class LightningSubContext extends DrupalSubContextBase {
    * @BeforeScenario
    */
   public function setFilePath() {
+    /** @var MinkContext $mink_context */
+    $mink_context = $this->getContext(MinkContext::class);
 
-    $existing = $this->minkContext->getMinkParameter('files_path');
+    $existing = $mink_context->getMinkParameter('files_path');
     if (empty($existing)) {
-      $this->minkContext->setMinkParameter('files_path', __DIR__ . '/../../files');
+      $mink_context->setMinkParameter('files_path', __DIR__ . '/../../files');
     }
-  }
-
-  /**
-   * Switches out of an iframe into the main window.
-   *
-   * @When I switch to the window
-   */
-  public function switchToWindow() {
-    $this->getSession()->switchToWindow();
   }
 
   /**

@@ -27,30 +27,6 @@ class EntitySubContext extends DrupalSubContextBase {
   protected $entities = [];
 
   /**
-   * The Lightning subcontext.
-   *
-   * @var \LightningSubContext
-   */
-  protected $lightning;
-
-  /**
-   * The Mink context.
-   *
-   * @var \Drupal\DrupalExtension\Context\MinkContext
-   */
-  protected $minkContext;
-
-  /**
-   * Pre-scenario hook.
-   *
-   * @BeforeScenario
-   */
-  public function gatherContexts() {
-    $this->lightning = $this->getContext('LightningSubContext');
-    $this->minkContext = $this->getContext('\Drupal\DrupalExtension\Context\MinkContext');
-  }
-
-  /**
    * Ensures the Drupal driver is bootstrapped.
    *
    * @throws \RuntimeException
