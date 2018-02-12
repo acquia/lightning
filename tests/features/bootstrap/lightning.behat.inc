@@ -77,36 +77,6 @@ class LightningSubContext extends DrupalSubContextBase {
   }
 
   /**
-   * Takes a screenshot for debugging purposes.
-   *
-   * @param string $filename
-   *   The name of the screenshot file.
-   *
-   * @When I take a screenshot named :filename
-   */
-  public function takeScreenshot($filename) {
-    $screenshot = $this->getSession()->getDriver()->getScreenshot();
-    // If this file is in tests/features/bootstrap, the screenshot be in tests.
-    file_put_contents(__DIR__ . '../../' . $filename . '.png', $screenshot);
-  }
-
-  /**
-   *  Dumps the HTML directly to stdout and a file.
-   *
-   * @When I view the HTML
-   */
-  public function viewTheHtml() {
-    $html_data = $this->getSession()->getDriver()->getContent();
-    echo $html_data;
-    $file_and_path = '/tmp/behat_page.html';
-    file_put_contents($file_and_path, $html_data);
-
-    if (PHP_OS === "Darwin" && PHP_SAPI === "cli") {
-      exec('open -a "Safari.app" ' . $file_and_path);
-    };
-  }
-
-  /**
    * Asserts that we are visiting a media entity.
    *
    * @Then I should be visiting a media entity
