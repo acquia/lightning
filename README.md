@@ -30,8 +30,8 @@ Drupal Console command (`lightning:subprofile`) which will generate a
 sub-profile for you.
 
 ## What Lightning Does
-Through custom modules and configuration, Lightning aims to target four
-functional areas:
+Through custom, contrib, and core modules plus configuration, Lightning aims to
+target four functional areas:
 
 ### Media
 The current version of media includes the following functionality:

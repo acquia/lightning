@@ -13,10 +13,10 @@ php:
   - 7.0.22
 env:
   - VERSION=HEAD
+  - VERSION=3.0.2
   - VERSION=3.0.1
   - VERSION=3.0.0
   - VERSION=2.2.6
-  - VERSION=2.2.5
 
 addons:
   apt:
@@ -75,7 +75,7 @@ install:
   # Install Lightning cleanly so that settings.php will be created properly.
   - lightning install 'mysql\://lightning:lightning@127.0.0.1/drupal' lightning 'http://127.0.0.1:8080'
   # Restore and update from the previous version.
-  - robo update $VERSION
+  - lightning update $VERSION
 
 before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &

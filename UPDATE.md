@@ -22,8 +22,7 @@ If you've installed Lightning using our [Composer-based project template](https:
 * ```cd /path/to/YOUR_PROJECT```
 * ```composer update```
 * Run ```drush updatedb && drush cache-rebuild```, or visit ```update.php```,
-  to perform automatic database updates. You can also use Drupal Console's
-  ```update:execute``` command.
+  to perform automatic database updates.
 * Perform any necessary configuration updates (see below).
 
 ### Tarball
@@ -46,39 +45,39 @@ To update Lightning safely:
 
 ## Configuration updates
 
-These instructions describe how to update your site's configuration to bring
-it in line with a newer version of Lightning. Lightning does not make these
-changes automatically, because they may change the way your site works.
+These instructions describe how to update your site's configuration to bring it
+in line with a newer version of Lightning. Lightning does not make these changes
+automatically, because they may change the way your site works.
 
-However, as of version 2.1.8, Lightning provides a Drupal Console command which
-*can* perform these updates automatically, confirming each change interactively
-as it goes. If you intend to perform all the configuration updates documented
-here, this can save quite a bit of time!
+However, as of version 3.0.2, Lightning provides a Drush 9 command which *can*
+perform these updates automatically, confirming each change interactively as it
+goes. If you intend to perform all the configuration updates documented here,
+this can save quite a bit of time!
 
 ### Automatic configuration updates
 
-Ensure Drupal Console is installed, then switch into the web root of your
+Ensure Drush 9 is installed, then switch into the web root of your
 Lightning installation and run:
 
 ```
-$ drupal update:lightning CURRENT_VERSION
+$ drush update:lightning
 ```
 
-...where `CURRENT_VERSION` is the version of Lightning you're currently using,
-in semantic version format (e.g., "8.x-2.24" should be "2.2.4", and
-"8.x-2.21-beta3" is "2.2.1-beta3").
 
 To run all available configuration updates without any prompting, use:
 
 ```
-$ drupal update:lightning CURRENT_VERSION --no-interaction
+$ drush update:lightning --no-interaction
 ```
 
 If you'd rather do the updates manually, follow the instructions below,
 starting from the version of Lightning you currently use. For example, if you
-are currently running Beta 1 and are trying to update to Beta 3, you will need
-to follow the instructions for updating from Beta 1 to Beta 2, then from Beta 2
-to Beta 3, in that order.
+are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
+follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
+2.2.2, in that order.
+
+### 3.0.1 to 3.0.2
+There are no manual update steps for this version.
 
 ### 3.0.0 to 3.0.1
 There are no manual update steps for this version. 
