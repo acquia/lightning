@@ -80,8 +80,14 @@ are currently running Beta 1 and are trying to update to Beta 3, you will need
 to follow the instructions for updating from Beta 1 to Beta 2, then from Beta 2
 to Beta 3, in that order.
 
+### 2.2.7 to 2.2.8
+There are no manual update steps for this version.
+
+You should switch to the 3.x branch of Lightning. The 2.x branch is no longer
+maintained.
+
 ### 2.2.6 to 2.2.7
-there are no manual update steps for this version.
+There are no manual update steps for this version.
 
 ### 2.2.5 to 2.2.6
 There are no manual update steps for this version.

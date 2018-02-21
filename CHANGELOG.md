@@ -1,3 +1,7 @@
+## 2.2.8
+* Drupal core has been updated to 8.4.5.
+* JSON API has been updated to 1.10.0.
+
 ## 2.2.7
 * Drupal Core has been updated to 8.4.4 (Issue #2934239)
 
