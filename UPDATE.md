@@ -38,7 +38,8 @@ you are updating from 2.2.3:
   drush cache-rebuild
   drush updatedb
   ```
-4. Follow the "Configuration updates" steps below, starting with "2.2.3 to 2.2.4". 
+4. Follow the "Configuration updates" steps below, starting with
+   "2.2.3 to 2.2.4". 
 
 
 ### Composer
@@ -100,6 +101,9 @@ starting from the version of Lightning you currently use. For example, if you
 are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
+
+### 3.0.3 to 3.1.0
+* Update Media view labels.
 
 ### 3.0.2 to 3.0.3
 There are no manual update steps for this version.

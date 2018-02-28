@@ -1,3 +1,10 @@
+## 3.1.0
+* Drupal core has been updated to 8.5.0.
+* Lightning API has been update to 2.x which patches Simple OAuth to make it
+  compoatible with TranslatableRevisionableInterface. (Issue #2945431)
+* Lightning Media has been update to 2.x which modifies the labels on some
+  Media-provided views so that they match those of new installs of Core Media.
+
 ## 3.0.3
 * Lightning API has been updated to rc3 which:
   * Only sets up developer-specific settings when Lightning's internal developer
