@@ -1,21 +1,22 @@
 ## 3.1.0
 * Drupal core has been updated to 8.5.0.
-* Lightning API has been update to 2.x which patches Simple OAuth to make it
-  compoatible with TranslatableRevisionableInterface. (Issue #2945431)
-* Lightning Media has been update to 2.x which modifies the labels on some
-  Media-provided views so that they match those of new installs of Core Media.
+* Lightning API has been updated to 2.x, which patches Simple OAuth to make it
+  compatible with TranslatableRevisionableInterface. (Issue #2945431)
+* Lightning Media has been updated to 2.x, which modifies the labels on some
+  Media-provided views so that they match those of new installs of the core
+  Media module.
 
 ## 3.0.3
-* Lightning API has been updated to rc3 which:
-  * Only sets up developer-specific settings when Lightning's internal developer
-    tools are installed.
+* Lightning API has been updated to RC3, which:
+  * Only sets up developer-specific settings when Lightning's internal
+    developer tools are installed.
   * The Entity CRUD test no longer tries to write to config entities via the
     JSON API because it is insecure and unsupported, at least for now.
-* Lightning Core has been updated to rc2 which:
+* Lightning Core has been updated to RC2, which:
   * Moves the Behat contexts used for testing into Lightning Core.
   * Renames the lightning.versions config object to lightning_core.versions.
-* Lightning Media has been updated to rc3 which only sets up developer-specific
-  settings when Lightning's internal developer tools are installed.
+* Lightning Media has been updated to RC3, which only sets up developer-
+  specific settings when Lightning's internal developer tools are installed.
 
 ## 3.0.2
 * Drupal Core has been security updated to 8.4.5.
