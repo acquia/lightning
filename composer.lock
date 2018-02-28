@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9beb75f1e86c4a66205bf87ae1ef817f",
+    "content-hash": "4f326410d866e2b409ffb4fd80b745cd",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2177,18 +2177,24 @@
         },
         {
             "name": "drupal/lightning_api",
-            "version": "dev-1.x",
+            "version": "1.0.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_api",
-                "reference": "a06aa804401a88606ebfc05fb4cb873bfd7acd79"
+                "reference": "8.x-1.0-rc3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_api-8.x-1.0-rc3.zip",
+                "reference": "8.x-1.0-rc3",
+                "shasum": "8e394fabcb633c6a2c66e0debf05d9dda8fa4701"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
-                "drupal/core": "^8.4.0",
+                "drupal/core": "~8.0",
                 "drupal/jsonapi": "1.10.0",
-                "drupal/lightning_core": "1.x-dev || 2.x-dev",
+                "drupal/lightning_core": "^1.0",
                 "drupal/openapi": "1.0-alpha1",
                 "drupal/openapi_redoc": "*",
                 "drupal/simple_oauth": "3.5.0",
@@ -2205,8 +2211,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc2+1-dev",
-                    "datestamp": "1519249080",
+                    "version": "8.x-1.0-rc3",
+                    "datestamp": "1519756680",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2283,16 +2289,21 @@
             "homepage": "https://www.drupal.org/project/lightning_api",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_api"
-            },
-            "time": "2018-02-21T21:35:53+00:00"
+            }
         },
         {
             "name": "drupal/lightning_core",
-            "version": "dev-1.x",
+            "version": "1.0.0-rc2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_core",
-                "reference": "f52a8c4e1f22ffe0afc288e25b2424b760417258"
+                "reference": "8.x-1.0-rc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_core-8.x-1.0-rc2.zip",
+                "reference": "8.x-1.0-rc2",
+                "shasum": "214e68bac3fe8e274f14607a9b1cd9ef3d3bcdab"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2308,7 +2319,6 @@
             },
             "require-dev": {
                 "acquia/lightning_dev": "dev-8.x-1.x",
-                "drupal/console": "^1.0.0",
                 "drupal/contact_storage": "*",
                 "drupal/search_api": "*"
             },
@@ -2318,8 +2328,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc1+0-dev",
-                    "datestamp": "1519150080",
+                    "version": "8.x-1.0-rc2",
+                    "datestamp": "1519756080",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2365,6 +2375,11 @@
                 },
                 "enable-patching": true
             },
+            "autoload": {
+                "classmap": [
+                    "tests/contexts/AwaitTrait.inc"
+                ]
+            },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "scripts": {
                 "post-install-cmd": [
@@ -2405,16 +2420,21 @@
             "homepage": "https://www.drupal.org/project/lightning_core",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_core"
-            },
-            "time": "2018-02-20T18:06:48+00:00"
+            }
         },
         {
             "name": "drupal/lightning_layout",
-            "version": "dev-1.x",
+            "version": "1.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_layout",
-                "reference": "98f1ef91b123fcc7ba9554f8675ca103db2a7dde"
+                "reference": "8.x-1.0-rc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_layout-8.x-1.0-rc1.zip",
+                "reference": "8.x-1.0-rc1",
+                "shasum": "6483b8ff57d601bd840a6f6add90450a594f2c40"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2422,7 +2442,7 @@
                 "drupal/core": "^8.4.3",
                 "drupal/ctools": "^3.0",
                 "drupal/entity_block": "1.0.0-alpha2",
-                "drupal/lightning_core": "1.x-dev || 2.x-dev",
+                "drupal/lightning_core": "^1.0 || ^2.0",
                 "drupal/panelizer": "4.0.0",
                 "drupal/panelizer_quickedit": "*",
                 "drupal/panels": "4.2.0",
@@ -2437,7 +2457,7 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc1+1-dev",
+                    "version": "8.x-1.0-rc1",
                     "datestamp": "1519152780",
                     "security-coverage": {
                         "status": "not-covered",
@@ -2526,23 +2546,28 @@
             "homepage": "https://www.drupal.org/project/lightning_layout",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_layout"
-            },
-            "time": "2018-02-20T18:48:54+00:00"
+            }
         },
         {
             "name": "drupal/lightning_media",
-            "version": "dev-1.x",
+            "version": "1.0.0-rc3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_media",
-                "reference": "0ec9ba7caf78a1299e36944f14891af4c68ec02c"
+                "reference": "8.x-1.0-rc3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_media-8.x-1.0-rc3.zip",
+                "reference": "8.x-1.0-rc3",
+                "shasum": "5eaedc42c10c484b572ef9861f21d2a504edf8ec"
             },
             "require": {
                 "bower-asset/cropper": "^2.3",
                 "bower-asset/dropzone": "^5.1",
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
-                "drupal/core": "^8.4.0",
+                "drupal/core": "*",
                 "drupal/crop": "2.0.0-beta1",
                 "drupal/dropzonejs": "2.0.0-alpha3",
                 "drupal/embed": "^1.0",
@@ -2550,7 +2575,7 @@
                 "drupal/entity_embed": "1.0.0-beta2",
                 "drupal/image_widget_crop": "^2.1",
                 "drupal/inline_entity_form": "^1.0",
-                "drupal/lightning_core": "1.x-dev",
+                "drupal/lightning_core": "^1.0",
                 "drupal/media": "*",
                 "drupal/media_entity_instagram": "2.0.0-alpha1",
                 "drupal/media_entity_twitter": "2.0.0-alpha2",
@@ -2571,8 +2596,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc1+1-dev",
-                    "datestamp": "1519234084",
+                    "version": "8.x-1.0-rc3",
+                    "datestamp": "1519756985",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2665,25 +2690,28 @@
             "homepage": "https://www.drupal.org/project/lightning_media",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_media"
-            },
-            "time": "2018-02-21T17:26:38+00:00"
+            }
         },
         {
             "name": "drupal/lightning_workflow",
-            "version": "dev-1.x",
+            "version": "1.0.0-rc2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_workflow",
-                "reference": "e7eb99aa568318473724a8668184782b90be9c86"
+                "reference": "8.x-1.0-rc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_workflow-8.x-1.0-rc2.zip",
+                "reference": "8.x-1.0-rc2",
+                "shasum": "26eec3ae22e817142a5c21691d448b03dc1204c4"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/core": "^8.4.3",
                 "drupal/diff": "^1.0",
-                "drupal/lightning_core": "1.x-dev || 2.x-dev",
-                "drupal/wbm2cm": "dev-2.x",
-                "drupal/workbench_moderation": "1.2.0",
+                "drupal/lightning_core": "^1.0 || ^2.0",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
             "require-dev": {
@@ -2695,8 +2723,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-rc1+1-dev",
-                    "datestamp": "1519234680",
+                    "version": "8.x-1.0-rc2",
+                    "datestamp": "1519244580",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2724,13 +2752,6 @@
                     "docroot/themes/contrib/{$name}": [
                         "type:drupal-theme"
                     ]
-                },
-                "patches": {
-                    "drupal/workbench_moderation": {
-                        "2668006 - Provide logical access control for when IPE should be applied to moderated nodes": "https://www.drupal.org/files/issues/2668006-2.patch",
-                        "2847078 - Revision tracker's dynamic table creation can break Views": "https://www.drupal.org/files/issues/2847078-6.patch",
-                        "2749503 - Add basic support for Quick Edit": "https://www.drupal.org/files/issues/workbench_moderation-quickedit-support-2749503-6.patch"
-                    }
                 },
                 "enable-patching": true
             },
@@ -2774,8 +2795,7 @@
             "homepage": "https://www.drupal.org/project/lightning_workflow",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_workflow"
-            },
-            "time": "2018-02-21T17:46:32+00:00"
+            }
         },
         {
             "name": "drupal/media_entity_instagram",
@@ -3584,17 +3604,17 @@
         },
         {
             "name": "drupal/search_api",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/search_api",
-                "reference": "8.x-1.6"
+                "reference": "8.x-1.7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.6.zip",
-                "reference": "8.x-1.6",
-                "shasum": "c590bfb9752f39087e66ea9ff6c98ad103508f0b"
+                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "a380eb516a813d99cf6178bd0fe15e8ea7be5842"
             },
             "require": {
                 "drupal/core": "^8.4"
@@ -3609,8 +3629,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.6",
-                    "datestamp": "1514109785",
+                    "version": "8.x-1.7",
+                    "datestamp": "1519387684",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3926,208 +3946,6 @@
             }
         },
         {
-            "name": "drupal/wbm2cm",
-            "version": "dev-2.x",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupal.org/project/wbm2cm",
-                "reference": "6300a3237055a5851946bfca2b2768e5f8eed8f7"
-            },
-            "require": {
-                "drupal/core": "~8.4"
-            },
-            "require-dev": {
-                "behat/mink-goutte-driver": "^1.2",
-                "drupal-composer/drupal-scaffold": "^2.3",
-                "drupal/devel": "^1.2",
-                "drupal/media_entity": "^1",
-                "drupal/migrate_tools": "4.x-dev",
-                "drupal/workbench_moderation": "~1",
-                "drush/drush": "^9",
-                "mikey179/vfsstream": "^1.6",
-                "oomphinc/composer-installers-extender": "dev-master",
-                "phpunit/phpunit": "~4"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-2.0-alpha3+4-dev",
-                    "datestamp": "1515544384",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
-                    }
-                },
-                "installer-paths": {
-                    "www/core": [
-                        "type:drupal-core"
-                    ],
-                    "www/modules/{$name}": [
-                        "type:drupal-module"
-                    ]
-                },
-                "drush": {
-                    "services": {
-                        "drush.services.yml": "^9"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "scripts": {
-                "post-install-cmd": [
-                    "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
-                    "mkdir -p ./www/themes ./www/profiles"
-                ],
-                "post-update-cmd": [
-                    "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
-                    "mkdir -p ./www/themes ./www/profiles"
-                ],
-                "push": [
-                    "rm -rf ./www/modules/wbm2cm",
-                    "mkdir -p ./www/modules/wbm2cm",
-                    "cp -R -f composer.json wbm2cm.* migrations src tests ./www/modules/wbm2cm"
-                ],
-                "pull": [
-                    "cp -R -f ./www/modules/wbm2cm/* ."
-                ]
-            },
-            "license": [
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Phéna Proxima",
-                    "homepage": "https://www.drupal.org/user/223087",
-                    "email": "adam@phenaproxima.net"
-                },
-                {
-                    "name": "josephdpurcell",
-                    "homepage": "https://www.drupal.org/user/2944035"
-                },
-                {
-                    "name": "phenaproxima",
-                    "homepage": "https://www.drupal.org/user/205645"
-                }
-            ],
-            "description": "Migrating Workbench Moderation's configuration to Workflows, because I'm a sucker for pain.",
-            "homepage": "https://www.drupal.org/project/wbm2cm",
-            "support": {
-                "source": "http://cgit.drupalcode.org/wbm2cm"
-            },
-            "time": "2018-01-10T00:31:21+00:00"
-        },
-        {
-            "name": "drupal/workbench_moderation",
-            "version": "1.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupal.org/project/workbench_moderation",
-                "reference": "8.x-1.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/workbench_moderation-8.x-1.2.zip",
-                "reference": "8.x-1.2",
-                "shasum": "3d37b29ed1e7fbf398160fe2494abc4361e4341c"
-            },
-            "require": {
-                "drupal/core": "*"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.2",
-                    "datestamp": "1516322885",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                },
-                "patches_applied": {
-                    "2668006 - Provide logical access control for when IPE should be applied to moderated nodes": "https://www.drupal.org/files/issues/2668006-2.patch",
-                    "2847078 - Revision tracker's dynamic table creation can break Views": "https://www.drupal.org/files/issues/2847078-6.patch",
-                    "2749503 - Add basic support for Quick Edit": "https://www.drupal.org/files/issues/workbench_moderation-quickedit-support-2749503-6.patch"
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Crell",
-                    "homepage": "https://www.drupal.org/user/26398"
-                },
-                {
-                    "name": "Dave Reid",
-                    "homepage": "https://www.drupal.org/user/53892"
-                },
-                {
-                    "name": "agentrickard",
-                    "homepage": "https://www.drupal.org/user/20975"
-                },
-                {
-                    "name": "becw",
-                    "homepage": "https://www.drupal.org/user/81067"
-                },
-                {
-                    "name": "caroltron",
-                    "homepage": "https://www.drupal.org/user/171342"
-                },
-                {
-                    "name": "colan",
-                    "homepage": "https://www.drupal.org/user/58704"
-                },
-                {
-                    "name": "das-peter",
-                    "homepage": "https://www.drupal.org/user/762870"
-                },
-                {
-                    "name": "josephdpurcell",
-                    "homepage": "https://www.drupal.org/user/2944035"
-                },
-                {
-                    "name": "larowlan",
-                    "homepage": "https://www.drupal.org/user/395439"
-                },
-                {
-                    "name": "robeano",
-                    "homepage": "https://www.drupal.org/user/67660"
-                },
-                {
-                    "name": "srjosh",
-                    "homepage": "https://www.drupal.org/user/165878"
-                },
-                {
-                    "name": "stevector",
-                    "homepage": "https://www.drupal.org/user/179805"
-                },
-                {
-                    "name": "tedbow",
-                    "homepage": "https://www.drupal.org/user/240860"
-                },
-                {
-                    "name": "timmillwood",
-                    "homepage": "https://www.drupal.org/user/227849"
-                }
-            ],
-            "description": "Provides moderation states for content",
-            "homepage": "http://drupal.org/project/workbench_moderation",
-            "keywords": [
-                "Drupal"
-            ],
-            "support": {
-                "source": "http://cgit.drupalcode.org/workbench_moderation",
-                "issues": "http://drupal.org/project/issues/workbench_moderation"
-            }
-        },
-        {
             "name": "easyrdf/easyrdf",
             "version": "0.9.1",
             "source": {
@@ -4243,16 +4061,16 @@
         },
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.9.3",
+            "version": "v4.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "95e1bae3182efc0f3422896a3236e991049dac69"
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/95e1bae3182efc0f3422896a3236e991049dac69",
-                "reference": "95e1bae3182efc0f3422896a3236e991049dac69",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/d85d39da4576a6934b72480be6978fb10c860021",
+                "reference": "d85d39da4576a6934b72480be6978fb10c860021",
                 "shasum": ""
             },
             "require": {
@@ -4286,7 +4104,7 @@
             "keywords": [
                 "html"
             ],
-            "time": "2017-06-03T02:28:16+00:00"
+            "time": "2018-02-23T01:58:20+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -6213,16 +6031,16 @@
         },
         {
             "name": "zendframework/zend-diactoros",
-            "version": "1.7.0",
+            "version": "1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diactoros.git",
-                "reference": "ed6ce7e2105c400ca10277643a8327957c0384b7"
+                "reference": "bf26aff803a11c5cc8eb7c4878a702c403ec67f1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/ed6ce7e2105c400ca10277643a8327957c0384b7",
-                "reference": "ed6ce7e2105c400ca10277643a8327957c0384b7",
+                "url": "https://api.github.com/repos/zendframework/zend-diactoros/zipball/bf26aff803a11c5cc8eb7c4878a702c403ec67f1",
+                "reference": "bf26aff803a11c5cc8eb7c4878a702c403ec67f1",
                 "shasum": ""
             },
             "require": {
@@ -6261,7 +6079,7 @@
                 "psr",
                 "psr-7"
             ],
-            "time": "2018-01-04T18:21:48+00:00"
+            "time": "2018-02-26T15:44:50+00:00"
         },
         {
             "name": "zendframework/zend-escaper",
@@ -6421,12 +6239,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/lightning-dev.git",
-                "reference": "a7d4f5ba0cb8015cfbcfadc897267d2864a3ab6c"
+                "reference": "1476d414666d557f5a10203d54c41c669d4034c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/lightning-dev/zipball/a7d4f5ba0cb8015cfbcfadc897267d2864a3ab6c",
-                "reference": "a7d4f5ba0cb8015cfbcfadc897267d2864a3ab6c",
+                "url": "https://api.github.com/repos/acquia/lightning-dev/zipball/1476d414666d557f5a10203d54c41c669d4034c7",
+                "reference": "1476d414666d557f5a10203d54c41c669d4034c7",
                 "shasum": ""
             },
             "require": {
@@ -6435,9 +6253,9 @@
                 "behat/mink-goutte-driver": "~1.2",
                 "consolidation/robo": "^1.2",
                 "drupal/coder": "~8.2.0",
+                "drupal/config_installer": "^1.5",
                 "drupal/devel": "^1.0",
                 "drupal/drupal-extension": "~3.3.0",
-                "drupal/lightning_core": "^1.0 || ^2.0",
                 "drush/drush": "^9",
                 "jakoch/phantomjs-installer": "1.9.8",
                 "jcalderonzumba/gastonjs": "~1.0.2",
@@ -6481,12 +6299,17 @@
                     "docroot/themes/contrib/{$name}": [
                         "type:drupal-theme"
                     ]
+                },
+                "patches": {
+                    "drupal/config_installer": {
+                        "2916090 - Support Drush 9": "https://www.drupal.org/files/issues/drush9-support-2916090-6.patch",
+                        "2935426 - Drush 9: Call to undefined function drush_generate_password": "https://www.drupal.org/files/issues/config_installer-drush_9_call_undefined_function_drush_generate_password-2935426-2.patch"
+                    }
                 }
             },
             "autoload": {
                 "classmap": [
-                    "Commands/",
-                    "tests/contexts/AwaitTrait.inc"
+                    "Commands/"
                 ]
             },
             "scripts": {
@@ -6516,7 +6339,7 @@
                 "source": "https://github.com/acquia/lightning-dev/tree/8.x-1.x",
                 "issues": "https://github.com/acquia/lightning-dev/issues"
             },
-            "time": "2018-02-20T17:53:24+00:00"
+            "time": "2018-02-27T17:58:53+00:00"
         },
         {
             "name": "alchemy/zippy",
@@ -7059,16 +6882,16 @@
         },
         {
             "name": "chi-teck/drupal-code-generator",
-            "version": "1.22.0",
+            "version": "1.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Chi-teck/drupal-code-generator.git",
-                "reference": "c7e3018ebcbdb5befcfe928c792146078c8c2d05"
+                "reference": "2d58afe40ab3a4a3104e3722fce6040ef52edddb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Chi-teck/drupal-code-generator/zipball/c7e3018ebcbdb5befcfe928c792146078c8c2d05",
-                "reference": "c7e3018ebcbdb5befcfe928c792146078c8c2d05",
+                "url": "https://api.github.com/repos/Chi-teck/drupal-code-generator/zipball/2d58afe40ab3a4a3104e3722fce6040ef52edddb",
+                "reference": "2d58afe40ab3a4a3104e3722fce6040ef52edddb",
                 "shasum": ""
             },
             "require": {
@@ -7091,23 +6914,23 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL2"
+                "GPL-2.0-or-later"
             ],
             "description": "Drupal code generator",
-            "time": "2018-01-06T15:54:30+00:00"
+            "time": "2018-02-27T15:43:26+00:00"
         },
         {
             "name": "consolidation/annotated-command",
-            "version": "2.8.2",
+            "version": "2.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/consolidation/annotated-command.git",
-                "reference": "e97c38717eae23a2bafcf3f09438290eee6ebeb4"
+                "reference": "8f8f5da2ca06fbd3a85f7d551c49f844b7c59437"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/e97c38717eae23a2bafcf3f09438290eee6ebeb4",
-                "reference": "e97c38717eae23a2bafcf3f09438290eee6ebeb4",
+                "url": "https://api.github.com/repos/consolidation/annotated-command/zipball/8f8f5da2ca06fbd3a85f7d551c49f844b7c59437",
+                "reference": "8f8f5da2ca06fbd3a85f7d551c49f844b7c59437",
                 "shasum": ""
             },
             "require": {
@@ -7119,6 +6942,7 @@
                 "symfony/finder": "^2.5|^3|^4"
             },
             "require-dev": {
+                "greg-1-anderson/composer-test-scenarios": "^1",
                 "phpunit/phpunit": "^4.8",
                 "satooshi/php-coveralls": "^1.0.2 | dev-master",
                 "squizlabs/php_codesniffer": "^2.7"
@@ -7145,7 +6969,7 @@
                 }
             ],
             "description": "Initialize Symfony Console commands from annotated command class methods.",
-            "time": "2017-11-29T16:23:23+00:00"
+            "time": "2018-02-23T16:32:04+00:00"
         },
         {
             "name": "consolidation/config",
@@ -7696,6 +7520,56 @@
             "time": "2017-03-18T10:28:49+00:00"
         },
         {
+            "name": "drupal/config_installer",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/config_installer",
+                "reference": "8.x-1.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/config_installer-8.x-1.5.zip",
+                "reference": "8.x-1.5",
+                "shasum": "ef2ea56469481c482c1ee716438a24b4ad12c6e2"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-profile",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.5",
+                    "datestamp": "1506257944",
+                    "security-coverage": {
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "patches_applied": {
+                    "2916090 - Support Drush 9": "https://www.drupal.org/files/issues/drush9-support-2916090-6.patch",
+                    "2935426 - Drush 9: Call to undefined function drush_generate_password": "https://www.drupal.org/files/issues/config_installer-drush_9_call_undefined_function_drush_generate_password-2935426-2.patch"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "alexpott",
+                    "homepage": "https://www.drupal.org/user/157725"
+                }
+            ],
+            "homepage": "https://www.drupal.org/project/config_installer",
+            "support": {
+                "source": "http://cgit.drupalcode.org/config_installer"
+            }
+        },
+        {
             "name": "drupal/console",
             "version": "1.6.1",
             "source": {
@@ -8208,20 +8082,21 @@
             "homepage": "https://www.drupal.org/project/media_entity_generic",
             "support": {
                 "source": "http://cgit.drupalcode.org/media_entity_generic"
-            }
+            },
+            "time": "2017-10-18T07:13:43+00:00"
         },
         {
             "name": "drush/drush",
-            "version": "9.1.0",
+            "version": "9.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drush-ops/drush.git",
-                "reference": "0380bba1ba88271caab8239edd640ee4ebaac3ee"
+                "reference": "78c1ec41bf57f3b3b489c7dbe0b8124a79089931"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drush-ops/drush/zipball/0380bba1ba88271caab8239edd640ee4ebaac3ee",
-                "reference": "0380bba1ba88271caab8239edd640ee4ebaac3ee",
+                "url": "https://api.github.com/repos/drush-ops/drush/zipball/78c1ec41bf57f3b3b489c7dbe0b8124a79089931",
+                "reference": "78c1ec41bf57f3b3b489c7dbe0b8124a79089931",
                 "shasum": ""
             },
             "require": {
@@ -8309,7 +8184,7 @@
             ],
             "description": "Drush is a command line shell and scripting interface for Drupal, a veritable Swiss Army knife designed to make life easier for those of us who spend some of our working hours hacking away at the command prompt.",
             "homepage": "http://www.drush.org",
-            "time": "2018-02-06T20:02:10+00:00"
+            "time": "2018-02-26T20:08:39+00:00"
         },
         {
             "name": "fabpot/goutte",
@@ -10744,11 +10619,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/lightning_api": 20,
-        "drupal/lightning_core": 20,
-        "drupal/lightning_layout": 20,
-        "drupal/lightning_media": 20,
-        "drupal/lightning_workflow": 20,
         "drupal/media_entity_generic": 20,
         "acquia/lightning_dev": 20
     },
