@@ -16,6 +16,59 @@ the "Configuration updates" section of this file.
 
 ## Updating Lightning
 
+### Summary
+For a typical site that has a properly configured directory for exporting config
+that is managed by your VCS, you would generally follow these steps:
+
+#### In your development or local environment.
+1. Update your codebase.
+  
+  ```
+  composer self-update
+  composer require acquia/lightning:~3.1.0 --no-update
+  composer update acquia/lightning --with-all-dependencies
+  ```
+
+2. Run any database updates.
+  
+  ```
+  drush cache-rebuild
+  drush updatedb
+  ```
+  
+3. Run any Lightning configuration updates.
+  
+  ```
+  drush cache:rebuild
+  drush update:lightning
+  ```
+  
+4. Export the new configuration.
+
+  
+  ```
+  drush config-export
+  ```
+
+5. Commit the code and configuration changes to your VCS and push them to your
+   destination environment.
+  
+#### On your destination environment.
+
+1. Run any database updates.
+  
+  ```
+  drush cache-rebuild
+  drush updatedb
+  ```
+
+2. Import any configuration changes.
+  
+  ```
+  drush cache-rebuild
+  drush config-import
+  ```
+
 ### 3.x branch
 Before updating to the 3.x branch of Lightning, you should first update to
 Lightning 2.2.8 including all database updates and migrations. For example, if
@@ -29,7 +82,7 @@ you are updating from 2.2.3:
 2. Update your codebase to 2.2.8:
   
   ```
-  composer update acquia/lightning:2.2.8 --no-update
+  composer require acquia/lightning:2.2.8 --no-update
   composer update acquia/lightning --with-all-dependencies
   ```
 3. Rebuild Drupal's cache and run database updates:
