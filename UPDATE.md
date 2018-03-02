@@ -21,6 +21,10 @@ For a typical site that has a properly configured directory for exporting config
 that is managed by your VCS, you would generally follow these steps:
 
 #### In your development or local environment.
+1. Read the [release notes](https://github.com/acquia/lightning/releases)
+   for the release to which you are updating, and any other releases between
+   your current version.
+   
 1. Update your codebase.
   
   ```
@@ -29,28 +33,28 @@ that is managed by your VCS, you would generally follow these steps:
   composer update acquia/lightning --with-all-dependencies
   ```
 
-2. Run any database updates.
+1. Run any database updates.
   
   ```
   drush cache-rebuild
   drush updatedb
   ```
   
-3. Run any Lightning configuration updates.
+1. Run any Lightning configuration updates.
   
   ```
   drush cache:rebuild
   drush update:lightning
   ```
   
-4. Export the new configuration.
+1. Export the new configuration.
 
   
   ```
   drush config-export
   ```
 
-5. Commit the code and configuration changes to your VCS and push them to your
+1. Commit the code and configuration changes to your VCS and push them to your
    destination environment.
   
 #### On your destination environment.
@@ -62,7 +66,7 @@ that is managed by your VCS, you would generally follow these steps:
   drush updatedb
   ```
 
-2. Import any configuration changes.
+1. Import any configuration changes.
   
   ```
   drush cache-rebuild
