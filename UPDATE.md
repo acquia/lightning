@@ -25,11 +25,12 @@ that is managed by your VCS, you would generally follow these steps:
    for the release to which you are updating, and any other releases between
    your current version.
    
-1. Update your codebase.
+1. Update your codebase, replacing `[LIGHTNING_VERSION]` with the most recent
+   version of Lightning. For example, `3.1.1`.
   
   ```
   composer self-update
-  composer require acquia/lightning:~3.1.0 --no-update
+  composer require acquia/lightning:~[LIGHTNING_VERSION] --no-update
   composer update acquia/lightning --with-all-dependencies
   ```
 
