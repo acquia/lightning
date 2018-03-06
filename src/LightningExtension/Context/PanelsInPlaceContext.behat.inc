@@ -2,7 +2,6 @@
 
 namespace Acquia\LightningExtension\Context;
 
-use Acquia\LightningExtension\AwaitTrait;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
 /**
@@ -49,7 +48,7 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
    * @When I revert the layout
    */
   public function revertLayout() {
-    $tray = $this->getContext('PanelsIPEContext')->assertTray();
+    $tray = $this->getContext(PanelsIPEContext::class)->assertTray();
 
     $this->assertSession()
       ->elementExists('named', ['link', 'Revert to default'], $tray)
