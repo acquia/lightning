@@ -37,7 +37,7 @@ that is managed by your VCS, you would generally follow these steps:
 1. Run any database updates.
   
   ```
-  drush cache-rebuild
+  drush cache:rebuild
   drush updatedb
   ```
   
@@ -52,7 +52,7 @@ that is managed by your VCS, you would generally follow these steps:
 
   
   ```
-  drush config-export
+  drush config:export
   ```
 
 1. Commit the code and configuration changes to your VCS and push them to your
@@ -63,15 +63,15 @@ that is managed by your VCS, you would generally follow these steps:
 1. Run any database updates.
   
   ```
-  drush cache-rebuild
+  drush cache:rebuild
   drush updatedb
   ```
 
 1. Import any configuration changes.
   
   ```
-  drush cache-rebuild
-  drush config-import
+  drush cache:rebuild
+  drush config:import
   ```
 
 ### 3.x branch
@@ -93,7 +93,7 @@ you are updating from 2.2.3:
 3. Rebuild Drupal's cache and run database updates:
   
   ```
-  drush cache-rebuild
+  drush cache:rebuild
   drush updatedb
   ```
 4. Follow the "Configuration updates" steps below, starting with
@@ -105,7 +105,7 @@ If you've installed Lightning using our [Composer-based project template](https:
 
 * ```cd /path/to/YOUR_PROJECT```
 * ```composer update```
-* Run ```drush updatedb && drush cache-rebuild```, or visit ```update.php```,
+* Run ```drush updatedb && drush cache:rebuild```, or visit ```update.php```,
   to perform automatic database updates.
 * Perform any necessary configuration updates (see below).
 
@@ -193,6 +193,11 @@ it in your project with the following command:
 ```
 composer require drupal/features
 ```
+
+**Note:** There are reports that the Media Entity module might not properly
+uninstall itself after handling the migration to core Media which could cause
+problems when it is removed from the codebase. See the comment number 15 on
+Issue #2918166 for more information. 
 
 **Note:** You will likely need to update Lightning's constraint to get the 3.x
 branch. The following is a good starting point, but additional commands might be
