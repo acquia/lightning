@@ -204,10 +204,7 @@ it in your project with the following command:
 composer require drupal/features
 ```
 
-**Note:** There are reports that the Media Entity module might not properly
-uninstall itself after handling the migration to core Media which could cause
-problems when it is removed from the codebase. See the comment number 15 on
-Issue #2918166 for more information.
+**Note:** See "3.x branch" section above for detailed instructions.
 
 **Note:** You will likely need to update Lightning's constraint to get the 3.x
 branch. The following is a good starting point, but additional commands might be
