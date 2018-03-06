@@ -96,9 +96,18 @@ you are updating from 2.2.3:
   drush cache:rebuild
   drush updatedb
   ```
-4. Follow the "Configuration updates" steps below, starting with
-   "2.2.3 to 2.2.4". 
+4. Cleanup cruft from the Media migration:
+  
+  ```
+  drush pm-uninstall entity media_entity
+  ``` 
+5. Follow the "Configuration updates" steps below, starting with
+   "2.2.3 to 2.2.4".
 
+#### Configuration Management
+If you are using configuration management to move your configuration between
+development, staging, and production environments, you should export 
+configuration after #5 and deploy.
 
 ### Composer
 If you've installed Lightning using our [Composer-based project template](https://github.com/acquia/lightning-project), all you need to do is:
@@ -183,6 +192,7 @@ file or include them in your codebase using another method:
 * Scheduled Updates (`scheduled_updates`)
 * Features (`features`)
 * Configuration Update Manager (`config_update`)
+* Entity (`entity`)
 * Media Entity (`media_entity`)
 * Media Entity Document (`media_entity_document`)
 * Media Entity Image (`media_entity_image`)
@@ -197,7 +207,7 @@ composer require drupal/features
 **Note:** There are reports that the Media Entity module might not properly
 uninstall itself after handling the migration to core Media which could cause
 problems when it is removed from the codebase. See the comment number 15 on
-Issue #2918166 for more information. 
+Issue #2918166 for more information.
 
 **Note:** You will likely need to update Lightning's constraint to get the 3.x
 branch. The following is a good starting point, but additional commands might be
@@ -224,9 +234,6 @@ There are no manual update steps for this version.
 * Visit *Structure > Media types*. For each media type, click "Manage display"
   and select the "Embedded" display. Then drag the "Name" field into the
   "Disabled" section and press "Save".
-* To migrate to Content Moderation, install the wbm2cm module and Drush (8.x or
-  9.x). **Back up your database**, then run ```drush wbm2cm-migrate``` to run
-  the migration.
 * If you previously used a sub-profile to exclude Lightning Workflow's
   "Schedule Publication" sub-component (its machine name is
   `lightning_scheduled_updates`), you will need to update your sub-profile's
@@ -239,6 +246,23 @@ There are no manual update steps for this version.
   drush pm-uninstall scheduled_updates lightning_scheduled_updates
   drush pm-enable lightning_scheduler
   ```
+* To migrate to Content Moderation, install the wbm2cm module and Drush (8.x or
+  9.x). **Back up your database**, then run ```drush wbm2cm-migrate``` to run
+  the migration.
+
+**Note:** The Workbench Moderation to Content Moderation migration in Lightning
+2.2.4 affects actual content entities. As such, it will need to be run on your
+production database. If you have previously run the migration locally and
+deployed your config, you will run into issues with your config trying to
+disable Workbench Moderation - since the migration hasn't taken place on that
+database yet.
+
+If you store and deploy your config via a VCS, it is recommended that you skip
+the last manual step during your initial update to 2.2.4. Once the other config
+changes have been deployed, test the migration locally on an export of your
+production database before ultimately running it in your production environment.
+As with any script that affects content, be sure to take a backup of your
+production database before running the script.  
 
 ### 2.2.2 to 2.2.3
 There are no manual update steps for this version.
