@@ -33,28 +33,24 @@ that is managed by your VCS, you would generally follow these steps:
   composer require acquia/lightning:~[LIGHTNING_VERSION] --no-update
   composer update acquia/lightning --with-all-dependencies
   ```
-
 1. Run any database updates.
   
   ```
   drush cache:rebuild
   drush updatedb
   ```
-  
 1. Run any Lightning configuration updates.
   
   ```
   drush cache:rebuild
   drush update:lightning
   ```
-  
 1. Export the new configuration.
 
   
   ```
   drush config:export
   ```
-
 1. Commit the code and configuration changes to your VCS and push them to your
    destination environment.
   
