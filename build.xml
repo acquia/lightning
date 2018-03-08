@@ -164,7 +164,7 @@
     <exec command="${drush8} make drupal-org.make ${docroot} --no-core" passthru="true" />
     <!-- Because legacy builds are not Composer-aware, we need to explicitly
     require dependencies. -->
-    <exec command="${composer} require j7mbo/twitter-api-php league/oauth2-server:~6.0" dir="${docroot}" />
+    <exec command="${composer} require j7mbo/twitter-api-php league/oauth2-server:~6.0 webflo/drupal-core-strict:~8.5.0 phpdocumentor/reflection-docblock:^3.0||^4.0" dir="${docroot}" passthru="true" />
     <!-- Place Lightning inside the docroot/profiles dir -->
     <phingcall target="push" />
 
