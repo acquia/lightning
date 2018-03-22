@@ -1,3 +1,5 @@
+
+
 ## 3.1.0
 * Drupal core has been updated to 8.5.0.
 * Lightning API has been updated to 2.0.0, which patches Simple OAuth to make it
