@@ -74,7 +74,7 @@ class EntitySubContext extends DrupalSubContextBase {
     $node = $scope->getEntity();
 
     if (!isset($node->uid)) {
-      $user = $this->getContext(DrupalContext::class)->user;
+      $user = $this->getContext(DrupalContext::class)->getUserManager()->getCurrentUser();
 
       if (is_object($user)) {
         $node->uid = $user->uid;
