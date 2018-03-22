@@ -90,6 +90,18 @@ class EntitySubContext extends DrupalSubContextBase {
     $this->entities[$entity_type][] = $entity;
   }
 
+  public function queueNode() {
+    @trigger_error(__METHOD__ . ' is deprecated. Use ' . __CLASS__ . '::queueEntity() instead.', E_USER_DEPRECATED);
+  }
+
+  public function queueTerm() {
+    @trigger_error(__METHOD__ . ' is deprecated. Use ' . __CLASS__ . '::queueEntity() instead.', E_USER_DEPRECATED);
+  }
+
+  public function queueUser() {
+    @trigger_error(__METHOD__ . ' is deprecated. Use ' . __CLASS__ . '::queueEntity() instead.', E_USER_DEPRECATED);
+  }
+
   /**
    * Deletes all entities created during the scenario.
    *
