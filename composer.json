@@ -14,18 +14,24 @@
     "bin": [
         "lightning-subprofile"
     ],
+    "config": {
+        "preferred-install": {
+            "drupal/core": "dist"
+        }
+    },
     "repositories": {
-        "0": {
+        "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
         },
-        "1": {
+        "assets": {
             "type": "composer",
             "url": "https://asset-packagist.org"
         },
         "dev": {
-            "type": "vcs",
-            "url": "https://github.com/acquia/lightning-dev"
+            "type": "github",
+            "url": "https://github.com/acquia/lightning-dev",
+            "no-api": true
         }
     },
     "scripts": {
