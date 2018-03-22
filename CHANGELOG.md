@@ -1,3 +1,8 @@
+## 3.0.4
+* Drupal core has been security updated to 8.4.6 (SA-CORE-2018-001)
+* Lightning API has been updated toto 1.0.0-rc4 which security updates JSON API
+  to 1.14.0. (Issue #2955026 and SA-CONTRIB-2018-016)
+
 ## 3.0.3
 * Lightning API has been updated to rc3 which:
   * Only sets up developer-specific settings when Lightning's internal developer
