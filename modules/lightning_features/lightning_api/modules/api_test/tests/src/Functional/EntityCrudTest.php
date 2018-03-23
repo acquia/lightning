@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\api_test\Functional;
 
+use Drupal\taxonomy\Entity\Vocabulary;
 use Drupal\user\Entity\User;
 use Drupal\consumers\Entity\Consumer;
 
@@ -30,38 +31,32 @@ class EntityCrudTest extends ApiTestBase {
     parent::setUp();
 
     // Create an admin user that has permission to do everything for testing.
-    $edit = [
+    /** @var \Drupal\user\UserInterface $account */
+    $account = User::create([
       'name' => 'api-admin-user',
       'mail' => 'api-admin-user@example.com',
       'pass' => 'admin',
-    ];
-
-    $account = User::create($edit);
+    ]);
     $account->addRole('administrator');
-    $account->activate();
-    $account->save();
-    $api_admin_user_id = $account->id();
+    $account->activate()->save();
 
     // Create an associated OAuth client to use for testing.
-    $data = [
-      'uuid' => 'api_test-admin-oauth2-client',
+    $client = Consumer::create([
       'label' => 'API Test Admin Client',
       'secret' => 'oursecret',
       'confidential' => 1,
-      'user_id' => $api_admin_user_id,
+      'user_id' => $account->id(),
       'roles' => 'administrator',
-    ];
-
-    $client = Consumer::create($data);
+    ]);
     $client->save();
 
     // Retrieve and store a token to use in the requests.
     $admin_client_options = [
       'form_params' => [
         'grant_type' => 'password',
-        'client_id' => 'api_test-admin-oauth2-client',
+        'client_id' => $client->uuid(),
         'client_secret' => 'oursecret',
-        'username' => 'api-admin-user',
+        'username' => $account->getAccountName(),
         'password' => 'admin',
       ],
     ];
@@ -69,51 +64,34 @@ class EntityCrudTest extends ApiTestBase {
   }
 
   /**
-   * Tests create, read, and update of content and config entities via the
-   * API.
+   * Tests create, read, and update of content entities via the API.
    */
   public function testEntities() {
-    $description = 'Created by Carl Linnaeus';
-    $data = [
-      'data' => [
-        'type' => 'taxonomy_vocabulary--taxonomy_vocabulary',
-        'id' => 'taxonomy_test_vocabulary',
-        'attributes' => [
-          'uuid' => 'taxonomy_test_vocabulary',
-          'name' => 'I\'m a vocab',
-          'vid' => 'im_a_vocab',
-          'description' => $description,
-          'status' => TRUE,
-        ]
-      ]
-    ];
+    // Create a taxonomy vocabulary. This cannot currently be done over the API
+    // because jsonapi doesn't really support it, and will not be able to
+    // properly support it until config entities can be internally validated
+    // and access controlled outside of the UI.
+    $vocabulary = Vocabulary::create([
+      'name' => "I'm a vocab",
+      'vid' => 'im_a_vocab',
+      'status' => TRUE,
+    ]);
+    $vocabulary->save();
 
-    // Create a taxonomy vocabulary (config entity).
-    $this->request('/jsonapi/taxonomy_vocabulary/taxonomy_vocabulary', 'post', $this->token, $data);
+    $endpoint = '/jsonapi/taxonomy_vocabulary/taxonomy_vocabulary/' . $vocabulary->uuid();
 
     // Read the newly created vocabulary.
-    $response = $this->request('/jsonapi/taxonomy_vocabulary/taxonomy_vocabulary/taxonomy_test_vocabulary', 'get', $this->token);
+    $response = $this->request($endpoint, 'get', $this->token);
     $body = $this->decodeResponse($response);
-    $this->assertEquals($description, $body['data']['attributes']['description']);
+    $this->assertEquals($vocabulary->label(), $body['data']['attributes']['name']);
 
-    $new_description = 'Refined by Johann Bartsch.';
-    $data = [
-      'data' => [
-        'id' => 'taxonomy_test_vocabulary',
-        'attributes' => [
-          'description' => $new_description,
-        ]
-      ]
-    ];
-
-    // Update the vocabulary.
-    $this->request('/jsonapi/taxonomy_vocabulary/taxonomy_vocabulary/taxonomy_test_vocabulary', 'patch', $this->token, $data);
+    $vocabulary->set('name', 'Still a vocab, just a different title');
+    $vocabulary->save();
 
     // Read the updated vocabulary.
-    $response = $this->request('/jsonapi/taxonomy_vocabulary/taxonomy_vocabulary/taxonomy_test_vocabulary', 'get', $this->token);
+    $response = $this->request($endpoint, 'get', $this->token);
     $body = $this->decodeResponse($response);
-    $this->assertEquals('I\'m a vocab', $body['data']['attributes']['name']);
-    $this->assertEquals($new_description, $body['data']['attributes']['description']);
+    $this->assertEquals($vocabulary->label(), $body['data']['attributes']['name']);
 
     // Assert that the newly created vocabulary's endpoint is reachable.
     // @todo figure out why we need to rebuild caches for it to be available.
@@ -121,24 +99,22 @@ class EntityCrudTest extends ApiTestBase {
     $response = $this->request('/jsonapi/taxonomy_term/im_a_vocab');
     $this->assertEquals(200, $response->getStatusCode());
 
-    $description = 'How quickly deft jumping zebras vex.';
+    $name = 'zebra';
+    $term_uuid = $this->container->get('uuid')->generate();
+    $endpoint = '/jsonapi/taxonomy_term/im_a_vocab/' . $term_uuid;
     $data = [
       'data' => [
         'type' => 'taxonomy_term--im_a_vocab',
-        'id' => 'zebra_taxonomy_term',
+        'id' => $term_uuid,
         'attributes' => [
-          'name' => 'zebra',
-          'uuid' => 'zebra_taxonomy_term',
-          'description' => [
-            'value' => $description,
-            'format' => 'rich_text',
-          ]
+          'name' => $name,
+          'uuid' => $term_uuid,
         ],
         'relationships' => [
           'vid' => [
             'data' => [
               'type' => 'taxonomy_vocabulary--taxonomy_vocabulary',
-              'id' => 'taxonomy_test_vocabulary',
+              'id' => $vocabulary->uuid(),
             ]
           ]
         ]
@@ -149,30 +125,28 @@ class EntityCrudTest extends ApiTestBase {
     $this->request('/jsonapi/taxonomy_term/im_a_vocab', 'post', $this->token, $data);
 
     // Read the taxonomy term.
-    $response = $this->request('/jsonapi/taxonomy_term/im_a_vocab/zebra_taxonomy_term', 'get', $this->token);
+    $response = $this->request($endpoint, 'get', $this->token);
     $body = $this->decodeResponse($response);
-    $this->assertEquals($description, $body['data']['attributes']['description']['value']);
+    $this->assertEquals($name, $body['data']['attributes']['name']);
 
-    $new_description = 'Smart squid gives lazy lummox who asks for job pen.';
+    $new_name = 'squid';
     $data = [
       'data' => [
-        'id' => 'zebra_taxonomy_term',
+        'type' => 'taxonomy_term--im_a_vocab',
+        'id' => $term_uuid,
         'attributes' => [
-          'description' => [
-            'value' => $new_description,
-          ]
+          'name' => $new_name,
         ]
       ]
     ];
 
     // Update the taxonomy term.
-    $this->request('/jsonapi/taxonomy_term/im_a_vocab/zebra_taxonomy_term', 'patch', $this->token, $data);
+    $this->request($endpoint, 'patch', $this->token, $data);
 
     // Read the updated taxonomy term.
-    $response = $this->request('/jsonapi/taxonomy_term/im_a_vocab/zebra_taxonomy_term', 'get', $this->token);
+    $response = $this->request($endpoint, 'get', $this->token);
     $body = $this->decodeResponse($response);
-    $this->assertSame('zebra', $body['data']['attributes']['name']);
-    $this->assertSame($new_description, $body['data']['attributes']['description']['value']);
+    $this->assertSame($new_name, $body['data']['attributes']['name']);
   }
 
 }
