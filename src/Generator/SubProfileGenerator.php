@@ -51,6 +51,7 @@ class SubProfileGenerator extends Generator {
         $dependencies,
         $excluded_dependencies
       );
+      return;
     }
 
     $parameters = [
