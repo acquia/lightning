@@ -1,21 +1,25 @@
 @lightning @core @search @api @errors
 Feature: Site search
 
-  @page @e4c5b23b
-  Scenario: Unpublished content does not appear in search results
-    Given I am an anonymous user
-    And page content:
-      | title    | moderation_state | body                                                                   |
-      | Zombie 1 | draft            | Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. |
-      | Zombie 2 | review           | De carne lumbering animata corpora quaeritis.                          |
-      | Zombie 3 | published        | Summus brains sit, morbo vel maleficia?                                |
-    When I visit "/search"
-    And I enter "zombie" for "Keywords"
-    And I press "Search"
-    Then the response status code should be 200
-    And I should not see "Zombie 1"
-    And I should not see "Zombie 2"
-    And I should see "Zombie 3"
+  # Search API 1.7 introduced a different method of triggering search indexing
+  # which causes this test to fail. We fixed the test method in 753e8f8ee on
+  # the Lightning Core package. That fix will not be backported so this test is
+  # commented out.
+  # @page @e4c5b23b
+  # Scenario: Unpublished content does not appear in search results
+  #   Given I am an anonymous user
+  #   And page content:
+  #    | title    | moderation_state | body                                                                   |
+  #    | Zombie 1 | draft            | Zombie ipsum reversus ab viral inferno, nam rick grimes malum cerebro. |
+  #    | Zombie 2 | review           | De carne lumbering animata corpora quaeritis.                          |
+  #    | Zombie 3 | published        | Summus brains sit, morbo vel maleficia?                                |
+  #   When I visit "/search"
+  #   And I enter "zombie" for "Keywords"
+  #   And I press "Search"
+  #   Then the response status code should be 200
+  #   And I should not see "Zombie 1"
+  #   And I should not see "Zombie 2"
+  #   And I should see "Zombie 3"
 
   @layout @landing-page @javascript @6aa9edbb
   Scenario: Indexing and searching for landing pages
