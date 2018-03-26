@@ -167,8 +167,7 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 
 ### 3.0.3 to 3.1.0
 * Edit the **Media** view, and if it has an exposed filter called "Media Type",
-  modify the filter label to "Type" from "Provider", and change its URL
-  identifier to "type" from "provider".
+  modify the filter label to "Type" and change its URL identifier to "type".
 
 ### 3.0.2 to 3.0.3
 There are no manual update steps for this version.
