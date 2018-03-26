@@ -3,6 +3,7 @@
 namespace Drupal\lightning\Command;
 
 use Drupal\Console\Command\Shared\ConfirmationTrait;
+use Drupal\Console\Core\Command\Command;
 use Drupal\Console\Core\Command\Shared\CommandTrait;
 use Drupal\Console\Core\Generator\Generator;
 use Drupal\Console\Core\Style\DrupalStyle;
@@ -14,7 +15,6 @@ use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\InfoParserInterface;
 use Drupal\lightning\ComponentDiscovery;
 use Drupal\lightning_core\Element;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
