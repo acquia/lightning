@@ -135,10 +135,10 @@ for Drush which allow you to uninstall dependencies of parent profiles.
 * [Drush 9 inherited profile dependencies patch](https://www.drupal.org/files/issues/2902643-2--drush-master.patch).
 
 ## Contributing
-Issues are tracked on [Drupal.Org][issue_queue]. Contributions can be provided
+Issues are tracked on [drupal.org][issue_queue]. Contributions can be provided
 either as traditional patches or as pull requests on our [GitHub clone][github].
 
-Each Lightning component also has a Drupal.Org issue queue:
+Each Lightning component also has a drupal.org issue queue:
 
 * [API](https://www.drupal.org/project/issues/lightning_api)
 * [Core](https://www.drupal.org/project/issues/lightning_core)
@@ -146,12 +146,20 @@ Each Lightning component also has a Drupal.Org issue queue:
 * [Media](https://www.drupal.org/project/issues/lightning_media)
 * [Workflow](https://www.drupal.org/project/issues/lightning_workflow)
 
-### Developing Lightning Locally
-Lightning has a dev dependency on Lightning Dev which provides tools to aid in
-devloping and contributing to Lightning. To install locally:
+### Local Development
+Lightning has a dev dependency on [Lightning Dev][lightning_dev] which provides
+tools to aid in developing and contributing to Lightning. To install locally:
 
-1. Clone this repo
-1. Run `composer install`
+1. Clone this repo:
+  ```
+  $ git clone git@github.com:acquia/lightning.git
+  ```
+  
+1. Install dependencies:
+  ```
+  $ cd lightning
+  $ composer install
+  ```
 
 This will create a fully functional docroot with a git-ignored copy of the
 profile files inside the `docroot/contrib/lightning`. You can modify those files
@@ -169,3 +177,4 @@ order to build a local version of Lightning in this way.
 [demo_videos]: http://lightning.acquia.com/blog/lightning-user-stories-demonstrations "Lightning user story demonstration videos"
 [sub-profile documentation]: https://github.com/acquia/lightning/wiki/Lightning-as-a-Base-Profile "Lightning sub-profile documentation"
 [github]: https://github.com/acquia/lightning "GitHub clone"
+[lightning_dev]: https://github.com/acquia/lightning-dev "Lightning Dev repository"
