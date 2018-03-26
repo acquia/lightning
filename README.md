@@ -134,6 +134,33 @@ for Drush which allow you to uninstall dependencies of parent profiles.
 
 * [Drush 9 inherited profile dependencies patch](https://www.drupal.org/files/issues/2902643-2--drush-master.patch).
 
+## Contributing
+Issues are tracked on [Drupal.Org][issue_queue]. Contributions can be provided
+either as traditional patches or as pull requests on our [GitHub clone][github].
+
+Each Lightning component also has a Drupal.Org issue queue:
+
+* [API](https://www.drupal.org/project/issues/lightning_api)
+* [Core](https://www.drupal.org/project/issues/lightning_core)
+* [Layout](https://www.drupal.org/project/issues/lightning_layout)
+* [Media](https://www.drupal.org/project/issues/lightning_media)
+* [Workflow](https://www.drupal.org/project/issues/lightning_workflow)
+
+### Developing Lightning Locally
+Lightning has a dev dependency on Lightning Dev which provides tools to aid in
+devloping and contributing to Lightning. To install locally:
+
+1. Clone this repo
+1. Run `composer install`
+
+This will create a fully functional docroot with a git-ignored copy of the
+profile files inside the `docroot/contrib/lightning`. You can modify those files
+directly, then use the provided `composer pull` command to move the changes back
+into the VCS controlled directory.
+
+Lightning is still compatible with PHP 5.6, but you will need PHP >= 7.0.8 in
+order to build a local version of Lightning in this way.
+
 [issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
 [meta_release]: https://www.drupal.org/node/2670686 "Lightning Meta Releases Issue"
 [template]: https://github.com/acquia/lightning-project "Composer-based project template"
@@ -141,3 +168,4 @@ for Drush which allow you to uninstall dependencies of parent profiles.
 [lightning_composer_project]: https://github.com/acquia/lightning-project
 [demo_videos]: http://lightning.acquia.com/blog/lightning-user-stories-demonstrations "Lightning user story demonstration videos"
 [sub-profile documentation]: https://github.com/acquia/lightning/wiki/Lightning-as-a-Base-Profile "Lightning sub-profile documentation"
+[github]: https://github.com/acquia/lightning "GitHub clone"
