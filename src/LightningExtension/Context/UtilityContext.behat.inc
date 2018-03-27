@@ -2,7 +2,6 @@
 
 namespace Acquia\LightningExtension\Context;
 
-use Acquia\LightningExtension\AwaitTrait;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
