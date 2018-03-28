@@ -1,6 +1,13 @@
 ## 3.1.1
+* Drupal core has been security update to 8.5.1 (SA-2018-002)
 * Lightning API has been updated to 2.1.0 which security updates JSON API to
   1.14.0. (Issue #2955026 and SA-CONTRIB-2018-016)
+* Lightning Workflow has been updated to 1.2.0 which adds the permission to view
+  unpublished content and revisions when Lightning Roles (part of Lightning
+  Core) is installed.
+* Lightning Core has been updated to 2.2.0 which now checks to ensure no
+  existing config exists of the same name when renaming the configuration which
+  stores extension's version numbers. (Issue #2955072)
 
 ## 3.1.0
 * Drupal core has been updated to 8.5.0.
