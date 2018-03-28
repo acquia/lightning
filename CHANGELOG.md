@@ -1,6 +1,8 @@
 ## 3.1.1
+* 
 * Lightning API has been updated to 2.1.0 which security updates JSON API to
   1.14.0. (Issue #2955026 and SA-CONTRIB-2018-016)
+* 
 
 ## 3.1.0
 * Drupal core has been updated to 8.5.0.
