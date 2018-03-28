@@ -166,7 +166,9 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
 ### 3.1.0 to 3.1.1
-
+* If you have Lightning Roles and Lightning Workflow installed, grant the
+  "View any unpublished content" and "View latest version" roles for each
+  provided "reviewer" role.  
 
 ### 3.0.3 to 3.1.0
 * Edit the **Media** view, and if it has an exposed filter called "Source",
