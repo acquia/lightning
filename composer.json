@@ -7,7 +7,8 @@
     "prefer-stable": true,
     "require-dev": {
         "drupal/media_entity_generic": "1.x-dev",
-        "acquia/lightning_dev": "dev-8.x-1.x"
+        "acquia/lightning_dev": "dev-8.x-1.x",
+        "composer/composer": "^1.6"
     },
     "bin": [
         "lightning-subprofile"
@@ -91,6 +92,9 @@
         "drupal/lightning_workflow": "^1.2",
         "drupal-composer/drupal-scaffold": "^2.0.0",
         "oomphinc/composer-installers-extender": "^1.1"
+    },
+    "conflict": {
+        "drupal/drupal-extension": "<3.4.0"
     },
     "autoload": {
         "psr-4": {
