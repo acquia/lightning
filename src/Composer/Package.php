@@ -172,7 +172,16 @@ class Package {
         ['.x', NULL],
         $package['version']
       );
-      $info['download']['revision'] = $package['source']['reference'];
+
+      // We never want to specify a commit hash, regardless of whether this is
+      // a dev branch or tagged release.
+      unset($info['download']['revision']);
+
+      // But, if it is a tagged release (i.e., there's no -dev suffix in the
+      // version), we do want to specify that tag.
+      if (strpos($package['version'], '-dev') === FALSE) {
+        $info['download']['tag'] = $package['version'];
+      }
     }
     // Dev versions should use git branch + revision, otherwise a tag is used.
     elseif (strstr($package['version'], 'dev')) {
