@@ -4,6 +4,7 @@ projects[drupal][type] = core
 projects[drupal][download][type] = git
 projects[drupal][download][url] = https://git.drupal.org/project/drupal.git
 projects[drupal][download][branch] = 8.5.x
+projects[drupal][download][tag] = 8.5.2
 projects[drupal][patch][] = https://www.drupal.org/files/issues/1356278-408--8.5.x-real.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch
