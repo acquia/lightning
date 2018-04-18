@@ -1,5 +1,11 @@
+## 3.0.5
+* Drupal core has been security updated to 8.4.7 (SA-CORE-2018-003)
+* Lightning Core has been update to 1.0.0-rc5 which fixes an incompatibility
+with Search API which would cause fatal errors under certain circumstances.
+(Issue #2961547 and GitHub #46)
+
 ## 3.0.4
-* Drupal core has been security updated to 8.4.6 (SA-CORE-2018-001)
+* Drupal core has been security updated to 8.4.6 (SA-CORE-2018-002)
 * Lightning API has been updated toto 1.0.0-rc4 which security updates JSON API
   to 1.14.0. (Issue #2955026 and SA-CONTRIB-2018-016)
 
