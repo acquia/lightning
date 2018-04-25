@@ -165,6 +165,9 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+### 3.1.2 to 3.1.3
+There are no manual update steps for this version.
+
 ### 3.1.1 to 3.1.2
 There are no manual update steps for this version.
 

@@ -1,7 +1,10 @@
+## 3.1.3
+* Drupal core has been security updated to 8.5.3. (SA-2018-004)
+
 ## 3.1.2
-* Drupal core has been security update to 8.5.2 (SA-2018-003)
-* Lightning Core has been update to 2.3.0 which fixes an incompatibility with
-  Search API 1.8.0.
+* Drupal core has been security update to 8.5.2. (SA-2018-003)
+* Lightning Core has been update to 2.3.0 to fix an incompatibility with Search
+  API 1.8.0.
 
 ## 3.1.1
 * Drupal core has been security update to 8.5.1 (SA-2018-002)
