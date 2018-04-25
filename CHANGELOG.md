@@ -1,5 +1,7 @@
 ## 3.0.6
 * Drupal core has been security updated to 8.4.8 (SA-CORE-2018-004)
+* Lightning API has been updated to 1.0.0-rc5, which includes a security update
+  to JSON API. (SA-CONTRIB-2018-021)
 
 ## 3.0.5
 * Drupal core has been security updated to 8.4.7 (SA-CORE-2018-003)
