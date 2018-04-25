@@ -166,7 +166,8 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
 ### 3.1.2 to 3.1.3
-There are no manual update steps for this version.
+* If you have Lightning API enabled, you should clear all caches after updating
+  Lightning, due to changes in JSON API that may require a cache rebuild.
 
 ### 3.1.1 to 3.1.2
 There are no manual update steps for this version.
