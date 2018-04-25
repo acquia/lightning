@@ -78,6 +78,7 @@ install:
   - phing install -Ddb.database=drupal -Ddb.user=lightning -Ddb.password=lightning -Ddb.host=127.0.0.1 -Durl=http://127.0.0.1:8080
   # Restore and update from the previous version.
   - robo update $VERSION
+  - drush cache-rebuild -y
 
 before_script:
   - drush runserver --default-server=builtin 8080 &>/dev/null &
