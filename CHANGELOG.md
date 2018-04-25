@@ -1,5 +1,9 @@
+## 2.2.10
+* Drupal core has been security updated to 8.4.8. (SA-2018-004)
+* JSON API has been security updated to 1.16.0. (SA-CONTRIB-2018-021)
+
 ## 2.2.9
-* Drupal core has been security update to 8.4.6. (SA-2018-002)
+* Drupal core has been security updated to 8.4.6. (SA-2018-002)
 * JSON API has been security updated to 1.14.
   (Issue #2955026 and SA-CONTRIB-2018-016)
 
