@@ -1,5 +1,5 @@
 ## 3.0.6
-* Drupal core has been security update to 8.4.8 (SA-CORE-2018-004)
+* Drupal core has been security updated to 8.4.8 (SA-CORE-2018-004)
 
 ## 3.0.5
 * Drupal core has been security updated to 8.4.7 (SA-CORE-2018-003)
