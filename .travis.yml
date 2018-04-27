@@ -18,11 +18,12 @@ env:
   - VERSION=3.0.0
 
 addons:
-  apt:
-    packages:
-    # Dependencies for Chrome.
-    - libappindicator1
-    - fonts-liberation
+  chrome: stable
+  # apt:
+  #   packages:
+  #   # Dependencies for Chrome.
+  #   - libappindicator1
+  #   - fonts-liberation
 
 before_install:
   - phpenv config-rm xdebug.ini
