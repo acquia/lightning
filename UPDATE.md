@@ -143,6 +143,11 @@ perform these updates automatically, confirming each change interactively as it
 goes. If you intend to perform all the configuration updates documented here,
 this can save quite a bit of time!
 
+That said, though, some of these updates involve complicated data migrations.
+Due to their complexity, Lightning *never* automates them -- you will need to
+take some manual action to complete these updates, which are denoted as such
+below.
+
 ### Automatic configuration updates
 
 Ensure Drush 9 is installed, then switch into the web root of your
@@ -166,17 +171,21 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
 ### 3.1.3 to 3.1.4
-* Lightning Scheduler has been completely rewritten, and now stores scheduled
+* **NOTE: This is a _fully manual update_ that involves a data migration!**
+  Lightning Scheduler has been completely rewritten, and now stores scheduled
   moderation state transitions in a pair of new base fields. You will need to
   migrate any existing scheduled transitions from the old base fields to the
   new ones. After completing database updates, Lightning Scheduler will link
   you to a UI where you can run the migration. Alternatively, you can do it
   at the command line (Drush 9 only) by running
   `drush lightning:scheduler:migrate`.
+  
+**Note:** The Lightning Scheduler migration in Lightning 3.1.4 affects actual
+  content entities. As such, it will need to be run on your production
+  database.
 
 ### 3.1.2 to 3.1.3
-* If you have Lightning API enabled, you should clear all caches after updating
-  Lightning, due to changes in JSON API that may require a cache rebuild.
+There are no manual update steps for this version.
 
 ### 3.1.1 to 3.1.2
 There are no manual update steps for this version.
@@ -276,7 +285,7 @@ the last manual step during your initial update to 2.2.4. Once the other config
 changes have been deployed, test the migration locally on an export of your
 production database before ultimately running it in your production environment.
 As with any script that affects content, be sure to take a backup of your
-production database before running the script.  
+production database before running the script.
 
 ### 2.2.2 to 2.2.3
 There are no manual update steps for this version.
