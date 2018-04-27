@@ -165,6 +165,15 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+### 3.1.3 to 3.1.4
+* Lightning Scheduler has been completely rewrittne, and now stores scheduled
+  moderation state transitions in a pair of new base fields. You will need to
+  migrate any existing scheduled transitions from the old base fields to the
+  new ones. After completing database updates, Lightning Scheduler will link
+  you to a UI where you can run the migration. Alternatively, you can do it
+  at the command line (Drush 9 only) by running
+  `drush lightning:scheduler:migrate`.
+
 ### 3.1.2 to 3.1.3
 * If you have Lightning API enabled, you should clear all caches after updating
   Lightning, due to changes in JSON API that may require a cache rebuild.

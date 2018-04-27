@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "ceeadcba4d0525d4705f461270d97044",
+    "content-hash": "fd85b53bf8c8ac2d801237c8ea74f250",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1082,16 +1082,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "8.5.x-dev",
+            "version": "8.5.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "bd6d2db0f234f5d84f77c938f65b3c7bd3a8fafa"
+                "reference": "b012f0ae51504880e920f2c6efdbdf03b6fe2129"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/bd6d2db0f234f5d84f77c938f65b3c7bd3a8fafa",
-                "reference": "bd6d2db0f234f5d84f77c938f65b3c7bd3a8fafa",
+                "url": "https://api.github.com/repos/drupal/core/zipball/b012f0ae51504880e920f2c6efdbdf03b6fe2129",
+                "reference": "b012f0ae51504880e920f2c6efdbdf03b6fe2129",
                 "shasum": ""
             },
             "require": {
@@ -1296,7 +1296,7 @@
                     "2880374 - Experimental modules should not have warnings after being installed": "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
-                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2018-04-16/2815221-87-8.5.x.patch",
+                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2815221-87.patch",
                     "2877383 - Add action support to Media module": "https://www.drupal.org/files/issues/2877383-56.patch",
                     "2670730 - Provide a delete action for each content entity type": "https://www.drupal.org/files/issues/2670730-81-89-8.5.0-rc1.patch"
                 }
@@ -1322,7 +1322,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2018-04-25T15:39:02+00:00"
+            "time": "2018-04-25T15:39:01+00:00"
         },
         {
             "name": "drupal/crop",
@@ -1886,7 +1886,7 @@
                 },
                 "patches_applied": {
                     "2865928 - The View widget should filter based on field settings": "https://www.drupal.org/files/issues/entity-browser-view-context-2865928-14.patch",
-                    "2877751 - Inform users how many items they can add to a field that uses an entity browser": "https://www.drupal.org/files/issues/2877751-17.patch"
+                    "2877751 - Inform users how many items they can add to a field that uses an entity browser": "https://www.drupal.org/files/issues/2877751-27-8.x-2.x.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2214,11 +2214,17 @@
         },
         {
             "name": "drupal/lightning_api",
-            "version": "dev-2.x",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_api",
-                "reference": "e87caea3be27395d7563b19aaffc6ca779021a05"
+                "reference": "8.x-2.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_api-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "997c1cc991e38798ebd9003b1f6c21411b6802cd"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2228,7 +2234,7 @@
                 "drupal/lightning_core": "^2.5",
                 "drupal/openapi": "1.0-alpha1",
                 "drupal/openapi_redoc": "*",
-                "drupal/simple_oauth": "3.5.0",
+                "drupal/simple_oauth": "3.6.0",
                 "drupal/simple_oauth_extras": "*",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
@@ -2242,11 +2248,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.2+0-dev",
-                    "datestamp": "1524679380",
+                    "version": "8.x-2.3",
+                    "datestamp": "1524839285",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "installer-types": [
@@ -2274,8 +2280,7 @@
                 },
                 "patches": {
                     "drupal/simple_oauth": {
-                        "2925369 - TokenAuthUser does not fulfill RevisionableInterface, causes fatals": "https://www.drupal.org/files/issues/2925369-2.patch",
-                        "2945431 - Make compatible with TranslatableRevisionableInterface in 8.5.x": "https://www.drupal.org/files/issues/2945431-3.patch"
+                        "2966590 - Undefined variable $client in TokenAuthUser::__construct()": "https://www.drupal.org/files/issues/2018-04-27/2966590-3.patch"
                     }
                 },
                 "enable-patching": true
@@ -2321,23 +2326,28 @@
             "homepage": "https://www.drupal.org/project/lightning_api",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_api"
-            },
-            "time": "2018-04-25T18:51:59+00:00"
+            }
         },
         {
             "name": "drupal/lightning_core",
-            "version": "dev-2.x",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_core",
-                "reference": "d7adb3768954106c2e6b86ce17dde86224a9bf5b"
+                "reference": "8.x-2.5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_core-8.x-2.5.zip",
+                "reference": "8.x-2.5",
+                "shasum": "4553354f5e5a148f11d013634e4eb4f4ed86e442"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/acquia_connector": "^1.1",
                 "drupal/contact_storage": "^1.0",
-                "drupal/core": "8.5.x-dev",
+                "drupal/core": "~8.5.3",
                 "drupal/metatag": "^1.0",
                 "drupal/pathauto": "^1.0",
                 "drupal/search_api": "^1.0",
@@ -2360,11 +2370,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.5+1-dev",
+                    "version": "8.x-2.5",
                     "datestamp": "1524678185",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "installer-types": [
@@ -2396,7 +2406,7 @@
                         "2880374 - Experimental modules should not have warnings after being installed": "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
                         "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                         "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
-                        "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2018-04-16/2815221-87-8.5.x.patch"
+                        "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2815221-87.patch"
                     }
                 },
                 "drush": {
@@ -2451,16 +2461,21 @@
             "homepage": "https://www.drupal.org/project/lightning_core",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_core"
-            },
-            "time": "2018-04-25T17:46:14+00:00"
+            }
         },
         {
             "name": "drupal/lightning_layout",
-            "version": "dev-1.x",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_layout",
-                "reference": "3e6f660126a85714674b3e29dbd10186e7d5681d"
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_layout-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "e56298db2dd24db248113652a2752514f0d1e079"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2468,10 +2483,10 @@
                 "drupal/core": "~8.0",
                 "drupal/ctools": "^3.0",
                 "drupal/entity_block": "^1.0",
-                "drupal/lightning_core": "1.x-dev || 2.x-dev",
-                "drupal/panelizer": "4.0.0",
+                "drupal/lightning_core": "^1.0 || ^2.5",
+                "drupal/panelizer": "^4.1",
                 "drupal/panelizer_quickedit": "*",
-                "drupal/panels": "4.2.0",
+                "drupal/panels": "4.3",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
             "require-dev": {
@@ -2483,11 +2498,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.1+2-dev",
-                    "datestamp": "1522329780",
+                    "version": "8.x-1.2",
+                    "datestamp": "1524769680",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "installer-types": [
@@ -2516,14 +2531,7 @@
                 "patches": {
                     "drupal/panels": {
                         "2878684 - Use String.match to correlate regions when switching Layouts in Panels IPE": "https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch",
-                        "2825034 - Form error messages do not appear in IPE": "https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch",
-                        "2908897 - CategoryView leaves AJAX request marked active": "https://www.drupal.org/files/issues/2908897-2.patch",
-                        "2913353 - IPE attaches behaviors a bit too quickly": "https://www.drupal.org/files/issues/2913353-2.patch",
-                        "2825028 - AJAX error creating and placing blocks with date fields in IPE": "https://www.drupal.org/files/issues/panels-ipe-date-field-2825028-10.patch",
-                        "2923286 - Fatal error in Drupal\\panels\\Form\\PanelsAddBlockForm::buildForm() with PHP 7.2": "https://www.drupal.org/files/issues/2923286-13.patch"
-                    },
-                    "drupal/panelizer": {
-                        "2908917 - SaveTabView blindly assumes a Revert tab exists": "https://www.drupal.org/files/issues/2908917-2.patch"
+                        "2825034 - Form error messages do not appear in IPE": "https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch"
                     }
                 },
                 "enable-patching": true
@@ -2568,16 +2576,21 @@
             "homepage": "https://www.drupal.org/project/lightning_layout",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_layout"
-            },
-            "time": "2018-04-02T17:00:25+00:00"
+            }
         },
         {
             "name": "drupal/lightning_media",
-            "version": "dev-2.x",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_media",
-                "reference": "169e9afff93742efd6ba80d3e2c0cc4ff7a150a2"
+                "reference": "8.x-2.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_media-8.x-2.2.zip",
+                "reference": "8.x-2.2",
+                "shasum": "83f49d6318b7e67a4313a9b4174a2e9664e5c8e6"
             },
             "require": {
                 "bower-asset/cropper": "^2.3",
@@ -2592,11 +2605,11 @@
                 "drupal/entity_embed": "1.0.0-beta2",
                 "drupal/image_widget_crop": "^2.1",
                 "drupal/inline_entity_form": "^1.0",
-                "drupal/lightning_core": "2.x-dev",
+                "drupal/lightning_core": "^2.5",
                 "drupal/media": "*",
                 "drupal/media_entity_instagram": "2.0.0-alpha1",
                 "drupal/media_entity_twitter": "2.0.0-alpha2",
-                "drupal/video_embed_field": "2.0.0-alpha2",
+                "drupal/video_embed_field": "^2.0",
                 "drupal/views_infinite_scroll": "^1.1",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
@@ -2613,11 +2626,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.1+1-dev",
-                    "datestamp": "1521730685",
+                    "version": "8.x-2.2",
+                    "datestamp": "1524770580",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "installer-types": [
@@ -2653,7 +2666,7 @@
                     },
                     "drupal/entity_browser": {
                         "2865928 - The View widget should filter based on field settings": "https://www.drupal.org/files/issues/entity-browser-view-context-2865928-14.patch",
-                        "2877751 - Inform users how many items they can add to a field that uses an entity browser": "https://www.drupal.org/files/issues/2877751-17.patch"
+                        "2877751 - Inform users how many items they can add to a field that uses an entity browser": "https://www.drupal.org/files/issues/2877751-27-8.x-2.x.patch"
                     },
                     "drupal/media_entity_instagram": {
                         "2917454 - Field formatter test is broken": "https://www.drupal.org/files/issues/2917454-2.patch"
@@ -2701,39 +2714,46 @@
             "homepage": "https://www.drupal.org/project/lightning_media",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_media"
-            },
-            "time": "2018-03-07T18:22:46+00:00"
+            }
         },
         {
             "name": "drupal/lightning_workflow",
-            "version": "dev-1.x",
+            "version": "2.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_workflow",
-                "reference": "498140a0a455dec1b8d9e576484aa0e528c04649"
+                "reference": "8.x-2.0-rc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_workflow-8.x-2.0-rc1.zip",
+                "reference": "8.x-2.0-rc1",
+                "shasum": "cb8992b01d5877a393205cdda98543206d49e577"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/core": "*",
                 "drupal/diff": "^1.0",
-                "drupal/lightning_core": "1.x-dev || 2.x-dev",
+                "drupal/lightning_core": "^1.0 || ^2.5",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
             "require-dev": {
-                "acquia/lightning_dev": "dev-8.x-1.x"
+                "acquia/lightning_dev": "dev-8.x-1.x",
+                "drupal/lightning_core": "*",
+                "webmozart/assert": "^1.3"
             },
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-1.x": "1.x-dev"
+                    "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.2+4-dev",
-                    "datestamp": "1522714384",
+                    "version": "8.x-2.0-rc1",
+                    "datestamp": "1524755880",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 },
                 "installer-types": [
@@ -2801,8 +2821,7 @@
             "homepage": "https://www.drupal.org/project/lightning_workflow",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_workflow"
-            },
-            "time": "2018-04-03T00:11:05+00:00"
+            }
         },
         {
             "name": "drupal/media_entity_instagram",
@@ -3115,17 +3134,17 @@
         },
         {
             "name": "drupal/panelizer",
-            "version": "4.0.0",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/panelizer",
-                "reference": "8.x-4.0"
+                "reference": "8.x-4.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/panelizer-8.x-4.0.zip",
-                "reference": "8.x-4.0",
-                "shasum": "8913d1b782d3f0e48ac957ce1f6d3bc611d524c1"
+                "url": "https://ftp.drupal.org/files/projects/panelizer-8.x-4.1.zip",
+                "reference": "8.x-4.1",
+                "shasum": "056f236f171305c32d5cfecbfb77a5c7398749d8"
             },
             "require": {
                 "drupal/core": "*",
@@ -3140,15 +3159,12 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.0",
+                    "version": "8.x-4.1",
                     "datestamp": "1523670784",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "2908917 - SaveTabView blindly assumes a Revert tab exists": "https://www.drupal.org/files/issues/2908917-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3195,7 +3211,7 @@
         },
         {
             "name": "drupal/panelizer_quickedit",
-            "version": "4.0.0",
+            "version": "4.1.0",
             "require": {
                 "drupal/core": "*",
                 "drupal/panelizer": "self.version"
@@ -3206,8 +3222,8 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.0",
-                    "datestamp": "1493427125",
+                    "version": "8.x-4.1",
+                    "datestamp": "1523670784",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3256,17 +3272,17 @@
         },
         {
             "name": "drupal/panels",
-            "version": "4.2.0",
+            "version": "4.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/panels",
-                "reference": "8.x-4.2"
+                "reference": "8.x-4.3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/panels-8.x-4.2.zip",
-                "reference": "8.x-4.2",
-                "shasum": "6991377531eafaec09f9c7a31e091592e455137b"
+                "url": "https://ftp.drupal.org/files/projects/panels-8.x-4.3.zip",
+                "reference": "8.x-4.3",
+                "shasum": "81f71d8679a7179be2981d7c485a181a85f4e32b"
             },
             "require": {
                 "drupal/core": "^8.3",
@@ -3281,7 +3297,7 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.2",
+                    "version": "8.x-4.3",
                     "datestamp": "1523670784",
                     "security-coverage": {
                         "status": "covered",
@@ -3290,11 +3306,7 @@
                 },
                 "patches_applied": {
                     "2878684 - Use String.match to correlate regions when switching Layouts in Panels IPE": "https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch",
-                    "2825034 - Form error messages do not appear in IPE": "https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch",
-                    "2908897 - CategoryView leaves AJAX request marked active": "https://www.drupal.org/files/issues/2908897-2.patch",
-                    "2913353 - IPE attaches behaviors a bit too quickly": "https://www.drupal.org/files/issues/2913353-2.patch",
-                    "2825028 - AJAX error creating and placing blocks with date fields in IPE": "https://www.drupal.org/files/issues/panels-ipe-date-field-2825028-10.patch",
-                    "2923286 - Fatal error in Drupal\\panels\\Form\\PanelsAddBlockForm::buildForm() with PHP 7.2": "https://www.drupal.org/files/issues/2923286-13.patch"
+                    "2825034 - Form error messages do not appear in IPE": "https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3349,7 +3361,7 @@
         },
         {
             "name": "drupal/panels_ipe",
-            "version": "4.2.0",
+            "version": "4.3.0",
             "require": {
                 "drupal/core": "*",
                 "drupal/panels": "self.version"
@@ -3360,8 +3372,8 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.2",
-                    "datestamp": "1500497642",
+                    "version": "8.x-4.3",
+                    "datestamp": "1523670784",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3705,20 +3717,20 @@
         },
         {
             "name": "drupal/simple_oauth",
-            "version": "3.5.0",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/simple_oauth",
-                "reference": "8.x-3.5"
+                "reference": "8.x-3.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/simple_oauth-8.x-3.5.zip",
-                "reference": "8.x-3.5",
-                "shasum": "e96fe600c7ddc075cbd3412a5452989f21d52829"
+                "url": "https://ftp.drupal.org/files/projects/simple_oauth-8.x-3.6.zip",
+                "reference": "8.x-3.6",
+                "shasum": "edd1a821db89cb24af2105dab6806e1662dfbb1c"
             },
             "require": {
-                "drupal/consumers": "*",
+                "drupal/consumers": "^1.0.0-beta3",
                 "drupal/core": "^8.3",
                 "league/oauth2-server": "~6.0"
             },
@@ -3728,7 +3740,7 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.5",
+                    "version": "8.x-3.6",
                     "datestamp": "1524208682",
                     "security-coverage": {
                         "status": "covered",
@@ -3736,8 +3748,7 @@
                     }
                 },
                 "patches_applied": {
-                    "2925369 - TokenAuthUser does not fulfill RevisionableInterface, causes fatals": "https://www.drupal.org/files/issues/2925369-2.patch",
-                    "2945431 - Make compatible with TranslatableRevisionableInterface in 8.5.x": "https://www.drupal.org/files/issues/2945431-3.patch"
+                    "2966590 - Undefined variable $client in TokenAuthUser::__construct()": "https://www.drupal.org/files/issues/2018-04-27/2966590-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3763,7 +3774,7 @@
         },
         {
             "name": "drupal/simple_oauth_extras",
-            "version": "3.5.0",
+            "version": "3.6.0",
             "require": {
                 "drupal/core": "~8.0",
                 "drupal/simple_oauth": "self.version"
@@ -3774,8 +3785,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.5",
-                    "datestamp": "1517905684",
+                    "version": "8.x-3.6",
+                    "datestamp": "1524208682",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -3871,17 +3882,17 @@
         },
         {
             "name": "drupal/video_embed_field",
-            "version": "2.0.0-alpha2",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/video_embed_field",
-                "reference": "8.x-2.0-alpha2"
+                "reference": "8.x-2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/video_embed_field-8.x-2.0-alpha2.zip",
-                "reference": "8.x-2.0-alpha2",
-                "shasum": "45b67ad5e0092f2ec9c2873ceabc85ff3a5e9620"
+                "url": "https://ftp.drupal.org/files/projects/video_embed_field-8.x-2.0.zip",
+                "reference": "8.x-2.0",
+                "shasum": "e864f090b3cb9405376ca324d81ace83613e2019"
             },
             "require": {
                 "drupal/core": "*"
@@ -3898,10 +3909,10 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x",
-                    "datestamp": "1512694688",
+                    "datestamp": "1523338084",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     },
                     "package": "Field types"
                 }
@@ -6630,12 +6641,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/acquia/lightning-dev",
-                "reference": "5d5aef5b97549d6ed483c0b6af9078241d4222a9"
+                "reference": "908f787c6ad448b4454dd0132ab00ffbbbee0edf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/acquia/lightning-dev/zipball/5d5aef5b97549d6ed483c0b6af9078241d4222a9",
-                "reference": "5d5aef5b97549d6ed483c0b6af9078241d4222a9",
+                "url": "https://api.github.com/repos/acquia/lightning-dev/zipball/908f787c6ad448b4454dd0132ab00ffbbbee0edf",
+                "reference": "908f787c6ad448b4454dd0132ab00ffbbbee0edf",
                 "shasum": ""
             },
             "require": {
@@ -6721,7 +6732,7 @@
                 "GPL-2.0+"
             ],
             "description": "Internal development tools for Acquia Lightning.",
-            "time": "2018-04-19T17:31:29+00:00"
+            "time": "2018-04-25T21:42:20+00:00"
         },
         {
             "name": "alchemy/zippy",
@@ -10724,11 +10735,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/lightning_api": 20,
-        "drupal/lightning_core": 20,
-        "drupal/lightning_layout": 20,
-        "drupal/lightning_media": 20,
-        "drupal/lightning_workflow": 20,
         "drupal/media_entity_generic": 20,
         "acquia/lightning_dev": 20
     },
