@@ -130,18 +130,18 @@ To update Lightning safely:
    Lightning.
 4. Visit ```update.php``` or run ```drush updatedb``` to perform any necessary
    database updates.
-5. Perform any necessary configuration updates (see below).
+5. Perform any necessary configuration updates and/or migrations (see below).
 
-## Configuration updates
+## Update instructions
 
-These instructions describe how to update your site's configuration to bring it
-in line with a newer version of Lightning. Lightning does not make these changes
-automatically, because they may change the way your site works.
+These instructions describe how to update your site to bring it in line with a
+newer version of Lightning. Lightning does not make these changes automatically
+because they may change the way your site works.
 
 However, as of version 3.0.2, Lightning provides a Drush 9 command which *can*
 perform these updates automatically, confirming each change interactively as it
-goes. If you intend to perform all the configuration updates documented here,
-this can save quite a bit of time!
+goes. If you intend to perform all the updates documented here, this can save
+quite a bit of time!
 
 That said, though, some of these updates involve complicated data migrations.
 Due to their complexity, Lightning *never* automates them -- you will need to
