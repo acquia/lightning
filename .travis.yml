@@ -1,4 +1,3 @@
-sudo: required
 dist: trusty
 language: php
 
@@ -44,11 +43,11 @@ before_install:
   - rm chromedriver_linux64.zip
 
   # Update Chrome.
-  - export CHROME_BIN=/usr/bin/google-chrome
-  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  - sudo dpkg -i google-chrome-stable_current_amd64.deb
-  - rm google-chrome-stable_current_amd64.deb
-  - google-chrome --version
+  # - export CHROME_BIN=/usr/bin/google-chrome
+  # - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  # - sudo dpkg -i google-chrome-stable_current_amd64.deb
+  # - rm google-chrome-stable_current_amd64.deb
+  # - google-chrome --version
 
 install:
   # Add Composer's local bin directory to the PATH so that we will be running
