@@ -9,5 +9,11 @@ default:
         paths:
           - '%paths.base%/features/bootstrap'
     'Behat\MinkExtension':
-      chrome:
-        switches: '--no-sandbox --headless --disable-gpu http://localhost'
+      selenium2:
+        capabilities:
+          chrome:
+            switches:
+              - '--no-sandbox'
+              - '--headless'
+              - '--disable-gpu'
+              - 'http://localhost'
