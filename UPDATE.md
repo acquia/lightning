@@ -166,7 +166,7 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
 ### 3.1.3 to 3.1.4
-* Lightning Scheduler has been completely rewrittne, and now stores scheduled
+* Lightning Scheduler has been completely rewritten, and now stores scheduled
   moderation state transitions in a pair of new base fields. You will need to
   migrate any existing scheduled transitions from the old base fields to the
   new ones. After completing database updates, Lightning Scheduler will link
