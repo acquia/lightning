@@ -139,9 +139,9 @@ newer version of Lightning. Lightning does not make these changes automatically
 because they may change the way your site works.
 
 However, as of version 3.0.2, Lightning provides a Drush 9 command which *can*
-perform these updates automatically, confirming each change interactively as it
-goes. If you intend to perform all the updates documented here, this can save
-quite a bit of time!
+perform updates automatically, confirming each change interactively as it goes.
+If you intend to perform all the updates documented here, this can save quite
+a bit of time!
 
 That said, though, some of these updates involve complicated data migrations.
 Due to their complexity, Lightning *never* automates them -- you will need to
