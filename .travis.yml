@@ -89,7 +89,7 @@ script:
   - cd docroot
   - phpunit --configuration ./core --group lightning,profiles
   - cd ..
-  - behat --config .behat.yml --stop-on-failure
+  - behat --config .behat.yml --stop-on-failure --tags=~55c3c017
 
 after_failure:
   - cd docroot
