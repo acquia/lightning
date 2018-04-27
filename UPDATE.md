@@ -180,6 +180,12 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
   at the command line (Drush 9 only) by running
   `drush lightning:scheduler:migrate`.
   
+  If you have scheduled transitions attached to a specific entity type and
+  you'd like to discard those transitions without migrating them (test data,
+  for example), you can "purge" it in the UI, or at the command line by running
+  `drush lightning:scheduler:purge ENTITY_TYPE_ID`. Purging must be done one
+  entity type at a time, e.g. `drush lightning:scheduler:purge paragraph`.
+
 **Note:** The Lightning Scheduler migration in Lightning 3.1.4 affects actual
   content entities. As such, it will need to be run on your production
   database.
