@@ -179,7 +179,7 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
   you to a UI where you can run the migration. Alternatively, you can do it
   at the command line (Drush 9 only) by running
   `drush lightning:scheduler:migrate`.
-  
+
   If you have scheduled transitions attached to a specific entity type and
   you'd like to discard those transitions without migrating them (test data,
   for example), you can "purge" it in the UI, or at the command line by running
