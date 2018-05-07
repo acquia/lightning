@@ -67,6 +67,7 @@ install:
   # Tweak PHP configuration.
   - echo 'max_execution_time = 120' >> drupal.php.ini;
   - echo 'sendmail_path = /bin/true' >> drupal.php.ini;
+  - if [ $VERSION != 'HEAD']; then echo 'date.timezone = America/New_York' >> drupal.php.ini; fi
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
