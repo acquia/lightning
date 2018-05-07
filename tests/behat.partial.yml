@@ -8,3 +8,14 @@ default:
       subcontexts:
         paths:
           - '%paths.base%/features/bootstrap'
+    'Behat\MinkExtension':
+      selenium2:
+        capabilities:
+          chrome:
+            switches:
+              # This switch prevents Chrome from crashing on Travis CI's
+              # container-based (non-sudo) infrastructure, as documented at
+              # https://docs.travis-ci.com/user/chrome. This should be moved
+              # into Lightning Dev once all components use the container-based
+              # infrastructure for testing.
+              - '--no-sandbox'
