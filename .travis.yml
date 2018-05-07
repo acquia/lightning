@@ -1,4 +1,3 @@
-sudo: required
 dist: trusty
 language: php
 
@@ -13,17 +12,18 @@ php:
   - 7.0
 env:
   - VERSION=HEAD
+  - VERSION=3.1.4
   - VERSION=3.1.3
   - VERSION=3.1.2
-  - VERSION=3.1.1
   - VERSION=3.0.0
 
 addons:
-  apt:
-    packages:
-    # Dependencies for Chrome.
-    - libappindicator1
-    - fonts-liberation
+  chrome: stable
+  # apt:
+  #   packages:
+  #   # Dependencies for Chrome.
+  #   - libappindicator1
+  #   - fonts-liberation
 
 before_install:
   - phpenv config-rm xdebug.ini
@@ -31,6 +31,7 @@ before_install:
   - composer --version
   # Initialize xvfb (see https://docs.travis-ci.com/user/gui-and-headless-browsers)
   - export DISPLAY=:99.0
+  - if [ $VERSION != 'HEAD' ]; then export TZ=America/New_York; fi
   - sh -e /etc/init.d/xvfb start
   - sleep 3
 
@@ -44,11 +45,11 @@ before_install:
   - rm chromedriver_linux64.zip
 
   # Update Chrome.
-  - export CHROME_BIN=/usr/bin/google-chrome
-  - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-  - sudo dpkg -i google-chrome-stable_current_amd64.deb
-  - rm google-chrome-stable_current_amd64.deb
-  - google-chrome --version
+  # - export CHROME_BIN=/usr/bin/google-chrome
+  # - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+  # - sudo dpkg -i google-chrome-stable_current_amd64.deb
+  # - rm google-chrome-stable_current_amd64.deb
+  # - google-chrome --version
 
 install:
   # Add Composer's local bin directory to the PATH so that we will be running
@@ -67,6 +68,7 @@ install:
   # Tweak PHP configuration.
   - echo 'max_execution_time = 120' >> drupal.php.ini;
   - echo 'sendmail_path = /bin/true' >> drupal.php.ini;
+  - if [ $VERSION != 'HEAD' ]; then echo 'date.timezone = America/New_York' >> drupal.php.ini; fi
   - phpenv config-add drupal.php.ini
   - phpenv rehash
 
@@ -89,7 +91,7 @@ script:
   - cd docroot
   - phpunit --configuration ./core --group lightning,profiles
   - cd ..
-  - behat --config .behat.yml --stop-on-failure
+  - behat --config .behat.yml --stop-on-failure --tags=~55c3c017
 
 after_failure:
   - cd docroot

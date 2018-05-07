@@ -130,18 +130,23 @@ To update Lightning safely:
    Lightning.
 4. Visit ```update.php``` or run ```drush updatedb``` to perform any necessary
    database updates.
-5. Perform any necessary configuration updates (see below).
+5. Perform any necessary configuration updates and/or migrations (see below).
 
-## Configuration updates
+## Update instructions
 
-These instructions describe how to update your site's configuration to bring it
-in line with a newer version of Lightning. Lightning does not make these changes
-automatically, because they may change the way your site works.
+These instructions describe how to update your site to bring it in line with a
+newer version of Lightning. Lightning does not make these changes automatically
+because they may change the way your site works.
 
 However, as of version 3.0.2, Lightning provides a Drush 9 command which *can*
-perform these updates automatically, confirming each change interactively as it
-goes. If you intend to perform all the configuration updates documented here,
-this can save quite a bit of time!
+perform updates automatically, confirming each change interactively as it goes.
+If you intend to perform all the updates documented here, this can save quite
+a bit of time!
+
+That said, though, some of these updates involve complicated data migrations.
+Due to their complexity, Lightning *never* automates them -- you will need to
+take some manual action to complete these updates, which are denoted as such
+below.
 
 ### Automatic configuration updates
 
@@ -165,9 +170,28 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+### 3.1.3 to 3.1.4
+* **NOTE: This is a _fully manual update_ that involves a data migration!**
+  Lightning Scheduler has been completely rewritten, and now stores scheduled
+  moderation state transitions in a pair of new base fields. You will need to
+  migrate any existing scheduled transitions from the old base fields to the
+  new ones. After completing database updates, Lightning Scheduler will link
+  you to a UI where you can run the migration. Alternatively, you can do it
+  at the command line (Drush 9 only) by running
+  `drush lightning:scheduler:migrate`.
+
+  If you have scheduled transitions attached to a specific entity type and
+  you'd like to discard those transitions without migrating them (test data,
+  for example), you can "purge" it in the UI, or at the command line by running
+  `drush lightning:scheduler:purge ENTITY_TYPE_ID`. Purging must be done one
+  entity type at a time, e.g. `drush lightning:scheduler:purge paragraph`.
+
+**Note:** The Lightning Scheduler migration in Lightning 3.1.4 affects actual
+  content entities. As such, it will need to be run on your production
+  database.
+
 ### 3.1.2 to 3.1.3
-* If you have Lightning API enabled, you should clear all caches after updating
-  Lightning, due to changes in JSON API that may require a cache rebuild.
+There are no manual update steps for this version.
 
 ### 3.1.1 to 3.1.2
 There are no manual update steps for this version.
@@ -267,7 +291,7 @@ the last manual step during your initial update to 2.2.4. Once the other config
 changes have been deployed, test the migration locally on an export of your
 production database before ultimately running it in your production environment.
 As with any script that affects content, be sure to take a backup of your
-production database before running the script.  
+production database before running the script.
 
 ### 2.2.2 to 2.2.3
 There are no manual update steps for this version.

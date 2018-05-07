@@ -8,3 +8,12 @@ default:
       subcontexts:
         paths:
           - '%paths.base%/features/bootstrap'
+    'Behat\MinkExtension':
+      selenium2:
+        capabilities:
+          chrome:
+            switches:
+              - '--no-sandbox'
+              - '--headless'
+              - '--disable-gpu'
+              - 'http://localhost'

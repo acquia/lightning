@@ -32,6 +32,32 @@ function lightning_modules_installed(array $modules) {
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * @todo Override this at the block plugin level in Lightning Layout.
+ */
+function lightning_form_panels_ipe_block_plugin_form_alter(array &$form) {
+  if (strpos($form['plugin_id']['#value'], 'entity_field:') === 0) {
+    $formatter_type = &$form['flipper']['front']['settings']['formatter_type'];
+    $formatter_type['#access'] = (bool) $form['#options'];
+  }
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * This clears the bootstrap cache on cron so that the system.cron_last state
+ * key (and other state data) is deleted from the cache. It's crazy to cache
+ * state anyway, but that's what core is doing. We can remove this function when
+ * that insanity is fixed in core.
+ *
+ * @todo Move or copy this to lightning_scheduler_cron().
+ */
+function lightning_cron() {
+  Drupal::cache('bootstrap')->delete('state');
+}
+
+/**
  * Implements hook_ENTITY_TYPE_presave().
  */
 function lightning_user_role_presave(RoleInterface $role) {
