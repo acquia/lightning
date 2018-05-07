@@ -37,7 +37,6 @@
     },
     "scripts": {
         "post-install-cmd": [
-            "PhantomInstaller\\Installer::installPhantomJS",
             "@composer drupal-scaffold",
             "@composer push",
             "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit"
