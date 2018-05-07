@@ -32,6 +32,18 @@ function lightning_modules_installed(array $modules) {
 }
 
 /**
+ * Implements hook_form_FORM_ID_alter().
+ *
+ * @todo Override this at the block plugin level in Lightning Layout.
+ */
+function lightning_form_panels_ipe_block_plugin_form_alter(array &$form) {
+  if (strpos($form['plugin_id']['#value'], 'entity_field:') === 0) {
+    $formatter_type = &$form['flipper']['front']['settings']['formatter_type'];
+    $formatter_type['#access'] = (bool) $form['#options'];
+  }
+}
+
+/**
  * Implements hook_cron().
  *
  * This clears the bootstrap cache on cron so that the system.cron_last state
