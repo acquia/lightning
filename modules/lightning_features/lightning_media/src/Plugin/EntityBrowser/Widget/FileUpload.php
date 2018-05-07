@@ -108,8 +108,8 @@ class FileUpload extends EntityFormProxy {
       $entity,
       MediaHelper::getSourceField($entity)->entity
     );
-    $file->setPermanent();
-    $file->save();
+    //$file->setPermanent();
+    //$file->save();
     $entity->save();
 
     $selection = [
