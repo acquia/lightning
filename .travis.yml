@@ -31,6 +31,7 @@ before_install:
   - composer --version
   # Initialize xvfb (see https://docs.travis-ci.com/user/gui-and-headless-browsers)
   - export DISPLAY=:99.0
+  - if [ $VERSION != 'HEAD' ]; then export TZ=America/New_York; fi
   - sh -e /etc/init.d/xvfb start
   - sleep 3
 
