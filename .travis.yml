@@ -67,6 +67,10 @@ install:
   - drush cache:rebuild
 
 before_script:
+  # For debugging, echo out the Drupal time zone and the server time zone.
+  - drush config:get system.date timezone.default
+  - drush php:eval 'echo drupal_get_user_timezone() . "\n";'
+  - php -i | grep date.timezone
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - jdk_switcher use oraclejdk8
   - sleep 5

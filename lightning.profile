@@ -5,29 +5,9 @@
  * The Lightning profile.
  */
 
-use Drupal\Core\Cache\CacheCollectorInterface;
 use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
 use Drupal\user\RoleInterface;
-
-/**
- * Implements hook_cron().
- */
-function lightning_cron() {
-  $state = Drupal::state();
-
-  // At some point, core started caching state values, both statically and
-  // persistently. Unfortunately, the cron service does not explicitly persist
-  // the system.cron_last variable, which means that subsequent reads of
-  // system.cron_last might return an outdated value, thus breaking any code
-  // which is sensitive to the last cron run time (e.g., Lightning Scheduler).
-  // This should be fixed in core at some point, but for now we can work around
-  // it by ensuring the state cache is cleared during cron, ensuring that all of
-  // its values are persisted.
-  if ($state instanceof CacheCollectorInterface) {
-    $state->resetCache();
-  }
-}
 
 /**
  * Implements hook_modules_installed().
