@@ -1086,12 +1086,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "989c0e97ac625db4cbe5b348ed89afa8da7188ce"
+                "reference": "e7a9d6b78f574dae5c719c47a9edbcb1d487ae59"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/989c0e97ac625db4cbe5b348ed89afa8da7188ce",
-                "reference": "989c0e97ac625db4cbe5b348ed89afa8da7188ce",
+                "url": "https://api.github.com/repos/drupal/core/zipball/e7a9d6b78f574dae5c719c47a9edbcb1d487ae59",
+                "reference": "e7a9d6b78f574dae5c719c47a9edbcb1d487ae59",
                 "shasum": ""
             },
             "require": {
@@ -1292,13 +1292,13 @@
                     "merge-extra": false
                 },
                 "patches_applied": {
+                    "2877383 - Add action support to Media module": "https://www.drupal.org/files/issues/2877383-56.patch",
+                    "2670730 - Provide a delete action for each content entity type": "https://www.drupal.org/files/issues/2670730-81-89-8.5.0-rc1.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356278-408--8.5.x-real.patch",
                     "2880374 - Experimental modules should not have warnings after being installed": "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
-                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2018-04-16/2815221-87-8.5.x.patch",
-                    "2877383 - Add action support to Media module": "https://www.drupal.org/files/issues/2877383-56.patch",
-                    "2670730 - Provide a delete action for each content entity type": "https://www.drupal.org/files/issues/2670730-81-89-8.5.0-rc1.patch"
+                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2018-04-16/2815221-87-8.5.x.patch"
                 }
             },
             "autoload": {
@@ -1322,7 +1322,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2018-05-07T16:16:34+00:00"
+            "time": "2018-05-07T23:05:04+00:00"
         },
         {
             "name": "drupal/crop",
@@ -2569,7 +2569,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_media",
-                "reference": "0a2f2be84f239e73a091d6128e399cf785c78e99"
+                "reference": "95205c8be53a2cab832f54de3c530dd4acbfe841"
             },
             "require": {
                 "bower-asset/cropper": "^2.3",
@@ -2584,7 +2584,7 @@
                 "drupal/entity_embed": "1.0.0-beta2",
                 "drupal/image_widget_crop": "^2.1",
                 "drupal/inline_entity_form": "^1.0",
-                "drupal/lightning_core": "^2.5",
+                "drupal/lightning_core": "2.x-dev",
                 "drupal/media": "*",
                 "drupal/media_entity_instagram": "2.0.0-alpha1",
                 "drupal/media_entity_twitter": "2.0.0-alpha2",
@@ -2694,7 +2694,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_media"
             },
-            "time": "2018-04-26T19:17:59+00:00"
+            "time": "2018-05-08T00:24:44+00:00"
         },
         {
             "name": "drupal/lightning_workflow",
@@ -3855,17 +3855,17 @@
         },
         {
             "name": "drupal/video_embed_field",
-            "version": "2.0.0-alpha2",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/video_embed_field",
-                "reference": "8.x-2.0-alpha2"
+                "reference": "8.x-2.0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/video_embed_field-8.x-2.0-alpha2.zip",
-                "reference": "8.x-2.0-alpha2",
-                "shasum": "45b67ad5e0092f2ec9c2873ceabc85ff3a5e9620"
+                "url": "https://ftp.drupal.org/files/projects/video_embed_field-8.x-2.0.zip",
+                "reference": "8.x-2.0",
+                "shasum": "e864f090b3cb9405376ca324d81ace83613e2019"
             },
             "require": {
                 "drupal/core": "*"
@@ -3882,10 +3882,10 @@
                 },
                 "drupal": {
                     "version": "8.x-1.x",
-                    "datestamp": "1512694688",
+                    "datestamp": "1523338084",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     },
                     "package": "Field types"
                 }
