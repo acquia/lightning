@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "474cc0d7af3b77a0842877a7046d84ef",
+    "content-hash": "ed175348055e294348038a86be5fa519",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2455,11 +2455,17 @@
         },
         {
             "name": "drupal/lightning_layout",
-            "version": "dev-1.x",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_layout",
-                "reference": "2f35b7bfc8f519c64b33b9f0d0bc8febbafb7c73"
+                "reference": "8.x-1.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_layout-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "e56298db2dd24db248113652a2752514f0d1e079"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2467,7 +2473,7 @@
                 "drupal/core": "~8.0",
                 "drupal/ctools": "^3.0",
                 "drupal/entity_block": "^1.0",
-                "drupal/lightning_core": "1.x-dev || 2.x-dev",
+                "drupal/lightning_core": "^1.0 || ^2.5",
                 "drupal/panelizer": "^4.1",
                 "drupal/panelizer_quickedit": "*",
                 "drupal/panels": "4.3",
@@ -2482,11 +2488,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.2+0-dev",
+                    "version": "8.x-1.2",
                     "datestamp": "1524769680",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "installer-types": [
@@ -2560,8 +2566,7 @@
             "homepage": "https://www.drupal.org/project/lightning_layout",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_layout"
-            },
-            "time": "2018-04-27T20:53:38+00:00"
+            }
         },
         {
             "name": "drupal/lightning_media",
@@ -10845,7 +10850,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/lightning_api": 20,
-        "drupal/lightning_layout": 20,
         "drupal/lightning_media": 20,
         "drupal/lightning_workflow": 20,
         "drupal/media_entity_generic": 20,
