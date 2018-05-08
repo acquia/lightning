@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3457dfb9445f63bc9b7f474d24f58a0f",
+    "content-hash": "334f655bfb0f333b7f19c72adb1bc37c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1292,13 +1292,13 @@
                     "merge-extra": false
                 },
                 "patches_applied": {
-                    "2877383 - Add action support to Media module": "https://www.drupal.org/files/issues/2877383-56.patch",
-                    "2670730 - Provide a delete action for each content entity type": "https://www.drupal.org/files/issues/2670730-81-89-8.5.0-rc1.patch",
                     "1356276 - Allow profiles to provide a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/1356278-408--8.5.x-real.patch",
                     "2880374 - Experimental modules should not have warnings after being installed": "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
-                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2018-04-16/2815221-87-8.5.x.patch"
+                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2018-04-16/2815221-87-8.5.x.patch",
+                    "2877383 - Add action support to Media module": "https://www.drupal.org/files/issues/2877383-56.patch",
+                    "2670730 - Provide a delete action for each content entity type": "https://www.drupal.org/files/issues/2670730-81-89-8.5.0-rc1.patch"
                 }
             },
             "autoload": {
@@ -2713,18 +2713,24 @@
         },
         {
             "name": "drupal/lightning_workflow",
-            "version": "dev-2.x",
+            "version": "2.0.0-rc2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_workflow",
-                "reference": "8c4a837bd86098e851f5a00c141d7e5812b82e68"
+                "reference": "8.x-2.0-rc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_workflow-8.x-2.0-rc2.zip",
+                "reference": "8.x-2.0-rc2",
+                "shasum": "72fec8c144e15afde836637844a2ff87cbec1679"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/core": "*",
                 "drupal/diff": "^1.0",
-                "drupal/lightning_core": "1.x-dev || 2.x-dev",
+                "drupal/lightning_core": "^2.5",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
             "require-dev": {
@@ -2738,11 +2744,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-rc1+4-dev",
-                    "datestamp": "1525807980",
+                    "version": "8.x-2.0-rc2",
+                    "datestamp": "1525822680",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 },
                 "installer-types": [
@@ -2810,8 +2816,7 @@
             "homepage": "https://www.drupal.org/project/lightning_workflow",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_workflow"
-            },
-            "time": "2018-05-08T21:04:11+00:00"
+            }
         },
         {
             "name": "drupal/media_entity_instagram",
@@ -10861,7 +10866,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/lightning_workflow": 20,
         "drupal/media_entity_generic": 20,
         "acquia/lightning_dev": 20
     },
