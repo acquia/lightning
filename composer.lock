@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff13b4c510c5660ad1101abd210ad553",
+    "content-hash": "2326e2dca7371f0e36fa59cb4f1b1576",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2214,11 +2214,17 @@
         },
         {
             "name": "drupal/lightning_api",
-            "version": "dev-2.x",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_api",
-                "reference": "93e5291fa536fd1020ace76db428d85c50b8c97e"
+                "reference": "8.x-2.3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_api-8.x-2.3.zip",
+                "reference": "8.x-2.3",
+                "shasum": "997c1cc991e38798ebd9003b1f6c21411b6802cd"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2242,11 +2248,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.3+0-dev",
+                    "version": "8.x-2.3",
                     "datestamp": "1524839285",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "installer-types": [
@@ -2320,8 +2326,7 @@
             "homepage": "https://www.drupal.org/project/lightning_api",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_api"
-            },
-            "time": "2018-04-27T14:24:30+00:00"
+            }
         },
         {
             "name": "drupal/lightning_core",
@@ -10851,7 +10856,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/lightning_api": 20,
         "drupal/lightning_media": 20,
         "drupal/lightning_workflow": 20,
         "drupal/media_entity_generic": 20,
