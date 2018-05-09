@@ -1,5 +1,5 @@
 ##  3.1.4
-* Lightning Workflow has been updated to 2.0.0-rc1, which includes a completely
+* Lightning Workflow has been updated to 2.0.0-rc2, which includes a completely
   rewritten Lightning Scheduler.
 * Lightning API has been updated to 2.3.0, which includes an updated version of
   Simple OAuth.
