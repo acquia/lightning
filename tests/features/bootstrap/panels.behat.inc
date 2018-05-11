@@ -31,7 +31,7 @@ class PanelsSubContext extends DrupalSubContextBase {
    */
   public function panelize($bundle) {
     $assert = $this->assertSession();
-    $assert->addressMatches("admin/structure/types/manage/$bundle/display");
+    $assert->addressMatches("/admin\/structure\/types\/manage\/$bundle\/display$/");
     $assert->fieldExists('panelizer[enable]')->check();
     $assert->fieldExists('panelizer[custom]')->check();
     $assert->elementExists('named', ['button', 'Save'])->press();
@@ -51,7 +51,7 @@ class PanelsSubContext extends DrupalSubContextBase {
    */
   public function unpanelize($bundle) {
     $assert = $this->assertSession();
-    $assert->addressMatches("admin/structure/types/manage/$bundle/display");
+    $assert->addressMatches("/admin\/structure\/types\/manage\/$bundle\/display$/");
     $assert->fieldExists('panelizer[enable]')->uncheck();
     $assert->fieldExists('panelizer[custom]')->uncheck();
     $assert->elementExists('named', ['button', 'Save'])->press();
