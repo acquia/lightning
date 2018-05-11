@@ -13,7 +13,12 @@ use Behat\Mink\Exception\UnsupportedDriverActionException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
 /**
- * Sub context for Lightning step definitions.
+ * Contains step definitions for interacting with the Lightning distribution.
+ *
+ * @internal
+ * This class is part of Lightning's internal testing code. It is not an API and
+ * should not be extended. This class will be marked final, and all protected
+ * members will be made private, in Lightning 4.x.
  */
 class LightningSubContext extends DrupalSubContextBase {
 

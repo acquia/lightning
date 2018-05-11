@@ -9,32 +9,13 @@ use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
 /**
  * Contains step definitions for working with Panels and panelized pages.
+ *
+ * @internal
+ * This class is part of Lightning's internal testing code. It is not an API and
+ * should not be extended. This class will be marked final, and all protected
+ * members will be made private, in Lightning 4.x.
  */
 class PanelsSubContext extends DrupalSubContextBase {
-
-  /**
-   * The Mink context.
-   *
-   * @var \Drupal\DrupalExtension\Context\MinkContext
-   */
-  protected $minkContext;
-
-  /**
-   * The Lightning subcontext.
-   *
-   * @var \LightningSubContext
-   */
-  protected $lightning;
-
-  /**
-   * Pre-scenario hook.
-   *
-   * @BeforeScenario
-   */
-  public function gatherContexts() {
-    $this->minkContext = $this->getContext('\Drupal\DrupalExtension\Context\MinkContext');
-    $this->lightning = $this->getContext('LightningSubContext');
-  }
 
   /**
    * Applies Panelizer to a node type.
@@ -49,10 +30,11 @@ class PanelsSubContext extends DrupalSubContextBase {
    * @When I panelize the :bundle node type
    */
   public function panelize($bundle) {
-    $this->minkContext->assertAtPath("admin/structure/types/manage/$bundle/display");
-    $this->minkContext->checkOption('panelizer[enable]');
-    $this->minkContext->checkOption('panelizer[custom]');
-    $this->minkContext->pressButton('Save');
+    $assert = $this->assertSession();
+    $assert->addressMatches("admin/structure/types/manage/$bundle/display");
+    $assert->fieldExists('panelizer[enable]')->check();
+    $assert->fieldExists('panelizer[custom]')->check();
+    $assert->elementExists('named', ['button', 'Save'])->press();
   }
 
   /**
@@ -68,10 +50,11 @@ class PanelsSubContext extends DrupalSubContextBase {
    * @When I unpanelize the :bundle node type
    */
   public function unpanelize($bundle) {
-    $this->minkContext->assertAtPath("admin/structure/types/manage/$bundle/display");
-    $this->minkContext->uncheckOption('panelizer[enable]');
-    $this->minkContext->uncheckOption('panelizer[custom]');
-    $this->minkContext->pressButton('Save');
+    $assert = $this->assertSession();
+    $assert->addressMatches("admin/structure/types/manage/$bundle/display");
+    $assert->fieldExists('panelizer[enable]')->uncheck();
+    $assert->fieldExists('panelizer[custom]')->uncheck();
+    $assert->elementExists('named', ['button', 'Save'])->press();
   }
 
   /**
@@ -87,9 +70,11 @@ class PanelsSubContext extends DrupalSubContextBase {
    * @Given I have customized the :view_mode view mode of the :node_type content type
    */
   public function customizeViewMode($view_mode, $node_type) {
-    $this->minkContext->visit('/admin/structure/types/manage/' . $node_type . '/display');
-    $this->minkContext->assertCheckBox('display_modes_custom[' . $view_mode . ']');
-    $this->minkContext->pressButton('Save');
+    $this->visitPath("/admin/structure/types/manage/$node_type/display");
+
+    $assert = $this->assertSession();
+    $assert->fieldExists('display_modes_custom[' . $view_mode . ']')->check();
+    $assert->elementExists('named', ['button', 'Save'])->press();
   }
 
   /**
@@ -105,9 +90,11 @@ class PanelsSubContext extends DrupalSubContextBase {
    * @Given I have uncustomized the :view_mode view mode of the :node_type content type
    */
   public function uncustomizeViewMode($view_mode, $node_type) {
-    $this->minkContext->visit('/admin/structure/types/manage/' . $node_type . '/display');
-    $this->minkContext->assertUncheckBox('display_modes_custom[' . $view_mode . ']');
-    $this->minkContext->pressButton('Save');
+    $this->visitPath("/admin/structure/types/manage/$node_type/display");
+
+    $assert = $this->assertSession();
+    $assert->fieldExists('display_modes_custom[' . $view_mode . ']')->uncheck();
+    $assert->elementExists('named', ['button', 'Save'])->press();
   }
 
 }

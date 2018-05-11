@@ -4,18 +4,17 @@ default:
       paths:
         - '%paths.base%/features'
   extensions:
+    'DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension': ~
     'Drupal\DrupalExtension':
       subcontexts:
         paths:
           - '%paths.base%/features/bootstrap'
+
+    # TODO: Move all of this into Lightning Dev once all components are tested
+    # on headless Chrome.
     'Behat\MinkExtension':
-      selenium2:
-        capabilities:
+      browser_name: chrome
+      sessions:
+        javascript:
           chrome:
-            switches:
-              # This switch prevents Chrome from crashing on Travis CI's
-              # container-based (non-sudo) infrastructure, as documented at
-              # https://docs.travis-ci.com/user/chrome. This should be moved
-              # into Lightning Dev once all components use the container-based
-              # infrastructure for testing.
-              - '--no-sandbox'
+            api_url: 'http://localhost:9222'
