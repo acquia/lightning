@@ -1,235 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="Lightning" default="env">
 
-  <taskdef name="setxmlproperty" classpath="${project.basedir}/src/Task" classname="SetXMLPropertyTask" />
-
-  <!-- Locations of required binaries. -->
-  <property name="drush" value="${project.basedir}/vendor/bin/drush" />
-  <property name="drupal" value="${project.basedir}/vendor/bin/drupal" />
-  <property name="composer" value="/usr/local/bin/composer" />
-  <property name="rsync" value="/usr/bin/rsync" />
-  <property name="bzip2" value="/usr/bin/bzip2" />
-  <property name="bunzip2" value="/usr/bin/bunzip2" />
-  <property name="tar" value="/usr/bin/tar" />
-  <property name="yaml-cli" value="${project.basedir}/vendor/bin/yaml-cli" />
-
-  <!-- Database credentials. -->
-  <property name="db.type" value="mysql" />
-  <property name="db.host" value="localhost" />
-  <property name="db.user" value="root" />
-  <property name="db.password" value="" />
-  <property name="db.database" value="lightning" />
-  <property name="db.url" value="${db.type}://${db.user}:${db.password}@${db.host}/${db.database}" />
-
-  <!-- Installation and build-specific variables. -->
-  <property name="url" value="http://127.0.0.1" />
-  <property name="docroot" value="docroot" />
-  <property name="profile" value="${docroot}/profiles/lightning" />
-  <property name="site" value="${docroot}/sites/default" />
-  <property name="version" value="HEAD" />
-  <property name="fixture" value="${project.basedir}/tests/fixtures/${version}.sql" />
-  <property name="cloud.subscription" value="lightningnightly" />
-
-  <!-- Attempts to find global Drush install and determine if it's 8.1.15 -->
   <target name="find-drush8" depends="env">
-    <exec command="drush --version" outputProperty="global-drush-version" />
-    <if>
-      <contains substring="8.1.15" string="${global-drush-version}" />
-      <then>
-        <exec command="which drush" outputProperty="drush8" />
-        <echo message="Found Drush 8: ${drush8}" />
-      </then>
-      <else>
-        <fail message="No global Drush 8 installed." />
-      </else>
-    </if>
+    <echo message="This target is deprecated and will be removed." />
   </target>
 
-  <!-- Finds required binaries. -->
   <target name="env">
-    <if>
-      <not>
-        <available file="${drush}" property="drush.exists" />
-      </not>
-      <then>
-        <exec command="which drush" outputProperty="drush" />
-      </then>
-    </if>
-    <exec command="which composer" outputProperty="composer" />
-    <exec command="which rsync" outputProperty="rsync" />
-    <exec command="which bzip2" outputProperty="bzip2" />
-    <exec command="which bunzip2" outputProperty="bunzip2" />
-    <exec command="which tar" outputProperty="tar" />
-
-    <echo message="Found Drush: ${drush}" />
-    <echo message="Found Composer: ${composer}" />
-    <echo message="Found rsync: ${rsync}" />
-    <echo message="Found bzip2: ${bzip2}" />
-    <echo message="Found bunzip2: ${bunzip2}" />
-    <echo message="Found tar: ${tar}" />
+    <echo message="This target is deprecated and will be removed." />
   </target>
 
-  <!-- Syncs the Lightning profile into the Drupal code base. -->
   <target name="push" depends="env">
-    <!-- Create the destination if it doesn't exist. -->
-    <mkdir dir="${profile}" />
-
-    <!-- rsync the profile, excluding developer flotsam. -->
-    <filesync destinationDir="${profile}" rsyncPath="${rsync}" sourceDir="." verbose="false" exclude=".idea,bin,build.xml,.git,.gitignore,${docroot},karma.conf.js,*.make,node_modules,.travis.yml,vendor" />
+    <echo message="This target is deprecated. Use composer push instead." />
   </target>
 
-  <target name="pull" depends="env">
-    <filesync destinationDir="." rsyncPath="${rsync}" sourceDir="${profile}/" verbose="false" exclude="modules/contrib" />
+  <target name="pull">
+    <echo message="This target is deprecated. Use composer pull instead." />
   </target>
 
-  <!-- Prepares the docroot for installation via the UI. -->
-  <target name="preinstall" depends="uninstall">
-    <if>
-      <not>
-        <isset property="www.user" />
-      </not>
-      <then>
-        <exec command="whoami" outputProperty="www.user" />
-      </then>
-    </if>
-
-    <copy file="${site}/default.settings.php" tofile="${site}/settings.php" />
-    <chmod file="${site}/settings.php" mode="0775" />
-    <mkdir dir="${site}/files" mode="0775" />
-
-    <if>
-      <and>
-        <isset property="www.user" />
-        <isset property="www.group" />
-      </and>
-      <then>
-        <chown file="${site}/settings.php" user="${www.user}" group="${www.group}" />
-        <chown file="${site}/files" user="${www.user}" group="${www.group}" />
-      </then>
-    </if>
+  <target name="preinstall">
+    <echo message="This target is deprecated and will not be replaced. Create settings.php manually." />
   </target>
 
-  <!-- Installs Lightning and sets it up for development. -->
-  <target name="install" depends="env">
-    <!-- Use passthru() when executing drupal site-install so that we'll know if errors occur. -->
-    <exec command="${drupal} site:install lightning --db-type=${db.type} --db-host=${db.host} --db-name=${db.database} --db-user=${db.user} --db-pass=${db.password} --no-interaction --force" passthru="true" />
-    <chmod file="${site}" mode="0755" />
-
-    <!-- Install Lightning Dev. -->
-    <exec command="${drupal} module:install lightning_dev --yes" dir="${docroot}" passthru="true" />
-
-    <!-- Prepare PHPUnit. -->
-    <mkdir dir="${docroot}/modules" />
-    <mkdir dir="${docroot}/themes" />
-    <mkdir dir="${docroot}/sites/simpletest" />
-    <if>
-      <not>
-        <available property="phpunit.xml" file="${docroot}/core/phpunit.xml" />
-      </not>
-      <then>
-        <copy file="${docroot}/core/phpunit.xml.dist" tofile="${docroot}/core/phpunit.xml" />
-        <setxmlproperty file="${docroot}/core/phpunit.xml" element="/phpunit/php/env[@name = 'SIMPLETEST_DB']" attribute="value" value="${db.url}" />
-        <setxmlproperty file="${docroot}/core/phpunit.xml" element="/phpunit/php/env[@name = 'SIMPLETEST_BASE_URL']" attribute="value" value="${url}" />
-      </then>
-    </if>
-
-    <!-- Generate Behat configuration. -->
-    <exec command="${drupal} behat:init ${url} --merge=${project.basedir}/tests/behat.yml" dir="${docroot}" />
-    <exec command="${drupal} behat:include ${project.basedir}/tests/features --with-subcontexts=${project.basedir}/tests/features/bootstrap --with-subcontexts=${project.basedir}/src/LightningExtension/Context" dir="${docroot}" />
-
-    <!-- Export configuration for archaeological purposes. -->
-    <property name="config_fixture" value="${project.basedir}/tests/config" />
-    <exec command="${drupal} config:export --directory=${project.basedir}/tests/config --remove-uuid --remove-config-hash" dir="${docroot}" />
-    <!-- Change config values that might, or will, change on every install. -->
-    <exec command="${yaml-cli} unset:key ${config_fixture}/embed.button.media_browser.yml dependencies.content" />
-    <exec command="${yaml-cli} update:value ${config_fixture}/embed.button.media_browser.yml icon_uuid ''" />
-    <exec command="${yaml-cli} update:value ${config_fixture}/system.date.yml timezone.default UTC" />
-    <exec command="${yaml-cli} update:value ${config_fixture}/entity_browser.browser.image_browser.yml widgets ''" />
-    <exec command="${yaml-cli} update:value ${config_fixture}/entity_browser.browser.media_browser.yml widgets ''" />
-
-    <if>
-      <isset property="www.group" />
-      <then>
-        <chown file="${site}/files" user="${env.USER}" group="${www.group}" />
-      </then>
-    </if>
+  <target name="install">
+    <echo message="This target is deprecated. Use lightning install instead." />
   </target>
 
-  <!-- Builds a Lightning code base from legacy Drush make files. -->
-  <target name="build-legacy" depends="find-drush8">
-    <exec command="${composer} nuke" />
-
-    <!-- Rebuild docroot and autoloader with makefiles. -->
-    <exec command="${drush8} make drupal-org-core.make ${docroot}" passthru="true" />
-    <exec command="${drush8} make drupal-org.make ${docroot} --no-core" passthru="true" />
-    <!-- Because legacy builds are not Composer-aware, we need to explicitly
-    require dependencies. -->
-    <exec command="${composer} require j7mbo/twitter-api-php league/oauth2-server:~6.0 webflo/drupal-core-strict:~8.5.0 phpdocumentor/reflection-docblock:^3.0||^4.0" dir="${docroot}" passthru="true" />
-    <!-- Place Lightning inside the docroot/profiles dir -->
-    <phingcall target="push" />
-
+  <target name="build-legacy">
+    <echo message="This target is deprecated. Use drush make or the tarball.sh script instead." />
   </target>
 
-  <!-- Generates a tarball of current docroot and saves it to the current user's
-  home directory. -->
-  <target name="tarball" depends="env">
-    <phingcall target="uninstall" />
-    <exec command="${tar} --exclude='.DS_Store' --exclude='._*' -zcf ~/lightning-${version}.tar.gz -s /^${docroot}/lightning-${version}/ ${docroot}" />
+  <target name="tarball">
+    <echo message="This target is deprecated. Use tar instead." />
   </target>
 
-  <!-- Creates a legacy-built tarball with composer dependencies suitable for
-  cloud. -->
   <target name="cloud-tarball">
-    <phingcall target="build-legacy" />
-    <phingcall target="tarball" />
+    <echo message="This target is deprecated. Use the tarball.sh script instead." />
   </target>
 
-  <!-- Destroys the Drupal installation, but leaves the code base intact. -->
   <target name="uninstall">
-    <if>
-      <available file="${site}" property="site.exists" />
-      <then>
-        <chmod file="${site}" mode="0755" />
-        <delete failonerror="true" includeemptydirs="true">
-          <fileset dir="${site}">
-            <include name="settings.php" />
-            <include name="files/**" />
-          </fileset>
-        </delete>
-      </then>
-    </if>
-    <phingcall target="reset-db" />
+    <echo message="This target is deprecated and will not be replaced. Delete settings.php manually to start over." />
   </target>
 
-  <!-- Generates a database snapshot from the current code base. -->
-  <target name="memorize" depends="env">
-    <phingcall target="reset-db" />
-    <phingcall target="install" />
-    <exec command="${drush} sql-dump" dir="${docroot}" output="${fixture}" />
-    <exec command="${bzip2} --force ${fixture}" />
+  <target name="memorize">
+    <echo message="This target is deprecated. Use lightning make:fixture instead." />
   </target>
 
-  <!-- Empties the database by dropping and recreating it. -->
   <target name="reset-db">
-    <!-- pdosqlexec requires an SQL file to execute. -->
-    <echo message="DROP DATABASE ${db.database}; CREATE DATABASE ${db.database};" file=".reset.sql" />
-    <pdosqlexec url="${db.type}:host=${db.host}" userid="${db.user}" password="${db.password}" src=".reset.sql" />
-    <delete file=".reset.sql" />
+    <echo message="This target is deprecated. Use drush sql:drop instead." />
   </target>
 
-  <!-- Replaces the existing settings file if it exists with the default and adds minimum necessary settings for cloud. -->
   <target name="cloud-settings">
-    <delete file="${docroot}/sites/default/settings.php" />
-    <copy file="${docroot}/sites/default/default.settings.php" tofile="${docroot}/sites/default/settings.php" />
-    <append destFile="${docroot}/sites/default/settings.php" text="${line.separator}if (file_exists('/var/www/site-php')) {${line.separator}  require '/var/www/site-php/${cloud.subscription}/${cloud.subscription}-settings.inc';${line.separator}}${line.separator}" />
-    <append destFile="${docroot}/sites/default/settings.php" text="$settings['install_profile'] = 'lightning';${line.separator}" />
-    <mkdir dir="config/default" />
-    <touch file="config/default/.gitkeep" />
+    <echo message="This target is deprecated. Use lightning configure:cloud instead." />
   </target>
 
-  <!-- Symlinks .git/hooks/pre-commit to our repo's pre-commit script -->
   <target name="symlink">
-    <symlink link=".git/hooks/pre-commit" target="git-hooks/pre-commit" overwrite="true" />
+    <echo message="This target is deprecated. git hooks are now symlinked by Composer after installation." />
   </target>
 
 </project>
