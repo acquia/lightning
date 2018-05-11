@@ -13,6 +13,11 @@ use Drupal\DrupalExtension\Hook\Scope\EntityScope;
 
 /**
  * Subcontext for creating and cleaning up entities of any type.
+ *
+ * @internal
+ * This class is part of Lightning's internal testing code. It is not an API and
+ * should not be extended. This class will be marked final, and all protected
+ * members will be made private, in Lightning 4.x.
  */
 class EntitySubContext extends DrupalSubContextBase {
 
@@ -22,30 +27,6 @@ class EntitySubContext extends DrupalSubContextBase {
    * @var array
    */
   protected $entities = [];
-
-  /**
-   * The Lightning subcontext.
-   *
-   * @var \LightningSubContext
-   */
-  protected $lightning;
-
-  /**
-   * The Mink context.
-   *
-   * @var \Drupal\DrupalExtension\Context\MinkContext
-   */
-  protected $minkContext;
-
-  /**
-   * Pre-scenario hook.
-   *
-   * @BeforeScenario
-   */
-  public function gatherContexts() {
-    $this->lightning = $this->getContext('LightningSubContext');
-    $this->minkContext = $this->getContext('\Drupal\DrupalExtension\Context\MinkContext');
-  }
 
   /**
    * Ensures the Drupal driver is bootstrapped.

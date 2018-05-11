@@ -1082,16 +1082,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "8.5.3",
+            "version": "8.5.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "b012f0ae51504880e920f2c6efdbdf03b6fe2129"
+                "reference": "bbf5c761fb74997dbf6a839321ccf1dc41774772"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/b012f0ae51504880e920f2c6efdbdf03b6fe2129",
-                "reference": "b012f0ae51504880e920f2c6efdbdf03b6fe2129",
+                "url": "https://api.github.com/repos/drupal/core/zipball/bbf5c761fb74997dbf6a839321ccf1dc41774772",
+                "reference": "bbf5c761fb74997dbf6a839321ccf1dc41774772",
                 "shasum": ""
             },
             "require": {
@@ -1296,7 +1296,7 @@
                     "2880374 - Experimental modules should not have warnings after being installed": "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
-                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2815221-87.patch",
+                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2018-04-16/2815221-87-8.5.x.patch",
                     "2877383 - Add action support to Media module": "https://www.drupal.org/files/issues/2877383-56.patch",
                     "2670730 - Provide a delete action for each content entity type": "https://www.drupal.org/files/issues/2670730-81-89-8.5.0-rc1.patch"
                 }
@@ -1322,7 +1322,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2018-04-25T15:39:01+00:00"
+            "time": "2018-05-11T09:58:50+00:00"
         },
         {
             "name": "drupal/crop",
@@ -2218,14 +2218,14 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_api",
-                "reference": "93e5291fa536fd1020ace76db428d85c50b8c97e"
+                "reference": "7308bb265bc7f1d550cd2017299f448a8ad91c3e"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/core": "~8.0",
                 "drupal/jsonapi": "1.16",
-                "drupal/lightning_core": "^2.5",
+                "drupal/lightning_core": "2.x-dev",
                 "drupal/openapi": "1.0-alpha1",
                 "drupal/openapi_redoc": "*",
                 "drupal/simple_oauth": "3.6.0",
@@ -2321,7 +2321,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_api"
             },
-            "time": "2018-04-27T14:24:30+00:00"
+            "time": "2018-05-11T16:58:04+00:00"
         },
         {
             "name": "drupal/lightning_core",
@@ -2329,14 +2329,14 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_core",
-                "reference": "a69154c521aeb8c2c2f89b2d6541ef0b3d152324"
+                "reference": "0fa9b02c35ad9c3057d7aa2e71d9b5c348742c52"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/acquia_connector": "^1.1",
                 "drupal/contact_storage": "^1.0",
-                "drupal/core": "~8.5.3",
+                "drupal/core": "8.5.x-dev",
                 "drupal/metatag": "^1.0",
                 "drupal/pathauto": "^1.0",
                 "drupal/search_api": "^1.0",
@@ -2395,7 +2395,7 @@
                         "2880374 - Experimental modules should not have warnings after being installed": "https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch",
                         "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                         "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
-                        "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2815221-87.patch"
+                        "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2018-04-16/2815221-87-8.5.x.patch"
                     }
                 },
                 "drush": {
@@ -2451,7 +2451,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_core"
             },
-            "time": "2018-05-09T13:15:40+00:00"
+            "time": "2018-05-11T13:37:03+00:00"
         },
         {
             "name": "drupal/lightning_layout",
@@ -2569,7 +2569,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_media",
-                "reference": "6292f507e72dffc27f7fbf5759ee2b509119376d"
+                "reference": "7056df7ac682deecd373ddeede8d59a93373b5d8"
             },
             "require": {
                 "bower-asset/cropper": "^2.3",
@@ -2584,7 +2584,7 @@
                 "drupal/entity_embed": "1.0.0-beta2",
                 "drupal/image_widget_crop": "^2.1",
                 "drupal/inline_entity_form": "^1.0",
-                "drupal/lightning_core": "^2.5",
+                "drupal/lightning_core": "2.x-dev",
                 "drupal/media": "*",
                 "drupal/media_entity_instagram": "2.0.0-alpha1",
                 "drupal/media_entity_twitter": "2.0.0-alpha2",
@@ -2694,7 +2694,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_media"
             },
-            "time": "2018-05-08T21:17:03+00:00"
+            "time": "2018-05-11T16:31:42+00:00"
         },
         {
             "name": "drupal/lightning_workflow",
@@ -2702,14 +2702,14 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_workflow",
-                "reference": "8c4a837bd86098e851f5a00c141d7e5812b82e68"
+                "reference": "d882176193a75312459975ee5adccd51d1fd9bad"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/core": "*",
                 "drupal/diff": "^1.0",
-                "drupal/lightning_core": "1.x-dev || 2.x-dev",
+                "drupal/lightning_core": "2.x-dev",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
             "require-dev": {
@@ -2723,8 +2723,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-rc1+5-dev",
-                    "datestamp": "1525813680",
+                    "version": "8.x-2.0-rc2+2-dev",
+                    "datestamp": "1525980780",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -2796,7 +2796,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_workflow"
             },
-            "time": "2018-05-08T21:04:11+00:00"
+            "time": "2018-05-11T14:08:46+00:00"
         },
         {
             "name": "drupal/media_entity_instagram",

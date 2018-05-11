@@ -2,6 +2,8 @@
 
 namespace Acquia\LightningExtension\Context;
 
+use Behat\Mink\Driver\Selenium2Driver;
+use DMore\ChromeDriver\ChromeDriver;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
 /**
@@ -50,15 +52,26 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
   public function revertLayout() {
     $tray = $this->getContext(PanelsIPEContext::class)->assertTray();
 
-    $this->assertSession()
-      ->elementExists('named', ['link', 'Revert to default'], $tray)
-      ->click();
+    $link = $this->assertSession()
+      ->elementExists('named', ['link', 'Revert to default'], $tray);
 
-    /** @var \Acquia\LightningExtension\Context\UtilityContext $utility */
-    $utility = $this->getContext(UtilityContext::class);
-    $utility->acceptAlerts(function () {
-      $this->awaitAjax();
-    });
+    $session = $this->getSession();
+    $driver = $session->getDriver();
+
+    if ($driver instanceof ChromeDriver) {
+      $link = addslashes($link->getXpath());
+      $session->executeScript("document.evaluate('$link', document, null).iterateNext().click();");
+      $driver->acceptAlert();
+    }
+    else {
+      $link->click();
+
+      if ($driver instanceof Selenium2Driver) {
+        $driver->getWebDriverSession()->accept_alert();
+      }
+    }
+
+    $this->awaitAjax();
   }
 
 }
