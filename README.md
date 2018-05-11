@@ -30,6 +30,13 @@ Lightning as its base profile][sub-profile documentation]. Lightning includes a
 Drupal Console command (`lightning:subprofile`) which will generate a
 sub-profile for you.
 
+#### Installing from exported config
+If you have a config export of a site built with Lighting, you can install it
+using the [Config Installer](https://drupal.org/project/config_installer)
+profile. This profile is fully supported by Lightning (we even run our tests
+against it). You can find more information about installing Lightning from
+exported config [here](https://lightning.acquia.com/blog/using-configuration-installer-lightning).
+
 ## What Lightning Does
 Through custom, contrib, and core modules plus configuration, Lightning aims to
 target four functional areas:
