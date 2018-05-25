@@ -185,6 +185,10 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
   for example), you can "purge" it in the UI, or at the command line by running
   `drush lightning:scheduler:purge ENTITY_TYPE_ID`. Purging must be done one
   entity type at a time, e.g. `drush lightning:scheduler:purge paragraph`.
+  
+  Once all entity types have been migrated or purged, the old base fields will
+  need to be uninstalled. You can perform this clean-up work automatically by
+  running `drush entity-updates`.
 
 **Note:** The Lightning Scheduler migration in Lightning 3.1.4 affects actual
   content entities. As such, it will need to be run on your production
