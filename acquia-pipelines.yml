@@ -32,12 +32,13 @@ events:
             - drush runserver --default-server=builtin 8080 &>/dev/null &
             - sleep 10
             - cd $SOURCE_DIR
-            - behat --stop-on-failure --config .behat.yml --tags=~javascript
+            #- behat --stop-on-failure --config .behat.yml --tags=~javascript
       - cleanup:
           type: script
           script:
             - cd $SOURCE_DIR
             # Setup settings file and codebase with minimum required for cloud.
             - lightning configure:cloud
-            # Remove dev tools from the Cloud build.
-            - composer remove acquia/lightning_dev --dev
+            # Alias Drush 8.x to be compatible with Cloud.
+            - composer require drush/drush:"8.1.16 as 9.2.1" --no-update
+            - composer update drush/drush --with-all-dependencies
