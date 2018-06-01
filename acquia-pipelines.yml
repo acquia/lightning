@@ -30,7 +30,6 @@ events:
           script:
             - cd $SOURCE_DIR/docroot
             - drush runserver --default-server=builtin 8080 &>/dev/null &
-            - phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
             - cd $SOURCE_DIR
             - behat --stop-on-failure --config .behat.yml --tags=~javascript
