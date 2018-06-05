@@ -32,7 +32,7 @@ events:
             - drush runserver --default-server=builtin 8080 &>/dev/null &
             - sleep 10
             - cd $SOURCE_DIR
-            #- behat --stop-on-failure --config .behat.yml --tags=~javascript
+            - behat --stop-on-failure --config .behat.yml --tags=~javascript
       - cleanup:
           type: script
           script:
