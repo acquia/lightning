@@ -82,15 +82,33 @@
         "enable-patching": true,
         "patchLevel": {
             "drupal/core": "-p2"
+        },
+        "patches": {
+            "drupal/lightning_layout": {
+                "2984739 - Lightning Landing Page should check for presence of Lightning Workflow, not Content Moderations":
+                "https://www.drupal.org/files/issues/2018-07-09/2984739-2.patch"
+            },
+            "drupal/lightning_core": {
+                "2984738 - Lightning Roles fatals without a dependency on node when installed with the Lightning profile":
+                "https://www.drupal.org/files/issues/2018-07-09/2984738-2.patch",
+                "2984737 - Lightning Page should check for presence of Lightning Workflow, not Content Moderations":
+                "https://www.drupal.org/files/issues/2018-07-09/2984737-2.patch"
+            },
+            "drupal/lightning_workflow": {
+                "2984734 - hook_requirements requires a return value":
+                "https://www.drupal.org/files/issues/2018-07-09/2984734-2.patch",
+                "2984747 - Lightning Workflow should only create a testing content type when the install profile is not Lightning - since Lightning does provide content types":
+                "https://www.drupal.org/files/issues/2018-07-09/2984747-2.patch"
+            }
         }
     },
     "require": {
         "cweagans/composer-patches": "^1.6.4",
         "drupal/lightning_api": "2.x-dev",
-        "drupal/lightning_core": "2.x-dev",
-        "drupal/lightning_layout": "1.x-dev",
-        "drupal/lightning_media": "2.x-dev",
-        "drupal/lightning_workflow": "2.x-dev",
+        "drupal/lightning_core": "3.x-dev",
+        "drupal/lightning_layout": "1.x-dev || 2.x-dev",
+        "drupal/lightning_media": "3.x-dev",
+        "drupal/lightning_workflow": "3.x-dev",
         "drupal-composer/drupal-scaffold": "^2.0.0",
         "oomphinc/composer-installers-extender": "^1.1"
     },
