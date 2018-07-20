@@ -4,6 +4,7 @@ namespace Acquia\Lightning;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\ExtensionDiscovery;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
 use Symfony\Component\Console\Style\StyleInterface;
@@ -70,8 +71,29 @@ final class Update320 implements ContainerInjectionInterface {
         $info = file_get_contents($info_file);
 
         if (strstr($info, 'base profile:')) {
-          $info = str_replace(['dependencies:', 'excluded_dependencies:'], ['install:', 'exclude:'], $info);
-          file_put_contents($info_file, $info);
+          $info = Yaml::decode($info);
+
+          if (is_array($info['base profile'])) {
+            $info['base profile'] = $info['base profile']['name'];
+          }
+          if (isset($info['dependencies'])) {
+            $info['install'] = $info['dependencies'];
+            unset($info['dependencies']);
+          }
+
+          $exclude = [];
+          if (isset($info['excluded_dependencies'])) {
+            $exclude = array_merge($exclude, $info['excluded_dependencies']);
+            unset($info['excluded_dependencies']);
+          }
+          if (isset($info['excluded_themes'])) {
+            $exclude = array_merge($exclude, $info['excluded_themes']);
+            unset($info['excluded_themes']);
+          }
+          if ($exclude) {
+            $info['exclude'] = $exclude;
+          }
+          file_put_contents($info_file, Yaml::encode($info));
 
           $message = $this->t('Updated @profile.', [
             '@profile' => $profile->getName(),
