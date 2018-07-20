@@ -75,14 +75,14 @@ class SubProfileCommand extends Command {
    *
    * @var string[]
    */
-  protected $include = [];
+  protected $installList = [];
 
   /**
    * Modules to exclude from the sub-profile.
    *
    * @var string[]
    */
-  protected $exclude = [];
+  protected $excludeList = [];
 
   /**
    * Cache of parsed info for Lightning's main components.
@@ -189,18 +189,18 @@ class SubProfileCommand extends Command {
       $this->validator->validateMachineName($options['machine-name']);
     }
     if ($options['include']) {
-      $this->include = $this->toArray($options['include']);
+      $this->installList = $this->toArray($options['include']);
     }
     if ($options['exclude']) {
       // Only Lightning components can be excluded. This prevents wily users
       // from excluding modules that Lightning needs.
-      $this->exclude = $this->toArray($options['exclude']);
-      $this->validateExcludedModules($this->exclude);
+      $this->excludeList = $this->toArray($options['exclude']);
+      $this->validateExcludedModules($this->excludeList);
 
       // Exclude the sub-components of any excluded components.
       $excluded_components = array_intersect_key(
         $this->getMainComponentInfo(),
-        array_flip($this->exclude)
+        array_flip($this->excludeList)
       );
       foreach ($excluded_components as $info) {
         $this->doExclude(@$info['components']);
@@ -244,13 +244,13 @@ class SubProfileCommand extends Command {
 
     // Get any included modules from the --include option, or ask the user if
     // none were specified.
-    if (empty($this->include)) {
+    if (empty($this->installList)) {
       $include = $io->ask(
         $this->trans('commands.lightning.subprofile.options.include'),
         NULL,
         'trim'
       );
-      $this->include = $this->toArray($include);
+      $this->installList = $this->toArray($include);
     }
 
     // Ask the user if they want to exclude any Lightning components.
@@ -262,7 +262,7 @@ class SubProfileCommand extends Command {
       // Ask about components that have not been excluded yet.
       $available_components = array_diff_key(
         $this->getMainComponentInfo(),
-        array_flip($this->exclude)
+        array_flip($this->excludeList)
       );
       foreach ($available_components as $component => $info) {
         $info['machine_name'] = $component;
@@ -357,8 +357,8 @@ class SubProfileCommand extends Command {
   protected function doExclude($modules) {
     if ($modules) {
       $modules = (array) $modules;
-      $this->exclude = array_merge($this->exclude, $modules);
-      $this->include = array_diff($this->include, $modules);
+      $this->excludeList = array_merge($this->excludeList, $modules);
+      $this->installList = array_diff($this->installList, $modules);
     }
   }
 
@@ -412,8 +412,8 @@ class SubProfileCommand extends Command {
         $input->getOption('machine-name'),
         $this->appRoot . '/profiles/custom',
         $input->getOption('description'),
-        array_unique($this->include),
-        array_unique($this->exclude)
+        array_unique($this->installList),
+        array_unique($this->excludeList)
       );
     }
   }

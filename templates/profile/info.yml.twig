@@ -5,9 +5,9 @@ version: 8.x-dev
 description: '{{ description }}'
 {% endif %}
 core: '8.x'
-{% if dependencies %}
-dependencies:
-{% for module in dependencies %}
+{% if install %}
+install:
+{% for module in install %}
   - {{ module }}
 {% endfor %}
 {% endif %}
@@ -18,9 +18,9 @@ themes:
 
 base profile:
   name: lightning
-{% if excluded_dependencies %}
-  excluded_dependencies:
-{% for module in excluded_dependencies %}
+{% if exclude %}
+  exclude:
+{% for module in exclude %}
     - {{ module }}
 {% endfor %}
 {% endif %}
