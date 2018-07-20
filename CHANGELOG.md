@@ -1,7 +1,7 @@
-3.2.0
+## 3.2.0
 * Drupal core has been update to 8.6.x.
 
-##  3.1.4
+## 3.1.4
 * Lightning Workflow has been updated to 2.0.0-rc2, which includes a completely
   rewritten Lightning Scheduler.
 * Lightning API has been updated to 2.3.0, which includes an updated version of
