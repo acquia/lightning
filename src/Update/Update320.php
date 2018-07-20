@@ -1,6 +1,6 @@
 <?php
 
-namespace Acquia\Lightning;
+namespace Drupal\lightning\Update;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\ExtensionDiscovery;
