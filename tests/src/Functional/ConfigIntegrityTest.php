@@ -107,7 +107,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
       ]);
     }
 
-    $this->doTestCrop();
     $this->doTestContactForm();
 
     // Assert that bundled content types have meta tags enabled.
@@ -242,41 +241,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
   protected function assertFilePermissions($permissions, $file) {
     $this->assertFileExists($file);
     $this->assertSame($permissions, fileperms($file) & 0777);
-  }
-
-  /**
-   * Tests that cropping is enabled for image media.
-   */
-  private function doTestCrop() {
-    // Assert that a local copy of the Cropper library is being used.
-    //
-    // @todo This breaks Travis CI using the 8.6.x version of the sub-profile
-    // patch: https://travis-ci.org/phenaproxima/lightning/builds/407208203.
-    // It breaks because modules in the 'install' list of a sub-profile are
-    // not dependencies, and therefore install order is not deterministic.
-    // This test will need to be moved into Lightning Media Image and made
-    // explicit.
-    return;
-    $settings = $this->config('image_widget_crop.settings')->get('settings');
-    $lib = 'libraries/cropper/dist';
-    $this->assertContains("$lib/cropper.min.js", $settings['library_url']);
-    $this->assertContains("$lib/cropper.min.css", $settings['css_url']);
-
-    $form_displays = $this->container
-      ->get('entity_type.manager')
-      ->getStorage('entity_form_display')
-      ->loadByProperties([
-        'targetEntityType' => 'media',
-        'bundle' => 'image',
-      ]);
-
-    /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
-    foreach ($form_displays as $form_display) {
-      $component = $form_display->getComponent('image');
-      $this->assertInternalType('array', $component);
-      $this->assertEquals('image_widget_crop', $component['type']);
-      $this->assertEquals(['freeform'], $component['settings']['crop_list']);
-    }
   }
 
   /**
