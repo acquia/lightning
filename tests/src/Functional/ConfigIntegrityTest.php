@@ -256,11 +256,11 @@ class ConfigIntegrityTest extends BrowserTestBase {
     // not dependencies, and therefore install order is not deterministic.
     // This test will need to be moved into Lightning Media Image and made
     // explicit.
-    //
-    // $settings = $this->config('image_widget_crop.settings')->get('settings');
-    // $lib = 'libraries/cropper/dist';
-    // $this->assertContains("$lib/cropper.min.js", $settings['library_url']);
-    // $this->assertContains("$lib/cropper.min.css", $settings['css_url']);
+    return;
+    $settings = $this->config('image_widget_crop.settings')->get('settings');
+    $lib = 'libraries/cropper/dist';
+    $this->assertContains("$lib/cropper.min.js", $settings['library_url']);
+    $this->assertContains("$lib/cropper.min.css", $settings['css_url']);
 
     $form_displays = $this->container
       ->get('entity_type.manager')
