@@ -107,8 +107,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
       ]);
     }
 
-    $this->doTestContactForm();
-
     // Assert that bundled content types have meta tags enabled.
     $this->assertMetatag(['page', 'landing_page']);
 
@@ -241,30 +239,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
   protected function assertFilePermissions($permissions, $file) {
     $this->assertFileExists($file);
     $this->assertSame($permissions, fileperms($file) & 0777);
-  }
-
-  /**
-   * Tests the site-wide contact form.
-   */
-  private function doTestContactForm() {
-    $assert = $this->assertSession();
-
-    $this->assertAllowed('/contact');
-
-    $assert->fieldExists('Your name');
-    $assert->fieldExists('Your email address');
-    $assert->fieldExists('Subject');
-    $assert->fieldExists('Message');
-
-    // The name and e-mail fields should not be present for authenticated users.
-    $account = $this->drupalCreateUser();
-    $this->drupalLogin($account);
-    $this->assertAllowed('/contact');
-    $assert->fieldNotExists('Your name');
-    $assert->fieldNotExists('Your email address');
-    $assert->fieldExists('Subject');
-    $assert->fieldExists('Message');
-    $this->drupalLogout();
   }
 
 }
