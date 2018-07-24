@@ -13,7 +13,8 @@ class SubProfileGenerator extends Generator {
   /**
    * {@inheritdoc}
    */
-  public function generate($name, $machine_name, $profile_path, $description, array $dependencies, array $excluded_dependencies) {
+  public function generate($name, $machine_name, $profile_path, $description, array $install_list, array $exclude_list
+  ) {
     $destination = $profile_path . '/' . $machine_name;
 
     // If the destination path already exists, realpath() will return something
@@ -43,14 +44,7 @@ class SubProfileGenerator extends Generator {
       (new Filesystem)->mkdir($destination);
 
       // Recurse to do the entire validation dance again.
-      $this->generate(
-        $name,
-        $machine_name,
-        $profile_path,
-        $description,
-        $dependencies,
-        $excluded_dependencies
-      );
+      $this->generate($name, $machine_name, $profile_path, $description, $install_list, $exclude_list);
       return;
     }
 
@@ -58,8 +52,8 @@ class SubProfileGenerator extends Generator {
       'profile' => $name,
       'machine_name' => $machine_name,
       'description' => $description,
-      'dependencies' => $dependencies,
-      'excluded_dependencies' => $excluded_dependencies,
+      'install' => $install_list,
+      'exclude' => $exclude_list,
     ];
 
     $prefix = "$dir/$machine_name";
