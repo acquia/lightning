@@ -48,6 +48,7 @@ projects[lightning_api][version] = 2.5
 projects[lightning_core][type] = module
 projects[lightning_core][version] = 3.0-alpha1
 projects[lightning_layout][type] = module
+projects[lightning_layout][patch][] = https://www.drupal.org/files/issues/2018-07-25/2988162-3.patch
 projects[lightning_layout][version] = 2.0-alpha1
 projects[lightning_media][type] = module
 projects[lightning_media][version] = 3.0-alpha1
