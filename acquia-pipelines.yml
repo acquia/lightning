@@ -40,3 +40,5 @@ events:
             - cd $SOURCE_DIR
             # Setup settings file and codebase with minimum required for cloud.
             - lightning configure:cloud
+            # Remove the Drush binary so it doesn't interfere with cloud.
+            - rm ./vendor/bin/drush
