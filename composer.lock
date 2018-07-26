@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e7ffabffac537108c715d29bd00ec2af",
+    "content-hash": "8d16397acc324337499c82faf81069e1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1363,6 +1363,7 @@
                     "merge-extra": false
                 },
                 "patches_applied": {
+                    "2988283 - Provided layouts should clear floats": "https://www.drupal.org/files/issues/2018-07-25/2988283-2.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2018-07-09/2815221-105.patch",
@@ -2436,17 +2437,17 @@
         },
         {
             "name": "drupal/lightning_core",
-            "version": "3.0.0-alpha1",
+            "version": "3.0.0-alpha2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_core",
-                "reference": "8.x-3.0-alpha1"
+                "reference": "8.x-3.0-alpha2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_core-8.x-3.0-alpha1.zip",
-                "reference": "8.x-3.0-alpha1",
-                "shasum": "67000f599ad7a5772ee1e1d6c3862da54cb683e6"
+                "url": "https://ftp.drupal.org/files/projects/lightning_core-8.x-3.0-alpha2.zip",
+                "reference": "8.x-3.0-alpha2",
+                "shasum": "93e0ede14ee73ec4553abd3edaccf2d74166b04a"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2476,8 +2477,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-alpha1",
-                    "datestamp": "1532092684",
+                    "version": "8.x-3.0-alpha2",
+                    "datestamp": "1532613181",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
@@ -2653,7 +2654,8 @@
                 },
                 "enable-patching": true,
                 "patches_applied": {
-                    "2988162 - field.storage.node.layout_builder__layout.yml should not be optional": "https://www.drupal.org/files/issues/2018-07-25/2988162-3.patch"
+                    "2988162 - field.storage.node.layout_builder__layout.yml should not be optional": "https://www.drupal.org/files/issues/2018-07-25/2988162-3.patch",
+                    "2988287 - Background image selectors should target content, not wrapper": "https://www.drupal.org/files/issues/2018-07-26/2988287-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -11229,7 +11231,14 @@
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "3.0.0-alpha1",
+            "alias_normalized": "3.0.0.0-alpha1",
+            "version": "3.0.0.0-alpha2",
+            "package": "drupal/lightning_core"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/media_entity_generic": 20,

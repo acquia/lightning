@@ -5,6 +5,7 @@ projects[drupal][download][type] = git
 projects[drupal][download][url] = https://git.drupal.org/project/drupal.git
 projects[drupal][download][branch] = 8.6.0-alpha1
 projects[drupal][download][tag] = 8.6.0-alpha1
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-07-25/2988283-2.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2885441-2.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-07-09/2815221-105.patch
