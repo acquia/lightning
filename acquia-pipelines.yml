@@ -40,6 +40,3 @@ events:
             - cd $SOURCE_DIR
             # Setup settings file and codebase with minimum required for cloud.
             - lightning configure:cloud
-            # Alias a cloud-compatible version of Drush.
-            - composer require drush/drush:"8.1.16 as 9.2.1" --no-update
-            - composer update drush/drush --with-all-dependencies
