@@ -8,6 +8,6 @@ projects[drupal][patch][] = https://www.drupal.org/files/issues/1356278-408--8.5
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2880374-remove-experimental-warnings-6.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2885441-2.patch
-projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-04-16/2815221-87-8.5.x.patch
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-06-07/2815221-102.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2877383-56.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2670730-81-89-8.5.0-rc1.patch
