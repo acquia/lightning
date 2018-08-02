@@ -1,4 +1,14 @@
-##  3.1.4
+## 3.1.5
+* Security updated Drupal core to 8.5.6. (SA-CORE-2018-005)
+* Lightning API has been update to 2.5 which:
+  * Updates several of its dependencies that no longer need to be patched or
+    pinned as a result.
+  * Is now compatible ith Drupal core 8.6 in addition 8.5.
+* Lightning Layout has been updated to 1.3 which has bug fixes and changes to
+  make it compatible with Drupal core 8.6 in addition to 8.5.
+* Lightning Workflow has been updated to 2.2 which includes several bug fixes.
+
+## 3.1.4
 * Lightning Workflow has been updated to 2.0.0-rc2, which includes a completely
   rewritten Lightning Scheduler.
 * Lightning API has been updated to 2.3.0, which includes an updated version of
