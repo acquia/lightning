@@ -40,5 +40,8 @@ events:
             - cd $SOURCE_DIR
             # Setup settings file and codebase with minimum required for cloud.
             - lightning configure:cloud
-            # Remove dev tools from the Cloud build.
-            - composer remove acquia/lightning_dev --dev
+            # Remove the Drush binary and package so it doesn't interfere with
+            # cloud versions. Doing this the proper way with Composer can cause
+            # timeouts.
+            - rm ./vendor/bin/drush
+            - rm -rf ./vendor/drush
