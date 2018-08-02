@@ -37,6 +37,7 @@ projects[lightning_api][version] = 2.5
 projects[lightning_core][type] = module
 projects[lightning_core][version] = 2.8
 projects[lightning_layout][type] = module
+projects[lightning_layout][patch][] = https://www.drupal.org/files/issues/2018-07-30/2989369-feat-dep-Ensure-lightning_workflow-dep-02.patch
 projects[lightning_layout][version] = 1.3
 projects[lightning_media][type] = module
 projects[lightning_media][version] = 2.3
