@@ -170,6 +170,18 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+### 3.1.4 to 3.1.5
+There are no manual update steps for this version.
+
+Note that this release includes an update to Drupal core which security updates
+some of its dependencies. As such, you might need to include `drupal/core` in
+the list of arguments you pass to `composer update` if any of its dependencies
+are locked at older versions in your project. For example:
+
+```
+$ composer update acquia/lightning drupal/core --with-all-dependencies
+```
+
 ### 3.1.3 to 3.1.4
 * **NOTE: This is a _fully manual update_ that involves a data migration!**
   Lightning Scheduler has been completely rewritten, and now stores scheduled
