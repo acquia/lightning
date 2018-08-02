@@ -62,7 +62,7 @@ before_script:
 
 script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
-  - behat --config .behat.yml --tags=~lightning_media
+  - behat --config .behat.yml --stop-on-failure
   - cd docroot
   - phpunit --configuration ./core --group lightning,profiles
 
