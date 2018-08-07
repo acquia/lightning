@@ -56,8 +56,6 @@ install:
   - drush cache:rebuild
 
 before_script:
-  # Disable Pathauto temporarily to prevent test failures.
-  - drush pm-uninstall pathauto --yes
   - drush config:set system.date timezone.default $TZ --yes
   - drush runserver --default-server=builtin 8080 &>/dev/null &
   - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
