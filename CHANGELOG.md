@@ -1,5 +1,11 @@
 ## 3.2.0
-* Drupal core has been updated to 8.6.x.
+* Drupal core has been updated to 8.6.0.
+* Pathauto is now installed by default. (#588)
+* The `lightning:subprofile` command is no longer compatible with the
+  sub-profile system from Drupal 8.5.x. The `dependencies` list is replaced by
+  `install`, `base profile` is the name of the base profile instead of an
+  array, and all excluded modules and themes are listed in a single `exclude`
+  array. (#585)
 
 ## 3.1.4
 * Lightning Workflow has been updated to 2.0.0-rc2, which includes a completely
