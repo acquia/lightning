@@ -167,7 +167,8 @@ class Package {
       // Derive the branch from the version string.
       $info['download']['branch'] = preg_replace(
         // 8.4.2 --> 8.4.x
-        ['/\.\d$/', '/-dev$/'],
+        // 8.6.0-beta2 --> 8.6.x
+        ['/\.\d(-\w+\d+)?$/', '/-dev$/'],
         // 8.5.x-dev --> 8.5.x
         ['.x', NULL],
         $package['version']
@@ -229,7 +230,7 @@ class Package {
     $info = [
       'download' => [
         'type' => 'git',
-        'url' => $package['source']['url'],
+        'url' => str_replace('git@github.com:', 'https://github.com/', $package['source']['url']),
         'branch' => $package['version'],
         'revision' => $package['source']['reference'],
       ],
@@ -274,15 +275,7 @@ class Package {
    *   TRUE if the package is an asset library, otherwise FALSE.
    */
   protected function isLibrary(array $package) {
-    $package_types = [
-      'drupal-library',
-      'bower-asset',
-      'npm-asset',
-    ];
-    return (
-      in_array($package['type'], $package_types) &&
-      array_key_exists($package['name'], $this->rootPackage->getRequires())
-    );
+    return in_array($package['type'], ['drupal-library', 'bower-asset', 'npm-asset'], TRUE);
   }
 
 }
