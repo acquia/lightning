@@ -174,6 +174,42 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 There is currently no migration between 3.x and 4.x. A migration will be
 provided once Lightning Layout 2.x is stable.
 
+### 3.1.5 to 3.2.0-beta1
+* If you have any sub-profiles (regardless of whether or not they extend
+  Lightning), you must change their info files to work with Drupal 8.6.0:
+  * Change `base profile` to a string, containing the name of the base
+    profile. For example: `base profile: lightning`.
+  * Change the `dependencies` key to `install`.
+  * If you have any excluded dependencies or themes, merge them into a
+    single array, with the key `exclude`.
+  For example, an 8.6.0-compatible sub-profile info file will look something
+  like this:
+```
+name: My Profile
+core: 8.x
+type: profile
+base profile: lightning
+install:
+  - paragraphs
+  - slick_entityreference
+exclude:
+  - lightning_search
+  - pathauto
+  - bartik
+```
+
+### 3.1.4 to 3.1.5
+There are no manual update steps for this version.
+
+Note that this release includes an update to Drupal core which security updates
+some of its dependencies. As such, you might need to include `drupal/core` in
+the list of arguments you pass to `composer update` if any of its dependencies
+are locked at older versions in your project. For example:
+
+```
+$ composer update acquia/lightning drupal/core --with-all-dependencies
+```
+
 ### 3.1.3 to 3.1.4
 * **NOTE: This is a _fully manual update_ that involves a data migration!**
   Lightning Scheduler has been completely rewritten, and now stores scheduled
