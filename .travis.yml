@@ -59,9 +59,7 @@ before_script:
 
 script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
-  # Temporarily disabled tests broken by Pathauto, but since fixed in
-  # Lightning Workflow. This will be restored post-release.
-  - behat --config .behat.yml --stop-on-failure --tags ~4e8a6957,~c9391f57,~b3ca1fae,~03ebc3ee,~c0c17d43
+  - behat --config .behat.yml --stop-on-failure
   - cd docroot
   - phpunit --configuration ./core --group lightning,profiles
 
