@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "70651fa9f48f1ccf6068cc2759bd6644",
+    "content-hash": "3dcd222fdd4d2742dd394fcb9bfc2c01",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1157,16 +1157,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "8.6.0-rc1",
+            "version": "8.6.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "2b8e6adebc84259f246bd52ef4faa9dcdd64e1b9"
+                "reference": "841190c616528e33a2061b449c99b1a1ab8f7ea3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/2b8e6adebc84259f246bd52ef4faa9dcdd64e1b9",
-                "reference": "2b8e6adebc84259f246bd52ef4faa9dcdd64e1b9",
+                "url": "https://api.github.com/repos/drupal/core/zipball/841190c616528e33a2061b449c99b1a1ab8f7ea3",
+                "reference": "841190c616528e33a2061b449c99b1a1ab8f7ea3",
                 "shasum": ""
             },
             "require": {
@@ -1404,7 +1404,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2018-08-17T18:43:58+00:00"
+            "time": "2018-08-20T14:18:36+00:00"
         },
         {
             "name": "drupal/crop",
@@ -2332,26 +2332,21 @@
         },
         {
             "name": "drupal/lightning_api",
-            "version": "2.5.0",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_api",
-                "reference": "8.x-2.5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_api-8.x-2.5.zip",
-                "reference": "8.x-2.5",
-                "shasum": "533543b06d0b04c9503487e418145a77f7bcca3d"
+                "reference": "c9f6d418b9148daa34b6643487ac3be62d7b12b8"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/core": "~8.0",
                 "drupal/jsonapi": "^1.22.0",
-                "drupal/lightning_core": "^2.7.0 || ^3.0.0",
-                "drupal/openapi": "^1.0.0",
-                "drupal/openapi_redoc": "*",
+                "drupal/lightning_core": "2.x-dev || 3.x-dev",
+                "drupal/openapi": "^1.0-beta2",
+                "drupal/openapi_ui_redoc": "^1.0",
+                "drupal/openapi_ui_swagger": "^1.0",
                 "drupal/simple_oauth": "^3.8.0",
                 "drupal/simple_oauth_extras": "*",
                 "oomphinc/composer-installers-extender": "^1.1"
@@ -2366,11 +2361,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.5",
+                    "version": "8.x-2.5+1-dev",
                     "datestamp": "1532101681",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "installer-types": [
@@ -2439,28 +2434,23 @@
             "homepage": "https://www.drupal.org/project/lightning_api",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_api"
-            }
+            },
+            "time": "2018-08-17T12:34:16+00:00"
         },
         {
             "name": "drupal/lightning_core",
-            "version": "3.0.0-beta1",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_core",
-                "reference": "8.x-3.0-beta1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_core-8.x-3.0-beta1.zip",
-                "reference": "8.x-3.0-beta1",
-                "shasum": "50ce367c11a11d516b731c349d2b7d5477d44643"
+                "reference": "ef086272470338f66a60bbe7ad1a8013a0c64e28"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/acquia_connector": "^1.1",
                 "drupal/contact_storage": "^1.0",
-                "drupal/core": "~8.6.0",
+                "drupal/core": "8.6.x-dev",
                 "drupal/metatag": "^1.0",
                 "drupal/pathauto": "^1.0",
                 "drupal/search_api": "^1.0",
@@ -2483,11 +2473,11 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-beta1",
-                    "datestamp": "1533660780",
+                    "version": "8.x-3.0-beta1+2-dev",
+                    "datestamp": "1534260485",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "installer-types": [
@@ -2574,21 +2564,16 @@
             "homepage": "https://www.drupal.org/project/lightning_core",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_core"
-            }
+            },
+            "time": "2018-08-17T18:04:22+00:00"
         },
         {
             "name": "drupal/lightning_layout",
-            "version": "2.0.0-alpha2",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_layout",
-                "reference": "8.x-2.0-alpha2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_layout-8.x-2.0-alpha2.zip",
-                "reference": "8.x-2.0-alpha2",
-                "shasum": "1c17227dbe32b6cf46a1fd51117312d01bdc4788"
+                "reference": "dd4531a4f35a3fe90d86f65f56f1568a1819d6ef"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2598,7 +2583,7 @@
                 "drupal/entity_block": "^1.0",
                 "drupal/entity_browser_block": "1.0.0-alpha1",
                 "drupal/layout_library": "1.x-dev",
-                "drupal/lightning_core": "^3.0",
+                "drupal/lightning_core": "3.x-dev",
                 "drupal/simple_gmap": "^1.4",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
@@ -2614,11 +2599,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-alpha2",
-                    "datestamp": "1533841980",
+                    "version": "8.x-2.0-alpha2+2-dev",
+                    "datestamp": "1534249980",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "installer-types": [
@@ -2704,21 +2689,16 @@
             "homepage": "https://www.drupal.org/project/lightning_layout",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_layout"
-            }
+            },
+            "time": "2018-08-14T12:32:43+00:00"
         },
         {
             "name": "drupal/lightning_media",
-            "version": "3.0.0-beta1",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_media",
-                "reference": "8.x-3.0-beta1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_media-8.x-3.0-beta1.zip",
-                "reference": "8.x-3.0-beta1",
-                "shasum": "07e509e78e48da740fbc9ae8e41786387b430243"
+                "reference": "e1f73b1672338636cc46c95c1b8257d22a0e45d1"
             },
             "require": {
                 "bower-asset/cropper": "^2.3",
@@ -2733,7 +2713,7 @@
                 "drupal/entity_embed": "1.0.0-beta2",
                 "drupal/image_widget_crop": "^2.1",
                 "drupal/inline_entity_form": "^1.0",
-                "drupal/lightning_core": "^3.0",
+                "drupal/lightning_core": "3.x-dev",
                 "drupal/media": "*",
                 "drupal/media_entity_instagram": "2.0.0-alpha1",
                 "drupal/media_entity_twitter": "2.0.0-alpha2",
@@ -2754,11 +2734,11 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-beta1",
-                    "datestamp": "1533663480",
+                    "version": "8.x-3.0-beta1+3-dev",
+                    "datestamp": "1534340280",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "installer-types": [
@@ -2838,28 +2818,23 @@
             "homepage": "https://www.drupal.org/project/lightning_media",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_media"
-            }
+            },
+            "time": "2018-08-20T13:08:28+00:00"
         },
         {
             "name": "drupal/lightning_workflow",
-            "version": "3.0.0-beta2",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_workflow",
-                "reference": "8.x-3.0-beta2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_workflow-8.x-3.0-beta2.zip",
-                "reference": "8.x-3.0-beta2",
-                "shasum": "153b19ccef883d08f7c61167956ff3c0698a3950"
+                "reference": "7c5eef35e40dbbfa0201af45cd46d4f72ca09737"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/core": "*",
                 "drupal/diff": "^1.0",
-                "drupal/lightning_core": "^3.0",
+                "drupal/lightning_core": "3.x-dev",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
             "require-dev": {
@@ -2873,11 +2848,11 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.0-beta2",
-                    "datestamp": "1533914280",
+                    "version": "8.x-3.0-beta2+3-dev",
+                    "datestamp": "1534258980",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Beta releases are not covered by Drupal security advisories."
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "installer-types": [
@@ -2945,7 +2920,8 @@
             "homepage": "https://www.drupal.org/project/lightning_workflow",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_workflow"
-            }
+            },
+            "time": "2018-08-14T15:50:48+00:00"
         },
         {
             "name": "drupal/media_entity_instagram",
@@ -3140,17 +3116,17 @@
         },
         {
             "name": "drupal/openapi",
-            "version": "1.0.0-beta1",
+            "version": "1.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/openapi",
-                "reference": "8.x-1.0-beta1"
+                "reference": "8.x-1.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/openapi-8.x-1.0-beta1.zip",
-                "reference": "8.x-1.0-beta1",
-                "shasum": "dfbdb760707bc8fb2a3c31ed3b4b7c9253d7cc6c"
+                "url": "https://ftp.drupal.org/files/projects/openapi-8.x-1.0-beta2.zip",
+                "reference": "8.x-1.0-beta2",
+                "shasum": "0207fcb17911f6a20e5a969c4acaa1604b6e3248"
             },
             "require": {
                 "drupal/core": "~8.0",
@@ -3166,7 +3142,7 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta1",
+                    "version": "8.x-1.0-beta2",
                     "datestamp": "1532566384",
                     "security-coverage": {
                         "status": "not-covered",
@@ -3207,20 +3183,30 @@
             }
         },
         {
-            "name": "drupal/openapi_redoc",
-            "version": "1.0.0-beta1",
-            "require": {
-                "drupal/core": "~8.0",
-                "drupal/openapi": "self.version"
+            "name": "drupal/openapi_ui",
+            "version": "1.0.0-rc1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/openapi_ui",
+                "reference": "8.x-1.0-rc1"
             },
-            "type": "metapackage",
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/openapi_ui-8.x-1.0-rc1.zip",
+                "reference": "8.x-1.0-rc1",
+                "shasum": "9ac8f441a63a469c898d2545f77f85d0e48671b3"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "type": "drupal-module",
             "extra": {
                 "branch-alias": {
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.0-beta1",
-                    "datestamp": "1528645980",
+                    "version": "8.x-1.0-rc1",
+                    "datestamp": "1532303581",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -3233,26 +3219,115 @@
             ],
             "authors": [
                 {
-                    "name": "mrjmd",
-                    "homepage": "https://www.drupal.org/user/1800446"
+                    "name": "richgerdes",
+                    "homepage": "https://www.drupal.org/user/3437973"
+                }
+            ],
+            "description": "Provides plugin system for OpenAPI/Swagger Interface libraries.",
+            "homepage": "https://www.drupal.org/project/openapi_ui",
+            "support": {
+                "source": "http://cgit.drupalcode.org/openapi_ui"
+            }
+        },
+        {
+            "name": "drupal/openapi_ui_redoc",
+            "version": "1.0.0-rc1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/openapi_ui_redoc",
+                "reference": "8.x-1.0-rc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/openapi_ui_redoc-8.x-1.0-rc1.zip",
+                "reference": "8.x-1.0-rc1",
+                "shasum": "91630bf6dbb00cb194ceb0f805b2478ab862afc0"
+            },
+            "require": {
+                "drupal/core": "~8.0",
+                "drupal/openapi_ui": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
                 },
+                "drupal": {
+                    "version": "8.x-1.0-rc1",
+                    "datestamp": "1532303881",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
                 {
                     "name": "richgerdes",
                     "homepage": "https://www.drupal.org/user/3437973"
-                },
-                {
-                    "name": "rogierbom",
-                    "homepage": "https://www.drupal.org/user/1352176"
-                },
-                {
-                    "name": "tedbow",
-                    "homepage": "https://www.drupal.org/user/240860"
                 }
             ],
-            "description": "Documentation using the ReDoc",
-            "homepage": "https://www.drupal.org/project/openapi",
+            "description": "Provides display of OpenAPI docs using the ReDoc library.",
+            "homepage": "https://www.drupal.org/project/openapi_ui_redoc",
             "support": {
-                "source": "http://cgit.drupalcode.org/openapi"
+                "source": "http://cgit.drupalcode.org/openapi_ui_redoc"
+            }
+        },
+        {
+            "name": "drupal/openapi_ui_swagger",
+            "version": "1.0.0-rc2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupal.org/project/openapi_ui_swagger",
+                "reference": "8.x-1.0-rc2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/openapi_ui_swagger-8.x-1.0-rc2.zip",
+                "reference": "8.x-1.0-rc2",
+                "shasum": "093ea1a6c3269512ba06ff188c7356c1073cf1f6"
+            },
+            "require": {
+                "drupal/core": "~8.0",
+                "drupal/openapi_ui": "^1.0",
+                "swagger-api/swagger-ui": "^3.0.17"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-rc2",
+                    "datestamp": "1532563381",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "richgerdes",
+                    "homepage": "https://www.drupal.org/user/3437973"
+                }
+            ],
+            "description": "Creates OpenAPI specification for Drupal REST resources.",
+            "homepage": "https://www.drupal.org/project/openapi_ui_swagger",
+            "keywords": [
+                "Drupal"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/openapi_ui_swagger",
+                "issues": "http://drupal.org/project/issues/openapi_ui_swagger"
             }
         },
         {
@@ -5026,6 +5101,63 @@
                 "parser"
             ],
             "time": "2016-11-22T22:57:47+00:00"
+        },
+        {
+            "name": "swagger-api/swagger-ui",
+            "version": "v3.18.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swagger-api/swagger-ui.git",
+                "reference": "6ba514583db6bf8a7ffca04d0e9ce77e7e94b734"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swagger-api/swagger-ui/zipball/6ba514583db6bf8a7ffca04d0e9ce77e7e94b734",
+                "reference": "6ba514583db6bf8a7ffca04d0e9ce77e7e94b734",
+                "shasum": ""
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Anna Bodnia",
+                    "email": "anna.bodnia@gmail.com"
+                },
+                {
+                    "name": "Buu Nguyen",
+                    "email": "buunguyen@gmail.com"
+                },
+                {
+                    "name": "Josh Ponelat",
+                    "email": "jponelat@gmail.com"
+                },
+                {
+                    "name": "Kyle Shockey",
+                    "email": "kyleshockey1@gmail.com"
+                },
+                {
+                    "name": "Robert Barnwell",
+                    "email": "robert@robertismy.name"
+                },
+                {
+                    "name": "Sahar Jafari",
+                    "email": "shr.jafari@gmail.com"
+                }
+            ],
+            "description": " Swagger UI is a collection of HTML, Javascript, and CSS assets that dynamically generate beautiful documentation from a Swagger-compliant API.",
+            "homepage": "http://swagger.io",
+            "keywords": [
+                "api",
+                "documentation",
+                "openapi",
+                "specification",
+                "swagger",
+                "ui"
+            ],
+            "time": "2018-08-11T05:59:08+00:00"
         },
         {
             "name": "symfony-cmf/routing",
@@ -11378,6 +11510,11 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "drupal/lightning_api": 20,
+        "drupal/lightning_core": 20,
+        "drupal/lightning_layout": 20,
+        "drupal/lightning_media": 20,
+        "drupal/lightning_workflow": 20,
         "drupal/media_entity_generic": 20,
         "acquia/lightning_dev": 20
     },
