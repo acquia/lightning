@@ -33,7 +33,7 @@ events:
             - phantomjs --webdriver=4444 > /dev/null &
             - sleep 10
             - cd $SOURCE_DIR
-            - behat --stop-on-failure --config .behat.yml --tags=~javascript,~workflow
+            - behat --stop-on-failure --config .behat.yml --tags=~javascript --tags=~workflow
       - cleanup:
           type: script
           script:
