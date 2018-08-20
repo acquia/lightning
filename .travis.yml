@@ -15,7 +15,6 @@ env:
   # from Panels and Panelizer exists.
   # - VERSION=3.0.0
 
-
 addons:
   chrome: stable
 
@@ -60,7 +59,7 @@ before_script:
 
 script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
-  - behat --config .behat.yml --stop-on-failure
+  - behat --config .behat.yml --stop-on-failure --tags ~workflow
   - cd docroot
   - phpunit --configuration ./core --group lightning,profiles
 
