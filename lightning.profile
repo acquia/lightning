@@ -160,7 +160,7 @@ function lightning_alter_frontpage_view() {
               'admin_label' => '',
               'empty' => TRUE,
               'tokenize' => TRUE,
-              'content' => '<p>Welcome to [site:name]. No front page content has been created yet.</p><p>Would you like to <a href="' . $lightning_path . '/README.md">view the README</a>?</p>',
+              'content' => '<p>Welcome to [site:name]. No front page content has been created yet.</p><p>Would you like to <a href="/' . drupal_get_path('profile', 'lightning') . '/README.md">view the README</a>?</p>',
               'label' => '',
               'plugin_id' => 'text_custom',
             ],
