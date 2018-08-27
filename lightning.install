@@ -99,6 +99,14 @@ function lightning_update_8006() {
  */
 function lightning_update_dependencies() {
   return [
+    'lightning_dev' => [
+      // Lightning Dev 8010 invokes hook_modules_installed() on all modules, so
+      // Lightning API must ensure the correct OpenAPI modules are installed
+      // before that happens.
+      8010 => [
+        'lightning_api' => 8300,
+      ],
+    ],
     'media_entity' => [
       // Lightning 8004 must run before Media Entity 8002.
       8002 => [
