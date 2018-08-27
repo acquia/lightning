@@ -429,4 +429,6 @@ function lightning_installer_install() {
       ])
       ->save(TRUE);
   }
+
+  \Drupal::service('module_installer')->uninstall(['lightning_installer']);
 }
