@@ -496,11 +496,6 @@ function lightning_modules_installed(array $modules) {
       ->grantPermission('use editorial transition create_new_draft')
       ->save();
 
-    entity_create('node_type', [
-      'type' => 'article',
-      'name' => 'Article',
-    ])->save();
-
     // Temporarily uninstall Pathauto for testing.
     Drupal::service('module_installer')->uninstall(['pathauto']);
   }
