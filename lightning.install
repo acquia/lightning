@@ -19,12 +19,7 @@ use Drupal\user\RoleInterface;
  * @see system_install()
  */
 function lightning_install() {
-  // Assign user 1 the "administrator" role.
-  $user = User::load(1);
-  $user->roles[] = 'administrator';
-  $user->save();
-
-  // Don't do anything else during config sync.
+  // Don't do anything during config sync.
   if (\Drupal::isConfigSyncing()) {
     return;
   }
