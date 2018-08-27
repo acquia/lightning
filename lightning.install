@@ -107,3 +107,10 @@ function lightning_update_dependencies() {
     ],
   ];
 }
+
+/**
+ * Uninstalls the "Lightning installer" module enabled by the profile.
+ */
+function lightning_update_8300() {
+  \Drupal::service('module_installer')->uninstall(['lightning_installer']);
+}
