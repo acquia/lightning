@@ -55,7 +55,7 @@ final class Update320 implements ContainerInjectionInterface {
    *
    * @update
    *
-   * @ask Do you want to update all sub-profiles to be Drupal 8.6 compatible?
+   * @ask Do you want to update all sub-profiles to be Drupal 8.6-compatible?
    *
    * @param \Symfony\Component\Console\Style\StyleInterface $io
    *   The I/O handler.
@@ -67,45 +67,49 @@ final class Update320 implements ContainerInjectionInterface {
     foreach ($profiles as $profile) {
       $info_file = $profile->getPathname();
 
-      if (is_writeable($info_file)) {
-        $info = file_get_contents($info_file);
-
-        if (strstr($info, 'base profile:')) {
-          $info = Yaml::decode($info);
-
-          if (is_array($info['base profile'])) {
-            $info['base profile'] = $info['base profile']['name'];
-          }
-          if (isset($info['dependencies'])) {
-            $info['install'] = $info['dependencies'];
-            unset($info['dependencies']);
-          }
-
-          $exclude = [];
-          if (isset($info['excluded_dependencies'])) {
-            $exclude = array_merge($exclude, $info['excluded_dependencies']);
-            unset($info['excluded_dependencies']);
-          }
-          if (isset($info['excluded_themes'])) {
-            $exclude = array_merge($exclude, $info['excluded_themes']);
-            unset($info['excluded_themes']);
-          }
-          if ($exclude) {
-            $info['exclude'] = $exclude;
-          }
-          file_put_contents($info_file, Yaml::encode($info));
-
-          $message = $this->t('Updated @profile.', [
-            '@profile' => $profile->getName(),
-          ]);
-          $io->success((string) $message);
-        }
-      }
-      else {
+      if (! is_writeable($info_file)) {
         $message = $this->t('Cannot write to @path, skipping.', [
           '@path' => $info_file,
         ]);
         $io->warning((string) $message);
+        continue;
+      }
+
+      $info = file_get_contents($info_file);
+      if (empty($info) || ! strstr($info, 'base profile:')) {
+        continue;
+      }
+
+      $info = Yaml::decode($info);
+
+      // 'base profile' must be an array with at least the 'name' key.
+      if (! isset($info['base profile']['name'])) {
+        continue;
+      }
+
+      // Build the list of excluded extensions and themes.
+      $exclude = [];
+      if (isset($info['base profile']['excluded_dependencies'])) {
+        $exclude = array_merge($exclude, $info['base profile']['excluded_dependencies']);
+      }
+      if (isset($info['base profile']['excluded_themes'])) {
+        $exclude = array_merge($exclude, $info['base profile']['excluded_themes']);
+      }
+
+      $info['base profile'] = $info['base profile']['name'];
+      if ($exclude) {
+        $info['exclude'] = $exclude;
+      }
+
+      $success = file_put_contents($info_file, Yaml::encode($info));
+      if ($success) {
+        $message = $this->t('Updated @profile.', [
+          '@profile' => $profile->getName(),
+        ]);
+        $io->success((string) $message);
+      }
+      else {
+        throw new \RuntimeException('An error occurred writing to ' . $profile->getPathname());
       }
     }
   }
