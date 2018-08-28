@@ -4,6 +4,7 @@ namespace Drupal\lightning\Update;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
 use Drupal\Core\Extension\ExtensionDiscovery;
+use Drupal\Core\Extension\ProfileExtensionList;
 use Drupal\Core\Serialization\Yaml;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\StringTranslation\TranslationInterface;
@@ -25,15 +26,25 @@ final class Update320 implements ContainerInjectionInterface {
   protected $appRoot;
 
   /**
+   * The profile extension list service.
+   *
+   * @var \Drupal\Core\Extension\ProfileExtensionList
+   */
+  protected $profileList;
+
+  /**
    * Update320 constructor.
    *
    * @param string $app_root
    *   The Drupal application root.
+   * @param \Drupal\Core\Extension\ProfileExtensionList $profile_list
+   *   The profile extension list service.
    * @param \Drupal\Core\StringTranslation\TranslationInterface|NULL $translation
    *   (optional) The string translation service.
    */
-  public function __construct($app_root, TranslationInterface $translation = NULL) {
+  public function __construct($app_root, ProfileExtensionList $profile_list, TranslationInterface $translation = NULL) {
     $this->appRoot = $app_root;
+    $this->profileList = $profile_list;
 
     if ($translation) {
       $this->setStringTranslation($translation);
@@ -46,6 +57,7 @@ final class Update320 implements ContainerInjectionInterface {
   public static function create(ContainerInterface $container) {
     return new static(
       $container->get('app.root'),
+      $container->get('extension.list.profile'),
       $container->get('string_translation')
     );
   }
@@ -63,8 +75,7 @@ final class Update320 implements ContainerInjectionInterface {
   public function updateProfiles(StyleInterface $io) {
     $discovery = new ExtensionDiscovery($this->appRoot);
 
-    $profiles = $discovery->scan('profile');
-    foreach ($profiles as $profile) {
+    foreach ($discovery->scan('profile') as $profile) {
       $info_file = $profile->getPathname();
 
       if (! is_writeable($info_file)) {
@@ -112,6 +123,8 @@ final class Update320 implements ContainerInjectionInterface {
         throw new \RuntimeException('An error occurred writing to ' . $profile->getPathname());
       }
     }
+    // Reset the cached profile list.
+    $this->profileList->reset();
   }
 
 }
