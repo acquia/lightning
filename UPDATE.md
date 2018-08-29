@@ -173,12 +173,19 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 ### 3.1.5 to 3.1.6
 * If you would like to create media items for audio files, enable the new
   Media Audio module (lightning_media_audio).
+* Rename every instance of the "Save to media library" field (present on all
+  media types by default) to "Show in media library".
 * If you would like to create media items for video files, create a new
   media type called "Video file", using the "Video file" source. Then, create
   two new view displays for this media type: one called "Thumbnail", which
   only displays the media thumbnail using the "Medium" image style, and one
   called "Embedded", which displays the "Video file" field using the "Video"
-  formatter.
+  formatter. Additionally, create a form display for this media type, using
+  the "Media browser" form mode, which displays, in order:
+  1. The "Name" field using the "Text field" widget
+  2. The "Video file" field using the "File" widget
+  3. The "Show in media library" field using the "Single on/off checkbox" widget
+  4. The "Published" field using the "Single on/off checkbox" widget
 * If you would like to be able to change the moderation states of content
   without having to visit the edit form, install the Moderation Sidebar module.
 * If you'd like to streamline the Editorial workflow, edit it and make the
