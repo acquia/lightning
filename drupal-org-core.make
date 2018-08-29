@@ -11,3 +11,4 @@ projects[drupal][patch][] = https://www.drupal.org/files/issues/2885441-2.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-06-07/2815221-102.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2877383-56.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2670730-81-89-8.5.0-rc1.patch
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-08-22/off-canvas-2945571-19.patch
