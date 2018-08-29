@@ -1,12 +1,25 @@
+## 3.1.6
+* Lightning API has been updated to 2.6, which updates the OpenAPI module
+  suite to 1.0-beta2.
+* Lightning Media has been updated to 2.4, which:
+  * Includes a new component providing support for locally hosted audio files.
+  * Now supports locally hosted video files.
+* Lightning Workflow has been updated to 2.3, which includes Moderation
+  Sidebar.
+* Lightning Layout has been updated to 1.4.
+* Lightning Core has been updated to 2.9.
+* Lightning now includes optional support for comments. (#590)
+* Lightning now installs Pathauto by default. (#588)
+
 ## 3.1.5
 * Security updated Drupal core to 8.5.6. (SA-CORE-2018-005)
-* Lightning API has been update to 2.5 which:
+* Lightning API has been update to 2.5, which:
   * Updates several of its dependencies that no longer need to be patched or
     pinned as a result.
   * Is now compatible ith Drupal core 8.6 in addition 8.5.
-* Lightning Layout has been updated to 1.3 which has bug fixes and changes to
+* Lightning Layout has been updated to 1.3, which has bug fixes and changes to
   make it compatible with Drupal core 8.6 in addition to 8.5.
-* Lightning Workflow has been updated to 2.2 which includes several bug fixes.
+* Lightning Workflow has been updated to 2.2, which includes several bug fixes.
 
 ## 3.1.4
 * Lightning Workflow has been updated to 2.0.0-rc2, which includes a completely
