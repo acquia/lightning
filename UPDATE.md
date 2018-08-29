@@ -170,6 +170,25 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+### 3.1.5 to 3.1.6
+* If you would like to create media items for audio files, enable the new
+  Media Audio module (lightning_media_audio).
+* If you would like to create media items for video files, create a new
+  media type called "Video file", using the "Video file" source. Then, create
+  two new view displays for this media type: one called "Thumbnail", which
+  only displays the media thumbnail using the "Medium" image style, and one
+  called "Embedded", which displays the "Video file" field using the "Video"
+  formatter.
+* If you would like to be able to change the moderation states of content
+  without having to visit the edit form, install the Moderation Sidebar module.
+* If you'd like to streamline the Editorial workflow, edit it and make the
+  following modifications:
+  1. Rename the "Review" transition to "Send to review".
+  2. Rename the "Restore" transition to "Restore from archive".
+  3. Remove the "Restore to draft" transition, and edit the "Create new draft"
+     transition to allow content to be transitioned from the Archived state to
+     the Draft state.
+
 ### 3.1.4 to 3.1.5
 There are no manual update steps for this version.
 

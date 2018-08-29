@@ -50,9 +50,10 @@ The current version of media includes the following functionality:
 * The ability to place media into the text area and have it fully embedded as it
   will appear in the live entity. The following media types are currently
   supported:
+  * Audio files
   * Tweets
   * Instagram posts
-  * Videos (YouTube and Vimeo supported out of the box)
+  * Videos (YouTube, Vimeo, and files are supported out of the box)
   * Images
 * Drag-and-drop bulk image uploads.
 * Image cropping.
@@ -131,7 +132,7 @@ to request features or bug fixes.
   compatible with the Core Media entity.
 * Using the bulk upload feature in environments with a load balancer might
   result in some images not being saved.
-  
+
 ### Inherited profiles
 Drush is not aware of the concept of inherited profiles and as a result, you
 will be unable to uninstall dependencies of any parent profile using Drush. You
