@@ -233,18 +233,6 @@ class LightningSubContext extends DrupalSubContextBase {
   }
 
   /**
-   * Sets the absolute path to the directory containing uploadable files.
-   *
-   * @BeforeScenario
-   */
-  public function setFilePath() {
-    $existing = $this->minkContext->getMinkParameter('files_path');
-    if (empty($existing)) {
-      $this->minkContext->setMinkParameter('files_path', __DIR__ . '/../../files');
-    }
-  }
-
-  /**
    * Switches out of an iframe into the main window.
    *
    * @When I switch to the window
