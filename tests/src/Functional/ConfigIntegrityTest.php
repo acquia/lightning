@@ -5,6 +5,7 @@ namespace Drupal\Tests\lightning\Functional;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
+use Drupal\user\UserInterface;
 use Drupal\workflows\Entity\Workflow;
 
 /**
@@ -21,6 +22,23 @@ class ConfigIntegrityTest extends BrowserTestBase {
 
   public function testConfig() {
     $assert = $this->assertSession();
+
+    // Assert that all install tasks have done what they should do.
+    // @see lightning_install_tasks()
+    $account = entity_load('user', 1);
+    $this->assertInstanceOf(UserInterface::class, $account);
+    /** @var UserInterface $account */
+    $this->assertTrue($account->hasRole('administrator'));
+
+    $this->assertSame('/node', $this->config('system.site')->get('page.front'));
+    $this->assertSame(USER_REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
+    $this->assertTrue(Role::load(Role::AUTHENTICATED_ID)->hasPermission('access shortcuts'));
+    $this->assertSame('bartik', $this->config('system.theme')->get('default'));
+    $this->assertSame('seven', $this->config('system.theme')->get('admin'));
+    $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
+    $this->assertContains('/lightning/lightning.png', $this->config('system.theme.global')->get('logo.path'));
+    $this->assertContains('/lightning/favicon.ico', $this->config('system.theme.global')->get('favicon.path'));
+    // TODO: Assert changes to the frontpage view were made.
 
     // lightning_core_update_8002() marks a couple of core view modes as
     // internal.
@@ -106,9 +124,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
         "delete any $node_type content",
       ]);
     }
-
-    $this->doTestCrop();
-    $this->doTestContactForm();
 
     // Assert that bundled content types have meta tags enabled.
     $this->assertMetatag(['page', 'landing_page']);
@@ -242,57 +257,6 @@ class ConfigIntegrityTest extends BrowserTestBase {
   protected function assertFilePermissions($permissions, $file) {
     $this->assertFileExists($file);
     $this->assertSame($permissions, fileperms($file) & 0777);
-  }
-
-  /**
-   * Tests that cropping is enabled for image media.
-   */
-  private function doTestCrop() {
-    // Assert that a local copy of the Cropper library is being used.
-    $settings = $this->config('image_widget_crop.settings')->get('settings');
-    $lib = 'libraries/cropper/dist';
-    $this->assertContains("$lib/cropper.min.js", $settings['library_url']);
-    $this->assertContains("$lib/cropper.min.css", $settings['css_url']);
-
-    $form_displays = $this->container
-      ->get('entity_type.manager')
-      ->getStorage('entity_form_display')
-      ->loadByProperties([
-        'targetEntityType' => 'media',
-        'bundle' => 'image',
-      ]);
-
-    /** @var \Drupal\Core\Entity\Display\EntityFormDisplayInterface $form_display */
-    foreach ($form_displays as $form_display) {
-      $component = $form_display->getComponent('image');
-      $this->assertInternalType('array', $component);
-      $this->assertEquals('image_widget_crop', $component['type']);
-      $this->assertEquals(['freeform'], $component['settings']['crop_list']);
-    }
-  }
-
-  /**
-   * Tests the site-wide contact form.
-   */
-  private function doTestContactForm() {
-    $assert = $this->assertSession();
-
-    $this->assertAllowed('/contact');
-
-    $assert->fieldExists('Your name');
-    $assert->fieldExists('Your email address');
-    $assert->fieldExists('Subject');
-    $assert->fieldExists('Message');
-
-    // The name and e-mail fields should not be present for authenticated users.
-    $account = $this->drupalCreateUser();
-    $this->drupalLogin($account);
-    $this->assertAllowed('/contact');
-    $assert->fieldNotExists('Your name');
-    $assert->fieldNotExists('Your email address');
-    $assert->fieldExists('Subject');
-    $assert->fieldExists('Message');
-    $this->drupalLogout();
   }
 
 }

@@ -1,3 +1,11 @@
+## 3.2.0
+* Drupal core has been updated to 8.6.0.
+* The `lightning:subprofile` command is no longer compatible with the
+  sub-profile system from Drupal 8.5.x. The `dependencies` list is replaced by
+  `install`, `base profile` is the name of the base profile instead of an
+  array, and all excluded modules and themes are listed in a single `exclude`
+  array. (#585)
+
 ## 3.1.7
 * Lightning API has been updated to 2.7, which fixes a persistent warning that
   could occur as a result of the OpenAPI module's beta2 update.
