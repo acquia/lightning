@@ -9,4 +9,3 @@ projects[drupal][patch][] = https://www.drupal.org/files/issues/2885441-2.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-07-09/2815221-105.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-07-12/1356276-473.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch
-projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-08-22/off-canvas-2945571-19.patch

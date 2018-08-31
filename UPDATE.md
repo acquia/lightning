@@ -170,7 +170,7 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
-### 3.1.5 to 3.2.0-beta1
+### 3.1.7 to 3.2.0-beta1
 * If you have any sub-profiles (regardless of whether or not they extend
   Lightning), you must change their info files to work with Drupal 8.6.0:
   * Change `base profile` to a string, containing the name of the base
@@ -194,8 +194,46 @@ exclude:
   - bartik
 ```
 
+### 3.1.6 to 3.1.7
+* There are no manual update steps for this version.
+
+### 3.1.5 to 3.1.6
+* If you would like to create media items for audio files, enable the new
+  Media Audio module (lightning_media_audio).
+* Rename every instance of the "Save to media library" field (present on all
+  media types by default) to "Show in media library".
+* If you would like to create media items for video files, create a new
+  media type called "Video file", using the "Video file" source. Then, create
+  two new view displays for this media type: one called "Thumbnail", which
+  only displays the media thumbnail using the "Medium" image style, and one
+  called "Embedded", which displays the "Video file" field using the "Video"
+  formatter. Additionally, create a form display for this media type, using
+  the "Media browser" form mode, which displays, in order:
+  1. The "Name" field using the "Text field" widget
+  2. The "Video file" field using the "File" widget
+  3. The "Show in media library" field using the "Single on/off checkbox" widget
+  4. The "Published" field using the "Single on/off checkbox" widget
+* If you would like to be able to change the moderation states of content
+  without having to visit the edit form, install the Moderation Sidebar module.
+* If you'd like to streamline the Editorial workflow, edit it and make the
+  following modifications:
+  1. Rename the "Review" transition to "Send to review".
+  2. Rename the "Restore" transition to "Restore from archive".
+  3. Remove the "Restore to draft" transition, and edit the "Create new draft"
+     transition to allow content to be transitioned from the Archived state to
+     the Draft state.
+
 ### 3.1.4 to 3.1.5
 There are no manual update steps for this version.
+
+Note that this release includes an update to Drupal core which security updates
+some of its dependencies. As such, you might need to include `drupal/core` in
+the list of arguments you pass to `composer update` if any of its dependencies
+are locked at older versions in your project. For example:
+
+```
+$ composer update acquia/lightning drupal/core --with-all-dependencies
+```
 
 ### 3.1.3 to 3.1.4
 * **NOTE: This is a _fully manual update_ that involves a data migration!**

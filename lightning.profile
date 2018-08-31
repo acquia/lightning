@@ -495,9 +495,6 @@ function lightning_modules_installed(array $modules) {
       ->getEntity('user_role', 'media_creator')
       ->grantPermission('use editorial transition create_new_draft')
       ->save();
-
-    // Temporarily uninstall Pathauto for testing.
-    Drupal::service('module_installer')->uninstall(['pathauto']);
   }
 }
 
