@@ -1,3 +1,9 @@
+## 3.1.7
+* Lightning API has been updated to 2.7, which fixes a persistent warning that
+  could occur as a result of the OpenAPI module's beta2 update.
+* Lightning Workflow has been updated to 2.4, which fixes an incompatibility
+  between Lightning Scheduler and Inline Entity Form.
+
 ## 3.1.6
 * Lightning API has been updated to 2.6, which updates the OpenAPI module
   suite to 1.0-beta2.
