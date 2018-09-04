@@ -170,10 +170,7 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
-### 3.2.0-beta1 to 3.2.0
-There are no manual update steps for this version.
-
-### 3.1.7 to 3.2.0-beta1
+### 3.1.7 to 3.2.0
 * If you have any sub-profiles (regardless of whether or not they extend
   Lightning), you must change their info files to work with Drupal 8.6.0:
   * Change `base profile` to a string, containing the name of the base
