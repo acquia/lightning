@@ -1,5 +1,7 @@
 ## 3.2.0
-* Drupal core has been updated to 8.6.0.
+* Updated Lightning Core to 3.0, which requires Drupal core 8.6.0.
+* Updated Lightning Workflow to 3.0.
+* Updated Lightning Media to 3.0.
 * The `lightning:subprofile` command is no longer compatible with the
   sub-profile system from Drupal 8.5.x. The `dependencies` list is replaced by
   `install`, `base profile` is the name of the base profile instead of an
