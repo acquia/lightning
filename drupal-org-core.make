@@ -15,3 +15,4 @@ projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-07-27/29550
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-05-03/2968110-3.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-08-28/2977587-25.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-08-20/2976148-31.patch
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2246725-24.patch
