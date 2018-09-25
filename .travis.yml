@@ -45,7 +45,7 @@ install:
   - phpenv rehash
 
   # Build the Lightning code base with the latest dependencies.
-  - composer update
+  - composer install
   # Install Lightning cleanly so that settings.php will be created properly.
   - lightning install --from-config 'mysql\://lightning:lightning@127.0.0.1/drupal' lightning 'http://127.0.0.1:8080'
   # Restore and update from the previous version.
