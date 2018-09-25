@@ -5,6 +5,7 @@ namespace Drupal\Tests\lightning\Functional;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
+use Drupal\user\UserInterface;
 use Drupal\workflows\Entity\Workflow;
 
 /**
@@ -21,6 +22,23 @@ class ConfigIntegrityTest extends BrowserTestBase {
 
   public function testConfig() {
     $assert = $this->assertSession();
+
+    // Assert that all install tasks have done what they should do.
+    // @see lightning_install_tasks()
+    $account = entity_load('user', 1);
+    $this->assertInstanceOf(UserInterface::class, $account);
+    /** @var UserInterface $account */
+    $this->assertTrue($account->hasRole('administrator'));
+
+    $this->assertSame('/node', $this->config('system.site')->get('page.front'));
+    $this->assertSame(USER_REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
+    $this->assertTrue(Role::load(Role::AUTHENTICATED_ID)->hasPermission('access shortcuts'));
+    $this->assertSame('bartik', $this->config('system.theme')->get('default'));
+    $this->assertSame('seven', $this->config('system.theme')->get('admin'));
+    $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
+    $this->assertContains('/lightning/lightning.png', $this->config('system.theme.global')->get('logo.path'));
+    $this->assertContains('/lightning/favicon.ico', $this->config('system.theme.global')->get('favicon.path'));
+    // TODO: Assert changes to the frontpage view were made.
 
     // lightning_core_update_8002() marks a couple of core view modes as
     // internal.
