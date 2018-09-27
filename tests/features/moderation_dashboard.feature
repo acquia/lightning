@@ -1,7 +1,7 @@
-@lightning @core @api
+@lightning @api
 Feature: Moderation Dashboard.
 
-  @page @javascript @ea966cba
+  @javascript @ea966cba
   Scenario: Admin can use dashboard.
     Given I am logged in as a user with the administrator role
     Then I should see a "views_block:content_moderation_dashboard_in_review-block_1" block
