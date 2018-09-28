@@ -83,29 +83,15 @@
         "enable-patching": true,
         "patchLevel": {
             "drupal/core": "-p2"
-        },
-        "patches": {
-            "drupal/lightning_layout": {
-                "2988162 - field.storage.node.layout_builder__layout.yml should not be optional":
-                "https://www.drupal.org/files/issues/2018-07-25/2988162-3.patch",
-                "2988287 - Background image selectors should target content, not wrapper":
-                "https://www.drupal.org/files/issues/2018-07-26/2988287-2.patch",
-                "2988429 - Internal view modes should hide the Layout Builder opt in field":
-                "https://www.drupal.org/files/issues/2018-07-26/2988429.patch"
-            },
-            "drupal/core": {
-                "2988283 - Provided layouts should clear floats":
-                "https://www.drupal.org/files/issues/2018-07-25/2988283-2.patch"
-            }
         }
     },
     "require": {
         "cweagans/composer-patches": "^1.6.4",
-        "drupal/lightning_api": "2.x-dev",
-        "drupal/lightning_core": "3.x-dev",
-        "drupal/lightning_layout": "2.x-dev",
-        "drupal/lightning_media": "3.x-dev",
-        "drupal/lightning_workflow": "3.x-dev",
+        "drupal/lightning_api": "^2.7",
+        "drupal/lightning_core": "^3.1",
+        "drupal/lightning_layout": "^2.0.0-alpha4",
+        "drupal/lightning_media": "^3.0",
+        "drupal/lightning_workflow": "^3.0",
         "drupal-composer/drupal-scaffold": "^2.0.0",
         "oomphinc/composer-installers-extender": "^1.1"
     },
