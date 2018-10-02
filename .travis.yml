@@ -60,6 +60,8 @@ before_script:
   # Disable the History module during testing, to prevent weird deadlock errors that don't
   # actually affect anything.
   - drush pm-uninstall --yes history
+  - export MINK_DRIVER_ARGS_WEBDRIVER='["chrome", {"browserName":"chrome","chromeOptions":{"args":["--disable-gpu","--headless","--no-sandbox","--disable-dev-shm-usage","--disable-extensions"]}}, "http://localhost:9515"]'
+  - chromedriver &
 
 script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
