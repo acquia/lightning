@@ -11,6 +11,17 @@ class SubProfileTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
+   *
+   * Slick Entity Reference has a schema error.
+   *
+   * @todo Remove when depending on slick_entityreference 1.2 or later.
+   */
+  protected static $configSchemaCheckerExclusions = [
+    'core.entity_view_display.block_content.media_slideshow.default',
+  ];
+
+  /**
+   * {@inheritdoc}
    */
   protected $profile = 'lightning_extender';
 
