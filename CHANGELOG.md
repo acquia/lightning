@@ -1,3 +1,7 @@
+## 3.2.1
+* Updated Lightning Media to 3.1.
+* Updated Lightning Workflow to 3.1.
+
 ## 3.2.0
 * Updated Lightning Core to 3.0, which requires Drupal core 8.6.0.
 * Updated Lightning Workflow to 3.0.
