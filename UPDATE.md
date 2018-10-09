@@ -170,6 +170,18 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+### 3.2.0 to 3.2.1
+* Install the Media Library module (in the "Core (Experimental)" group). Then,
+  for each media type, create a new display, called "Media library", containing
+  only the thumbnail image, displayed using the thumbnail image style.
+* Install the new "Media Slideshow" module (in the "Lightning" group).
+* Install the Moderation Dashboard module. By default, this will cause users to
+  be redirected to their moderation dashboard upon logging in. To disable this
+  behavior, run the following Drush command:
+```
+drush config:set moderation_dashboard.settings redirect_on_login 0
+```
+
 ### 3.1.7 to 3.2.0
 * If you have any sub-profiles (regardless of whether or not they extend
   Lightning), you must change their info files to work with Drupal 8.6.0:
