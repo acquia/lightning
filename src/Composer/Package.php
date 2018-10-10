@@ -56,10 +56,9 @@ class Package {
     $encoder = new IniEncoder();
 
     $make = $handler->make();
-    $event->getIO()->write($encoder->encode($make));
-
     $core = $handler->makeCore($make);
     file_put_contents('drupal-org-core.make', $encoder->encode($core));
+    file_put_contents('drupal-org.make', $encoder->encode($make));
   }
 
   /**
@@ -73,7 +72,7 @@ class Package {
    */
   protected function makeCore(array &$make) {
     $project = $make['projects']['drupal'];
-    unset($make['projects']['drupal'], $project['patch']);
+    unset($make['projects']['drupal']);
 
     return [
       'core' => $make['core'],
