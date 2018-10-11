@@ -1,0 +1,28 @@
+<?php
+
+/**
+ * @file
+ * Install and uninstall functions for the Lightning installation profile.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function lightning_install_requirements($phase) {
+  $requirements = [];
+
+  if ($phase === 'install') {
+    $info = Drupal::service('extension.list.profile')
+      ->get('lightning')
+      ->getPathname();
+
+    if (strstr(file_get_contents($info), '# Information added by Drupal.org packaging script')) {
+      $requirements['lightning_reject_tarball'] = [
+        'title' => t('Missing Composer dependencies'),
+        'severity' => REQUIREMENT_ERROR,
+        'description' => t('Lightning appears to have been downloaded as an archive from drupal.org. Lightning cannot be installed this way because drupal.org does not package all the necessary dependencies. Please visit <a href="https://github.com/acquia/lightning-project">this GitHub repository</a> for instructions on how to build Lightning using Composer.'),
+      ];
+    }
+  }
+  return $requirements;
+}
