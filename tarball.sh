@@ -12,7 +12,7 @@ chmod +x drush
 ./drush make $DESTINATION/drupal-org-core.make $ARCHIVE
 ./drush make --no-core $DESTINATION/drupal-org.make $ARCHIVE
 cd $ARCHIVE
-composer require j7mbo/twitter-api-php league/oauth2-server:~6.0 webflo/drupal-core-strict:~8.5.0 'phpdocumentor/reflection-docblock:^3.0||^4.0'
+composer require j7mbo/twitter-api-php league/oauth2-server:~6.0 webflo/drupal-core-strict:~8.6.0 'phpdocumentor/reflection-docblock:^3.0||^4.0'
 mkdir -p $PROFILE_DIR
 tar -x -f ../$ARCHIVE.tar --directory $PROFILE_DIR
 cd ..
