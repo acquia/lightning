@@ -153,6 +153,7 @@ class Package {
       case 'drupal-core':
       case 'drupal-theme':
       case 'drupal-module':
+      case 'drupal-profile':
         $info['type'] = substr($package['type'], 7);
         break;
     }
@@ -212,6 +213,8 @@ class Package {
         '$1.$2$3',
         $version
       );
+    }
+    if (strpos($package['name'], 'drupal/') === 0) {
       unset($info['download']);
     }
     return $info;
@@ -260,8 +263,7 @@ class Package {
       'drupal-profile',
     ];
     return (
-      strpos($package['name'], 'drupal/') === 0 &&
-      in_array($package['type'], $package_types)
+    in_array($package['type'], $package_types)
     );
   }
 
