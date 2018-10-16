@@ -67,7 +67,7 @@ script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
   - behat --config .behat.yml --stop-on-failure
   - cd docroot
-  - phpunit --configuration ./core --group lightning,profiles
+  - phpunit --configuration ./core --group lightning
 
 after_failure:
   - drush watchdog:show --count=100 --severity=Error --extended
