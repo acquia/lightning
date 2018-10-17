@@ -55,9 +55,20 @@ class Package {
 
     $encoder = new IniEncoder();
 
+    // Build the complete make file and write it to the console, so it can be
+    // used to build a tarball for use on Acquia Cloud.
     $make = $handler->make();
+    $event->getIO()->write($encoder->encode($make));
+
+    // Extract a core-only make file for drupal.org's packaging system.
     $core = $handler->makeCore($make);
     file_put_contents('drupal-org-core.make', $encoder->encode($core));
+
+    // Remove JavaScript libraries, since they may cause a build failure if
+    // the exact repository URLs are not on the accept-list. This means that the
+    // drupal.org-generated tarball will not work, but it does not install
+    // anyway and we don't support it.
+    unset($make['libraries']);
     file_put_contents('drupal-org.make', $encoder->encode($make));
   }
 
