@@ -1,3 +1,7 @@
+## 3.2.2
+* Updated Lightning Core to 3.2, which security updates Drupal core
+  to 8.6.2.
+
 ## 3.2.1
 * Updated Lightning Media to 3.1.
 * Updated Lightning Workflow to 3.1.
