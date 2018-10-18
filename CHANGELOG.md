@@ -1,3 +1,7 @@
+## 3.1.8
+* Lightning Core has been updated to 2.11, which security updates
+  Drupal core to 8.5.8.
+
 ## 3.1.7
 * Lightning API has been updated to 2.7, which fixes a persistent warning that
   could occur as a result of the OpenAPI module's beta2 update.
