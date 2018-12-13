@@ -14,5 +14,4 @@ projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-11-26/29988
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-08-16/2952390-53.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-07-27/2955065-17.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-05-03/2968110-3.patch
-projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-11-26/2976148-delegate-127.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2246725-24.patch
