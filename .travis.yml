@@ -65,7 +65,7 @@ before_script:
 
 script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
-  - behat --stop-on-failure
+  - behat --stop-on-failure --tags '~@e787aec5'
   - cd docroot
   - phpunit --configuration ./core --group lightning,profiles
 
