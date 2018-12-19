@@ -25,23 +25,9 @@ events:
             - cd $SOURCE_DIR
             - mysql -u root -proot -e 'CREATE DATABASE drupal;'
             - lightning install 'mysql\://root:root@localhost/drupal' lightning 'http://127.0.0.1:8080'
-      - test:
-          type: script
-          script:
-            - cd $SOURCE_DIR/docroot
-            - drush runserver --default-server=builtin 8080 &>/dev/null &
-            - phantomjs --webdriver=4444 > /dev/null &
-            - sleep 10
-            - cd $SOURCE_DIR
-            - behat --stop-on-failure --config .behat.yml --tags=~javascript
       - cleanup:
           type: script
           script:
             - cd $SOURCE_DIR
             # Setup settings file and codebase with minimum required for cloud.
             - lightning configure:cloud
-            # Remove the Drush binary and package so it doesn't interfere with
-            # cloud versions. Doing this the proper way with Composer can cause
-            # timeouts.
-            - rm ./vendor/bin/drush
-            - rm -rf ./vendor/drush

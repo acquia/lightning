@@ -19,7 +19,6 @@ default:
         - '\Drupal\Tests\lightning_core\FixtureContext'
         - '\Drupal\Tests\lightning_layout\FixtureContext'
   extensions:
-    DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: null
     Drupal\DrupalExtension:
       subcontexts:
         paths:
@@ -41,12 +40,16 @@ default:
         login_form_selector: '#user-login-form'
     Behat\MinkExtension:
       browser_name: chrome
-      sessions:
-        javascript:
-          chrome:
-            api_url: 'http://localhost:9222'
       base_url: 'http://127.0.0.1:8080'
       goutte: null
       selenium2:
-        wd_host: 'http://127.0.0.1:4444/wd/hub'
+        wd_host: 'http://127.0.0.1:4444'
+        capabilities:
+          chrome:
+            switches:
+              - headless
+              - disable-gpu
+              - no-sandbox
+              - disable-dev-shm-usage
+              - disable-extensions
         browser: chrome

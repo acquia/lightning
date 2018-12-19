@@ -56,18 +56,17 @@ install:
 before_script:
   - drush config:set system.date timezone.default $TZ --yes
   - drush runserver --default-server=builtin 8080 &>/dev/null &
-  - google-chrome-stable --headless --disable-gpu --no-sandbox --remote-debugging-port=9222 http://localhost &
   # Disable the History module during testing, to prevent weird deadlock errors that don't
   # actually affect anything.
   - drush pm-uninstall --yes history
-  - export MINK_DRIVER_ARGS_WEBDRIVER='["chrome", {"browserName":"chrome","chromeOptions":{"args":["--disable-gpu","--headless","--no-sandbox","--disable-dev-shm-usage","--disable-extensions"]}}, "http://localhost:9515"]'
-  - chromedriver &
+  - chromedriver --port=4444 &
+  - cp -f phpunit.xml ./docroot/core
 
 script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
-  - behat --stop-on-failure
+  - behat --stop-on-failure --tags '~@e787aec5' --tags '~@368f0045'
   - cd docroot
-  - phpunit --configuration ./core --group lightning,profiles
+  - phpunit --configuration ./core --group lightning,profiles --exclude-group lightning_scheduler
 
 after_failure:
   - drush watchdog:show --count=100 --severity=Error --extended
