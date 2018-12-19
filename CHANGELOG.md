@@ -1,3 +1,21 @@
+## 3.2.3
+* Lightning API now defaults to the 2.x branch of the JSON:API module.
+  [See the release notes for the 2.x branch.](https://www.drupal.org/project/jsonapi/releases/8.x-2.0-beta1)
+
+  If you must use the 1.x branch, you can switch to it with the following commands:
+
+  ```
+  composer require drupal/lightning_api:^2.7 --no-update
+  composer update drupal/lightning_api --with-all-dependencies
+  ```
+
+  or by adding the following to the require section of your root composer.json file and running 
+  `composer update`:
+
+  ```
+  drupal/lightning_api:^2.7
+  ```
+
 ## 3.2.2
 * Updated Lightning Core to 3.2, which security updates Drupal core
   to 8.6.2.
