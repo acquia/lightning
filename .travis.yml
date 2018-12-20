@@ -64,9 +64,9 @@ before_script:
 
 script:
   - composer validate composer.json --no-check-all --ansi --no-interaction
-  - behat --stop-on-failure --tags '~@e787aec5' --tags '~@368f0045'
+  - behat --stop-on-failure
   - cd docroot
-  - phpunit --configuration ./core --group lightning,profiles --exclude-group lightning_scheduler
+  - phpunit --configuration ./core --group lightning,profiles
 
 after_failure:
   - drush watchdog:show --count=100 --severity=Error --extended
