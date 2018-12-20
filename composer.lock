@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "175d740a99706c519180274d742a7b1c",
+    "content-hash": "5b247c95bd5407ac2ddb62a14671a9b9",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2935,24 +2935,24 @@
         },
         {
             "name": "drupal/lightning_workflow",
-            "version": "3.1.0",
+            "version": "3.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_workflow",
-                "reference": "8.x-3.1"
+                "reference": "8.x-3.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_workflow-8.x-3.1.zip",
-                "reference": "8.x-3.1",
-                "shasum": "c57eedada4b8be411fc6954c310e90ccd5b04f55"
+                "url": "https://ftp.drupal.org/files/projects/lightning_workflow-8.x-3.2.zip",
+                "reference": "8.x-3.2",
+                "shasum": "f59917775b01ef172440f5e3ed5c62d2dd8f5e06"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/core": "*",
                 "drupal/diff": "^1.0",
-                "drupal/lightning_core": "^3.1",
+                "drupal/lightning_core": "^3.4",
                 "drupal/moderation_dashboard": "1.0.0-alpha1",
                 "drupal/moderation_sidebar": "^1.0",
                 "oomphinc/composer-installers-extender": "^1.1"
@@ -2970,8 +2970,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.1",
-                    "datestamp": "1538155380",
+                    "version": "8.x-3.2",
+                    "datestamp": "1545276780",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2990,6 +2990,10 @@
                         "type:bower-asset",
                         "type:npm-asset"
                     ],
+                    "docroot/modules/contrib/acquia/{$name}": [
+                        "drupal/lightning_core",
+                        "drupal/lightning_workflow"
+                    ],
                     "docroot/modules/contrib/{$name}": [
                         "type:drupal-module"
                     ],
@@ -3006,6 +3010,11 @@
                     }
                 },
                 "enable-patching": true
+            },
+            "autoload": {
+                "psr-4": {
+                    "Drupal\\Tests\\lightning_workflow\\": "tests/src"
+                }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "scripts": {
@@ -3031,7 +3040,7 @@
                 ]
             },
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
                 {

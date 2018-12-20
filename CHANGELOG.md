@@ -9,6 +9,8 @@
   composer update drupal/lightning_api --with-all-dependencies
   ```
 * Updated Lightning Layout to 1.5.
+* Updated Lightning Media to 3.4.
+* Updated Lightning Workflow to 3.2.
 
 ## 3.2.2
 * Updated Lightning Core to 3.2, which security updates Drupal core
