@@ -8,6 +8,7 @@
   composer require drupal/lightning_api:^2.7 --no-update
   composer update drupal/lightning_api --with-all-dependencies
   ```
+* Updated Lightning Layout to 1.5.
 
 ## 3.2.2
 * Updated Lightning Core to 3.2, which security updates Drupal core
