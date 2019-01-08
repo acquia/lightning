@@ -1,66 +1,33 @@
 {
     "name": "acquia/lightning",
-    "description": "The best of Drupal, curated by Acquia",
     "type": "drupal-profile",
+    "description": "The best of Drupal, curated by Acquia",
     "license": "GPL-2.0-or-later",
-    "minimum-stability": "dev",
-    "prefer-stable": true,
+    "require": {
+        "cweagans/composer-patches": "^1.6.4",
+        "drupal-composer/drupal-scaffold": "^2.0.0",
+        "drupal/lightning_api": "^2.7",
+        "drupal/lightning_core": "^3.4",
+        "drupal/lightning_layout": "^2.0.0-alpha8",
+        "drupal/lightning_media": "^3.2",
+        "drupal/lightning_workflow": "^3.1",
+        "oomphinc/composer-installers-extender": "^1.1"
+    },
     "require-dev": {
-        "drupal/media_entity_generic": "1.x-dev",
         "acquia/lightning_dev": "dev-8.x-1.x",
+        "drupal/media_entity_generic": "1.x-dev",
         "drupal/schema_metatag": "^1.3"
     },
-    "bin": [
-        "lightning-subprofile"
-    ],
     "config": {
-        "preferred-install": {
-            "drupal/core": "dist"
-        },
         "platform": {
             "php": "7.0.8"
-        }
-    },
-    "repositories": {
-        "drupal": {
-            "type": "composer",
-            "url": "https://packages.drupal.org/8"
         },
-        "assets": {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        },
-        "dev": {
-            "type": "github",
-            "url": "https://github.com/acquia/lightning-dev",
-            "no-api": true
+        "preferred-install": {
+            "drupal/core": "dist"
         }
-    },
-    "scripts": {
-        "post-install-cmd": [
-            "@composer drupal-scaffold",
-            "@composer push",
-            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit"
-        ],
-        "post-update-cmd": [
-            "@composer push",
-            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit",
-            "@composer package"
-        ],
-        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
-        "package": "Acquia\\Lightning\\Composer\\Package::execute",
-        "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
-        "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute",
-        "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute",
-        "nuke": "rm -r -f docroot vendor",
-        "pull": "Acquia\\Lightning\\Commands\\FileCommands::pull",
-        "push": "Acquia\\Lightning\\Commands\\FileCommands::push"
     },
     "extra": {
-        "installer-types": [
-            "bower-asset",
-            "npm-asset"
-        ],
+        "enable-patching": true,
         "installer-paths": {
             "docroot/core": [
                 "type:drupal-core"
@@ -80,25 +47,58 @@
                 "type:drupal-theme"
             ]
         },
-        "enable-patching": true,
+        "installer-types": [
+            "bower-asset",
+            "npm-asset"
+        ],
         "patchLevel": {
             "drupal/core": "-p2"
         }
-    },
-    "require": {
-        "cweagans/composer-patches": "^1.6.4",
-        "drupal/lightning_api": "^2.7",
-        "drupal/lightning_core": "^3.4",
-        "drupal/lightning_layout": "^2.0.0-alpha8",
-        "drupal/lightning_media": "^3.2",
-        "drupal/lightning_workflow": "^3.1",
-        "drupal-composer/drupal-scaffold": "^2.0.0",
-        "oomphinc/composer-installers-extender": "^1.1"
     },
     "autoload": {
         "psr-4": {
             "Acquia\\Lightning\\": "src",
             "Acquia\\LightningExtension\\": "src/LightningExtension"
         }
+    },
+    "repositories": {
+        "drupal": {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        },
+        "assets": {
+            "type": "composer",
+            "url": "https://asset-packagist.org"
+        },
+        "dev": {
+            "type": "github",
+            "url": "https://github.com/acquia/lightning-dev",
+            "no-api": true
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "bin": [
+        "lightning-subprofile"
+    ],
+    "scripts": {
+        "post-install-cmd": [
+            "@composer drupal-scaffold",
+            "@composer push",
+            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit"
+        ],
+        "post-update-cmd": [
+            "@composer push",
+            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit",
+            "@composer package"
+        ],
+        "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
+        "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute",
+        "nuke": "rm -r -f docroot vendor",
+        "package": "Acquia\\Lightning\\Composer\\Package::execute",
+        "pull": "Acquia\\Lightning\\Commands\\FileCommands::pull",
+        "push": "Acquia\\Lightning\\Commands\\FileCommands::push",
+        "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
+        "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute"
     }
 }
