@@ -33,9 +33,6 @@ install:
   # composer install should fail on bad patches.
   - export COMPOSER_EXIT_ON_PATCH_FAILURE=1
 
-  # Create the MySQL database and add a user for testing.
-  - mysql -u root -e "CREATE DATABASE drupal; CREATE USER 'lightning'@'localhost' IDENTIFIED BY 'lightning'; GRANT ALL ON drupal.* TO 'lightning'@'localhost';"
-
   # Install the PECL YAML extension for strict parsing. yes is used to
   # acknowledge all prompts.
   - yes '' | pecl install yaml
@@ -48,7 +45,7 @@ install:
   # Build the Lightning code base with the latest dependencies.
   - composer update
   # Install Lightning cleanly so that settings.php will be created properly.
-  - lightning install --from-config 'mysql\://lightning:lightning@127.0.0.1/drupal' lightning 'http://127.0.0.1:8080'
+  - lightning install --from-config 'sqlite\://db.sqlite' lightning 'http://127.0.0.1:8080'
   # Restore and update from the previous version.
   - lightning update $VERSION
   - drush cache:rebuild
