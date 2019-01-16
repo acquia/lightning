@@ -24,47 +24,47 @@ that is managed by your VCS, you would generally follow these steps:
 1. Read the [release notes](https://github.com/acquia/lightning/releases)
    for the release to which you are updating, and any other releases between
    your current version.
-   
+
 1. Update your codebase, replacing `[LIGHTNING_VERSION]` with the most recent
    version of Lightning. For example, `3.1.1`.
-  
+
   ```
   composer self-update
   composer require acquia/lightning:~[LIGHTNING_VERSION] --no-update
   composer update acquia/lightning --with-all-dependencies
   ```
 1. Run any database updates.
-  
+
   ```
   drush cache:rebuild
   drush updatedb
   ```
 1. Run any Lightning configuration updates.
-  
+
   ```
   drush cache:rebuild
   drush update:lightning
   ```
 1. Export the new configuration.
 
-  
+
   ```
   drush config:export
   ```
 1. Commit the code and configuration changes to your VCS and push them to your
    destination environment.
-  
+
 #### On your destination environment.
 
 1. Run any database updates.
-  
+
   ```
   drush cache:rebuild
   drush updatedb
   ```
 
 1. Import any configuration changes.
-  
+
   ```
   drush cache:rebuild
   drush config:import
@@ -76,33 +76,33 @@ Lightning 2.2.8 including all database updates and migrations. For example, if
 you are updating from 2.2.3:
 
 1. Make sure you have the latest version of Composer:
-  
+
   ```
   composer self-update
   ```
 2. Update your codebase to 2.2.8:
-  
+
   ```
   composer require acquia/lightning:2.2.8 --no-update
   composer update acquia/lightning --with-all-dependencies
   ```
 3. Rebuild Drupal's cache and run database updates:
-  
+
   ```
   drush cache:rebuild
   drush updatedb
   ```
 4. Cleanup cruft from the Media migration:
-  
+
   ```
   drush pm-uninstall entity media_entity
-  ``` 
+  ```
 5. Follow the "Configuration updates" steps below, starting with
    "2.2.3 to 2.2.4".
 
 #### Configuration Management
 If you are using configuration management to move your configuration between
-development, staging, and production environments, you should export 
+development, staging, and production environments, you should export
 configuration after #5 and deploy.
 
 ### Composer
@@ -169,6 +169,29 @@ starting from the version of Lightning you currently use. For example, if you
 are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
+
+### 3.2.3 to 3.2.4
+* Configure the "Show in media library" field of the "Audio file" media type to
+  be non-translatable.
+* Configure the "Show in media library" field of the "Video" media type to be
+  non-translatable.
+* Configure the "Show in media library" field of the "Video file" media type to
+  be non-translatable.
+* If you have the "Moderation history" view installed:
+  1. Replace the author field, which displays the original creator of the node,
+     with a new field that displays the author of the revision. This will
+     require you to add a relationship to the revision author.
+  2. Replace the creation time field, which displays the time that the node was
+     originally created, with a new field that displays the time that the
+     revision was created.
+  3. Rewrite the content of the "Moderation state" field to this Twig template
+     code:
+```
+Set to <strong>{{ moderation_state }}</strong> on {{ revision_timestamp }} by {{ revision_uid }}
+```
+
+### 3.2.2 to 3.2.3
+There are no manual update steps for this version.
 
 ### 3.2.1 to 3.2.2
 There are no manual update steps for this version.
@@ -265,7 +288,7 @@ $ composer update acquia/lightning drupal/core --with-all-dependencies
   for example), you can "purge" it in the UI, or at the command line by running
   `drush lightning:scheduler:purge ENTITY_TYPE_ID`. Purging must be done one
   entity type at a time, e.g. `drush lightning:scheduler:purge paragraph`.
-  
+
   Once all entity types have been migrated or purged, the old base fields will
   need to be uninstalled. You can perform this clean-up work automatically by
   running `drush entity-updates`.
@@ -296,7 +319,7 @@ There are no manual update steps for this version.
 There are no manual update steps for this version.
 
 ### 3.0.0 to 3.0.1
-There are no manual update steps for this version. 
+There are no manual update steps for this version.
 
 ### 2.2.8 to 3.0.0
 There are no manual update steps for this version.
@@ -354,7 +377,7 @@ There are no manual update steps for this version.
   replaces `lightning_scheduled_updates` in this release.
 * Uninstall Scheduled Updates and Lightning Scheduled Updates, and enable the
   Lightning Scheduler module.
-  
+
   ```
   drush pm-uninstall scheduled_updates lightning_scheduled_updates
   drush pm-enable lightning_scheduler
@@ -389,7 +412,7 @@ There are no manual update steps for this version.
   "Disabled" section and press "Save".
 
 ### 2.1.8 to 2.2.0
-There are no manual update steps for this version. 
+There are no manual update steps for this version.
 
 ### 2.1.7 to 2.1.8
 * Lightning now ships with support for image cropping, using the Image Widget
