@@ -9,8 +9,8 @@
   * Added a configuration option to control whether newly-created media fields
     (i.e., entity reference fields which reference media items) will be
     configured to use the media browser by default. (Issue #2945153)
-  * The "Show in media library" field is no longer translatable by default in
-    any media type included with Lightning Media. (Issue #3014913)
+  * Made the "Show in media library" field non-translatable by default in every
+    media type included with Lightning Media. (Issue #3014913)
 * Updated Lightning Workflow to 3.3, which:
   * Made the time steps in Lightning Scheduler's UI configurable.
     (Issue #2981050)
