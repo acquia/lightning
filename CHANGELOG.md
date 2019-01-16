@@ -78,7 +78,7 @@
 * Lightning API has been update to 2.5, which:
   * Updates several of its dependencies that no longer need to be patched or
     pinned as a result.
-  * Is now compatible ith Drupal core 8.6 in addition 8.5.
+  * Is now compatible with Drupal core 8.6 in addition 8.5.
 * Lightning Layout has been updated to 1.3, which has bug fixes and changes to
   make it compatible with Drupal core 8.6 in addition to 8.5.
 * Lightning Workflow has been updated to 2.2, which includes several bug fixes.
@@ -150,7 +150,7 @@
   ```
   drush update:lightning
   # To run all available configuration updates without any prompting, use:
-  drush update:lightning --no-inetraction
+  drush update:lightning --no-interaction
   ```
   * Note: Configuration updates from versions of Lightning < 3.0.0 will not be
     run when using the updated command. You should update to the last available
