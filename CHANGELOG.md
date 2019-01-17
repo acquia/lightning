@@ -1,3 +1,7 @@
+## 3.1.9
+* Lightning Core has been updated to 2.12, which security updates
+  Drupal core to 8.5.9.
+
 ## 3.1.8
 * Lightning Core has been updated to 2.11, which security updates
   Drupal core to 8.5.8.
