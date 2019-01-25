@@ -14,5 +14,5 @@ projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-07-27/29550
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-05-03/2968110-3.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-10-26/3008431-context-17.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-11-29/3016458-context-16.patch
-projects[drupal][patch][] = https://www.drupal.org/files/issues/2019-01-09/2986394-backport_lb87-4.patch
+projects[drupal][patch][] = https://www.drupal.org/files/issues/2019-01-25/2986394-9-backport-layout_builder.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-11-30/2246725-34.patch
