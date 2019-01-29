@@ -1,3 +1,7 @@
+imports:
+  - 'docroot/modules/contrib/lightning_core/tests/drupal.behat.yml'
+  - 'docroot/modules/contrib/lightning_core/tests/mink.behat.yml'
+
 default:
   suites:
     default:
@@ -15,20 +19,17 @@ default:
         - '\Drupal\DrupalExtension\Context\MinkContext'
         - '\Drupal\DrupalExtension\Context\MessageContext'
         - '\Drupal\DrupalExtension\Context\DrushContext'
-        - '\Drupal\Tests\lightning_media\FixtureContext'
+        - '\Drupal\Tests\lightning_api\FixtureContext'
         - '\Drupal\Tests\lightning_core\FixtureContext'
+        - '\Drupal\Tests\lightning_media\FixtureContext'
+        - '\Drupal\Tests\lightning_workflow\FixtureContext'
         # - '\Drupal\Tests\lightning_layout\FixtureContext'
   extensions:
-    DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: null
     Drupal\DrupalExtension:
       subcontexts:
         paths:
-          - 'profiles/contrib/lightning/tests/features/bootstrap'
-          - 'modules/contrib/lightning_core/tests/contexts'
-          - 'modules/contrib/lightning_media/tests/contexts'
-          - 'modules/contrib/lightning_workflow/tests/contexts'
-          - 'modules/contrib/lightning_workflow/modules/lightning_scheduler/tests/contexts'
-          # - 'modules/contrib/lightning_layout/tests/contexts'
+          - 'modules/contrib'
+          - 'profiles/contrib'
       api_driver: drupal
       blackbox: null
       drupal:
@@ -39,14 +40,3 @@ default:
         error_message_selector: '.messages [role="alert"]'
         warning_message_selector: .messages--warning
         login_form_selector: '#user-login-form'
-    Behat\MinkExtension:
-      browser_name: chrome
-      sessions:
-        javascript:
-          chrome:
-            api_url: 'http://localhost:9222'
-      base_url: 'http://127.0.0.1:8080'
-      goutte: null
-      selenium2:
-        wd_host: 'http://127.0.0.1:4444/wd/hub'
-        browser: chrome
