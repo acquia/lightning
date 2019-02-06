@@ -135,7 +135,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
     // Assert that basic blocks expose a Body field.
     $account = $this->drupalCreateUser(['administer blocks']);
     $this->drupalLogin($account);
-    $this->assertAllowed('/block/add/basic');
+    $this->assertAllowed('/block/add/text');
     $assert->fieldExists('Body');
     $this->drupalLogout();
 
