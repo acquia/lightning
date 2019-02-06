@@ -1,3 +1,8 @@
+## 3.2.5
+* Security updated Acquia Connector to 1.16 (SA-CONTRIB-2019-014)
+* Updated Consumers to 1.8.
+* Updated JSON:API to 2.1.
+
 ## 3.2.4
 * Updated Lightning Core to 3.5, which:
   * Security updated Drupal core to 8.6.6.
