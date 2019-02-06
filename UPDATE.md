@@ -170,6 +170,9 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+### 3.2.4 to 3.2.5
+There are no manual update steps for this version.
+
 ### 3.2.3 to 3.2.4
 * Configure the "Show in media library" field of the "Audio file" media type to
   be non-translatable.
