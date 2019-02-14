@@ -1,5 +1,5 @@
 ## 4.0.0
-* Panels and Panelizer have been replaced with Layout Builder. (Issue #2952620)
+* Lightning Layout now uses core's Layout Builder. (Issue #2952620)
 
 ## 3.2.0
 * Drupal core has been updated to 8.6.0.
