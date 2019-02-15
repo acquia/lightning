@@ -1,0 +1,49 @@
+uuid: ed23d7a2-d6d1-4dd2-955e-60758fce93d9
+langcode: en
+status: true
+dependencies:
+  config:
+    - field.field.node.landing_page.layout_selection
+    - node.type.landing_page
+  module:
+    - layout_builder
+    - layout_builder_restrictions
+    - layout_discovery
+    - layout_library
+    - user
+third_party_settings:
+  layout_builder:
+    allow_custom: false
+    enabled: true
+    sections:
+      -
+        layout_id: layout_onecol
+        layout_settings: {  }
+        components: {  }
+  layout_library:
+    enable: true
+  layout_builder_restrictions:
+    allowed_blocks: {  }
+    allowed_layouts:
+      - layout_onecol
+      - layout_twocol_section
+      - layout_threecol_section
+      - layout_fourcol_section
+_core:
+  default_config_hash: 5UN5kAHRgHTV9rnAtMyoW8FuNbs9zX705ijw5csX8YI
+id: node.landing_page.default
+targetEntityType: node
+bundle: landing_page
+mode: default
+content:
+  field_meta_tags:
+    type: metatag_empty_formatter
+    region: content
+    label: hidden
+    weight: 0
+    settings: {  }
+    third_party_settings: {  }
+hidden:
+  body: true
+  layout_selection: true
+  links: true

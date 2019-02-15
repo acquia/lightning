@@ -1,0 +1,83 @@
+uuid: df94bda0-7d0e-4cb8-ba04-556b79079be0
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: jYVh8Epfmnyruruw9mvA0muLgCUeWj7UjNe6c8voaxw
+id: page_two_column
+label: Two-column
+targetEntityType: node
+targetBundle: page
+layout:
+  -
+    layout_id: layout_twocol_section
+    layout_settings:
+      column_widths: 67-33
+    components:
+      54ecf9a4-9d35-49a3-828a-50986ed55ae6:
+        uuid: 54ecf9a4-9d35-49a3-828a-50986ed55ae6
+        region: second
+        configuration:
+          id: 'field_block:node:page:uid'
+          label: 'Authored by'
+          provider: layout_builder
+          label_display: '0'
+          formatter:
+            label: visually_hidden
+            type: entity_reference_entity_view
+            settings:
+              view_mode: compact
+            third_party_settings: {  }
+          context_mapping:
+            entity: layout_builder.entity
+        additional: {  }
+        weight: 0
+      ca742119-c99c-465a-b9a4-b7a4bf17c2dd:
+        uuid: ca742119-c99c-465a-b9a4-b7a4bf17c2dd
+        region: first
+        configuration:
+          id: 'field_block:node:page:created'
+          label: 'Authored on'
+          provider: layout_builder
+          label_display: '0'
+          formatter:
+            label: inline
+            type: timestamp
+            settings:
+              date_format: long_12h
+              custom_date_format: ''
+              timezone: ''
+            third_party_settings: {  }
+          context_mapping:
+            entity: layout_builder.entity
+        additional: {  }
+        weight: 0
+      04e37601-4eff-48cb-80b7-eb53f4794952:
+        uuid: 04e37601-4eff-48cb-80b7-eb53f4794952
+        region: first
+        configuration:
+          id: 'field_block:node:page:body'
+          label: Body
+          provider: layout_builder
+          label_display: '0'
+          formatter:
+            label: hidden
+            type: text_default
+            settings: {  }
+            third_party_settings: {  }
+          context_mapping:
+            entity: layout_builder.entity
+        additional: {  }
+        weight: 1
+      7b586756-4ef7-4280-ab67-e2612b7b786c:
+        uuid: 7b586756-4ef7-4280-ab67-e2612b7b786c
+        region: first
+        configuration:
+          id: 'extra_field_block:node:page:links'
+          label: Links
+          provider: layout_builder
+          label_display: '0'
+          context_mapping:
+            entity: layout_builder.entity
+        additional: {  }
+        weight: 2

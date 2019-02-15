@@ -1,0 +1,39 @@
+uuid: 0614efcb-65e3-4a71-8ac7-e40ee61a2c15
+langcode: en
+status: true
+dependencies:
+  config:
+    - block_content.type.google_map
+    - field.field.block_content.google_map.field_map_location
+  module:
+    - content_moderation
+_core:
+  default_config_hash: FfyNPH7IUb9gQuPEg1lFzHvGMmY8sLx1JHLceBeLqvU
+id: block_content.google_map.default
+targetEntityType: block_content
+bundle: google_map
+mode: default
+content:
+  field_map_location:
+    weight: 26
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+    type: string_textfield
+    region: content
+  info:
+    type: string_textfield
+    weight: -5
+    region: content
+    settings:
+      size: 60
+      placeholder: ''
+    third_party_settings: {  }
+  moderation_state:
+    type: moderation_state_default
+    weight: 100
+    settings: {  }
+    region: content
+    third_party_settings: {  }
+hidden: {  }
