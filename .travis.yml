@@ -43,7 +43,7 @@ install:
   # Build the Lightning code base with the latest dependencies.
   - composer update
   # Install Lightning cleanly so that settings.php will be created properly.
-  - lightning install --no-dev --from-config 'sqlite\://db.sqlite' lightning 'http://127.0.0.1:8080'
+  - lightning install --no-dev --from-config 'sqlite\://db.sqlite'
   - lightning make:extender
   # Restore and update from the previous version.
   - lightning update $VERSION
