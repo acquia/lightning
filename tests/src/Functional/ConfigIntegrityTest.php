@@ -5,6 +5,7 @@ namespace Drupal\Tests\lightning\Functional;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
+use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use Drupal\workflows\Entity\Workflow;
 
@@ -36,7 +37,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
 
     // Assert that all install tasks have done what they should do.
     // @see lightning_install_tasks()
-    $account = entity_load('user', 1);
+    $account = User::load( 1);
     $this->assertInstanceOf(UserInterface::class, $account);
     /** @var UserInterface $account */
     $this->assertTrue($account->hasRole('administrator'));
