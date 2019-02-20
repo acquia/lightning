@@ -1,6 +1,13 @@
+## 3.1.10
+* Lightning Core has been updated to 2.13, which:
+  * Security updates Drupal core to 8.5.11. (SA-CORE-2019-003)
+  * Security updates Metatag to 1.8. (SA-CONTRIB-2019-021)
+* Lightning API has been update to 2.9, which security updates JSON:API to 1.25.
+  (SA-CONTRIB-2019-019)
+
 ## 3.1.9
 * Lightning Core has been updated to 2.12, which security updates
-  Drupal core to 8.5.9.
+  Drupal core to 8.5.9. (SA-CORE-2019-001, SA-CORE-2019-002)
 
 ## 3.1.8
 * Lightning Core has been updated to 2.11, which security updates
