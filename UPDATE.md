@@ -170,6 +170,42 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+### 3.2.5 to 3.2.6
+* If you would like to enable support for user account pictures (avatars):
+  1. Create a new image field on user accounts. In Lightning Core, this field
+     is called "Picture" by default and its machine name is user_picture.
+  2. Set the file default-avatar.png, contained in the `images` directory
+     of Lightning Core, to be the default image for the field.
+  2. Customize the display of the "Compact" view mode for user accounts, and
+     ensure that the new image field is displayed using the Thumbnail image
+     style.
+* If you would like to display the media browser in a modal window, rather than
+  in an iFrame, follow these instructions:
+  1. Create a clone of the media browser which will only be used when embedding
+     media using the WYSIWYG editor. There is no easy way to duplicate the media
+     browser from the administrative backend, but you can run a bit of PHP code
+     at the command line with Drush (or, if you have Devel installed, at the
+     `/devel/php` path) to do it:
+```
+drush php:eval "entity_load('entity_browser', 'media_browser')->createDuplicate()->setName('ckeditor_media_browser')
+>setLabel('Media browser (CKEditor)')->save();"
+```
+  2. Configure the "Media browser" embed button to use the duplicate you just
+     created.
+  3. Grant permissions to use the duplicate entity browser to the "Media
+     creator" and "Media manager" user roles.
+  4. If you have Lightning Roles installed, you'll also need to grant access to
+     the duplicate by executing this PHP code (again, this can be done at the
+     command line with Drush, as in this example, or at `/devel/php` if you have
+     Devel installed):
+```
+drush php:eval "Drupal::service('lightning.content_roles')->grantPermissions('creator', 'use ckeditor_media_browser entity browser pages');"
+```
+  5. Edit the pre-existing media browser -- _not_ the duplicate -- to use the
+     Modal display plugin. Leave the "Width" and "Height" options empty to make
+     the modal dialog responsive, set the link text to "Add media", and disable
+     auto-open. Save the changes to the media browser.
+
 ### 3.2.4 to 3.2.5
 There are no manual update steps for this version.
 
