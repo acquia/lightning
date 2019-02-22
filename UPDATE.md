@@ -70,36 +70,6 @@ that is managed by your VCS, you would generally follow these steps:
   drush config:import
   ```
 
-### 3.x branch
-Before updating to the 3.x branch of Lightning, you should first update to
-Lightning 2.2.8 including all database updates and migrations. For example, if
-you are updating from 2.2.3:
-
-1. Make sure you have the latest version of Composer:
-  
-  ```
-  composer self-update
-  ```
-2. Update your codebase to 2.2.8:
-  
-  ```
-  composer require acquia/lightning:2.2.8 --no-update
-  composer update acquia/lightning --with-all-dependencies
-  ```
-3. Rebuild Drupal's cache and run database updates:
-  
-  ```
-  drush cache:rebuild
-  drush updatedb
-  ```
-4. Cleanup cruft from the Media migration:
-  
-  ```
-  drush pm-uninstall entity media_entity
-  ``` 
-5. Follow the "Configuration updates" steps below, starting with
-   "2.2.3 to 2.2.4".
-
 #### Configuration Management
 If you are using configuration management to move your configuration between
 development, staging, and production environments, you should export 

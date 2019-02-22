@@ -78,18 +78,11 @@ can use them in your Lightning site:
   * [Pinterest](https://www.drupal.org/project/lightning_media_pinterest)  
 
 ### Layout
-Lightning includes the Panelizer module, which allows you to configure the
-layout of any content type using a drag-and-drop interface (Panels IPE).
-Lightning also includes a Landing Page content type for you to create
-landing pages with their own one-off layouts and content.
-
-Any content type that uses Panelizer will allow you to set up default layouts
-for each view mode of that content type, which you can choose from (or override
-on a one-off basis) for individual pieces of content.
-
-Eight layouts are provided out of the box by Panels. You can create your own
-layouts (see the Layout Discovery module bundled with Core) or install a
-contributed library of layouts like [Radix Layouts](https://www.drupal.org/project/radix_layouts).
+Lightning includes a Landing Page content type which allows editors to create
+and place discrete blocks of content in any order and layout they wish using an
+intuitive, accessible interface. Lightning also allows site builders to define
+default layouts for content types using the same interface - or define multiple
+layouts and allow editors to choose which one to use for each post.
 
 ### Workflow
 Lightning includes tools for building organization-specific content workflows.
