@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "057f292de3f3555097bba34493361c89",
+    "content-hash": "2dcf1e5f92757a1b89e79e36297aad31",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1249,16 +1249,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "8.6.10",
+            "version": "8.6.x-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "59568ac02948cf075ee8543e6c6d4386ad8daec1"
+                "reference": "415dae75af0a776e5262c4071bc71b8dfbd92645"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/59568ac02948cf075ee8543e6c6d4386ad8daec1",
-                "reference": "59568ac02948cf075ee8543e6c6d4386ad8daec1",
+                "url": "https://api.github.com/repos/drupal/core/zipball/415dae75af0a776e5262c4071bc71b8dfbd92645",
+                "reference": "415dae75af0a776e5262c4071bc71b8dfbd92645",
                 "shasum": ""
             },
             "require": {
@@ -1471,7 +1471,7 @@
                     "2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch",
                     "2952390 - Off-canvas styles override CKEditor's reset and theme": "https://www.drupal.org/files/issues/2018-08-16/2952390-53.patch",
                     "2968110 - Layout Builder's ConfigureBlockFormBase forms do not display validation errors on submit": "https://www.drupal.org/files/issues/2018-05-03/2968110-3.patch",
-                    "2986394 - Backport Layout Builder to 8.6.x": "https://www.drupal.org/files/issues/2019-02-14/2986394-15-layout_builder--8.6.9--with-3008431-and-3016458-and-2955065.patch"
+                    "2986394 - Backport Layout Builder to 8.6.x": "https://www.drupal.org/files/issues/2019-02-14/2986394-16-layout_builder--8.6.x-32c214552--with-3008431-and-3016458-and-2955065.patch"
                 }
             },
             "autoload": {
@@ -1495,7 +1495,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2019-02-20T18:35:01+00:00"
+            "time": "2019-02-22T11:15:33+00:00"
         },
         {
             "name": "drupal/crop",
@@ -2558,17 +2558,11 @@
         },
         {
             "name": "drupal/lightning_api",
-            "version": "3.4.0",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_api",
-                "reference": "8.x-3.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_api-8.x-3.4.zip",
-                "reference": "8.x-3.4",
-                "shasum": "967b4321f541476c4bec04b594fd8d2238a37992"
+                "reference": "ebe0f250195a425af0a5b42eee0ea3980e1cff4b"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2576,7 +2570,7 @@
                 "drupal/consumers": "1.5",
                 "drupal/core": "~8.0",
                 "drupal/jsonapi": "^2.3",
-                "drupal/lightning_core": "^2.13 || ^3.7",
+                "drupal/lightning_core": "2.x-dev || 3.x-dev",
                 "drupal/openapi": "^1.0-beta2",
                 "drupal/openapi_ui_redoc": "^1.0",
                 "drupal/openapi_ui_swagger": "^1.0",
@@ -2595,11 +2589,11 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.4",
+                    "version": "8.x-3.4+1-dev",
                     "datestamp": "1550696584",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "enable-patching": true,
@@ -2673,28 +2667,23 @@
             "homepage": "https://www.drupal.org/project/lightning_api",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_api"
-            }
+            },
+            "time": "2019-02-20T21:01:56+00:00"
         },
         {
             "name": "drupal/lightning_core",
-            "version": "3.7.0",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_core",
-                "reference": "8.x-3.7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_core-8.x-3.7.zip",
-                "reference": "8.x-3.7",
-                "shasum": "b1de42e89cec9037ca4d9d31a5d7cbfbb0597048"
+                "reference": "255510cff052ea2b7b12bffb4eb755842bf721ab"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/acquia_connector": "^1.1",
                 "drupal/contact_storage": "^1.0",
-                "drupal/core": "~8.6.10",
+                "drupal/core": "8.6.x-dev",
                 "drupal/metatag": "^1.8",
                 "drupal/pathauto": "^1.3",
                 "drupal/search_api": "^1.0",
@@ -2719,11 +2708,11 @@
                     "dev-8.x-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.7",
+                    "version": "8.x-3.7+1-dev",
                     "datestamp": "1550692281",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "drush": {
@@ -2814,21 +2803,16 @@
             "homepage": "https://www.drupal.org/project/lightning_core",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_core"
-            }
+            },
+            "time": "2019-02-20T20:32:06+00:00"
         },
         {
             "name": "drupal/lightning_layout",
-            "version": "2.0.0-alpha10",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_layout",
-                "reference": "8.x-2.0-alpha10"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_layout-8.x-2.0-alpha10.zip",
-                "reference": "8.x-2.0-alpha10",
-                "shasum": "65a57dbcddbf910840df9b9e171a188e74a8d9c0"
+                "reference": "f33b568c16c4be6a88724bd9fc79d46825793cae"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2839,7 +2823,7 @@
                 "drupal/entity_browser_block": "1.0.0-alpha1",
                 "drupal/layout_builder_restrictions": "^1.4",
                 "drupal/layout_library": "1.0-alpha1",
-                "drupal/lightning_core": "^3.6",
+                "drupal/lightning_core": "3.x-dev",
                 "drupal/simple_gmap": "^1.4",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
@@ -2856,11 +2840,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-alpha10",
-                    "datestamp": "1550173080",
+                    "version": "8.x-2.0-alpha10+1-dev",
+                    "datestamp": "1550174280",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "enable-patching": true,
@@ -2894,7 +2878,7 @@
                     "drupal/core": {
                         "2952390 - Off-canvas styles override CKEditor's reset and theme": "https://www.drupal.org/files/issues/2018-08-16/2952390-53.patch",
                         "2968110 - Layout Builder's ConfigureBlockFormBase forms do not display validation errors on submit": "https://www.drupal.org/files/issues/2018-05-03/2968110-3.patch",
-                        "2986394 - Backport Layout Builder to 8.6.x": "https://www.drupal.org/files/issues/2019-02-14/2986394-15-layout_builder--8.6.9--with-3008431-and-3016458-and-2955065.patch"
+                        "2986394 - Backport Layout Builder to 8.6.x": "https://www.drupal.org/files/issues/2019-02-14/2986394-16-layout_builder--8.6.x-32c214552--with-3008431-and-3016458-and-2955065.patch"
                     },
                     "drupal/layout_builder_restrictions": {
                         "3032933 - Bad schema for allowed layouts": "https://www.drupal.org/files/issues/2019-02-14/3032933-2.patch"
@@ -2960,21 +2944,16 @@
             "homepage": "https://www.drupal.org/project/lightning_layout",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_layout"
-            }
+            },
+            "time": "2019-02-19T17:16:07+00:00"
         },
         {
             "name": "drupal/lightning_media",
-            "version": "3.6.0",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_media",
-                "reference": "8.x-3.6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_media-8.x-3.6.zip",
-                "reference": "8.x-3.6",
-                "shasum": "687cab8e173e24256e03aca6f8204520c0199e80"
+                "reference": "40f77535de2150c35126755a04225f66108d353d"
             },
             "require": {
                 "bower-asset/cropper": "^2.3",
@@ -2991,7 +2970,7 @@
                 "drupal/image_widget_crop": "^2.1",
                 "drupal/inline_entity_form": "^1.0",
                 "drupal/libraries": "3.0-alpha1",
-                "drupal/lightning_core": "^3.6",
+                "drupal/lightning_core": "3.x-dev",
                 "drupal/media_entity_instagram": "2.0.0-alpha2",
                 "drupal/media_entity_twitter": "2.0.0-alpha2",
                 "drupal/slick_entityreference": "^1.1",
@@ -3017,11 +2996,11 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.6",
-                    "datestamp": "1550164383",
+                    "version": "8.x-3.6+3-dev",
+                    "datestamp": "1550517780",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "enable-patching": true,
@@ -3103,28 +3082,23 @@
             "homepage": "https://www.drupal.org/project/lightning_media",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_media"
-            }
+            },
+            "time": "2019-02-19T17:10:16+00:00"
         },
         {
             "name": "drupal/lightning_workflow",
-            "version": "3.4.0",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_workflow",
-                "reference": "8.x-3.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_workflow-8.x-3.4.zip",
-                "reference": "8.x-3.4",
-                "shasum": "09a6e3776dd5ce04675ac2de8872454638e033b8"
+                "reference": "0d04bc1512060ee6059edb049132a6c2c5bb3b3a"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/core": "*",
                 "drupal/diff": "^1.0",
-                "drupal/lightning_core": "^3.6",
+                "drupal/lightning_core": "3.x-dev",
                 "drupal/moderation_dashboard": "^1.0",
                 "drupal/moderation_sidebar": "^1.0",
                 "oomphinc/composer-installers-extender": "^1.1"
@@ -3143,11 +3117,11 @@
                     "dev-8.x-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.4",
-                    "datestamp": "1550178780",
+                    "version": "8.x-3.4+4-dev",
+                    "datestamp": "1550588287",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "enable-patching": true,
@@ -3220,7 +3194,8 @@
             "homepage": "https://www.drupal.org/project/lightning_workflow",
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_workflow"
-            }
+            },
+            "time": "2019-02-19T17:13:51+00:00"
         },
         {
             "name": "drupal/media_entity_instagram",
@@ -3827,8 +3802,7 @@
                     }
                 },
                 "patches_applied": {
-                    "2878684 - Use String.match to correlate regions when switching Layouts in Panels IPE": "https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch",
-                    "2825034 - Form error messages do not appear in IPE": "https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch"
+                    "3030976 - Panels should check if there is an icon map before setting the no preview icon": "https://www.drupal.org/files/issues/2019-02-06/initial.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -12832,6 +12806,11 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "drupal/lightning_api": 20,
+        "drupal/lightning_core": 20,
+        "drupal/lightning_layout": 20,
+        "drupal/lightning_media": 20,
+        "drupal/lightning_workflow": 20,
         "acquia/lightning_dev": 20,
         "drupal/media_entity_generic": 20
     },
