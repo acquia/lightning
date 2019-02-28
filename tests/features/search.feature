@@ -1,7 +1,7 @@
-@lightning @core @search @api @errors
+@lightning @api
 Feature: Site search
 
-  @layout @landing-page @javascript @6aa9edbb
+  @javascript @6aa9edbb @orca_public
   Scenario: Indexing and searching for landing pages
     Given I am logged in as a user with the "landing_page_creator, landing_page_reviewer, layout_manager" roles
     And landing_page content:

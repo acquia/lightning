@@ -6,67 +6,60 @@ cache:
   directories:
     - "$HOME/.composer/cache"
     - "$HOME/.drush/cache"
-    - "$HOME/.npm"
+
 php:
-  - 7.0
+  - 7.1
+
 env:
   - VERSION=HEAD
-  - VERSION=3.2.6
   # The final CI slot should be used to test the update path from the oldest
   # available database fixture.
   - VERSION=3.0.0
+
+matrix:
+  fast_finish: true
 
 addons:
   chrome: stable
 
 before_install:
-  - phpenv config-rm xdebug.ini
+  - phpenv config-add ./tests/travis.php.ini
+  - phpenv rehash
+
   - composer self-update
   - composer --version
   - google-chrome-stable --version
 
+  - export ORCA=$TRAVIS_BUILD_DIR/../orca
+  - export ORCA_FIXTURE=$ORCA-build
+  - export ORCA_SUT=$TRAVIS_REPO_SLUG
+
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+  - export PATH="$ORCA/bin:$PATH"
+  - export PATH="$ORCA/vendor/bin:$PATH"
+  - export PATH="$ORCA_FIXTURE/vendor/bin:$PATH"
+
 install:
-  # Add Composer's local bin directory to the PATH so that we will be running
-  # our installed versions of Drush, PHPCS, Behat, PhantomJS, etc.
-  - export PATH="$HOME/.composer/vendor/bin:$TRAVIS_BUILD_DIR/vendor/bin:$PATH"
+  # Install ORCA so that we can build the fixture using that.
+  - git clone --depth 1 --branch lightning https://github.com/acquia/orca.git ../orca
+  - "$ORCA/bin/travis/install 8.x-3.x"
 
-  # composer install should fail on bad patches.
-  - export COMPOSER_EXIT_ON_PATCH_FAILURE=1
+  # Run ORCA static analysis tools.
+  - orca static-analysis:run ./
 
-  # Install the PECL YAML extension for strict parsing. yes is used to
-  # acknowledge all prompts.
-  - yes '' | pecl install yaml
-  # Tweak PHP configuration.
-  - echo 'max_execution_time = 120' >> drupal.php.ini;
-  - echo 'sendmail_path = /bin/true' >> drupal.php.ini;
-  - phpenv config-add drupal.php.ini
-  - phpenv rehash
-
-  # Build the Lightning code base with the latest dependencies.
-  - composer update
-  # Install Lightning cleanly so that settings.php will be created properly.
-  - lightning install --from-config 'sqlite\://db.sqlite' lightning 'http://127.0.0.1:8080'
-  # Restore and update from the previous version.
-  - lightning update $VERSION
-  - drush cache:rebuild
+  # Use ORCA to build the code base.
+  - orca fixture:init -f --sut $ORCA_SUT --dev --profile lightning
+  # Install dev dependencies.
+  - composer require --dev drupal/console --working-dir $ORCA_FIXTURE --no-update
+  # Update in a separate step to prevent lock file version conflicts.
+  - composer update --working-dir $ORCA_FIXTURE
 
 before_script:
-  - drush config:set system.date timezone.default $TZ --yes
-  - drush runserver --default-server=builtin 8080 &>/dev/null &
-  # Disable the History module during testing, to prevent weird deadlock errors that don't
-  # actually affect anything.
-  - drush pm-uninstall --yes history
-  - chromedriver --port=4444 &
-  - cp -f phpunit.xml ./docroot/core
+  - cd $ORCA_FIXTURE/docroot
+  - $TRAVIS_BUILD_DIR/update.sh $VERSION
 
 script:
-  - composer validate composer.json --no-check-all --ansi --no-interaction
-  - behat --stop-on-failure
-  - cd docroot
-  - phpunit --configuration ./core --group lightning,profiles
+  - orca tests:run --sut $ORCA_SUT
 
 after_failure:
   - drush watchdog:show --count=100 --severity=Error --extended
-
-matrix:
-  fast_finish: true
