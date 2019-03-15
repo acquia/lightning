@@ -1178,6 +1178,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3038668 - Fix tests following a change in Drupal 8.7.0: #2976035": "https://www.drupal.org/files/issues/2019-03-10/3038668-25.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -1218,12 +1221,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "61b3a70f0999b1a18d08ae9232eccd3bf9ac6751"
+                "reference": "47ce73d0cf9b7fe445b30be46db57546c266c4e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/61b3a70f0999b1a18d08ae9232eccd3bf9ac6751",
-                "reference": "61b3a70f0999b1a18d08ae9232eccd3bf9ac6751",
+                "url": "https://api.github.com/repos/drupal/core/zipball/47ce73d0cf9b7fe445b30be46db57546c266c4e3",
+                "reference": "47ce73d0cf9b7fe445b30be46db57546c266c4e3",
                 "shasum": ""
             },
             "require": {
@@ -1429,6 +1432,14 @@
                     "recurse": false,
                     "replace": false,
                     "merge-extra": false
+                },
+                "patches_applied": {
+                    "2998335 - [regression] \\Drupal\\user\\ContextProvider\\CurrentUserContext broken for anonymous users": "https://www.drupal.org/files/issues/2018-10-04/2998335-currentusercontext-16.patch",
+                    "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
+                    "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
+                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-03-05/2815221-116.patch",
+                    "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2018-10-12/1356276-531.patch",
+                    "2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch"
                 }
             },
             "autoload": {
@@ -1452,7 +1463,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2019-03-14T18:27:31+00:00"
+            "time": "2019-03-15T18:50:58+00:00"
         },
         {
             "name": "drupal/crop",
@@ -2424,7 +2435,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_api",
-                "reference": "3a6916430d9fe0a8297f116fcf5bfbe20f038afe"
+                "reference": "dbb37ad622130d9fb95ec78ac87beb8a8b58ec89"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2452,8 +2463,8 @@
                     "dev-8.x-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.4+2-dev",
-                    "datestamp": "1551188588",
+                    "version": "8.x-3.5+1-dev",
+                    "datestamp": "1552672085",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -2531,7 +2542,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_api"
             },
-            "time": "2019-03-05T16:49:35+00:00"
+            "time": "2019-03-15T17:47:24+00:00"
         },
         {
             "name": "drupal/lightning_core",
@@ -2539,13 +2550,13 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupal.org/project/lightning_core",
-                "reference": "7325fec6c77fcc80fc0a0a1e368fbdcc232a060c"
+                "reference": "344bf6241828eb111277ac7565f9187d2936db28"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/acquia_connector": "^1.1",
-                "drupal/contact_storage": "^1.0",
+                "drupal/contact_storage": "1.0-beta9",
                 "drupal/core": "8.7.x-dev",
                 "drupal/metatag": "^1.8",
                 "drupal/pathauto": "^1.3",
@@ -2571,8 +2582,8 @@
                     "dev-8.x-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.x-dev",
-                    "datestamp": "1551804484",
+                    "version": "8.x-4.0-alpha1+1-dev",
+                    "datestamp": "1552650785",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -2608,7 +2619,11 @@
                     "npm-asset"
                 ],
                 "patches": {
+                    "drupal/contact_storage": {
+                        "3038668 - Fix tests following a change in Drupal 8.7.0: #2976035": "https://www.drupal.org/files/issues/2019-03-10/3038668-25.patch"
+                    },
                     "drupal/core": {
+                        "2998335 - [regression] \\Drupal\\user\\ContextProvider\\CurrentUserContext broken for anonymous users": "https://www.drupal.org/files/issues/2018-10-04/2998335-currentusercontext-16.patch",
                         "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                         "2885441 - EntityReferenceAutocompleteWidget should define its size setting as an integer": "https://www.drupal.org/files/issues/2885441-2.patch",
                         "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-03-05/2815221-116.patch",
@@ -2666,7 +2681,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/lightning_core"
             },
-            "time": "2019-03-05T16:45:06+00:00"
+            "time": "2019-03-15T11:50:47+00:00"
         },
         {
             "name": "drupal/lightning_layout",
@@ -13183,12 +13198,12 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/weitzman/drupal-test-traits.git",
-                "reference": "42aa980ee1a2f52aa3b29db2d5041ddaec47d0be"
+                "reference": "00ed2afa0f3bb06d5f63922aff00f6d4a1246f5c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/weitzman%2Fdrupal-test-traits/repository/archive.zip?sha=42aa980ee1a2f52aa3b29db2d5041ddaec47d0be",
-                "reference": "42aa980ee1a2f52aa3b29db2d5041ddaec47d0be",
+                "url": "https://gitlab.com/api/v4/projects/weitzman%2Fdrupal-test-traits/repository/archive.zip?sha=00ed2afa0f3bb06d5f63922aff00f6d4a1246f5c",
+                "reference": "00ed2afa0f3bb06d5f63922aff00f6d4a1246f5c",
                 "shasum": ""
             },
             "require": {
@@ -13203,10 +13218,11 @@
                 "composer/installers": "^1.2",
                 "dmore/chrome-mink-driver": "^2.6",
                 "drupal-composer/drupal-scaffold": "2.3.0",
-                "drupal/core": "^8.6",
+                "drupal/core": "^8.7@alpha",
                 "drush/drush": "^9",
                 "jakub-onderka/php-parallel-lint": "^1.0",
-                "squizlabs/php_codesniffer": "^3.2"
+                "squizlabs/php_codesniffer": "^3.2",
+                "zaporylie/composer-drupal-optimizations": "^1.0"
             },
             "type": "library",
             "extra": {
@@ -13232,7 +13248,7 @@
                 }
             ],
             "description": "Traits for testing Drupal sites that have user content (versus unpopulated sites).",
-            "time": "2019-02-09T14:22:39+00:00"
+            "time": "2019-03-15T10:43:19+00:00"
         }
     ],
     "aliases": [],

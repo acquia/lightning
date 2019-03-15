@@ -1,0 +1,101 @@
+---
+# An indexed array of Acquia software package data. Each element is an
+# associative array that may contain the following key-value pairs:
+# - "name": (required) The package name, corresponding to the "name" property in
+#   its composer.json file, e.g., "drupal/example".
+# - "type": (optional) The package type, corresponding to the "type" property in
+#   its composer.json file. Defaults to "drupal-module".
+# - "install_path": (optional) The path the package gets installed at relative
+#   to the fixture root, e.g., docroot/modules/contrib/example.
+#   Used internally for Drupal submodules. Defaults by "type" to match the
+#   "installer-paths" patterns specified by BLT.
+# - "url": (optional) The path, absolute or relative to the fixture root, of a
+#   local clone of the package. Used for the "url" property of the
+#   Composer path repository used to symlink the system under test (SUT) into
+#   place. Defaults to a directory adjacent to the fixture root named the
+#   Composer project name, e.g., "../example" for a "drupal/example" project.
+# - "version": (optional) The recommended package version to require via
+#   Composer. Defaults to "*".
+# - "version_dev": (required) The dev package version to require via Composer.
+# - "enable": (internal) TRUE if the package is a Drupal module that should be
+#   automatically enabled or FALSE if not. Defaults to TRUE for modules. Always
+#   FALSE for anything else.
+#
+# These are converted to \Acquia\Orca\Fixture\Package objects by
+# \Acquia\Orca\Fixture\PackageManager. A different specification can be
+# substituted at runtime using the "ORCA_PACKAGES_CONFIG" environment variable.
+# See config/services.yml for the relevant code or bin/self-test for a usage
+# example.
+-
+  name: acquia/acsf-tools
+  type: drupal-drush
+  # acsf-tools specifies an installer-name.
+  install_path: drush/Commands/acsf_tools
+  version_dev: dev-9.x-dev
+-
+  name: acquia/blt
+  type: composer-plugin
+  version: ~10.0
+  version_dev: 10.0.x-dev
+-
+  name: acquia/drupal-spec-tool
+  type: behat-extension
+  version_dev: 2.x-dev
+-
+  name: acquia/headless_lightning
+  url: ../headless-lightning
+  type: drupal-profile
+  version_dev: 1.x-dev
+#-
+#  name: drupal/acquia_commercemanager
+#  url: ../commerce-manager
+#  version_dev: 1.x-dev
+-
+  name: drupal/acquia_connector
+  url: ../acquia-connector
+  version_dev: 1.x-dev
+-
+  name: drupal/acquia_contenthub
+  url: ../content-hub-d8
+  version: ~1.0
+  version_dev: 1.x-dev
+-
+  name: drupal/acquia_lift
+  version_dev: 3.x-dev
+-
+  name: drupal/acquia_purge
+  version_dev: 1.x-dev
+#-
+#  name: drupal/acsf
+#  version_dev: "*"
+-
+  name: drupal/cog
+  type: drupal-theme
+  version_dev: 1.x-dev
+-
+  name: acquia/lightning
+  type: drupal-profile
+  version_dev: 3.x-dev
+-
+  name: drupal/lightning_api
+  url: ../lightning-api
+  version_dev: 3.x-dev
+-
+  name: drupal/lightning_core
+  url: ../lightning-core
+  version_dev: 4.x-dev
+-
+  name: drupal/lightning_layout
+  url: ../lightning-layout
+  version_dev: 1.x-dev
+-
+  name: drupal/lightning_media
+  url: ../lightning-media
+  version_dev: 3.x-dev
+-
+  name: drupal/lightning_workflow
+  url: ../lightning-workflow
+  version_dev: 3.x-dev
+#-
+#  name: drupal/media_acquiadam
+#  version_dev: 1.x-dev
