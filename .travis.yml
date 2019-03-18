@@ -52,6 +52,7 @@ install:
   # Use ORCA to build the code base.
   - ORCA_DRUPAL_CORE_VERSION=8.7.x-dev orca fixture:init -f --sut $ORCA_SUT --dev --profile lightning
   # Install dev dependencies.
+  - composer remove --dev --no-update acquia/lightning_dev --working-dir $ORCA_FIXTURE
   - composer require --dev drupal/console --working-dir $ORCA_FIXTURE --no-update
   # Update in a separate step to prevent lock file version conflicts.
   - composer update --working-dir $ORCA_FIXTURE
