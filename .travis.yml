@@ -33,7 +33,7 @@ before_install:
   - export ORCA=$TRAVIS_BUILD_DIR/../orca
   - export ORCA_FIXTURE=$ORCA-build
   - export ORCA_SUT=$TRAVIS_REPO_SLUG
-  - export ORCA_DRUPAL_CORE_VERSION=8.7.0-alpha1
+  - export ORCA_DRUPAL_CORE_VERSION=8.7.x-dev
   - export ORCA_PACKAGES_CONFIG=../lightning/tests/packages.yml
 
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
@@ -50,7 +50,7 @@ install:
   - orca static-analysis:run ./
 
   # Use ORCA to build the code base.
-  - orca fixture:init -f --sut $ORCA_SUT --profile lightning
+  - orca fixture:init -f --dev --sut $ORCA_SUT --profile lightning
   # Install dev dependencies.
   - composer require --dev drupal/console --working-dir $ORCA_FIXTURE --no-update
   # Update in a separate step to prevent lock file version conflicts.
