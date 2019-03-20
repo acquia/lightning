@@ -10,6 +10,7 @@ projects[blazy][version] = 1.0-rc4
 projects[consumers][type] = module
 projects[consumers][version] = 1.9
 projects[contact_storage][type] = module
+projects[contact_storage][patch][] = https://www.drupal.org/files/issues/2019-03-10/3038668-25.patch
 projects[contact_storage][version] = 1.0-beta9
 projects[crop][type] = module
 projects[crop][version] = 2.0-rc1
