@@ -1,3 +1,28 @@
+## 3.2.7
+* Updated Lightning Core to 3.9, which:
+  * Security updated Drupal core to 8.6.13 (SA-CORE-2019-004).
+  * Removed deprecated function calls. (Issue #3034195)
+* Updated Lightning API to 3.5, which:
+  * Adds support for Drupal core 8.7.
+  * Updates Consumers module to 1.9 and unpins its Composer
+    constraint.
+* Updated Lightning Media to 3.8, which:
+  * Adds support for Drupal core 8.7.
+  * Updates Entity Browser to 2.1.
+  * Adds a link to the settings form on the module list page.
+    (Issue #3033650)
+  * Adds descriptions to administrative links. (Issue #3034042)
+* Updated Lightning Layout to 1.7, which:
+  * Adds support for Drupal core 8.7.
+  * Adds a description to an administrative link. (Issue #3034041)
+* Updated Lightning Workflow to 3.5, which:
+  * Adds support for Drupal core 8.7.
+  * Fixed missing configure button for Lightning Scheduler module in
+    list page. (Issue #3034047)
+  * Replaces entity_load() calls with entity load(). (Issue #3033637)
+  * Adds a missing description in Lightning Scheduler module in
+    links.menu.yml file. (Issue #3034048)
+
 ## 3.2.6
 * Updated Lightning Core to 3.7, which:
   * Security updated Drupal core to 8.6.10 (SA-CORE-2019-003).
