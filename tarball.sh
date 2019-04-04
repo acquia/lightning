@@ -12,7 +12,7 @@ curl -L -o drush https://github.com/drush-ops/drush/releases/download/8.1.16/dru
 chmod +x drush
 ./drush make cloud.make $ARCHIVE
 cd $ARCHIVE
-composer require j7mbo/twitter-api-php league/oauth2-server:~6.0 webflo/drupal-core-strict:~8.6.0 'phpdocumentor/reflection-docblock:^3.0||^4.0'
+composer require j7mbo/twitter-api-php league/oauth2-server:~6.0 webflo/drupal-core-strict:~8.7.0 'phpdocumentor/reflection-docblock:^3.0||^4.0'
 mkdir -p $PROFILE_DIR
 tar -x -f ../$ARCHIVE.tar --directory $PROFILE_DIR
 cd ..
