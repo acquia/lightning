@@ -39,7 +39,6 @@ class ComponentDiscoveryTest extends KernelTestBase {
 
     $this->assertInstanceOf(Extension::class, $components['lightning_core']);
     $this->assertInstanceOf(Extension::class, $components['lightning_search']);
-    $this->assertInstanceOf(Extension::class, $components['lightning_dev']);
     $this->assertArrayNotHasKey('panels', $components);
     $this->assertArrayNotHasKey('views', $components);
   }
