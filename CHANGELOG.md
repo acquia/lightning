@@ -1,3 +1,13 @@
+## 3.3.0-beta1
+* Updated Lightning Core to 4.0-beta1, which:
+  * Updated Drupal core to 8.7.0-beta1.
+* Updated Lightning API to 4.0-beta1, which:
+  * Updated Lightning Core to 4.0.0-beta1, which requires Drupal core 8.7.0 and
+    replaces the contributed JSON:API module with the core version.
+* Updated Lightning Workflow to 3.6, which:
+  * Fixed a bug that could occur with Drupal 8.7 when installing the
+    moderation_history view.
+
 ## 3.2.7
 * Updated Lightning Core to 3.9, which:
   * Security updated Drupal core to 8.6.13 (SA-CORE-2019-004).

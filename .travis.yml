@@ -23,39 +23,33 @@ addons:
   chrome: stable
 
 before_install:
-  - phpenv config-add ./tests/travis.php.ini
-  - phpenv rehash
-
   - composer self-update
   - composer --version
   - google-chrome-stable --version
 
   - export ORCA=$TRAVIS_BUILD_DIR/../orca
   - export ORCA_FIXTURE=$ORCA-build
-  - export ORCA_SUT=$TRAVIS_REPO_SLUG
-  - export ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/orca.yml
+  - export ORCA_SUT_NAME=acquia/lightning
+  - export ORCA_SUT_BRANCH=8.x-3.x
+  - export ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/packages.yml
 
   - export PATH="$HOME/.composer/vendor/bin:$PATH"
   - export PATH="$ORCA/bin:$PATH"
   - export PATH="$ORCA/vendor/bin:$PATH"
   - export PATH="$ORCA_FIXTURE/vendor/bin:$PATH"
 
-  # Add the ORCA repository.
-  - composer config --global repositories.orca vcs "https://github.com/acquia/orca"
-  # Use a personal access token to authenticate with GitHub, to avoid being
-  # rate-limited. The token is configured in the Travis CI repository settings.
-  - composer config --global github-oauth.github.com $GITHUB_OAUTH_TOKEN
+  # Install ORCA and prepare the environment.
+  - git clone --branch develop --depth 1 https://github.com/acquia/orca.git $ORCA
+  - $ORCA/bin/travis/before_install.sh
 
 install:
-  # Install ORCA so that we can build the fixture using that.
-  - composer create-project --stability dev --no-dev acquia/orca:^1.0.0-alpha6 $ORCA
-  - "$ORCA/bin/travis/install 8.x-3.x"
+  - $ORCA/bin/travis/install.sh
 
   # Run ORCA static analysis tools.
   - orca static-analysis:run ./
 
   # Use ORCA to build the code base.
-  - orca fixture:init -f --sut $ORCA_SUT --dev --profile lightning
+  - orca fixture:init -f --sut $ORCA_SUT_NAME --core ~8.7.0 --profile lightning
   # Install dev dependencies.
   - composer require --dev drupal/console --working-dir $ORCA_FIXTURE --no-update
   # Update in a separate step to prevent lock file version conflicts.
@@ -66,7 +60,7 @@ before_script:
   - $TRAVIS_BUILD_DIR/update.sh $VERSION
 
 script:
-  - orca tests:run --sut $ORCA_SUT
+  - orca tests:run --sut $ORCA_SUT_NAME
 
 after_failure:
   - drush watchdog:show --count=100 --severity=Error --extended
