@@ -12,6 +12,7 @@ use GuzzleHttp\ClientInterface;
 class Telemetry {
 
   const AMPLITUDE_API_URL = 'https://api.amplitude.com/httpapi';
+  const AMPLITUDE_API_KEY = 'f32aacddde42ad34f5a3078a621f37a9';
 
   /**
    * The module handler to invoke the alter hook with.
@@ -56,37 +57,46 @@ class Telemetry {
   }
 
   /**
+   * Sends an event to Amplitude.
+   *
    * @param array $event
+   *   The Amplitude event data.
+   *
+   * @return bool
+   *   TRUE if the request to Amplitude was successful.
    */
   protected function sendEvent($event) {
-    // Project ID: 221942
-    $post_data = [
-      'api_key' => 'f32aacddde42ad34f5a3078a621f37a9',
-      'event' => json_encode($event),
-    ];
-
-    $this->httpClient->request('POST', self::AMPLITUDE_API_URL, [
-      'form_params' => $post_data,
+    $response = $this->httpClient->request('POST', self::AMPLITUDE_API_URL, [
+      'form_params' => [
+        'api_key' => self::AMPLITUDE_API_KEY,
+        'event' => json_encode($event),
+      ]
     ]);
+    $success = $response->getStatusCode() == 200;
+
+    return $success;
   }
 
   /**
-   *
+   * Creates and sends a cron event to Amplitude.
    */
   public function sendCronEvent() {
     $data = $this->gatherCronData();
 
-    $event = [
-      'user_id' => $this->config_factory->get('system.site.uuid'),
-      'event_type' => 'cron',
+    $cron_event = [
+      'user_id' => $this->config_factory->get('system.site')->get('uuid'),
+      'event_type' => 'Drupal cron ran',
       'event_properties' => $data,
     ];
 
-    $this->sendEvent($event);
+    $this->sendEvent($cron_event);
   }
 
   /**
+   * Gathers data for creating a cron event.
+   *
    * @return array
+   *   An array of event data.
    */
   protected function gatherCronData() {
     $installed_modules = $this->extensionListModule->getAllInstalledInfo();
@@ -96,11 +106,16 @@ class Telemetry {
       'lightning_layout',
       'lightning_api',
     ];
-    $installed_lightning_modules = array_intersect_key($lightning_modules_names, $installed_modules);
+    $installed_lightning_modules = array_intersect($lightning_modules_names, array_keys($installed_modules));
 
     $data = [
       'modules' => [
         'installed' => $installed_lightning_modules,
+      ],
+      'versions' => [
+        'php' => phpversion(),
+        'lightning' => $installed_modules['lightning']['version'],
+        'drupal' => \Drupal::VERSION,
       ],
     ];
 
