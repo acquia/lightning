@@ -63,21 +63,6 @@ class Event {
   }
 
   /**
-   * Merges $data with existing $this->data.
-   *
-   * @param array $data
-   *   Event properties.
-   *
-   * @return $this
-   *   The event object.
-   */
-  public function addData($data) {
-    $this->data = array_merge_recursive($this->data, $data);
-
-    return $this;
-  }
-
-  /**
    * Converts the event object to a JSON string that Amplitude will accept.
    *
    * @return string

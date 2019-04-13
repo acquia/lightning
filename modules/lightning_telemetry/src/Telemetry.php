@@ -90,13 +90,16 @@ class Telemetry {
   /**
    * Creates and sends a cron event to Amplitude.
    *
-   * @param string $type
+   * @param string $event_type
    *   The event type.
+   *
+   * @param array $event_properties
+   *   Event properties.
    *
    * @throws \Exception
    */
-  public function sendTelemetry($type) {
-    $event = $this->createEvent($type, []);
+  public function sendTelemetry($event_type, array $event_properties = []) {
+    $event = $this->createEvent($event_type, $event_properties);
 
     // Failure to send Telemetry should never cause a user facing error or
     // interrupt a process. Telemetry failure should be graceful and quiet.
@@ -145,19 +148,19 @@ class Telemetry {
    *
    * @param string $type
    *   The event type.
-   * @param array $data
-   *   The event data.
+   * @param array $properties
+   *   The event properties.
    *
    * @return \Drupal\lightning_telemetry\Event
    *   An Amplitude event with basic info already populated.
    */
-  protected function createEvent($type, $data) {
+  protected function createEvent($type, $properties) {
     $user_id = $this->config_factory->get('system.site')->get('uuid');
-    $default_data['extensions'] = $this->getExtensionInfo();
-    $default_data['php']['version'] = phpversion();
-    $default_data['drupal']['version'] = \Drupal::VERSION;
-    $data = array_merge_recursive($default_data, $data);
-    $event = new Event($type, $user_id, $data);
+    $default_properties['extensions'] = $this->getExtensionInfo();
+    $default_properties['php']['version'] = phpversion();
+    $default_properties['drupal']['version'] = \Drupal::VERSION;
+    $properties = array_merge_recursive($default_properties, $properties);
+    $event = new Event($type, $user_id, $properties);
 
     return $event;
   }
@@ -168,7 +171,7 @@ class Telemetry {
    * @return array
    *   A flat array of all Lightning Drupal extensions.
    */
-  protected function getLightningExtensionNames(): array {
+  public function getLightningExtensionNames(): array {
     $lightning_extension_names = [
       'lightning',
       'lightning_api',
