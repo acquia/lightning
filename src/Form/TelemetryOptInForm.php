@@ -21,6 +21,7 @@ class TelemetryOptInForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
+    $form['#title'] = "Telemetry Opt-In";
     $form['allow_telemetry'] = array(
       '#type' => 'checkbox',
       '#title' => t('Allow Lightning to send anonymized telemetry data.'),
@@ -46,7 +47,9 @@ class TelemetryOptInForm extends FormBase {
    * {@inheritdoc}
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
-    \Drupal::service('module_installer')->install(['lightning_telemetry']);
+    if ($form_state->getValue('allow_telemetry')) {
+      \Drupal::service('module_installer')->install(['lightning_telemetry']);
+    }
   }
 
 }

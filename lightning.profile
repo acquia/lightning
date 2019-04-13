@@ -23,7 +23,7 @@ function lightning_install_tasks() {
   $tasks['lightning_set_logo'] = [];
   $tasks['lightning_alter_frontpage_view'] = [];
 
-  $tasks['\Drupal\lightning\Form\ConfigurationForm'] = [
+  $tasks['Drupal\lightning\Form\TelemetryOptInForm'] = [
     'display_name' => t('Telemetry Opt-in'),
     'type' => 'form',
   ];

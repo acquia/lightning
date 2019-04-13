@@ -1,10 +1,9 @@
 <?php
 
-namespace Drupal\lightning\lightning_telemetry;
+namespace Drupal\lightning_telemetry;
 
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
-use Drupal\Core\Extension\ModuleHandlerInterface;
 use GuzzleHttp\ClientInterface;
 
 /**
@@ -61,14 +60,13 @@ class Telemetry {
    */
   protected function sendEvent($event) {
     // Project ID: 221942
-
     $post_data = [
       'api_key' => 'f32aacddde42ad34f5a3078a621f37a9',
       'event' => json_encode($event),
     ];
 
     $this->httpClient->request('POST', self::AMPLITUDE_API_URL, [
-      'body' => $post_data,
+      'form_params' => $post_data,
     ]);
   }
 
