@@ -4,7 +4,7 @@
  * Implements hook_cron().
  */
 function lightning_telemetry_cron() {
-  /** @var \Drupal\lightning\lightning_telemetry\Telemetry $telemetry_service */
+  /** @var \Drupal\lightning_telemetry\Telemetry $telemetry_service */
   $telemetry_service = \Drupal::service('lightning_telemetry.telemetry');
-  $telemetry_service->sendCronEvent();
+  $telemetry_service->sendTelemetry('Drupal cron ran');
 }
