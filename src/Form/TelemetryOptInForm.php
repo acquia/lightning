@@ -11,7 +11,9 @@ use Drupal\Core\Form\FormStateInterface;
 /**
  * Class TelemetryOptInForm.
  *
- * This form is displayed during the Lightning install process.
+ * This form is displayed during the Lightning install process. It provides
+ * the opportunity for users to opt-in to enabling the Lightning Telemetry
+ * module.
  *
  * @package Drupal\lightning\Form
  */
@@ -28,11 +30,12 @@ class TelemetryOptInForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['#title'] = "Telemetry Opt-In";
+    $form['#title'] = "Telemetry Opt-in";
     $form['allow_telemetry'] = array(
       '#type' => 'checkbox',
-      '#title' => t('Allow Lightning to send anonymized telemetry data.'),
-      '#description' => t('Telemetry will be anonymized and send to Acquia for product development purposes. Information will be used in compliance with GDPR and will never be shared with third parties.')
+      '#title' => t('Allow Lightning to send anonymized telemetry data to Acquia'),
+      // @todo Revise and finalize language.
+      '#description' => t('Telemetry will be anonymized and sent to Acquia for product development purposes. Information will be used in compliance with GDPR and will never be shared with third parties.')
     );
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = array(

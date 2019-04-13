@@ -169,7 +169,7 @@ class Telemetry {
    *   A flat array of all Lightning Drupal extensions.
    */
   protected function getLightningExtensionNames(): array {
-    $lightning_modules_names = [
+    $lightning_extension_names = [
       'lightning',
       'lightning_api',
       'lightning_core',
@@ -179,7 +179,7 @@ class Telemetry {
       'lightning_workflow',
     ];
 
-    return $lightning_modules_names;
+    return $lightning_extension_names;
   }
 
 }
