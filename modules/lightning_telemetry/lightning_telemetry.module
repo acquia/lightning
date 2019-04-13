@@ -15,7 +15,7 @@ function lightning_telemetry_cron() {
 function lightning_telemetry_modules_installed($modules) {
   /** @var \Drupal\lightning_telemetry\Telemetry $telemetry_service */
   $telemetry_service = \Drupal::service('lightning_telemetry.telemetry');
-  $installed_lightning_extensions = array_intersect_key($modules, array_flip($telemetry_service->getLightningExtensionNames()));
+  $installed_lightning_extensions = array_intersect($modules, $telemetry_service->getLightningExtensionNames());
   if ($installed_lightning_extensions) {
     $event_properties = ['installed_extensions' => $installed_lightning_extensions];
     $telemetry_service->sendTelemetry('Lightning extensions installed', $event_properties);
@@ -28,7 +28,7 @@ function lightning_telemetry_modules_installed($modules) {
 function lightning_telemetry_modules_uninstalled($modules) {
   /** @var \Drupal\lightning_telemetry\Telemetry $telemetry_service */
   $telemetry_service = \Drupal::service('lightning_telemetry.telemetry');
-  $uninstalled_lightning_extensions = array_intersect_key($modules, array_flip($telemetry_service->getLightningExtensionNames()));
+  $uninstalled_lightning_extensions = array_intersect($modules, $telemetry_service->getLightningExtensionNames());
   if ($uninstalled_lightning_extensions) {
     $event_properties = ['uninstalled_extensions' => $uninstalled_lightning_extensions];
     $telemetry_service->sendTelemetry('Lightning extensions uninstalled', $event_properties);
