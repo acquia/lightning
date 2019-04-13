@@ -8,6 +8,13 @@ namespace Drupal\lightning\Form;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
 
+/**
+ * Class TelemetryOptInForm.
+ *
+ * This form is displayed during the Lightning install process.
+ *
+ * @package Drupal\lightning\Form
+ */
 class TelemetryOptInForm extends FormBase {
 
   /**

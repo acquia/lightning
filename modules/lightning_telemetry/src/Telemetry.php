@@ -11,7 +11,17 @@ use GuzzleHttp\ClientInterface;
  */
 class Telemetry {
 
+  /**
+   * Amplitude API URL.
+   */
   const AMPLITUDE_API_URL = 'https://api.amplitude.com/httpapi';
+
+  /**
+   * Amplitude API key.
+   *
+   * This is not intended to be private. It is typically included in client
+   * side code. Fetching data requires an additional API secret.
+   */
   const AMPLITUDE_API_KEY = 'f32aacddde42ad34f5a3078a621f37a9';
 
   /**
@@ -101,7 +111,10 @@ class Telemetry {
   }
 
   /**
+   * Get an array of information about Lightning extensions.
+   *
    * @return array
+   *   An array of extension info keyed by the extensions machine name.
    */
   protected function getExtensionInfo() {
     $all_modules = $this->extensionListModule->getAllAvailableInfo();
@@ -136,6 +149,7 @@ class Telemetry {
    *   The event data.
    *
    * @return \Drupal\lightning_telemetry\Event
+   *   An Amplitude event with basic info already populated.
    */
   protected function createEvent($type, $data) {
     $user_id = $this->config_factory->get('system.site')->get('uuid');
@@ -149,7 +163,10 @@ class Telemetry {
   }
 
   /**
+   * Gets an array of all Lightning Drupal extensions.
+   *
    * @return array
+   *   A flat array of all Lightning Drupal extensions.
    */
   protected function getLightningExtensionNames(): array {
     $lightning_modules_names = [

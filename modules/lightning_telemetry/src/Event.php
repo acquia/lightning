@@ -17,17 +17,29 @@ class Event {
   /**
    * An array of event data.
    *
+   * This key value pair will be sent to Amplitude as event_properties.
+   *
    * @var array
    */
   protected $data;
 
+  /**
+   * The Amplitude user id for the event.
+   *
+   * We do not use actual user ids. Instead, the UUID of the application is
+   * used to uniquely identify the event while preserving anonymity.
+   *
+   * @var string
+   */
   protected $user_id;
 
   /**
    * Event constructor.
    *
    * @param string $type
+   *   The event type.
    * @param array $data
+   *   The event properties.
    */
   public function __construct($type, $user_id, $data = []) {
     $this->type = $type;
@@ -36,9 +48,13 @@ class Event {
   }
 
   /**
-   * @param $data
+   * Sets $this->data.
+   *
+   * @param array $data
+   *   The event properties.
    *
    * @return $this
+   *   The event object.
    */
   public function setData($data) {
     $this->data = $data;
@@ -46,6 +62,15 @@ class Event {
     return $this;
   }
 
+  /**
+   * Merges $data with existing $this->data.
+   *
+   * @param array $data
+   *   Event properties.
+   *
+   * @return $this
+   *   The event object.
+   */
   public function addData($data) {
     $this->data = array_merge_recursive($this->data, $data);
 
@@ -53,7 +78,10 @@ class Event {
   }
 
   /**
+   * Converts the event object to a JSON string that Amplitude will accept.
+   *
    * @return string
+   *   JSON string that Amplitude will accept.
    */
   public function __toJson() {
     return json_encode(
