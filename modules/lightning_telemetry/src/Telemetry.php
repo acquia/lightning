@@ -13,6 +13,8 @@ class Telemetry {
 
   /**
    * Amplitude API URL.
+   *
+   * @see https://developers.amplitude.com/#http-api
    */
   const AMPLITUDE_API_URL = 'https://api.amplitude.com/httpapi';
 
@@ -21,6 +23,8 @@ class Telemetry {
    *
    * This is not intended to be private. It is typically included in client
    * side code. Fetching data requires an additional API secret.
+   *
+   * @see https://developers.amplitude.com/#http-api
    */
   const AMPLITUDE_API_KEY = 'f32aacddde42ad34f5a3078a621f37a9';
 
@@ -74,6 +78,8 @@ class Telemetry {
    *
    * @return bool
    *   TRUE if the request to Amplitude was successful.
+   *
+   * @see https://developers.amplitude.com/#http-api
    */
   protected function sendEvent(Event $event) {
     $response = $this->httpClient->request('POST', self::AMPLITUDE_API_URL, [

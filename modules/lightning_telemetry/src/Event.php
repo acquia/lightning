@@ -3,7 +3,9 @@
 namespace Drupal\lightning_telemetry;
 
 /**
- * AmplitudeEvent.
+ * An event object as defined by Amplitude API specifications.
+ *
+ * @see https://developers.amplitude.com/#http-api
  */
 class Event {
 
@@ -24,9 +26,9 @@ class Event {
   protected $data;
 
   /**
-   * The Amplitude user id for the event.
+   * The Amplitude user ID for the event.
    *
-   * We do not use actual user ids. Instead, the UUID of the application is
+   * We do not use actual user ID. Instead, the UUID of the application is
    * used to uniquely identify the event while preserving anonymity.
    *
    * @var string
