@@ -2,6 +2,8 @@
 
 namespace Drupal\lightning_telemetry;
 
+use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
 use GuzzleHttp\ClientInterface;
@@ -29,13 +31,6 @@ class Telemetry {
   const AMPLITUDE_API_KEY = 'f32aacddde42ad34f5a3078a621f37a9';
 
   /**
-   * The module handler to invoke the alter hook with.
-   *
-   * @var \Drupal\Core\Extension\ModuleHandlerInterface
-   */
-  protected $moduleHandler;
-
-  /**
    * The extension.list.module service.
    *
    * @var \Drupal\Core\Extension\ModuleExtensionList
@@ -50,6 +45,8 @@ class Telemetry {
   protected $httpClient;
 
   /**
+   * The config.factory service.
+   *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
   protected $config_factory;
@@ -77,7 +74,7 @@ class Telemetry {
    *   The Amplitude event.
    *
    * @return bool
-   *   TRUE if the request to Amplitude was successful.
+   *   TRUE if the request to Amplitude was successful, FALSE otherwise.
    *
    * @see https://developers.amplitude.com/#http-api
    */
@@ -85,12 +82,11 @@ class Telemetry {
     $response = $this->httpClient->request('POST', self::AMPLITUDE_API_URL, [
       'form_params' => [
         'api_key' => self::AMPLITUDE_API_KEY,
-        'event' => $event->__toJson(),
+        'event' => Json::encode($event),
       ]
     ]);
-    $success = $response->getStatusCode() == 200;
 
-    return $success;
+    return $response->getStatusCode() == 200;
   }
 
   /**
@@ -165,7 +161,7 @@ class Telemetry {
     $default_properties['extensions'] = $this->getExtensionInfo();
     $default_properties['php']['version'] = phpversion();
     $default_properties['drupal']['version'] = \Drupal::VERSION;
-    $properties = array_merge_recursive($default_properties, $properties);
+    $properties = NestedArray::mergeDeep($default_properties, $properties);
     $event = new Event($type, $user_id, $properties);
 
     return $event;

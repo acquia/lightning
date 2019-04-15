@@ -2,12 +2,14 @@
 
 namespace Drupal\lightning_telemetry;
 
+use Drupal\Component\Serialization\Json;
+
 /**
  * An event object as defined by Amplitude API specifications.
  *
  * @see https://developers.amplitude.com/#http-api
  */
-class Event {
+class Event implements \JsonSerializable {
 
   /**
    * The event type.
@@ -65,19 +67,22 @@ class Event {
   }
 
   /**
-   * Converts the event object to a JSON string that Amplitude will accept.
+   * Converts the event object to a serializable array for the Amplitude API.
    *
-   * @return string
-   *   JSON string that Amplitude will accept.
+   * This method will be be called by PHP whenever json_encode() is used on
+   * an object of this class.
+   *
+   * @return array
+   *   An array, to be serialized json  that the Amplitude API will accept.
+   *
+   * @see https://amplitude.zendesk.com/hc/en-us/articles/204771828#keys-for-the-event-argument
    */
-  public function __toJson() {
-    return json_encode(
-      [
+  public function jsonSerialize() {
+     return [
         'event_type' => $this->type,
         'user_id' => $this->user_id,
         'event_properties' => $this->data,
-      ]
-    );
+      ];
   }
 
 }
