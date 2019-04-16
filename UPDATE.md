@@ -140,11 +140,98 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
-### 3.x to 4.x
-There is currently no migration between 3.x and 4.x. A migration will be
-provided once Lightning Layout 2.x is stable.
+### 3.3.0-beta1 to 4.0.0-beta1
+Lightning 4.0.0-beta1 includes Lightning Layout 2.0, which uses Layout Builder
+in place of Panels and Panelizer. However, both modules are still packaged with
+Lightning Layout, allowing you to migrate your layouts manually to Layout
+Builder as needed. An automated migration path will eventually be introduced,
+but until then, any Panelizer/Panels layouts you have should continue to work
+as before.
 
-### 3.1.5 to 3.2.0-beta1
+### 3.2.7 to 3.3.0-beta1
+There are no manual update steps for this version.
+
+### 3.2.6 to 3.2.7
+There are no manual update steps for this version.
+
+### 3.2.5 to 3.2.6
+* If you would like to enable support for user account pictures (avatars):
+  1. Create a new image field on user accounts. In Lightning Core, this field
+     is called "Picture" by default and its machine name is user_picture.
+  2. Set the file default-avatar.png, contained in the `images` directory
+     of Lightning Core, to be the default image for the field.
+  2. Customize the display of the "Compact" view mode for user accounts, and
+     ensure that the new image field is displayed using the Thumbnail image
+     style.
+* If you would like to display the media browser in a modal window, rather than
+  in an iFrame, follow these instructions:
+  1. Create a clone of the media browser which will only be used when embedding
+     media using the WYSIWYG editor. There is no easy way to duplicate the media
+     browser from the administrative backend, but you can run a bit of PHP code
+     at the command line with Drush (or, if you have Devel installed, at the
+     `/devel/php` path) to do it:
+```
+drush php:eval "entity_load('entity_browser', 'media_browser')->createDuplicate()->setName('ckeditor_media_browser')
+>setLabel('Media browser (CKEditor)')->save();"
+```
+  2. Configure the "Media browser" embed button to use the duplicate you just
+     created.
+  3. Grant permissions to use the duplicate entity browser to the "Media
+     creator" and "Media manager" user roles.
+  4. If you have Lightning Roles installed, you'll also need to grant access to
+     the duplicate by executing this PHP code (again, this can be done at the
+     command line with Drush, as in this example, or at `/devel/php` if you have
+     Devel installed):
+```
+drush php:eval "Drupal::service('lightning.content_roles')->grantPermissions('creator', 'use ckeditor_media_browser entity browser pages');"
+```
+  5. Edit the pre-existing media browser -- _not_ the duplicate -- to use the
+     Modal display plugin. Leave the "Width" and "Height" options empty to make
+     the modal dialog responsive, set the link text to "Add media", and disable
+     auto-open. Save the changes to the media browser.
+
+### 3.2.4 to 3.2.5
+There are no manual update steps for this version.
+
+### 3.2.3 to 3.2.4
+* Configure the "Show in media library" field of the "Audio file" media type to
+  be non-translatable.
+* Configure the "Show in media library" field of the "Video" media type to be
+  non-translatable.
+* Configure the "Show in media library" field of the "Video file" media type to
+  be non-translatable.
+* If you have the "Moderation history" view installed:
+  1. Replace the author field, which displays the original creator of the node,
+     with a new field that displays the author of the revision. This will
+     require you to add a relationship to the revision author.
+  2. Replace the creation time field, which displays the time that the node was
+     originally created, with a new field that displays the time that the
+     revision was created.
+  3. Rewrite the content of the "Moderation state" field to this Twig template
+     code:
+```
+Set to <strong>{{ moderation_state }}</strong> on {{ revision_timestamp }} by {{ revision_uid }}
+```
+
+### 3.2.2 to 3.2.3
+There are no manual update steps for this version.
+
+### 3.2.1 to 3.2.2
+There are no manual update steps for this version.
+
+### 3.2.0 to 3.2.1
+* Install the Media Library module (in the "Core (Experimental)" group). Then,
+  for each media type, create a new display, called "Media library", containing
+  only the thumbnail image, displayed using the thumbnail image style.
+* Install the new "Media Slideshow" module (in the "Lightning" group).
+* Install the Moderation Dashboard module. By default, this will cause users to
+  be redirected to their moderation dashboard upon logging in. To disable this
+  behavior, run the following Drush command:
+```
+drush config:set moderation_dashboard.settings redirect_on_login 0
+```
+
+### 3.1.7 to 3.2.0
 * If you have any sub-profiles (regardless of whether or not they extend
   Lightning), you must change their info files to work with Drupal 8.6.0:
   * Change `base profile` to a string, containing the name of the base
@@ -167,6 +254,35 @@ exclude:
   - pathauto
   - bartik
 ```
+
+### 3.1.6 to 3.1.7
+* There are no manual update steps for this version.
+
+### 3.1.5 to 3.1.6
+* If you would like to create media items for audio files, enable the new
+  Media Audio module (lightning_media_audio).
+* Rename every instance of the "Save to media library" field (present on all
+  media types by default) to "Show in media library".
+* If you would like to create media items for video files, create a new
+  media type called "Video file", using the "Video file" source. Then, create
+  two new view displays for this media type: one called "Thumbnail", which
+  only displays the media thumbnail using the "Medium" image style, and one
+  called "Embedded", which displays the "Video file" field using the "Video"
+  formatter. Additionally, create a form display for this media type, using
+  the "Media browser" form mode, which displays, in order:
+  1. The "Name" field using the "Text field" widget
+  2. The "Video file" field using the "File" widget
+  3. The "Show in media library" field using the "Single on/off checkbox" widget
+  4. The "Published" field using the "Single on/off checkbox" widget
+* If you would like to be able to change the moderation states of content
+  without having to visit the edit form, install the Moderation Sidebar module.
+* If you'd like to streamline the Editorial workflow, edit it and make the
+  following modifications:
+  1. Rename the "Review" transition to "Send to review".
+  2. Rename the "Restore" transition to "Restore from archive".
+  3. Remove the "Restore to draft" transition, and edit the "Create new draft"
+     transition to allow content to be transitioned from the Archived state to
+     the Draft state.
 
 ### 3.1.4 to 3.1.5
 There are no manual update steps for this version.

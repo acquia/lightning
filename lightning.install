@@ -63,15 +63,15 @@ function lightning_update_8002() {
  * Enables the lightning_core module.
  */
 function lightning_update_8003() {
-  \Drupal::service('module_installer')->install(['lightning_core']);
+  Drupal::service('module_installer')->install(['lightning_core']);
 }
 
 /**
  * Enables Entity API.
  */
 function lightning_update_8004() {
-  require_once __DIR__ . '/.entity-helper.php';
-  \Drupal::service('module_installer')->install(['entity']);
+  eval('interface Drupal\entity\Entity\RevisionableEntityBundleInterface {}');
+  Drupal::service('module_installer')->install(['entity']);
 }
 
 /**

@@ -1,8 +1,125 @@
-## 4.0.0
-* Lightning Layout now uses core's Layout Builder. (Issue #2952620)
+## 4.0.0-beta1
+* Updated Lightning Layout to 2.0-beta1, which:
+  * Uses Layout Builder in place of Panels and Panelizer. However, both modules
+    are still shipped with Lightning Layout, allowing you to migrate your
+    layouts to Layout Builder manually as needed. An automated migration path
+    will eventually be introduced, but until then, any Panelizer/Panels layouts
+    you have should continue to work as before. (Issue #2952620)
+
+## 3.3.0-beta1
+* Updated Lightning Core to 4.0-beta1, which:
+  * Updated Drupal core to 8.7.0-beta1.
+* Updated Lightning API to 4.0-beta1, which:
+  * Updated Lightning Core to 4.0.0-beta1, which requires Drupal core 8.7.0 and
+    replaces the contributed JSON:API module with the core version.
+* Updated Lightning Workflow to 3.6, which:
+  * Fixed a bug that could occur with Drupal 8.7 when installing the
+    moderation_history view.
+
+## 3.2.7
+* Updated Lightning Core to 3.9, which:
+  * Security updated Drupal core to 8.6.13 (SA-CORE-2019-004).
+  * Removed deprecated function calls. (Issue #3034195)
+* Updated Lightning API to 3.5, which:
+  * Adds support for Drupal core 8.7.
+  * Updates Consumers module to 1.9 and unpins its Composer
+    constraint.
+* Updated Lightning Media to 3.8, which:
+  * Adds support for Drupal core 8.7.
+  * Updates Entity Browser to 2.1.
+  * Adds a link to the settings form on the module list page.
+    (Issue #3033650)
+  * Adds descriptions to administrative links. (Issue #3034042)
+* Updated Lightning Layout to 1.7, which:
+  * Adds support for Drupal core 8.7.
+  * Adds a description to an administrative link. (Issue #3034041)
+* Updated Lightning Workflow to 3.5, which:
+  * Adds support for Drupal core 8.7.
+  * Fixed missing configure button for Lightning Scheduler module in
+    list page. (Issue #3034047)
+  * Replaces entity_load() calls with entity load(). (Issue #3033637)
+  * Adds a missing description in Lightning Scheduler module in
+    links.menu.yml file. (Issue #3034048)
+
+## 3.2.6
+* Updated Lightning Core to 3.7, which:
+  * Security updated Drupal core to 8.6.10 (SA-CORE-2019-003).
+  * Security updated Metatag to 1.8 (SA-CONTRIB-2019-021).
+  * Now supports attaching pictures to user accounts, and includes a Compact
+    display which displays the user's picture and name, both optionally linked
+    to the user's profile. (Issue #3026959)
+  * Now includes a "Long (12-hour)" date format, which formats dates and times
+    like "April 1, 2019 at 4:20 PM".
+  * Fixed a bug where Lightning's utility to convert descendant profiles to the
+    Drupal 8.6-compatible format would fail if the active profile was itself a
+    descendant profile. (Issue #2997990)
+  * Fixed an "undefined index" bug that could happen when processing form elements
+    which can have legends. (Issue #3018499)
+  * Namespaced all declared dependencies. (Issue #2995711)
+* Updated Lightning API to 3.4, which:
+  * Security updated JSON API to 2.3 (SA-CONTRIB-2019-019).
+* Updated Lightning Media to 3.6, which has the following changes:
+  * The media browser is now displayed in a modal dialog by default, which
+  is activated by pressing the "Add media" button. When embedding media in
+  the WYSIWYG editor, the media browser is unchanged (the entity browser
+  used for WYSIWYG has been split out into a completely separate entity
+  browser configuration in order to facilitate this). (GitHub #80)
+
+## 3.2.5
+* Security updated Acquia Connector to 1.16 (SA-CONTRIB-2019-014)
+* Updated Consumers to 1.8.
+* Updated JSON:API to 2.1.
+
+## 3.2.4
+* Updated Lightning Core to 3.5, which:
+  * Security updated Drupal core to 8.6.6.
+  * Will automatically clear all persistent caches _before_ running database
+    updates with Drush 9.
+* Updated Lightning API to 3.2, which introduces no user-facing changes.
+* Updated Lightning Layout to 1.6, which introduces no user-facing changes.
+* Updated Lightning Media to 3.5, which:
+  * Added a configuration option to control whether newly-created media fields
+    (i.e., entity reference fields which reference media items) will be
+    configured to use the media browser by default. (Issue #2945153)
+  * Made the "Show in media library" field non-translatable by default in every
+    media type included with Lightning Media. (Issue #3014913)
+* Updated Lightning Workflow to 3.3, which:
+  * Made the time steps in Lightning Scheduler's UI configurable.
+    (Issue #2981050)
+  * Fixed a bug in the Moderation History where the users and timestamps didn't
+    correctly correspond to the actual revisions. (Issue #3022898)
+  * Updated Moderation Dashboard to its latest stable version.
+  * Refactored underlying scheduler UI code to be less sensitive to time zones.
+  * Added project namespaces to all stated dependencies. (Issue #2999322)
+* Changes were made to the internal testing infrastructure, but nothing that
+  will affect users of Lightning.
+
+## 3.2.3
+* Lightning API now defaults to the 2.x branch of the JSON:API module.
+  [See the release notes for the 2.x branch](https://www.drupal.org/project/jsonapi/releases/8.x-2.0-beta1).
+
+  If you must use the 1.x branch, you can switch to it with the following commands:
+
+  ```
+  composer require drupal/lightning_api:^2.7 --no-update
+  composer update drupal/lightning_api --with-all-dependencies
+  ```
+* Updated Lightning Layout to 1.5.
+* Updated Lightning Media to 3.4.
+* Updated Lightning Workflow to 3.2.
+
+## 3.2.2
+* Updated Lightning Core to 3.2, which security updates Drupal core
+  to 8.6.2.
+
+## 3.2.1
+* Updated Lightning Media to 3.1.
+* Updated Lightning Workflow to 3.1.
 
 ## 3.2.0
-* Drupal core has been updated to 8.6.0.
+* Updated Lightning Core to 3.0, which requires Drupal core 8.6.0.
+* Updated Lightning Workflow to 3.0.
+* Updated Lightning Media to 3.0.
 * Pathauto is now installed by default. (#588)
 * The `lightning:subprofile` command is no longer compatible with the
   sub-profile system from Drupal 8.5.x. The `dependencies` list is replaced by
