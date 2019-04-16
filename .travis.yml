@@ -49,9 +49,9 @@ install:
   - orca static-analysis:run ./
 
   # Use ORCA to build the code base.
-  - orca fixture:init -f --sut $ORCA_SUT_NAME --core 8.7.x-dev --dev --profile lightning
+  - orca fixture:init -f --sut $ORCA_SUT_NAME --core ~8.7.0-beta2 --dev --profile lightning
   # Install dev dependencies.
-  - composer require --dev drupal/console --working-dir $ORCA_FIXTURE --no-update
+  - composer require --dev drupal/console webflo/drupal-core-require-dev:~8.7.0-beta2 --working-dir $ORCA_FIXTURE --no-update
   # Update in a separate step to prevent lock file version conflicts.
   - composer update --working-dir $ORCA_FIXTURE
 

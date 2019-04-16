@@ -1,4 +1,6 @@
 ## 4.0.0-beta1
+* Updated Lightning Core to 4.0-beta2, which:
+  * Updated Drupal core to 8.7.0-beta2.
 * Updated Lightning Layout to 2.0-beta1, which:
   * Uses Layout Builder in place of Panels and Panelizer. However, both modules
     are still shipped with Lightning Layout, allowing you to migrate your
