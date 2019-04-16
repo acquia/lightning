@@ -2,14 +2,14 @@
 
 namespace Drupal\lightning_telemetry;
 
-use Drupal\Component\Serialization\Json;
+use JsonSerializable;
 
 /**
  * An event object as defined by Amplitude API specifications.
  *
  * @see https://developers.amplitude.com/#http-api
  */
-class Event implements \JsonSerializable {
+class Event implements JsonSerializable {
 
   /**
    * The event type.

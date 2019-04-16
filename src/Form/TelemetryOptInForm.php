@@ -58,12 +58,12 @@ class TelemetryOptInForm extends FormBase {
    * {@inheritdoc}
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
-    $form['#title'] = "Telemetry Opt-in";
+    $form['#title'] = "Telemetry opt-in";
     $form['allow_telemetry'] = array(
       '#type' => 'checkbox',
       '#title' => t('Allow Lightning to send anonymous telemetry data to Acquia'),
       // @todo Revise and finalize language.
-      '#description' => t('This module sends anonymous data about Acquia product usage to Acquia for product development purposes. No private information will be gathered. Data will not be used marketing
+      '#description' => t('This module sends anonymous data about Acquia product usage to Acquia for product development purposes. No private information will be gathered. Data will not be used for marketing
 and will not be sold to any third parties. Telemetry can be disabled at any time by uninstalling the lightning_telemetry module.')
     );
     $form['actions']['#type'] = 'actions';

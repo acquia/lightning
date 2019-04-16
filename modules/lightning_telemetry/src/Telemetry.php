@@ -157,7 +157,7 @@ class Telemetry {
    *   An Amplitude event with basic info already populated.
    */
   protected function createEvent($type, $properties) {
-    $user_id = $this->config_factory->get('system.site')->get('uuid');
+    $user_id = $this->getUserId();
     $default_properties['extensions'] = $this->getExtensionInfo();
     $default_properties['php']['version'] = phpversion();
     $default_properties['drupal']['version'] = \Drupal::VERSION;
@@ -165,6 +165,10 @@ class Telemetry {
     $event = new Event($type, $user_id, $properties);
 
     return $event;
+  }
+
+  protected function getUserId() {
+    return $this->config_factory->get('system.site')->get('uuid');
   }
 
   /**
