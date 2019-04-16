@@ -3,6 +3,7 @@
 namespace Drupal\acquia_telemetry;
 
 use Drupal\Component\Serialization\Json;
+use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
@@ -172,8 +173,13 @@ class Telemetry {
     return $event;
   }
 
+  /**
+   * Gets a unique ID for this application. "User ID" is an Amplitude term.
+   *
+   * @return string
+   */
   protected function getUserId() {
-    return $this->config_factory->get('system.site')->get('uuid');
+    return Crypt::hashBase64($this->config_factory->get('system.site')->get('uuid'));
   }
 
   /**
