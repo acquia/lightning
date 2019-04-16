@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lightning_telemetry;
+namespace Drupal\acquia_telemetry;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Utility\NestedArray;
@@ -70,7 +70,7 @@ class Telemetry {
   /**
    * Sends an event to Amplitude.
    *
-   * @param \Drupal\lightning_telemetry\Event $event
+   * @param \Drupal\acquia_telemetry\Event $event
    *   The Amplitude event.
    *
    * @return bool
@@ -90,15 +90,20 @@ class Telemetry {
   }
 
   /**
-   * Creates and sends a cron event to Amplitude.
+   * Creates and sends an event to Amplitude.
    *
    * @param string $event_type
-   *   The event type.
+   *   The event type. This accepts any string that is not reserved. Reserved
+   *   event types include: "[Amplitude] Start Session", "[Amplitude] End
+   *   Session", "[Amplitude] Revenue", "[Amplitude] Revenue (Verified)",
+   *   "[Amplitude] Revenue (Unverified)", and "[Amplitude] Merged User".
    *
    * @param array $event_properties
    *   Event properties.
    *
    * @throws \Exception
+   *
+   * @see https://amplitude.zendesk.com/hc/en-us/articles/204771828#keys-for-the-event-argument
    */
   public function sendTelemetry($event_type, array $event_properties = []) {
     $event = $this->createEvent($event_type, $event_properties);
@@ -109,7 +114,7 @@ class Telemetry {
       $this->sendEvent($event);
     }
     catch (\Exception $e) {
-      if (getenv('LIGHTNING_TELEMETRY_LOUD')) {
+      if (getenv('ACQUIA_TELEMETRY_LOUD')) {
         throw $e;
       }
     }
@@ -123,17 +128,17 @@ class Telemetry {
    */
   protected function getExtensionInfo() {
     $all_modules = $this->extensionListModule->getAllAvailableInfo();
-    $lightning_extensions = array_intersect_key($all_modules, array_flip($this->getLightningExtensionNames()));
+    $acquia_extensions = array_intersect_key($all_modules, array_flip($this->getAcquiaExtensionNames()));
     $extension_info = [];
 
-    foreach ($lightning_extensions as $name => $extension) {
+    foreach ($acquia_extensions as $name => $extension) {
       // Version is unset for dev versions.
       $version = $extension['version'] ? $extension['version'] : $extension['core'];
       $extension_info[$name]['version'] = $version;
     }
 
     $installed_modules = $this->extensionListModule->getAllInstalledInfo();
-    foreach ($lightning_extensions as $name => $extension) {
+    foreach ($acquia_extensions as $name => $extension) {
       if (array_key_exists($name, $installed_modules)) {
         $extension_info[$name]['status'] = 'enabled';
       }
@@ -153,7 +158,7 @@ class Telemetry {
    * @param array $properties
    *   The event properties.
    *
-   * @return \Drupal\lightning_telemetry\Event
+   * @return \Drupal\acquia_telemetry\Event
    *   An Amplitude event with basic info already populated.
    */
   protected function createEvent($type, $properties) {
@@ -172,13 +177,13 @@ class Telemetry {
   }
 
   /**
-   * Gets an array of all Lightning Drupal extensions.
+   * Gets an array of all Acquia Drupal extensions.
    *
    * @return array
-   *   A flat array of all Lightning Drupal extensions.
+   *   A flat array of all Acquia Drupal extensions.
    */
-  public function getLightningExtensionNames(): array {
-    $lightning_extension_names = [
+  public function getAcquiaExtensionNames(): array {
+    $acquia_extension_names = [
       'lightning',
       'lightning_api',
       'lightning_core',
@@ -188,7 +193,7 @@ class Telemetry {
       'lightning_workflow',
     ];
 
-    return $lightning_extension_names;
+    return $acquia_extension_names;
   }
 
 }

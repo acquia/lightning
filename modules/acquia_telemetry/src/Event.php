@@ -1,6 +1,6 @@
 <?php
 
-namespace Drupal\lightning_telemetry;
+namespace Drupal\acquia_telemetry;
 
 use JsonSerializable;
 

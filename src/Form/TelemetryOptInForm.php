@@ -32,7 +32,7 @@ class TelemetryOptInForm extends FormBase {
    * {@inheritdoc}
    */
   public function getFormId() {
-    return 'lightning_telemetry_opt_in';
+    return 'acquia_telemetry_opt_in';
   }
 
   /**
