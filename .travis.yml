@@ -6,12 +6,12 @@ cache:
   directories:
     - "$HOME/.composer/cache"
     - "$HOME/.drush/cache"
-    - "$HOME/.npm"
+
 php:
   - 7.0
+
 env:
   - VERSION=HEAD
-  - VERSION=3.1.11
   # The final CI slot should be used to test the update path from the oldest
   # available database fixture.
   - VERSION=3.0.0
@@ -40,9 +40,7 @@ install:
   # acknowledge all prompts.
   - yes '' | pecl install yaml
   # Tweak PHP configuration.
-  - echo 'max_execution_time = 120' >> drupal.php.ini;
-  - echo 'sendmail_path = /bin/true' >> drupal.php.ini;
-  - phpenv config-add drupal.php.ini
+  - phpenv config-add tests/travis.php.ini
   - phpenv rehash
 
   # Build the Lightning code base with the latest dependencies.
