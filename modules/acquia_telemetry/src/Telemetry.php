@@ -14,7 +14,7 @@ use GuzzleHttp\ClientInterface;
 /**
  * Telemetry service.
  */
-final class Telemetry {
+class Telemetry {
 
   /**
    * Amplitude API URL.
