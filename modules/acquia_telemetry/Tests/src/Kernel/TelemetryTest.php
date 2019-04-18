@@ -8,7 +8,7 @@ use Drupal\KernelTests\KernelTestBase;
 /**
  * @group lightning
  *
- * @coversDefaultClass \Drupal\acquia_lightning\Telemetry
+ * @coversDefaultClass \Drupal\acquia_telemetry\Telemetry
  */
 class TelemetryTest extends KernelTestBase {
 
