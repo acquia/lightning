@@ -40,7 +40,7 @@ class Telemetry {
    *
    * @var \Drupal\Core\Extension\ModuleExtensionList
    */
-  private $moduleExtensionList;
+  private $moduleList;
 
   /**
    * The HTTP client.
@@ -73,15 +73,19 @@ class Telemetry {
   /**
    * Constructs a telemetry object.
    *
-   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_list
    *   The extension.list.module service.
    * @param \GuzzleHttp\ClientInterface $http_client
    *   The HTTP client.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config.factory service.
+   * @param \Drupal\Core\State\StateInterface $state
+   *   The state service.
+   * @param string $app_root
+   *   The Drupal application root.
    */
-  public function __construct(ModuleExtensionList $module_extension_list, ClientInterface $http_client, ConfigFactoryInterface $config_factory, StateInterface $state, $app_root) {
-    $this->moduleExtensionList = $module_extension_list;
+  public function __construct(ModuleExtensionList $module_list, ClientInterface $http_client, ConfigFactoryInterface $config_factory, StateInterface $state, $app_root) {
+    $this->moduleList = $module_list;
     $this->httpClient = $http_client;
     $this->configFactory = $config_factory;
     $this->state = $state;
@@ -119,7 +123,7 @@ class Telemetry {
    *   Session", "[Amplitude] Revenue", "[Amplitude] Revenue (Verified)",
    *   "[Amplitude] Revenue (Unverified)", and "[Amplitude] Merged User".
    * @param array $event_properties
-   *   Event properties.
+   *   (optional) Event properties.
    *
    * @return bool
    *   TRUE if event was successfully sent, otherwise FALSE.
@@ -152,7 +156,7 @@ class Telemetry {
    *   An array of extension info keyed by the extensions machine name.
    */
   private function getExtensionInfo() {
-    $all_modules = $this->moduleExtensionList->getAllAvailableInfo();
+    $all_modules = $this->moduleList->getAllAvailableInfo();
     $acquia_extensions = array_intersect_key($all_modules, array_flip($this->getAcquiaExtensionNames()));
     $extension_info = [];
 
@@ -162,7 +166,7 @@ class Telemetry {
       $extension_info[$name]['version'] = $version;
     }
 
-    $installed_modules = $this->moduleExtensionList->getAllInstalledInfo();
+    $installed_modules = $this->moduleList->getAllInstalledInfo();
     foreach ($acquia_extensions as $name => $extension) {
       $extension_info[$name]['status'] = array_key_exists($name, $installed_modules) ? 'enabled' : 'disabled';
     }
@@ -217,9 +221,7 @@ class Telemetry {
    */
   public function getAcquiaExtensionNames() {
     $discovery = new ComponentDiscovery($this->root);
-    $acquia_extension_names = array_keys($discovery->getAll());
-
-    return $acquia_extension_names;
+    return array_keys($discovery->getAll());
   }
 
 }
