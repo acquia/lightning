@@ -2,6 +2,7 @@
 
 namespace Drupal\lightning\Form;
 
+use Drupal\Core\Extension\ModuleExtensionList;
 use Drupal\Core\Extension\ModuleInstallerInterface;
 use Drupal\Core\Form\FormBase;
 use Drupal\Core\Form\FormStateInterface;
@@ -24,6 +25,13 @@ final class TelemetryOptInForm extends FormBase {
   private $moduleInstaller;
 
   /**
+   * The extension.list.module service.
+   *
+   * @var \Drupal\Core\Extension\ModuleExtensionList
+   */
+  protected $moduleExtensionList;
+
+  /**
    * {@inheritdoc}
    */
   public function getFormId() {
@@ -34,10 +42,13 @@ final class TelemetryOptInForm extends FormBase {
    * Constructs a new TelemetryOptInForm.
    *
    * @param ModuleInstallerInterface $module_installer
-   *   The module installer service.
+   *   The module_installer service.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
+   *   The extension.list.module service.
    */
-  public function __construct(ModuleInstallerInterface $module_installer) {
+  public function __construct(ModuleInstallerInterface $module_installer, ModuleExtensionList $module_extension_list) {
     $this->moduleInstaller = $module_installer;
+    $this->moduleExtensionList = $module_extension_list;
   }
 
   /**
@@ -45,7 +56,8 @@ final class TelemetryOptInForm extends FormBase {
    */
   public static function create(ContainerInterface $container) {
     return new static(
-      $container->get('module_installer')
+      $container->get('module_installer'),
+      $container->get('extension.list.module')
     );
   }
 
@@ -56,9 +68,8 @@ final class TelemetryOptInForm extends FormBase {
     $form['#title'] = "Telemetry opt-in";
     $form['allow_telemetry'] = [
       '#type' => 'checkbox',
-      '#title' => t('Allow Lightning to send anonymous telemetry data to Acquia'),
-      // @todo Revise and finalize language.
-      '#description' => $this->t('This module sends anonymous data about Acquia product usage to Acquia for product development purposes. No private information will be gathered. Data will not be used for marketing and will not be sold to any third parties. Telemetry can be disabled at any time by uninstalling the acquia_telemetry module.'),
+      '#title' => $this->t('Install Acquia Telemetry module'),
+      '#description' => $this->moduleExtensionList->get('acquia_telemetry')->info['description'],
     ];
     $form['actions']['#type'] = 'actions';
     $form['actions']['submit'] = [
