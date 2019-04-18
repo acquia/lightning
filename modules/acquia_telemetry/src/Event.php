@@ -40,10 +40,13 @@ final class Event implements \JsonSerializable {
    *
    * @param string $type
    *   The event type.
+   * @param string $user_id
+   *   The Amplitude user ID. This does not connote a Drupal user id. In the
+   *   context of this acquia_telemetry, it is simply a uuid.
    * @param array $data
    *   The event properties.
    */
-  public function __construct($type, $user_id, $data = []) {
+  public function __construct($type, $user_id, array $data = []) {
     $this->type = $type;
     $this->user_id = $user_id;
     $this->data = $data;
@@ -65,22 +68,19 @@ final class Event implements \JsonSerializable {
   }
 
   /**
-   * Converts the event object to a serializable array for the Amplitude API.
-   *
-   * This method will be be called by PHP whenever json_encode() is used on
-   * an object of this class.
+   * Implements \JsonSerializable::jsonSerialize().
    *
    * @return array
-   *   An array, to be serialized json  that the Amplitude API will accept.
+   *   An array, to be serialized JSON that the Amplitude API will accept.
    *
    * @see https://amplitude.zendesk.com/hc/en-us/articles/204771828#keys-for-the-event-argument
    */
   public function jsonSerialize() {
-     return [
-        'event_type' => $this->type,
-        'user_id' => $this->user_id,
-        'event_properties' => $this->data,
-      ];
+    return [
+      'event_type' => $this->type,
+      'user_id' => $this->user_id,
+      'event_properties' => $this->data,
+    ];
   }
 
 }

@@ -7,6 +7,8 @@ use Drupal\Component\Utility\Crypt;
 use Drupal\Component\Utility\NestedArray;
 use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\Extension\ModuleExtensionList;
+use Drupal\Core\State\StateInterface;
+use Drupal\lightning\ComponentDiscovery;
 use GuzzleHttp\ClientInterface;
 
 /**
@@ -19,7 +21,7 @@ class Telemetry {
    *
    * @see https://developers.amplitude.com/#http-api
    */
-  const AMPLITUDE_API_URL = 'https://api.amplitude.com/httpapi';
+  protected $apiUrl = 'https://api.amplitude.com/httpapi';
 
   /**
    * Amplitude API key.
@@ -29,14 +31,14 @@ class Telemetry {
    *
    * @see https://developers.amplitude.com/#http-api
    */
-  const AMPLITUDE_API_KEY = 'f32aacddde42ad34f5a3078a621f37a9';
+  protected $apiKey = 'f32aacddde42ad34f5a3078a621f37a9';
 
   /**
    * The extension.list.module service.
    *
    * @var \Drupal\Core\Extension\ModuleExtensionList
    */
-  protected $extensionListModule;
+  protected $moduleExtensionList;
 
   /**
    * The HTTP client.
@@ -53,19 +55,35 @@ class Telemetry {
   protected $config_factory;
 
   /**
+   * The state service.
+   *
+   * @var \Drupal\Core\State\StateInterface
+   */
+  protected $state;
+
+  /**
+   * The application root directory.
+   *
+   * @var string
+   */
+  protected $app_root;
+
+  /**
    * Constructs a telemetry object.
    *
-   * @param \Drupal\Core\Extension\ModuleExtensionList $extension_list_module
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_extension_list
    *   The extension.list.module service.
    * @param \GuzzleHttp\ClientInterface $http_client
    *   The HTTP client.
    * @param \Drupal\Core\Config\ConfigFactoryInterface $config_factory
    *   The config.factory service.
    */
-  public function __construct(ModuleExtensionList $extension_list_module, ClientInterface $http_client, ConfigFactoryInterface $config_factory) {
-    $this->extensionListModule = $extension_list_module;
+  public function __construct(ModuleExtensionList $module_extension_list, ClientInterface $http_client, ConfigFactoryInterface $config_factory, StateInterface $state, $app_root) {
+    $this->moduleExtensionList = $module_extension_list;
     $this->httpClient = $http_client;
     $this->config_factory = $config_factory;
+    $this->state = $state;
+    $this->root = $app_root;
   }
 
   /**
@@ -80,14 +98,14 @@ class Telemetry {
    * @see https://developers.amplitude.com/#http-api
    */
   protected function sendEvent(Event $event) {
-    $response = $this->httpClient->request('POST', self::AMPLITUDE_API_URL, [
+    $response = $this->httpClient->request('POST', $this->apiUrl, [
       'form_params' => [
-        'api_key' => self::AMPLITUDE_API_KEY,
+        'api_key' => $this->apiKey,
         'event' => Json::encode($event),
       ]
     ]);
 
-    return $response->getStatusCode() == 200;
+    return $response->getStatusCode() === 200;
   }
 
   /**
@@ -106,6 +124,7 @@ class Telemetry {
    *   TRUE if event was successfully sent, otherwise FALSE.
    *
    * @throws \Exception
+   *   Thrown if state key acquia_telemetry.loud is TRUE and request fails.
    *
    * @see https://amplitude.zendesk.com/hc/en-us/articles/204771828#keys-for-the-event-argument
    */
@@ -118,7 +137,7 @@ class Telemetry {
       return $this->sendEvent($event);
     }
     catch (\Exception $e) {
-      if (getenv('ACQUIA_TELEMETRY_LOUD')) {
+      if ($this->state->get('acquia_telemetry.loud')) {
         throw $e;
       }
       return FALSE;
@@ -132,24 +151,19 @@ class Telemetry {
    *   An array of extension info keyed by the extensions machine name.
    */
   protected function getExtensionInfo() {
-    $all_modules = $this->extensionListModule->getAllAvailableInfo();
+    $all_modules = $this->moduleExtensionList->getAllAvailableInfo();
     $acquia_extensions = array_intersect_key($all_modules, array_flip($this->getAcquiaExtensionNames()));
     $extension_info = [];
 
     foreach ($acquia_extensions as $name => $extension) {
       // Version is unset for dev versions.
-      $version = $extension['version'] ? $extension['version'] : $extension['core'];
+      $version = isset($extension['version']) ? $extension['version'] : $extension['core'];
       $extension_info[$name]['version'] = $version;
     }
 
-    $installed_modules = $this->extensionListModule->getAllInstalledInfo();
+    $installed_modules = $this->moduleExtensionList->getAllInstalledInfo();
     foreach ($acquia_extensions as $name => $extension) {
-      if (array_key_exists($name, $installed_modules)) {
-        $extension_info[$name]['status'] = 'enabled';
-      }
-      else {
-        $extension_info[$name]['status']  = 'disabled';
-      }
+      $extension_info[$name]['status'] = array_key_exists($name, $installed_modules) ? 'enabled' : 'disabled';
     }
 
     return $extension_info;
@@ -192,16 +206,9 @@ class Telemetry {
    * @return array
    *   A flat array of all Acquia Drupal extensions.
    */
-  public function getAcquiaExtensionNames(): array {
-    $acquia_extension_names = [
-      'lightning',
-      'lightning_api',
-      'lightning_core',
-      'lightning_dev',
-      'lightning_layout',
-      'lightning_media',
-      'lightning_workflow',
-    ];
+  public function getAcquiaExtensionNames() {
+    $discovery = new ComponentDiscovery($this->root);
+    $acquia_extension_names = array_keys($discovery->getAll());
 
     return $acquia_extension_names;
   }
