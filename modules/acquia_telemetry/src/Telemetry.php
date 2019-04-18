@@ -14,14 +14,14 @@ use GuzzleHttp\ClientInterface;
 /**
  * Telemetry service.
  */
-class Telemetry {
+final class Telemetry {
 
   /**
    * Amplitude API URL.
    *
    * @see https://developers.amplitude.com/#http-api
    */
-  protected $apiUrl = 'https://api.amplitude.com/httpapi';
+  private $apiUrl = 'https://api.amplitude.com/httpapi';
 
   /**
    * Amplitude API key.
@@ -31,42 +31,42 @@ class Telemetry {
    *
    * @see https://developers.amplitude.com/#http-api
    */
-  protected $apiKey = 'f32aacddde42ad34f5a3078a621f37a9';
+  private $apiKey = 'f32aacddde42ad34f5a3078a621f37a9';
 
   /**
    * The extension.list.module service.
    *
    * @var \Drupal\Core\Extension\ModuleExtensionList
    */
-  protected $moduleExtensionList;
+  private $moduleExtensionList;
 
   /**
    * The HTTP client.
    *
    * @var \GuzzleHttp\ClientInterface
    */
-  protected $httpClient;
+  private $httpClient;
 
   /**
    * The config.factory service.
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  protected $config_factory;
+  private $config_factory;
 
   /**
    * The state service.
    *
    * @var \Drupal\Core\State\StateInterface
    */
-  protected $state;
+  private $state;
 
   /**
    * The application root directory.
    *
    * @var string
    */
-  protected $app_root;
+  private $app_root;
 
   /**
    * Constructs a telemetry object.
@@ -97,7 +97,7 @@ class Telemetry {
    *
    * @see https://developers.amplitude.com/#http-api
    */
-  protected function sendEvent(Event $event) {
+  private function sendEvent(Event $event) {
     $response = $this->httpClient->request('POST', $this->apiUrl, [
       'form_params' => [
         'api_key' => $this->apiKey,
@@ -150,7 +150,7 @@ class Telemetry {
    * @return array
    *   An array of extension info keyed by the extensions machine name.
    */
-  protected function getExtensionInfo() {
+  private function getExtensionInfo() {
     $all_modules = $this->moduleExtensionList->getAllAvailableInfo();
     $acquia_extensions = array_intersect_key($all_modules, array_flip($this->getAcquiaExtensionNames()));
     $extension_info = [];
@@ -180,7 +180,7 @@ class Telemetry {
    * @return \Drupal\acquia_telemetry\Event
    *   An Amplitude event with basic info already populated.
    */
-  protected function createEvent($type, $properties) {
+  private function createEvent($type, $properties) {
     $user_id = $this->getUserId();
     $default_properties['extensions'] = $this->getExtensionInfo();
     $default_properties['php']['version'] = phpversion();
@@ -196,7 +196,7 @@ class Telemetry {
    *
    * @return string
    */
-  protected function getUserId() {
+  private function getUserId() {
     return Crypt::hashBase64($this->config_factory->get('system.site')->get('uuid'));
   }
 

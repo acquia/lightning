@@ -18,17 +18,20 @@ class TelemetryTest extends KernelTestBase {
   protected $telemetry;
 
   /**
-   * {@inheritdoc}
+   * Tests that module is disabled by default.
    */
-  protected function setUp() {
-    parent::setUp();
-    $this->telemetry = $this->container->get('acquia.telemetry');
+  public function testOptIn() {
+    /** @var \Drupal\Core\Extension\ModuleHandler $module_handler */
+    $module_handler = $this->container->get('module_handler');
+    $this->assertFalse($module_handler->moduleExists('acquia_telemetry'));
   }
 
   /**
    * @covers ::__construct
    */
   public function testTelemetryService() {
+    $this->container->get('module_installer')->install(['acquia_telemetry']);
+    $this->telemetry = $this->container->get('acquia.telemetry');
     $this->assertInstanceOf(Telemetry::class, $this->telemetry);
   }
 
