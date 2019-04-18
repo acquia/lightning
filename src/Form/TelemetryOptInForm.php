@@ -1,8 +1,5 @@
 <?php
-/**
- * @file
- * Contains \Drupal\lightning\Form\TelemetryOptInForm.
- */
+
 namespace Drupal\lightning\Form;
 
 use Drupal\Core\Extension\ModuleInstallerInterface;
@@ -11,20 +8,20 @@ use Drupal\Core\Form\FormStateInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * Class TelemetryOptInForm.
+ * Provides a form for opting a Lightning installation into Acquia telemetry.
  *
  * This form is displayed during the Lightning install process. It provides
  * the opportunity for users to opt-in to enabling the Lightning Telemetry
  * module.
  */
-class TelemetryOptInForm extends FormBase {
+final class TelemetryOptInForm extends FormBase {
 
   /**
-   * The module_installer service.
+   * The module installer service.
    *
    * @var ModuleInstallerInterface
    */
-  protected $moduleInstaller;
+  private $moduleInstaller;
 
   /**
    * {@inheritdoc}
@@ -37,7 +34,7 @@ class TelemetryOptInForm extends FormBase {
    * Constructs a new TelemetryOptInForm.
    *
    * @param ModuleInstallerInterface $module_installer
-   *   The module_installer service.
+   *   The module installer service.
    */
   public function __construct(ModuleInstallerInterface $module_installer) {
     $this->moduleInstaller = $module_installer;
@@ -57,18 +54,18 @@ class TelemetryOptInForm extends FormBase {
    */
   public function buildForm(array $form, FormStateInterface $form_state) {
     $form['#title'] = "Telemetry opt-in";
-    $form['allow_telemetry'] = array(
+    $form['allow_telemetry'] = [
       '#type' => 'checkbox',
       '#title' => t('Allow Lightning to send anonymous telemetry data to Acquia'),
       // @todo Revise and finalize language.
-      '#description' => t('This module sends anonymous data about Acquia product usage to Acquia for product development purposes. No private information will be gathered. Data will not be used for marketing and will not be sold to any third parties. Telemetry can be disabled at any time by uninstalling the acquia_telemetry module.')
-    );
+      '#description' => $this->t('This module sends anonymous data about Acquia product usage to Acquia for product development purposes. No private information will be gathered. Data will not be used for marketing and will not be sold to any third parties. Telemetry can be disabled at any time by uninstalling the acquia_telemetry module.'),
+    ];
     $form['actions']['#type'] = 'actions';
-    $form['actions']['submit'] = array(
+    $form['actions']['submit'] = [
       '#type' => 'submit',
       '#value' => $this->t('Continue'),
       '#button_type' => 'primary',
-    );
+    ];
 
     return $form;
   }
