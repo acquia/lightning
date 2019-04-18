@@ -19,6 +19,7 @@ final class Telemetry {
   /**
    * Amplitude API URL.
    *
+   * @var string
    * @see https://developers.amplitude.com/#http-api
    */
   private $apiUrl = 'https://api.amplitude.com/httpapi';
@@ -29,6 +30,7 @@ final class Telemetry {
    * This is not intended to be private. It is typically included in client
    * side code. Fetching data requires an additional API secret.
    *
+   * @var string
    * @see https://developers.amplitude.com/#http-api
    */
   private $apiKey = 'f32aacddde42ad34f5a3078a621f37a9';
@@ -52,7 +54,7 @@ final class Telemetry {
    *
    * @var \Drupal\Core\Config\ConfigFactoryInterface
    */
-  private $config_factory;
+  private $configFactory;
 
   /**
    * The state service.
@@ -66,7 +68,7 @@ final class Telemetry {
    *
    * @var string
    */
-  private $app_root;
+  private $root;
 
   /**
    * Constructs a telemetry object.
@@ -81,7 +83,7 @@ final class Telemetry {
   public function __construct(ModuleExtensionList $module_extension_list, ClientInterface $http_client, ConfigFactoryInterface $config_factory, StateInterface $state, $app_root) {
     $this->moduleExtensionList = $module_extension_list;
     $this->httpClient = $http_client;
-    $this->config_factory = $config_factory;
+    $this->configFactory = $config_factory;
     $this->state = $state;
     $this->root = $app_root;
   }
@@ -102,7 +104,7 @@ final class Telemetry {
       'form_params' => [
         'api_key' => $this->apiKey,
         'event' => Json::encode($event),
-      ]
+      ],
     ]);
 
     return $response->getStatusCode() === 200;
@@ -116,7 +118,6 @@ final class Telemetry {
    *   event types include: "[Amplitude] Start Session", "[Amplitude] End
    *   Session", "[Amplitude] Revenue", "[Amplitude] Revenue (Verified)",
    *   "[Amplitude] Revenue (Unverified)", and "[Amplitude] Merged User".
-   *
    * @param array $event_properties
    *   Event properties.
    *
@@ -180,7 +181,7 @@ final class Telemetry {
    * @return \Drupal\acquia_telemetry\Event
    *   An Amplitude event with basic info already populated.
    */
-  private function createEvent($type, $properties) {
+  private function createEvent($type, array $properties) {
     $user_id = $this->getUserId();
     $default_properties['extensions'] = $this->getExtensionInfo();
     $default_properties['php']['version'] = phpversion();
@@ -195,9 +196,10 @@ final class Telemetry {
    * Gets a unique ID for this application. "User ID" is an Amplitude term.
    *
    * @return string
+   *   Returns a hashed site uuid.
    */
   private function getUserId() {
-    return Crypt::hashBase64($this->config_factory->get('system.site')->get('uuid'));
+    return Crypt::hashBase64($this->configFactory->get('system.site')->get('uuid'));
   }
 
   /**

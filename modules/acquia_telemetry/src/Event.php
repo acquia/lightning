@@ -33,7 +33,7 @@ final class Event implements \JsonSerializable {
    *
    * @var string
    */
-  private $user_id;
+  private $userId;
 
   /**
    * Event constructor.
@@ -48,7 +48,7 @@ final class Event implements \JsonSerializable {
    */
   public function __construct($type, $user_id, array $data = []) {
     $this->type = $type;
-    $this->user_id = $user_id;
+    $this->userId = $user_id;
     $this->data = $data;
   }
 
@@ -78,7 +78,7 @@ final class Event implements \JsonSerializable {
   public function jsonSerialize() {
     return [
       'event_type' => $this->type,
-      'user_id' => $this->user_id,
+      'user_id' => $this->userId,
       'event_properties' => $this->data,
     ];
   }
