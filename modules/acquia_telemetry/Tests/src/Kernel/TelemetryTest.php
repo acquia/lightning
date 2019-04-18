@@ -30,7 +30,7 @@ class TelemetryTest extends KernelTestBase {
    * @covers ::__construct
    */
   public function testTelemetryService() {
-    $this->container->get('module_installer')->install(['acquia_telemetry']);
+    $this->enableModules(['acquia_telemetry']);
     $this->telemetry = $this->container->get('acquia.telemetry');
     $this->assertInstanceOf(Telemetry::class, $this->telemetry);
   }
