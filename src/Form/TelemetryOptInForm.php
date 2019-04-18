@@ -16,8 +16,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * This form is displayed during the Lightning install process. It provides
  * the opportunity for users to opt-in to enabling the Lightning Telemetry
  * module.
- *
- * @package Drupal\lightning\Form
  */
 class TelemetryOptInForm extends FormBase {
 
@@ -87,7 +85,7 @@ and will not be sold to any third parties. Telemetry can be disabled at any time
    */
   public function submitForm(array &$form, FormStateInterface $form_state) {
     if ($form_state->getValue('allow_telemetry')) {
-     $this->moduleInstaller->install(['lightning_telemetry']);
+     $this->moduleInstaller->install(['acquia_telemetry']);
     }
   }
 

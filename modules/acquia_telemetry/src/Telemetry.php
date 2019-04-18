@@ -102,6 +102,9 @@ class Telemetry {
    * @param array $event_properties
    *   Event properties.
    *
+   * @return bool
+   *   TRUE if event was successfully sent, otherwise FALSE.
+   *
    * @throws \Exception
    *
    * @see https://amplitude.zendesk.com/hc/en-us/articles/204771828#keys-for-the-event-argument
@@ -112,12 +115,13 @@ class Telemetry {
     // Failure to send Telemetry should never cause a user facing error or
     // interrupt a process. Telemetry failure should be graceful and quiet.
     try {
-      $this->sendEvent($event);
+      return $this->sendEvent($event);
     }
     catch (\Exception $e) {
       if (getenv('ACQUIA_TELEMETRY_LOUD')) {
         throw $e;
       }
+      return FALSE;
     }
   }
 

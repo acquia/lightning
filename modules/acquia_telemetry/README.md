@@ -8,3 +8,9 @@ marketing and will not be sold to any third parties.
 
 Telemetry is opt-in only and can be disabled at any time by uninstalling
 the acquia_telemetry module.
+
+# Contribution Guide
+
+Failures to send telemetry are intended to be graceful and quiet. Exceptions are caught and output is intentionally suppressed.
+
+To disable error suppression, set the the state key `acquia_telemetry.debug` to TRUE. E.g., `drush state-set acquia_telemetry.debug true`.

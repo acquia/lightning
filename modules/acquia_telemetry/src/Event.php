@@ -2,21 +2,19 @@
 
 namespace Drupal\acquia_telemetry;
 
-use JsonSerializable;
-
 /**
  * An event object as defined by Amplitude API specifications.
  *
  * @see https://developers.amplitude.com/#http-api
  */
-class Event implements JsonSerializable {
+final class Event implements \JsonSerializable {
 
   /**
    * The event type.
    *
    * @var string
    */
-  protected $type;
+  private $type;
 
   /**
    * An array of event data.
@@ -25,7 +23,7 @@ class Event implements JsonSerializable {
    *
    * @var array
    */
-  protected $data;
+  private $data = [];
 
   /**
    * The Amplitude user ID for the event.
@@ -35,7 +33,7 @@ class Event implements JsonSerializable {
    *
    * @var string
    */
-  protected $user_id;
+  private $user_id;
 
   /**
    * Event constructor.
