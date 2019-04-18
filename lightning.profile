@@ -8,6 +8,7 @@
 use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
 use Drupal\user\RoleInterface;
+use Drupal\lightning\Form\TelemetryOptInForm;
 
 /**
  * Implements hook_install_tasks().
@@ -22,6 +23,11 @@ function lightning_install_tasks() {
   $tasks['lightning_set_default_theme'] = [];
   $tasks['lightning_set_logo'] = [];
   $tasks['lightning_alter_frontpage_view'] = [];
+
+  $tasks[TelemetryOptInForm::class] = [
+    'display_name' => t('Telemetry opt-in'),
+    'type' => 'form',
+  ];
 
   return $tasks;
 }

@@ -1,0 +1,4 @@
+services:
+  acquia.telemetry:
+    class: Drupal\acquia_telemetry\Telemetry
+    arguments: ['@extension.list.module', '@http_client', '@config.factory', '@state', '@app.root']
