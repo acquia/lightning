@@ -2,7 +2,6 @@
 
 namespace Drupal\Tests\acquia_telemetry\Kernel;
 
-use Drupal\acquia_telemetry\Telemetry;
 use Drupal\KernelTests\KernelTestBase;
 use GuzzleHttp\ClientInterface;
 use Prophecy\Argument;

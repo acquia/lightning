@@ -91,7 +91,7 @@ class Telemetry {
   /**
    * Sends an event to Amplitude.
    *
-   * @param \Drupal\acquia_telemetry\Event $event
+   * @param array $event
    *   The Amplitude event.
    *
    * @return bool
@@ -99,7 +99,7 @@ class Telemetry {
    *
    * @see https://developers.amplitude.com/#http-api
    */
-  private function sendEvent(Event $event) {
+  private function sendEvent(array $event) {
     $response = $this->httpClient->request('POST', $this->apiUrl, [
       'form_params' => [
         'api_key' => $this->apiKey,
@@ -178,18 +178,25 @@ class Telemetry {
    * @param array $properties
    *   The event properties.
    *
-   * @return \Drupal\acquia_telemetry\Event
+   * @return array
    *   An Amplitude event with basic info already populated.
    */
   private function createEvent($type, array $properties) {
-    $user_id = $this->getUserId();
-    $default_properties['extensions'] = $this->getExtensionInfo();
-    $default_properties['php']['version'] = phpversion();
-    $default_properties['drupal']['version'] = \Drupal::VERSION;
-    $properties = NestedArray::mergeDeep($default_properties, $properties);
-    $event = new Event($type, $user_id, $properties);
+    $default_properties = [
+      'extensions' => $this->getExtensionInfo(),
+      'php' => [
+        'version' => phpversion(),
+      ],
+      'drupal' => [
+        'version' => \Drupal::VERSION,
+      ],
+    ];
 
-    return $event;
+    return [
+      'event_type' => $type,
+      'user_id' => $this->getUserId(),
+      'event_properties' => NestedArray::mergeDeep($default_properties, $properties),
+    ];
   }
 
   /**
