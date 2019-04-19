@@ -29,7 +29,7 @@ final class TelemetryOptInForm extends FormBase {
    *
    * @var \Drupal\Core\Extension\ModuleExtensionList
    */
-  protected $moduleExtensionList;
+  private $moduleExtensionList;
 
   /**
    * {@inheritdoc}
