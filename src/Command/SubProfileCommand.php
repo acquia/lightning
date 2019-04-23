@@ -13,7 +13,7 @@ use Drupal\Console\Utils\TranslatorManager;
 use Drupal\Console\Utils\Validator;
 use Drupal\Core\Extension\Extension;
 use Drupal\Core\Extension\InfoParserInterface;
-use Drupal\lightning\ComponentDiscovery;
+use Drupal\lightning_core\ComponentDiscovery;
 use Drupal\lightning_core\Element;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
