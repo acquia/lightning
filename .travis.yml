@@ -39,7 +39,7 @@ before_install:
   - export PATH="$ORCA_FIXTURE/vendor/bin:$PATH"
 
   # Install ORCA and prepare the environment.
-  - git clone --branch develop --depth 1 https://github.com/acquia/orca.git $ORCA
+  - git clone --branch master --depth 1 https://github.com/acquia/orca.git $ORCA
   - $ORCA/bin/travis/before_install.sh
 
 install:
