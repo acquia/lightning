@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f4c7e8122110016993102d6158acf04",
+    "content-hash": "2bee44a64b9edb5bb6f41bcde887d127",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -95,16 +95,16 @@
         },
         {
             "name": "bower-asset/jquery",
-            "version": "3.4.0",
+            "version": "3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jquery/jquery-dist.git",
-                "reference": "180c5c33e477463ed93a9d5f7ac7cad7c9809f1c"
+                "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/180c5c33e477463ed93a9d5f7ac7cad7c9809f1c",
-                "reference": "180c5c33e477463ed93a9d5f7ac7cad7c9809f1c",
+                "url": "https://api.github.com/repos/jquery/jquery-dist/zipball/15bc73803f76bc53b654b9fdbbbc096f56d7c03d",
+                "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d",
                 "shasum": null
             },
             "type": "bower-asset",
@@ -1221,16 +1221,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "8.7.x-dev",
+            "version": "8.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "adb3910cc9eceaef05c619d449ee40ed6b0f1846"
+                "reference": "969f24810fb31eac71dd624de593f551bd6dc2a3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/adb3910cc9eceaef05c619d449ee40ed6b0f1846",
-                "reference": "adb3910cc9eceaef05c619d449ee40ed6b0f1846",
+                "url": "https://api.github.com/repos/drupal/core/zipball/969f24810fb31eac71dd624de593f551bd6dc2a3",
+                "reference": "969f24810fb31eac71dd624de593f551bd6dc2a3",
                 "shasum": ""
             },
             "require": {
@@ -1275,7 +1275,7 @@
                 "symfony/validator": "~3.4.0",
                 "symfony/yaml": "~3.4.5",
                 "twig/twig": "^1.38.2",
-                "typo3/phar-stream-wrapper": "^2.0.1",
+                "typo3/phar-stream-wrapper": "^2.1.1",
                 "zendframework/zend-diactoros": "^1.1",
                 "zendframework/zend-feed": "^2.4"
             },
@@ -1468,7 +1468,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2019-05-01T18:42:43+00:00"
+            "time": "2019-05-08T16:00:55+00:00"
         },
         {
             "name": "drupal/crop",
@@ -2115,7 +2115,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-beta2",
-                    "datestamp": "1476698339",
+                    "datestamp": "1556906881",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
@@ -2372,18 +2372,23 @@
         },
         {
             "name": "drupal/lightning_api",
-            "version": "dev-4.x",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_api.git",
-                "reference": "d53cb8d871a77e6a13c0feca7f92df36c72fe15f"
+                "reference": "8.x-4.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_api-8.x-4.1.zip",
+                "reference": "8.x-4.1",
+                "shasum": "857787e05f5a886a7512e9230a1eb4a47a7ae722"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/consumers": "^1.9",
-                "drupal/core": "~8.0",
-                "drupal/jsonapi": "*",
+                "drupal/core": "*",
                 "drupal/lightning_core": "^4.0",
                 "drupal/openapi": "^1.0-beta2",
                 "drupal/openapi_ui_redoc": "^1.0",
@@ -2403,11 +2408,11 @@
                     "dev-8.x-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.0+0-dev",
-                    "datestamp": "1556745181",
+                    "version": "8.x-4.1",
+                    "datestamp": "1556765584",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "enable-patching": true,
@@ -2484,23 +2489,28 @@
             "homepage": "https://www.drupal.org/project/lightning_api",
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_api"
-            },
-            "time": "2019-05-01T21:08:03+00:00"
+            }
         },
         {
             "name": "drupal/lightning_core",
-            "version": "dev-4.x",
+            "version": "4.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_core.git",
-                "reference": "c4b325fca03ba7cf96c8fdf930ede3be39c78f65"
+                "reference": "8.x-4.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_core-8.x-4.1.zip",
+                "reference": "8.x-4.1",
+                "shasum": "8dd8f0df5ee2064e60ba0e4a28fc6aea9cc8895b"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/acquia_connector": "^1.1",
                 "drupal/contact_storage": "1.0-beta9",
-                "drupal/core": "8.7.x-dev",
+                "drupal/core": "~8.7.1",
                 "drupal/metatag": "^1.8",
                 "drupal/pathauto": "^1.3",
                 "drupal/search_api": "^1.0",
@@ -2525,11 +2535,11 @@
                     "dev-8.x-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.0+0-dev",
-                    "datestamp": "1556742181",
+                    "version": "8.x-4.1",
+                    "datestamp": "1557341581",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "drush": {
@@ -2622,16 +2632,21 @@
             "homepage": "https://www.drupal.org/project/lightning_core",
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_core"
-            },
-            "time": "2019-05-01T20:23:26+00:00"
+            }
         },
         {
             "name": "drupal/lightning_layout",
-            "version": "dev-1.x",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_layout.git",
-                "reference": "13e7fea2663b54d38d62cfc54d76e12d2ad09190"
+                "reference": "8.x-1.7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_layout-8.x-1.7.zip",
+                "reference": "8.x-1.7",
+                "shasum": "fca0968c3659d6939c81b31fe329b7f55644f67e"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2639,7 +2654,7 @@
                 "drupal/core": "~8.0",
                 "drupal/ctools": "3.0",
                 "drupal/entity_block": "^1.0",
-                "drupal/lightning_core": "1.x-dev || 2.x-dev || 3.x-dev || 4.x-dev",
+                "drupal/lightning_core": "^1.0-rc7 || ^2.14 || ^3.8 || ^4.0-alpha1",
                 "drupal/panelizer": "^4.1",
                 "drupal/panelizer_quickedit": "*",
                 "drupal/panels": "4.3",
@@ -2656,11 +2671,11 @@
                     "dev-8.x-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.7+1-dev",
+                    "version": "8.x-1.7",
                     "datestamp": "1552942380",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "enable-patching": true,
@@ -2742,16 +2757,21 @@
             "homepage": "https://www.drupal.org/project/lightning_layout",
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_layout"
-            },
-            "time": "2019-03-18T20:52:25+00:00"
+            }
         },
         {
             "name": "drupal/lightning_media",
-            "version": "dev-3.x",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_media.git",
-                "reference": "02a7c0a9766640944af1f7f35f17e9ad705a92ad"
+                "reference": "8.x-3.8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_media-8.x-3.8.zip",
+                "reference": "8.x-3.8",
+                "shasum": "a88509db6e4459bf54ed1e2886c104ed7bd80a11"
             },
             "require": {
                 "bower-asset/cropper": "^2.3",
@@ -2768,7 +2788,7 @@
                 "drupal/image_widget_crop": "^2.1",
                 "drupal/inline_entity_form": "^1.0",
                 "drupal/libraries": "3.0-alpha1",
-                "drupal/lightning_core": "3.x-dev || 4.x-dev",
+                "drupal/lightning_core": "^3.8 || ^4.0-alpha1",
                 "drupal/media_entity_instagram": "2.0.0-alpha2",
                 "drupal/media_entity_twitter": "2.0.0-alpha2",
                 "drupal/slick_entityreference": "^1.1",
@@ -2795,11 +2815,11 @@
                     "dev-8.x-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.7+8-dev",
-                    "datestamp": "1553525285",
+                    "version": "8.x-3.8",
+                    "datestamp": "1552917185",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "enable-patching": true,
@@ -2881,23 +2901,28 @@
             "homepage": "https://www.drupal.org/project/lightning_media",
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_media"
-            },
-            "time": "2019-03-25T14:46:27+00:00"
+            }
         },
         {
             "name": "drupal/lightning_workflow",
-            "version": "dev-3.x",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_workflow.git",
-                "reference": "0ccf60c42782a5c098fcadf80936ff4589ab7b94"
+                "reference": "8.x-3.6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/lightning_workflow-8.x-3.6.zip",
+                "reference": "8.x-3.6",
+                "shasum": "cb2d4e7116cb209ce811f6820af95c7dc20ea5c4"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
                 "drupal-composer/drupal-scaffold": "^2.0.0",
                 "drupal/core": "*",
                 "drupal/diff": "^1.0",
-                "drupal/lightning_core": "3.x-dev || 4.x-dev",
+                "drupal/lightning_core": "^3.9 || ^4.0-beta1",
                 "drupal/moderation_dashboard": "^1.0",
                 "drupal/moderation_sidebar": "^1.0",
                 "oomphinc/composer-installers-extender": "^1.1"
@@ -2916,11 +2941,11 @@
                     "dev-8.x-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.6+1-dev",
+                    "version": "8.x-3.6",
                     "datestamp": "1554389281",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "enable-patching": true,
@@ -2993,8 +3018,7 @@
             "homepage": "https://www.drupal.org/project/lightning_workflow",
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_workflow"
-            },
-            "time": "2019-04-04T14:47:10+00:00"
+            }
         },
         {
             "name": "drupal/media_entity_instagram",
@@ -3742,6 +3766,7 @@
                     }
                 },
                 "patches_applied": {
+                    "3030976 - Panels should check if there is an icon map before setting the no preview icon": "https://www.drupal.org/files/issues/2019-02-06/initial.patch",
                     "2878684 - Use String.match to correlate regions when switching Layouts in Panels IPE": "https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch",
                     "2825034 - Form error messages do not appear in IPE": "https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch"
                 }
@@ -4096,17 +4121,17 @@
         },
         {
             "name": "drupal/search_api",
-            "version": "1.12.0",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api.git",
-                "reference": "8.x-1.12"
+                "reference": "8.x-1.13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.12.zip",
-                "reference": "8.x-1.12",
-                "shasum": "db203e2fdd669d6e9ff2c99688c0816d248a1fff"
+                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.13.zip",
+                "reference": "8.x-1.13",
+                "shasum": "9f03dd5a4d9ee7c58d47aabc33d9229793d1195f"
             },
             "require": {
                 "drupal/core": "^8.5"
@@ -4126,8 +4151,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.12",
-                    "datestamp": "1552334285",
+                    "version": "8.x-1.13",
+                    "datestamp": "1557244685",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -5195,16 +5220,16 @@
         },
         {
             "name": "league/oauth2-server",
-            "version": "7.3.3",
+            "version": "7.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-server.git",
-                "reference": "c7f499849704ebe2c60b45b6d6bb231df5601d4a"
+                "reference": "2eb1cf79e59d807d89c256e7ac5e2bf8bdbd4acf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/c7f499849704ebe2c60b45b6d6bb231df5601d4a",
-                "reference": "c7f499849704ebe2c60b45b6d6bb231df5601d4a",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/2eb1cf79e59d807d89c256e7ac5e2bf8bdbd4acf",
+                "reference": "2eb1cf79e59d807d89c256e7ac5e2bf8bdbd4acf",
                 "shasum": ""
             },
             "require": {
@@ -5268,7 +5293,7 @@
                 "secure",
                 "server"
             ],
-            "time": "2019-03-29T18:19:35+00:00"
+            "time": "2019-05-05T09:22:01+00:00"
         },
         {
             "name": "masterminds/html5",
@@ -7483,16 +7508,16 @@
         },
         {
             "name": "typo3/phar-stream-wrapper",
-            "version": "v2.1.0",
+            "version": "v2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TYPO3/phar-stream-wrapper.git",
-                "reference": "b7a21f0859059ed5d9754af8c11f852d43762334"
+                "reference": "e438b0c78652b33407983eb29d215a1a3f68f6f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TYPO3/phar-stream-wrapper/zipball/b7a21f0859059ed5d9754af8c11f852d43762334",
-                "reference": "b7a21f0859059ed5d9754af8c11f852d43762334",
+                "url": "https://api.github.com/repos/TYPO3/phar-stream-wrapper/zipball/e438b0c78652b33407983eb29d215a1a3f68f6f3",
+                "reference": "e438b0c78652b33407983eb29d215a1a3f68f6f3",
                 "shasum": ""
             },
             "require": {
@@ -7502,6 +7527,7 @@
                 "php": "^5.3.3|^7.0"
             },
             "require-dev": {
+                "ext-xdebug": "*",
                 "phpunit/phpunit": "^4.8.36"
             },
             "type": "library",
@@ -7522,7 +7548,7 @@
                 "security",
                 "stream-wrapper"
             ],
-            "time": "2019-03-01T17:43:52+00:00"
+            "time": "2019-05-05T17:30:51+00:00"
         },
         {
             "name": "vardot/blazy",
@@ -8128,12 +8154,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minkphp/Mink.git",
-                "reference": "d5ee350c40baff5f331a05ebdbe1927345c9ac8b"
+                "reference": "153e4bbee958fea4a6dc542105ff6013c06813e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minkphp/Mink/zipball/d5ee350c40baff5f331a05ebdbe1927345c9ac8b",
-                "reference": "d5ee350c40baff5f331a05ebdbe1927345c9ac8b",
+                "url": "https://api.github.com/repos/minkphp/Mink/zipball/153e4bbee958fea4a6dc542105ff6013c06813e8",
+                "reference": "153e4bbee958fea4a6dc542105ff6013c06813e8",
                 "shasum": ""
             },
             "require": {
@@ -8179,7 +8205,7 @@
                 "testing",
                 "web"
             ],
-            "time": "2018-06-24T20:08:51+00:00"
+            "time": "2019-05-07T14:41:06+00:00"
         },
         {
             "name": "behat/mink-browserkit-driver",
@@ -9972,21 +9998,21 @@
         },
         {
             "name": "drupal/devel",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/devel.git",
-                "reference": "8.x-2.0"
+                "reference": "8.x-2.1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/devel-8.x-2.0.zip",
-                "reference": "8.x-2.0",
-                "shasum": "cf5fb816f767f3cac4f2e170ab39e982d5e0698b"
+                "url": "https://ftp.drupal.org/files/projects/devel-8.x-2.1.zip",
+                "reference": "8.x-2.1",
+                "shasum": "8f735892922aa5f228e681e645e5f02b1c008f14"
             },
             "require": {
                 "drupal/core": "~8.0",
-                "symfony/var-dumper": "~2.7|^3"
+                "symfony/var-dumper": "~2.7|^3|^4"
             },
             "type": "drupal-module",
             "extra": {
@@ -9994,8 +10020,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0",
-                    "datestamp": "1548799380",
+                    "version": "8.x-2.1",
+                    "datestamp": "1556799496",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -12470,16 +12496,16 @@
         },
         {
             "name": "stecman/symfony-console-completion",
-            "version": "0.10.0",
+            "version": "0.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stecman/symfony-console-completion.git",
-                "reference": "bc095febf00aa42ace233b344d4561071d7c912b"
+                "reference": "7bfa9b93e216896419f2f8de659935d7e04fecd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stecman/symfony-console-completion/zipball/bc095febf00aa42ace233b344d4561071d7c912b",
-                "reference": "bc095febf00aa42ace233b344d4561071d7c912b",
+                "url": "https://api.github.com/repos/stecman/symfony-console-completion/zipball/7bfa9b93e216896419f2f8de659935d7e04fecd8",
+                "reference": "7bfa9b93e216896419f2f8de659935d7e04fecd8",
                 "shasum": ""
             },
             "require": {
@@ -12492,7 +12518,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "0.6.x-dev"
+                    "dev-master": "0.10.x-dev"
                 }
             },
             "autoload": {
@@ -12511,7 +12537,7 @@
                 }
             ],
             "description": "Automatic BASH completion for Symfony Console Component based applications.",
-            "time": "2019-04-26T12:14:26+00:00"
+            "time": "2019-04-29T03:20:18+00:00"
         },
         {
             "name": "symfony/browser-kit",
@@ -13201,11 +13227,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/lightning_api": 20,
-        "drupal/lightning_core": 20,
-        "drupal/lightning_layout": 20,
-        "drupal/lightning_media": 20,
-        "drupal/lightning_workflow": 20,
         "acquia/lightning_dev": 20,
         "drupal/media_entity_generic": 20
     },
