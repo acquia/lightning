@@ -1,3 +1,8 @@
+## 4.0.0-beta2
+* Security updated Lightning Core to 4.1.0 which updates Drupal core to 8.7.1.
+  (SA-CORE-2019-07)
+* Updated Lightning Layout to 2.0.0. 
+
 ## 4.0.0-beta1
 * Updated Lightning Core to 4.0-beta2, which:
   * Updated Drupal core to 8.7.0-beta2.
