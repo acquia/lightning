@@ -52,7 +52,7 @@ install:
   - orca static-analysis:run ./
 
   # Use ORCA to build the code base.
-  - orca fixture:init -f --sut $ORCA_SUT_NAME --dev --profile lightning
+  - orca fixture:init -f --sut $ORCA_SUT_NAME --dev --profile lightning --core 8.6.x-dev
   # Install dev dependencies.
   - composer require --dev drupal/console --working-dir $ORCA_FIXTURE --no-update
   # Update in a separate step to prevent lock file version conflicts.
