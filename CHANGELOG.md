@@ -1,3 +1,7 @@
+## 3.2.9
+* Update Lightning Core to 3.11.0 which:
+  * Security updated Drupal core to 8.6.16. (A-CORE-2019-007)
+
 ## 3.2.8
 * Updated Lightning Core to 3.10, which:
   * Security updated Drupal core to 8.6.15.
