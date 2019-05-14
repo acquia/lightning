@@ -1,7 +1,10 @@
+## 4.0.0-beta3
+* Added the Claro administration theme.
+
 ## 4.0.0-beta2
-* Security updated Lightning Core to 4.1.0 which updates Drupal core to 8.7.1.
+* Security updated Lightning Core to 4.1.0, which updates Drupal core to 8.7.1.
   (SA-CORE-2019-07)
-* Updated Lightning Layout to 2.0.0. 
+* Updated Lightning Layout to 2.0.0.
 
 ## 4.0.0-beta1
 * Updated Lightning Core to 4.0-beta2, which:
@@ -185,7 +188,7 @@
   * Updates Crop API to RC1.
   * Modifies any configured Media-related actions to use the new, generic action
     plugins provided by core.
-* Behat contexts used for testing were moved into the 
+* Behat contexts used for testing were moved into the
   `Acquia\LightningExtension\Context` namespace.
 
 ## 3.0.3
@@ -207,11 +210,11 @@
   * Reads the previous version from config and, as a result, no longer requires
     nor accepts the `version` argument.
   * Usage:
-  
+
   ```
   drush update:lightning
   # To run all available configuration updates without any prompting, use:
-  drush update:lightning --no-inetraction 
+  drush update:lightning --no-inetraction
   ```
   * Note: Configuration updates from versions of Lightning < 3.0.0 will not be
     run when using the updated command. You should update to the last available
@@ -239,7 +242,7 @@
 ## 3.0.0
 * Lightning's components are no longer bundled with the profile. They are now
   packaged as separate components and located alongside other Drupal modules.
-  (Issue #2925010) 
+  (Issue #2925010)
 * The following unused modules have been removed from the build manifest
   (Issue #2927527):
   * Scheduled Updates
@@ -320,12 +323,12 @@
   Console command. (GitHub #462)
 * OAuth key pairs:
   * Lightning will no longer try to guess where keys should be stored and won't
-    generate the keys until an administrator triggers that action. (GitHub #445) 
+    generate the keys until an administrator triggers that action. (GitHub #445)
   * Key pairs are now generated with 600 permissions. (GitHub #443)
   * Better error messages are shown if the system encounters an error when
     generating OAuth key pairs. (GitHub #440)
 * Lightning no longer patches Drush and therefore has no opinion about which
-  version of Drush you use in your project. (GitHub #459) 
+  version of Drush you use in your project. (GitHub #459)
 * Page manager is no longer included in the codebase. (GitHub #466)
 * You can now choose to hide the links to API docs shown on entity bundles via a
   config option. (GitHub #435)
@@ -369,7 +372,7 @@
 ## 2.1.6
 * Lightning now provides a Display Plugin for images embedded via CKEditor that
   allows editors to select an image style, alt text, and other settings each
-  time an image is embedded. (Issue #2784699) 
+  time an image is embedded. (Issue #2784699)
 * You can now select and insert media items from a single-cardinality media
   browser with a double-click. (Issue #2888535)
 * Added documentation about the known incompatibility between Workbench
@@ -502,7 +505,7 @@
 * Scheduled updates now clearly display what is scheduled to happen and when,
   and multiple updates can be created for basic pages. (Issue #2688411)
 * Fixed a bug where reverting the layout of a forward revision of a landing page
-  also reverted the layout of the published version. (Issue #2754649) 
+  also reverted the layout of the published version. (Issue #2754649)
 * Fixed a bug where Lightning Media failed to validate file size and dimension
   constraints. (Issue #2796683)
 * The *.features.yml files were removed from our older features that had them.
@@ -644,7 +647,7 @@
 * Most of the configuration previously provided as part of the
   Lightning install profile has been moved into Lightning Core.
   (#2773519)
-* The "publish" and "unpublish" actions have been removed from the 
+* The "publish" and "unpublish" actions have been removed from the
   administrative Content view, because they do not make sense with
   Workbench Moderation enabled. (#2705931)
 * Fixed a regression caused by changes in Panelizer. (#2790699)
@@ -681,7 +684,7 @@
 * Fixed a PHP notice arising from the media asset preview handler. (PR #140)
 
 ## 1.02
-* Updated core to 8.1.7 (Security Release) and all contrib modules to latest 
+* Updated core to 8.1.7 (Security Release) and all contrib modules to latest
   available releases.
 * It's now possible to define which Lightning extensions will be enabled by
   listing them in ```lightning.extend.yml```. (#2765627)
