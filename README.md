@@ -33,11 +33,9 @@ Drupal Console command (`lightning:subprofile`) which will generate a
 sub-profile for you.
 
 #### Installing from exported config
-If you have a config export of a site built with Lighting, you can install it
-using the [Config Installer](https://drupal.org/project/config_installer)
-profile. This profile is fully supported by Lightning (we even run our tests
-against it). You can find more information about installing Lightning from
-exported config [here](https://lightning.acquia.com/blog/using-configuration-installer-lightning).
+Lightning can be installed from a set of exported configuration (e.g., using the
+--existing-config option with `drush site:install`). This method of installation
+is fully supported and tested.
 
 ## What Lightning Does
 Through custom, contrib, and core modules plus configuration, Lightning aims to
@@ -95,7 +93,7 @@ specific future date and time.
 ### API-First
 Lightning ships with several modules which, together, quickly set up Drupal to
 deliver data to decoupled applications via a standardized API. By default,
-Lightning installs the OpenAPI and JSON API modules, plus the Simple OAuth
+Lightning installs the OpenAPI and JSON:API modules, plus the Simple OAuth
 module, as a toolkit for authentication, authorization, and delivery of data
 to API consumers. Currently, Lightning includes no default configuration for
 any of these modules, because it does not make any assumptions about how the
@@ -122,11 +120,11 @@ to request features or bug fixes.
   can set the image's alt text at upload time, but that text will not be
   replicated to the image field. This is due to a limitation of Entity Browser's
   API.
-* Some of the Lightning contributed media module listed above might not yet be
+* Some of the Lightning contributed media modules listed above might not yet be
   compatible with the Core Media entity.
 * Using the bulk upload feature in environments with a load balancer might
   result in some images not being saved.
-  
+
 ### Inherited profiles
 Drush is not aware of the concept of inherited profiles and as a result, you
 will be unable to uninstall dependencies of any parent profile using Drush. You
@@ -156,7 +154,7 @@ tools to aid in developing and contributing to Lightning. To install locally:
   ```
   $ git clone git@github.com:acquia/lightning.git
   ```
-  
+
 1. Install dependencies:
   ```
   $ cd lightning
