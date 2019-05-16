@@ -69,7 +69,6 @@ projects[panelizer][type] = module
 projects[panelizer][patch][] = https://www.drupal.org/files/issues/2018-08-13/panelizer-multilingual-2778565-38.patch
 projects[panelizer][version] = 4.1
 projects[panels][type] = module
-projects[panels][patch][] = https://www.drupal.org/files/issues/2019-02-06/initial.patch
 projects[panels][patch][] = https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch
 projects[panels][patch][] = https://www.drupal.org/files/issues/panels-ipe-propogate-errors-2825034-5.patch
 projects[panels][version] = 4.3
