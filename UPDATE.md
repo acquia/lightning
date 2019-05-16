@@ -140,13 +140,23 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
-## 4.0.0-beta2 to 4.0.0
+### 3.3.1 to 4.0.0
+Lightning 4.0.0 includes Lightning Layout 2.0, which uses Layout Builder in place
+of Panels and Panelizer. However, both modules are still packaged with Lightning
+Layout, allowing you to migrate your layouts manually to Layout Builder as needed.
+An automated migration path will eventually be introduced, but until then, any
+Panelizer/Panels layouts you have should continue to work as before.
+
+## 3.3.0 to 3.3.1
+There are no manual update steps for this version.
+
+### 3.2.9 to 3.3.0
 There are no manual update steps for this version. However, there is a known
 bug in the update path of the Consumers module (packaged with Lightning API)
 which may cause problems when updating from Drupal 8.6 to 8.7 *and* updating
 from an older version of Consumers at the same time. A temporary workaround is
 to update the Consumers module to its latest version *before* updating to Drupal
-core 8.7. If you are using a Composer-based build of Lightning, you can update
+core 8.7. If you have a Composer-based build of Lightning, you can update
 Consumers like so:
 
 ```
@@ -158,18 +168,10 @@ Once this is done, you should be able to update to Drupal 8.7 without trouble.
 See https://www.drupal.org/project/consumers/issues/3052959 for more information
 about this bug.
 
-## 4.0.0-beta1 to 4.0.0-beta2
+### 3.2.8 to 3.2.9
 There are no manual update steps for this version.
 
-### 3.3.0-beta1 to 4.0.0-beta1
-Lightning 4.0.0-beta1 includes Lightning Layout 2.0, which uses Layout Builder
-in place of Panels and Panelizer. However, both modules are still packaged with
-Lightning Layout, allowing you to migrate your layouts manually to Layout
-Builder as needed. An automated migration path will eventually be introduced,
-but until then, any Panelizer/Panels layouts you have should continue to work
-as before.
-
-### 3.2.7 to 3.3.0-beta1
+### 3.2.7 to 3.2.8
 There are no manual update steps for this version.
 
 ### 3.2.6 to 3.2.7
@@ -721,88 +723,5 @@ There are no manual update steps for this version.
 
 ### 1.00 to 1.01
 There are no manual update steps for this version.
-
-### RC7 to 1.00
-There are no manual update steps for this version.
-
-### RC6 to RC7
-After running `drush updatedb` or visiting `/update.php`:
-
-* Go to *Structure > Content types* and choose **Manage Display** for the
-  Landing Page content type.
-* Under "Custom Display Settings", make sure the the **Full content** box is
-  checked.
-* Scroll down and ensure the **Panelize this view mode** and **Allow custom
-  overrides of each entity** boxes are checked.
-* Press Save.
-* Click the **Full content** tab.
-* Scroll down and ensure that the **Panelize this view mode**, **Allow custom
-  overrides of each entity**, and **Allow panelizer default choice** boxes are
-  checked.
-* Press Save.
-* Click the **Manage form display** tab.
-* Move the **Panelizer** field out the Disabled area. Be sure that "Panelizer"
-  is selected as the widget type, and press Save.
-
-Depending on what customizations you made to Landing Page prior to the update,
-some, all, or none of these setting might already be enabled.
-
-### RC5 to RC6
-There are no manual update steps for this version. There are several database
-updates. So, as always, be sure to run `drush updatedb` or visit `/update.php`.
-
-### RC4 to RC5
-There are no manual update steps for this version.
-
-### RC3 to RC4
-* Add ```<br>``` to the Rich Text filter format's list of allowed HTML tags.
-* Add the following permissions to Media Creator role:
-  * Access the Media overview page
-* Add the following permissions to the Media Manager role:
-  * Access the Media overview page
-  * Administer media bundles
-* Edit the **Media** view. Change the **Media** display, and under
-  **Page Settings**, set the access permission to "Access the Media overview page".
-
-### RC2 to RC3
-There are no manual update steps for this version.
-
-### RC1 to RC2
-There are no manual update steps for this version.
-
-### Beta 5 to RC1
-There are no manual update steps for this version.
-
-### Beta 4 to Beta 5
-* Scheduled updates which change several pieces of content at once were broken.
-  The fix is a change to configuration that is owned by the site, so Lightning
-  does not attempt to make the change automatically. To implement the fix
-  manually:
-  * Go to *Configuration > Scheduled Updates Overview > Scheduled Update Types*
-  * Edit the **Publish multiple nodes at a certain time** update type
-  * Under "Update Runner Settings", select **Default** from the "Update Runner"
-    field
-  * Select every content type listed in the "Content type" field
-  * Press Save
-
-### Beta 3 to Beta 4
-There are no manual update steps for this version.
-
-### Beta 2 to Beta 3
-* Scheduled updates to content are broken by Lightning's content moderation
-  functionality. Beta 3 includes a workaround out-of-the-box which is NOT
-  applied by the update. To implement the fix manually:
-  * Go to *Configuration > Scheduled Updates Overview > Scheduled Update Types*
-  * Edit the **Publish single node at certain time** update type
-  * Under "Update Runner Settings", select **Latest Revision** from the
-    "Update Runner" field
-  * Under "Advanced Runner Options", select **The owner of the update.** from the
-    "Run update as" field
-  * Press Save
-
-### Beta 1 to Beta 2
-* Enable the ```view media``` permission for the ```anonymous``` and
-  ```authenticated``` user roles.
-* Install the Lightning Workflow module.
 
 [sub-profile documentation]: https://github.com/acquia/lightning/wiki/Lightning-as-a-Base-Profile "Lightning sub-profile documentation"
