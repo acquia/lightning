@@ -140,6 +140,24 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+## 4.0.0-beta2 to 4.0.0
+There are no manual update steps for this version. However, there is a known
+bug in the update path of the Consumers module (packaged with Lightning API)
+which may cause problems when updating from Drupal 8.6 to 8.7 *and* updating
+from an older version of Consumers at the same time. A temporary workaround is
+to update the Consumers module to its latest version *before* updating to Drupal
+core 8.7. If you are using a Composer-based build of Lightning, you can update
+Consumers like so:
+
+```
+$ composer update drupal/consumers --with-all-dependencies
+$ drush updatedb
+```
+
+Once this is done, you should be able to update to Drupal 8.7 without trouble.
+See https://www.drupal.org/project/consumers/issues/3052959 for more information
+about this bug.
+
 ## 4.0.0-beta1 to 4.0.0-beta2
 There are no manual update steps for this version.
 
