@@ -6,7 +6,6 @@
  */
 
 use Drupal\DrupalExtension\Context\RawDrupalContext;
-use Behat\Behat\Context\SnippetAcceptingContext;
 
 /**
  * Defines application features from the specific context.
@@ -16,5 +15,5 @@ use Behat\Behat\Context\SnippetAcceptingContext;
  * @see lightning.behat.inc.
  * @see http://behat-drupal-extension.readthedocs.org/en/3.1/subcontexts.html#for-contributors
  */
-class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext {
+class FeatureContext extends RawDrupalContext {
 }

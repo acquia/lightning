@@ -404,9 +404,7 @@ class SubProfileCommand extends Command {
    * {@inheritdoc}
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $io = new DrupalStyle($input, $output);
-
-    if ($this->confirmGeneration($io)) {
+    if ($this->confirmOperation()) {
       $this->generator->generate(
         $input->getOption('name'),
         $input->getOption('machine-name'),
