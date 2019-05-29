@@ -31,7 +31,9 @@ function lightning_install_tasks() {
  */
 function lightning_prepare_administrator() {
   /** @var \Drupal\user\UserInterface $account */
-  $account = entity_load('user', 1);
+  $account = \Drupal::entityTypeManager()
+    ->getStorage('user')
+    ->load(1);
   if ($account) {
     $account->addRole('administrator');
     $account->save();

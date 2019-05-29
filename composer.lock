@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1bed0b4dd64890f4392edf03665ab8ec",
+    "content-hash": "f594adf0ab057cd9dc013d3458eb22d4",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1035,7 +1035,7 @@
             "description": "Allows Drupal websites to connect with Acquia.",
             "homepage": "https://www.drupal.org/project/acquia_connector",
             "support": {
-                "source": "http://cgit.drupalcode.org/acquia_connector"
+                "source": "https://git.drupalcode.org/project/acquia_connector"
             }
         },
         {
@@ -1192,7 +1192,7 @@
                 },
                 "drupal": {
                     "version": "8.x-1.0-alpha1",
-                    "datestamp": "1557847086",
+                    "datestamp": "1558014957",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -1277,7 +1277,7 @@
             "description": "Declare all the consumers of your API",
             "homepage": "https://www.drupal.org/project/consumers",
             "support": {
-                "source": "http://cgit.drupalcode.org/consumers"
+                "source": "https://git.drupalcode.org/project/consumers"
             }
         },
         {
@@ -1650,7 +1650,7 @@
             "description": "Provides storage and API for image crops.",
             "homepage": "https://www.drupal.org/project/crop",
             "support": {
-                "source": "http://cgit.drupalcode.org/crop",
+                "source": "https://git.drupalcode.org/project/crop",
                 "issues": "https://www.drupal.org/project/issues/crop"
             }
         },
@@ -1940,7 +1940,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.0-alpha3",
-                    "datestamp": "1513265285",
+                    "datestamp": "1555407785",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -2057,7 +2057,7 @@
             "description": "Provide a framework for various different types of embeds in WYSIWYG editors, common functionality, interfaces, and standards.",
             "homepage": "https://www.drupal.org/project/embed",
             "support": {
-                "source": "http://cgit.drupalcode.org/embed",
+                "source": "https://git.drupalcode.org/project/embed",
                 "issues": "https://www.drupal.org/project/issues/embed",
                 "irc": "irc://irc.freenode.org/drupal-media"
             }
@@ -2118,7 +2118,7 @@
             "description": "Let site administrators place content entities as blocks.",
             "homepage": "https://www.drupal.org/project/entity_block",
             "support": {
-                "source": "http://cgit.drupalcode.org/entity_block"
+                "source": "https://git.drupalcode.org/project/entity_block"
             }
         },
         {
@@ -2470,6 +2470,14 @@
                     "homepage": "https://www.drupal.org/user/99340"
                 },
                 {
+                    "name": "joachim",
+                    "homepage": "https://www.drupal.org/user/107701"
+                },
+                {
+                    "name": "kaythay",
+                    "homepage": "https://www.drupal.org/user/2182186"
+                },
+                {
                     "name": "rszrama",
                     "homepage": "https://www.drupal.org/user/49344"
                 },
@@ -2485,7 +2493,7 @@
             "description": "Provides a widget for inline management (creation, modification, removal) of referenced entities.",
             "homepage": "https://www.drupal.org/project/inline_entity_form",
             "support": {
-                "source": "http://cgit.drupalcode.org/inline_entity_form"
+                "source": "https://git.drupalcode.org/project/inline_entity_form"
             }
         },
         {
@@ -2651,6 +2659,10 @@
                 {
                     "name": "Pol",
                     "homepage": "https://www.drupal.org/user/47194"
+                },
+                {
+                    "name": "joseph.olstad",
+                    "homepage": "https://www.drupal.org/user/1321830"
                 },
                 {
                     "name": "rjacobs",
@@ -2943,7 +2955,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_layout.git",
-                "reference": "55587dba1ec500f915c8cde1dd567b3a2a36810d"
+                "reference": "6d8502500372b9bfaf3c8921c1c4a36fb2e01f27"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6.4",
@@ -2955,14 +2967,13 @@
                 "drupal/entity_browser_block": "^1.0",
                 "drupal/layout_builder_restrictions": "^1.5",
                 "drupal/layout_library": "1.0-alpha2",
-                "drupal/lightning_core": "^4.1",
+                "drupal/lightning_core": "^4.1 || 4.x-dev",
                 "drupal/panelizer": "^4.1",
                 "drupal/panels": "4.3",
                 "drupal/simple_gmap": "^1.4",
                 "oomphinc/composer-installers-extender": "^1.1"
             },
             "require-dev": {
-                "acquia/lightning_dev": "dev-8.x-1.x",
                 "drupal/bg_image_formatter": "*",
                 "drupal/schema_metatag": "^1.3",
                 "drupal/simple_gmap": "*",
@@ -2974,8 +2985,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0+0-dev",
-                    "datestamp": "1557343381",
+                    "version": "8.x-2.0+10-dev",
+                    "datestamp": "1559145785",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -3041,7 +3052,7 @@
                     "DrupalComposer\\DrupalScaffold\\Plugin::scaffold"
                 ],
                 "install-drupal": [
-                    "drush site:install minimal --yes --account-pass admin --db-url sqlite://db.sqlite",
+                    "drush site:install minimal --yes --config ./drush.yml",
                     "drush config:set system.logging error_level verbose --yes",
                     "drush config:set system.performance css.preprocess 0 --yes",
                     "drush config:set system.performance js.preprocess 0 --yes",
@@ -3052,10 +3063,14 @@
                     "rm -r -f docroot vendor"
                 ],
                 "pull": [
-                    "Acquia\\Lightning\\Commands\\FileCommands::pull"
+                    "cp -R -f ./docroot/modules/contrib/lightning_layout/* ."
                 ],
                 "push": [
-                    "Acquia\\Lightning\\Commands\\FileCommands::push"
+                    "rm -r -f ./docroot/modules/contrib/lightning_layout",
+                    "mkdir -p ./docroot/modules/contrib/lightning_layout",
+                    "@composer archive --file lightning_layout",
+                    "tar -x -f lightning_layout.tar -C ./docroot/modules/contrib/lightning_layout",
+                    "rm lightning_layout.tar"
                 ]
             },
             "license": [
@@ -3076,7 +3091,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_layout"
             },
-            "time": "2019-05-14T14:49:05+00:00"
+            "time": "2019-05-29T21:35:54+00:00"
         },
         {
             "name": "drupal/lightning_media",
@@ -3399,7 +3414,7 @@
             "description": "Media entity Instagram provider.",
             "homepage": "https://www.drupal.org/project/media_entity_instagram",
             "support": {
-                "source": "http://cgit.drupalcode.org/media_entity_instagram"
+                "source": "https://git.drupalcode.org/project/media_entity_instagram"
             }
         },
         {
@@ -3459,7 +3474,7 @@
             "description": "Media entity Twitter provider.",
             "homepage": "https://www.drupal.org/project/media_entity_twitter",
             "support": {
-                "source": "http://cgit.drupalcode.org/media_entity_twitter"
+                "source": "https://git.drupalcode.org/project/media_entity_twitter"
             }
         },
         {
@@ -3576,7 +3591,7 @@
             "description": "Provides a per-user dashboard for moderation.",
             "homepage": "https://www.drupal.org/project/moderation_dashboard",
             "support": {
-                "source": "http://cgit.drupalcode.org/moderation_dashboard"
+                "source": "https://git.drupalcode.org/project/moderation_dashboard"
             }
         },
         {
@@ -3627,7 +3642,7 @@
             "description": "Provides a frontend sidebar for Content Moderation",
             "homepage": "https://www.drupal.org/project/moderation_sidebar",
             "support": {
-                "source": "http://cgit.drupalcode.org/moderation_sidebar"
+                "source": "https://git.drupalcode.org/project/moderation_sidebar"
             }
         },
         {
@@ -3742,7 +3757,7 @@
             "description": "Provides plugin system for OpenAPI/Swagger Interface libraries.",
             "homepage": "https://www.drupal.org/project/openapi_ui",
             "support": {
-                "source": "http://cgit.drupalcode.org/openapi_ui"
+                "source": "https://git.drupalcode.org/project/openapi_ui"
             }
         },
         {
@@ -3773,7 +3788,7 @@
                     "datestamp": "1538143680",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -3790,7 +3805,7 @@
             "description": "Provides display of OpenAPI docs using the ReDoc library.",
             "homepage": "https://www.drupal.org/project/openapi_ui_redoc",
             "support": {
-                "source": "http://cgit.drupalcode.org/openapi_ui_redoc"
+                "source": "https://git.drupalcode.org/project/openapi_ui_redoc"
             }
         },
         {
@@ -3822,7 +3837,7 @@
                     "datestamp": "1545018184",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -3871,7 +3886,7 @@
                 },
                 "drupal": {
                     "version": "8.x-4.0-beta3",
-                    "datestamp": "1523670484",
+                    "datestamp": "1559135889",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -3897,8 +3912,8 @@
                     "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
-                    "name": "tim.plunkett",
-                    "homepage": "https://www.drupal.org/user/241634"
+                    "name": "manuel.adan",
+                    "homepage": "https://www.drupal.org/user/516420"
                 }
             ],
             "description": "Provides a way to place blocks on a custom page.",
@@ -4122,6 +4137,10 @@
                     "homepage": "https://www.drupal.org/user/45640"
                 },
                 {
+                    "name": "joelpittet",
+                    "homepage": "https://www.drupal.org/user/160302"
+                },
+                {
                     "name": "merlinofchaos",
                     "homepage": "https://www.drupal.org/user/26979"
                 },
@@ -4132,10 +4151,6 @@
                 {
                     "name": "samuel.mortenson",
                     "homepage": "https://www.drupal.org/user/2582268"
-                },
-                {
-                    "name": "sdboyer",
-                    "homepage": "https://www.drupal.org/user/146719"
                 },
                 {
                     "name": "tim.plunkett",
@@ -4607,7 +4622,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.15",
-                    "datestamp": "1556659981",
+                    "datestamp": "1558127887",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4649,7 +4664,7 @@
                 },
                 "drupal": {
                     "version": "8.x-3.15",
-                    "datestamp": "1556659981",
+                    "datestamp": "1558127887",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4859,7 +4874,7 @@
             "description": "Provides a user interface for the Token API and some missing core tokens.",
             "homepage": "https://www.drupal.org/project/token",
             "support": {
-                "source": "http://cgit.drupalcode.org/token"
+                "source": "https://git.drupalcode.org/project/token"
             }
         },
         {
@@ -4891,7 +4906,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.1",
-                    "datestamp": "1557724385",
+                    "datestamp": "1557726644",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -4959,6 +4974,10 @@
             ],
             "authors": [
                 {
+                    "name": "Bobík",
+                    "homepage": "https://www.drupal.org/user/123612"
+                },
+                {
                     "name": "Remon",
                     "homepage": "https://www.drupal.org/user/143827"
                 },
@@ -4970,7 +4989,7 @@
             "description": "A pager which allows an infinite scroll effect for views.",
             "homepage": "https://www.drupal.org/project/views_infinite_scroll",
             "support": {
-                "source": "http://cgit.drupalcode.org/views_infinite_scroll"
+                "source": "https://git.drupalcode.org/project/views_infinite_scroll"
             }
         },
         {
@@ -7077,7 +7096,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "backendtea@gmail.com"
+                    "email": "BackEndTea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
@@ -10601,7 +10620,7 @@
                     "datestamp": "1508310844",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -10634,9 +10653,8 @@
             "description": "Provides a generic Media source plugin.",
             "homepage": "https://www.drupal.org/project/media_entity_generic",
             "support": {
-                "source": "http://cgit.drupalcode.org/media_entity_generic"
-            },
-            "time": "2017-10-18T07:13:43+00:00"
+                "source": "https://git.drupalcode.org/project/media_entity_generic"
+            }
         },
         {
             "name": "drupal/schema_metatag",
@@ -13543,7 +13561,9 @@
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
+    "platform": {
+        "ext-dom": "*"
+    },
     "platform-dev": [],
     "platform-overrides": {
         "php": "7.0.8"
