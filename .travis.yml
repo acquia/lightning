@@ -28,7 +28,9 @@ matrix:
     - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
     - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=ISOLATED_RECOMMENDED }
     - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
-    - { name: "Integrated test w/ recommended package versions & previous minor release of Drupal core", env: ORCA_JOB=CORE_PREVIOUS }
+    # Lightning 4.x is incompatible with Drupal Core 8.6.
+    # @todo Uncomment this job once Drupal 8.7 is the "previous" version.
+    # - { name: "Integrated test w/ recommended package versions & previous minor release of Drupal core", env: ORCA_JOB=CORE_PREVIOUS }
     - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=ISOLATED_DEV }
     - { name: "Integrated test w/ dev package versions", env: ORCA_JOB=INTEGRATED_DEV }
     - { name: "Integrated test w/ dev package versions & next minor dev version of Drupal core", env: ORCA_JOB=CORE_NEXT }
@@ -38,10 +40,6 @@ matrix:
   allow_failures:
     - env: ORCA_JOB=INTEGRATED_DEV
     - env: ORCA_JOB=CORE_NEXT
-    # Lightning 4.x is incompatible with Drupal Core 8.6.
-    # @todo Remove this allowance once Drupal 8.7 is the "previous" version.
-    # Temporary allowances.
-    - env: ORCA_JOB=CORE_PREVIOUS
 
 before_install:
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
