@@ -36,7 +36,9 @@ class ConfigIntegrityTest extends BrowserTestBase {
 
     // Assert that all install tasks have done what they should do.
     // @see lightning_install_tasks()
-    $account = entity_load('user', 1);
+    $account = \Drupal::entityTypeManager()
+      ->getStorage('user')
+      ->load(1);
     $this->assertInstanceOf(UserInterface::class, $account);
     /** @var UserInterface $account */
     $this->assertTrue($account->hasRole('administrator'));

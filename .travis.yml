@@ -1,66 +1,54 @@
-dist: trusty
+---
 language: php
 
-cache:
-  bundler: true
-  directories:
-    - "$HOME/.composer/cache"
-    - "$HOME/.drush/cache"
-
-php:
-  - 7.1
-
-env:
-  - VERSION=HEAD
-  # Add 3.x fixtures once Lightning Layout 2.x is stable and a migration path
-  # from Panels and Panelizer exists.
-  # - VERSION=3.0.0
-
-matrix:
-  fast_finish: true
+php: "7.1"
 
 addons:
   chrome: stable
 
+cache:
+  directories:
+    - "$HOME/.composer/cache"
+    - "$HOME/.drush/cache"
+    - "$TMPDIR/phpstan/cache"
+
+env:
+  global:
+    - ORCA_SUT_NAME=acquia/lightning
+    - ORCA_SUT_BRANCH=8.x-4.x
+    - ORCA_VERSION=v1.0.0-alpha13
+    - ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/packages_alter.yml
+    - ORCA_FIXTURE_PROFILE=lightning
+
+matrix:
+  fast_finish: true
+  include:
+    # Standard ORCA jobs.
+    - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
+    - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
+    - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=ISOLATED_RECOMMENDED }
+    - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
+    # Lightning 4.x is incompatible with Drupal Core 8.6.
+    # @todo Uncomment this job once Drupal 8.7 is the "previous" version.
+    # - { name: "Integrated test w/ recommended package versions & previous minor release of Drupal core", env: ORCA_JOB=CORE_PREVIOUS }
+    - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=ISOLATED_DEV }
+    - { name: "Integrated test w/ dev package versions", env: ORCA_JOB=INTEGRATED_DEV }
+    - { name: "Integrated test w/ dev package versions & next minor dev version of Drupal core", env: ORCA_JOB=CORE_NEXT }
+    # Custom job.
+    # @todo Add 3.x fixtures once Lightning Layout 2.x is stable and a migration
+    #   path from Panels and Panelizer exists.
+  allow_failures:
+    - env: ORCA_JOB=INTEGRATED_DEV
+    - env: ORCA_JOB=CORE_NEXT
+
 before_install:
-  - composer self-update
-  - composer --version
-  - google-chrome-stable --version
+  - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
+  - ../orca/bin/travis/before_install.sh
 
-  - export ORCA=$TRAVIS_BUILD_DIR/../orca
-  - export ORCA_FIXTURE=$ORCA-build
-  - export ORCA_SUT_NAME=acquia/lightning
-  - export ORCA_SUT_BRANCH=8.x-4.x
-  - export ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/packages.yml
+install: ../orca/bin/travis/install.sh
 
-  - export PATH="$HOME/.composer/vendor/bin:$PATH"
-  - export PATH="$ORCA/bin:$PATH"
-  - export PATH="$ORCA/vendor/bin:$PATH"
-  - export PATH="$ORCA_FIXTURE/vendor/bin:$PATH"
+before_script: ../orca/bin/travis/before_script.sh
 
-  # Install ORCA and prepare the environment.
-  - git clone --branch develop --depth 1 https://github.com/acquia/orca.git $ORCA
-  - $ORCA/bin/travis/before_install.sh
+script: ../orca/bin/travis/script.sh
 
-install:
-  - $ORCA/bin/travis/install.sh
-
-  # Run ORCA static analysis tools.
-  - orca static-analysis:run ./
-
-  # Use ORCA to build the code base.
-  - orca fixture:init -f --sut $ORCA_SUT_NAME --core 8.7.x-dev --dev --profile lightning
-  # Install dev dependencies.
-  - composer require --dev drupal/console --working-dir $ORCA_FIXTURE --no-update
-  # Update in a separate step to prevent lock file version conflicts.
-  - composer update --working-dir $ORCA_FIXTURE
-
-before_script:
-  - cd $ORCA_FIXTURE/docroot
-  # - $TRAVIS_BUILD_DIR/update.sh $VERSION
-
-script:
-  - orca tests:run --sut $ORCA_SUT_NAME
-
-after_failure:
-  - drush watchdog:show --count=100 --severity=Error --extended
+after_failure: ../orca/bin/travis/after_failure.sh

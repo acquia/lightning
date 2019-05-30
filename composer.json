@@ -4,6 +4,7 @@
     "description": "The best of Drupal, curated by Acquia",
     "license": "GPL-2.0-or-later",
     "require": {
+        "ext-dom": "*",
         "cweagans/composer-patches": "^1.6.4",
         "drupal-composer/drupal-scaffold": "^2.0.0",
         "drupal/claro": "^1.0",
@@ -61,7 +62,13 @@
         "psr-4": {
             "Acquia\\Lightning\\": "src",
             "Acquia\\LightningExtension\\": "src/LightningExtension"
-        }
+        },
+        "classmap": [
+            "tests/features/bootstrap"
+        ],
+        "files": [
+            "RoboFile.php"
+        ]
     },
     "repositories": {
         "drupal": {
