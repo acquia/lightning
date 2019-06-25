@@ -1,3 +1,18 @@
+## 4.0.1
+* Updated Lightning Media to 3.11, which:
+  * Updated DropzoneJS to 2.0-alpha4.
+  * Updated Entity Embed to 1.0-rc2.
+  * Updated Media Entity Twitter to 2.0-alpha3.
+* Updated Lightning Workflow to 3.7 (no user-facing changes).
+* Updated Lightning Layout to 2.1, which:
+  * Added the Layout Builder Symmetric Translations module to provide basic translation support for landing pages.
+  * Updated Background Image Formatter to 1.9.
+  * Updated Layout Builder Library to 1.0-beta1.
+  * Updated Layout Builder Restrictions to 2.1.
+  * Updated Panels to 4.4.
+* Many changes to internal testing infrastructure, but nothing that
+  should affect users of Lightning.
+
 ## 4.0.0
 * Added the Claro administration theme.
 * Security updated Lightning Core to 4.1.0, which updates Drupal core to 8.7.1.
