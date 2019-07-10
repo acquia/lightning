@@ -150,7 +150,8 @@ abstract class BehatCommandBase extends Command {
    * @return string
    *   The full, real path.
    *
-   * @throws \InvalidArgumentException if the path cannot be resolved.
+   * @throws \InvalidArgumentException
+   *   If the path cannot be resolved.
    */
   protected function ensurePath($path) {
     $real_path = $this->fileSystem->realpath($path);

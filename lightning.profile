@@ -118,7 +118,7 @@ function lightning_set_logo() {
 function lightning_alter_frontpage_view() {
   $front_page = Drupal::configFactory()->getEditable('views.view.frontpage');
 
-  if (! $front_page->isNew()) {
+  if (!$front_page->isNew()) {
     $front_page
       ->set('langcode', 'en')
       ->set('status', TRUE)

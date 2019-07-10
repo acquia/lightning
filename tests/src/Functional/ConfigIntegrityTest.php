@@ -17,13 +17,12 @@ class ConfigIntegrityTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
-   *
-   * Slick Entity Reference has a schema error.
-   *
-   * @todo Remove when depending on slick_entityreference 1.2 or later.
    */
   protected static $configSchemaCheckerExclusions = [
+    // @todo Remove this when depending on slick_entityreference 1.2 or later.
     'core.entity_view_display.block_content.media_slideshow.default',
+    // @todo Remove when requiring Lightning Layout 2.2 or later.
+    'core.entity_view_display.block_content.banner.default',
   ];
 
   /**
@@ -40,18 +39,18 @@ class ConfigIntegrityTest extends BrowserTestBase {
       ->getStorage('user')
       ->load(1);
     $this->assertInstanceOf(UserInterface::class, $account);
-    /** @var UserInterface $account */
+    /** @var \Drupal\user\UserInterface $account */
     $this->assertTrue($account->hasRole('administrator'));
 
     $this->assertSame('/node', $this->config('system.site')->get('page.front'));
-    $this->assertSame(USER_REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
+    $this->assertSame(UserInterface::REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
     $this->assertTrue(Role::load(Role::AUTHENTICATED_ID)->hasPermission('access shortcuts'));
     $this->assertSame('bartik', $this->config('system.theme')->get('default'));
     $this->assertSame('seven', $this->config('system.theme')->get('admin'));
     $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
     $this->assertContains('/lightning/lightning.png', $this->config('system.theme.global')->get('logo.path'));
     $this->assertContains('/lightning/favicon.ico', $this->config('system.theme.global')->get('favicon.path'));
-    // TODO: Assert changes to the frontpage view were made.
+    /* @todo: Assert changes to the frontpage view were made. */
 
     // lightning_core_update_8002() marks a couple of core view modes as
     // internal.

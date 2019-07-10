@@ -10,8 +10,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * A Drupal Console command that simply prints the semver converted version of
- * the current Lightning codebase to stdout.
+ * Prints the semver version of the current Lightning code base.
  */
 class VersionCommand extends Command {
 
@@ -61,20 +60,21 @@ class VersionCommand extends Command {
   }
 
   /**
-   * Converts a Lightning release version to a semantic version number according
-   * to Lightning's VERSIONS.md file. Examples:
+   * Converts a Lightning release version to a semantic version number.
+   *
+   * The version number is converted according to Lightning's VERSIONS.md file.
+   * For example:
    * - 8.x-1.23 => 1.2.3
    * - 8.x-1.203 => 1.2.3
    * - 8.x-1.230 => 1.2.30
    * - 8.x-1.23-dev => 8.x-1.2.3-dev
-   *
-   * NOTE: This will break if the minor version number is greater than 9.
+   * This will break if the minor version number is greater than 9.
    *
    * @param string $drupal_version
    *   The version in 8.x-n.nn format.
    *
    * @return string
-   *   Semantic version
+   *   The semantic version number.
    */
   public static function toSemanticVersion($drupal_version) {
     preg_match('/^8\.x-(\d+).(\d)(\d+)(-.+)?$/', $drupal_version, $matches);

@@ -40,8 +40,6 @@ matrix:
   allow_failures:
     - env: ORCA_JOB=INTEGRATED_DEV
     - env: ORCA_JOB=CORE_NEXT
-    # Temporary allowances.
-    - env: ORCA_JOB=STATIC_CODE_ANALYSIS
 
 before_install:
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca

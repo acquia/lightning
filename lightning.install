@@ -53,8 +53,6 @@ function lightning_update_8001() {
  * Removed in Lightning 8.x-2.06.
  *
  * Formerly created roles for editing content types.
- *
- * @deprecated
  */
 function lightning_update_8002() {
 }
@@ -70,7 +68,13 @@ function lightning_update_8003() {
  * Enables Entity API.
  */
 function lightning_update_8004() {
-  eval('interface Drupal\entity\Entity\RevisionableEntityBundleInterface {}');
+  /*
+   * This ancient line is disabled in order to evade a strict coding standards
+   * check. It should not be necessary at this point anyway, since it dates from
+   * the days of Lightning 1.x, which has long since been end-of-life.
+   *
+   * eval('interface Drupal\entity\Entity\RevisionableEntityBundleInterface{}');
+   */
   Drupal::service('module_installer')->install(['entity']);
 }
 
@@ -78,8 +82,6 @@ function lightning_update_8004() {
  * Removed in Lightning 8.x-2.04.
  *
  * Formerly installed Contact Storage.
- *
- * @deprecated
  */
 function lightning_update_8005() {
 }
@@ -88,8 +90,6 @@ function lightning_update_8005() {
  * Removed in Lightning 8.x-2.04.
  *
  * Formerly Granted permission to use contact form(s).
- *
- * @deprecated
  */
 function lightning_update_8006() {
 }

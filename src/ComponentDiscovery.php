@@ -25,14 +25,14 @@ class ComponentDiscovery {
   /**
    * The Lightning profile extension object.
    *
-   * @var Extension
+   * @var \Drupal\Core\Extension\Extension
    */
   protected $profile;
 
   /**
    * Cache of all discovered components.
    *
-   * @var Extension[]
+   * @var \Drupal\Core\Extension\Extension[]
    */
   protected $components;
 
@@ -70,7 +70,7 @@ class ComponentDiscovery {
   /**
    * Returns extension objects for all Lightning components.
    *
-   * @return Extension[]
+   * @return \Drupal\Core\Extension\Extension[]
    *   Array of extension objects for all Lightning components.
    */
   public function getAll() {
@@ -89,7 +89,7 @@ class ComponentDiscovery {
   /**
    * Returns extension objects for all main Lightning components.
    *
-   * @return Extension[]
+   * @return \Drupal\Core\Extension\Extension[]
    *   Array of extension objects for top-level Lightning components.
    */
   public function getMainComponents() {
@@ -102,7 +102,7 @@ class ComponentDiscovery {
       // 2. The main component's directory starts with "lightning_".
       // E.g.: "/lightning_core/modules/lightning_search".
       $path = explode(DIRECTORY_SEPARATOR, $module->getPath());
-      $parent = $path[count($path)-3];
+      $parent = $path[count($path) - 3];
       return strpos($parent, $identifier) !== 0;
     };
 
@@ -112,7 +112,7 @@ class ComponentDiscovery {
   /**
    * Returns extension object for all Lightning sub-components.
    *
-   * @return Extension[]
+   * @return \Drupal\Core\Extension\Extension[]
    *   Array of extension objects for Lightning sub-components.
    */
   public function getSubComponents() {

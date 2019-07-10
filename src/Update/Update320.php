@@ -11,6 +11,8 @@ use Symfony\Component\Console\Style\StyleInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
+ * Contains optional updates targeting Lightning 3.2.0.
+ *
  * @Update("3.2.0")
  */
 final class Update320 implements ContainerInjectionInterface {
@@ -29,7 +31,7 @@ final class Update320 implements ContainerInjectionInterface {
    *
    * @param string $app_root
    *   The Drupal application root.
-   * @param \Drupal\Core\StringTranslation\TranslationInterface|NULL $translation
+   * @param \Drupal\Core\StringTranslation\TranslationInterface $translation
    *   (optional) The string translation service.
    */
   public function __construct($app_root, TranslationInterface $translation = NULL) {
@@ -53,12 +55,12 @@ final class Update320 implements ContainerInjectionInterface {
   /**
    * Converts sub-profile info keys to the 8.6.x API.
    *
+   * @param \Symfony\Component\Console\Style\StyleInterface $io
+   *   The I/O handler.
+   *
    * @update
    *
    * @ask Do you want to update all sub-profiles to be Drupal 8.6 compatible?
-   *
-   * @param \Symfony\Component\Console\Style\StyleInterface $io
-   *   The I/O handler.
    */
   public function updateProfiles(StyleInterface $io) {
     $discovery = new ExtensionDiscovery($this->appRoot);
@@ -67,7 +69,7 @@ final class Update320 implements ContainerInjectionInterface {
     foreach ($profiles as $profile) {
       $info_file = $profile->getPathname();
 
-      if (is_writeable($info_file)) {
+      if (is_writable($info_file)) {
         $info = file_get_contents($info_file);
 
         if (strstr($info, 'base profile:')) {

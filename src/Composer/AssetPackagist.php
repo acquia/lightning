@@ -16,7 +16,7 @@ final class AssetPackagist {
    * This will be the composer.json closest to the current working directory
    * that contains a dependency on acquia/lightning.
    *
-   * @return JsonFile
+   * @return \Composer\Json\JsonFile
    *   File wrapper around the root package's composer.json.
    */
   protected static function getRootPackage() {
@@ -36,8 +36,7 @@ final class AssetPackagist {
       }
       chdir('..');
       array_pop($dir);
-    }
-    while ($dir);
+    } while ($dir);
 
     throw new \RuntimeException('Could not locate the root package.');
   }

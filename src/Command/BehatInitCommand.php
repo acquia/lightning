@@ -2,6 +2,7 @@
 
 namespace Drupal\lightning\Command;
 
+use Drupal\Core\File\FileSystemInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,7 +27,7 @@ class BehatInitCommand extends BehatCommandBase {
    * @param string $app_root
    *   The Drupal application root.
    */
-  public function __construct($file_system, $app_root) {
+  public function __construct(FileSystemInterface $file_system, $app_root) {
     parent::__construct($file_system);
     $this->appRoot = $app_root;
   }
