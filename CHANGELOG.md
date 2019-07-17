@@ -1,3 +1,8 @@
+## 4.0.2
+* Updated Lightning Core to 4.3, which:
+  * Security updated Drupal core to 8.7.5. (SA-CORE-2019-008)
+  * Now allows any version of Acquia Connector to be installed.
+
 ## 4.0.1
 * Updated Lightning Media to 3.11, which:
   * Updated DropzoneJS to 2.0-alpha4.

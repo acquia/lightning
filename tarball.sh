@@ -6,7 +6,10 @@ ARCHIVE=lightning-8.x-$1
 PROFILE_DIR=profiles/contrib/lightning
 
 composer package 1> $WORK_DIR/cloud.make
+composer release-version 8.x-$1
 composer archive --file $ARCHIVE --dir $WORK_DIR
+# Remove modifications to info files.
+git reset --hard
 cd $WORK_DIR
 curl -L -o drush https://github.com/drush-ops/drush/releases/download/8.1.16/drush.phar
 chmod +x drush
