@@ -1,3 +1,8 @@
+## 3.3.2
+* Updated Lightning Core to 4.3, which:
+  * Security updated Drupal core to 8.7.5. (SA-CORE-2019-008)
+  * Now allows any version of Acquia Connector to be installed.
+
 ## 3.3.1
 * Updated Lightning Core to 4.1, which:
   * Security updated Drupal core to 8.7.1 (SA-CORE-2019-007).
