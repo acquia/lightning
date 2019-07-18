@@ -2,6 +2,8 @@
 
 namespace Acquia\LightningExtension\Context;
 
+@trigger_error(__NAMESPACE__ . '\BlockContext is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
 use Drupal\block\Entity\Block;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 use Drupal\DrupalExtension\Context\MinkContext;
@@ -38,6 +40,8 @@ class BlockContext extends DrupalSubContextBase {
    * @When I instantiate the :plugin_id block in :theme
    */
   public function instantiateBlock($plugin_id, $theme) {
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
     $this->visitPath('/admin/structure/block/add/' . $plugin_id . '/' . $theme);
 
     $id = uniqid($theme . '_');
@@ -57,6 +61,8 @@ class BlockContext extends DrupalSubContextBase {
    *   The block entity ID.
    */
   public function deleteBlock($id) {
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
     $block = Block::load($id);
     if ($block) {
       $block->delete();

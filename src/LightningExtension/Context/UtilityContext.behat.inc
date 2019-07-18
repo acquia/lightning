@@ -2,6 +2,8 @@
 
 namespace Acquia\LightningExtension\Context;
 
+@trigger_error(__NAMESPACE__ . '\UtilityContext is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Mink\Exception\ExpectationException;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
@@ -25,6 +27,8 @@ class UtilityContext extends DrupalSubContextBase {
    * @When I accept the alert(s)
    */
   public function acceptAlerts(callable $then = NULL, array $arguments = []) {
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
     $driver = $this->getSession()->getDriver();
 
     if ($driver instanceof Selenium2Driver) {
@@ -62,6 +66,8 @@ class UtilityContext extends DrupalSubContextBase {
    * @Then there should be :count :bundle :entity_type entity
    */
   public function assertEntityExistence($entity_type, $count, $bundle = NULL) {
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
     $query = \Drupal::entityQuery($entity_type)->count();
 
     if ($bundle) {
@@ -86,6 +92,8 @@ class UtilityContext extends DrupalSubContextBase {
    * @When I dump the page contents
    */
   public function dumpPage() {
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
     print_r($this->getSession()->getPage()->getContent());
   }
 

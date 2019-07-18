@@ -4,6 +4,8 @@ namespace Acquia\LightningExtension\Context;
 
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
+@trigger_error(__NAMESPACE__ . '\UndoContext is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
 /**
  * A context allowing easy undo of anything done during a scenario.
  */
@@ -29,6 +31,8 @@ class UndoContext extends DrupalSubContextBase {
    * @AfterScenario
    */
   public function runAll() {
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
     $this->locked = TRUE;
 
     while ($this->stack) {
@@ -49,6 +53,8 @@ class UndoContext extends DrupalSubContextBase {
    *   be passed by reference.
    */
   public function push(callable $callback, array $arguments = []) {
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
     if ($this->locked == FALSE) {
       $this->stack[] = func_get_args();
     }

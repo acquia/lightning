@@ -2,6 +2,8 @@
 
 namespace Acquia\LightningExtension\Context;
 
+@trigger_error(__NAMESPACE__ . '\PanelsInPlaceContext is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
 use Behat\Mink\Driver\Selenium2Driver;
 use DMore\ChromeDriver\ChromeDriver;
 use Drupal\DrupalExtension\Context\DrupalSubContextBase;
@@ -20,6 +22,8 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
    *   The active tab's contents.
    */
   protected function getActiveTab() {
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
     return $this->assertSession()
       ->elementExists('css', '.ipe-tabs-content', $this->assertTray());
   }
@@ -36,6 +40,8 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
    * @Then I should not see the :plugin_id plugin in the :category category
    */
   public function assertBlockPluginNotExists($plugin_id, $category = NULL) {
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
     $this->assertSession()
       ->elementNotExists(
         'css',
@@ -50,6 +56,8 @@ class PanelsInPlaceContext extends DrupalSubContextBase {
    * @When I revert the layout
    */
   public function revertLayout() {
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-4.0 and will be removed in lightning:8.x-4.1. If you need its functionality, you should copy the relevant code into your own project. See https://www.drupal.org/node/3068751', E_USER_DEPRECATED);
+
     $tray = $this->getContext(PanelsIPEContext::class)->assertTray();
 
     $link = $this->assertSession()
