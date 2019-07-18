@@ -1,3 +1,10 @@
+## 3.3.3
+* Hotfixed a Composer error caused by erroneous configuration
+  shipped with Lightning 3.3.2.
+* Updated Lightning Core to 4.4.0 to hotfix a separate but related
+  Composer error caused by erroneous configuration shipped with
+  Lightning Core 4.3.0.
+
 ## 3.3.2
 * Updated Lightning Core to 4.3, which:
   * Security updated Drupal core to 8.7.5. (SA-CORE-2019-008)
