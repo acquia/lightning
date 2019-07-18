@@ -9,17 +9,18 @@
         "drupal-composer/drupal-scaffold": "^2.0.0",
         "drupal/claro": "^1.0",
         "drupal/lightning_api": "^4.1",
-        "drupal/lightning_core": "^4.3",
+        "drupal/lightning_core": "^4.4",
         "drupal/lightning_layout": "^2.1",
         "drupal/lightning_media": "^3.11",
         "drupal/lightning_workflow": "^3.7",
         "oomphinc/composer-installers-extender": "^1.1"
     },
     "require-dev": {
-        "acquia/lightning_dev": "dev-8.x-1.x",
+        "drupal/drupal-extension": "^3.4",
         "drupal/facets": "^1.2",
         "drupal/media_entity_generic": "1.x-dev",
-        "drupal/schema_metatag": "^1.3"
+        "drupal/schema_metatag": "^1.3",
+        "webflo/drupal-core-require-dev": "*"
     },
     "config": {
         "platform": {
@@ -100,8 +101,14 @@
         "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute",
         "nuke": "rm -r -f docroot vendor",
         "package": "Acquia\\Lightning\\Composer\\Package::execute",
-        "pull": "Acquia\\Lightning\\Commands\\FileCommands::pull",
-        "push": "Acquia\\Lightning\\Commands\\FileCommands::push",
+        "pull": "cp -R -f ./docroot/profiles/contrib/lightning/* .",
+        "push": [
+            "rm -r -f ./docroot/profiles/contrib/lightning",
+            "mkdir -p ./docroot/profiles/contrib/lightning",
+            "@composer archive --file lightning",
+            "tar -x -f lightning.tar -C ./docroot/profiles/contrib/lightning",
+            "rm lightning.tar"
+        ],
         "release-version": "Acquia\\Lightning\\Composer\\ReleaseVersion::execute",
         "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute"
     }
