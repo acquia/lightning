@@ -6,6 +6,13 @@ use Drupal\DrupalExtension\Context\DrupalSubContextBase;
 
 /**
  * A context allowing easy undo of anything done during a scenario.
+ *
+ * @internal
+ *   This is an internal part of Lightning's testing system and may be changed
+ *   or removed at any time without warning. External code should not extend,
+ *   instantiate, or rely on this class in any way! If you'd like to use any of
+ *   these step definitions in your project, you should copy them into your own
+ *   project.
  */
 class UndoContext extends DrupalSubContextBase {
 
