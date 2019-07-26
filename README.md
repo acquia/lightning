@@ -146,28 +146,7 @@ Each Lightning component also has a drupal.org issue queue:
 * [Media](https://www.drupal.org/project/issues/lightning_media)
 * [Workflow](https://www.drupal.org/project/issues/lightning_workflow)
 
-### Local Development
-Lightning has a dev dependency on [Lightning Dev][lightning_dev] which provides
-tools to aid in developing and contributing to Lightning. To install locally:
-
-1. Clone this repo:
-  ```
-  $ git clone git@github.com:acquia/lightning.git
-  ```
-
-1. Install dependencies:
-  ```
-  $ cd lightning
-  $ composer install
-  ```
-
-This will create a fully functional docroot with a git-ignored copy of the
-profile files inside the `docroot/contrib/lightning`. You can modify those files
-directly, then use the provided `composer pull` command to move the changes back
-into the VCS controlled directory.
-
-Lightning is still compatible with PHP 5.6, but you will need PHP >= 7.0.8 in
-order to build a local version of Lightning in this way.
+For more information on local development, see CONTRIBUTING.md.
 
 ### How to uninstall Lightning
 Lightning is an installation profile, so there's no "officially" sanctioned way
