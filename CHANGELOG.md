@@ -1,3 +1,11 @@
+## 3.3.4
+* Updated Lightning Core to 4.5, which:
+  * Security updated Metatag to 1.9.
+  * Fixed a Drupal Console-related error that could appear even if Drupal Console
+    is not installed. (Issue #3007425)
+  * Sorts module version numbers recorded in the lightning_core.versions config
+    by key. (Issue #3050259)
+
 ## 3.3.3
 * Hotfixed a Composer error caused by erroneous configuration
   shipped with Lightning 3.3.2.
