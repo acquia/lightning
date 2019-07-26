@@ -93,16 +93,16 @@ class IniEncoder {
   /**
    * Parses data in Drupal's .info format.
    *
-   * @see https://api.drupal.org/api/drupal/includes!common.inc/function/drupal_parse_info_format/7.x
-   *
    * @param string $data
    *   A string to parse.
+   *
+   * @see https://api.drupal.org/api/drupal/includes!common.inc/function/drupal_parse_info_format/7.x
    *
    * @return array
    *   The parsed data.
    */
   public function parse($data) {
-    $info = array();
+    $info = [];
 
     if (preg_match_all('
       @^\s*                           # Start at the beginning of a line, ignoring leading whitespace

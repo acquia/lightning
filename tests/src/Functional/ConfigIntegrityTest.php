@@ -37,9 +37,9 @@ class ConfigIntegrityTest extends BrowserTestBase {
 
     // Assert that all install tasks have done what they should do.
     // @see lightning_install_tasks()
-    $account = User::load( 1);
+    $account = User::load(1);
     $this->assertInstanceOf(UserInterface::class, $account);
-    /** @var UserInterface $account */
+    /** @var \Drupal\user\UserInterface $account */
     $this->assertTrue($account->hasRole('administrator'));
 
     $this->assertSame('/node', $this->config('system.site')->get('page.front'));
@@ -51,7 +51,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertContains('/lightning/lightning.png', $this->config('system.theme.global')->get('logo.path'));
     $this->assertContains('/lightning/favicon.ico', $this->config('system.theme.global')->get('favicon.path'));
     // TODO: Assert changes to the frontpage view were made.
-
+    //
     // lightning_core_update_8002() marks a couple of core view modes as
     // internal.
     $view_modes = EntityViewMode::loadMultiple(['node.rss', 'node.search_index']);

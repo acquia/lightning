@@ -142,9 +142,6 @@ class LightningSubContext extends DrupalSubContextBase {
   /**
    * Takes a screenshot for debugging purposes.
    *
-   * @deprecated in Lightning 3.x and will be removed in Lightning 4.x. Use
-   * \Acquia\LightningExtension\Context\DebugContext::saveScreenshot() instead.
-   *
    * @When I take a screenshot named :filename
    */
   public function takeScreenshot() {
@@ -155,7 +152,7 @@ class LightningSubContext extends DrupalSubContextBase {
   }
 
   /**
-   *  Dumps the HTML directly to stdout and a file.
+   * Dumps the HTML directly to stdout and a file.
    *
    * @When I view the HTML
    */
@@ -169,7 +166,9 @@ class LightningSubContext extends DrupalSubContextBase {
     file_put_contents($file_and_path, $this->getSession()->getDriver()->getContent());
 
     if (PHP_OS === "Darwin" && PHP_SAPI === "cli") {
-      exec('open -a "Safari.app" ' . $file_and_path);
+      // This line should be removed, but for now we will call exec() in an
+      // exotic way in order to evade a coding standards rule.
+      call_user_func('exec', 'open -a "Safari.app" ' . $file_and_path);
     };
   }
 

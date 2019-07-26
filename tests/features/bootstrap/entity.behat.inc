@@ -72,15 +72,15 @@ class EntitySubContext extends DrupalSubContextBase {
   }
 
   public function queueNode() {
-    @trigger_error(__METHOD__ . ' is deprecated. Use ' . __CLASS__ . '::queueEntity() instead.', E_USER_DEPRECATED);
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-3.3 and will be removed in lightning:8.x-4.0. Use ' . __CLASS__ . '::queueEntity() instead. See https://www.drupal.org/node/2105097', E_USER_DEPRECATED);
   }
 
   public function queueTerm() {
-    @trigger_error(__METHOD__ . ' is deprecated. Use ' . __CLASS__ . '::queueEntity() instead.', E_USER_DEPRECATED);
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-3.3 and will be removed in lightning:8.x-4.0. Use ' . __CLASS__ . '::queueEntity() instead. See https://www.drupal.org/node/2105097', E_USER_DEPRECATED);
   }
 
   public function queueUser() {
-    @trigger_error(__METHOD__ . ' is deprecated. Use ' . __CLASS__ . '::queueEntity() instead.', E_USER_DEPRECATED);
+    @trigger_error(__METHOD__ . ' is deprecated in lightning:8.x-3.3 and will be removed in lightning:8.x-4.0. Use ' . __CLASS__ . '::queueEntity() instead. See https://www.drupal.org/node/2105097', E_USER_DEPRECATED);
   }
 
   /**

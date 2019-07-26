@@ -35,7 +35,7 @@ class UtilityContext extends DrupalSubContextBase {
     $driver = $this->getSession()->getDriver();
 
     if ($driver instanceof Selenium2Driver) {
-      while (true) {
+      while (TRUE) {
         try {
           $driver->getWebDriverSession()->accept_alert();
         }
@@ -60,8 +60,8 @@ class UtilityContext extends DrupalSubContextBase {
    * @param string $bundle
    *   (optional) The bundle to filter by.
    *
-   * @throws \Behat\Mink\Exception\ExpectationException if there are not exactly
-   * as many entities of the given type and bundle as expected.
+   * @throws \Behat\Mink\Exception\ExpectationException
+   *   If the number of entities found does not match the expected number.
    *
    * @Then there should be :count :entity_type entities
    * @Then there should be :count :bundle :entity_type entities

@@ -6,6 +6,8 @@ use Behat\Mink\Element\ElementInterface;
 use Behat\Mink\Exception\ExpectationException;
 
 /**
+ * Provides helper methods for interacting with <details> elements.
+ *
  * @internal
  *   This is an internal part of Lightning's testing system and may be changed
  *   or removed at any time without warning. External code should not extend,
@@ -26,11 +28,8 @@ trait DetailsTrait {
    * @return \Behat\Mink\Element\NodeElement
    *   The details element.
    *
-   * @throws \Behat\Mink\Exception\ExpectationException if the element is not
-   * found in the container.
-   *
-   * @return \Behat\Mink\Element\NodeElement
    * @throws \Behat\Mink\Exception\ExpectationException
+   *   If the element is not found in the container.
    */
   protected function assertDetails($summary, ElementInterface $container) {
     /** @var \Behat\Mink\Element\NodeElement $element */
