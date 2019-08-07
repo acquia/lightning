@@ -1,7 +1,7 @@
 ---
 language: php
 
-php: "7.1"
+php: "7.2"
 
 addons:
   chrome: stable
@@ -10,15 +10,16 @@ cache:
   directories:
     - "$HOME/.composer/cache"
     - "$HOME/.drush/cache"
-    - "$TMPDIR/phpstan/cache"
+    - "${TMPDIR:-/tmp}/phpstan/cache"
 
 env:
   global:
     - ORCA_SUT_NAME=acquia/lightning
     - ORCA_SUT_BRANCH=8.x-4.x
-    - ORCA_VERSION=v1.0.0-alpha17
+    - ORCA_VERSION=master
     - ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/packages_alter.yml
     - ORCA_FIXTURE_PROFILE=lightning
+    - ORCA_TELEMETRY_ENABLE=TRUE
 
 matrix:
   fast_finish: true
@@ -43,8 +44,6 @@ matrix:
 
 before_install:
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
-  - curl https://github.com/acquia/orca/commit/278cfe3c1c3bf62c407cc2e5147d266ac3c2dd6c.patch | git -C ../orca apply
-  - curl https://github.com/acquia/orca/commit/2901aa5d9ff0c02cd2ca773fe4ff75f1010e7e37.patch | git -C ../orca apply  
   - ../orca/bin/travis/before_install.sh
 
 install: ../orca/bin/travis/install.sh
@@ -53,4 +52,10 @@ before_script: ../orca/bin/travis/before_script.sh
 
 script: ../orca/bin/travis/script.sh
 
+before_cache: ../orca/bin/travis/before_cache.sh
+
+after_success: ../orca/bin/travis/after_success.sh
+
 after_failure: ../orca/bin/travis/after_failure.sh
+
+after_script: ../orca/bin/travis/after_script.sh
