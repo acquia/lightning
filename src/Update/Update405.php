@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Drupal\lightning\Update;
 
 use Drupal\Core\DependencyInjection\ContainerInjectionInterface;
@@ -20,7 +19,6 @@ final class Update405 implements ContainerInjectionInterface {
    * @var \Drupal\Core\Extension\ModuleInstallerInterface
    */
   private $moduleInstaller;
-
 
   /**
    * Update405 constructor.
@@ -52,3 +50,4 @@ final class Update405 implements ContainerInjectionInterface {
     $this->moduleInstaller->install(['autosave_form', 'conflict']);
   }
 }
+
