@@ -1,18 +1,19 @@
 <?php
 
-namespace Drupal\Tests\lightning\Functional;
+namespace Drupal\Tests\lightning\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
 use Drupal\lightning\Update\Update405;
-use Drupal\Tests\BrowserTestBase;
 
 /**
  * @group lightning
  */
-class Update405Test extends BrowserTestBase
+class Update405Test extends KernelTestBase
 {
-  /**
-   */
+    protected static $modules = array('system');
+
+    /**
+     */
   public function testEnableAutosaveForm() {
 
     $moduleHandler = $this->container->get('module_handler');
@@ -23,5 +24,11 @@ class Update405Test extends BrowserTestBase
     $updateHandler = Update405::create($this->container);
 
     $updateHandler->enableAutosaveForm();
+
+    $moduleHandler = $this->container->get('module_handler');
+
+    $this->assertTrue($moduleHandler->moduleExists('autosave_form'));
+    $this->assertTrue($moduleHandler->moduleExists('conflict'));
   }
 }
+
