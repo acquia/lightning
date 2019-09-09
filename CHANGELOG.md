@@ -1,3 +1,11 @@
+## 4.0.5
+* Updated Lightning Workflow to 3.9, which:
+  * Added the Autosave Form and Conflict modules as soft dependencies to
+    Lightning Workflow. (Issue #3060244)
+  * Updated Moderation Sidebar to 1.2.
+  * Added labels to the base fields created by Lightning Scheduler
+    (Issues #3070984 and #3031460)
+
 ## 4.0.4
 * Updated Lightning Core to 4.5, which:
   * Security updated Metatag to 1.9.
