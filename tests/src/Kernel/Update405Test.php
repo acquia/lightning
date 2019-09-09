@@ -6,14 +6,16 @@ use Drupal\KernelTests\KernelTestBase;
 use Drupal\lightning\Update\Update405;
 
 /**
- * @group lightning
- */
+* @group lightning
+* @coversDefaultClass \Drupal\lightning\Update\Update405
+*/
 class Update405Test extends KernelTestBase
 {
     protected static $modules = array('system');
 
-    /**
-     */
+  /**
+   * @covers ::enableAutosaveForm
+   */
   public function testEnableAutosaveForm() {
 
     $moduleHandler = $this->container->get('module_handler');
@@ -21,9 +23,7 @@ class Update405Test extends KernelTestBase
     $this->assertFalse($moduleHandler->moduleExists('autosave_form'));
     $this->assertFalse($moduleHandler->moduleExists('conflict'));
 
-    $updateHandler = Update405::create($this->container);
-
-    $updateHandler->enableAutosaveForm();
+    Update405::create($this->container)->enableAutosaveForm();
 
     $moduleHandler = $this->container->get('module_handler');
 
