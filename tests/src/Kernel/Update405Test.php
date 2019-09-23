@@ -19,35 +19,24 @@ class Update405Test extends KernelTestBase {
 
   /**
    * @covers ::enableAutosaveForm
+   * @covers ::enableRedirect
    */
-  public function testEnableAutosaveForm() {
+  public function testUpdate() {
 
     $moduleHandler = $this->container->get('module_handler');
 
     $this->assertFalse($moduleHandler->moduleExists('autosave_form'));
     $this->assertFalse($moduleHandler->moduleExists('conflict'));
+    $this->assertFalse($moduleHandler->moduleExists('redirect'));
 
-    Update405::create($this->container)->enableAutosaveForm();
+    $update = Update405::create($this->container);
+    $update->enableAutosaveForm();
+    $update->enableRedirect();
 
     $moduleHandler = $this->container->get('module_handler');
 
     $this->assertTrue($moduleHandler->moduleExists('autosave_form'));
     $this->assertTrue($moduleHandler->moduleExists('conflict'));
-  }
-
-  /**
-   * @covers ::enableRedirect
-   */
-  public function testEnableRedirect() {
-
-    $moduleHandler = $this->container->get('module_handler');
-
-    $this->assertFalse($moduleHandler->moduleExists('redirect'));
-
-    Update405::create($this->container)->enableRedirect();
-
-    $moduleHandler = $this->container->get('module_handler');
-
     $this->assertTrue($moduleHandler->moduleExists('redirect'));
   }
 
