@@ -60,5 +60,5 @@ final class Update405 implements ContainerInjectionInterface {
   public function enableRedirect() {
     $this->moduleInstaller->install(['redirect']);
   }
-}
 
+}
