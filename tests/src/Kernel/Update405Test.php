@@ -22,7 +22,6 @@ class Update405Test extends KernelTestBase {
    * @covers ::enableRedirect
    */
   public function testUpdate() {
-
     $moduleHandler = $this->container->get('module_handler');
 
     $this->assertFalse($moduleHandler->moduleExists('autosave_form'));
