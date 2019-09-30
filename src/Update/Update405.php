@@ -50,4 +50,15 @@ final class Update405 implements ContainerInjectionInterface {
     $this->moduleInstaller->install(['autosave_form', 'conflict']);
   }
 
+  /**
+   * Enables the Redirect module.
+   *
+   * @update
+   *
+   * @ask Do you want to enable the Redirect module?
+   */
+  public function enableRedirect() {
+    $this->moduleInstaller->install(['redirect']);
+  }
+
 }

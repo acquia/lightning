@@ -19,18 +19,24 @@ class Update405Test extends KernelTestBase {
 
   /**
    * @covers ::enableAutosaveForm
+   * @covers ::enableRedirect
    */
-  public function testEnableAutosaveForm() {
-    /** @var \Drupal\Core\Extension\ModuleHandlerInterface $module_handler */
-    $module_handler = $this->container->get('module_handler');
-    $this->assertFalse($module_handler->moduleExists('autosave_form'));
-    $this->assertFalse($module_handler->moduleExists('conflict'));
+  public function testUpdate() {
+    $moduleHandler = $this->container->get('module_handler');
 
-    Update405::create($this->container)->enableAutosaveForm();
+    $this->assertFalse($moduleHandler->moduleExists('autosave_form'));
+    $this->assertFalse($moduleHandler->moduleExists('conflict'));
+    $this->assertFalse($moduleHandler->moduleExists('redirect'));
 
-    $module_handler = $this->container->get('module_handler');
-    $this->assertTrue($module_handler->moduleExists('autosave_form'));
-    $this->assertTrue($module_handler->moduleExists('conflict'));
+    $update = Update405::create($this->container);
+    $update->enableAutosaveForm();
+    $update->enableRedirect();
+
+    $moduleHandler = $this->container->get('module_handler');
+
+    $this->assertTrue($moduleHandler->moduleExists('autosave_form'));
+    $this->assertTrue($moduleHandler->moduleExists('conflict'));
+    $this->assertTrue($moduleHandler->moduleExists('redirect'));
   }
 
 }
