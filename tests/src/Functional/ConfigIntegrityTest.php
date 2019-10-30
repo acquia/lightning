@@ -46,7 +46,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertSame(UserInterface::REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
     $this->assertTrue(Role::load(Role::AUTHENTICATED_ID)->hasPermission('access shortcuts'));
     $this->assertSame('bartik', $this->config('system.theme')->get('default'));
-    $this->assertSame('seven', $this->config('system.theme')->get('admin'));
+    $this->assertSame('claro', $this->config('system.theme')->get('admin'));
     $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
     $this->assertContains('/lightning/lightning.png', $this->config('system.theme.global')->get('logo.path'));
     $this->assertContains('/lightning/favicon.ico', $this->config('system.theme.global')->get('favicon.path'));
