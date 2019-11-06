@@ -7,8 +7,8 @@
 
 use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
-use Drupal\user\RoleInterface;
 use Drupal\user\Entity\User;
+use Drupal\user\RoleInterface;
 
 /**
  * Implements hook_install_tasks().
