@@ -3,3 +3,8 @@ acquia/lightning:
   type: drupal-profile
   url: ../lightning
   version_dev: 3.x-dev
+# Lightning 8.x-3.x requires Lightning Layout 1.x, period, so force that.
+drupal/lightning_layout:
+  type: drupal-module
+  version: 1.*
+  version_dev: 1.x-dev
