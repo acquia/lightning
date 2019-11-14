@@ -1,5 +1,10 @@
 #!/bin/bash
 
+_include() {
+  cat ../docroot/modules/contrib/$1/logs/$2.md | tail -n +2 | sed 's/^/  /'
+}
+export -f _include
+
 for file in $(ls *.md); do
   # Strip the .md extension off to determine the git tag.
   tag="${file%.*}"
