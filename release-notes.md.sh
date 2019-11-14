@@ -46,6 +46,7 @@ Run Lightning configuration updates (if required - depending on the version from
 drush cache:rebuild
 drush update:lightning
 ```
-
-For general update instructions see https://gitub.com/acquia/lightning/blob/$BRANCH/UPDATE.md.
 EOF
+
+echo
+echo "For general update instructions see https://gitub.com/acquia/lightning/blob/$BRANCH/UPDATE.md."
