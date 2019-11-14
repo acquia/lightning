@@ -1,3 +1,8 @@
+## 4.1.0-beta1
+* Updated Lightning Core to 5.0-beta1:
+  * Updated Drupal core to 8.8.0-beta1.
+  * Updated Pathauto to 1.6-alpha1.
+
 ## 4.0.5
 * Updated Lightning Workflow to 3.12, which:
   * Added the Autosave Form and Conflict modules as soft dependencies.

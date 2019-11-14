@@ -16,7 +16,11 @@ For the best developer experience and dependency management, install with Compos
 ### Changelog
 EOF
 
-tail -n +2 $CHANGE_LOG | cat
+if [[ -x $CHANGE_LOG ]]; then
+  ./$CHANGE_LOG
+else
+  tail -n +2 $CHANGE_LOG | cat
+fi
 echo
 
 cat << 'EOF'
