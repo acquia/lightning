@@ -8,13 +8,15 @@ if [[ $BRANCH != release/* ]]; then
 fi
 
 VERSION=${BRANCH#release/}
+# Ask git for the most recent semantic version tag, and use it as the version
+# from which to update.
+FROM=$(git tag --list 4.* --sort -creatordate | head -n 1)
 
 ./install-drupal.sh
 
-# Destroy the database.
+# Destroy the database and import the fixture from which to update.
+echo "Replacing database with $FROM snapshot..."
 drush sql:drop --yes
-
-# Import the fixture from which to update.
 cd docroot
 php core/scripts/db-tools.php import ../tests/fixtures/$FROM.php.gz
 cd ..

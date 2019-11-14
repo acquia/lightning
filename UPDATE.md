@@ -143,6 +143,7 @@ follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 ## 4.0.4 to 4.0.5
 * If you would like to enable support for autosave on your site, install the
   Autosave Form and Conflict modules.
+* If you would like to enable improved redirect handling, install the Redirect module.
 
 ## 4.0.3 to 4.0.4
 There are no manual update steps for this version.

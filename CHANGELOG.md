@@ -1,21 +1,49 @@
 ## 4.0.5
-* Updated Lightning Workflow to 3.9, which:
-  * Added the Autosave Form and Conflict modules as soft dependencies to
-    Lightning Workflow. (Issue #3060244)
+* Updated Lightning Workflow to 3.12, which:
+  * Added the Autosave Form and Conflict modules as soft dependencies.
+    (Issue #3060244)
   * Updated Moderation Sidebar to 1.2.
   * Added labels to the base fields created by Lightning Scheduler
     (Issues #3070984 and #3031460)
+  * Added support for Drupal core 8.8.x.
+* Updated Lightning API to 4.3:
+  * Added support for Drupal core 8.8.x.
+  * Updated OpenAPI to 1.0-beta6.
+  * Updated Simple OAuth to 3.16.
+* Updated Lightning Layout to 2.2:
+  * Added support for Drupal core 8.8.x.
+  * Updated Background Image Formatter to 1.10.
+  * Layout Builder Symmetric Translations will only be installed if the
+    site is using the Language module. (Issue #3066811)
+  * Fixed a PHP warning that can occur after a cache clear. (Issue #3068755)
+  * Allow CTools 3.0 or later.
+  * Include the Layout Builder Styles module as a dependency.
+* Updated Lightning Media to 3.13:
+  * Added support for Drupal core 8.8.x.
+  * Updated Entity Embed to 1.0.
+  * Updated Views Infinite Scroll to 1.6.
+  * Updated Entity Browser to 2.2.
+  * Fixed an improperly namespaced dependency in Lightning Media Video's info
+    file.
+* Updated Lightning Workflow to 3.12:
+  * Added support for Drupal core 8.8.x.
+* Fixed a bug which could break certain modules due to Drupal Console services
+  being defined in the wrong place. (Issue #3084092)
+* Added the Redirect, Autosave Form, and Conflict modules.
+* Improved documentation for contributors.
 
 ## 4.0.4
 * Updated Lightning Core to 4.5, which:
   * Security updated Metatag to 1.9.
-  * Fixed a Drupal Console-related error that could appear even if Drupal Console is not
-    installed. (Issue #3007425)
-  * Sorts module version numbers recorded in the lightning_core.versions config by key. (Issue #3050259)
-* Fixed a fatal error that could occur when enabling Devel's profiler. (Issue #2867829)
-* Many Behat contexts have been deprecated. This should not affect most users of Lightning, but
-  if you are using Lightning's step definitions in your own Behat tests, there may be implications
-  for you. (Issue #3068751)
+  * Fixed a Drupal Console-related error that could appear even if Drupal
+    Console is not installed. (Issue #3007425)
+  * Sorts module version numbers recorded in the lightning_core.versions
+    config by key. (Issue #3050259)
+* Fixed a fatal error that could occur when enabling Devel's profiler. 
+  (Issue #2867829)
+* Many Behat contexts have been deprecated. This should not affect most users
+  of Lightning, but if you are using Lightning's step definitions in your own
+  Behat tests, there may be implications for you. (Issue #3068751)
 
 ## 4.0.3
 * Hotfixed a Composer error caused by erroneous configuration shipped
@@ -36,7 +64,8 @@
   * Updated Media Entity Twitter to 2.0-alpha3.
 * Updated Lightning Workflow to 3.7 (no user-facing changes).
 * Updated Lightning Layout to 2.1, which:
-  * Added the Layout Builder Symmetric Translations module to provide basic translation support for landing pages.
+  * Added the Layout Builder Symmetric Translations module to provide basic
+    translation support for landing pages.
   * Updated Background Image Formatter to 1.9.
   * Updated Layout Builder Library to 1.0-beta1.
   * Updated Layout Builder Restrictions to 2.1.
@@ -106,8 +135,8 @@
   * Fixed a bug where Lightning's utility to convert descendant profiles to the
     Drupal 8.6-compatible format would fail if the active profile was itself a
     descendant profile. (Issue #2997990)
-  * Fixed an "undefined index" bug that could happen when processing form elements
-    which can have legends. (Issue #3018499)
+  * Fixed an "undefined index" bug that could happen when processing form
+    elements which can have legends. (Issue #3018499)
   * Namespaced all declared dependencies. (Issue #2995711)
 * Updated Lightning API to 3.4, which:
   * Security updated JSON API to 2.3 (SA-CONTRIB-2019-019).
@@ -151,7 +180,8 @@
 * Lightning API now defaults to the 2.x branch of the JSON:API module.
   [See the release notes for the 2.x branch](https://www.drupal.org/project/jsonapi/releases/8.x-2.0-beta1).
 
-  If you must use the 1.x branch, you can switch to it with the following commands:
+  If you must use the 1.x branch, you can switch to it with the following
+  commands:
 
   ```
   composer require drupal/lightning_api:^2.7 --no-update
@@ -779,11 +809,12 @@
 * Added build status to README.md. [#2737655]
 * Updated all dependencies to latest releases. [#2737745]
 * The dependency on Drush has been moved to `require-dev`. [#2716657]
-* Lightning Media has been rewritten to take advantage of Entity Browser. [#2726889]
+* Lightning Media has been rewritten to take advantage of Entity Browser.
+  [#2726889]
 * Lightning Media now supports documents (txt, pdf, doc, and docx).
 
 ## Release Candidate 5 (RC5)
-* The Media  Entity Embeddable Video module has been deprecated and is replaced
+* The Media Entity Embeddable Video module has been deprecated and is replaced
   by Video Embed Field in this release. (Issue #2700399)
 * Lightning now ships with the stable release of Drush 9 (currently alpha1).
   This fixes dependency conflicts with the Lightning installer.
@@ -840,8 +871,8 @@
 * Lightning now adds a warning gate to ```drush update```, since Drush's code
   update mechanisms can destroy a working site. (Issue #2694367)
 * All contributed modules included with Lightning have been moved into a single
-  contrib directory -- no more subfolders for layout modules, media modules, etc.
-  (Issue #2692229)
+  contrib directory -- no more subfolders for layout modules, media modules,
+  etc. (Issue #2692229)
 * We've adopted a versioning policy that should help bridge the gap between
   drupal.org (which does not support semantic versioning yet) and Composer. See
   VERSIONS.md for more information. (Issue #2693897)
@@ -869,7 +900,8 @@
 * Developers: Lightning's functional tests are now part of the Lightning
   profile, not their own sub-package. (Issue #2681359)
 * Due to a bizarre issue in Panelizer, one could not save changes to landing
-  pages using Panels IPE until the default layout was re-saved. (Issue #2678900).
+  pages using Panels IPE until the default layout was re-saved.
+  (Issue #2678900).
 
 ## Beta 4
 * Updates Drupal Core to 8.0.5.
