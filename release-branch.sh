@@ -24,13 +24,12 @@ if [[ $BRANCH =~ ^8\.x\-[0-9]+\.x$ ]]; then
   git pull
   git checkout -b $RELEASE_BRANCH
 
-  cd logs
-  ./generate.sh > ../CHANGELOG.md
-  cd ..
-
-  composer require --no-update drupal/lightning_core drupal/lightning_api drupal/lightning_layout drupal/lightning_media drupal/lightning_workflow
   composer update
   ./make-fixture.sh $1
+
+  cd logs
+  ./generate.sh | sed '$ d' > ../CHANGELOG.md
+  cd ..
 
   git add .
   git commit --message "$1 Release"

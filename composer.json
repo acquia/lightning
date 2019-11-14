@@ -84,12 +84,10 @@
     "scripts": {
         "post-install-cmd": [
             "@composer drupal-scaffold",
-            "@composer push",
-            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit"
+            "@composer push"
         ],
         "post-update-cmd": [
             "@composer push",
-            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit",
             "@composer package"
         ],
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
