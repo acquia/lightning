@@ -140,13 +140,17 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+## 4.1.0-beta1 to 4.1.0
+There are no manual update steps for this version.
+
 ## 4.0.5 to 4.1.0-beta1
 There are no manual update steps for this version.
 
 ## 4.0.4 to 4.0.5
 * If you would like to enable support for autosave on your site, install the
   Autosave Form and Conflict modules.
-* If you would like to enable improved redirect handling, install the Redirect module.
+* If you would like to enable improved redirect handling, install the Redirect
+  module.
 
 ## 4.0.3 to 4.0.4
 There are no manual update steps for this version.
@@ -161,11 +165,12 @@ There are no manual update steps for this version.
 There are no manual update steps for this version.
 
 ### 3.3.1 to 4.0.0
-Lightning 4.0.0 includes Lightning Layout 2.0, which uses Layout Builder in place
-of Panels and Panelizer. However, both modules are still packaged with Lightning
-Layout, allowing you to migrate your layouts manually to Layout Builder as needed.
-An automated migration path will eventually be introduced, but until then, any
-Panelizer/Panels layouts you have should continue to work as before.
+Lightning 4.0.0 includes Lightning Layout 2.0, which uses Layout Builder in
+place of Panels and Panelizer. However, both modules are still packaged with
+Lightning Layout, allowing you to migrate your layouts manually to Layout
+Builder as needed. An automated migration path will eventually be introduced,
+but until then, any Panelizer/Panels layouts you have should continue to work
+as before.
 
 ## 3.3.0 to 3.3.1
 There are no manual update steps for this version.
@@ -214,8 +219,11 @@ There are no manual update steps for this version.
      at the command line with Drush (or, if you have Devel installed, at the
      `/devel/php` path) to do it:
 ```
-drush php:eval "entity_load('entity_browser', 'media_browser')->createDuplicate()->setName('ckeditor_media_browser')
->setLabel('Media browser (CKEditor)')->save();"
+drush php:eval "entity_load('entity_browser', 'media_browser')
+  ->createDuplicate()
+  ->setName('ckeditor_media_browser')
+  ->setLabel('Media browser (CKEditor)')
+  ->save();"
 ```
   2. Configure the "Media browser" embed button to use the duplicate you just
      created.
@@ -226,7 +234,10 @@ drush php:eval "entity_load('entity_browser', 'media_browser')->createDuplicate(
      command line with Drush, as in this example, or at `/devel/php` if you have
      Devel installed):
 ```
-drush php:eval "Drupal::service('lightning.content_roles')->grantPermissions('creator', 'use ckeditor_media_browser entity browser pages');"
+drush php:eval "Drupal::service('lightning.content_roles')
+  ->grantPermissions('creator', [
+    'use ckeditor_media_browser entity browser pages',
+  ]);"
 ```
   5. Edit the pre-existing media browser -- _not_ the duplicate -- to use the
      Modal display plugin. Leave the "Width" and "Height" options empty to make
@@ -253,7 +264,8 @@ There are no manual update steps for this version.
   3. Rewrite the content of the "Moderation state" field to this Twig template
      code:
 ```
-Set to <strong>{{ moderation_state }}</strong> on {{ revision_timestamp }} by {{ revision_uid }}
+Set to <strong>{{ moderation_state }}</strong> on
+{{ revision_timestamp }} by {{ revision_uid }}
 ```
 
 ### 3.2.2 to 3.2.3
@@ -576,8 +588,9 @@ There are no manual update steps for this version.
 
 **Note:**  
 There is a known issue with Metatag version 8.x-1.1 where you might need to
-clear your site's cache after updating. See [Metatag 8.x-1.1 Release notes][metatag8.x-1.1]
-and this [related issue][2882954].
+clear your site's cache after updating. See
+[Metatag 8.x-1.1 Release notes][metatag8.x-1.1] and this
+[related issue][2882954].
 
 As per our Dependency Constraint Policy, Lightning doesn't pin to a specific
 version of Metatag, so depending on your your setup, Metatag is likely to be

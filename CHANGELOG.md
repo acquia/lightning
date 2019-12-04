@@ -1,3 +1,22 @@
+## 4.1.0
+* Updated Lightning Workflow to 3.14:
+  * Made Lightning Workflow compatible any installation profile.
+    (Issue #3089223)
+  * Fixed a bug where Lightning Scheduler's JavaScript libraries were not
+    properly declared as external. (Issue #3089153)
+* Updated Lightning Core to 5.0:
+  * Updated Drupal core to 8.8.0.
+  * Fixed all known deprecations. (Issue #3096212)
+  * Updated Metatag to 1.10.
+  * Updated Pathauto to 1.6.
+  * Fixed an incompatibility between Lightning Page and Lightning Workflow
+    3.14 and later.
+* Updated Lightning Layout to 2.4:
+  * Fixed an incompatibility between Lightning Landing Page and Lightning
+    Workflow 3.14 and later.
+* Updated Lightning API to 4.4.
+* Updated Lightning Media to 3.14.
+
 ## 4.1.0-beta1
 * Updated Lightning Core to 5.0-beta1:
   * Updated Drupal core to 8.8.0-beta1.

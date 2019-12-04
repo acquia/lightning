@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Prepares a release branch.
 # Example usage: ./release-branch 4.1.0
 
