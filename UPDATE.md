@@ -140,25 +140,34 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
-## 4.1.0-beta1 to 4.1.0
+### 4.1.0-beta1 to 4.1.0
+**IMPORTANT!!** This release includes Pathauto 1.6. If you are already using
+Pathauto 1.5 or lower, you MUST update Pathauto before updating to this release
+of Lightning! See https://www.drupal.org/project/drupal/releases/8.8.0, under
+the section "Changes to path aliases and a critical note for sites using the
+Pathauto contributed module":
+
+> If you have the contributed Pathauto module enabled, you must update to the
+> latest version of Pathauto _before_ you update to Drupal 8.8.0. **Failure to
+> update Pathauto before updating core could result in data loss.** Drupal
+> 8.8.0 declares a conflict with Pathauto 8.x-1.5 or lower for this reason.
+
+### 4.0.5 to 4.1.0-beta1
 There are no manual update steps for this version.
 
-## 4.0.5 to 4.1.0-beta1
-There are no manual update steps for this version.
-
-## 4.0.4 to 4.0.5
+### 4.0.4 to 4.0.5
 * If you would like to enable support for autosave on your site, install the
   Autosave Form and Conflict modules.
 * If you would like to enable improved redirect handling, install the Redirect
   module.
 
-## 4.0.3 to 4.0.4
+### 4.0.3 to 4.0.4
 There are no manual update steps for this version.
 
-## 4.0.2 to 4.0.3
+### 4.0.2 to 4.0.3
 There are no manual update steps for this version.
 
-## 4.0.1 to 4.0.2
+### 4.0.1 to 4.0.2
 There are no manual update steps for this version.
 
 ### 4.0.0 to 4.0.1
@@ -172,7 +181,7 @@ Builder as needed. An automated migration path will eventually be introduced,
 but until then, any Panelizer/Panels layouts you have should continue to work
 as before.
 
-## 3.3.0 to 3.3.1
+### 3.3.0 to 3.3.1
 There are no manual update steps for this version.
 
 ### 3.2.9 to 3.3.0
