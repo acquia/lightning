@@ -20,7 +20,6 @@ function lightning_install_tasks() {
   $tasks['lightning_set_front_page'] = [];
   $tasks['lightning_disallow_free_registration'] = [];
   $tasks['lightning_grant_shortcut_access'] = [];
-  $tasks['lightning_set_default_theme'] = [];
   $tasks['lightning_set_logo'] = [];
   $tasks['lightning_alter_frontpage_view'] = [];
 
@@ -67,25 +66,6 @@ function lightning_disallow_free_registration() {
 function lightning_grant_shortcut_access() {
   if (Drupal::moduleHandler()->moduleExists('shortcut')) {
     user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, ['access shortcuts']);
-  }
-}
-
-/**
- * Sets the default and administration themes.
- */
-function lightning_set_default_theme() {
-  Drupal::configFactory()
-    ->getEditable('system.theme')
-    ->set('default', 'bartik')
-    ->set('admin', 'seven')
-    ->save(TRUE);
-
-  // Use the admin theme for creating content.
-  if (Drupal::moduleHandler()->moduleExists('node')) {
-    Drupal::configFactory()
-      ->getEditable('node.settings')
-      ->set('use_admin_theme', TRUE)
-      ->save(TRUE);
   }
 }
 
@@ -140,7 +120,6 @@ function lightning_alter_frontpage_view() {
     ->set('tag', 'default')
     ->set('base_table', 'node_field_data')
     ->set('base_field', 'nid')
-    ->set('core', '8.x')
     ->set('display.default', [
       'display_options' => [
         'access' => [

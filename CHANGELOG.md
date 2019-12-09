@@ -1,3 +1,10 @@
+## 3.4.0
+* Updated Lightning Core to 5.0:
+  * Updated Drupal core to 8.8.0.
+  * Fixed all known deprecations. (Issue #3096212)
+  * Updated Metatag to 1.10.
+  * Updated Pathauto to 1.6.
+
 ## 3.3.4
 * Updated Lightning Core to 4.5, which:
   * Security updated Metatag to 1.9.
