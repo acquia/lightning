@@ -13,8 +13,7 @@ class SubProfileGenerator extends Generator {
   /**
    * {@inheritdoc}
    */
-  public function generate($name, $machine_name, $profile_path, $description, array $install_list, array $exclude_list
-  ) {
+  public function generate($name, $machine_name, $profile_path, $description, array $install_list, array $exclude_list) {
     $destination = $profile_path . '/' . $machine_name;
 
     // If the destination path already exists, realpath() will return something
