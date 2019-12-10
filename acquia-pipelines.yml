@@ -6,7 +6,7 @@ version: 1.1.0
 services:
   - mysql
   - php:
-      version: 7.1
+      version: 7.2
 
 events:
   build:
@@ -19,15 +19,19 @@ events:
             - export PATH="$HOME/.composer/vendor/bin:$SOURCE_DIR/vendor/bin:$PATH"
             - composer validate --no-check-all --ansi --no-interaction
             - composer update
-      - install:
-          type: script
-          script:
-            - cd $SOURCE_DIR
-            - mysql -u root -proot -e 'CREATE DATABASE drupal;'
-            - lightning install 'mysql\://root:root@localhost/drupal' lightning 'http://127.0.0.1:8080'
       - cleanup:
           type: script
           script:
-            - cd $SOURCE_DIR
             # Setup settings file and codebase with minimum required for cloud.
-            - lightning configure:cloud
+            - chmod -R +w docroot/sites/default
+            - cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
+            - echo "if (file_exists('/var/www/site-php')) { require '/var/www/site-php/lightningnightly/lightningnightly-settings.inc';}" >> docroot/sites/default/settings.php
+            # Clear any config directories that Cloud tries to set in th include
+            # file.
+            - echo "\$config_directories = [];" >> docroot/sites/default/settings.php
+            # Use the existing `config` directory we already have. Cloud get's
+            # confused because we have a config directory above docroot already
+            # and manipulating it in Pipelines doesn't seem to work. This
+            # deployment is ephemeral, so using the existing config directory
+            # isn't a problem.
+            - echo "\$config_directories['sync'] = '../config';" >> docroot/sites/default/settings.php
