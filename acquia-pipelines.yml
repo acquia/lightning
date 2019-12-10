@@ -26,7 +26,12 @@ events:
             - chmod -R +w docroot/sites/default
             - cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
             - echo "if (file_exists('/var/www/site-php')) { require '/var/www/site-php/lightningnightly/lightningnightly-settings.inc';}" >> docroot/sites/default/settings.php
-            # Clear any config directories that Cloud tries to set in th include file.
+            # Clear any config directories that Cloud tries to set in th include
+            # file.
             - echo "\$config_directories = [];" >> docroot/sites/default/settings.php
-            # Use the existing `config` directory we already have.
+            # Use the existing `config` directory we already have. Cloud get's
+            # confused because we have a config directory above docroot already
+            # and manipulating it in Pipelines doesn't seem to work. This
+            # deployment is ephemeral, so using the existing config directory
+            # isn't a problem.
             - echo "\$config_directories['sync'] = '../config';" >> docroot/sites/default/settings.php
