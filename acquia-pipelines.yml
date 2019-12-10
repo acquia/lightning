@@ -27,6 +27,6 @@ events:
             - cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
             - echo "if (file_exists('/var/www/site-php')) { require '/var/www/site-php/lightningnightly/lightningnightly-settings.inc';}" >> docroot/sites/default/settings.php
             # Clear any config directories that Cloud tries to set in th include file.
-            - echo "\$config_directories = [];
+            - echo "\$config_directories = [];" >> docroot/sites/default/settings.php
             # Use the existing `config` directory we already have.
             - echo "\$config_directories['sync'] = '../config';" >> docroot/sites/default/settings.php
