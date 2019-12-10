@@ -6,7 +6,7 @@ version: 1.1.0
 services:
   - mysql
   - php:
-      version: 7.1
+      version: 7.2
 
 events:
   build:
@@ -23,9 +23,11 @@ events:
           type: script
           script:
             # Setup settings file and codebase with minimum required for cloud.
-            - rm -rf ./config
-            - mkdir -p ./config/sync
-            - mkdir ./config/vcs
+            - ls -la config
+            - rm -rf config
+            - mkdir -p config/sync
+            - mkdir config/vcs
+            - ls -la config
             - chmod -R +w docroot/sites/default
             - cp docroot/sites/default/default.settings.php docroot/sites/default/settings.php
             - echo "if (file_exists('/var/www/site-php')) { require '/var/www/site-php/lightningnightly/lightningnightly-settings.inc';}" >> docroot/sites/default/settings.php
