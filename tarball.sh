@@ -11,7 +11,7 @@ if [[ ! $YAML_CLI ]]; then
   exit 1
 fi
 
-composer create-project --stability beta --no-install drupal/legacy-project:~8.8.0 $ARCHIVE
+composer create-project --no-install drupal/legacy-project:~8.8.0 $ARCHIVE
 composer dump-autoload
 composer configure-tarball $ARCHIVE
 

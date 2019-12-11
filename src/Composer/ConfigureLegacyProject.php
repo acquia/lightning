@@ -45,6 +45,9 @@ final class ConfigureLegacyProject {
     $project['extra']['installer-types'] = ['bower-asset', 'npm-asset'];
     $project['extra']['patchLevel']['drupal/core'] = '-p2';
 
+    // Ensure there are no "empty" sections, since Composer
+    // might complain about those.
+    $project = array_filter($project);
     $target->write($project);
   }
 
