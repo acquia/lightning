@@ -95,6 +95,7 @@
             "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit",
             "@composer package"
         ],
+        "configure-tarball": "Acquia\\Lightning\\Composer\\ConfigureLegacyProject::execute",
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
         "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute",
         "nuke": "rm -r -f docroot vendor",
