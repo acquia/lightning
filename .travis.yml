@@ -16,7 +16,7 @@ env:
   global:
     - ORCA_SUT_NAME=acquia/lightning
     - ORCA_SUT_BRANCH=8.x-4.x
-    - ORCA_VERSION=lightning
+    - ORCA_VERSION=master
     - ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/packages_alter.yml
     - ORCA_FIXTURE_PROFILE=lightning
     - ORCA_TELEMETRY_ENABLE=TRUE
@@ -34,7 +34,7 @@ matrix:
     - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=ISOLATED_DEV }
     - { name: "Integrated test w/ dev package versions", env: ORCA_JOB=INTEGRATED_DEV }
     - { name: "Integrated test w/ dev package versions & next minor dev version of Drupal core", env: ORCA_JOB=CORE_NEXT }
-    # - { name: "Contrib: Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_CONTRIB }
+    - { name: "Contrib: Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_CONTRIB }
     # Custom job.
     # @todo Add 3.x fixtures once Lightning Layout 2.x is stable and a migration
     #   path from Panels and Panelizer exists.
