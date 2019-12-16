@@ -114,6 +114,10 @@ Please use the [Drupal.org issue queue][issue_queue] for latest information and
 to request features or bug fixes.
 
 ## Known Issues
+* There are a few known issues when using the Claro administrative theme with
+  various Lightning components.
+  See https://github.com/acquia/lightning/pull/660#pullrequestreview-331654008
+  for more information.
 
 ### Media
 * If you upload an image into an image field using the new image browser, you
