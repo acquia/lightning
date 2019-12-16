@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4871c9602506d08bb54aa607fa9130a0",
+    "content-hash": "aa2ebae237f391afd6ef016f49a6416d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -96,7 +96,7 @@
             "version": "3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "dist": {
@@ -1814,6 +1814,7 @@
                     }
                 },
                 "patches_applied": {
+                    "3096566 - Copy media library styles from Seven to Claro & 3096241 - Refactor image and file field widgets to improve contrib compatibility and to make their templates and preprocess functions DRY": "https://www.drupal.org/files/issues/2019-12-16/3096566-23-combined-3096241-3.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-11-27/2815221-125.patch",
                     "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2019-11-05/1356276-531-8.8.x-4.patch",
@@ -2252,20 +2253,20 @@
         },
         {
             "name": "drupal/embed",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/embed.git",
-                "reference": "8.x-1.1"
+                "reference": "8.x-1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/embed-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "d1c1dbd5eb8f82ce635b1abab40837c2c7e0ff9f"
+                "url": "https://ftp.drupal.org/files/projects/embed-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "1a5dd3ebe09f392798d3e2ded0c7a3445e449f84"
             },
             "require": {
-                "drupal/core": "~8.0"
+                "drupal/core": "^8.7"
             },
             "type": "drupal-module",
             "extra": {
@@ -2273,8 +2274,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1575666184",
+                    "version": "8.x-1.2",
+                    "datestamp": "1576259580",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2725,12 +2726,20 @@
                     "homepage": "https://www.drupal.org/user/99340"
                 },
                 {
+                    "name": "geek.merlin aka axel.rutz",
+                    "homepage": "https://www.drupal.org/user/229048"
+                },
+                {
                     "name": "joachim",
                     "homepage": "https://www.drupal.org/user/107701"
                 },
                 {
                     "name": "kaythay",
                     "homepage": "https://www.drupal.org/user/2182186"
+                },
+                {
+                    "name": "oknate",
+                    "homepage": "https://www.drupal.org/user/471638"
                 },
                 {
                     "name": "rszrama",
@@ -11623,6 +11632,7 @@
                 "json",
                 "normalizer"
             ],
+            "abandoned": "ergebnis/composer-json-normalizer",
             "time": "2019-01-09T14:43:16+00:00"
         },
         {
@@ -11791,6 +11801,7 @@
                 "json",
                 "normalizer"
             ],
+            "abandoned": "ergebnis/json-normalizer",
             "time": "2018-10-07T17:36:39+00:00"
         },
         {
@@ -11972,16 +11983,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.9.3",
+            "version": "1.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "007c053ae6f31bba39dfa19a7726f56e9763bbea"
+                "reference": "579bb7356d91f9456ccd505f24ca8b667966a0a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/007c053ae6f31bba39dfa19a7726f56e9763bbea",
-                "reference": "007c053ae6f31bba39dfa19a7726f56e9763bbea",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/579bb7356d91f9456ccd505f24ca8b667966a0a7",
+                "reference": "579bb7356d91f9456ccd505f24ca8b667966a0a7",
                 "shasum": ""
             },
             "require": {
@@ -12016,7 +12027,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2019-08-09T12:45:53+00:00"
+            "time": "2019-12-15T19:12:40+00:00"
         },
         {
             "name": "nikic/php-parser",
