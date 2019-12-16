@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4871c9602506d08bb54aa607fa9130a0",
+    "content-hash": "aa2ebae237f391afd6ef016f49a6416d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -96,7 +96,7 @@
             "version": "3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "dist": {
@@ -987,16 +987,16 @@
         },
         {
             "name": "doctrine/persistence",
-            "version": "1.2.0",
+            "version": "1.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/persistence.git",
-                "reference": "43526ae63312942e5316100bb3ed589ba1aba491"
+                "reference": "99b196bbd4715a94fa100fac664a351ffa46d6a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/persistence/zipball/43526ae63312942e5316100bb3ed589ba1aba491",
-                "reference": "43526ae63312942e5316100bb3ed589ba1aba491",
+                "url": "https://api.github.com/repos/doctrine/persistence/zipball/99b196bbd4715a94fa100fac664a351ffa46d6a5",
+                "reference": "99b196bbd4715a94fa100fac664a351ffa46d6a5",
                 "shasum": ""
             },
             "require": {
@@ -1011,19 +1011,20 @@
                 "doctrine/common": "<2.10@dev"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^5.0",
-                "phpstan/phpstan": "^0.8",
+                "doctrine/coding-standard": "^6.0",
+                "phpstan/phpstan": "^0.11",
                 "phpunit/phpunit": "^7.0"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.2.x-dev"
+                    "dev-master": "1.3.x-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
-                    "Doctrine\\Common\\": "lib/Doctrine/Common"
+                    "Doctrine\\Common\\": "lib/Doctrine/Common",
+                    "Doctrine\\Persistence\\": "lib/Doctrine/Persistence"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1065,7 +1066,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2019-04-23T12:39:21+00:00"
+            "time": "2019-12-13T10:43:02+00:00"
         },
         {
             "name": "doctrine/reflection",
@@ -1144,45 +1145,55 @@
         },
         {
             "name": "drupal/acquia_connector",
-            "version": "1.16.0",
+            "version": "1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_connector.git",
-                "reference": "8.x-1.16"
+                "reference": "8.x-1.17"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.16.zip",
-                "reference": "8.x-1.16",
-                "shasum": "a428b1b2ce429bdbb3010a7176916823fd4eb4db"
+                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-1.17.zip",
+                "reference": "8.x-1.17",
+                "shasum": "3d9e5421d55a4fe01cf013a7dc504c3b1ee27715"
             },
             "require": {
                 "drupal/core": "~8.0",
-                "drupal/search_api": "^1.8",
-                "drupal/search_api_solr": "^1.2"
+                "php": "^7.1"
             },
             "require-dev": {
-                "drupal/search_api_solr": "*"
+                "drupal/search_api_solr": "*",
+                "drush/drush": "~9.0"
             },
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-1.x": "1.x-dev"
+                    "dev-1.x": "1.x-dev",
+                    "dev-8.x-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.16",
-                    "datestamp": "1549478497",
+                    "version": "8.x-1.17",
+                    "datestamp": "1576179185",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
+                    }
+                },
+                "drush": {
+                    "services": {
+                        "drush.services.yml": "^9"
                     }
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
-                "GPL-2.0+"
+                "GPL-2.0-or-later"
             ],
             "authors": [
+                {
+                    "name": "Dane Powell",
+                    "homepage": "https://www.drupal.org/user/339326"
+                },
                 {
                     "name": "Mark Trapp",
                     "homepage": "https://www.drupal.org/user/212019"
@@ -1190,6 +1201,10 @@
                 {
                     "name": "Stanislav Mixnovich",
                     "homepage": "https://www.drupal.org/user/2859977"
+                },
+                {
+                    "name": "acquia",
+                    "homepage": "https://www.drupal.org/user/1231722"
                 },
                 {
                     "name": "ayang",
@@ -1204,16 +1219,16 @@
                     "homepage": "https://www.drupal.org/user/411965"
                 },
                 {
+                    "name": "grasmash",
+                    "homepage": "https://www.drupal.org/user/455714"
+                },
+                {
                     "name": "irek02",
                     "homepage": "https://www.drupal.org/user/736644"
                 },
                 {
                     "name": "kolafson",
                     "homepage": "https://www.drupal.org/user/822402"
-                },
-                {
-                    "name": "mundanity",
-                    "homepage": "https://www.drupal.org/user/373605"
                 },
                 {
                     "name": "vlad.pavlovic",
@@ -1799,6 +1814,7 @@
                     }
                 },
                 "patches_applied": {
+                    "3096566 - Copy media library styles from Seven to Claro & 3096241 - Refactor image and file field widgets to improve contrib compatibility and to make their templates and preprocess functions DRY": "https://www.drupal.org/files/issues/2019-12-16/3096566-23-combined-3096241-3.patch",
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-11-27/2815221-125.patch",
                     "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2019-11-05/1356276-531-8.8.x-4.patch",
@@ -2237,20 +2253,20 @@
         },
         {
             "name": "drupal/embed",
-            "version": "1.1.0",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/embed.git",
-                "reference": "8.x-1.1"
+                "reference": "8.x-1.2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/embed-8.x-1.1.zip",
-                "reference": "8.x-1.1",
-                "shasum": "d1c1dbd5eb8f82ce635b1abab40837c2c7e0ff9f"
+                "url": "https://ftp.drupal.org/files/projects/embed-8.x-1.2.zip",
+                "reference": "8.x-1.2",
+                "shasum": "1a5dd3ebe09f392798d3e2ded0c7a3445e449f84"
             },
             "require": {
-                "drupal/core": "~8.0"
+                "drupal/core": "^8.7"
             },
             "type": "drupal-module",
             "extra": {
@@ -2258,8 +2274,8 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.1",
-                    "datestamp": "1575666184",
+                    "version": "8.x-1.2",
+                    "datestamp": "1576259580",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2710,12 +2726,20 @@
                     "homepage": "https://www.drupal.org/user/99340"
                 },
                 {
+                    "name": "geek.merlin aka axel.rutz",
+                    "homepage": "https://www.drupal.org/user/229048"
+                },
+                {
                     "name": "joachim",
                     "homepage": "https://www.drupal.org/user/107701"
                 },
                 {
                     "name": "kaythay",
                     "homepage": "https://www.drupal.org/user/2182186"
+                },
+                {
+                    "name": "oknate",
+                    "homepage": "https://www.drupal.org/user/471638"
                 },
                 {
                     "name": "rszrama",
@@ -4950,88 +4974,6 @@
             }
         },
         {
-            "name": "drupal/search_api_solr",
-            "version": "1.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/search_api_solr.git",
-                "reference": "8.x-1.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/search_api_solr-8.x-1.3.zip",
-                "reference": "8.x-1.3",
-                "shasum": "2b980ad4f43540b8e5e1fd5a90054d427815d55e"
-            },
-            "require": {
-                "drupal/core": "~8.0",
-                "drupal/search_api": "~1.3",
-                "solarium/solarium": "3.8.*"
-            },
-            "require-dev": {
-                "drupal/facets": "1.x-dev",
-                "drupal/geofield": "1.x-dev",
-                "drupal/search_api_autocomplete": "1.x-dev",
-                "drupal/search_api_location": "1.x-dev",
-                "phayes/geophp": "dev-master"
-            },
-            "suggest": {
-                "drupal/facets": "Provides facetted search.",
-                "drupal/search_api_solr_multilingual": "Highly recommended if installation is multilingual or uses a language different than English."
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.3",
-                    "datestamp": "1575044885",
-                    "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
-                    }
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "Markus Kalkbrenner",
-                    "homepage": "https://www.drupal.org/u/mkalkbrenner"
-                },
-                {
-                    "name": "Other contributors",
-                    "homepage": "https://www.drupal.org/node/982682/committers"
-                },
-                {
-                    "name": "amateescu",
-                    "homepage": "https://www.drupal.org/user/729614"
-                },
-                {
-                    "name": "cspitzlay",
-                    "homepage": "https://www.drupal.org/user/419305"
-                },
-                {
-                    "name": "drunken monkey",
-                    "homepage": "https://www.drupal.org/user/205582"
-                },
-                {
-                    "name": "mkalkbrenner",
-                    "homepage": "https://www.drupal.org/user/124705"
-                }
-            ],
-            "description": "Offers an implementation of the Search API that uses an Apache Solr server for indexing content.",
-            "homepage": "https://www.drupal.org/project/search_api_solr",
-            "support": {
-                "source": "http://git.drupal.org/project/search_api_solr.git",
-                "issues": "https://www.drupal.org/project/issues/search_api_solr",
-                "irc": "irc://irc.freenode.org/drupal-search-api"
-            }
-        },
-        {
             "name": "drupal/simple_gmap",
             "version": "1.4.0",
             "source": {
@@ -6856,64 +6798,6 @@
             ],
             "description": "A polyfill for getallheaders.",
             "time": "2019-03-08T08:55:37+00:00"
-        },
-        {
-            "name": "solarium/solarium",
-            "version": "3.8.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/solariumphp/solarium.git",
-                "reference": "c353babec89fdbe8c64054bfec8e77bcb5da6705"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/solariumphp/solarium/zipball/c353babec89fdbe8c64054bfec8e77bcb5da6705",
-                "reference": "c353babec89fdbe8c64054bfec8e77bcb5da6705",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.2",
-                "symfony/event-dispatcher": "~2.3|~3.0"
-            },
-            "require-dev": {
-                "guzzlehttp/guzzle": "^3.8 || ^6.2",
-                "phpunit/phpunit": "~3.7",
-                "satooshi/php-coveralls": "~1.0",
-                "squizlabs/php_codesniffer": "~1.4",
-                "zendframework/zendframework1": "~1.12"
-            },
-            "suggest": {
-                "minimalcode/search": "Query builder compatible with Solarium, allows simplified solr-query handling"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-develop": "3.3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Solarium\\": "library/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "See GitHub contributors",
-                    "homepage": "https://github.com/basdenooijer/solarium/contributors"
-                }
-            ],
-            "description": "PHP Solr client",
-            "homepage": "http://www.solarium-project.org",
-            "keywords": [
-                "php",
-                "search",
-                "solr"
-            ],
-            "time": "2017-02-02T13:32:22+00:00"
         },
         {
             "name": "stack/builder",
@@ -11748,6 +11632,7 @@
                 "json",
                 "normalizer"
             ],
+            "abandoned": "ergebnis/composer-json-normalizer",
             "time": "2019-01-09T14:43:16+00:00"
         },
         {
@@ -11916,6 +11801,7 @@
                 "json",
                 "normalizer"
             ],
+            "abandoned": "ergebnis/json-normalizer",
             "time": "2018-10-07T17:36:39+00:00"
         },
         {
@@ -12097,16 +11983,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.9.3",
+            "version": "1.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "007c053ae6f31bba39dfa19a7726f56e9763bbea"
+                "reference": "579bb7356d91f9456ccd505f24ca8b667966a0a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/007c053ae6f31bba39dfa19a7726f56e9763bbea",
-                "reference": "007c053ae6f31bba39dfa19a7726f56e9763bbea",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/579bb7356d91f9456ccd505f24ca8b667966a0a7",
+                "reference": "579bb7356d91f9456ccd505f24ca8b667966a0a7",
                 "shasum": ""
             },
             "require": {
@@ -12141,7 +12027,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2019-08-09T12:45:53+00:00"
+            "time": "2019-12-15T19:12:40+00:00"
         },
         {
             "name": "nikic/php-parser",

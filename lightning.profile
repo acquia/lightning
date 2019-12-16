@@ -78,7 +78,7 @@ function lightning_set_default_theme() {
   Drupal::configFactory()
     ->getEditable('system.theme')
     ->set('default', 'bartik')
-    ->set('admin', 'seven')
+    ->set('admin', 'claro')
     ->save(TRUE);
 
   // Use the admin theme for creating content.

@@ -23,6 +23,9 @@ class ConfigIntegrityTest extends ExistingSiteBase {
     'core.entity_view_display.block_content.media_slideshow.default',
   ];
 
+  /**
+   * Tests config set during install.
+   */
   public function testConfig() {
     $assert_session = $this->assertSession();
 
@@ -40,7 +43,7 @@ class ConfigIntegrityTest extends ExistingSiteBase {
     $this->assertTrue(Role::load(Role::AUTHENTICATED_ID)->hasPermission('access shortcuts'));
     $theme_config = $this->config('system.theme');
     $this->assertSame('bartik', $theme_config->get('default'));
-    $this->assertSame('seven', $theme_config->get('admin'));
+    $this->assertSame('claro', $theme_config->get('admin'));
     $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
     $theme_global = $this->config('system.theme.global');
     $this->assertContains('/lightning/lightning.png', $theme_global->get('logo.path'));
