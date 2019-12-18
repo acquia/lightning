@@ -1,3 +1,6 @@
+## 3.4.1
+* Security updated Drupal core to 8.8.1.
+
 ## 3.4.0
 * Updated Lightning Core to 5.0:
   * Updated Drupal core to 8.8.0.
