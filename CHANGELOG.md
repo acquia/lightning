@@ -1,3 +1,8 @@
+## 4.1.1
+* Security updated Drupal core to 8.8.1.
+* Claro is now the default administrative theme in new installations
+  of Lightning.
+
 ## 4.1.0
 * Updated Lightning Workflow to 3.14:
   * Made Lightning Workflow compatible any installation profile.
