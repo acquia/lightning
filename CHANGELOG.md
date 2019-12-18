@@ -1,3 +1,6 @@
+## 4.0.6
+* Security updated Drupal core to 8.7.11.
+
 ## 4.0.5
 * Updated Lightning Workflow to 3.12, which:
   * Added the Autosave Form and Conflict modules as soft dependencies.
