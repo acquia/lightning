@@ -139,7 +139,6 @@ function lightning_alter_frontpage_view() {
       ->set('tag', 'default')
       ->set('base_table', 'node_field_data')
       ->set('base_field', 'nid')
-      ->set('core', '8.x')
       ->set('display.default', [
         'display_options' => [
           'access' => [
@@ -162,7 +161,7 @@ function lightning_alter_frontpage_view() {
               'admin_label' => '',
               'empty' => TRUE,
               'tokenize' => TRUE,
-              'content' => '<p>Welcome to [site:name]. No front page content has been created yet.</p><p>Would you like to <a href="' . drupal_get_path('profile', 'lightning') . '/README.md">view the README</a>?</p>',
+              'content' => '<p>Welcome to [site:name]. No front page content has been created yet.</p><p>Would you like to <a href="/' . drupal_get_path('profile', 'lightning') . '/README.md">view the README</a>?</p>',
               'label' => '',
               'plugin_id' => 'text_custom',
             ],
@@ -219,6 +218,8 @@ function lightning_alter_frontpage_view() {
                 ],
                 'required' => FALSE,
                 'use_operator' => FALSE,
+                'operator_limit_selection' => FALSE,
+                'operator_list' => [],
               ],
               'exposed' => FALSE,
               'field' => 'promote',
@@ -249,6 +250,8 @@ function lightning_alter_frontpage_view() {
             'status' => [
               'expose' => [
                 'operator' => '',
+                'operator_limit_selection' => FALSE,
+                'operator_list' => [],
               ],
               'field' => 'status',
               'group' => 1,
@@ -286,6 +289,8 @@ function lightning_alter_frontpage_view() {
                   'authenticated' => 'authenticated',
                 ],
                 'reduce' => FALSE,
+                'operator_limit_selection' => FALSE,
+                'operator_list' => [],
               ],
               'is_grouped' => FALSE,
               'group_info' => [
