@@ -53,4 +53,4 @@ drush update:lightning
 EOF
 
 echo
-echo "For general update instructions see https://gitub.com/acquia/lightning/blob/$BRANCH/UPDATE.md."
+echo "For general update instructions see https://github.com/acquia/lightning/blob/$BRANCH/UPDATE.md."
