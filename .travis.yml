@@ -36,8 +36,7 @@ matrix:
     - { name: "Integrated test w/ dev package versions & next minor dev version of Drupal core", env: ORCA_JOB=CORE_NEXT }
     - { name: "Contrib: Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_CONTRIB }
     # Custom job.
-    # @todo Add 3.x fixtures once Lightning Layout 2.x is stable and a migration
-    #   path from Panels and Panelizer exists.
+    - { name: "Upgrade test", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--dev --no-site-install" ORCA_CUSTOM_TESTS_RUN_ARGS="--sut-only" DB_FIXTURE=3.0.0 }
   allow_failures:
     - env: ORCA_JOB=INTEGRATED_DEV
     - env: ORCA_JOB=CORE_NEXT
@@ -49,7 +48,7 @@ before_install:
 
 install:
   - '[[ "$ORCA_JOB" == "DEPRECATED_CODE_SCAN_CONTRIB" ]] && orca fixture:init -f --sut="$ORCA_SUT_NAME" --sut-only --no-site-install || ../orca/bin/travis/install.sh'
-  - 'if [[ -d ../orca-build ]]; then cd ../orca-build && composer require --dev weitzman/drupal-test-traits; fi'
+  - ./tests/travis/install.sh
 
 before_script: ../orca/bin/travis/before_script.sh
 

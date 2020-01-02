@@ -131,13 +131,6 @@ class ConfigIntegrityTest extends ExistingSiteBase {
     // Assert that bundled content types have meta tags enabled.
     $this->assertMetatag(['page', 'landing_page']);
 
-    // Assert that basic blocks expose a Body field.
-    $account = $this->createUser(['administer blocks']);
-    $this->drupalLogin($account);
-    $this->assertAllowed('/block/add/text');
-    $assert_session->fieldExists('Body');
-    $this->drupalLogout();
-
     // Assert that Lightning configuration pages are accessible to users who
     // have an administrative role.
     $this->assertForbidden('/admin/config/system/lightning');

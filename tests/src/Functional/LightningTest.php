@@ -5,10 +5,12 @@ namespace Drupal\Tests\lightning\Functional;
 use Drupal\Tests\BrowserTestBase;
 
 /**
+ * Tests integrated functionality of the Lightning profile.
+ *
  * @group lightning
  * @group orca_public
  */
-class SubProfileTest extends BrowserTestBase {
+class LightningTest extends BrowserTestBase {
 
   /**
    * {@inheritdoc}
@@ -47,12 +49,39 @@ class SubProfileTest extends BrowserTestBase {
     parent::tearDown();
   }
 
-  public function testSubProfile() {
+  /**
+   * Tests integrated functionality of the Lightning profile.
+   *
+   * Because it takes aeons to install the Lightning profile, or any of its
+   * descendants, this test only has one public test method, with private helper
+   * methods covering specific test scenarios. This is done purely for
+   * performance reasons.
+   */
+  public function testLightning() {
+    // Test that the sub-profile was installed...
     $this->assertSame('lightning_extender', $this->container->getParameter('install_profile'));
 
     $module_list = $this->container->get('extension.list.module')->getAllInstalledInfo();
+    // ...and that the changes it makes are reflected in the system.
     $this->assertArrayHasKey('ban', $module_list);
     $this->assertArrayNotHasKey('lightning_search', $module_list);
+
+    $this->doTextBlockTest();
+  }
+
+  /**
+   * Tests the 'text' custom block type that ships with Lightning.
+   */
+  private function doTextBlockTest() {
+    $assert_session = $this->assertSession();
+
+    // Assert that basic blocks expose a Body field.
+    $account = $this->createUser(['administer blocks']);
+    $this->drupalLogin($account);
+
+    $this->drupalGet('/block/add/text');
+    $assert_session->statusCodeEquals(200);
+    $assert_session->fieldExists('Body');
   }
 
 }
