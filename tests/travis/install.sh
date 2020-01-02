@@ -19,7 +19,7 @@ source ../../../orca/bin/travis/_includes.sh
 # kernel tests.
 if [ -d $ORCA_FIXTURE_DIR ]; then
   cd $ORCA_FIXTURE_DIR
-  composer require --dev mikey179/vfsstream
+  composer require --dev mikey179/vfsstream weitzman/drupal-test-traits
 fi
 # End temporary workaround.
 

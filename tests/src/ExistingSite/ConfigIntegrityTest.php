@@ -1,20 +1,20 @@
 <?php
 
-namespace Drupal\Tests\lightning\Functional;
+namespace Drupal\Tests\lightning\ExistingSite;
 
 use Drupal\Core\Entity\Entity\EntityViewMode;
-use Drupal\Tests\BrowserTestBase;
 use Drupal\user\Entity\Role;
 use Drupal\user\Entity\User;
 use Drupal\user\UserInterface;
 use Drupal\workflows\Entity\Workflow;
+use weitzman\DrupalTestTraits\ExistingSiteBase;
 
 /**
  * Ensures the integrity and correctness of Lightning's bundled config.
  *
  * @group lightning
  */
-class ConfigIntegrityTest extends BrowserTestBase {
+class ConfigIntegrityTest extends ExistingSiteBase {
 
   /**
    * {@inheritdoc}
@@ -27,24 +27,21 @@ class ConfigIntegrityTest extends BrowserTestBase {
     'core.entity_view_display.block_content.media_slideshow.default',
   ];
 
-  /**
-   * {@inheritdoc}
-   */
-  protected $profile = 'lightning';
-
   public function testConfig() {
+    $profile = $this->container->getParameter('install_profile');
+    if ($profile !== 'lightning') {
+      $this->markTestSkipped('This test can only be run against the Lightning install profile.');
+    }
+
     $assert = $this->assertSession();
 
     // Assert that all install tasks have done what they should do.
     // @see lightning_install_tasks()
-    $account = User::load(1);
-    $this->assertInstanceOf(UserInterface::class, $account);
-    /** @var \Drupal\user\UserInterface $account */
-    $this->assertTrue($account->hasRole('administrator'));
+    $this->assertTrue(User::load(1)->hasRole('administrator'));
 
     $this->assertSame('/node', $this->config('system.site')->get('page.front'));
-    $this->assertSame(USER_REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
-    $this->assertTrue(Role::load(Role::AUTHENTICATED_ID)->hasPermission('access shortcuts'));
+    $this->assertSame(UserInterface::REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
+    $this->assertPermissions(Role::AUTHENTICATED_ID, 'access shortcuts');
     $this->assertSame('bartik', $this->config('system.theme')->get('default'));
     $this->assertSame('seven', $this->config('system.theme')->get('admin'));
     $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
@@ -141,7 +138,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertMetatag(['page', 'landing_page']);
 
     // Assert that basic blocks expose a Body field.
-    $account = $this->drupalCreateUser(['administer blocks']);
+    $account = $this->createUser(['administer blocks']);
     $this->drupalLogin($account);
     $this->assertAllowed('/block/add/basic');
     $assert->fieldExists('Body');
@@ -154,7 +151,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
     $this->assertForbidden('/admin/config/system/lightning/layout');
     $this->assertForbidden('/admin/config/system/lightning/media');
 
-    $account = $this->drupalCreateUser([], NULL, TRUE);
+    $account = $this->createUser([], NULL, TRUE);
     $this->drupalLogin($account);
 
     $this->assertAllowed('/admin/config/system/lightning');
@@ -173,7 +170,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
    * @param string[] $node_types
    *   The node type IDs to check.
    */
-  protected function assertMetatag(array $node_types) {
+  private function assertMetatag(array $node_types) {
     $assert = $this->assertSession();
 
     $permissions = array_map(
@@ -182,7 +179,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
       },
       $node_types
     );
-    $account = $this->drupalCreateUser($permissions);
+    $account = $this->createUser($permissions);
     $this->drupalLogin($account);
 
     foreach ($node_types as $node_type) {
@@ -201,7 +198,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
    * @param mixed|mixed[] $id
    *   The entity ID, or a set of IDs.
    */
-  protected function assertEntityExists($entity_type, $id) {
+  private function assertEntityExists($entity_type, $id) {
     $this->assertContainsAll(
       (array) $id,
       \Drupal::entityQuery($entity_type)->execute()
@@ -216,7 +213,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
    * @param string|string[] $permissions
    *   The permission(s) to check.
    */
-  protected function assertPermissions($role, $permissions) {
+  private function assertPermissions($role, $permissions) {
     if (is_string($role)) {
       $role = Role::load($role);
     }
@@ -231,7 +228,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
    * @param mixed[] $haystack
    *   The haystack.
    */
-  protected function assertContainsAll(array $needles, array $haystack) {
+  private function assertContainsAll(array $needles, array $haystack) {
     $diff = array_diff($needles, $haystack);
     $this->assertSame([], $diff);
   }
@@ -242,7 +239,7 @@ class ConfigIntegrityTest extends BrowserTestBase {
    * @param string $path
    *   The route path to visit.
    */
-  protected function assertAllowed($path) {
+  private function assertAllowed($path) {
     $this->drupalGet($path);
     $this->assertSession()->statusCodeEquals(200);
   }
@@ -253,22 +250,22 @@ class ConfigIntegrityTest extends BrowserTestBase {
    * @param string $path
    *   The route path to visit.
    */
-  protected function assertForbidden($path) {
+  private function assertForbidden($path) {
     $this->drupalGet($path);
     $this->assertSession()->statusCodeEquals(403);
   }
 
   /**
-   * Asserts that a file exists and has a specific permission mask.
+   * Returns an editable config object by name.
    *
-   * @param int $permissions
-   *   The permission mask as an octal number (0755, 0600, etc.)
-   * @param string $file
-   *   The path to the file.
+   * @param string $name
+   *   The name of the config object to return.
+   *
+   * @return \Drupal\Core\Config\Config
+   *   The editable config object.
    */
-  protected function assertFilePermissions($permissions, $file) {
-    $this->assertFileExists($file);
-    $this->assertSame($permissions, fileperms($file) & 0777);
+  private function config($name) {
+    return $this->container->get('config.factory')->getEditable($name);
   }
 
 }
