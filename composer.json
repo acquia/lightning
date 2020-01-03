@@ -6,12 +6,22 @@
     "require": {
         "ext-dom": "*",
         "cweagans/composer-patches": "^1.6",
+        "drupal/autosave_form": "1.x-dev",
+        "drupal/blazy": "2.x-dev as 1.200.x-dev",
+        "drupal/contact_storage": "1.x-dev",
         "drupal/core": "~8.8.1 || 8.9.* || 9.0.*",
+        "drupal/crop": "2.x-dev",
+        "drupal/diff": "1.x-dev",
+        "drupal/dropzonejs": "2.x-dev as 2.0.0-alpha4",
         "drupal/lightning_api": "^4.4",
         "drupal/lightning_core": "^5.0",
         "drupal/lightning_layout": "^2.4",
         "drupal/lightning_media": "^3.14",
-        "drupal/lightning_workflow": "^3.14"
+        "drupal/lightning_workflow": "^3.14",
+        "drupal/media_entity_instagram": "2.x-dev as 2.0.0-alpha2",
+        "drupal/media_entity_twitter": "2.x-dev as 2.0.0-alpha3",
+        "drupal/slick": "2.x-dev as 1.2.0",
+        "drupal/upgrade_status": "^1.3"
     },
     "require-dev": {
         "drupal-composer/drupal-scaffold": "^2.0.0",
@@ -62,6 +72,30 @@
         "patches": {
             "drupal/core": {
                 "3096566 - Copy media library styles from Seven to Claro & 3096241 - Refactor image and file field widgets to improve contrib compatibility and to make their templates and preprocess functions DRY": "https://www.drupal.org/files/issues/2019-12-16/3096566-23-combined-3096241-3.patch"
+            },
+            "drupal/consumers": {
+                "3042825 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2019-12-25/3042825-16-drupal-9-deprecated-code-report.patch"
+            },
+            "drupal/contact_storage": {
+                "3081195 - Remove calls to entity_get_display() and entity_get_form_display()": "https://www.drupal.org/files/issues/2019-10-12/2-contact-storage-drupal9-compatibility.patch"
+            },
+            "drupal/crop": {
+                "3096959 - Drupal 9 deprecated code report": "https://www.drupal.org/files/issues/2019-11-28/3096959-3-drupal9-deprecated-code-report.patch"
+            },
+            "drupal/image_widget_crop": {
+                "3042648 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2019-03-26/image_widget_crop-fixed_drupal_set_message-3042648-2.patch"
+            },
+            "drupal/layout_library": {
+                "3075888 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2019-08-26/3075888-11--fix-8_8_deprecations--with-test-case-fixes.patch"
+            },
+            "drupal/layout_builder_styles": {
+                "3092650 - Remove deprecated function drupal_set_message": "https://www.drupal.org/files/issues/2019-11-06/deprecated-3092650-2.patch"
+            },
+            "drupal/openapi": {
+                "3070671 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2019-10-24/openapi_deprecated_code_report-3070671-7.patch"
+            },
+            "drupal/dropzonejs": {
+                "3095062 - Remove deprecated code": "https://www.drupal.org/files/issues/2019-11-25/3095062-4.patch"
             }
         }
     },
