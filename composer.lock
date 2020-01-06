@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "cd60e7c73e1c3a135c806dcd22bba96d",
+    "content-hash": "a8c7437dd11d9bff7d5b4e58cab2da77",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2026,20 +2026,14 @@
         },
         {
             "name": "drupal/ctools",
-            "version": "3.2.0",
+            "version": "dev-3.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ctools.git",
-                "reference": "8.x-3.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/ctools-8.x-3.2.zip",
-                "reference": "8.x-3.2",
-                "shasum": "d6da87239b64ba708a5977e7b33b1e009e36b091"
+                "reference": "d1eb0935090054ea690d7c0ae268ac7074da360d"
             },
             "require": {
-                "drupal/core": "^8.5"
+                "drupal/core": "^8.6 || ^9"
             },
             "type": "drupal-module",
             "extra": {
@@ -2047,11 +2041,11 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.2",
-                    "datestamp": "1550728386",
+                    "version": "8.x-3.2+31-dev",
+                    "datestamp": "1576399387",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -4549,17 +4543,11 @@
         },
         {
             "name": "drupal/page_manager",
-            "version": "4.0.0-beta4",
+            "version": "dev-4.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/page_manager.git",
-                "reference": "8.x-4.0-beta4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/page_manager-8.x-4.0-beta4.zip",
-                "reference": "8.x-4.0-beta4",
-                "shasum": "f77d57fa0f0a734c26d9119850672a51e2760d5f"
+                "reference": "6140c84d0b2ea390b6a926ca0f06e53babd9191d"
             },
             "require": {
                 "drupal/core": "~8.5",
@@ -4571,8 +4559,8 @@
                     "dev-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.0-beta4",
-                    "datestamp": "1559135889",
+                    "version": "8.x-4.0-beta4+2-dev",
+                    "datestamp": "1578339783",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -4600,6 +4588,10 @@
                 {
                     "name": "manuel.adan",
                     "homepage": "https://www.drupal.org/user/516420"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
                 }
             ],
             "description": "Provides a way to place blocks on a custom page.",
@@ -4729,6 +4721,7 @@
                     }
                 },
                 "patches_applied": {
+                    "3070866 - Drupal 9 replace deprecated function drupal_set_message()": "https://www.drupal.org/files/issues/2019-07-28/3070866-2.patch",
                     "3030976 - Panels should check if there is an icon map before setting the no preview icon": "https://www.drupal.org/files/issues/2019-02-06/initial.patch",
                     "2878684 - Use String.match to correlate regions when switching Layouts in Panels IPE": "https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch"
                 }
@@ -7100,31 +7093,30 @@
         },
         {
             "name": "nette/schema",
-            "version": "v1.0.1",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/schema.git",
-                "reference": "337117df1dade22e2ba1fdc4a4b832c1e9b06b76"
+                "reference": "febf71fb4052c824046f5a33f4f769a6e7fa0cb4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/schema/zipball/337117df1dade22e2ba1fdc4a4b832c1e9b06b76",
-                "reference": "337117df1dade22e2ba1fdc4a4b832c1e9b06b76",
+                "url": "https://api.github.com/repos/nette/schema/zipball/febf71fb4052c824046f5a33f4f769a6e7fa0cb4",
+                "reference": "febf71fb4052c824046f5a33f4f769a6e7fa0cb4",
                 "shasum": ""
             },
             "require": {
-                "nette/utils": "^3.0.1",
+                "nette/utils": "^3.1",
                 "php": ">=7.1"
             },
             "require-dev": {
                 "nette/tester": "^2.2",
+                "phpstan/phpstan-nette": "^0.12",
                 "tracy/tracy": "^2.3"
             },
             "type": "library",
             "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
+                "branch-alias": []
             },
             "autoload": {
                 "classmap": [
@@ -7153,7 +7145,7 @@
                 "config",
                 "nette"
             ],
-            "time": "2019-10-31T20:52:19+00:00"
+            "time": "2020-01-06T22:52:48+00:00"
         },
         {
             "name": "nette/utils",
@@ -15747,6 +15739,12 @@
             "package": "drupal/blazy"
         },
         {
+            "alias": "3.2.0",
+            "alias_normalized": "3.2.0.0",
+            "version": "3.9999999.9999999.9999999-dev",
+            "package": "drupal/ctools"
+        },
+        {
             "alias": "2.0.0-alpha4",
             "alias_normalized": "2.0.0.0-alpha4",
             "version": "2.9999999.9999999.9999999-dev",
@@ -15783,11 +15781,13 @@
         "drupal/blazy": 20,
         "drupal/contact_storage": 20,
         "drupal/crop": 20,
+        "drupal/ctools": 20,
         "drupal/dropzonejs": 20,
         "drupal/entity_browser": 20,
         "drupal/facets": 20,
         "drupal/media_entity_instagram": 20,
         "drupal/media_entity_twitter": 20,
+        "drupal/page_manager": 20,
         "drupal/search_api": 20,
         "drupal/simple_gmap": 20,
         "drupal/slick": 20,
