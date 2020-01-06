@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fba29a9f0d30b648b82063a0aa4b8d80",
+    "content-hash": "cd60e7c73e1c3a135c806dcd22bba96d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1540,8 +1540,7 @@
             "support": {
                 "source": "http://cgit.drupalcode.org/blazy",
                 "issues": "https://drupal.org/project/issues/blazy"
-            },
-            "time": "2020-01-06T08:47:20+00:00"
+            }
         },
         {
             "name": "drupal/conflict",
@@ -2023,8 +2022,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/crop",
                 "issues": "https://www.drupal.org/project/issues/crop"
-            },
-            "time": "2020-01-06T17:52:53+00:00"
+            }
         },
         {
             "name": "drupal/ctools",
@@ -2580,8 +2578,7 @@
                 "source": "https://git.drupalcode.org/project/entity_browser",
                 "issues": "https://www.drupal.org/project/issues/entity_browser",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
-            },
-            "time": "2019-12-15T22:59:46+00:00"
+            }
         },
         {
             "name": "drupal/entity_browser_block",
@@ -2773,8 +2770,7 @@
                 "source": "git://git.drupal.org/project/facets.git",
                 "issues": "https://www.drupal.org/project/issues/facets",
                 "irc": "irc://irc.freenode.org/drupal-search-api"
-            },
-            "time": "2019-10-30T09:21:31+00:00"
+            }
         },
         {
             "name": "drupal/git_deploy",
@@ -5210,25 +5206,21 @@
                 "source": "http://git.drupal.org/project/search_api.git",
                 "issues": "https://www.drupal.org/project/issues/search_api",
                 "irc": "irc://irc.freenode.org/drupal-search-api"
-            },
-            "time": "2019-12-29T17:16:47+00:00"
+            }
         },
         {
             "name": "drupal/simple_gmap",
-            "version": "1.4.0",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/simple_gmap.git",
-                "reference": "8.x-1.4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/simple_gmap-8.x-1.4.zip",
-                "reference": "8.x-1.4",
-                "shasum": "364d59f318052ab8094b25e52b43f7f7deda9259"
+                "reference": "180e2a5d674b88ff176ac6ba88f35864b922211a"
             },
             "require": {
                 "drupal/core": "*"
+            },
+            "require-dev": {
+                "drupal/address": "*"
             },
             "type": "drupal-module",
             "extra": {
@@ -5236,12 +5228,15 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.4",
-                    "datestamp": "1504630143",
+                    "version": "8.x-1.4+3-dev",
+                    "datestamp": "1525293480",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "2913307 - Prepare Tests for upgrade.": "https://www.drupal.org/files/issues/2019-12-14/2913307-30.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -15794,6 +15789,7 @@
         "drupal/media_entity_instagram": 20,
         "drupal/media_entity_twitter": 20,
         "drupal/search_api": 20,
+        "drupal/simple_gmap": 20,
         "drupal/slick": 20,
         "drupal/media_entity_generic": 20
     },
