@@ -47,7 +47,7 @@ before_install:
   - ../orca/bin/travis/before_install.sh
 
 install:
-  - '[[ "$ORCA_JOB" == "DEPRECATED_CODE_SCAN_CONTRIB" ]] && ../orca/bin/orca fixture:init -f --sut="$ORCA_SUT_NAME" --sut-only --no-site-install || ../orca/bin/travis/install.sh'
+  - '[[ "$ORCA_JOB" == "DEPRECATED_CODE_SCAN_CONTRIB" ]] && ../orca/bin/orca fixture:init -f --sut="$ORCA_SUT_NAME" --dev --sut-only --no-site-install || ../orca/bin/travis/install.sh'
   - 'if [[ -d ../orca-build ]]; then cd ../orca-build && composer require --dev weitzman/drupal-test-traits; fi'
 
 before_script: ../orca/bin/travis/before_script.sh
