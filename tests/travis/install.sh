@@ -14,6 +14,13 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
+if [[ "$ORCA_JOB" == "DEPRECATED_CODE_SCAN_CONTRIB" ]]; then
+  orca fixture:init -f --sut="$ORCA_SUT_NAME" --sut-only --no-site-install
+  exit 0
+fi
+
+../../../orca/bin/travis/install.sh
+
 # This is a temporary workaround for a change in BLT 11.x which causes
 # mikey179/vfsstream to be absent from the fixture, which breaks all
 # kernel tests.

@@ -46,9 +46,7 @@ before_install:
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
   - ../orca/bin/travis/before_install.sh
 
-install:
-  - '[[ "$ORCA_JOB" == "DEPRECATED_CODE_SCAN_CONTRIB" ]] && ../orca/bin/orca fixture:init -f --sut="$ORCA_SUT_NAME" --sut-only --no-site-install || ../orca/bin/travis/install.sh'
-  - ./tests/travis/install.sh
+install: ./tests/travis/install.sh
 
 before_script: ../orca/bin/travis/before_script.sh
 
