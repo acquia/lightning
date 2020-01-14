@@ -15,7 +15,9 @@ cache:
 env:
   global:
     - ORCA_SUT_NAME=acquia/lightning
-    - ORCA_SUT_BRANCH=8.x-4.x
+    # Testing symlinking with a branch name that (I assume) isn't available
+    # anywhere else.
+    - ORCA_SUT_BRANCH=flibbertigibbet
     - ORCA_VERSION=wip
     - ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/packages_alter.yml
     - ORCA_FIXTURE_PROFILE=lightning
