@@ -25,7 +25,7 @@ fi
 # so as to be installed in a SUT-only fixture.
 if [[ "$ORCA_JOB" == "ISOLATED_DEV" ]]; then
   export ORCA_PACKAGES_CONFIG=../lightning/tests/packages.yml
-  orca fixture:init -f --sut="acquia/lightning" --dev
+  orca fixture:init -f --sut="acquia/lightning" --dev --profile=lightning
   exit 0
 fi
 
