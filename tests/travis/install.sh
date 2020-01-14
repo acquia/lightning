@@ -16,7 +16,16 @@ source ../../../orca/bin/travis/_includes.sh
 
 # Handle the Contrib: Deprecated code scan special case.
 if [[ "$ORCA_JOB" == "DEPRECATED_CODE_SCAN_CONTRIB" ]]; then
-  orca fixture:init -f --sut="acquia/lightning" --sut-only --dev --no-site-install
+  export ORCA_PACKAGES_CONFIG=../lightning/tests/packages.yml
+  orca fixture:init -f --sut="acquia/lightning" --dev --no-site-install
+  exit 0
+fi
+
+# Make the Isolated dev job treat Lightning's components as part of the SUT
+# so as to be installed in a SUT-only fixture.
+if [[ "$ORCA_JOB" == "ISOLATED_DEV" ]]; then
+  export ORCA_PACKAGES_CONFIG=../lightning/tests/packages.yml
+  orca fixture:init -f --sut="acquia/lightning" --dev
   exit 0
 fi
 
