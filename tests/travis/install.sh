@@ -61,6 +61,7 @@ drush update:lightning --no-interaction --yes
 # do not have automatic scripts.
 drush role:perm:add layout_manager 'configure any layout'
 drush theme:enable claro
+drush pm:enable --yes core_context
 
 orca fixture:enable-extensions
 
