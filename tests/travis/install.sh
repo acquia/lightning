@@ -30,14 +30,14 @@ if [[ "$ORCA_JOB" == "ISOLATED_DEV" ]]; then
   export ORCA_PACKAGES_CONFIG=../lightning/tests/packages.yml
   orca fixture:init -f --sut="$ORCA_SUT_NAME" --dev --profile=lightning
 else
-  # Run ORCA's standard install script.
+  # Run ORCA's standard installation script.
   ../../../orca/bin/travis/install.sh
 fi
 
 # If there is no fixture, there's nothing else for us to do.
 [[ -d "$ORCA_FIXTURE_DIR" ]] || exit 0
 
-# Add test-only dependencies.
+# Add testing dependencies.
 composer -d"$ORCA_FIXTURE_DIR" require --dev weitzman/drupal-test-traits
 
 # Exit early if no DB fixture is specified.
