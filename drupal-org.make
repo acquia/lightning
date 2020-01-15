@@ -71,7 +71,6 @@ projects[layout_builder_styles][type] = module
 projects[layout_builder_styles][patch][] = https://www.drupal.org/files/issues/2019-11-06/deprecated-3092650-2.patch
 projects[layout_builder_styles][version] = 1.0-beta1
 projects[layout_library][type] = module
-projects[layout_library][patch][] = https://www.drupal.org/files/issues/2019-08-26/3075888-11--fix-8_8_deprecations--with-test-case-fixes.patch
 projects[layout_library][version] = 1.0-beta1
 projects[libraries][type] = module
 projects[libraries][patch][] = https://www.drupal.org/files/issues/2019-12-09/3039243-9-fatal-error-trait-method-getLibrary.patch
