@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7880bfbecfcef761abdfa93f1c616a3",
+    "content-hash": "2cf0bcb338c175dd270648c84ca04a61",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1520,6 +1520,10 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3042825 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2019-12-25/3042825-16-drupal-9-deprecated-code-report.patch",
+                    "3052959 - Update 8103 does not work with Drupal 8.7": "https://www.drupal.org/files/issues/2019-05-17/3052959-12.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -1811,6 +1815,13 @@
                         "[web-root]/profiles/README.txt": "assets/scaffold/files/profiles.README.txt",
                         "[web-root]/themes/README.txt": "assets/scaffold/files/themes.README.txt"
                     }
+                },
+                "patches_applied": {
+                    "3096566 - Copy media library styles from Seven to Claro & 3096241 - Refactor image and file field widgets to improve contrib compatibility and to make their templates and preprocess functions DRY": "https://www.drupal.org/files/issues/2019-12-16/3096566-23-combined-3096241-3.patch",
+                    "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
+                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-11-27/2815221-125.patch",
+                    "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2019-11-05/1356276-531-8.8.x-4.patch",
+                    "2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch"
                 }
             },
             "autoload": {
@@ -1913,8 +1924,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.2+32-dev",
-                    "datestamp": "1578345183",
+                    "version": "8.x-3.2+31-dev",
+                    "datestamp": "1576399387",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -2186,6 +2197,9 @@
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
+                },
+                "patches_applied": {
+                    "3095062 - Remove deprecated code": "https://www.drupal.org/files/issues/2019-11-25/3095062-4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2253,7 +2267,7 @@
                 "shasum": "141be860f2d2e1df67904995fa43774fee355328"
             },
             "require": {
-                "drupal/core": "^8 || ^9"
+                "drupal/core": "^8.7"
             },
             "type": "drupal-module",
             "extra": {
@@ -2364,14 +2378,20 @@
         },
         {
             "name": "drupal/entity_browser",
-            "version": "dev-2.x",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/entity_browser.git",
-                "reference": "2ce46a70457ec8b844a5674493757b7accc1630c"
+                "reference": "8.x-2.2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/entity_browser-8.x-2.2.zip",
+                "reference": "8.x-2.2",
+                "shasum": "083a21040ad7bcb9aef25d8b4a0e702d02574261"
             },
             "require": {
-                "drupal/core": "^8.7.7 || ^9"
+                "drupal/core": "~8.4"
             },
             "require-dev": {
                 "drupal/embed": "~1.0",
@@ -2387,12 +2407,15 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.2+18-dev",
-                    "datestamp": "1578951483",
+                    "version": "8.x-2.2",
+                    "datestamp": "1578954483",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3104611 - remove deprecated EntityBrowserJavascriptTestBase": "https://www.drupal.org/files/issues/2020-01-06/3104611-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2446,8 +2469,7 @@
                 "source": "https://git.drupalcode.org/project/entity_browser",
                 "issues": "https://www.drupal.org/project/issues/entity_browser",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
-            },
-            "time": "2020-01-13T21:35:27+00:00"
+            }
         },
         {
             "name": "drupal/entity_browser_block",
@@ -2482,6 +2504,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3097657 - Make Entity Browser Block D9 ready": "https://www.drupal.org/files/issues/2019-11-29/d9_deprecation_3097657_2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2607,6 +2632,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3090592 - Drupal 9 readiness / compatibility": "https://www.drupal.org/files/issues/2019-10-29/facets_remove-depricated-code-3090592-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2674,6 +2702,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3042648 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2019-03-26/image_widget_crop-fixed_drupal_set_message-3042648-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -2760,7 +2791,7 @@
                     "homepage": "https://www.drupal.org/user/99340"
                 },
                 {
-                    "name": "geek-merlin",
+                    "name": "geek.merlin aka axel.rutz",
                     "homepage": "https://www.drupal.org/user/229048"
                 },
                 {
@@ -2942,6 +2973,9 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3092650 - Remove deprecated function drupal_set_message": "https://www.drupal.org/files/issues/2019-11-06/deprecated-3092650-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3064,6 +3098,10 @@
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3039243 - Fatal error: Trait method getLibrary has not been applied": "https://www.drupal.org/files/issues/2019-12-09/3039243-9-fatal-error-trait-method-getLibrary.patch",
+                    "2882709 - Misnamed interface causes \"Fatal error: Cannot declare interface Drupal\\libraries\\ExternalLibrary\\Utility\\LibraryAccessorIdInterface\"": "https://www.drupal.org/files/issues/2882709-2-interface-libraryidaccessorinterface-misnamed.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3989,6 +4027,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3102602 - Use DI to add services to the settings form": "https://www.drupal.org/files/issues/2019-12-30/metatag-settings-form-use-di-3102602-14.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4152,6 +4193,9 @@
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
                     }
+                },
+                "patches_applied": {
+                    "3070671 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2019-10-24/openapi_deprecated_code_report-3070671-7.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4433,6 +4477,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "2778565 - Multilingual support for Panelizer": "https://www.drupal.org/files/issues/2018-08-13/panelizer-multilingual-2778565-38.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4514,6 +4561,11 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3070866 - Drupal 9 replace deprecated function drupal_set_message()": "https://www.drupal.org/files/issues/2019-07-28/3070866-2.patch",
+                    "3030976 - Panels should check if there is an icon map before setting the no preview icon": "https://www.drupal.org/files/issues/2019-02-06/initial.patch",
+                    "2878684 - Use String.match to correlate regions when switching Layouts in Panels IPE": "https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4960,6 +5012,9 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
+                },
+                "patches_applied": {
+                    "3023170 - Test for compatibility with Drupal 9": "https://www.drupal.org/files/issues/2019-12-29/3023170-43--prepare_for_drupal_9.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5015,6 +5070,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "2913307 - Prepare Tests for upgrade.": "https://www.drupal.org/files/issues/2019-12-14/2913307-30.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -5419,6 +5477,9 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
+                },
+                "patches_applied": {
+                    "3097542 - Prepare views_infinite_scroll module for Drupal 9": "https://www.drupal.org/files/issues/2019-12-01/3097542-4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -10687,7 +10748,8 @@
             "homepage": "https://www.drupal.org/project/git_deploy",
             "support": {
                 "source": "https://git.drupalcode.org/project/git_deploy"
-            }
+            },
+            "time": "2020-01-08T13:41:10+00:00"
         },
         {
             "name": "drupal/media_entity_generic",
@@ -10744,7 +10806,8 @@
             "homepage": "https://www.drupal.org/project/media_entity_generic",
             "support": {
                 "source": "https://git.drupalcode.org/project/media_entity_generic"
-            }
+            },
+            "time": "2017-10-18T07:13:43+00:00"
         },
         {
             "name": "drupal/schema_metatag",
@@ -12894,35 +12957,34 @@
         },
         {
             "name": "ocramius/package-versions",
-            "version": "1.5.1",
+            "version": "1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Ocramius/PackageVersions.git",
-                "reference": "1d32342b8c1eb27353c8887c366147b4c2da673c"
+                "reference": "44af6f3a2e2e04f2af46bcb302ad9600cba41c7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/1d32342b8c1eb27353c8887c366147b4c2da673c",
-                "reference": "1d32342b8c1eb27353c8887c366147b4c2da673c",
+                "url": "https://api.github.com/repos/Ocramius/PackageVersions/zipball/44af6f3a2e2e04f2af46bcb302ad9600cba41c7d",
+                "reference": "44af6f3a2e2e04f2af46bcb302ad9600cba41c7d",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.0.0",
-                "php": "^7.3.0"
+                "php": "^7.1.0"
             },
             "require-dev": {
-                "composer/composer": "^1.8.6",
-                "doctrine/coding-standard": "^6.0.0",
+                "composer/composer": "^1.6.3",
+                "doctrine/coding-standard": "^5.0.1",
                 "ext-zip": "*",
-                "infection/infection": "^0.13.4",
-                "phpunit/phpunit": "^8.2.5",
-                "vimeo/psalm": "^3.4.9"
+                "infection/infection": "^0.7.1",
+                "phpunit/phpunit": "^7.5.17"
             },
             "type": "composer-plugin",
             "extra": {
                 "class": "PackageVersions\\Installer",
                 "branch-alias": {
-                    "dev-master": "1.6.x-dev"
+                    "dev-master": "2.0.x-dev"
                 }
             },
             "autoload": {
@@ -12941,7 +13003,7 @@
                 }
             ],
             "description": "Composer plugin that provides efficient querying for installed package versions (no runtime IO)",
-            "time": "2019-07-17T15:49:50+00:00"
+            "time": "2019-11-15T16:17:10+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -15731,12 +15793,6 @@
             "package": "drupal/dropzonejs"
         },
         {
-            "alias": "2.2.0",
-            "alias_normalized": "2.2.0.0",
-            "version": "2.9999999.9999999.9999999-dev",
-            "package": "drupal/entity_browser"
-        },
-        {
             "alias": "2.0.0-alpha2",
             "alias_normalized": "2.0.0.0-alpha2",
             "version": "2.9999999.9999999.9999999-dev",
@@ -15747,7 +15803,6 @@
     "stability-flags": {
         "drupal/autosave_form": 20,
         "drupal/ctools": 20,
-        "drupal/entity_browser": 20,
         "drupal/facets": 20,
         "drupal/lightning_api": 20,
         "drupal/lightning_core": 20,
