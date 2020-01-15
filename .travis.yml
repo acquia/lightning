@@ -15,7 +15,7 @@ cache:
 env:
   global:
     - ORCA_SUT_NAME=acquia/lightning
-    - ORCA_SUT_BRANCH=8.x-4.x
+    - ORCA_SUT_BRANCH=8.x-3.x
     - ORCA_VERSION=master
     - ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/packages_alter.yml
     - ORCA_FIXTURE_PROFILE=lightning
@@ -26,7 +26,7 @@ matrix:
   include:
     # Standard ORCA jobs.
     - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
-    - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_SUT }
+    - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN }
     - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=ISOLATED_RECOMMENDED }
     - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
     # @todo Uncomment this job once Drupal 8.7 is the "previous" version.
