@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2cf0bcb338c175dd270648c84ca04a61",
+    "content-hash": "9d65968d8a6a5c8b3cf7d46364f1803c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1848,6 +1848,62 @@
             "time": "2019-12-18T10:34:03+00:00"
         },
         {
+            "name": "drupal/core_context",
+            "version": "1.0.0-beta1",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/core_context.git",
+                "reference": "8.x-1.0-beta1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/core_context-8.x-1.0-beta1.zip",
+                "reference": "8.x-1.0-beta1",
+                "shasum": "7d18b004ea1c333c25ffff6a010c6e652fc8a5a1"
+            },
+            "require": {
+                "drupal/core": "~8.0",
+                "drupal/ctools": "*"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta1",
+                    "datestamp": "1575989286",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "EclipseGc",
+                    "homepage": "https://www.drupal.org/user/61203"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                }
+            ],
+            "description": "Allows context values to be attached to entities in a field.",
+            "homepage": "https://www.drupal.org/project/core_context",
+            "support": {
+                "source": "https://git.drupalcode.org/project/core_context"
+            }
+        },
+        {
             "name": "drupal/crop",
             "version": "2.0.0",
             "source": {
@@ -2605,64 +2661,6 @@
                 "issues": "https://www.drupal.org/project/issues/entity_embed",
                 "irc": "irc://irc.freenode.org/drupal-media"
             }
-        },
-        {
-            "name": "drupal/facets",
-            "version": "dev-1.x",
-            "source": {
-                "type": "git",
-                "url": "https://git.drupalcode.org/project/facets.git",
-                "reference": "09dcc807b55990782a02e8a87db9dacef9b77aea"
-            },
-            "require": {
-                "drupal/core": "~8.0"
-            },
-            "require-dev": {
-                "drupal/search_api": "~1.5"
-            },
-            "type": "drupal-module",
-            "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
-                "drupal": {
-                    "version": "8.x-1.4+26-dev",
-                    "datestamp": "1572421384",
-                    "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
-                    }
-                },
-                "patches_applied": {
-                    "3090592 - Drupal 9 readiness / compatibility": "https://www.drupal.org/files/issues/2019-10-29/facets_remove-depricated-code-3090592-3.patch"
-                }
-            },
-            "notification-url": "https://packages.drupal.org/8/downloads",
-            "license": [
-                "GPL-2.0+"
-            ],
-            "authors": [
-                {
-                    "name": "See all contributors",
-                    "homepage": "https://www.drupal.org/node/2348769/committers"
-                },
-                {
-                    "name": "StryKaizer",
-                    "homepage": "https://www.drupal.org/user/462700"
-                },
-                {
-                    "name": "borisson_",
-                    "homepage": "https://www.drupal.org/user/2393360"
-                }
-            ],
-            "description": "The Facet module allows site builders to easily create and manage faceted search interfaces.",
-            "homepage": "https://www.drupal.org/project/facets",
-            "support": {
-                "source": "git://git.drupal.org/project/facets.git",
-                "issues": "https://www.drupal.org/project/issues/facets",
-                "irc": "irc://irc.freenode.org/drupal-search-api"
-            },
-            "time": "2019-10-30T09:21:31+00:00"
         },
         {
             "name": "drupal/image_widget_crop",
@@ -4446,36 +4444,38 @@
         },
         {
             "name": "drupal/panelizer",
-            "version": "4.2.0",
+            "version": "5.0.0-beta2",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/panelizer.git",
-                "reference": "8.x-4.2"
+                "reference": "8.x-5.0-beta2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/panelizer-8.x-4.2.zip",
-                "reference": "8.x-4.2",
-                "shasum": "c8e2993111ab54464de714c30a54896d27e8150b"
+                "url": "https://ftp.drupal.org/files/projects/panelizer-8.x-5.0-beta2.zip",
+                "reference": "8.x-5.0-beta2",
+                "shasum": "ee705b3bd98a40160b1562d8db32ba0977e11ee5"
             },
             "require": {
-                "drupal/core": "*",
-                "drupal/ctools": ">=3.1.0",
+                "drupal/core": "^8.8",
+                "drupal/core_context": "^1.0",
+                "drupal/ctools": ">=3.0.0-beta1",
                 "drupal/ctools_block": "*",
-                "drupal/panels": ">=4.4.0",
-                "drupal/panels_ipe": ">=4.4.0"
+                "drupal/layout_library": "^1.0-beta1",
+                "drupal/panels": ">=4.0.0-alpha1",
+                "drupal/panels_ipe": ">=4.0.0-alpha1"
             },
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-4.x": "4.x-dev"
+                    "dev-5.x": "5.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.2",
-                    "datestamp": "1578071889",
+                    "version": "8.x-5.0-beta2",
+                    "datestamp": "1576604280",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
@@ -10690,6 +10690,64 @@
             "time": "2017-12-06T20:35:40+00:00"
         },
         {
+            "name": "drupal/facets",
+            "version": "dev-1.x",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/facets.git",
+                "reference": "09dcc807b55990782a02e8a87db9dacef9b77aea"
+            },
+            "require": {
+                "drupal/core": "~8.0"
+            },
+            "require-dev": {
+                "drupal/search_api": "~1.5"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.4+26-dev",
+                    "datestamp": "1572421384",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
+                    }
+                },
+                "patches_applied": {
+                    "3090592 - Drupal 9 readiness / compatibility": "https://www.drupal.org/files/issues/2019-10-29/facets_remove-depricated-code-3090592-3.patch"
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "See all contributors",
+                    "homepage": "https://www.drupal.org/node/2348769/committers"
+                },
+                {
+                    "name": "StryKaizer",
+                    "homepage": "https://www.drupal.org/user/462700"
+                },
+                {
+                    "name": "borisson_",
+                    "homepage": "https://www.drupal.org/user/2393360"
+                }
+            ],
+            "description": "The Facet module allows site builders to easily create and manage faceted search interfaces.",
+            "homepage": "https://www.drupal.org/project/facets",
+            "support": {
+                "source": "git://git.drupal.org/project/facets.git",
+                "issues": "https://www.drupal.org/project/issues/facets",
+                "irc": "irc://irc.freenode.org/drupal-search-api"
+            },
+            "time": "2019-10-30T09:21:31+00:00"
+        },
+        {
             "name": "drupal/git_deploy",
             "version": "dev-2.x",
             "source": {
@@ -15803,7 +15861,6 @@
     "stability-flags": {
         "drupal/autosave_form": 20,
         "drupal/ctools": 20,
-        "drupal/facets": 20,
         "drupal/lightning_api": 20,
         "drupal/lightning_core": 20,
         "drupal/lightning_layout": 20,
@@ -15814,6 +15871,7 @@
         "drupal/page_manager": 20,
         "drupal/search_api": 20,
         "drupal/simple_gmap": 20,
+        "drupal/facets": 20,
         "drupal/media_entity_generic": 20
     },
     "prefer-stable": true,
