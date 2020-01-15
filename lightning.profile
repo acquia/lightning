@@ -9,6 +9,7 @@ use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
 use Drupal\user\Entity\User;
 use Drupal\user\RoleInterface;
+use Drupal\user\UserInterface;
 
 /**
  * Implements hook_install_tasks().
@@ -56,7 +57,7 @@ function lightning_set_front_page() {
 function lightning_disallow_free_registration() {
   Drupal::configFactory()
     ->getEditable('user.settings')
-    ->set('register', USER_REGISTER_ADMINISTRATORS_ONLY)
+    ->set('register', UserInterface::REGISTER_ADMINISTRATORS_ONLY)
     ->save(TRUE);
 }
 
