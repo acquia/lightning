@@ -26,11 +26,10 @@ fi
 if [[ "$ORCA_JOB" == "ISOLATED_DEV" ]]; then
   export ORCA_PACKAGES_CONFIG=../lightning/tests/packages.yml
   orca fixture:init -f --sut="acquia/lightning" --dev --profile=lightning
-  exit 0
+else
+  # Run ORCA's standard install script.
+  ../../../orca/bin/travis/install.sh
 fi
-
-# Run ORCA's standard install script.
-../../../orca/bin/travis/install.sh
 
 # Exit early in the absence of a fixture.
 [[ -d "$ORCA_FIXTURE_DIR" ]] || exit 0
