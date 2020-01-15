@@ -14,24 +14,27 @@ cd "$(dirname "$0")"
 # Reuse ORCA's own includes.
 source ../../../orca/bin/travis/_includes.sh
 
-# Handle the Contrib: Deprecated code scan special case.
+# Handle the special case of scanning for deprecations in contrib dependencies.
+# We need to ensure that the components are included as part of the SUT,
+# but none of the other Acquia product modules are.
 if [[ "$ORCA_JOB" == "DEPRECATED_CODE_SCAN_CONTRIB" ]]; then
   export ORCA_PACKAGES_CONFIG=../lightning/tests/packages.yml
-  orca fixture:init -f --sut="acquia/lightning" --dev --no-site-install
+  orca fixture:init -f --sut="$ORCA_SUT_NAME" --dev --no-site-install
   exit 0
 fi
 
-# Make the Isolated dev job treat Lightning's components as part of the SUT
-# so as to be installed in a SUT-only fixture.
+# When testing the SUT in isolation using dev package versions, treat the
+# components as part of the SUT, to be installed in an isolated (SUT-only)
+# fixture.
 if [[ "$ORCA_JOB" == "ISOLATED_DEV" ]]; then
   export ORCA_PACKAGES_CONFIG=../lightning/tests/packages.yml
-  orca fixture:init -f --sut="acquia/lightning" --dev --profile=lightning
+  orca fixture:init -f --sut="$ORCA_SUT_NAME" --dev --profile=lightning
 else
   # Run ORCA's standard install script.
   ../../../orca/bin/travis/install.sh
 fi
 
-# Exit early in the absence of a fixture.
+# If there is no fixture, there's nothing else for us to do.
 [[ -d "$ORCA_FIXTURE_DIR" ]] || exit 0
 
 # Add test-only dependencies.
