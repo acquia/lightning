@@ -24,7 +24,7 @@ if [[ "$ORCA_JOB" == "DEPRECATED_CODE_SCAN_CONTRIB" ]]; then
   # Ignore dependencies added by acquia/blt-project, since these are not
   # Lightning dependencies and we therefore do not need to hear about them
   # in the deprecation scan.
-  composer -d"$ORCA_FIXTURE_DIR" remove acquia/memcache-settings drupal/config_split drupal/devel drupal/features drupal/seckit drupal/shield
+  composer -d"$ORCA_FIXTURE_DIR" remove acquia/memcache-settings drupal/acquia_purge drupal/config_split drupal/devel drupal/features drupal/purge drupal/seckit drupal/shield
   exit 0
 fi
 
