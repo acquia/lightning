@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea600e61f1e96068a8ae7b6812be92c5",
+    "content-hash": "582cde4f61a290f937bfd22b0bf82fab",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3884,6 +3884,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3097666 - Make Media entity Instagram D9 Ready": "https://www.drupal.org/files/issues/2020-01-10/3097666-20.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3921,17 +3924,11 @@
         },
         {
             "name": "drupal/media_entity_twitter",
-            "version": "2.3.0",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/media_entity_twitter.git",
-                "reference": "8.x-2.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/media_entity_twitter-8.x-2.3.zip",
-                "reference": "8.x-2.3",
-                "shasum": "de0f25deaa97e09c6851c09ee01c1e2f3f505f48"
+                "reference": "6e9c59db75a22f9a300d00213f9f87693dc19435"
             },
             "require": {
                 "drupal/core": "^8.4",
@@ -3943,12 +3940,15 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.3",
-                    "datestamp": "1579597383",
+                    "version": "8.x-2.2+1-dev",
+                    "datestamp": "1579597088",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3097669 - Make media entity twitter D9 ready.": "https://www.drupal.org/files/issues/2020-01-14/3097669_18.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3981,7 +3981,8 @@
             "homepage": "https://www.drupal.org/project/media_entity_twitter",
             "support": {
                 "source": "https://git.drupalcode.org/project/media_entity_twitter"
-            }
+            },
+            "time": "2020-01-21T08:56:33+00:00"
         },
         {
             "name": "drupal/metatag",
@@ -4458,6 +4459,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "2778565 - Multilingual support for Panelizer": "https://www.drupal.org/files/issues/2018-08-13/panelizer-multilingual-2778565-38.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4504,7 +4508,8 @@
                 "source": "http://git.drupal.org/project/panelizer.git",
                 "issues": "https://www.drupal.org/project/issues/panelizer",
                 "irc": "irc://irc.freenode.org/drupal-scotch"
-            }
+            },
+            "time": "2020-01-22T15:44:10+00:00"
         },
         {
             "name": "drupal/panels",
@@ -15896,12 +15901,6 @@
             "alias_normalized": "2.0.0.0-alpha4",
             "version": "2.0.0.0-alpha5",
             "package": "drupal/dropzonejs"
-        },
-        {
-            "alias": "2.0.0-alpha2",
-            "alias_normalized": "2.0.0.0-alpha2",
-            "version": "2.9999999.9999999.9999999-dev",
-            "package": "drupal/media_entity_instagram"
         }
     ],
     "minimum-stability": "dev",
@@ -15917,6 +15916,7 @@
         "drupal/lightning_media": 20,
         "drupal/lightning_workflow": 20,
         "drupal/media_entity_instagram": 20,
+        "drupal/media_entity_twitter": 20,
         "drupal/metatag": 20,
         "drupal/openapi": 20,
         "drupal/page_manager": 20,
