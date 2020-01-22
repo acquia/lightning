@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da62ccba3522017a7b2cf9edc9611f39",
+    "content-hash": "6e9ca3f666291525637065530453af78",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -4105,17 +4105,11 @@
         },
         {
             "name": "drupal/moderation_sidebar",
-            "version": "1.2.0",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/moderation_sidebar.git",
-                "reference": "8.x-1.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/moderation_sidebar-8.x-1.2.zip",
-                "reference": "8.x-1.2",
-                "shasum": "1d0e209d3e7196e5f489560edd34a60aee5c7ab5"
+                "reference": "66dbbe5fa30ee5f7a7eaf1a007c7bd52879849f8"
             },
             "require": {
                 "drupal/core": "^8.5"
@@ -4126,12 +4120,15 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.2",
-                    "datestamp": "1562866084",
+                    "version": "8.x-1.2+1-dev",
+                    "datestamp": "1570728184",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3096342 - D9 Deprecation report": "https://www.drupal.org/files/issues/2020-01-06/3096342-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4152,7 +4149,8 @@
             "homepage": "https://www.drupal.org/project/moderation_sidebar",
             "support": {
                 "source": "https://git.drupalcode.org/project/moderation_sidebar"
-            }
+            },
+            "time": "2019-10-10T17:28:14+00:00"
         },
         {
             "name": "drupal/openapi",
@@ -15921,6 +15919,7 @@
         "drupal/media_entity_instagram": 20,
         "drupal/media_entity_twitter": 20,
         "drupal/metatag": 20,
+        "drupal/moderation_sidebar": 20,
         "drupal/openapi": 20,
         "drupal/page_manager": 20,
         "drupal/panelizer": 20,
