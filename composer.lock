@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "924965bb58234e1fdca3210dcf8a5a21",
+    "content-hash": "f5cf408c58a7a8acf5b1970a02bed198",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1241,7 +1241,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/blazy.git",
-                "reference": "048d0194d972b3ee613ed6003732b02f7f6a5723"
+                "reference": "aa284992d037a7ee2fda50c7c1057f9dbd1947ae"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
@@ -1252,8 +1252,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-rc6+79-dev",
-                    "datestamp": "1580043784",
+                    "version": "8.x-2.0-rc6+80-dev",
+                    "datestamp": "1580059685",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -1291,7 +1291,7 @@
                 "source": "http://cgit.drupalcode.org/blazy",
                 "issues": "https://drupal.org/project/issues/blazy"
             },
-            "time": "2020-01-26T17:24:45+00:00"
+            "time": "2020-01-27T15:32:51+00:00"
         },
         {
             "name": "drupal/conflict",
@@ -4589,17 +4589,11 @@
         },
         {
             "name": "drupal/redirect",
-            "version": "1.5.0",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/redirect.git",
-                "reference": "8.x-1.5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/redirect-8.x-1.5.zip",
-                "reference": "8.x-1.5",
-                "shasum": "7940acfb28bd802235d159f1c7a9a58e89dd3d15"
+                "reference": "291312303ca05a5f1a095b4159acf8253bbcc444"
             },
             "require": {
                 "drupal/core": "^8.7.7 || ^9"
@@ -4610,12 +4604,15 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.5",
-                    "datestamp": "1576656784",
+                    "version": "8.x-1.4+7-dev",
+                    "datestamp": "1576656480",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3066367 - Convert GlobalRedirectTest to phpunit": "https://www.drupal.org/files/issues/2020-01-24/3066367-4.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4640,7 +4637,8 @@
             "homepage": "https://www.drupal.org/project/redirect",
             "support": {
                 "source": "https://git.drupalcode.org/project/redirect"
-            }
+            },
+            "time": "2019-12-18T08:02:34+00:00"
         },
         {
             "name": "drupal/schemata",
@@ -15855,6 +15853,7 @@
         "drupal/page_manager": 20,
         "drupal/panelizer": 20,
         "drupal/pathauto": 20,
+        "drupal/redirect": 20,
         "drupal/search_api": 20,
         "drupal/simple_gmap": 20,
         "drupal/simple_oauth": 20,
