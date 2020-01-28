@@ -33,10 +33,10 @@ fi
 # fixture.
 if [[ "$ORCA_JOB" == "ISOLATED_DEV" ]]; then
   export ORCA_PACKAGES_CONFIG=../lightning/tests/packages.yml
-  orca fixture:init -f --sut="$ORCA_SUT_NAME" --dev --profile=lightning
+  orca fixture:init -f --sut="$ORCA_SUT_NAME" --dev --profile=lightning --core 9.0.x-dev
 else
   # Run ORCA's standard installation script.
-  ../../../orca/bin/travis/install.sh
+  ORCA_CUSTOM_FIXTURE_INIT_ARGS="--core 9.0.x-dev" ../../../orca/bin/travis/install.sh
 fi
 
 # If there is no fixture, there's nothing else for us to do.

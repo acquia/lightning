@@ -46,6 +46,8 @@ matrix:
 
 before_install:
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
+  - git clone --branch 8.x-2.x git@git.drupal.org:project/media_entity_instagram.git TRAVIS_BUILD_DIR/modules/media_entity_instagram
+  - composer config --global repositories.media_entity_instagram path $TRAVIS_BUILD_DIR/modules/media_entity_instagram
   - ../orca/bin/travis/before_install.sh
 
 install: ./tests/travis/install.sh
