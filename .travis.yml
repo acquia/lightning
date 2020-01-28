@@ -1,7 +1,7 @@
 ---
 language: php
 
-php: "7.2"
+php: "7.3"
 
 addons:
   chrome: stable
@@ -27,8 +27,8 @@ matrix:
   fast_finish: true
   include:
     # Standard ORCA jobs.
-    - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
-    - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN }
+#    - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
+#    - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN }
     - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=ISOLATED_RECOMMENDED }
     - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
     # @todo Uncomment this job once Drupal 8.7 is the "previous" version.
@@ -46,8 +46,8 @@ matrix:
 
 before_install:
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
-  - git clone --branch 8.x-2.x https://git.drupalcode.org/project/media_entity_instagram.git $TRAVIS_BUILD_DIR/modules/media_entity_instagram
-  - composer config --global repositories.media_entity_instagram path $TRAVIS_BUILD_DIR/modules/media_entity_instagram
+  - git clone --branch 8.x-2.x https://git.drupalcode.org/project/media_entity_instagram.git /tmp/media_entity_instagram
+  - composer config --global repositories.media_entity_instagram path /tmp/media_entity_instagram
   - ../orca/bin/travis/before_install.sh
 
 install: ./tests/travis/install.sh
