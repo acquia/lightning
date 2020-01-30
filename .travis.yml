@@ -46,8 +46,12 @@ matrix:
 
 before_install:
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
+  - git clone --branch 11.x https://github.com/acquia/blt-project.git /tmp/blt-project
   - git clone --branch 8.x-2.x https://git.drupalcode.org/project/media_entity_instagram.git /tmp/media_entity_instagram
   - composer config --global repositories.media_entity_instagram path /tmp/media_entity_instagram
+  - composer config --global repositories.blt-project path /tmp/blt-project
+  - composer -d/tmp/blt-project platform.php 7.3
+  - composer -d/tmp/media_entity_instagram require --no-update "drupal/core:^8 || ^9"
   - ../orca/bin/travis/before_install.sh
 
 install: ./tests/travis/install.sh
