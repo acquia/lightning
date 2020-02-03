@@ -1,3 +1,8 @@
+## 4.1.2
+* Updated Drupal core to 8.8.2.
+* Fixed stale configuration of front page view created during installation.
+  (GitHub #666)
+
 ## 4.1.1
 * Security updated Drupal core to 8.8.1.
 * Claro is now the default administrative theme in new installations
