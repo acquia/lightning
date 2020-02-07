@@ -59,6 +59,18 @@
         ],
         "patchLevel": {
             "drupal/core": "-p2"
+        },
+        "patches": {
+            "drupal/core": {
+                "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2020-02-07/2869592-remove-update-warning-34.patch"
+            }
+        },
+        "patches-ignore": {
+            "drupal/lightning_core": {
+                "drupal/core": {
+                    "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch"
+                }
+            }
         }
     },
     "autoload": {
