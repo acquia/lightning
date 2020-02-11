@@ -132,6 +132,7 @@ projects[moderation_sidebar][download][type] = git
 projects[moderation_sidebar][download][url] = https://git.drupalcode.org/project/moderation_sidebar.git
 projects[moderation_sidebar][download][branch] = 1.x
 projects[moderation_sidebar][download][revision] = f129f9e3881859e96ef601ea14bf3d4e2e746280
+projects[moderation_sidebar][patch][] = https://www.drupal.org/files/issues/2020-02-11/3112902-2.patch
 projects[openapi][type] = module
 projects[openapi][download][type] = git
 projects[openapi][download][url] = https://git.drupalcode.org/project/openapi.git
