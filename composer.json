@@ -8,13 +8,18 @@
         "cweagans/composer-patches": "^1.6",
         "drupal/autosave_form": "1.x-dev",
         "drupal/blazy": "2.x-dev",
+        "drupal/consumers": "1.x-dev",
         "drupal/core": "~8.8.1 || 8.9.* || 9.0.*",
         "drupal/core_context": "1.x-dev",
         "drupal/ctools": "3.x-dev as 3.2.0",
-        "drupal/dropzonejs": "2.0.0-alpha5 as 2.0.0-alpha4",
-        "drupal/embed": "1.x-dev",
+        "drupal/dropzonejs": "2.x-dev as 2.0.0-alpha5",
+        "drupal/embed": "1.x-dev as 1.0",
+        "drupal/entity_browser": "2.x-dev as 2.2.0",
+        "drupal/entity_browser_block": "1.x-dev",
         "drupal/entity_embed": "1.x-dev",
+        "drupal/image_widget_crop": "2.x-dev",
         "drupal/inline_entity_form": "1.x-dev",
+        "drupal/layout_builder_styles": "1.x-dev",
         "drupal/lightning_api": "^4.4 || 4.x-dev",
         "drupal/lightning_core": "^5.0 || 5.x-dev",
         "drupal/lightning_layout": "^2.4 || 2.x-dev",
@@ -24,7 +29,7 @@
         "drupal/media_entity_twitter": "2.x-dev",
         "drupal/metatag": "1.x-dev",
         "drupal/moderation_sidebar": "1.x-dev",
-        "drupal/openapi": "1.x-dev",
+        "drupal/openapi": "2.x-dev",
         "drupal/page_manager": "4.x-dev",
         "drupal/panelizer": "5.x-dev",
         "drupal/pathauto": "1.x-dev",
@@ -85,30 +90,11 @@
             "drupal/core": "-p2"
         },
         "patches": {
-            "drupal/core": {
-                "3096566 - Copy media library styles from Seven to Claro & 3096241 - Refactor image and file field widgets to improve contrib compatibility and to make their templates and preprocess functions DRY": "https://www.drupal.org/files/issues/2019-12-16/3096566-23-combined-3096241-3.patch"
-            },
-            "drupal/consumers": {
-                "3042825 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2019-12-25/3042825-16-drupal-9-deprecated-code-report.patch"
-            },
             "drupal/contact_storage": {
                 "3081195 - Update code deprecated in 8.8": "https://www.drupal.org/files/issues/2020-01-17/8.8_deprecations-3081195-10.patch"
             },
-            "drupal/image_widget_crop": {
-                "3042648 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2019-03-26/image_widget_crop-fixed_drupal_set_message-3042648-2.patch",
-                "2895377 - Convert WebTestBase to BrowserTestBase": "https://www.drupal.org/files/issues/2020-01-16/image_widget_crop-convert_simpletest_to_phpunit-2895377-8.patch"
-            },
-            "drupal/layout_builder_styles": {
-                "3092650 - Remove deprecated function drupal_set_message": "https://www.drupal.org/files/issues/2019-11-06/deprecated-3092650-2.patch"
-            },
             "drupal/dropzonejs": {
-                "3095062 - Remove deprecated code": "https://www.drupal.org/files/issues/2019-11-25/3095062-4.patch"
-            },
-            "drupal/entity_browser": {
-                "3104611 - remove deprecated EntityBrowserJavascriptTestBase": "https://www.drupal.org/files/issues/2020-01-06/3104611-2.patch"
-            },
-            "drupal/entity_browser_block": {
-                "3097657 - Make Entity Browser Block D9 ready": "https://www.drupal.org/files/issues/2019-11-29/d9_deprecation_3097657_2.patch"
+                "3095062 - Remove deprecated code": "https://www.drupal.org/files/issues/2020-02-07/3095062-21.patch"
             },
             "drupal/redirect": {
                 "3066367 - Convert GlobalRedirectTest to phpunit": "https://www.drupal.org/files/issues/2020-01-27/3066367-7.patch"
@@ -128,14 +114,11 @@
                 "3097542 - Prepare views_infinite_scroll module for Drupal 9": "https://www.drupal.org/files/issues/2019-12-01/3097542-4.patch"
             },
             "drupal/metatag": {
-                "3042590 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2020-01-17/metatag-3042590-44.patch"
+                "3042590 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2020-02-10/3042590-45.patch"
             },
             "drupal/libraries": {
                 "3039243 - Fatal error: Trait method getLibrary has not been applied": "https://www.drupal.org/files/issues/2019-12-09/3039243-9-fatal-error-trait-method-getLibrary.patch",
                 "3032159 - Replace usages of the deprecated functions like drupal_set_message and SafeMarkup": "https://www.drupal.org/files/issues/2020-01-22/libraries-d9ready-3032159-7.patch"
-            },
-            "drupal/moderation_sidebar": {
-                "3096342 - D9 Deprecation report": "https://www.drupal.org/files/issues/2020-01-06/3096342-5.patch"
             },
             "drupal/video_embed_field": {
                 "3097287 - Prepare Video Embed Field for Drupal 9": "https://www.drupal.org/files/issues/2020-01-17/3097287-22.patch"
