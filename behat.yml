@@ -7,23 +7,12 @@ default:
     default:
       paths:
         - 'docroot/profiles/contrib/lightning/tests/features'
-        - 'docroot/modules/contrib/lightning_api/tests/features'
-        - 'docroot/modules/contrib/lightning_core/tests/features'
-        - 'docroot/modules/contrib/lightning_media/tests/features'
-        - 'docroot/modules/contrib/lightning_media/modules/lightning_media_slideshow/tests/features'
-        - 'docroot/modules/contrib/lightning_workflow/tests/features'
-        - 'docroot/modules/contrib/lightning_workflow/modules/lightning_scheduler/tests/features'
         - 'docroot/modules/contrib/lightning_layout/tests/features'
       contexts:
         - '\Drupal\DrupalExtension\Context\DrupalContext'
         - '\Drupal\DrupalExtension\Context\MinkContext'
         - '\Drupal\DrupalExtension\Context\MessageContext'
         - '\Drupal\DrupalExtension\Context\DrushContext'
-        - '\Drupal\Tests\lightning_api\FixtureContext'
-        - '\Drupal\Tests\lightning_core\FixtureContext'
-        - '\Drupal\Tests\lightning_media\FixtureContext'
-        - '\Drupal\Tests\lightning_workflow\FixtureContext'
-        # - '\Drupal\Tests\lightning_layout\FixtureContext'
   extensions:
     Drupal\DrupalExtension:
       subcontexts:
