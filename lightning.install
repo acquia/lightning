@@ -19,7 +19,7 @@ function lightning_requirements() {
     $requirements = [];
     $libraries_dependencies = [];
     $enabled_modules = \Drupal::moduleHandler()->getModuleList();
-
+    
     foreach ($enabled_modules as $module => $data) {
         $info = \Drupal::service('extension.list.module')->getExtensionInfo($module);
         if (in_array('drupal:libraries', $info['dependencies'])) {
@@ -35,7 +35,6 @@ function lightning_requirements() {
         ];
     }
     return $requirements;
-
 }
 
 /**
