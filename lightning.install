@@ -8,33 +8,37 @@
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\lightning_core\ConfigHelper as Config;
+use Drupal\lightning_core\Element;
 
 /**
  * Alerts users of Libraries API dependencies.
  *
  * A future version of Lightning will remove Libraries API, so
  * users must add that dependency to composer.json manually.
+ *
+ * @todo Remove this function when Libraries API is no longer shipped with Lightning.
  */
 function lightning_requirements() {
-    $requirements = [];
-    $libraries_dependencies = [];
-    $enabled_modules = \Drupal::moduleHandler()->getModuleList();
-    
-    foreach ($enabled_modules as $module => $data) {
-        $info = \Drupal::service('extension.list.module')->getExtensionInfo($module);
-        if (in_array('drupal:libraries', $info['dependencies'])) {
-            $libraries_dependencies[$module] = $info['name'];
-        }
-    }
+  $requirements = [];
+  $libraries_dependencies = [];
+  $enabled_modules = \Drupal::service('extension.list.module')->getAllInstalledInfo();
 
-    if ($enabled_modules) {
-        $requirements['lightning_libraries'] = [
-            'title' => t('Libraries API dependencies'),
-            'value' => t('These modules require Libraries API: %module_list. Lightning will soon remove Libraries API as a dependency, so you must add that dependency to your composer.json manually.', ['%module_list' => implode(', ', $libraries_dependencies)]),
-            'severity' => REQUIREMENT_WARNING,
-        ];
+  foreach ($enabled_modules as $module => $info) {
+    foreach (['libraries:libraries', 'libraries'] as $needle) {
+      if (in_array($needle, $info['dependencies'], TRUE)) {
+        $libraries_dependencies[$module] = $info['name'];
+      }
     }
-    return $requirements;
+  }
+
+  if ($enabled_modules) {
+    $requirements['lightning_libraries'] = [
+      'title' => t('Libraries API dependencies'),
+      'value' => t('These modules require Libraries API: %module_list. Lightning will soon remove Libraries API as a dependency, so you must add that dependency to your composer.json manually.', ['%module_list' => Element::oxford($libraries_dependencies)]),
+      'severity' => REQUIREMENT_WARNING,
+    ];
+  }
+  return $requirements;
 }
 
 /**
