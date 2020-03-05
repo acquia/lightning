@@ -10,6 +10,35 @@ use Drupal\field\Entity\FieldConfig;
 use Drupal\lightning_core\ConfigHelper as Config;
 
 /**
+ * Alerts users of Libraries API dependencies.
+ *
+ * A future version of Lightning will remove Libraries API, so
+ * users must add that dependency to composer.json manually.
+ */
+function lightning_requirements() {
+    $requirements = [];
+    $libraries_dependencies = [];
+    $enabled_modules = \Drupal::moduleHandler()->getModuleList();
+
+    foreach ($enabled_modules as $module => $data) {
+        $info = \Drupal::service('extension.list.module')->getExtensionInfo($module);
+        if (in_array('drupal:libraries', $info['dependencies'])) {
+            $libraries_dependencies[$module] = $info['name'];
+        }
+    }
+
+    if ($enabled_modules) {
+        $requirements['lightning_libraries'] = [
+            'title' => t('Libraries API'),
+            'value' => t('Libraries API dependency: %module_list. These modules require Libraries API. Lightning will soon remove Libraries API as a dependency, so you must add that dependency to your composer.json manually.', ['%module_list' => implode(', ', $libraries_dependencies)]),
+            'severity' => REQUIREMENT_WARNING,
+        ];
+    }
+    return $requirements;
+
+}
+
+/**
  * Makes updates to some basic config that ships with Lightning.
  *
  * Install the body field on the basic block_content type, delete the Create
