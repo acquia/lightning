@@ -8,6 +8,38 @@
 use Drupal\Core\Entity\Entity\EntityViewDisplay;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\lightning_core\ConfigHelper as Config;
+use Drupal\lightning_core\Element;
+
+/**
+ * Alerts users of Libraries API dependencies.
+ *
+ * A future version of Lightning will remove Libraries API, so
+ * users must add that dependency to composer.json manually.
+ *
+ * @todo Remove this function when Libraries API is no longer shipped with Lightning.
+ */
+function lightning_requirements() {
+  $requirements = [];
+  $libraries_dependencies = [];
+  $enabled_modules = \Drupal::service('extension.list.module')->getAllInstalledInfo();
+
+  foreach ($enabled_modules as $module => $info) {
+    if (array_intersect($info['dependencies'], ['libraries:libraries', 'libraries'])) {
+      $libraries_dependencies[$module] = $info['name'];
+    }
+  }
+
+  if ($libraries_dependencies) {
+    $requirements['lightning_libraries'] = [
+      'title' => t('Libraries API dependencies'),
+      'value' => t('These modules require Libraries API: %module_list. Lightning will soon remove Libraries API as a dependency, so you must add that dependency to your composer.json manually.', [
+        '%module_list' => Element::oxford($libraries_dependencies),
+      ]),
+      'severity' => REQUIREMENT_WARNING,
+    ];
+  }
+  return $requirements;
+}
 
 /**
  * Makes updates to some basic config that ships with Lightning.
