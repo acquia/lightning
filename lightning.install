@@ -33,7 +33,7 @@ function lightning_requirements() {
     $requirements['lightning_libraries'] = [
       'title' => t('Libraries API dependencies'),
       'value' => t('These modules require Libraries API: %module_list. Lightning will soon remove Libraries API as a dependency, so you must add that dependency to your composer.json manually.', [
-        '%module_list' => Element::oxford($libraries_dependencies)
+        '%module_list' => Element::oxford($libraries_dependencies),
       ]),
       'severity' => REQUIREMENT_WARNING,
     ];
