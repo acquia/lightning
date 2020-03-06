@@ -24,17 +24,17 @@ function lightning_requirements() {
   $enabled_modules = \Drupal::service('extension.list.module')->getAllInstalledInfo();
 
   foreach ($enabled_modules as $module => $info) {
-    foreach (['libraries:libraries', 'libraries'] as $needle) {
-      if (in_array($needle, $info['dependencies'], TRUE)) {
-        $libraries_dependencies[$module] = $info['name'];
-      }
+    if (array_intersect($info['dependencies'], ['libraries:libraries', 'libraries'])) {
+      $libraries_dependencies[$module] = $info['name'];
     }
   }
 
-  if ($enabled_modules) {
+  if ($libraries_dependencies) {
     $requirements['lightning_libraries'] = [
       'title' => t('Libraries API dependencies'),
-      'value' => t('These modules require Libraries API: %module_list. Lightning will soon remove Libraries API as a dependency, so you must add that dependency to your composer.json manually.', ['%module_list' => Element::oxford($libraries_dependencies)]),
+      'value' => t('These modules require Libraries API: %module_list. Lightning will soon remove Libraries API as a dependency, so you must add that dependency to your composer.json manually.', [
+        '%module_list' => Element::oxford($libraries_dependencies)
+      ]),
       'severity' => REQUIREMENT_WARNING,
     ];
   }
