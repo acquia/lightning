@@ -151,6 +151,41 @@ class ConfigIntegrityTest extends ExistingSiteBase {
     $this->assertAllowed('/admin/config/system/lightning/media');
   }
 
+  public function providerModeratedContentTypes() {
+    return [
+      ['page', 'page_creator'],
+      ['page', 'administrator'],
+      ['landing_page', 'landing_page_creator'],
+      ['landing_page', 'administrator'],
+    ];
+  }
+
+  /**
+   * Tests that moderated content types do not show a Published checkbox.
+   *
+   * @param string $node_type
+   *   The machine name of the content type to test.
+   * @param string $role
+   *   The machine name of the user role to log in with.
+   *
+   * @dataProvider providerModeratedContentTypes
+   */
+  public function testModeratedContentTypes($node_type, $role) {
+    $assert_session = $this->assertSession();
+
+    $account = $this->createUser();
+    $account->addRole($role);
+    $account->save();
+
+    $this->drupalLogin($account);
+    $this->drupalGet("/node/add/$node_type");
+    $assert_session->statusCodeEquals(200);
+    $assert_session->buttonExists('Save');
+    $assert_session->fieldNotExists('status[value]');
+    $assert_session->buttonNotExists('Save and publish');
+    $assert_session->buttonNotExists('Save as unpublished');
+  }
+
   /**
    * Asserts that meta tags are enabled for specific content types.
    *
