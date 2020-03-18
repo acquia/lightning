@@ -16,7 +16,11 @@ env:
   global:
     - ORCA_SUT_NAME=acquia/lightning
     - ORCA_SUT_BRANCH=8.x-4.x
-    - ORCA_VERSION=master
+    # Specify the version of ORCA to use. Use dev-master to track the latest
+    # release, dev-develop to track Dev/HEAD, or any other Composer version
+    # string.
+    # @see https://getcomposer.org/doc/articles/versions.md
+    - ORCA_VERSION=dev-develop
     - ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/packages_alter.yml
     - ORCA_FIXTURE_PROFILE=lightning
     - ORCA_TELEMETRY_ENABLE=TRUE
@@ -27,23 +31,30 @@ matrix:
     # Standard ORCA jobs.
     - { name: "Static code analysis", env: ORCA_JOB=STATIC_CODE_ANALYSIS }
     - { name: "Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN }
-    - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=ISOLATED_RECOMMENDED }
-    - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
+    # - { name: "Isolated test w/ recommended package versions", env: ORCA_JOB=ISOLATED_RECOMMENDED }
+    # - { name: "Integrated test w/ recommended package versions", env: ORCA_JOB=INTEGRATED_RECOMMENDED }
     # @todo Uncomment this job once Drupal 8.7 is the "previous" version.
     # - { name: "Integrated test w/ recommended package versions & previous minor release of Drupal core", env: ORCA_JOB=CORE_PREVIOUS }
-    - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=ISOLATED_DEV }
-    - { name: "Integrated test w/ dev package versions", env: ORCA_JOB=INTEGRATED_DEV }
-    - { name: "Integrated test w/ dev package versions & next minor dev version of Drupal core", env: ORCA_JOB=CORE_NEXT }
-    - { name: "Contrib: Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_CONTRIB }
+    # - { name: "Isolated test w/ dev package versions", env: ORCA_JOB=ISOLATED_DEV }
+    # - { name: "Integrated test w/ dev package versions", env: ORCA_JOB=INTEGRATED_DEV }
+    # - { name: "Integrated test w/ dev package versions & next minor dev version of Drupal core", env: ORCA_JOB=CORE_NEXT }
+    # - { name: "Contrib: Deprecated code scan", env: ORCA_JOB=DEPRECATED_CODE_SCAN_CONTRIB }
+    - { name: "D9 readiness test", php: "7.3", env: ORCA_JOB=D9_READINESS }
     # Custom job.
-    - { name: "Upgrade test", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--dev --no-site-install" ORCA_CUSTOM_TESTS_RUN_ARGS="--sut-only" DB_FIXTURE=3.0.0 }
+    # - { name: "Upgrade test", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--dev --no-site-install" ORCA_CUSTOM_TESTS_RUN_ARGS="--sut-only" DB_FIXTURE=3.0.0 }
   allow_failures:
     - env: ORCA_JOB=INTEGRATED_DEV
     - env: ORCA_JOB=CORE_NEXT
     - env: ORCA_JOB=DEPRECATED_CODE_SCAN_CONTRIB
 
 before_install:
-  - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
+  - git clone --branch 8.x-2.x https://git.drupalcode.org/project/openapi_rest.git /tmp/openapi_rest
+  - cp -f openapi_rest.composer.json /tmp/openapi_rest/composer.json
+  - composer config --global repositories.openapi_rest path /tmp/openapi_rest
+  - git clone --branch 8.x-1.x https://git.drupalcode.org/project/search_api.git /tmp/search_api
+  - cp -f search_api.composer.json /tmp/search_api/composer.json
+  - composer config --global repositories.search_api path /tmp/search_api
+  - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - ../orca/bin/travis/before_install.sh
 
 install: ./tests/travis/install.sh
