@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b60d73b8b4cf265cba95916644e9d078",
+    "content-hash": "b8a1c8b5f354edf141674641515c8a2c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -747,9 +747,6 @@
                 },
                 "grumphp": {
                     "config-default-path": "vendor/drupol/drupal-conventions/config/drupal8/grumphp.yml"
-                },
-                "patches_applied": {
-                    "3110141 - Declare Drupal 9 compatibility": "https://www.drupal.org/files/issues/2020-03-20/3110141-7.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -913,20 +910,14 @@
         },
         {
             "name": "drupal/consumers",
-            "version": "1.10.0",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/consumers.git",
-                "reference": "8.x-1.10"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/consumers-8.x-1.10.zip",
-                "reference": "8.x-1.10",
-                "shasum": "04fc542861836a260e174a7965ae7c3825278eea"
+                "reference": "ca0668d8f2f5fdd14335fe503d315865e1548a2d"
             },
             "require": {
-                "drupal/core": "*"
+                "drupal/core": "^8 || ^9"
             },
             "type": "drupal-module",
             "extra": {
@@ -934,11 +925,11 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.10",
-                    "datestamp": "1574140689",
+                    "version": "8.x-1.10+1-dev",
+                    "datestamp": "1577485383",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -960,7 +951,8 @@
             "homepage": "https://www.drupal.org/project/consumers",
             "support": {
                 "source": "https://git.drupalcode.org/project/consumers"
-            }
+            },
+            "time": "2020-01-29T20:44:25+00:00"
         },
         {
             "name": "drupal/contact_storage",
@@ -1229,12 +1221,6 @@
                         "[web-root]/profiles/README.txt": "assets/scaffold/files/profiles.README.txt",
                         "[web-root]/themes/README.txt": "assets/scaffold/files/themes.README.txt"
                     }
-                },
-                "patches_applied": {
-                    "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2020-02-07/2869592-remove-update-warning-34.patch",
-                    "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2020-03-20/1356276-531-9.0.x-8.patch",
-                    "2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch",
-                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-11-27/2815221-125.patch"
                 }
             },
             "autoload": {
@@ -1628,9 +1614,6 @@
                         "status": "not-covered",
                         "message": "Alpha releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "3099836 - Use new LibrariesDirectoryFinder": "https://www.drupal.org/files/issues/2020-01-30/dropzonejs-libraries-directory-finder-3099836-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4049,9 +4032,6 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "2778565 - Multilingual support for Panelizer": "https://www.drupal.org/files/issues/2020-01-22/2778565-46.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4129,9 +4109,6 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "2878684 - Use String.match to correlate regions when switching Layouts in Panels IPE": "https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -14035,6 +14012,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "drupal/consumers": 20,
         "drupal/core": 20,
         "drupal/lightning_media": 20,
         "drupal/panels": 20,

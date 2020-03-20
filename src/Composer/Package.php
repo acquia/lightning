@@ -115,6 +115,9 @@ class Package {
     $lock = $this->locker->getLockData();
 
     foreach ($lock['packages'] as $package) {
+      if (empty($package['source'])) {
+        continue;
+      }
       list(, $name) = explode('/', $package['name'], 2);
 
       if ($this->isDrupalPackage($package)) {
