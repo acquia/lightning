@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2c4da99a0042a6302c861aba9b19724",
+    "content-hash": "bdc780aec4dd12ffd89bb6041f1f44d8",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1585,20 +1585,14 @@
         },
         {
             "name": "drupal/dropzonejs",
-            "version": "2.0.0-alpha5",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/dropzonejs.git",
-                "reference": "8.x-2.0-alpha5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/dropzonejs-8.x-2.0-alpha5.zip",
-                "reference": "8.x-2.0-alpha5",
-                "shasum": "75d3170db7ed26ced39e63f1461906f33f34c72a"
+                "reference": "365cc0e6ce22923d7aa8ea26c44199047d254356"
             },
             "require": {
-                "drupal/core": "*"
+                "drupal/core": "^8.8 || ^9"
             },
             "require-dev": {
                 "drupal/entity_browser": "*"
@@ -1612,11 +1606,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-alpha5",
-                    "datestamp": "1579100883",
+                    "version": "8.x-2.0+1-dev",
+                    "datestamp": "1581067516",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Alpha releases are not covered by Drupal security advisories."
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "patches_applied": {
@@ -1671,7 +1665,8 @@
                 "source": "https://www.drupal.org/project/dropzonejs",
                 "issues": "https://www.drupal.org/project/issues/dropzonejs",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
-            }
+            },
+            "time": "2020-03-12T09:11:46+00:00"
         },
         {
             "name": "drupal/embed",
@@ -13823,14 +13818,22 @@
             "time": "2015-12-17T08:42:14+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "alias": "2.0.0-alpha5",
+            "alias_normalized": "2.0.0.0-alpha5",
+            "version": "2.9999999.9999999.9999999-dev",
+            "package": "drupal/dropzonejs"
+        }
+    ],
     "minimum-stability": "dev",
     "stability-flags": {
         "drupal/consumers": 20,
         "drupal/core": 20,
+        "drupal/crop": 20,
+        "drupal/dropzonejs": 20,
         "drupal/lightning_media": 20,
         "drupal/panels": 20,
-        "drupal/crop": 20,
         "drupal/core-dev": 20
     },
     "prefer-stable": true,
