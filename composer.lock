@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d66d7abd89ed7e05cfe8f106602814b8",
+    "content-hash": "b60d73b8b4cf265cba95916644e9d078",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -747,6 +747,9 @@
                 },
                 "grumphp": {
                     "config-default-path": "vendor/drupol/drupal-conventions/config/drupal8/grumphp.yml"
+                },
+                "patches_applied": {
+                    "3110141 - Declare Drupal 9 compatibility": "https://www.drupal.org/files/issues/2020-03-20/3110141-7.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3188,9 +3191,6 @@
                     "drupal/dropzonejs": {
                         "3099836 - Use new LibrariesDirectoryFinder": "https://www.drupal.org/files/issues/2020-01-30/dropzonejs-libraries-directory-finder-3099836-3.patch"
                     }
-                },
-                "patches_applied": {
-                    "Declare core compatibility in subcomponents": "https://raw.githubusercontent.com/acquia/lightning/9.0.x-compatible/lightning_media.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3236,7 +3236,8 @@
             "homepage": "https://www.drupal.org/project/lightning_media",
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_media"
-            }
+            },
+            "time": "2020-03-20T14:03:10+00:00"
         },
         {
             "name": "drupal/lightning_workflow",
