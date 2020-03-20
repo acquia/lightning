@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "618b75813ced28898432ccaef00874a9",
+    "content-hash": "2dbdbd50cbb4776e02b803eda7d0b43a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1272,6 +1272,65 @@
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
             "time": "2020-03-20T14:41:55+00:00"
+        },
+        {
+            "name": "drupal/core_context",
+            "version": "1.0.0-beta2",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/core_context.git",
+                "reference": "8.x-1.0-beta2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/core_context-8.x-1.0-beta2.zip",
+                "reference": "8.x-1.0-beta2",
+                "shasum": "38b6deeb7173b68e054dcdb72f0ddcf93b640603"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9",
+                "drupal/ctools": "*"
+            },
+            "require-dev": {
+                "drupal/page_manager": "^4.0"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "branch-alias": {
+                    "dev-1.x": "1.x-dev"
+                },
+                "drupal": {
+                    "version": "8.x-1.0-beta2",
+                    "datestamp": "1582832527",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "EclipseGc",
+                    "homepage": "https://www.drupal.org/user/61203"
+                },
+                {
+                    "name": "japerry",
+                    "homepage": "https://www.drupal.org/user/45640"
+                },
+                {
+                    "name": "phenaproxima",
+                    "homepage": "https://www.drupal.org/user/205645"
+                }
+            ],
+            "description": "Allows context values to be attached to entities in a field.",
+            "homepage": "https://www.drupal.org/project/core_context",
+            "support": {
+                "source": "https://git.drupalcode.org/project/core_context"
+            }
         },
         {
             "name": "drupal/crop",
@@ -3957,41 +4016,35 @@
         },
         {
             "name": "drupal/panelizer",
-            "version": "4.2.0",
+            "version": "dev-5.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/panelizer.git",
-                "reference": "8.x-4.2"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/panelizer-8.x-4.2.zip",
-                "reference": "8.x-4.2",
-                "shasum": "c8e2993111ab54464de714c30a54896d27e8150b"
+                "reference": "171c8885ad5614073dc2976d68809a054f9ecfa5"
             },
             "require": {
-                "drupal/core": "*",
-                "drupal/ctools": ">=3.1.0",
+                "drupal/core": "^8.8 || ^9",
+                "drupal/core_context": "^1.0",
+                "drupal/ctools": ">=3.0.0-beta1",
                 "drupal/ctools_block": "*",
-                "drupal/panels": ">=4.4.0",
-                "drupal/panels_ipe": ">=4.4.0"
+                "drupal/layout_library": "^1.0-beta1",
+                "drupal/panels": ">=4.0.0-alpha1",
+                "drupal/panels_ipe": ">=4.0.0-alpha1"
             },
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-4.x": "4.x-dev"
+                    "dev-5.x": "5.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.2",
-                    "datestamp": "1578071889",
+                    "version": "8.x-5.0-beta2+8-dev",
+                    "datestamp": "1582562806",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
-                "patches_applied": {
-                    "2778565 - Multilingual support for Panelizer": "https://www.drupal.org/files/issues/2020-01-22/2778565-46.patch"
-                }
+                "patches_applied": []
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
@@ -13785,6 +13838,7 @@
         "drupal/moderation_dashboard": 20,
         "drupal/openapi": 20,
         "drupal/page_manager": 20,
+        "drupal/panelizer": 20,
         "drupal/panels": 20,
         "drupal/core-dev": 20
     },
