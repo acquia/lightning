@@ -55,6 +55,9 @@ before_install:
   - git clone --branch 8.x-1.x https://git.drupalcode.org/project/search_api.git /tmp/search_api
   - cp -f search_api.composer.json /tmp/search_api/composer.json
   - composer config --global repositories.search_api path /tmp/search_api
+  - 'echo "core_version_requirement: ^8 || ^9" >> /tmp/search_api/search_api.info.yml'
+  - 'echo "core_version_requirement: ^8 || ^9" >> /tmp/search_api/modules/search_api_db/search_api_db.info.yml'
+  - 'echo "core_version_requirement: ^8 || ^9" >> /tmp/search_api/modules/search_api_db/search_api_db_defaults/search_api_db_defaults.info.yml'
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - ../orca/bin/travis/before_install.sh
 
