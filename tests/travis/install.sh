@@ -38,7 +38,8 @@ fi
 [[ -d "$ORCA_FIXTURE_DIR" ]] || exit 0
 
 # Add testing dependencies.
-# composer -d"$ORCA_FIXTURE_DIR" require --dev weitzman/drupal-test-traits
+composer -d"$ORCA_FIXTURE_DIR" require --dev --no-update weitzman/drupal-test-traits
+composer -d"$ORCA_FIXTURE_DIR" update
 
 # Exit early if no DB fixture is specified.
 [[ "$DB_FIXTURE" ]] || exit 0
