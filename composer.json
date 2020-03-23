@@ -25,6 +25,7 @@
         "drupal/page_manager": "4.x-dev",
         "drupal/panelizer": "5.x-dev",
         "drupal/panels": "4.x-dev",
+        "drupal/redirect": "1.x-dev",
         "drupal/slick": "2.x-dev"
     },
     "require-dev": {
@@ -90,6 +91,9 @@
             "drupal/core": "-p2"
         },
         "patches": {
+            "drupal/bg_image_formatter": {
+                "3121753 - Replace use of deprecated entity.manager service": "https://www.drupal.org/files/issues/2020-03-23/3121753-2.patch"
+            },
             "drupal/core": {
                 "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2020-02-07/2869592-remove-update-warning-34.patch",
                 "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2020-03-20/1356276-531-9.0.x-8.patch",
