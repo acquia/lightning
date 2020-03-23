@@ -2,7 +2,13 @@ core = 8.x
 api = 2
 defaults[projects][subdir] = contrib
 projects[acquia_connector][type] = module
+<<<<<<< HEAD
 projects[acquia_connector][version] = 1.21
+||||||| merged common ancestors
+projects[acquia_connector][version] = 1.19
+=======
+projects[acquia_connector][version] = 1.20
+>>>>>>> Updating all dependencies
 projects[acquia_pendo][type] = module
 projects[acquia_pendo][version] = 1.0-alpha1
 projects[autosave_form][type] = module
