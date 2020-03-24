@@ -3,14 +3,13 @@
 namespace Drupal\lightning\Commands;
 
 use Drush\Commands\DrushCommands;
-use Drush\Style\DrushStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * Exposes Drush commands provided by the Lightning profile.
  */
-class LightningCommands extends DrushCommands {
+final class LightningCommands extends DrushCommands {
   /**
    * The Drupal application root.
    *
@@ -19,7 +18,7 @@ class LightningCommands extends DrushCommands {
   protected $appRoot;
 
   /**
-   * LightningVersionCommand constructor.
+   * LightningCommands constructor.
    *
    * @param string $app_root
    *   The Drupal application root.
@@ -54,8 +53,7 @@ class LightningCommands extends DrushCommands {
     if (!isset($info)) {
       throw new \Exception('Lightning info file not found.');
     }
-    $io = new DrushStyle($this->input(), $this->output());
-    $io->note('Version ' . $this->toSemanticVersion($info['version']));
+    $this->output()->writeln('Version ' . $this->toSemanticVersion($info['version']));
   }
 
   /**
