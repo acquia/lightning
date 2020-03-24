@@ -64,6 +64,11 @@
                 "[web-root]/web.config": false
             }
         },
+        "drush": {
+            "services": {
+                "drush.services.yml": "^9"
+            }
+        },
         "enable-patching": true,
         "installer-paths": {
             "docroot/core": [
@@ -102,6 +107,9 @@
             },
             "drupal/lightning_api": {
                 "#75 - Do not use deprecated path.alias_storage": "https://raw.githubusercontent.com/acquia/lightning/9.0.x-compatible/lightning_api-75.diff"
+            },
+            "drupal/metatag": {
+                "3042590 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2020-03-02/3042590-47.patch"
             }
         },
         "patches-ignore": {

@@ -1,19 +1,16 @@
 <?php
 
-namespace Drupal\lightning\Command;
+namespace Drupal\lightning\Commands;
 
-use Drupal\Console\Core\Command\Command;
-use Drupal\Console\Core\Style\DrupalStyle;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use Drush\Commands\DrushCommands;
+use Drush\Style\DrushStyle;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Yaml\Yaml;
 
 /**
- * Prints the semver version of the current Lightning code base.
+ * Exposes Drush commands provided by the Lightning profile.
  */
-class VersionCommand extends Command {
-
+class LightningCommands extends DrushCommands {
   /**
    * The Drupal application root.
    *
@@ -22,20 +19,23 @@ class VersionCommand extends Command {
   protected $appRoot;
 
   /**
-   * VersionCommand constructor.
+   * LightningVersionCommand constructor.
    *
    * @param string $app_root
    *   The Drupal application root.
    */
   public function __construct($app_root) {
-    parent::__construct('lightning:version');
+    parent::__construct();
     $this->appRoot = $app_root;
   }
 
   /**
-   * {@inheritdoc}
+   * Prints the semver version of the current Lightning code base.
+   *
+   * @command lightning:version
+   *
    */
-  protected function execute(InputInterface $input, OutputInterface $output) {
+  public function version() {
     $finder = (new Finder())
       ->files()
       ->name('lightning.info.yml')
@@ -43,7 +43,7 @@ class VersionCommand extends Command {
 
     foreach ($finder as $info_file) {
       $info = Yaml::parse($info_file->getContents());
-      if ($info['distribution']['name'] === 'Lightning' && isset($info['version'])) {
+      if ($info['name'] === 'Lightning' && isset($info['version'])) {
         // There should only be one file in docroot/profiles named
         // lightning.info.yml, but just to make sure we have the right file in
         // the iterator, break out when we have enough information to be
@@ -54,9 +54,8 @@ class VersionCommand extends Command {
     if (!isset($info)) {
       throw new \Exception('Lightning info file not found.');
     }
-
-    $io = new DrupalStyle($input, $output);
-    $io->info($this->toSemanticVersion($info['version']));
+    $io = new DrushStyle($this->input(), $this->output());
+    $io->note('Version ' . $this->toSemanticVersion($info['version']));
   }
 
   /**
@@ -77,7 +76,8 @@ class VersionCommand extends Command {
    *   The semantic version number.
    */
   public static function toSemanticVersion($drupal_version) {
-    preg_match('/^8\.x-(\d+).(\d)(\d+)(-.+)?$/', $drupal_version, $matches);
+    var_dump($drupal_version);
+    preg_match('/^9\.x-(\d+).(\d)(\d+)(-.+)?$/', $drupal_version, $matches);
     $semver = "$matches[1].$matches[2]." . intval($matches[3]);
     if (isset($matches[4])) {
       // $matches[4] is only populated if the version has a "-[prerelease]"
