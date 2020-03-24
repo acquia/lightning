@@ -32,7 +32,6 @@ final class LightningCommands extends DrushCommands {
    * Prints the semver version of the current Lightning code base.
    *
    * @command lightning:version
-   *
    */
   public function version() {
     $finder = (new Finder())
