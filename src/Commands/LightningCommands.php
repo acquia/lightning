@@ -76,7 +76,6 @@ class LightningCommands extends DrushCommands {
    *   The semantic version number.
    */
   public static function toSemanticVersion($drupal_version) {
-    var_dump($drupal_version);
     preg_match('/^9\.x-(\d+).(\d)(\d+)(-.+)?$/', $drupal_version, $matches);
     $semver = "$matches[1].$matches[2]." . intval($matches[3]);
     if (isset($matches[4])) {
