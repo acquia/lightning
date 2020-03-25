@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "729cc28431b99a5adb994be28f5d3ce2",
+    "content-hash": "f72cd696efb2fe3e2e4f1a03ce6b0b45",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3809,7 +3809,7 @@
             "version": "dev-8.x-2.x",
             "dist": {
                 "type": "path",
-                "url": "/Users/phen/openapi_rest",
+                "url": "/Users/kdruckman/sites/openapi_rest",
                 "reference": "fbbd74a6620351622ec2bae1d367a9564d15dd97"
             },
             "require": {
@@ -3820,7 +3820,12 @@
                 "branch-alias": {
                     "dev-8.x-2.x": "2.x-dev"
                 }
-            }
+            },
+            "license": [
+                "GPL-2.0+"
+            ],
+            "description": "OpenAPI support for the REST module.",
+            "homepage": "https://www.drupal.org/project/openapi_rest"
         },
         {
             "name": "drupal/openapi_ui",
@@ -4535,8 +4540,8 @@
             "version": "dev-8.x-1.x",
             "dist": {
                 "type": "path",
-                "url": "/Users/phen/search_api",
-                "reference": "006a695aff52b930a1fca296b7f7407e5732e47c"
+                "url": "/Users/kdruckman/sites/search_api",
+                "reference": "0d39287215ba128d7fdd7ba3dacd536d7aea8be1"
             },
             "conflict": {
                 "drupal/search_api_solr": "2.* || 3.0 || 3.1"
@@ -4552,13 +4557,13 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-8.x-1.x": "1.x-dev"
-                },
                 "drush": {
                     "services": {
                         "drush.services.yml": "^9"
                     }
+                },
+                "branch-alias": {
+                    "dev-8.x-1.x": "1.x-dev"
                 }
             },
             "license": [
@@ -4612,6 +4617,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3122334 - Remove stress_test info file": "https://www.drupal.org/files/issues/2020-03-25/3122334-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4632,7 +4640,8 @@
             "homepage": "https://www.drupal.org/project/simple_gmap",
             "support": {
                 "source": "https://git.drupalcode.org/project/simple_gmap"
-            }
+            },
+            "time": "2020-01-16T19:24:52+00:00"
         },
         {
             "name": "drupal/simple_oauth",
@@ -4882,17 +4891,11 @@
         },
         {
             "name": "drupal/video_embed_field",
-            "version": "2.3.0",
+            "version": "dev-2.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/video_embed_field.git",
-                "reference": "8.x-2.3"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/video_embed_field-8.x-2.3.zip",
-                "reference": "8.x-2.3",
-                "shasum": "d9b4b3bde48edf49d1aa038aae6736496558caf4"
+                "reference": "49024268e806b767579083805311152b1b52073c"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
@@ -4909,12 +4912,15 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.3",
-                    "datestamp": "1584489966",
+                    "version": "8.x-2.2+1-dev",
+                    "datestamp": "1584414101",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3122349 - Remove core key from test module info file": "https://www.drupal.org/files/issues/2020-03-25/3122349-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4939,7 +4945,8 @@
             "homepage": "https://www.drupal.org/project/video_embed_field",
             "support": {
                 "source": "https://git.drupalcode.org/project/video_embed_field"
-            }
+            },
+            "time": "2020-03-17T03:01:12+00:00"
         },
         {
             "name": "drupal/views_infinite_scroll",
@@ -6859,20 +6866,6 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-24T13:10:00+00:00"
         },
         {
@@ -7002,20 +6995,6 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-29T09:50:10+00:00"
         },
         {
@@ -7255,20 +7234,6 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-13T19:40:01+00:00"
         },
         {
@@ -7359,20 +7324,6 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-29T10:31:38+00:00"
         },
         {
@@ -7434,20 +7385,6 @@
             "keywords": [
                 "mime",
                 "mime-type"
-            ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-02-04T09:41:09+00:00"
         },
@@ -7849,20 +7786,6 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-07T20:06:44+00:00"
         },
         {
@@ -8003,20 +7926,6 @@
                 "uri",
                 "url"
             ],
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-25T12:41:09+00:00"
         },
         {
@@ -8099,20 +8008,6 @@
             ],
             "description": "Symfony Serializer Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-29T10:05:28+00:00"
         },
         {
@@ -8247,20 +8142,6 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-04T09:32:40+00:00"
         },
         {
@@ -8411,20 +8292,6 @@
             ],
             "description": "Symfony Validator Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-29T10:05:28+00:00"
         },
         {
@@ -8559,20 +8426,6 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-03T10:46:43+00:00"
         },
         {
@@ -9111,16 +8964,6 @@
                 "dependency",
                 "package"
             ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-03-13T19:34:27+00:00"
         },
         {
@@ -9348,12 +9191,6 @@
             "keywords": [
                 "Xdebug",
                 "performance"
-            ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                }
             ],
             "time": "2020-03-01T12:26:26+00:00"
         },
@@ -10618,12 +10455,6 @@
                 }
             ],
             "description": "Library for accessing git",
-            "funding": [
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/gitonomy/gitlib",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-03-23T12:43:44+00:00"
         },
         {
@@ -13253,20 +13084,6 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-29T10:05:28+00:00"
         },
         {
@@ -13366,20 +13183,6 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-02-14T07:42:58+00:00"
         },
         {
@@ -13721,6 +13524,7 @@
         "drupal/redirect": 20,
         "drupal/simple_gmap": 20,
         "drupal/slick": 20,
+        "drupal/video_embed_field": 20,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,
@@ -13728,6 +13532,5 @@
     "platform": {
         "ext-dom": "*"
     },
-    "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "platform-dev": []
 }
