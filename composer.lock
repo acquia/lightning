@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "26ba40b44b9eb070126cdc1f67b1bf66",
+    "content-hash": "7c9264511ca3bf632fe1ae7888d1a54d",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2961,7 +2961,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_layout.git",
-                "reference": "f8854520e02d641c711a6ec67788b9eeee5bd186"
+                "reference": "ffc1c57baf11dfd31a6f101cdf61df4545001710"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6",
@@ -2977,7 +2977,7 @@
                 "drupal/lightning_core": "4.* || 5.*",
                 "drupal/panelizer": "^4.1 || ^5.0",
                 "drupal/panels": "4.4 || 4.x-dev",
-                "drupal/simple_gmap": "^2.0"
+                "drupal/simple_gmap": "^2.0 || 1.x-dev"
             },
             "require-dev": {
                 "drupal/bg_image_formatter": "*",
@@ -2996,8 +2996,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.5+11-dev",
-                    "datestamp": "1584642937",
+                    "version": "8.x-2.5+12-dev",
+                    "datestamp": "1584970640",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -3105,7 +3105,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_layout"
             },
-            "time": "2020-03-23T13:22:57+00:00"
+            "time": "2020-03-25T14:09:48+00:00"
         },
         {
             "name": "drupal/lightning_media",
@@ -3524,7 +3524,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/metatag.git",
-                "reference": "f646df075526416cca637de20113c2ca15baedb3"
+                "reference": "acd07c71502b5248daafe41be3b3ffecb293f665"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
@@ -3546,16 +3546,14 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.11+25-dev",
-                    "datestamp": "1582562649",
+                    "version": "8.x-1.11+28-dev",
+                    "datestamp": "1585141973",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
-                "patches_applied": {
-                    "3042590 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2020-03-02/3042590-47.patch"
-                }
+                "patches_applied": []
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
@@ -3580,9 +3578,9 @@
             ],
             "support": {
                 "source": "https://git.drupalcode.org/project/metatag",
-                "issues": "https://www.drupal.org/project/issues/metatag"
-            },
-            "time": "2020-02-24T20:39:52+00:00"
+                "issues": "https://www.drupal.org/project/issues/metatag",
+                "docs": "https://www.drupal.org/docs/8/modules/metatag"
+            }
         },
         {
             "name": "drupal/moderation_dashboard",
@@ -4587,17 +4585,11 @@
         },
         {
             "name": "drupal/simple_gmap",
-            "version": "2.0.0",
+            "version": "dev-1.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/simple_gmap.git",
-                "reference": "8.x-2.0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/simple_gmap-8.x-2.0.zip",
-                "reference": "8.x-2.0",
-                "shasum": "d218842c311795cded1a75bc93595e95a9e5d701"
+                "reference": "0ab2124637419ced9b008c8a191d82310e339766"
             },
             "require": {
                 "drupal/core": "^8 || ^9"
@@ -4608,14 +4600,14 @@
             "type": "drupal-module",
             "extra": {
                 "branch-alias": {
-                    "dev-2.x": "2.x-dev"
+                    "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0",
-                    "datestamp": "1579517588",
+                    "version": "8.x-1.4+4-dev",
+                    "datestamp": "1579243387",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -4637,7 +4629,8 @@
             "homepage": "https://www.drupal.org/project/simple_gmap",
             "support": {
                 "source": "https://git.drupalcode.org/project/simple_gmap"
-            }
+            },
+            "time": "2020-01-16T19:24:52+00:00"
         },
         {
             "name": "drupal/simple_oauth",
@@ -13724,6 +13717,7 @@
         "drupal/panelizer": 20,
         "drupal/panels": 20,
         "drupal/redirect": 20,
+        "drupal/simple_gmap": 20,
         "drupal/slick": 20,
         "weitzman/drupal-test-traits": 20
     },
