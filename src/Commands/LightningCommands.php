@@ -10,6 +10,7 @@ use Symfony\Component\Yaml\Yaml;
  * Exposes Drush commands provided by the Lightning profile.
  */
 final class LightningCommands extends DrushCommands {
+
   /**
    * The Drupal application root.
    *
@@ -52,7 +53,7 @@ final class LightningCommands extends DrushCommands {
     if (!isset($info)) {
       throw new \Exception('Lightning info file not found.');
     }
-    $this->output()->writeln('Version ' . $this->toSemanticVersion($info['version']));
+    $this->output()->writeln('Version ' . static::toSemanticVersion($info['version']));
   }
 
   /**
