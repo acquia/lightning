@@ -15,6 +15,11 @@ class LightningTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $configSchemaCheckerExclusions = [
     // @todo Remove this when depending on slick_entityreference 1.2 or later.
     'core.entity_view_display.block_content.media_slideshow.default',
