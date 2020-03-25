@@ -61,6 +61,7 @@ projects[entity_embed][download][type] = git
 projects[entity_embed][download][url] = https://git.drupalcode.org/project/entity_embed.git
 projects[entity_embed][download][branch] = 1.x
 projects[entity_embed][download][revision] = beadf3089ed48e294eeb851ea8a93434edf1742b
+projects[entity_embed][patch][] = https://www.drupal.org/files/issues/2020-02-25/3109693-28.patch
 projects[image_widget_crop][type] = module
 projects[image_widget_crop][download][type] = git
 projects[image_widget_crop][download][url] = https://git.drupalcode.org/project/image_widget_crop.git
