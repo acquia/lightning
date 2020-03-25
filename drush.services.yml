@@ -2,6 +2,6 @@ services:
   lightning.commands:
     class: '\Drupal\lightning\Commands\LightningCommands'
     arguments:
-      - '%app.root%'
+      - '@app.root'
     tags:
       - { name: drush.command }
