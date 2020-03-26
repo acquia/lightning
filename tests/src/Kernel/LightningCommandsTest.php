@@ -3,14 +3,14 @@
 namespace Drupal\Tests\lightning\Kernel;
 
 use Drupal\KernelTests\KernelTestBase;
-use Drupal\lightning\Command\VersionCommand;
+use Drupal\lightning\Commands\LightningCommands;
 
 /**
  * @group lightning
  *
- * @coversDefaultClass \Drupal\lightning\Command\VersionCommand
+ * @coversDefaultClass \Drupal\lightning\Commands\LightningCommands
  */
-class VersionCommandTest extends KernelTestBase {
+class LightningCommandsTest extends KernelTestBase {
 
   /**
    * @covers ::toSemanticVersion
@@ -24,7 +24,7 @@ class VersionCommandTest extends KernelTestBase {
     ];
 
     foreach ($drupal_versions as $drupal_version => $expected_semantic_version) {
-      $generated_semantic_version = VersionCommand::toSemanticVersion($drupal_version);
+      $generated_semantic_version = LightningCommands::toSemanticVersion($drupal_version);
       $this->assertSame($expected_semantic_version, $generated_semantic_version);
     }
   }
