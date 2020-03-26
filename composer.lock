@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c4c636b682804b6250c106245cb363a4",
+    "content-hash": "9cae9b09b7009711f945066d375f9dd1",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -564,11 +564,17 @@
         },
         {
             "name": "drupal/acquia_connector",
-            "version": "dev-2.x",
+            "version": "2.0.0-rc1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/acquia_connector.git",
-                "reference": "edba38d91f9677686beb838d0b803827debe2768"
+                "reference": "8.x-2.0-rc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/acquia_connector-8.x-2.0-rc1.zip",
+                "reference": "8.x-2.0-rc1",
+                "shasum": "a8b2a54e06e6f214264412267e372aba796b87e7"
             },
             "require": {
                 "drupal/core": "^8.7 || ^9.0.0-alpha1",
@@ -586,11 +592,11 @@
                     "dev-8.x-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0-beta3+12-dev",
-                    "datestamp": "1583536001",
+                    "version": "8.x-2.0-rc1",
+                    "datestamp": "1584565461",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "message": "RC releases are not covered by Drupal security advisories."
                     }
                 },
                 "drush": {
@@ -654,8 +660,7 @@
             "homepage": "https://www.drupal.org/project/acquia_connector",
             "support": {
                 "source": "https://git.drupalcode.org/project/acquia_connector"
-            },
-            "time": "2020-03-06T23:06:02+00:00"
+            }
         },
         {
             "name": "drupal/autosave_form",
@@ -855,6 +860,9 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
+                },
+                "patches_applied": {
+                    "3122375 - Add conflict.schema.yml": "https://www.drupal.org/files/issues/2020-03-25/3122375-2.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -895,7 +903,8 @@
             "support": {
                 "source": "https://git.drupal.org/project/conflict.git",
                 "issues": "https://www.drupal.org/project/issues/conflict"
-            }
+            },
+            "time": "2019-12-16T15:18:26+00:00"
         },
         {
             "name": "drupal/consumers",
@@ -3210,6 +3219,9 @@
                     "drupal/dropzonejs": {
                         "3099836 - Use new LibrariesDirectoryFinder": "https://www.drupal.org/files/issues/2020-01-30/dropzonejs-libraries-directory-finder-3099836-3.patch"
                     }
+                },
+                "patches_applied": {
+                    "Patch image browser view to comply with config schema": "https://raw.githubusercontent.com/acquia/lightning/9.0.x-compatible/lightning_media-config_schema.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3255,7 +3267,8 @@
             "homepage": "https://www.drupal.org/project/lightning_media",
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_media"
-            }
+            },
+            "time": "2020-03-23T15:51:38+00:00"
         },
         {
             "name": "drupal/lightning_workflow",
@@ -4702,7 +4715,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/slick.git",
-                "reference": "cdb76318e59ccea974dbef06428c515d30633103"
+                "reference": "2f8ec277da5000897db38d8ea63c243a9801fd0e"
             },
             "require": {
                 "drupal/blazy": "~2.0",
@@ -4714,8 +4727,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.1+8-dev",
-                    "datestamp": "1584353353",
+                    "version": "8.x-2.1+9-dev",
+                    "datestamp": "1584567352",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -4728,8 +4741,9 @@
             ],
             "authors": [
                 {
-                    "name": "arshadcn",
-                    "homepage": "https://www.drupal.org/user/571032"
+                    "name": "Contributors",
+                    "homepage": "https://www.drupal.org/node/2232779/committers",
+                    "role": "Contributors"
                 },
                 {
                     "name": "gausarts",
@@ -4751,7 +4765,7 @@
                 "source": "https://git.drupalcode.org/project/slick",
                 "issues": "https://drupal.org/project/issues/slick"
             },
-            "time": "2020-03-18T21:18:14+00:00"
+            "time": "2020-03-25T21:26:52+00:00"
         },
         {
             "name": "drupal/slick_entityreference",
@@ -4888,7 +4902,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/video_embed_field.git",
-                "reference": "49024268e806b767579083805311152b1b52073c"
+                "reference": "0da9a7554ae0dde562a5b62761f83d24987d5d1d"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
@@ -4896,7 +4910,6 @@
             "require-dev": {
                 "drupal/colorbox": "^1.0",
                 "drupal/media_entity": "*",
-                "drupal/media_entity_embeddable_video": "*",
                 "drupal/video_embed_media": "*"
             },
             "type": "drupal-module",
@@ -4905,16 +4918,14 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.2+1-dev",
-                    "datestamp": "1584414101",
+                    "version": "8.x-2.3+1-dev",
+                    "datestamp": "1585180191",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
-                "patches_applied": {
-                    "3122349 - Remove core key from test module info file": "https://www.drupal.org/files/issues/2020-03-25/3122349-2.patch"
-                }
+                "patches_applied": []
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
@@ -4939,7 +4950,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/video_embed_field"
             },
-            "time": "2020-03-17T03:01:12+00:00"
+            "time": "2020-03-25T23:54:46+00:00"
         },
         {
             "name": "drupal/views_infinite_scroll",
@@ -13703,7 +13714,6 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "drupal/acquia_connector": 20,
         "drupal/autosave_form": 20,
         "drupal/conflict": 20,
         "drupal/consumers": 20,
