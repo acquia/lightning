@@ -10,6 +10,7 @@ use Symfony\Component\Yaml\Yaml;
  * Exposes Drush commands provided by the Lightning profile.
  */
 final class LightningCommands extends DrushCommands {
+
   /**
    * The Drupal application root.
    *

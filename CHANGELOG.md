@@ -1,3 +1,6 @@
+## 4.1.3
+* Security updated Drupal core to 8.8.4.
+
 ## 4.1.2
 * Updated Drupal core to 8.8.2.
 * Fixed stale configuration of front page view created during installation.
