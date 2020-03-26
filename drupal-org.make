@@ -123,6 +123,7 @@ projects[metatag][download][type] = git
 projects[metatag][download][url] = https://git.drupalcode.org/project/metatag.git
 projects[metatag][download][branch] = 1.x
 projects[metatag][download][revision] = a764f383304b607b9f317ebc4168982b6e3a5a9e
+projects[metatag][patch][] = https://www.drupal.org/files/issues/2020-03-26/3042590-52.patch
 projects[moderation_dashboard][type] = module
 projects[moderation_dashboard][download][type] = git
 projects[moderation_dashboard][download][url] = https://git.drupalcode.org/project/moderation_dashboard.git
