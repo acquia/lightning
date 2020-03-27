@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "96f3ffe209df1ee291a1a882e00154d6",
+    "content-hash": "f3e44ef6e8e1a7d6f00059bba095cde7",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2670,22 +2670,16 @@
         },
         {
             "name": "drupal/lightning_api",
-            "version": "4.5.0",
+            "version": "dev-4.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_api.git",
-                "reference": "8.x-4.5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/lightning_api-8.x-4.5.zip",
-                "reference": "8.x-4.5",
-                "shasum": "58d615765bc9c74a10e0d7c794d30bcd671e7580"
+                "reference": "c0659eaf310365137f729459b3264f9f6d74fb25"
             },
             "require": {
                 "drupal/consumers": "^1.10",
-                "drupal/core": "~8.7.11 || ~8.8.1 || 8.9.* || 9.0.*",
-                "drupal/lightning_core": "4.* || 5.*",
+                "drupal/core": "~8.8.1 || 8.9.* || 9.0.*",
+                "drupal/lightning_core": "5.*",
                 "drupal/openapi_jsonapi": "^2.0-rc1",
                 "drupal/openapi_rest": "^2.0-rc1",
                 "drupal/openapi_ui_redoc": "^1.0",
@@ -2706,11 +2700,11 @@
                     "dev-8.x-4.x": "4.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-4.5",
-                    "datestamp": "1583505030",
+                    "version": "8.x-4.5+2-dev",
+                    "datestamp": "1584127558",
                     "security-coverage": {
-                        "status": "covered",
-                        "message": "Covered by Drupal's security advisory policy"
+                        "status": "not-covered",
+                        "message": "Dev releases are not covered by Drupal security advisories."
                     }
                 },
                 "drupal-scaffold": {
@@ -2754,10 +2748,7 @@
                 "installer-types": [
                     "bower-asset",
                     "npm-asset"
-                ],
-                "patches_applied": {
-                    "#75 - Do not use deprecated path.alias_storage": "https://raw.githubusercontent.com/acquia/lightning/9.0.x-compatible/lightning_api-75.diff"
-                }
+                ]
             },
             "autoload": {
                 "psr-4": {
@@ -2810,7 +2801,8 @@
             "homepage": "https://www.drupal.org/project/lightning_api",
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_api"
-            }
+            },
+            "time": "2020-03-27T15:46:56+00:00"
         },
         {
             "name": "drupal/lightning_core",
@@ -13878,6 +13870,7 @@
         "drupal/consumers": 20,
         "drupal/dropzonejs": 20,
         "drupal/image_widget_crop": 20,
+        "drupal/lightning_api": 20,
         "drupal/lightning_media": 20,
         "drupal/metatag": 20,
         "drupal/moderation_dashboard": 20,
