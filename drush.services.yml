@@ -5,3 +5,8 @@ services:
       - '@app.root'
     tags:
       - { name: drush.command }
+
+  subprofile.generator:
+    class: Drupal\lightning\Generators\SubProfileGenerator
+    tags:
+      - { name: drush.generator }
