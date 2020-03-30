@@ -2,13 +2,7 @@ core = 8.x
 api = 2
 defaults[projects][subdir] = contrib
 projects[acquia_connector][type] = module
-<<<<<<< HEAD
 projects[acquia_connector][version] = 1.21
-||||||| merged common ancestors
-projects[acquia_connector][version] = 1.19
-=======
-projects[acquia_connector][version] = 1.20
->>>>>>> Updating all dependencies
 projects[acquia_pendo][type] = module
 projects[acquia_pendo][version] = 1.0-alpha1
 projects[autosave_form][type] = module
@@ -71,7 +65,7 @@ projects[media_entity_instagram][version] = 2.0
 projects[media_entity_twitter][type] = module
 projects[media_entity_twitter][version] = 2.3
 projects[metatag][type] = module
-projects[metatag][version] = 1.11
+projects[metatag][version] = 1.12
 projects[moderation_dashboard][type] = module
 projects[moderation_dashboard][version] = 1.0-beta1
 projects[moderation_sidebar][type] = module
