@@ -7,7 +7,7 @@ services:
       - { name: drush.command }
 
   subprofile.generator:
-    class: Drupal\lightning\Generators\SubProfileGenerator
+    class: 'Drupal\lightning\Generators\SubProfileGenerator'
     arguments:
       - '@app.root'
     tags:

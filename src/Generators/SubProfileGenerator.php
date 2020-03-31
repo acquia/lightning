@@ -2,6 +2,7 @@
 
 namespace Drupal\lightning\Generators;
 
+use Drupal\Component\Serialization\Yaml;
 use Drupal\lightning\ComponentDiscovery;
 use DrupalCodeGenerator\Command\BaseGenerator;
 use DrupalCodeGenerator\Utils;
@@ -11,8 +12,10 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
-class SubProfileGenerator extends BaseGenerator
-{
+/**
+ * Implements lightning-subprofile command.
+ */
+final class SubProfileGenerator extends BaseGenerator {
   /**
    * The Lightning component discovery helper.
    *
@@ -27,10 +30,29 @@ class SubProfileGenerator extends BaseGenerator
    */
   protected $installList = [];
 
+  /**
+   * {@inheritdoc}
+   */
   protected $name = 'lightning-subprofile';
+
+  /**
+   * {@inheritdoc}
+   */
   protected $description = 'Generates a Lightning Subprofile.';
+
+  /**
+   * {@inheritdoc}
+   */
   protected $alias = 'lsp';
+
+  /**
+   * {@inheritdoc}
+   */
   protected $templatePath = __DIR__;
+
+  /**
+   * {@inheritdoc}
+   */
   protected $destination = 'profiles';
 
   /**
@@ -47,22 +69,18 @@ class SubProfileGenerator extends BaseGenerator
   /**
    * {@inheritdoc}
    */
-  protected function interact(InputInterface $input, OutputInterface $output)
-  {
+  protected function interact(InputInterface $input, OutputInterface $output) {
     $questions['name'] = new Question('Profile Name');
     $questions['name']->setValidator([Utils::class, 'validateRequired']);
-
     $questions['machine_name'] = new Question('Profile Machine Name (enter for default)');
     $questions['machine_name']->setValidator([Utils::class, 'validateMachineName']);
-    $questions['description'] = new Question('Enter the description (optional)', NULL);
+    $questions['description'] = new Question('Enter the description (optional)');
     $questions['install'] = new Question('Additional modules to include (optional), separated by commas (e.g. context, rules, file_entity)', NULL);
     $normalizer = function ($answer) {
       return $answer ? array_map('trim', explode(',', $answer)) : [];
     };
     $questions['install']->setNormalizer($normalizer);
-
     $questions['exclusions'] = new ConfirmationQuestion('Do you want to exclude any components of Lightning?', FALSE);
-
 
     $vars = &$this->collectVars($input, $output, $questions);
 
@@ -73,7 +91,7 @@ class SubProfileGenerator extends BaseGenerator
         array_keys($modules),
         NULL
       );
-      $questions['exclude']->setMultiselect(true);
+      $questions['exclude']->setMultiselect(TRUE);
       $this->collectVars($input, $output, $questions);
     }
 
@@ -105,7 +123,7 @@ class SubProfileGenerator extends BaseGenerator
 
     $this->addFile()
       ->path('custom/{machine_name}/{machine_name}.info.yml')
-      ->content(\Drupal\Component\Serialization\Yaml::encode($info_array));
+      ->content(Yaml::encode($info_array));
 
     $this->addFile()
       ->path('custom/{machine_name}/install.info.yml')
