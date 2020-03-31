@@ -77,9 +77,35 @@ class SubProfileGenerator extends BaseGenerator
       $this->collectVars($input, $output, $questions);
     }
 
+
+    $info_array = [
+      'name' => $vars['name'],
+      'type' => 'profile',
+      'description' => [],
+      'core_version_requirement' => '^8.8 || ^9',
+      'install'=> [],
+      'themes' => [
+        'bartik', 'seven'
+      ],
+      'base profile' => 'lightning',
+      'exclude'=> [],
+    ];
+
+    if ($vars['description']) {
+      $info_array['description'] = $vars['description'];
+    }
+    if ($vars['install']) {
+      $info_array['install'] = $vars['install'];
+    }
+    if ($vars['exclude']) {
+      $info_array['exclude'] = $vars['exclude'];
+    }
+
+    $info_array = array_filter($info_array);
+
     $this->addFile()
       ->path('custom/{machine_name}/{machine_name}.info.yml')
-      ->template('info.yml.twig');
+      ->content(\Drupal\Component\Serialization\Yaml::encode($info_array));
 
     $this->addFile()
       ->path('custom/{machine_name}/install.info.yml')
