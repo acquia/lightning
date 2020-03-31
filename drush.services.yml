@@ -8,5 +8,7 @@ services:
 
   subprofile.generator:
     class: Drupal\lightning\Generators\SubProfileGenerator
+    arguments:
+      - '@app.root'
     tags:
       - { name: drush.generator }
