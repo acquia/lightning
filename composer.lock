@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "27984ef425749dbb194167e2d54128a7",
+    "content-hash": "2de3311850b66f192a38de8b4570ae4a",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -96,7 +96,7 @@
             "version": "3.4.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "15bc73803f76bc53b654b9fdbbbc096f56d7c03d"
             },
             "dist": {
@@ -1350,7 +1350,7 @@
                 },
                 "drupal": {
                     "version": "8.x-2.1",
-                    "datestamp": "1585251786",
+                    "datestamp": "1585251827",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1392,7 +1392,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/ctools.git",
-                "reference": "ecdbad447ae23f134c1c6a41d20a98703362dc24"
+                "reference": "742c3af44fe83bce0dd64fb020f07d9b9a73f481"
             },
             "require": {
                 "drupal/core": "^8.6 || ^9"
@@ -1403,8 +1403,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.2+33-dev",
-                    "datestamp": "1579756385",
+                    "version": "8.x-3.2+34-dev",
+                    "datestamp": "1581434980",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -1469,10 +1469,10 @@
             "description": "Provides a number of utility and helper APIs for Drupal developers and site builders.",
             "homepage": "https://www.drupal.org/project/ctools",
             "support": {
-                "source": "http://cgit.drupalcode.org/ctools",
+                "source": "https://git.drupalcode.org/project/ctools",
                 "issues": "https://www.drupal.org/project/issues/ctools"
             },
-            "time": "2020-02-11T15:27:17+00:00"
+            "time": "2020-03-31T02:46:51+00:00"
         },
         {
             "name": "drupal/ctools_block",
@@ -1487,8 +1487,8 @@
                     "dev-3.x": "3.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-3.2+33-dev",
-                    "datestamp": "1579756385",
+                    "version": "8.x-3.2+34-dev",
+                    "datestamp": "1581434980",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -1643,11 +1643,17 @@
         },
         {
             "name": "drupal/dropzonejs",
-            "version": "dev-2.x",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/dropzonejs.git",
-                "reference": "365cc0e6ce22923d7aa8ea26c44199047d254356"
+                "reference": "8.x-2.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/dropzonejs-8.x-2.1.zip",
+                "reference": "8.x-2.1",
+                "shasum": "a165b70070c320933fdce0c02be3577abce5e938"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
@@ -1664,15 +1670,12 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.0+1-dev",
-                    "datestamp": "1581067516",
+                    "version": "8.x-2.1",
+                    "datestamp": "1585662324",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "3099836 - Use new LibrariesDirectoryFinder": "https://www.drupal.org/files/issues/2020-01-30/dropzonejs-libraries-directory-finder-3099836-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -1723,8 +1726,7 @@
                 "source": "https://www.drupal.org/project/dropzonejs",
                 "issues": "https://www.drupal.org/project/issues/dropzonejs",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
-            },
-            "time": "2020-03-12T09:11:46+00:00"
+            }
         },
         {
             "name": "drupal/embed",
@@ -2026,8 +2028,7 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": []
+                }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
             "license": [
@@ -3131,7 +3132,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_media.git",
-                "reference": "6d650aa62628697ea61c7f7d9a90789bb47839d6"
+                "reference": "a4bb32d96616c65db1a6659c5f914c7e60bbf608"
             },
             "require": {
                 "bower-asset/cropper": "^2.3",
@@ -3140,7 +3141,7 @@
                 "cweagans/composer-patches": "^1.6",
                 "drupal/core": "~8.8.2 || 8.9.* || 9.0.*",
                 "drupal/crop": "^2.0.0-rc1",
-                "drupal/dropzonejs": "^2.0.0-alpha5",
+                "drupal/dropzonejs": "^2.1",
                 "drupal/embed": "^1.0",
                 "drupal/entity_browser": "^2.3",
                 "drupal/entity_embed": "^1.0",
@@ -3155,7 +3156,6 @@
                 "vardot/blazy": "^1.8"
             },
             "require-dev": {
-                "cweagans/composer-patches": "^1.6",
                 "drupal/core-composer-scaffold": "*",
                 "drupal/core-dev": "*",
                 "drupal/dropzonejs": "*",
@@ -3225,11 +3225,6 @@
                     "bower-asset",
                     "npm-asset"
                 ],
-                "patches": {
-                    "drupal/dropzonejs": {
-                        "3099836 - Use new LibrariesDirectoryFinder": "https://www.drupal.org/files/issues/2020-01-30/dropzonejs-libraries-directory-finder-3099836-3.patch"
-                    }
-                },
                 "patches_applied": {
                     "Patch image browser view to comply with config schema": "https://raw.githubusercontent.com/acquia/lightning/9.0.x-compatible/lightning_media-config_schema.patch"
                 }
@@ -3278,7 +3273,7 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_media"
             },
-            "time": "2020-03-27T16:44:23+00:00"
+            "time": "2020-03-31T13:31:13+00:00"
         },
         {
             "name": "drupal/lightning_workflow",
@@ -3482,11 +3477,17 @@
         },
         {
             "name": "drupal/media_entity_twitter",
-            "version": "dev-2.x",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/media_entity_twitter.git",
-                "reference": "933bcb5042bade400b700b3aa2c36b36b4efc3eb"
+                "reference": "8.x-2.4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/media_entity_twitter-8.x-2.4.zip",
+                "reference": "8.x-2.4",
+                "shasum": "11bca09cc6dd678dc7585d16d66167a09c6e42fb"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9",
@@ -3498,11 +3499,11 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.2+1-dev",
-                    "datestamp": "1579597088",
+                    "version": "8.x-2.4",
+                    "datestamp": "1585646747",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 }
             },
@@ -3536,8 +3537,7 @@
             "homepage": "https://www.drupal.org/project/media_entity_twitter",
             "support": {
                 "source": "https://git.drupalcode.org/project/media_entity_twitter"
-            },
-            "time": "2020-03-12T09:20:45+00:00"
+            }
         },
         {
             "name": "drupal/metatag",
@@ -3545,7 +3545,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/metatag.git",
-                "reference": "486c030f333ed4020183e63f6f0f615520eef5ba"
+                "reference": "ec6ee0e96b959d4eff27610104de500ef6e0d954"
             },
             "require": {
                 "drupal/core": "^8 || ^9",
@@ -3554,8 +3554,8 @@
             "require-dev": {
                 "drupal/metatag_dc": "*",
                 "drupal/metatag_open_graph": "*",
-                "drupal/page_manager": "^4.0",
-                "drupal/redirect": "^1.0"
+                "drupal/page_manager": "4.x-dev",
+                "drupal/redirect": "1.x-dev"
             },
             "type": "drupal-module",
             "extra": {
@@ -3563,15 +3563,12 @@
                     "dev-1.x": "1.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-1.12+3-dev",
-                    "datestamp": "1585588947",
+                    "version": "8.x-1.12+4-dev",
+                    "datestamp": "1585588988",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "3042590 - Drupal 9 Deprecated Code Report": "https://www.drupal.org/files/issues/2020-03-30/3042590-64.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -3600,7 +3597,7 @@
                 "issues": "https://www.drupal.org/project/issues/metatag",
                 "docs": "https://www.drupal.org/docs/8/modules/metatag"
             },
-            "time": "2020-03-30T17:22:51+00:00"
+            "time": "2020-03-31T09:12:10+00:00"
         },
         {
             "name": "drupal/moderation_dashboard",
@@ -9273,6 +9270,16 @@
                 "dependency",
                 "package"
             ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-03-13T19:34:27+00:00"
         },
         {
@@ -9500,6 +9507,12 @@
             "keywords": [
                 "Xdebug",
                 "performance"
+            ],
+            "funding": [
+                {
+                    "url": "https://packagist.com",
+                    "type": "custom"
+                }
             ],
             "time": "2020-03-01T12:26:26+00:00"
         },
@@ -10764,6 +10777,12 @@
                 }
             ],
             "description": "Library for accessing git",
+            "funding": [
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/gitonomy/gitlib",
+                    "type": "tidelift"
+                }
+            ],
             "time": "2020-03-23T12:43:44+00:00"
         },
         {
@@ -13916,7 +13935,6 @@
         "drupal/autosave_form": 20,
         "drupal/conflict": 20,
         "drupal/consumers": 20,
-        "drupal/dropzonejs": 20,
         "drupal/lightning_api": 20,
         "drupal/lightning_media": 20,
         "drupal/metatag": 20,
