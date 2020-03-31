@@ -4,6 +4,7 @@ projects[drupal][type] = core
 projects[drupal][download][type] = git
 projects[drupal][download][url] = https://git.drupal.org/project/drupal.git
 projects[drupal][download][branch] = 9.0.x
+projects[drupal][download][tag] = 9.0.0-beta2
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2020-02-07/2869592-remove-update-warning-34.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2020-03-24/1356276-531-9.0.x-9.patch
 projects[drupal][patch][] = https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch

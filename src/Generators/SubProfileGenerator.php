@@ -95,18 +95,17 @@ final class SubProfileGenerator extends BaseGenerator {
       $this->collectVars($input, $output, $questions);
     }
 
-
     $info_array = [
       'name' => $vars['name'],
       'type' => 'profile',
       'description' => [],
       'core_version_requirement' => '^8.8 || ^9',
-      'install'=> [],
+      'install' => [],
       'themes' => [
-        'bartik', 'seven'
+        'bartik', 'seven',
       ],
       'base profile' => 'lightning',
-      'exclude'=> [],
+      'exclude' => [],
     ];
 
     if ($vars['description']) {
