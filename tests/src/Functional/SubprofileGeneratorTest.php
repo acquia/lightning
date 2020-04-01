@@ -37,7 +37,7 @@ class SubprofileGeneratorTest extends BrowserTestBase {
   public function testCommands() {
     $this->drush('generate', ['lightning-subprofile'], ['answers' => '{"name": "Wizards", "machine_name": "wizards", "description": "This is the description.", "install": "consumers", "exclusions": "Yes", "exclude": "2, 3"}']);
     $output = $this->getOutput();
-    $this->assertContains('profiles/custom/muggles/install.info.yml', $output);
+    $this->assertContains('profiles/custom/wizards/wizards.info.yml', $output);
   }
 
 }
