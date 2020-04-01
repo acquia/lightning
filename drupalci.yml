@@ -1,0 +1,37 @@
+# See docs at https://www.drupal.org/drupalorg/docs/drupal-ci/customizing-drupalci-testing-for-projects.
+# The container_command below is the only non-default item in this file. It was
+# added for testing of Drush commands.
+build:
+  environment:
+    startcontainers:
+      runcontainers:
+    create_db:
+      dbcreate:
+  codebase:
+    assemble_codebase:
+      checkout_core:
+      composer.core_install:
+      composer_contrib:
+      fetch:
+      patch:
+      update_build:
+      update_dependencies:
+      yarn_install:
+      start_phantomjs:
+  assessment:
+    validate_codebase:
+      phplint:
+      container_composer:
+      csslint:
+      eslint:
+      phpcs:
+    testing:
+      container_command:
+        commands:
+          - "cd ${SOURCE_DIR} && sudo -u www-data composer require drush/drush:^9.6.1 && sudo -u www-data composer update twig/twig"
+      run_tests.standard:
+        types: 'Simpletest,PHPUnit-Unit,PHPUnit-Kernel,PHPUnit-Functional'
+      run_tests.js:
+        concurrency: 1
+        types: 'PHPUnit-FunctionalJavascript'
+      nightwatchjs:

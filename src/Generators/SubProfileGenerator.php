@@ -24,13 +24,6 @@ final class SubProfileGenerator extends BaseGenerator {
   protected $componentDiscovery;
 
   /**
-   * Modules to include in the sub-profile.
-   *
-   * @var string[]
-   */
-  protected $installList = [];
-
-  /**
    * {@inheritdoc}
    */
   protected $name = 'lightning-subprofile';
