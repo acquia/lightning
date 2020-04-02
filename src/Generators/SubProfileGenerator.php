@@ -69,10 +69,7 @@ final class SubProfileGenerator extends BaseGenerator {
     $questions['machine_name']->setValidator([Utils::class, 'validateMachineName']);
     $questions['description'] = new Question('Enter the description (optional)');
     $questions['install'] = new Question('Additional modules to include (optional), separated by commas (e.g. context, rules, file_entity)', NULL);
-    $normalizer = function ($answer) {
-      return $answer ? array_map('trim', explode(',', $answer)) : [];
-    };
-    $questions['install']->setNormalizer($normalizer);
+    $questions['install']->setNormalizer([static::class, 'toArray']);
     $questions['exclusions'] = new ConfirmationQuestion('Do you want to exclude any components of Lightning?', FALSE);
 
     $vars = &$this->collectVars($input, $output, $questions);
@@ -91,7 +88,7 @@ final class SubProfileGenerator extends BaseGenerator {
     $info_array = [
       'name' => $vars['name'],
       'type' => 'profile',
-      'description' => [],
+      'description' => '',
       'core_version_requirement' => '^8.8 || ^9',
       'install' => [],
       'themes' => [
@@ -118,13 +115,25 @@ final class SubProfileGenerator extends BaseGenerator {
       ->content(Yaml::encode($info_array));
 
     $this->addFile()
-      ->path('custom/{machine_name}/install.info.yml')
+      ->path('custom/{machine_name}/{machine_name}.install')
       ->template('install.twig');
 
     $this->addFile()
-      ->path('custom/{machine_name}/profile.info.yml')
+      ->path('custom/{machine_name}/{machine_name}.profile')
       ->template('profile.twig');
+  }
 
+  /**
+   * Converts a comma-separated string to an array of trimmed values.
+   *
+   * @param string $string
+   *   The comma-separated string to split up.
+   *
+   * @return string[]
+   *   The comma-separated values, trimmed of white space.
+   */
+  public static function toArray($string) {
+    return $string ? array_map('trim', explode(',', $string)) : [];
   }
 
 }
