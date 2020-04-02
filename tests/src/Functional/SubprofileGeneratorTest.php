@@ -8,7 +8,6 @@ use Drupal\lightning\ComponentDiscovery;
 use Drupal\lightning\Generators\SubProfileGenerator;
 use Drupal\Tests\BrowserTestBase;
 use Drush\TestTraits\DrushTestTrait;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Tests the Drush command to generate a Lightning sub-profile.
@@ -20,15 +19,6 @@ use Symfony\Component\Filesystem\Filesystem;
 class SubprofileGeneratorTest extends BrowserTestBase {
 
   use DrushTestTrait;
-
-  /**
-   * The machine name of the generated profile.
-   *
-   * Stored here so the generated profile can be deleted in ::tearDown().
-   *
-   * @var string
-   */
-  private $machineName;
 
   /**
    * {@inheritdoc}
@@ -79,27 +69,26 @@ class SubprofileGeneratorTest extends BrowserTestBase {
 
     $answers += [
       'name' => 'Wizards',
-      'machine_name' => 'wizards',
       'description' => 'This is the description.',
       'install' => [],
       'exclude' => [],
     ];
+    $answers['machine_name'] = 'wizards';
     $answers['exclusions'] = $answers['exclude'] ? 'Yes' : 'No';
-    $options = [
+
+    // Generate the profile relative to the site directory, so that it will be
+    // automatically cleaned up when the test is done.
+    $output_dir = $this->getDrupalRoot() . "/$this->siteDirectory";
+
+    $this->drush('generate', ['lightning-subprofile'], [
       'answers' => Json::encode($answers),
-    ];
+      'directory' => $output_dir,
+    ]);
+    $this->assertFileExists("$output_dir/custom/wizards/wizards.info.yml");
+    $this->assertFileExists("$output_dir/custom/wizards/wizards.install");
+    $this->assertFileExists("$output_dir/custom/wizards/wizards.profile");
 
-    $this->machineName = $answers['machine_name'];
-    $directory = "profiles/custom/$this->machineName";
-    $info_file = "$directory/$this->machineName.info.yml";
-
-    $this->assertDirectoryNotExists($directory);
-    $this->drush('generate', ['lightning-subprofile'], $options);
-    $this->assertFileExists($info_file);
-    $this->assertFileExists("$directory/$this->machineName.install");
-    $this->assertFileExists("$directory/$this->machineName.profile");
-
-    $info = file_get_contents($info_file);
+    $info = file_get_contents("$output_dir/custom/wizards/wizards.info.yml");
     $info = Yaml::decode($info);
     // Assert the constant values...
     $this->assertSame($answers['name'], $info['name']);
@@ -140,16 +129,6 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     else {
       $this->assertArrayNotHasKey('exclude', $info);
     }
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function tearDown() {
-    parent::tearDown();
-
-    $filesystem = new Filesystem();
-    $filesystem->remove("profiles/custom/$this->machineName");
   }
 
 }
