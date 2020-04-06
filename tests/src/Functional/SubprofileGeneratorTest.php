@@ -4,7 +4,6 @@ namespace Drupal\Tests\lightning\Functional;
 
 use Drupal\Component\Serialization\Json;
 use Drupal\Component\Serialization\Yaml;
-use Drupal\lightning\ComponentDiscovery;
 use Drupal\lightning\Generators\SubProfileGenerator;
 use Drupal\Tests\BrowserTestBase;
 use Drush\TestTraits\DrushTestTrait;
@@ -40,7 +39,7 @@ class SubprofileGeneratorTest extends BrowserTestBase {
       ],
       'with exclusions' => [
         'answers' => [
-          'exclude' => '0, 3',
+          'exclude' => 'lightning_search, lightning_media_instagram',
         ],
       ],
     ];
@@ -67,6 +66,13 @@ class SubprofileGeneratorTest extends BrowserTestBase {
       ->set('profile', 'lightning')
       ->save();
 
+    // Generate the profile relative to the site directory, so that it will be
+    // automatically cleaned up when the test is done.
+    $output_dir = $this->getDrupalRoot() . "/$this->siteDirectory";
+    $options = [
+      'directory' => $output_dir,
+    ];
+
     $answers += [
       'name' => 'Wizards',
       'description' => 'This is the description.',
@@ -74,16 +80,13 @@ class SubprofileGeneratorTest extends BrowserTestBase {
       'exclude' => [],
     ];
     $answers['machine_name'] = 'wizards';
-    $answers['exclusions'] = $answers['exclude'] ? 'Yes' : 'No';
+    $options['answers'] = Json::encode($answers);
 
-    // Generate the profile relative to the site directory, so that it will be
-    // automatically cleaned up when the test is done.
-    $output_dir = $this->getDrupalRoot() . "/$this->siteDirectory";
+    if ($answers['exclude']) {
+      $options['yes'] = NULL;
+    }
 
-    $this->drush('generate', ['lightning-subprofile'], [
-      'answers' => Json::encode($answers),
-      'directory' => $output_dir,
-    ]);
+    $this->drush('generate', ['lightning-subprofile'], $options);
     $this->assertFileExists("$output_dir/custom/wizards/wizards.info.yml");
     $this->assertFileExists("$output_dir/custom/wizards/wizards.install");
     $this->assertFileExists("$output_dir/custom/wizards/wizards.profile");
@@ -114,16 +117,10 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     }
 
     if ($answers['exclude']) {
-      $component_discovery = new ComponentDiscovery($this->getDrupalRoot());;
-      $components = array_keys($component_discovery->getAll());
-
-      // The exclusions are submitted as a comma-separated string of numeric
-      // array indices, so transform them into an array of integer indices.
       $exclude = SubProfileGenerator::toArray($answers['exclude']);
-      $exclude = array_map('intval', $exclude);
 
-      foreach ($exclude as $index) {
-        $this->assertContains($components[$index], $info['exclude']);
+      foreach ($exclude as $module) {
+        $this->assertContains($module, $info['exclude']);
       }
     }
     else {

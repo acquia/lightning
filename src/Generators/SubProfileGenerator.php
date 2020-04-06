@@ -3,25 +3,26 @@
 namespace Drupal\lightning\Generators;
 
 use Drupal\Component\Serialization\Yaml;
-use Drupal\lightning\ComponentDiscovery;
+use Drupal\Core\Extension\ModuleExtensionList;
 use DrupalCodeGenerator\Command\BaseGenerator;
 use DrupalCodeGenerator\Utils;
+use Drush\Style\DrushStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ChoiceQuestion;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 /**
  * Implements lightning-subprofile command.
  */
 final class SubProfileGenerator extends BaseGenerator {
+
   /**
-   * The Lightning component discovery helper.
+   * The module extension list service.
    *
-   * @var \Drupal\lightning\ComponentDiscovery
+   * @var \Drupal\Core\Extension\ModuleExtensionList
    */
-  protected $componentDiscovery;
+  private $moduleList;
 
   /**
    * {@inheritdoc}
@@ -51,18 +52,20 @@ final class SubProfileGenerator extends BaseGenerator {
   /**
    * SubProfileGenerator constructor.
    *
-   * @param string $app_root
-   *   The Drupal application root.
+   * @param \Drupal\Core\Extension\ModuleExtensionList $module_list
+   *   The module extension list service.
    */
-  public function __construct($app_root) {
+  public function __construct(ModuleExtensionList $module_list) {
     parent::__construct();
-    $this->componentDiscovery = new ComponentDiscovery($app_root);
+    $this->moduleList = $module_list;
   }
 
   /**
    * {@inheritdoc}
    */
   protected function interact(InputInterface $input, OutputInterface $output) {
+    $io = new DrushStyle($input, $output);
+
     $questions['name'] = new Question('Profile Name');
     $questions['name']->setValidator([Utils::class, 'validateRequired']);
     $questions['machine_name'] = new Question('Profile Machine Name (enter for default)');
@@ -70,18 +73,23 @@ final class SubProfileGenerator extends BaseGenerator {
     $questions['description'] = new Question('Enter the description (optional)');
     $questions['install'] = new Question('Additional modules to include (optional), separated by commas (e.g. context, rules, file_entity)', NULL);
     $questions['install']->setNormalizer([static::class, 'toArray']);
-    $questions['exclusions'] = new ConfirmationQuestion('Do you want to exclude any components of Lightning?', FALSE);
 
     $vars = &$this->collectVars($input, $output, $questions);
 
-    if ($vars['exclusions']) {
-      $modules = $this->componentDiscovery->getAll();
-      $questions['exclude'] = new ChoiceQuestion(
-        'Lightning components to exclude (optional), entered as keys separated by commas (e.g. 0,1)',
-        array_keys($modules),
-        NULL
-      );
+    if ($io->confirm('Do you want to exclude any components of Lightning?', FALSE)) {
+      $filter = function ($name) {
+        return strpos($name, 'lightning_') === 0;
+      };
+      $modules = array_filter($this->moduleList->getAllAvailableInfo(), $filter, ARRAY_FILTER_USE_KEY);
+
+      $map = function (array $info) {
+        return $info['name'];
+      };
+      $modules = array_map($map, $modules);
+
+      $questions['exclude'] = new ChoiceQuestion('Lightning components to exclude (optional), entered as keys separated by commas (e.g. 0,1)', $modules);
       $questions['exclude']->setMultiselect(TRUE);
+
       $this->collectVars($input, $output, $questions);
     }
 
@@ -105,7 +113,9 @@ final class SubProfileGenerator extends BaseGenerator {
       $info_array['install'] = $vars['install'];
     }
     if ($vars['exclude']) {
-      $info_array['exclude'] = $vars['exclude'];
+      $info_array['exclude'] = is_string($vars['exclude'])
+        ? static::toArray($vars['exclude'])
+        : $vars['exclude'];
     }
 
     $info_array = array_filter($info_array);

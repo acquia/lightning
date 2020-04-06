@@ -9,6 +9,6 @@ services:
   subprofile.generator:
     class: 'Drupal\lightning\Generators\SubProfileGenerator'
     arguments:
-      - '@app.root'
+      - '@extension.list.module'
     tags:
       - { name: drush.generator }
