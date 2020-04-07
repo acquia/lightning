@@ -42,6 +42,21 @@ class SubprofileGeneratorTest extends BrowserTestBase {
           'exclude' => 'lightning_search, lightning_media_instagram',
         ],
       ],
+      'inclusions and exclusions' => [
+        'answers' => [
+          'install' => ['consumers', 'book'],
+          'exclude' => 'lightning_media_instagram',
+        ],
+      ],
+      'defaults' => [
+        'answers' => []
+      ],
+      'not default' => [
+        'answers' => [
+          'machine_name' => 'something_different',
+          'description' => 'This profile rules.',
+        ]
+      ]
     ];
   }
 
@@ -75,23 +90,25 @@ class SubprofileGeneratorTest extends BrowserTestBase {
 
     $answers += [
       'name' => 'Wizards',
-      'description' => 'This is the description.',
+      'machine_name' => 'wizards',
+      'description' => '',
       'install' => [],
       'exclude' => [],
     ];
-    $answers['machine_name'] = 'wizards';
-    $options['answers'] = Json::encode($answers);
+    $options['answers'] = json_encode($answers);
 
     if ($answers['exclude']) {
       $options['yes'] = NULL;
     }
 
-    $this->drush('generate', ['lightning-subprofile'], $options);
-    $this->assertFileExists("$output_dir/custom/wizards/wizards.info.yml");
-    $this->assertFileExists("$output_dir/custom/wizards/wizards.install");
-    $this->assertFileExists("$output_dir/custom/wizards/wizards.profile");
+    $machine_name = $answers['machine_name'];
 
-    $info = file_get_contents("$output_dir/custom/wizards/wizards.info.yml");
+    $this->drush('generate', ['lightning-subprofile'], $options);
+    $this->assertFileExists("$output_dir/custom/$machine_name/$machine_name.info.yml");
+    $this->assertFileExists("$output_dir/custom/$machine_name/$machine_name.install");
+    $this->assertFileExists("$output_dir/custom/$machine_name/$machine_name.profile");
+
+    $info = file_get_contents("$output_dir/custom/$machine_name/$machine_name.info.yml");
     $info = Yaml::decode($info);
     // Assert the constant values...
     $this->assertSame($answers['name'], $info['name']);
@@ -126,6 +143,11 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     else {
       $this->assertArrayNotHasKey('exclude', $info);
     }
+    $install = file_get_contents("$output_dir/custom/$machine_name/$machine_name.install");
+    $this->assertContains(sprintf('function %s_install()', $machine_name), $install);
+
+    $profile = file_get_contents("$output_dir/custom/$machine_name/$machine_name.profile");
+    $this->assertContains('* Enables modules and site configuration for the Wizards profile.', $profile);
   }
 
 }

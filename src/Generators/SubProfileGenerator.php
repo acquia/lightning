@@ -87,7 +87,7 @@ final class SubProfileGenerator extends BaseGenerator {
       };
       $modules = array_map($map, $modules);
 
-      $questions['exclude'] = new ChoiceQuestion('Lightning components to exclude (optional), entered as keys separated by commas (e.g. 0,1)', $modules);
+      $questions['exclude'] = new ChoiceQuestion('Lightning components to exclude (optional), entered as keys separated by commas (e.g. lightning_media, lightning_layout)', $modules);
       $questions['exclude']->setMultiselect(TRUE);
 
       $this->collectVars($input, $output, $questions);
