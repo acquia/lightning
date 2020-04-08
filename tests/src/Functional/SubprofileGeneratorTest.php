@@ -91,7 +91,7 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     $answers += [
       'name' => 'Wizards',
       'machine_name' => 'wizards',
-      'description' => '',
+      'description' => ' ',
       'install' => [],
       'exclude' => [],
     ];
