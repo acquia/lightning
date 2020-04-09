@@ -48,13 +48,6 @@ matrix:
     - env: ORCA_JOB=DEPRECATED_CODE_SCAN_CONTRIB
 
 before_install:
-  - git clone --branch 8.x-2.x https://git.drupalcode.org/project/openapi_rest.git /tmp/openapi_rest
-  - cp -f openapi_rest.composer.json /tmp/openapi_rest/composer.json
-  - composer config --global repositories.openapi_rest path /tmp/openapi_rest
-  - 'echo "core_version_requirement: ^8 || ^9" >> /tmp/openapi_rest/openapi_rest.info.yml'
-  - git clone --branch 8.x-1.x https://git.drupalcode.org/project/search_api.git /tmp/search_api
-  - cp -f search_api.composer.json /tmp/search_api/composer.json
-  - composer config --global repositories.search_api path /tmp/search_api
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - ../orca/bin/travis/before_install.sh
 
