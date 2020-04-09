@@ -48,15 +48,15 @@ class SubprofileGeneratorTest extends BrowserTestBase {
           'exclude' => 'lightning_media_instagram',
         ],
       ],
-      'defaults' => [
-        'answers' => []
+      'default answers' => [
+        'answers' => [],
       ],
-      'not default' => [
+      'specific machine name and description' => [
         'answers' => [
           'machine_name' => 'something_different',
           'description' => 'This profile rules.',
-        ]
-      ]
+        ],
+      ],
     ];
   }
 
@@ -91,11 +91,11 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     $answers += [
       'name' => 'Wizards',
       'machine_name' => 'wizards',
-      'description' => ' ',
-      'install' => [],
-      'exclude' => [],
+      'description' => NULL,
+      'install' => NULL,
+      'exclude' => NULL,
     ];
-    $options['answers'] = json_encode($answers);
+    $options['answers'] = Json::encode($answers);
 
     if ($answers['exclude']) {
       $options['yes'] = NULL;
@@ -143,11 +143,15 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     else {
       $this->assertArrayNotHasKey('exclude', $info);
     }
-    $install = file_get_contents("$output_dir/custom/$machine_name/$machine_name.install");
-    $this->assertContains(sprintf('function %s_install()', $machine_name), $install);
 
-    $profile = file_get_contents("$output_dir/custom/$machine_name/$machine_name.profile");
-    $this->assertContains('* Enables modules and site configuration for the Wizards profile.', $profile);
+    // Ensure the .install file is valid PHP and includes an install hook.
+    require_once "$output_dir/custom/$machine_name/$machine_name.install";
+    $this->assertTrue(function_exists($machine_name . '_install'));
+
+    $profile = "$output_dir/custom/$machine_name/$machine_name.profile";
+    // Ensure the .profile file is valid PHP and includes at least a comment.
+    require_once $profile;
+    $this->assertNotEmpty(file_get_contents($profile));
   }
 
 }
