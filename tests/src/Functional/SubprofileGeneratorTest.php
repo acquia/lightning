@@ -102,13 +102,14 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     }
 
     $machine_name = $answers['machine_name'];
+    $profile_dir = "$output_dir/custom/$machine_name";
 
     $this->drush('generate', ['lightning-subprofile'], $options);
-    $this->assertFileExists("$output_dir/custom/$machine_name/$machine_name.info.yml");
-    $this->assertFileExists("$output_dir/custom/$machine_name/$machine_name.install");
-    $this->assertFileExists("$output_dir/custom/$machine_name/$machine_name.profile");
+    $this->assertFileExists("$profile_dir/$machine_name.info.yml");
+    $this->assertFileExists("$profile_dir/$machine_name.install");
+    $this->assertFileExists("$profile_dir/$machine_name.profile");
 
-    $info = file_get_contents("$output_dir/custom/$machine_name/$machine_name.info.yml");
+    $info = file_get_contents("$profile_dir/$machine_name.info.yml");
     $info = Yaml::decode($info);
     // Assert the constant values...
     $this->assertSame($answers['name'], $info['name']);
@@ -144,14 +145,17 @@ class SubprofileGeneratorTest extends BrowserTestBase {
       $this->assertArrayNotHasKey('exclude', $info);
     }
 
-    // Ensure the .install file is valid PHP and includes an install hook.
-    require_once "$output_dir/custom/$machine_name/$machine_name.install";
+    // Ensure the .install file is valid PHP and includes an install hook. We
+    // need to require the file as a variable in order to evade an annoying
+    // coding standards check.
+    $file = "$profile_dir/$machine_name.install";
+    require_once $file;
     $this->assertTrue(function_exists($machine_name . '_install'));
 
-    $profile = "$output_dir/custom/$machine_name/$machine_name.profile";
+    $file = "$profile_dir/$machine_name.profile";
     // Ensure the .profile file is valid PHP and includes at least a comment.
-    require_once $profile;
-    $this->assertNotEmpty(file_get_contents($profile));
+    require_once $file;
+    $this->assertNotEmpty(file_get_contents($file));
   }
 
 }
