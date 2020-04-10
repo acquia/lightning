@@ -13,7 +13,11 @@ use Symfony\Component\Console\Question\ChoiceQuestion;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * Implements lightning-subprofile command.
+ * Implements a Lightning sub-profile generator for Drush.
+ *
+ * The generator will ask for a human-readable name, machine name, optional
+ * description, and optional lists of modules to include in the generated
+ * profile, and Lightning modules to exclude.
  */
 final class SubProfileGenerator extends BaseGenerator {
 
@@ -45,11 +49,6 @@ final class SubProfileGenerator extends BaseGenerator {
   protected $templatePath = __DIR__;
 
   /**
-   * {@inheritdoc}
-   */
-  protected $destination = 'profiles';
-
-  /**
    * SubProfileGenerator constructor.
    *
    * @param \Drupal\Core\Extension\ModuleExtensionList $module_list
@@ -58,6 +57,16 @@ final class SubProfileGenerator extends BaseGenerator {
   public function __construct(ModuleExtensionList $module_list) {
     parent::__construct();
     $this->moduleList = $module_list;
+
+    // Drush doesn't support setting $this->destination to 'profiles/custom',
+    // so we need to use a callback function instead. This is ignored if
+    // the --directory option is set; in that case, the profile will be
+    // generated at $custom_directory/$machine_name.
+    // @see \Drush\Commands\generate\Helper\InputHandler::collectVars()
+    // @see \Drush\Commands\generate\Helper\InputHandler::getDirectory()
+    $this->setDestination(function () {
+      return 'profiles/custom';
+    });
   }
 
   /**
@@ -120,24 +129,16 @@ final class SubProfileGenerator extends BaseGenerator {
 
     $info_array = array_filter($info_array);
 
-    $profile_path = 'custom/{machine_name}';
-    // For reasons I don't understand, if an output directory is specified
-    // (e.g., in our test coverage), then the $destination property of this
-    // class is ignored. This works around that particular bit of weirdness.
-    if ($input->getOption('directory')) {
-      $profile_path = "profiles/$profile_path";
-    }
-
     $this->addFile()
-      ->path("$profile_path/{machine_name}.info.yml")
+      ->path("{machine_name}/{machine_name}.info.yml")
       ->content(Yaml::encode($info_array));
 
     $this->addFile()
-      ->path("$profile_path/{machine_name}.install")
+      ->path("{machine_name}/{machine_name}.install")
       ->template('install.twig');
 
     $this->addFile()
-      ->path("$profile_path/{machine_name}.profile")
+      ->path("{machine_name}/{machine_name}.profile")
       ->template('profile.twig');
   }
 

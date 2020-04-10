@@ -84,6 +84,10 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     $answers += [
       'name' => 'Wizards',
       'machine_name' => 'wizards',
+      // Ideally, these would be empty strings, but it seems that Symfony
+      // Console (or possibly Drush) mangles empty strings in JSON-encoded data,
+      // results in the --answers option containing invalid JSON. Setting these
+      // to NULL is a workaround, but it achieves the desired result.
       'description' => NULL,
       'install' => NULL,
       'exclude' => NULL,
@@ -92,7 +96,7 @@ class SubprofileGeneratorTest extends BrowserTestBase {
       'answers' => Json::encode($answers),
       // Generate the profile relative to the site directory, so that it will be
       // automatically cleaned up when the test is done.
-      'directory' => $this->getDrupalRoot() . "/$this->siteDirectory",
+      'directory' => $this->getDrupalRoot() . "/$this->siteDirectory/profiles/custom",
     ];
 
     if ($answers['exclude']) {
@@ -100,8 +104,6 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     }
 
     $machine_name = $answers['machine_name'];
-    $profile_dir = "$this->siteDirectory/profiles/custom/$machine_name";
-
     $this->drush('generate', ['lightning-subprofile'], $options);
 
     // Ensure that the new profile is picked up by the extension system. Because
@@ -118,13 +120,14 @@ class SubprofileGeneratorTest extends BrowserTestBase {
       ->reset()
       ->get($machine_name);
 
-    // Get the unprocessed info for the generated profile. The profile list's
+    // Get the raw info for the generated profile. The profile list's
     // getExtensionInfo() method would merge in default values from the
     // extension system and ancestral profiles, which interfere with these
     // assertions.
     $info = file_get_contents($extension->getPathname());
     $info = Yaml::decode($info);
-    // Assert the constant values...
+
+    // Assert the constant values.
     $this->assertSame($answers['name'], $info['name']);
     $this->assertSame('profile', $info['type']);
     $this->assertArrayNotHasKey('core', $info);
@@ -132,7 +135,7 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     $this->assertSame(['bartik', 'seven'], $info['themes']);
     $this->assertSame('lightning', $info['base profile']);
 
-    // ...and the stuff that can change depending on user input.
+    // Assert the stuff that can change depending on user input.
     if ($answers['description']) {
       $this->assertSame($answers['description'], $info['description']);
     }
@@ -161,7 +164,7 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     // Load up the new profile to ensure it's valid PHP and includes an install
     // hook.
     $module_handler = $this->container->get('module_handler');
-    $module_handler->addProfile($machine_name, $profile_dir);
+    $module_handler->addProfile($machine_name, $extension->getPath());
     $module_handler->load($machine_name);
     $module_handler->loadInclude($machine_name, 'install');
     $this->assertTrue(function_exists($machine_name . '_install'));
