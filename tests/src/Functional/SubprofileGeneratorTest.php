@@ -3,7 +3,7 @@
 namespace Drupal\Tests\lightning\Functional;
 
 use Drupal\Component\Serialization\Json;
-use Drupal\Component\Serialization\Yaml;
+use Drupal\Core\Serialization\Yaml;
 use Drupal\lightning\Generators\SubProfileGenerator;
 use Drupal\Tests\BrowserTestBase;
 use Drush\TestTraits\DrushTestTrait;
@@ -100,14 +100,29 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     }
 
     $machine_name = $answers['machine_name'];
-    $profile_dir = "$this->siteDirectory/custom/$machine_name";
+    $profile_dir = "$this->siteDirectory/profiles/custom/$machine_name";
 
     $this->drush('generate', ['lightning-subprofile'], $options);
-    $this->assertFileExists("$profile_dir/$machine_name.info.yml");
-    $this->assertFileExists("$profile_dir/$machine_name.install");
-    $this->assertFileExists("$profile_dir/$machine_name.profile");
 
-    $info = file_get_contents("$profile_dir/$machine_name.info.yml");
+    // Ensure that the new profile is picked up by the extension system. Because
+    // ExtensionDiscovery does not expect the available extensions to change in
+    // the course of a single request, and has no public method to reset its
+    // internal static cache, we need to pry open its static $files property
+    // and force-reset it.
+    $reflector = new \ReflectionClass('\Drupal\Core\Extension\ExtensionDiscovery');
+    $property = $reflector->getProperty('files');
+    $property->setAccessible(TRUE);
+    $property->setValue([]);
+
+    $extension = $this->container->get('extension.list.profile')
+      ->reset()
+      ->get($machine_name);
+
+    // Get the unprocessed info for the generated profile. The profile list's
+    // getExtensionInfo() method would merge in default values from the
+    // extension system and ancestral profiles, which interfere with these
+    // assertions.
+    $info = file_get_contents($extension->getPathname());
     $info = Yaml::decode($info);
     // Assert the constant values...
     $this->assertSame($answers['name'], $info['name']);

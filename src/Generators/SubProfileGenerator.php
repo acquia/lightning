@@ -120,16 +120,24 @@ final class SubProfileGenerator extends BaseGenerator {
 
     $info_array = array_filter($info_array);
 
+    $profile_path = 'custom/{machine_name}';
+    // For reasons I don't understand, if an output directory is specified
+    // (e.g., in our test coverage), then the $destination property of this
+    // class is ignored. This works around that particular bit of weirdness.
+    if ($input->getOption('directory')) {
+      $profile_path = "profiles/$profile_path";
+    }
+
     $this->addFile()
-      ->path('custom/{machine_name}/{machine_name}.info.yml')
+      ->path("$profile_path/{machine_name}.info.yml")
       ->content(Yaml::encode($info_array));
 
     $this->addFile()
-      ->path('custom/{machine_name}/{machine_name}.install')
+      ->path("$profile_path/{machine_name}.install")
       ->template('install.twig');
 
     $this->addFile()
-      ->path('custom/{machine_name}/{machine_name}.profile')
+      ->path("$profile_path/{machine_name}.profile")
       ->template('profile.twig');
   }
 
