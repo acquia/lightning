@@ -81,13 +81,6 @@ class SubprofileGeneratorTest extends BrowserTestBase {
       ->set('profile', 'lightning')
       ->save();
 
-    // Generate the profile relative to the site directory, so that it will be
-    // automatically cleaned up when the test is done.
-    $output_dir = $this->getDrupalRoot() . "/$this->siteDirectory";
-    $options = [
-      'directory' => $output_dir,
-    ];
-
     $answers += [
       'name' => 'Wizards',
       'machine_name' => 'wizards',
@@ -95,14 +88,19 @@ class SubprofileGeneratorTest extends BrowserTestBase {
       'install' => NULL,
       'exclude' => NULL,
     ];
-    $options['answers'] = Json::encode($answers);
+    $options = [
+      'answers' => Json::encode($answers),
+      // Generate the profile relative to the site directory, so that it will be
+      // automatically cleaned up when the test is done.
+      'directory' => $this->getDrupalRoot() . "/$this->siteDirectory",
+    ];
 
     if ($answers['exclude']) {
       $options['yes'] = NULL;
     }
 
     $machine_name = $answers['machine_name'];
-    $profile_dir = "$output_dir/custom/$machine_name";
+    $profile_dir = "$this->siteDirectory/custom/$machine_name";
 
     $this->drush('generate', ['lightning-subprofile'], $options);
     $this->assertFileExists("$profile_dir/$machine_name.info.yml");
@@ -145,16 +143,16 @@ class SubprofileGeneratorTest extends BrowserTestBase {
       $this->assertArrayNotHasKey('exclude', $info);
     }
 
-    // Ensure the .install file is valid PHP and includes an install hook. We
-    // need to require the file as a variable in order to evade an annoying
-    // coding standards check.
-    $file = "$profile_dir/$machine_name.install";
-    require_once $file;
+    // Load up the new profile to ensure it's valid PHP and includes an install
+    // hook.
+    $module_handler = $this->container->get('module_handler');
+    $module_handler->addProfile($machine_name, $profile_dir);
+    $module_handler->load($machine_name);
+    $module_handler->loadInclude($machine_name, 'install');
     $this->assertTrue(function_exists($machine_name . '_install'));
 
-    $file = "$profile_dir/$machine_name.profile";
-    // Ensure the .profile file is valid PHP and includes at least a comment.
-    require_once $file;
+    // Ensure the .profile file at least includes a comment.
+    $file = $module_handler->getModule($machine_name)->getExtensionPathname();
     $this->assertNotEmpty(file_get_contents($file));
   }
 
