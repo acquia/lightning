@@ -104,6 +104,7 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     }
 
     $machine_name = $answers['machine_name'];
+    $this->assertDirectoryIsWritable($this->siteDirectory);
     $this->drush('generate', ['lightning-subprofile'], $options);
 
     // Ensure that the new profile is picked up by the extension system. Because
