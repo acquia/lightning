@@ -107,3 +107,19 @@ function lightning_update_dependencies() {
     ],
   ];
 }
+
+/**
+ * Implements hook_requirements().
+ */
+function lightning_requirements() {
+  // Check if the PHP version is below what Lightning supports.
+  if (version_compare(phpversion(), '7.1.0') < 0) {
+    $requirements['php']['description'] = t('Your PHP installation is too old. Lightning requires at least PHP 7.1. It is recommended to upgrade to the recommended PHP version for Drupal,  %recommended or higher, for the best ongoing support.',
+      [
+        '%recommended' => DRUPAL_RECOMMENDED_PHP,
+        ':php_requirements' => 'https://www.drupal.org/docs/8/system-requirements/php',
+      ]
+    );
+    $requirements['php']['severity'] = REQUIREMENT_ERROR;
+  }
+}
