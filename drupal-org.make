@@ -37,6 +37,7 @@ projects[embed][version] = 1.3
 projects[entity_block][type] = module
 projects[entity_block][version] = 1.0-beta2
 projects[entity_browser][type] = module
+projects[entity_browser][patch][] = https://www.drupal.org/files/issues/2020-04-22/3110133-13.patch
 projects[entity_browser][version] = 2.4
 projects[entity_browser_block][type] = module
 projects[entity_browser_block][version] = 1.1
