@@ -7,6 +7,7 @@ use Drupal\Core\Serialization\Yaml;
 use Drupal\lightning\Generators\SubProfileGenerator;
 use Drupal\Tests\BrowserTestBase;
 use Drush\TestTraits\DrushTestTrait;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Tests the Drush command to generate a Lightning sub-profile.
@@ -81,6 +82,12 @@ class SubprofileGeneratorTest extends BrowserTestBase {
       ->set('profile', 'lightning')
       ->save();
 
+    // Ensure that the destination directory exists.
+    $destination = $this->getDrupalRoot() . "/$this->siteDirectory/profiles/custom";
+    $file_system = new Filesystem();
+    $file_system->mkdir($destination);
+    $this->assertDirectoryIsWritable($destination);
+
     $answers += [
       'name' => 'Wizards',
       'machine_name' => 'wizards',
@@ -94,9 +101,9 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     ];
     $options = [
       'answers' => Json::encode($answers),
-      // Generate the profile relative to the site directory, so that it will be
+      // Generate the profile in the test site's directory, so that it will be
       // automatically cleaned up when the test is done.
-      'directory' => $this->getDrupalRoot() . "/$this->siteDirectory/profiles/custom",
+      'directory' => $destination,
     ];
 
     if ($answers['exclude']) {
@@ -104,7 +111,6 @@ class SubprofileGeneratorTest extends BrowserTestBase {
     }
 
     $machine_name = $answers['machine_name'];
-    $this->assertDirectoryIsWritable($this->siteDirectory);
     $this->drush('generate', ['lightning-subprofile'], $options);
 
     // Ensure that the new profile is picked up by the extension system. Because
