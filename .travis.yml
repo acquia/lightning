@@ -16,7 +16,11 @@ env:
   global:
     - ORCA_SUT_NAME=acquia/lightning
     - ORCA_SUT_BRANCH=8.x-4.x
-    - ORCA_VERSION=master
+    # Specify the version of ORCA to use. Use dev-master to track the latest
+    # release, dev-develop to track Dev/HEAD, or any other Composer version
+    # string.
+    # @see https://getcomposer.org/doc/articles/versions.md
+    - ORCA_VERSION=dev-master
     - ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/packages_alter.yml
     - ORCA_FIXTURE_PROFILE=lightning
     - ORCA_TELEMETRY_ENABLE=TRUE
@@ -43,7 +47,7 @@ matrix:
     - env: ORCA_JOB=DEPRECATED_CODE_SCAN_CONTRIB
 
 before_install:
-  - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
+  - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - ../orca/bin/travis/before_install.sh
 
 install: ./tests/travis/install.sh
