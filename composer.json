@@ -130,13 +130,11 @@
             "@composer push"
         ],
         "post-update-cmd": [
-            "@composer push",
-            "@composer package"
+            "@composer push"
         ],
         "configure-tarball": "Acquia\\Lightning\\Composer\\ConfigureLegacyProject::execute",
         "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute",
         "nuke": "rm -r -f docroot vendor",
-        "package": "Acquia\\Lightning\\Composer\\Package::execute",
         "pull": "cp -R -f ./docroot/profiles/contrib/lightning/* .",
         "push": [
             "rm -r -f ./docroot/profiles/contrib/lightning",
