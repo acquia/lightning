@@ -49,6 +49,8 @@ DB="$TRAVIS_BUILD_DIR/tests/fixtures/$DB_FIXTURE.php.gz"
 
 php core/scripts/db-tools.php import ${DB}
 
+drush php:script "$TRAVIS_BUILD_DIR/tests/update.php"
+
 drush updatedb --yes
 drush update:lightning --no-interaction --yes
 
