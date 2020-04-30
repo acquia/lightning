@@ -111,14 +111,12 @@
         ],
         "post-update-cmd": [
             "@composer push",
-            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit",
-            "@composer package"
+            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit"
         ],
         "configure-tarball": "Acquia\\Lightning\\Composer\\ConfigureLegacyProject::execute",
         "drupal-scaffold": "DrupalComposer\\DrupalScaffold\\Plugin::scaffold",
         "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute",
         "nuke": "rm -r -f docroot vendor",
-        "package": "Acquia\\Lightning\\Composer\\Package::execute",
         "pull": "cp -R -f ./docroot/profiles/contrib/lightning/* .",
         "push": [
             "rm -r -f ./docroot/profiles/contrib/lightning",
