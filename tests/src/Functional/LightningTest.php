@@ -15,6 +15,11 @@ class LightningTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
+  protected $defaultTheme = 'stark';
+
+  /**
+   * {@inheritdoc}
+   */
   protected static $configSchemaCheckerExclusions = [
     // @todo Remove this when depending on slick_entityreference 1.2 or later.
     'core.entity_view_display.block_content.media_slideshow.default',
@@ -31,13 +36,24 @@ class LightningTest extends BrowserTestBase {
    * {@inheritdoc}
    */
   protected function setUp() {
+    $root = static::getDrupalRoot();
+    $this->assertNotEmpty($root);
+
     // Symlink the sub-profile into a place where Drupal will be able to find
     // it. The symlink is deleted in tearDown(). If the symlink cannot be
-    // created, abort the test. symlink() is called strangely in order to avoid
-    // a too-strict coding standards check.
-    if (!call_user_func('symlink', __DIR__ . '/../../' . $this->profile, "$this->root/profiles/$this->profile")) {
-      $this->markTestSkipped("Could not symlink $this->profile into $this->root/profiles.");
-    }
+    // created, fail the test.
+    $target = __DIR__ . '/../../' . $this->profile;
+    $this->assertDirectoryIsReadable($target);
+
+    $link = "$root/profiles/$this->profile";
+    $this->assertDirectoryIsWritable(dirname($link));
+
+    // symlink() is called strangely in order to evade a too-strict coding
+    // standards check.
+    $success = call_user_func('symlink', $target, $link);
+    $this->assertTrue($success, "Could not symlink $link to $target");
+    $this->assertDirectoryIsReadable($target);
+
     parent::setUp();
   }
 
