@@ -46,8 +46,8 @@ class ConfigIntegrityTest extends ExistingSiteBase {
     $this->assertSame('claro', $theme_config->get('admin'));
     $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
     $theme_global = $this->config('system.theme.global');
-    $this->assertContains('/lightning/lightning.png', $theme_global->get('logo.path'));
-    $this->assertContains('/lightning/favicon.ico', $theme_global->get('favicon.path'));
+    $this->assertStringContainsString('/lightning/lightning.png', $theme_global->get('logo.path'));
+    $this->assertStringContainsString('/lightning/favicon.ico', $theme_global->get('favicon.path'));
     /* @todo: Assert changes to the frontpage view were made. */
 
     // lightning_core_update_8002() marks a couple of core view modes as
@@ -151,6 +151,12 @@ class ConfigIntegrityTest extends ExistingSiteBase {
     $this->assertAllowed('/admin/config/system/lightning/media');
   }
 
+  /**
+   * Data provider for testModeratedContentTypes().
+   *
+   * @return array[]
+   *   Sets of arguments to pass to the test method.
+   */
   public function providerModeratedContentTypes() {
     return [
       ['page', 'page_creator'],
