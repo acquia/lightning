@@ -22,7 +22,7 @@ fi
 # Ensure we are on a mainline release branch.
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
-if [[ $BRANCH =~ ^8\.x\-[0-9]+\.x$ ]]; then
+if [[ $BRANCH =~ ^([0-9]+\.){2}x$ ]]; then
   git pull
   git checkout -b $RELEASE_BRANCH
 
@@ -37,6 +37,6 @@ if [[ $BRANCH =~ ^8\.x\-[0-9]+\.x$ ]]; then
   git commit --message "$1 Release"
   git push --set-upstream origin $RELEASE_BRANCH
 else
-  echo "This can only be done from a mainline release branch, e.g. 8.x-4.x."
+  echo "This can only be done from a mainline release branch, e.g. 5.0.x."
   exit 1
 fi

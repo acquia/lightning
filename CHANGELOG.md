@@ -1,3 +1,7 @@
+## 5.0.0-alpha1
+* Updated Drupal core to 9.0.0-beta2.
+* Ported the lightning:version command to Drush.
+
 ## 4.1.3
 * Security updated Drupal core to 8.8.4.
 
