@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
-VERSION=$(git tag --list 4.* --sort -creatordate | head -n 1)
+VERSION=$(git tag --list 5.* --sort -creatordate | head -n 1)
 CHANGE_LOG=logs/$VERSION.md
 
 if [[ ! -f $CHANGE_LOG ]]; then
