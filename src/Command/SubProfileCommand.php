@@ -213,6 +213,7 @@ class SubProfileCommand extends Command {
    */
   protected function interact(InputInterface $input, OutputInterface $output) {
     $io = new DrupalStyle($input, $output);
+    $io->warning('This command is deprecated and will be removed in Lightning 5.0. Please use the Drush command `drush generate lightning-subprofile` instead.');
     $options = $input->getOptions();
 
     // Get the profile name from the --name option, or ask the user if none was
