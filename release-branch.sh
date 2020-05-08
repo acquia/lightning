@@ -21,7 +21,7 @@ if [[ $BRANCH =~ ^8\.x\-[0-9]+\.x$ ]]; then
   git checkout -b $RELEASE_BRANCH
 
   composer update
-  ./make-fixture.sh $1
+  cp composer.lock tests/fixtures/$1.lock
 
   git add .
   git commit --message "$1 Release"
