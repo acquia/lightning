@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5346d5c8de98ac9eb020d745f53514ee",
+    "content-hash": "18de8641f3642c195e855f8e8901792c",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -96,7 +96,7 @@
             "version": "3.5.1",
             "source": {
                 "type": "git",
-                "url": "https://github.com/jquery/jquery-dist.git",
+                "url": "git@github.com:jquery/jquery-dist.git",
                 "reference": "4c0e4becb8263bb5b3e6dadc448d8e7305ef8215"
             },
             "dist": {
@@ -935,7 +935,7 @@
             "extra": {
                 "drupal": {
                     "version": "8.x-2.1",
-                    "datestamp": "1589112982",
+                    "datestamp": "1589120601",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -1160,16 +1160,16 @@
         },
         {
             "name": "drupal/core",
-            "version": "9.0.0-beta2",
+            "version": "9.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core.git",
-                "reference": "ae085c68b25b78cc77091fb3d8d29fcd941f8d35"
+                "reference": "084a8705f4169a95366eea1451012c81ca2cd500"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core/zipball/ae085c68b25b78cc77091fb3d8d29fcd941f8d35",
-                "reference": "ae085c68b25b78cc77091fb3d8d29fcd941f8d35",
+                "url": "https://api.github.com/repos/drupal/core/zipball/084a8705f4169a95366eea1451012c81ca2cd500",
+                "reference": "084a8705f4169a95366eea1451012c81ca2cd500",
                 "shasum": ""
             },
             "require": {
@@ -1217,7 +1217,6 @@
                 "typo3/phar-stream-wrapper": "^3.1.3"
             },
             "conflict": {
-                "drupal/pathauto": "<1.6",
                 "drush/drush": "<8.1.10"
             },
             "replace": {
@@ -1407,7 +1406,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "Drupal is an open source content management platform powering millions of websites and applications.",
-            "time": "2020-03-30T19:13:47+00:00"
+            "time": "2020-05-15T23:57:43+00:00"
         },
         {
             "name": "drupal/core_context",
@@ -2238,9 +2237,6 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-2.x": "2.x-dev"
-                },
                 "drupal": {
                     "version": "8.x-2.3",
                     "datestamp": "1585408029",
@@ -3128,7 +3124,7 @@
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/lightning_layout.git",
-                "reference": "e014e438e254a3fb964d886571dd9e89e980e78e"
+                "reference": "da4eec90a321c3f2caecf47704f5af86fa71e58f"
             },
             "require": {
                 "cweagans/composer-patches": "^1.6",
@@ -3162,8 +3158,8 @@
                     "dev-2.x": "2.x-dev"
                 },
                 "drupal": {
-                    "version": "8.x-2.6+2-dev",
-                    "datestamp": "1588268671",
+                    "version": "8.x-2.6+3-dev",
+                    "datestamp": "1588800849",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
@@ -3270,8 +3266,7 @@
             "homepage": "https://www.drupal.org/project/lightning_layout",
             "support": {
                 "source": "https://git.drupalcode.org/project/lightning_layout"
-            },
-            "time": "2020-05-06T20:52:36+00:00"
+            }
         },
         {
             "name": "drupal/lightning_media",
@@ -10762,7 +10757,7 @@
         },
         {
             "name": "drupal/core-composer-scaffold",
-            "version": "8.8.5",
+            "version": "8.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-composer-scaffold.git",
@@ -10809,16 +10804,16 @@
         },
         {
             "name": "drupal/core-dev",
-            "version": "9.0.0-beta2",
+            "version": "9.0.0-beta3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-dev.git",
-                "reference": "63fd4cd23dc735c2db0a97c43348c062ffb1b70c"
+                "reference": "34ab35ef70eb772c38178ad626e99e11267a7022"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-dev/zipball/63fd4cd23dc735c2db0a97c43348c062ffb1b70c",
-                "reference": "63fd4cd23dc735c2db0a97c43348c062ffb1b70c",
+                "url": "https://api.github.com/repos/drupal/core-dev/zipball/34ab35ef70eb772c38178ad626e99e11267a7022",
+                "reference": "34ab35ef70eb772c38178ad626e99e11267a7022",
                 "shasum": ""
             },
             "require": {
@@ -10834,8 +10829,8 @@
                 "phpunit/phpunit": "^8.4.1",
                 "symfony/browser-kit": "^4.4",
                 "symfony/css-selector": "^4.4",
-                "symfony/debug": "^4.4",
                 "symfony/dom-crawler": "^4.4 !=4.4.5",
+                "symfony/error-handler": "^4.4",
                 "symfony/filesystem": "^4.4",
                 "symfony/finder": "^4.4",
                 "symfony/lock": "^4.4",
@@ -10850,7 +10845,7 @@
                 "GPL-2.0-or-later"
             ],
             "description": "require-dev dependencies from drupal/drupal; use in addition to drupal/core-recommended to run tests from drupal/core.",
-            "time": "2020-03-19T11:15:53+00:00"
+            "time": "2020-04-21T12:07:33+00:00"
         },
         {
             "name": "drush/drush",
