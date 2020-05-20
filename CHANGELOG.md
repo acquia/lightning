@@ -1,4 +1,6 @@
 ## 3.4.3
+* Updated Lightning Core to 5.2:
+  * Security updated Drupal core to 8.8.6.
 * Ported the `lightning:version` Drupal Console command to Drush.
 * Ported the `lightning:subprofile' Drupal Console command to Drush. To generate a
   sub-profile, run `drush generate lightning-subprofile`.
