@@ -1,3 +1,7 @@
+## 4.0.7
+* Updated Lightning Core to 4.10:
+  * Security updated Drupal core to 8.7.14.
+
 ## 4.0.6
 * Security updated Drupal core to 8.7.11.
 
