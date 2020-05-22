@@ -40,34 +40,35 @@ fi
 # Add testing dependencies.
 composer -d"$ORCA_FIXTURE_DIR" require --dev weitzman/drupal-test-traits:dev-master
 
-# Exit early if no DB fixture is specified.
-[[ "$DB_FIXTURE" ]] || exit 0
-
 cd "$ORCA_FIXTURE_DIR/docroot"
 
-DB="$TRAVIS_BUILD_DIR/tests/fixtures/$DB_FIXTURE.php.gz"
+# Back up the current state of the fixture so we can proceed from there
+# after verifying that installing from config still works after our
+# update path.
+orca fixture:backup --force
 
-php core/scripts/db-tools.php import ${DB}
+# Loop through every database fixture and restore it, then run the update
+# path, export config, and reinstall the site from config to prove that
+# the update path keeps the config coherent.
+for DB in $TRAVIS_BUILD_DIR/tests/fixtures/*.php.gz
+do
+  drush sql:drop --yes
+  php core/scripts/db-tools.php import ${DB}
+  drush php:script "$TRAVIS_BUILD_DIR/tests/update.php"
+  drush updatedb --yes
+  drush update:lightning --no-interaction --yes
+  drush config:export --yes
+  drush site:install --yes --existing-config
+done
 
-drush php:script "$TRAVIS_BUILD_DIR/tests/update.php"
-
-drush updatedb --yes
-drush update:lightning --no-interaction --yes
+# Restore the fixture backup.
+orca fixture:reset
 
 # Do manual updates required for existing site tests to pass, but which
 # do not have automatic scripts.
 drush role:perm:add layout_manager 'configure any layout'
 drush theme:enable claro
 
-orca fixture:enable-extensions
-
-# Reinstall from exported configuration to prove that it's coherent.
-drush config:export --yes
-drush site:install --yes --existing-config
-
 # Disable the History module during testing, to prevent weird deadlock errors
 # that don't actually affect anything.
 drush pm:uninstall --yes history
-
-# Set the fixture state to reset to between tests.
-orca fixture:backup --force
