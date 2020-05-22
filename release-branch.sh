@@ -27,7 +27,7 @@ if [[ $BRANCH =~ ^([0-9]+\.){2}x$ ]]; then
   git checkout -b $RELEASE_BRANCH
 
   composer update
-  ./make-fixture.sh $1
+  cp composer.lock tests/fixtures/$1.lock
 
   cd logs
   ./generate.sh | sed '$ d' > ../CHANGELOG.md

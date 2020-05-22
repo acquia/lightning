@@ -42,7 +42,7 @@ matrix:
     - { name: "D9 readiness test", env: ORCA_JOB=D9_READINESS }
     # Custom jobs. The --core and --sut-only arguments can be removed when Drupal 9 is the
     # "current" version of core, and all Acquia product modules are compatible with it.
-    - { name: "Upgrade test from 4.1.0", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--dev --no-site-install --core=D9_READINESS --sut-only" ORCA_CUSTOM_TESTS_RUN_ARGS="--sut-only" DB_FIXTURE=4.1.0 }
+    - { name: "Upgrade test from 4.1.0-beta1", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--dev --no-site-install --core=D9_READINESS --sut-only" ORCA_CUSTOM_TESTS_RUN_ARGS="--sut-only" DB_FIXTURE=4.1.0-beta1 }
     - { name: "Upgrade test from 3.4.0", env: ORCA_JOB=CUSTOM ORCA_CUSTOM_FIXTURE_INIT_ARGS="--dev --no-site-install --core=D9_READINESS --sut-only" ORCA_CUSTOM_TESTS_RUN_ARGS="--sut-only" DB_FIXTURE=3.4.0 }
   allow_failures:
     - env: ORCA_JOB=INTEGRATED_DEV
