@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e67492a46d1616887a2717e7282511db",
+    "content-hash": "c198c18d60cbc384416bbf2f107b5030",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -829,9 +829,6 @@
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
                     }
-                },
-                "patches_applied": {
-                    "3109317 - Run tests against Drupal 9": "https://www.drupal.org/files/issues/2020-05-15/autosave_form-1.1-core-version-requirement.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -1359,12 +1356,6 @@
                         "[web-root]/profiles/README.txt": "assets/scaffold/files/profiles.README.txt",
                         "[web-root]/themes/README.txt": "assets/scaffold/files/themes.README.txt"
                     }
-                },
-                "patches_applied": {
-                    "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2020-02-07/2869592-remove-update-warning-34.patch",
-                    "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2020-03-24/1356276-531-9.0.x-9.patch",
-                    "2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch",
-                    "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-11-27/2815221-125.patch"
                 }
             },
             "autoload": {
@@ -2315,9 +2306,6 @@
                         "status": "not-covered",
                         "message": "RC releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "3121071 - Replace theme_inline_entity_form_entity_table() with twig template": "https://www.drupal.org/files/issues/2020-03-22/3121071-5.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4175,27 +4163,25 @@
         },
         {
             "name": "drupal/page_manager",
-            "version": "4.0.0-beta5",
+            "version": "dev-4.x",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/page_manager.git",
-                "reference": "8.x-4.0-beta5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/page_manager-8.x-4.0-beta5.zip",
-                "reference": "8.x-4.0-beta5",
-                "shasum": "729f45714c87bcf6aacfd1ddb748c51b4290d1a4"
+                "reference": "f86895e039339a381ca0e81c7ea290e1634e3777"
             },
             "require": {
-                "drupal/core": "^8.5 || ^9",
-                "drupal/ctools": "~3.1"
+                "drupal/core": "^8.8 || ^9",
+                "drupal/ctools": "^3.1"
             },
             "type": "drupal-module",
             "extra": {
+                "branch-alias": {
+                    "dev-4.x": "4.x-dev",
+                    "dev-8.x-4.x": "4.x-dev"
+                },
                 "drupal": {
-                    "version": "8.x-4.0-beta5",
-                    "datestamp": "1585603617",
+                    "version": "8.x-4.0-beta5+6-dev",
+                    "datestamp": "1587489185",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -4235,7 +4221,8 @@
                 "source": "https://git.drupal.org/project/page_manager.git",
                 "issues": "https://www.drupal.org/project/issues/page_manager",
                 "irc": "irc://irc.freenode.org/drupal-contribute"
-            }
+            },
+            "time": "2020-04-28T23:59:30+00:00"
         },
         {
             "name": "drupal/panelizer",
@@ -4269,9 +4256,6 @@
                         "status": "not-covered",
                         "message": "Beta releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "2778565 - Multilingual support for Panelizer": "https://www.drupal.org/files/issues/2020-03-23/2778565-47.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4350,9 +4334,6 @@
                         "status": "not-covered",
                         "message": "Dev releases are not covered by Drupal security advisories."
                     }
-                },
-                "patches_applied": {
-                    "2878684 - Use String.match to correlate regions when switching Layouts in Panels IPE": "https://www.drupal.org/files/issues/panels-ipe-2878684-3.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -4870,9 +4851,6 @@
                     "services": {
                         "drush.services.yml": "^9"
                     }
-                },
-                "patches_applied": {
-                    "3121637 - Replace theme functions with templates": "https://www.drupal.org/files/issues/2020-04-24/3121637-8--replace_theme_functions_with_templates.patch"
                 }
             },
             "notification-url": "https://packages.drupal.org/8/downloads",
@@ -14531,6 +14509,7 @@
         "drupal/lightning_api": 20,
         "drupal/lightning_layout": 20,
         "drupal/lightning_media": 20,
+        "drupal/page_manager": 20,
         "drupal/pendo": 15,
         "weitzman/drupal-test-traits": 20
     },
