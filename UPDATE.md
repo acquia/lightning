@@ -140,6 +140,47 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+### 4.1.4/3.4.3 to 5.0.0-beta1
+* It is possible to update to this version of Lightning directly from version
+  3.4.x, OR from version 4.1.x. You do NOT need to update from 3.4.x TO 4.1.x
+  in order to update to this version. However...
+* **You cannot update to Lightning 5 from Lightning 3.3.x, 4.0.x, or
+  earlier.** This is a limitation of Drupal core. You must be on Drupal 8.8
+  or 8.9 before you can update to Drupal 9. So, if you are on an old version
+  of Lightning, now is a very good time to update to 3.4.3 or 4.1.4, depending
+  on which major version you are currently using.
+* This release includes a development snapshot of the Search API module
+  because the most recently released version does not support Drupal 9.
+  Lightning 5.0.0's first stable release will include a tagged, Drupal
+  9-compatible release of Search API. If your site is not allowed to use
+  development snapshots of contributed modules, hold off on updating to
+  this version of Lightning.
+* Lightning 5 **drops support for Drupal Console**. The `lightning:version`
+  command has been removed because Lightning now natively supports semantic
+  versioning, and the `lightning:subprofile` command has been ported to
+  Drush. To generate a sub-profile, run `drush generate lightning-subprofile`.
+* Lightning 5 **does not include the Libraries API module**, because it will
+  not be ported to Drupal 9. If you are using it, you will need to either copy
+  or fork it into your project directly, or drop your usage of it. The most
+  common usage of Libraries API -- finding the location of an asset library --
+  has been moved into core. See https://www.drupal.org/node/3099614 for more
+  information.
+* This release effectively deprecates Panelizer support in Lightning. Lightning
+  5 **requires Panelizer 5, which implements a migration path to Layout
+  Builder**. You can do the migration at your own pace; in the interim,
+  existing Panelizer layouts will continue to work, but default layouts will be
+  read-only. More information is available at
+  http://lightning.acquia.com/blog/how-migrate-panelizer-layout-builder.
+* This release **includes Lightning Media 4, which uses the core Media Library
+  module instead of Entity Browser** for certain things (Entity Browser is
+  still used for image fields), and the core oEmbed system instead of Video
+  Embed Field. Video Embed Field is still included to support existing sites,
+  but will be removed as a dependency from Lightning Media 5. (Lightning Media
+  will warn you about this.)
+
+### 4.1.3 to 4.1.4
+There are no manual update steps for this version.
+
 ### 4.1.2 to 4.1.3
 There are no manual update steps for this version.
 
@@ -182,13 +223,31 @@ There are no manual update steps for this version.
 ### 4.0.0 to 4.0.1
 There are no manual update steps for this version.
 
-### 3.3.1 to 4.0.0
+### 3.3.4 to 4.0.0
 Lightning 4.0.0 includes Lightning Layout 2.0, which uses Layout Builder in
 place of Panels and Panelizer. However, both modules are still packaged with
 Lightning Layout, allowing you to migrate your layouts manually to Layout
 Builder as needed. An automated migration path will eventually be introduced,
 but until then, any Panelizer/Panels layouts you have should continue to work
 as before.
+
+### 3.4.2 to 3.4.3
+There are no manual update steps for this version.
+
+### 3.4.1 to 3.4.2
+There are no manual update steps for this version.
+
+### 3.4.0 to 3.4.1
+There are no manual update steps for this version.
+
+### 3.3.4 to 3.4.0
+There are no manual update steps for this version.
+
+### 3.3.2 to 3.3.3
+There are no manual update steps for this version.
+
+### 3.3.1 to 3.3.2
+There are no manual update steps for this version.
 
 ### 3.3.0 to 3.3.1
 There are no manual update steps for this version.
