@@ -82,7 +82,20 @@ class LightningTest extends BrowserTestBase {
     $this->assertArrayHasKey('ban', $module_list);
     $this->assertArrayNotHasKey('lightning_search', $module_list);
 
+    $this->doModerationDashboardTest();
     $this->doTextBlockTest();
+  }
+
+  /**
+   * Tests that the moderation dashboard works.
+   */
+  private function doModerationDashboardTest() {
+    $account = $this->drupalCreateUser(['use moderation dashboard']);
+    $this->drupalLogin($account);
+    $this->drupalGet('/user/' . $account->id() . '/moderation/dashboard');
+    $this->assertSession()->statusCodeEquals(200);
+
+    $this->drupalLogout();
   }
 
   /**
@@ -98,6 +111,8 @@ class LightningTest extends BrowserTestBase {
     $this->drupalGet('/block/add/text');
     $assert_session->statusCodeEquals(200);
     $assert_session->fieldExists('Body');
+
+    $this->drupalLogout();
   }
 
 }
