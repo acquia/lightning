@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92d70b6e55480861f60b7b47682da989",
+    "content-hash": "d30d78daef27fc97a10e9f642a804ec0",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -1378,7 +1378,6 @@
                     "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2020-02-07/2869592-remove-update-warning-34.patch",
                     "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2020-03-24/1356276-531-9.0.x-9.patch",
                     "2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch",
-                    "3143958 - [ignore] Patch queue": "https://www.drupal.org/files/issues/2020-05-29/9.0.x-suppress_theme_function_error.patch",
                     "2815221 - Add quickedit to the latest-revision route": "https://www.drupal.org/files/issues/2019-11-27/2815221-125.patch"
                 }
             },
@@ -4847,11 +4846,17 @@
         },
         {
             "name": "drupal/search_api",
-            "version": "dev-1.x",
+            "version": "1.17.0",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/search_api.git",
-                "reference": "7ccab8aa8e6ebb68255096ac50bd00bdb40b7be2"
+                "reference": "8.x-1.17"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/search_api-8.x-1.17.zip",
+                "reference": "8.x-1.17",
+                "shasum": "a9f3352f1c8c893c7032c11f00a23f76b9733b56"
             },
             "require": {
                 "drupal/core": "^8.8 || ^9"
@@ -4871,15 +4876,12 @@
             },
             "type": "drupal-module",
             "extra": {
-                "branch-alias": {
-                    "dev-1.x": "1.x-dev"
-                },
                 "drupal": {
-                    "version": "8.x-1.x-dev",
-                    "datestamp": "1591119175",
+                    "version": "8.x-1.17",
+                    "datestamp": "1591128369",
                     "security-coverage": {
-                        "status": "not-covered",
-                        "message": "Dev releases are not covered by Drupal security advisories."
+                        "status": "covered",
+                        "message": "Covered by Drupal's security advisory policy"
                     }
                 },
                 "drush": {
@@ -4912,8 +4914,7 @@
                 "source": "https://git.drupalcode.org/project/search_api",
                 "issues": "https://www.drupal.org/project/issues/search_api",
                 "irc": "irc://irc.freenode.org/drupal-search-api"
-            },
-            "time": "2020-06-02T17:36:23+00:00"
+            }
         },
         {
             "name": "drupal/simple_gmap",
@@ -14779,7 +14780,6 @@
         "drupal/lightning_layout": 20,
         "drupal/lightning_media": 20,
         "drupal/pendo": 15,
-        "drupal/search_api": 20,
         "weitzman/drupal-test-traits": 20
     },
     "prefer-stable": true,
