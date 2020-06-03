@@ -4,6 +4,11 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD)
 VERSION=$(git tag --list 5.* --sort -creatordate | head -n 1)
 CHANGE_LOG=logs/$VERSION.md
 
+_include() {
+  cat ./docroot/modules/contrib/$1/logs/$2.md | tail -n +2 | sed 's/^/  /'
+}
+export -f _include
+
 if [[ ! -f $CHANGE_LOG ]]; then
   echo "Cannot generate release notes because $CHANGE_LOG does not exist."
   exit 1

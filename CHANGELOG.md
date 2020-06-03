@@ -1,3 +1,9 @@
+## 5.0.0-beta2
+* Updated Search API to 1.17. Note that this release includes a
+  backwards compatibility-breaking change; see
+  https://www.drupal.org/node/3138575 for more information.
+* Updated Page Manager to 4.0-beta6.
+
 ## 5.0.0-beta1
 * Updated Drupal core to 9.0.0.
 * Ported the `lightning:subprofile` Drupal Console command to Drush. To

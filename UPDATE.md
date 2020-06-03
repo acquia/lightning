@@ -140,6 +140,12 @@ are currently running 2.2.0 and are trying to update to 2.2.6, you will need to
 follow the instructions for updating from 2.2.0 to 2.2.1, then from 2.2.1 to
 2.2.2, in that order.
 
+### 5.0.0-beta1 to 5.0.0-beta2
+There are no manual update steps for this version. However, this version
+includes Search API 1.17, which contains a backwards compatibility-breaking
+change that may require code changes on your site. See
+https://www.drupal.org/node/3138575 for more information before updating.
+
 ### 4.1.4/3.4.3 to 5.0.0-beta1
 * It is possible to update to this version of Lightning directly from version
   3.4.x, OR from version 4.1.x. You do NOT need to update from 3.4.x TO 4.1.x
