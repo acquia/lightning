@@ -13,12 +13,6 @@ if [[ ! -f $CHANGE_LOG ]]; then
   exit 1
 fi
 
-read -p "Are the update instructions current? (y/n)" choice
-if [[ "$choice" = "n" ]]; then
-  echo "Go fix that and try again."
-  exit 0
-fi
-
 # Ensure we are on a mainline release branch.
 BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
