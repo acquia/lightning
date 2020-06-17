@@ -1,3 +1,7 @@
+## 4.1.5
+* Updated Lightning Layout to 2.6.
+* Security updated Drupal core to 8.8.8.
+
 ## 4.1.4
 * Updated Lightning Core to 5.2:
   * Security updated Drupal core to 8.8.6.
