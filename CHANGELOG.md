@@ -1,4 +1,7 @@
 ## 5.0.0-beta2
+* Security updated Drupal core to 9.0.1.
+
+## 5.0.0-beta2
 * Updated Search API to 1.17. Note that this release includes a
   backwards compatibility-breaking change; see
   https://www.drupal.org/node/3138575 for more information.
