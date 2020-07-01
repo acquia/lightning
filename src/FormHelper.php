@@ -23,6 +23,7 @@ class FormHelper {
    *   The element info plugin manager.
    */
   public function __construct(ElementInfoManagerInterface $element_info) {
+    @trigger_error(__CLASS__ . ' is deprecated in lightning:8.x-5.0 and will be removed in lightning:8.x-5.1. Use \Drupal\Core\Render\ElementInfoManagerInterface::getInfo() instead. See https://www.drupal.org/node/3156221', E_USER_DEPRECATED);
     $this->elementInfo = $element_info;
   }
 

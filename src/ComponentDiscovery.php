@@ -43,6 +43,7 @@ class ComponentDiscovery {
    *   The application root directory.
    */
   public function __construct($app_root) {
+    @trigger_error(__CLASS__ . ' is deprecated in lightning:8.x-5.0 and will be removed in lightning:8.x-5.1. If you need it, copy it into your project. See https://www.drupal.org/node/3156219', E_USER_DEPRECATED);
     $this->discovery = new ExtensionDiscovery($app_root);
   }
 
