@@ -97,7 +97,6 @@ class ConfigIntegrityTest extends ExistingSiteBase {
 
     $permissions = [
       'use text format rich_text',
-      'access media_browser entity browser pages',
       'access image_browser entity browser pages',
     ];
     $this->assertPermissions('page_creator', $permissions);
