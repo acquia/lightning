@@ -1,7 +1,7 @@
 # Drupal Lightning
-![Lightning logo of a bolt of lightning](https://raw.githubusercontent.com/acquia/lightning/8.x-3.x/lightning-logo.png)
+![Lightning logo of a bolt of lightning](https://raw.githubusercontent.com/acquia/lightning/5.0.x/lightning-logo.png)
 
-[![Build Status](https://travis-ci.org/acquia/lightning.svg?branch=8.x-3.x)](https://travis-ci.org/acquia/lightning)
+[![Build Status](https://travis-ci.org/acquia/lightning.svg?branch=5.0.x)](https://travis-ci.org/acquia/lightning)
 
 Lightning's mission is to enable developers to create great authoring
 experiences and empower editorial teams.
