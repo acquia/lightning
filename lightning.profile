@@ -5,7 +5,6 @@
  * The Lightning profile.
  */
 
-use Drupal\node\Entity\NodeType;
 use Drupal\user\RoleInterface;
 
 /**
@@ -69,16 +68,5 @@ function lightning_alter_frontpage_view() {
       ->set("$section.tokenize", TRUE)
       ->set("$section.content", '<p>Welcome to [site:name]. No front page content has been created yet.</p><p>Would you like to <a href="/' . drupal_get_path('profile', 'lightning') . '/README.md">view the README</a>?</p>')
       ->save(TRUE);
-  }
-}
-
-/**
- * Implements hook_ENTITY_TYPE_presave().
- */
-function lightning_user_role_presave(RoleInterface $role) {
-  if ($role->isNew() && $role->id() === 'layout_manager') {
-    foreach (NodeType::loadMultiple() as $node_type) {
-      $role->grantPermission('administer panelizer node ' . $node_type->id() . ' defaults');
-    }
   }
 }
