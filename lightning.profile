@@ -14,7 +14,6 @@ function lightning_install_tasks() {
   $tasks = [];
 
   $tasks['lightning_grant_shortcut_access'] = [];
-  $tasks['lightning_set_default_theme'] = [];
   $tasks['lightning_set_logo'] = [];
   $tasks['lightning_alter_frontpage_view'] = [];
 
@@ -27,19 +26,6 @@ function lightning_install_tasks() {
 function lightning_grant_shortcut_access() {
   if (Drupal::moduleHandler()->moduleExists('shortcut')) {
     user_role_grant_permissions(RoleInterface::AUTHENTICATED_ID, ['access shortcuts']);
-  }
-}
-
-/**
- * Sets the default and administration themes.
- */
-function lightning_set_default_theme() {
-  // Use the admin theme for creating content.
-  if (Drupal::moduleHandler()->moduleExists('node')) {
-    Drupal::configFactory()
-      ->getEditable('node.settings')
-      ->set('use_admin_theme', TRUE)
-      ->save(TRUE);
   }
 }
 

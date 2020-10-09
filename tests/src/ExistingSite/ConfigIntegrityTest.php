@@ -34,11 +34,13 @@ class ConfigIntegrityTest extends ExistingSiteBase {
     // @see lightning_install_tasks()
     $this->assertSame('/node', $this->config('system.site')->get('page.front'));
     $this->assertSame(UserInterface::REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
-    $this->assertTrue(Role::load(Role::AUTHENTICATED_ID)->hasPermission('access shortcuts'));
+    $this->assertPermissions(Role::AUTHENTICATED_ID, 'access shortcuts');
+    $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
+
     $theme_config = $this->config('system.theme');
     $this->assertSame('claro', $theme_config->get('admin'));
     $this->assertSame('bartik', $theme_config->get('default'));
-    $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
+
     $theme_global = $this->config('system.theme.global');
     $logo = $theme_global->get('logo');
     $this->assertStringContainsString('/lightning/lightning.png', $logo['path']);
@@ -46,6 +48,7 @@ class ConfigIntegrityTest extends ExistingSiteBase {
     $favicon = $theme_global->get('favicon');
     $this->assertStringContainsString('/lightning/favicon.ico', $favicon['path']);
     $this->assertFalse($favicon['use_default']);
+
     /** @var \Drupal\views\ViewEntityInterface $view */
     $view = View::load('frontpage');
     $this->assertInstanceOf(View::class, $view);
