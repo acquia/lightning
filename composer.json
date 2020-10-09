@@ -124,23 +124,18 @@
     "minimum-stability": "dev",
     "prefer-stable": true,
     "scripts": {
-        "post-install-cmd": [
-            "@composer push"
-        ],
         "post-update-cmd": [
-            "@composer push"
+            "@putenv DIR=./docroot/profiles/lightning",
+            "mkdir -p $DIR",
+            "ln -s -f $PWD/config $DIR",
+            "ln -s -f $PWD/modules $DIR",
+            "ln -s -f $PWD/src $DIR",
+            "find $PWD -name 'lightning.*' -depth 1 -exec ln -s -f {} $DIR ';'",
+            "cp -f phpunit.xml ./docroot/core"
         ],
         "configure-tarball": "Acquia\\Lightning\\Composer\\ConfigureLegacyProject::execute",
         "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute",
         "nuke": "rm -r -f docroot vendor",
-        "pull": "cp -R -f ./docroot/profiles/contrib/lightning/* .",
-        "push": [
-            "rm -r -f ./docroot/profiles/contrib/lightning",
-            "mkdir -p ./docroot/profiles/contrib/lightning",
-            "@composer archive --file lightning",
-            "tar -x -f lightning.tar -C ./docroot/profiles/contrib/lightning",
-            "rm lightning.tar"
-        ],
         "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute"
     }
 }
