@@ -5,10 +5,8 @@
  * The Lightning profile.
  */
 
-use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
 use Drupal\user\RoleInterface;
-use Drupal\user\UserInterface;
 
 /**
  * Implements hook_install_tasks().
@@ -16,51 +14,12 @@ use Drupal\user\UserInterface;
 function lightning_install_tasks() {
   $tasks = [];
 
-  $tasks['lightning_prepare_administrator'] = [];
-  $tasks['lightning_set_front_page'] = [];
-  $tasks['lightning_disallow_free_registration'] = [];
   $tasks['lightning_grant_shortcut_access'] = [];
   $tasks['lightning_set_default_theme'] = [];
   $tasks['lightning_set_logo'] = [];
   $tasks['lightning_alter_frontpage_view'] = [];
 
   return $tasks;
-}
-
-/**
- * Assigns the 'administrator' role to user 1.
- */
-function lightning_prepare_administrator() {
-  /** @var \Drupal\user\UserInterface $account */
-  $account = \Drupal::entityTypeManager()
-    ->getStorage('user')
-    ->load(1);
-  if ($account) {
-    $account->addRole('administrator');
-    $account->save();
-  }
-}
-
-/**
- * Sets the front page path to /node.
- */
-function lightning_set_front_page() {
-  if (Drupal::moduleHandler()->moduleExists('node')) {
-    Drupal::configFactory()
-      ->getEditable('system.site')
-      ->set('page.front', '/node')
-      ->save(TRUE);
-  }
-}
-
-/**
- * Only allows administrators to create new user accounts.
- */
-function lightning_disallow_free_registration() {
-  Drupal::configFactory()
-    ->getEditable('user.settings')
-    ->set('register', UserInterface::REGISTER_ADMINISTRATORS_ONLY)
-    ->save(TRUE);
 }
 
 /**
@@ -76,12 +35,6 @@ function lightning_grant_shortcut_access() {
  * Sets the default and administration themes.
  */
 function lightning_set_default_theme() {
-  Drupal::configFactory()
-    ->getEditable('system.theme')
-    ->set('default', 'bartik')
-    ->set('admin', 'claro')
-    ->save(TRUE);
-
   // Use the admin theme for creating content.
   if (Drupal::moduleHandler()->moduleExists('node')) {
     Drupal::configFactory()
@@ -92,24 +45,15 @@ function lightning_set_default_theme() {
 }
 
 /**
- * Set the path to the logo, favicon and README file based on install directory.
+ * Sets the path to the logo and favicon.
  */
 function lightning_set_logo() {
-  $lightning_path = drupal_get_path('profile', 'lightning');
+  $dir = Drupal::service('extension.list.profile')->getPath('lightning');
 
   Drupal::configFactory()
     ->getEditable('system.theme.global')
-    ->set('logo', [
-      'path' => $lightning_path . '/lightning.png',
-      'url' => '',
-      'use_default' => FALSE,
-    ])
-    ->set('favicon', [
-      'mimetype' => 'image/vnd.microsoft.icon',
-      'path' => $lightning_path . '/favicon.ico',
-      'url' => '',
-      'use_default' => FALSE,
-    ])
+    ->set('logo.path', $dir . '/lightning.png')
+    ->set('favicon.path', $dir . '/favicon.ico')
     ->save(TRUE);
 }
 
@@ -486,23 +430,6 @@ function lightning_alter_frontpage_view() {
         ],
       ])
       ->save(TRUE);
-  }
-}
-
-/**
- * Implements hook_modules_installed().
- */
-function lightning_modules_installed(array $modules) {
-  if (\Drupal::isConfigSyncing()) {
-    return;
-  }
-
-  if (in_array('lightning_dev', $modules, TRUE)) {
-    Config::forModule('lightning_media')
-      ->optional()
-      ->getEntity('user_role', 'media_creator')
-      ->grantPermission('use editorial transition create_new_draft')
-      ->save();
   }
 }
 

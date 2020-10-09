@@ -12,7 +12,7 @@ if [[ -f $SETTINGS ]]; then
 fi
 
 # Install Drupal.
-drush site:install lightning --yes --config ./drush.yml --account-pass admin --db-url $DB_URL
+drush site:install lightning --yes --account-pass admin --db-url $DB_URL
 
 # Make settings writable.
 chmod +w $SITE_DIR $SETTINGS

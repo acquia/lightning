@@ -3,6 +3,9 @@
 namespace Drupal\Tests\lightning\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\user\UserInterface;
+use Drupal\views\Entity\View;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Tests integrated functionality of the Lightning profile.
@@ -15,7 +18,14 @@ class LightningTest extends BrowserTestBase {
   /**
    * {@inheritdoc}
    */
-  protected $defaultTheme = 'stark';
+  protected function installDefaultThemeFromClassProperty(ContainerInterface $container) {
+    // Normally, this method would try to determine the default theme to
+    // install, first by looking for overridden config from the install profile,
+    // and then by looking at $this->defaultTheme. For the purposes of this
+    // test, though, we want to rely entirely on the profile to install and set
+    // the default theme. Therefore, this method serves no purpose and is
+    // disabled.
+  }
 
   /**
    * {@inheritdoc}
@@ -81,6 +91,25 @@ class LightningTest extends BrowserTestBase {
     // ...and that the changes it makes are reflected in the system.
     $this->assertArrayHasKey('ban', $module_list);
     $this->assertArrayNotHasKey('lightning_search', $module_list);
+
+    // Lightning's configuration overrides should be applied.
+    $this->assertSame('/node', $this->config('system.site')->get('page.front'));
+    $this->assertSame(UserInterface::REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
+    $theme_config = $this->config('system.theme');
+    $this->assertSame('claro', $theme_config->get('admin'));
+    $this->assertSame('bartik', $theme_config->get('default'));
+    $theme_global = $this->config('system.theme.global');
+    $logo = $theme_global->get('logo');
+    $this->assertStringContainsString('/lightning/lightning.png', $logo['path']);
+    $this->assertFalse($logo['use_default']);
+    $favicon = $theme_global->get('favicon');
+    $this->assertStringContainsString('/lightning/favicon.ico', $favicon['path']);
+    $this->assertFalse($favicon['use_default']);
+    /** @var \Drupal\views\ViewEntityInterface $view */
+    $view = View::load('frontpage');
+    $this->assertInstanceOf(View::class, $view);
+    $display = &$view->getDisplay('default');
+    $this->assertStringContainsString('lightning', $display['display_options']['empty']['area_text_custom']['content']);
 
     $this->doModerationDashboardTest();
     $this->doTextBlockTest();

@@ -5,6 +5,7 @@ namespace Drupal\Tests\lightning\ExistingSite;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\user\Entity\Role;
 use Drupal\user\UserInterface;
+use Drupal\views\Entity\View;
 use Drupal\workflows\Entity\Workflow;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
@@ -42,17 +43,28 @@ class ConfigIntegrityTest extends ExistingSiteBase {
     $this->assertSame(UserInterface::REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
     $this->assertTrue(Role::load(Role::AUTHENTICATED_ID)->hasPermission('access shortcuts'));
     $theme_config = $this->config('system.theme');
-    $this->assertSame('bartik', $theme_config->get('default'));
     $this->assertSame('claro', $theme_config->get('admin'));
+    $this->assertSame('bartik', $theme_config->get('default'));
     $this->assertTrue($this->config('node.settings')->get('use_admin_theme'));
     $theme_global = $this->config('system.theme.global');
-    $this->assertStringContainsString('/lightning/lightning.png', $theme_global->get('logo.path'));
-    $this->assertStringContainsString('/lightning/favicon.ico', $theme_global->get('favicon.path'));
-    /* @todo: Assert changes to the frontpage view were made. */
+    $logo = $theme_global->get('logo');
+    $this->assertStringContainsString('/lightning/lightning.png', $logo['path']);
+    $this->assertFalse($logo['use_default']);
+    $favicon = $theme_global->get('favicon');
+    $this->assertStringContainsString('/lightning/favicon.ico', $favicon['path']);
+    $this->assertFalse($favicon['use_default']);
+    /** @var \Drupal\views\ViewEntityInterface $view */
+    $view = View::load('frontpage');
+    $this->assertInstanceOf(View::class, $view);
+    $display = &$view->getDisplay('default');
+    $this->assertStringContainsString('lightning', $display['display_options']['empty']['area_text_custom']['content']);
 
     // lightning_core_update_8002() marks a couple of core view modes as
     // internal.
-    $view_modes = EntityViewMode::loadMultiple(['node.rss', 'node.search_index']);
+    $view_modes = EntityViewMode::loadMultiple([
+      'node.rss',
+      'node.search_index',
+    ]);
     /** @var \Drupal\Core\Entity\EntityViewModeInterface $view_mode */
     foreach ($view_modes as $view_mode) {
       $this->assertTrue($view_mode->getThirdPartySetting('lightning_core', 'internal'));
