@@ -14,7 +14,6 @@ use Drupal\user\UserInterface;
 function lightning_install_tasks() {
   $tasks = [];
 
-  $tasks['lightning_prepare_administrator'] = [];
   $tasks['lightning_set_front_page'] = [];
   $tasks['lightning_disallow_free_registration'] = [];
   $tasks['lightning_grant_shortcut_access'] = [];
@@ -23,20 +22,6 @@ function lightning_install_tasks() {
   $tasks['lightning_alter_frontpage_view'] = [];
 
   return $tasks;
-}
-
-/**
- * Assigns the 'administrator' role to user 1.
- */
-function lightning_prepare_administrator() {
-  /** @var \Drupal\user\UserInterface $account */
-  $account = \Drupal::entityTypeManager()
-    ->getStorage('user')
-    ->load(1);
-  if ($account) {
-    $account->addRole('administrator');
-    $account->save();
-  }
 }
 
 /**
