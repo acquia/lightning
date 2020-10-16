@@ -5,6 +5,7 @@ namespace Drupal\Tests\lightning\ExistingSite;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\user\Entity\Role;
 use Drupal\user\UserInterface;
+use Drupal\views\Entity\View;
 use Drupal\workflows\Entity\Workflow;
 use weitzman\DrupalTestTraits\ExistingSiteBase;
 
@@ -41,7 +42,12 @@ class ConfigIntegrityTest extends ExistingSiteBase {
     $theme_global = $this->config('system.theme.global');
     $this->assertStringContainsString('/lightning/lightning.png', $theme_global->get('logo.path'));
     $this->assertStringContainsString('/lightning/favicon.ico', $theme_global->get('favicon.path'));
-    /* @todo: Assert changes to the frontpage view were made. */
+    /** @var \Drupal\views\ViewEntityInterface $view */
+    $view = View::load('frontpage');
+    $this->assertInstanceOf(View::class, $view);
+    $display = &$view->getDisplay('default');
+    $this->assertTrue($display['display_options']['empty']['area_text_custom']['tokenize']);
+    $this->assertStringContainsString('/lightning/README.md', $display['display_options']['empty']['area_text_custom']['content']);
 
     // lightning_core_update_8002() marks a couple of core view modes as
     // internal.
