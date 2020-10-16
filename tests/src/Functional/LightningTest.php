@@ -3,6 +3,7 @@
 namespace Drupal\Tests\lightning\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\user\UserInterface;
 
 /**
  * Tests integrated functionality of the Lightning profile.
@@ -81,6 +82,9 @@ class LightningTest extends BrowserTestBase {
     // ...and that the changes it makes are reflected in the system.
     $this->assertArrayHasKey('ban', $module_list);
     $this->assertArrayNotHasKey('lightning_search', $module_list);
+
+    // Lightning's configuration overrides should have taken effect.
+    $this->assertSame(UserInterface::REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
 
     $this->doModerationDashboardTest();
     $this->doTextBlockTest();

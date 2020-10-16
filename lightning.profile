@@ -6,7 +6,6 @@
  */
 
 use Drupal\user\RoleInterface;
-use Drupal\user\UserInterface;
 
 /**
  * Implements hook_install_tasks().
@@ -15,7 +14,6 @@ function lightning_install_tasks() {
   $tasks = [];
 
   $tasks['lightning_set_front_page'] = [];
-  $tasks['lightning_disallow_free_registration'] = [];
   $tasks['lightning_grant_shortcut_access'] = [];
   $tasks['lightning_set_default_theme'] = [];
   $tasks['lightning_set_logo'] = [];
@@ -34,16 +32,6 @@ function lightning_set_front_page() {
       ->set('page.front', '/node')
       ->save(TRUE);
   }
-}
-
-/**
- * Only allows administrators to create new user accounts.
- */
-function lightning_disallow_free_registration() {
-  Drupal::configFactory()
-    ->getEditable('user.settings')
-    ->set('register', UserInterface::REGISTER_ADMINISTRATORS_ONLY)
-    ->save(TRUE);
 }
 
 /**
