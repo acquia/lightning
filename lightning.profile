@@ -5,7 +5,6 @@
  * The Lightning profile.
  */
 
-use Drupal\lightning_core\ConfigHelper as Config;
 use Drupal\node\Entity\NodeType;
 use Drupal\user\Entity\User;
 use Drupal\user\RoleInterface;
@@ -461,23 +460,6 @@ function lightning_alter_frontpage_view() {
       ],
     ])
     ->save(TRUE);
-}
-
-/**
- * Implements hook_modules_installed().
- */
-function lightning_modules_installed(array $modules) {
-  if (\Drupal::isConfigSyncing()) {
-    return;
-  }
-
-  if (in_array('lightning_dev', $modules, TRUE)) {
-    Config::forModule('lightning_media')
-      ->optional()
-      ->getEntity('user_role', 'media_creator')
-      ->grantPermission('use editorial transition create_new_draft')
-      ->save();
-  }
 }
 
 /**
