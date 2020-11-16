@@ -18,6 +18,13 @@ Drupal::configFactory()
   ->getEditable('libraries.settings')
   ->delete();
 
+foreach (['default', 'embedded'] as $view_mode) {
+  Drupal::configFactory()
+    ->getEditable("core.entity_view_display.media.instagram.$view_mode")
+    ->set('content.embed_code.settings.hidecaption', NULL)
+    ->save();
+}
+
 Drupal::keyValue('system.schema')->deleteMultiple([
   'libraries',
   'openapi_redoc',
