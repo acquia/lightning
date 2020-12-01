@@ -3,10 +3,9 @@
 namespace Acquia\Lightning\Composer;
 
 use Composer\Json\JsonFile;
-use Composer\Package\CompletePackageInterface as Package;
 use Composer\Package\Link;
-use Composer\Package\Loader\ArrayLoader;
-use Composer\Package\Loader\JsonLoader;
+use Composer\Package\Loader\RootPackageLoader;
+use Composer\Package\RootPackageInterface;
 use Composer\Script\Event;
 
 /**
@@ -32,7 +31,7 @@ use Composer\Script\Event;
  * - The drupal.org and asset packagist repositories will be added to the root
  *   composer.json if needed.
  */
-final class ConfigureProject {
+final class Uninstall {
 
   /**
    * Executes the script.
@@ -44,16 +43,18 @@ final class ConfigureProject {
     $arguments = $event->getArguments();
     $file = new JsonFile($arguments[0]);
 
-    $source = $event->getComposer()->getPackage();
+    $composer = $event->getComposer();
+
+    $source = $composer->getPackage();
     assert($source->getName() === 'acquia/lightning');
     $extra = $source->getExtra();
 
-    $loader = new JsonLoader(new ArrayLoader());
-    /** @var \Composer\Package\CompletePackageInterface $target */
-    $target = $loader->load($file);
+    $loader = new RootPackageLoader($composer->getRepositoryManager(), $composer->getConfig());
+    $data = $file->read();
+    $target = $loader->load($data);
 
-    $data = static::mergeCanadian($file->read(), [
-      'requirements' => static::getRequirements($target, $source),
+    $data = static::mergeCanadian($data, [
+      'require' => static::getRequirements($target, $source),
       'extra' => [
         'composer-exit-on-patch-failure' => $extra['composer-exit-on-patch-failure'] ?? TRUE,
         'drupal-scaffold' => [
@@ -76,16 +77,16 @@ final class ConfigureProject {
   /**
    * Returns the combined requirements for the target package.
    *
-   * @param \Composer\Package\CompletePackageInterface $target
+   * @param \Composer\Package\RootPackageInterface $target
    *   The target package.
-   * @param \Composer\Package\CompletePackageInterface $source
+   * @param \Composer\Package\RootPackageInterface $source
    *   The source package.
    *
    * @return array
    *   The combined requirements to add to the target package. The keys will
    *   be package names and the values will be version constraints.
    */
-  private static function getRequirements(Package $target, Package $source) : array {
+  private static function getRequirements(RootPackageInterface $target, RootPackageInterface $source) : array {
     $map = function (Link $link) : string {
       return $link->getPrettyConstraint();
     };
@@ -95,6 +96,9 @@ final class ConfigureProject {
     // dependencies defined by the source package (Lightning).
     $requirements += array_map($map, $target->getRequires());
     $requirements += array_map($map, $source->getRequires());
+    // The profile_switcher module is only needed to switch Drupal off the
+    // Lightning profile, which should be done before running this script.
+    unset($requirements['drupal/profile_switcher']);
 
     // If the target package is not using the deprecated scaffold plugin, use
     // the one that ships with Drupal core. On the other hand, if the target
@@ -110,14 +114,14 @@ final class ConfigureProject {
   /**
    * Returns the package types to expose to the Composer installers extender.
    *
-   * @param \Composer\Package\CompletePackageInterface $target
+   * @param \Composer\Package\RootPackageInterface $target
    *   The target package.
    *
    * @return string[]
    *   The package types to expose to the Composer installers extender plugin
    *   (oomphinc/composer-installers-extender), if available.
    */
-  private static function getPackageTypes(Package $target) : array {
+  private static function getPackageTypes(RootPackageInterface $target) : array {
     $extra = $target->getExtra();
     $installer_types = $extra['installer-types'] ?? [];
 
@@ -129,15 +133,15 @@ final class ConfigureProject {
   /**
    * Returns the combined installer paths for the target package.
    *
-   * @param \Composer\Package\CompletePackageInterface $target
+   * @param \Composer\Package\RootPackageInterface $target
    *   The target package.
-   * @param \Composer\Package\CompletePackageInterface $source
+   * @param \Composer\Package\RootPackageInterface $source
    *   The source package.
    *
    * @return array[]
    *   An array of paths to be used by the composer/installers plugin.
    */
-  private static function getPaths(Package $target, Package $source) : array {
+  private static function getPaths(RootPackageInterface $target, RootPackageInterface $source) : array {
     $root_dir = static::getDrupalRoot($target, $source);
     // If we don't know where Drupal core is installed, we cannot possibly
     // determine where modules, themes, etc. should go.
@@ -167,13 +171,13 @@ final class ConfigureProject {
   /**
    * Returns the combined repositories for the target package.
    *
-   * @param \Composer\Package\CompletePackageInterface $target
+   * @param \Composer\Package\RootPackageInterface $target
    *   The target package.
    *
    * @return array[]
    *   An array of Composer repository definitions to add to the target package.
    */
-  private static function getRepositories(Package $target) : array {
+  private static function getRepositories(RootPackageInterface $target) : array {
     $repositories = [];
 
     $source_repositories = [
@@ -204,9 +208,9 @@ final class ConfigureProject {
   /**
    * Returns a map of locations where packages will be installed.
    *
-   * @param \Composer\Package\CompletePackageInterface $target
+   * @param \Composer\Package\RootPackageInterface $target
    *   The target package.
-   * @param \Composer\Package\CompletePackageInterface $source
+   * @param \Composer\Package\RootPackageInterface $source
    *   The source package.
    *
    * @return string[]
@@ -215,7 +219,7 @@ final class ConfigureProject {
    *   location where that package or package type will be installed, relative
    *   to the target package.
    */
-  private static function getPathMap(Package $target, Package $source) : array {
+  private static function getPathMap(RootPackageInterface $target, RootPackageInterface $source) : array {
     if (!isset($target->pathMap)) {
       // Try to get the installer-paths configuration from the target package,
       // falling back to the source package (Lightning) in the unlikely event
@@ -238,16 +242,16 @@ final class ConfigureProject {
   /**
    * Returns the path to the Drupal root, relative to the target package.
    *
-   * @param \Composer\Package\CompletePackageInterface $target
+   * @param \Composer\Package\RootPackageInterface $target
    *   The target package.
-   * @param \Composer\Package\CompletePackageInterface $source
+   * @param \Composer\Package\RootPackageInterface $source
    *   The source package (i.e., Lightning).
    *
    * @return string|null
    *   The path to the Drupal root, relative to the target package, e.g.,
    *   'docroot', or NULL if it cannot be determined.
    */
-  private static function getDrupalRoot(Package $target, Package $source) : ?string {
+  private static function getDrupalRoot(RootPackageInterface $target, RootPackageInterface $source) : ?string {
     $path_map = static::getPathMap($target, $source);
 
     // We expect that the path map has an install location for Drupal core. If
