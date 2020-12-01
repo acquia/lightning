@@ -98,10 +98,14 @@ function lightning_update_8006() {
  * Uninstalls the lightning_install module.
  */
 function lightning_update_8007() {
-  $module = 'lightning_install';
-  if (Drupal::moduleHandler()->moduleExists($module)) {
-    Drupal::service('module_installer')->uninstall([$module]);
-  }
+  Drupal::service('module_installer')->uninstall(['lightning_install']);
+}
+
+/**
+ * Installs the profile_switcher module.
+ */
+function lightning_update_8008() {
+  Drupal::service('module_installer')->install(['profile_switcher']);
 }
 
 /**
