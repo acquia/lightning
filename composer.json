@@ -138,10 +138,10 @@
             "find $PWD -name 'lightning.*' -depth 1 -exec ln -s -f {} $DIR ';'",
             "cp -f phpunit.xml ./docroot/core"
         ],
-        "configure-project": "Acquia\\Lightning\\Composer\\ConfigureProject::execute",
         "configure-tarball": "Acquia\\Lightning\\Composer\\ConfigureLegacyProject::execute",
         "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute",
         "nuke": "rm -r -f docroot vendor",
+        "uninstall": "Acquia\\Lightning\\Composer\\Uninstall::execute",
         "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute"
     }
 }
