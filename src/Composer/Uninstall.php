@@ -71,6 +71,16 @@ final class Uninstall {
       ],
       'repositories' => static::getRepositories($target),
     ]);
+
+    // There's no further need for a direct dependency on Lightning.
+    unset($data['require']['acquia/lightning']);
+
+    // Delete any empty arrays, since they will be encoded as empty arrays and
+    // may therefore break the composer.json schema.
+    $data = array_filter($data, function ($item) {
+      return is_array($item) ? (bool) $item : TRUE;
+    });
+
     $file->write($data);
   }
 
