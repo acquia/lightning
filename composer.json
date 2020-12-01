@@ -17,6 +17,7 @@
         "drupal/page_manager": "^4.0-beta6",
         "drupal/panelizer": "^5.0-beta3",
         "drupal/pendo": "^1@alpha",
+        "drupal/profile_switcher": "^1.0-alpha5",
         "drupal/search_api": "^1.17"
     },
     "require-dev": {
@@ -137,6 +138,7 @@
             "find $PWD -name 'lightning.*' -depth 1 -exec ln -s -f {} $DIR ';'",
             "cp -f phpunit.xml ./docroot/core"
         ],
+        "configure-project": "Acquia\\Lightning\\Composer\\ConfigureProject::execute",
         "configure-tarball": "Acquia\\Lightning\\Composer\\ConfigureLegacyProject::execute",
         "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute",
         "nuke": "rm -r -f docroot vendor",

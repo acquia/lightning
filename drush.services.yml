@@ -5,3 +5,11 @@ services:
       - '@extension.list.module'
     tags:
       - { name: drush.generator }
+
+  subprofile.decoupler:
+      class: 'Drupal\lightning\Commands\SubProfileDecoupler'
+      arguments:
+        - '@extension.list.profile'
+        - '@file_system'
+      tags:
+        - { name: drush.command }
