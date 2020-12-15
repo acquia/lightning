@@ -56,9 +56,16 @@ final class SubProfileDecoupler extends DrushCommands {
   /**
    * Uncouples Lightning sub-profiles from Lightning.
    *
+   * @param array $options
+   *   (optional) An array of command options.
+   *
    * @command lightning:decouple-profiles
+   *
+   * @option dry-run
+   *   If passed, the modified sub-profile info will be outputted directly,
+   *   not written to the profile info file.
    */
-  public function decoupleAll() : void {
+  public function decoupleAll(array $options = ['dry-run' => FALSE]) : void {
     $message = $this->t('Decoupling installation profiles from Lightning...');
     $this->say($message);
 
@@ -67,7 +74,7 @@ final class SubProfileDecoupler extends DrushCommands {
 
     foreach ($profiles as $name => $info) {
       if (isset($info['base profile']) && $info['base profile'] === 'lightning') {
-        $this->decouple($name);
+        $this->decouple($name, $options);
       }
     }
   }
@@ -87,28 +94,71 @@ final class SubProfileDecoupler extends DrushCommands {
    *   not written to the profile info file.
    */
   public function decouple(string $name, array $options = ['dry-run' => FALSE]) : void {
-    $lightning = $this->profileList->getExtensionInfo('lightning');
-    $info = $this->profileList->getExtensionInfo($name);
+    $lightning = $this->read('lightning');
+    $info = $this->read($name);
 
     assert($info['base profile'] === 'lightning');
     unset($info['base profile']);
 
+    // This strips out the project prefix from a dependency. For example, this
+    // will convert 'drupal:views' to just 'views'.
     $map = function (string $name) : string {
       $name = explode(':', $name, 2);
       return end($name);
     };
 
     $exclude = array_map($map, $info['exclude'] ?? []);
+    unset($info['exclude']);
 
     $install = array_map($map, $install['install'] ?? []);
+    // Add all of Lightning's dependencies, except for excluded ones.
     $install = array_merge($install, $lightning['install']);
-    $info['install'] = array_diff($install, $exclude);
+    $info['install'] = $this->arrayDiff($install, $exclude);
 
+    // Add all of Lightning's themes, except for excluded ones.
     $themes = array_merge($info['themes'] ?? [], $lightning['themes']);
-    $info['themes'] = array_diff($themes, $exclude);
+    $info['themes'] = $this->arrayDiff($themes, $exclude);
+
+    // If Lightning is listed as an explicit dependency, remove that.
+    if (isset($info['dependencies'])) {
+      $info['dependencies'] = $this->arrayDiff($info['dependencies'], ['lightning']);
+    }
 
     $this->write($name, $info, $options['dry-run']);
     $this->copyConfig($name, $options['dry-run']);
+  }
+
+  /**
+   * Returns the difference between two arrays.
+   *
+   * @param array $a
+   *   An array of values.
+   * @param array $b
+   *   Another array of values.
+   *
+   * @return array
+   *   The items which are in $a but not $b, numerically re-indexed. All
+   *   duplicate values will be removed.
+   */
+  private function arrayDiff(array $a, array $b) : array {
+    $c = array_diff($a, $b);
+    $c = array_unique($c);
+    return array_values($c);
+  }
+
+  /**
+   * Reads the info file of a profile.
+   *
+   * @param string $name
+   *   The machine name of the profile.
+   *
+   * @return array
+   *   The parsed profile info.
+   */
+  private function read(string $name) : array {
+    $info = $this->profileList->getPathname($name);
+    $info = file_get_contents($info);
+    return Yaml::decode($info);
   }
 
   /**
