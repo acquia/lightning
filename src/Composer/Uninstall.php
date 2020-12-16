@@ -72,9 +72,6 @@ final class Uninstall {
       'repositories' => static::getRepositories($target),
     ]);
 
-    // There's no further need for a direct dependency on Lightning.
-    unset($data['require']['acquia/lightning']);
-
     // Delete any empty arrays, since they will be encoded as empty arrays and
     // may therefore break the composer.json schema.
     $data = array_filter($data, function ($item) {
@@ -106,9 +103,6 @@ final class Uninstall {
     // dependencies defined by the source package (Lightning).
     $requirements += array_map($map, $target->getRequires());
     $requirements += array_map($map, $source->getRequires());
-    // The profile_switcher module is only needed to switch Drupal off the
-    // Lightning profile, which should be done before running this script.
-    unset($requirements['drupal/profile_switcher']);
 
     // If the target package is not using the deprecated scaffold plugin, use
     // the one that ships with Drupal core. On the other hand, if the target
