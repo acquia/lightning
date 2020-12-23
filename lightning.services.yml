@@ -1,8 +1,0 @@
-services:
-  lightning.uninstall_validator.extension_location:
-    class: 'Drupal\lightning\ExtensionLocationValidator'
-    arguments:
-      - '@module_handler'
-      - '@theme_handler'
-    tags:
-      - { name: module_install.uninstall_validator }

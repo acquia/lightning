@@ -9,8 +9,11 @@ services:
   lightning.uninstaller:
     class: 'Drupal\lightning\Commands\Uninstaller'
     arguments:
-      - '@lightning.uninstall_validator.extension_location'
+      - '@module_handler'
+      - '@theme_handler'
       - '@extension.list.profile'
       - '@file_system'
+      - '@profile_switcher.profile_switcher'
+      - '%app.root%'
     tags:
       - { name: drush.command }
