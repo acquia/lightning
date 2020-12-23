@@ -11,13 +11,7 @@ services:
     arguments:
       - '@lightning.uninstall_validator.extension_location'
       - '@lightning.uninstall_validator.sub_profiles'
+      - '@extension.list.profile'
+      - '@file_system'
     tags:
       - { name: drush.command }
-
-  subprofile.decoupler:
-      class: 'Drupal\lightning\Commands\SubProfileDecoupler'
-      arguments:
-        - '@extension.list.profile'
-        - '@file_system'
-      tags:
-        - { name: drush.command }

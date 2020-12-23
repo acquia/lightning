@@ -35,31 +35,22 @@ final class SubProfileValidator implements ModuleUninstallValidatorInterface {
   /**
    * {@inheritdoc}
    */
-  public function validate($module) {
+  public function validate($module, array &$list = NULL) {
     $reasons = [];
 
     if ($module === 'lightning') {
-      $profiles = $this->listAll();
-      if ($profiles) {
-        $reasons[] = sprintf('The following install profiles use Lightning as a base profile. They must stand alone, or use a different base profile, before Lightning can be uninstalled: %s', implode(', ', $profiles));
+      $list = [];
+      foreach ($this->profileList->getAllAvailableInfo() as $name => $info) {
+        if (isset($info['base profile']) && $info['base profile'] === 'lightning') {
+          $list[] = $name;
+        }
+      }
+
+      if ($list) {
+        $reasons[] = sprintf('The following install profiles use Lightning as a base profile. They must stand alone, or use a different base profile, before Lightning can be uninstalled: %s', implode(', ', $list));
       }
     }
     return $reasons;
-  }
-
-  /**
-   * Returns the names of profiles that use Lightning as their parent.
-   *
-   * @return string[]
-   *   The machine names of the profiles (installed or not) that use Lightning
-   *   as their parent.
-   */
-  public function listAll() : array {
-    $filter = function (array $info) : bool {
-      return isset($info['base profile']) && $info['base profile'] === 'lightning';
-    };
-    $profiles = array_filter($this->profileList->getAllAvailableInfo(), $filter);
-    return array_keys($profiles);
   }
 
 }
