@@ -6,10 +6,3 @@ services:
       - '@theme_handler'
     tags:
       - { name: module_install.uninstall_validator }
-
-  lightning.uninstall_validator.sub_profiles:
-    class: 'Drupal\lightning\SubProfileValidator'
-    arguments:
-      - '@extension.list.profile'
-    tags:
-      - { name: module_install.uninstall_validator }

@@ -11,7 +11,6 @@ use Drupal\Core\Extension\ProfileExtensionList;
 use Drupal\Core\File\Exception\FileExistsException;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\lightning\ExtensionLocationValidator;
-use Drupal\lightning\SubProfileValidator;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\Filesystem\Exception\IOException;
 
@@ -33,13 +32,6 @@ final class Uninstaller extends DrushCommands {
   private $extensionLocationValidator;
 
   /**
-   * Lightning's uninstall validator to detect sub-profiles.
-   *
-   * @var \Drupal\lightning\SubProfileValidator
-   */
-  private $subProfileValidator;
-
-  /**
    * The profile extension list.
    *
    * @var \Drupal\Core\Extension\ProfileExtensionList
@@ -58,16 +50,13 @@ final class Uninstaller extends DrushCommands {
    *
    * @param \Drupal\lightning\ExtensionLocationValidator $extension_location_validator
    *   Lightning's uninstall validator to check extension locations.
-   * @param \Drupal\lightning\SubProfileValidator $sub_profile_validator
-   *   Lightning's uninstall validator to detect sub-profiles.
    * @param \Drupal\Core\Extension\ProfileExtensionList $profile_list
    *   The profile extension list.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
    */
-  public function __construct(ExtensionLocationValidator $extension_location_validator, SubProfileValidator $sub_profile_validator, ProfileExtensionList $profile_list, FileSystemInterface $file_system) {
+  public function __construct(ExtensionLocationValidator $extension_location_validator, ProfileExtensionList $profile_list, FileSystemInterface $file_system) {
     $this->extensionLocationValidator = $extension_location_validator;
-    $this->subProfileValidator = $sub_profile_validator;
     $this->profileList = $profile_list;
     $this->fileSystem = $file_system;
   }
@@ -96,19 +85,56 @@ final class Uninstaller extends DrushCommands {
         throw new ModuleUninstallValidatorException($reason);
       }
 
-      $profiles = [];
-      $reasons = $this->subProfileValidator->validate('lightning', $profiles);
-      if ($reasons) {
-        $this->io()->warning($reasons);
-
-        $decouple = $this->confirm('These profiles can be automatically decoupled from Lightning. Should I do that now?', TRUE);
-        if ($decouple) {
-          array_walk($profiles, [$this, 'decoupleProfile']);
-        }
-        else {
-          throw new ModuleUninstallValidatorException('These profiles must be decoupled from Lightning before uninstallation can continue.');
-        }
+      if ($this->decoupleProfiles() == FALSE) {
+        throw new ModuleUninstallValidatorException('These profiles must be decoupled from Lightning before uninstallation can continue.');
       }
+    }
+  }
+
+  /**
+   * Uncouples all Lightning sub-profile from Lightning.
+   *
+   * @param array $options
+   *   (optional) An array of command options.
+   *
+   * @command lightning:decouple-profiles
+   *
+   * @option dry-run
+   *   If passed, the modified sub-profile info will be outputted directly,
+   *   not written to the profile info file.
+   *
+   * @return bool
+   *   TRUE if all sub-profiles are, or have been, decoupled from Lightning.
+   *   FALSE otherwise.
+   */
+  public function decoupleProfiles(array $options = ['dry-run' => FALSE]) : bool {
+    // Find all profiles, installed or not, that have Lightning as their
+    // immediate parent. All of them need to be modified before Lightning can
+    // be uninstalled.
+    $children = [];
+    foreach ($this->profileList->getAllAvailableInfo() as $name => $info) {
+      if (isset($info['base profile']) && $info['base profile'] === 'lightning') {
+        $children[] = $name;
+      }
+    }
+
+    if ($children) {
+      $warning = sprintf('The following install profiles use Lightning as a base profile. They must stand alone, or use a different base profile, before Lightning can be uninstalled: %s', implode(', ', $children));
+      $this->io()->warning($warning);
+
+      $fix_it = $this->confirm('These profiles can be automatically decoupled from Lightning. Should I do that now?', TRUE);
+      if ($fix_it) {
+        foreach ($children as $name) {
+          $this->decoupleProfile($name, $options);
+        }
+        return TRUE;
+      }
+      else {
+        return FALSE;
+      }
+    }
+    else {
+      return TRUE;
     }
   }
 

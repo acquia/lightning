@@ -10,7 +10,6 @@ services:
     class: 'Drupal\lightning\Commands\Uninstaller'
     arguments:
       - '@lightning.uninstall_validator.extension_location'
-      - '@lightning.uninstall_validator.sub_profiles'
       - '@extension.list.profile'
       - '@file_system'
     tags:
