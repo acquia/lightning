@@ -71,6 +71,8 @@ final class Uninstaller extends DrushCommands {
    */
   private $appRoot;
 
+  private $installProfile;
+
   /**
    * Uninstaller constructor.
    *
@@ -83,18 +85,18 @@ final class Uninstaller extends DrushCommands {
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
    */
-  public function __construct(ModuleHandlerInterface $module_handler, ThemeHandlerInterface $theme_handler, ProfileExtensionList $profile_list, FileSystemInterface $file_system, ProfileSwitcher $profile_switcher, $app_root) {
+  public function __construct(ModuleHandlerInterface $module_handler, ThemeHandlerInterface $theme_handler, ProfileExtensionList $profile_list, FileSystemInterface $file_system, ?ProfileSwitcher $profile_switcher, $app_root, $install_profile) {
     $this->moduleHandler = $module_handler;
     $this->themeHandler = $theme_handler;
     $this->profileList = $profile_list;
     $this->fileSystem = $file_system;
     $this->profileSwitcher = $profile_switcher;
     $this->appRoot = $app_root;
+    $this->installProfile = $install_profile;
   }
 
-  private function isActive() : bool {
-    $arguments = $this->input()->getArguments();
-    return in_array('lightning', $arguments['module'], TRUE);
+  private function isActive() {
+    return in_array('lightning', $this->input()->getArgument('modules'), TRUE);
   }
 
   /**
@@ -102,6 +104,8 @@ final class Uninstaller extends DrushCommands {
    *
    * @hook validate pm:uninstall
    *
+   * @throws \RuntimeException
+   *   Thrown if the profile_switcher module is not installed.
    * @throws \LogicException
    *   Thrown if the user attempts to uninstall any other extension(s) at the
    *   same time as Lightning.
@@ -113,7 +117,13 @@ final class Uninstaller extends DrushCommands {
    */
   public function validate(CommandData $data) : void {
     if ($this->isActive()) {
-      if (count($data->arguments()) > 1) {
+      $this->io()->title('Welcome to the Lightning uninstaller!');
+
+      if (empty($this->profileSwitcher)) {
+        throw new \RuntimeException('The profile_switcher module must be installed in order to uninstall Lightning.');
+      }
+
+      if (count($data->input()->getArgument('modules')) > 1) {
         throw new \LogicException('You cannot uninstall Lightning and other extensions at the same time.');
       }
 
@@ -139,12 +149,14 @@ final class Uninstaller extends DrushCommands {
   public function preCommand() : void {
     if ($this->isActive()) {
       $target = $this->locateProjectFile();
-      $this->io()->write("Rewriting $target...");
+      $this->say("Modifying $target...");
       $this->alterProject($target);
 
-      $profile = 'minimal';
-      $this->io()->write("Switching to $profile profile...");
-      $this->profileSwitcher->switchProfile($profile);
+      if ($this->installProfile === 'lightning') {
+        $profile = 'minimal';
+        $this->say("Switching to $profile profile...");
+        $this->profileSwitcher->switchProfile($profile);
+      }
     }
   }
 
@@ -265,7 +277,7 @@ final class Uninstaller extends DrushCommands {
       $destination = $this->profileList->getPathname($name);
       $success = file_put_contents($destination, $target);
       if ($success) {
-        $this->say("Updated $name profile.");
+        $this->io()->success("Updated $destination.");
       }
       else {
         throw new IOException("Unable to write to $destination.");
@@ -321,11 +333,14 @@ final class Uninstaller extends DrushCommands {
     $destination_dir = $this->profileList->getPath($name) . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
     $this->fileSystem->prepareDirectory($destination_dir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
 
-    $this->say("Copying Lightning configuration to $destination_dir...");
+    $this->io()->note("Copying Lightning configuration to $destination_dir...");
 
     foreach ($this->getConfigurationToCopy() as $name => $source) {
       $destination = sprintf('%s/%s.%s', $destination_dir, $name, FileStorage::getFileExtension());
-      $this->say($name);
+
+      if ($this->output()->isVerbose()) {
+        $this->say("$name --> $destination");
+      }
 
       if ($dry_run) {
         continue;
