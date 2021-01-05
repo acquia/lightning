@@ -430,7 +430,7 @@ final class Uninstaller extends DrushCommands {
         'installer-paths' => $this->getPaths($target, $source),
         'installer-types' => $this->getPackageTypes($target),
         'patchLevel' => $source['extra']['patchLevel'] ?? [],
-        'patches' => $source['extra']['patches'] ?? [],
+        'patches' => $this->getPatches($source),
         'patches-ignore' => $source['extra']['patches-ignore'] ?? [],
       ],
       'repositories' => $this->getRepositories($target),
@@ -443,6 +443,14 @@ final class Uninstaller extends DrushCommands {
     });
 
     $file->write($data);
+  }
+
+  private function getPatches(array $source) : array {
+    $filter = function (string $label) : bool {
+      return $label{0} !== '*';
+    };
+
+    return array_filter($source['extra']['patches'] ?? [], $filter, ARRAY_FILTER_USE_KEY);
   }
 
   /**
@@ -486,9 +494,6 @@ final class Uninstaller extends DrushCommands {
    *   (oomphinc/composer-installers-extender), if available.
    */
   private function getPackageTypes(array $target) : array {
-    $target += [
-      'extra' => [],
-    ];
     $installer_types = $target['extra']['installer-types'] ?? [];
 
     // Ensure that npm-asset and bower-asset are known package types.
