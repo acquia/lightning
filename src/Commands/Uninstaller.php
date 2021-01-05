@@ -4,6 +4,8 @@ namespace Drupal\lightning\Commands;
 
 use Composer\Json\JsonFile;
 use Consolidation\AnnotatedCommand\CommandData;
+use Consolidation\SiteAlias\SiteAliasManagerAwareInterface;
+use Consolidation\SiteAlias\SiteAliasManagerAwareTrait;
 use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Config\FileStorage;
 use Drupal\Core\Config\InstallStorage;
@@ -14,7 +16,6 @@ use Drupal\Core\Extension\ProfileExtensionList;
 use Drupal\Core\Extension\ThemeHandlerInterface;
 use Drupal\Core\File\Exception\FileExistsException;
 use Drupal\Core\File\FileSystemInterface;
-use Drupal\profile_switcher\ProfileSwitcher;
 use DrupalFinder\DrupalFinder;
 use Drush\Commands\DrushCommands;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -27,7 +28,9 @@ use Symfony\Component\Filesystem\Exception\IOException;
  *   and can be changed in any way, or removed outright, at any time without
  *   warning. External code should not use this class in any way.
  */
-final class Uninstaller extends DrushCommands {
+final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareInterface {
+
+  use SiteAliasManagerAwareTrait;
 
   /**
    * The module handler service.
@@ -58,13 +61,6 @@ final class Uninstaller extends DrushCommands {
   private $fileSystem;
 
   /**
-   * The profile switcher service.
-   *
-   * @var \Drupal\profile_switcher\ProfileSwitcher
-   */
-  private $profileSwitcher;
-
-  /**
    * The Drupal root.
    *
    * @var string
@@ -85,14 +81,21 @@ final class Uninstaller extends DrushCommands {
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
    */
-  public function __construct(ModuleHandlerInterface $module_handler, ThemeHandlerInterface $theme_handler, ProfileExtensionList $profile_list, FileSystemInterface $file_system, ?ProfileSwitcher $profile_switcher, $app_root, $install_profile) {
+  public function __construct(ModuleHandlerInterface $module_handler, ThemeHandlerInterface $theme_handler, ProfileExtensionList $profile_list, FileSystemInterface $file_system, $app_root, $install_profile) {
     $this->moduleHandler = $module_handler;
     $this->themeHandler = $theme_handler;
     $this->profileList = $profile_list;
     $this->fileSystem = $file_system;
-    $this->profileSwitcher = $profile_switcher;
     $this->appRoot = $app_root;
     $this->installProfile = $install_profile;
+  }
+
+  private function drush(string $command, array $arguments = []) : void {
+    $alias = $this->siteAliasManager()->getSelf();
+
+    $this->processManager()
+      ->drush($alias, $command, $arguments, ['yes' => NULL])
+      ->mustRun();
   }
 
   private function isActive() {
@@ -104,8 +107,6 @@ final class Uninstaller extends DrushCommands {
    *
    * @hook validate pm:uninstall
    *
-   * @throws \RuntimeException
-   *   Thrown if the profile_switcher module is not installed.
    * @throws \LogicException
    *   Thrown if the user attempts to uninstall any other extension(s) at the
    *   same time as Lightning.
@@ -119,10 +120,6 @@ final class Uninstaller extends DrushCommands {
     if ($this->isActive()) {
       $this->io()->title('Welcome to the Lightning uninstaller!');
 
-      if (empty($this->profileSwitcher)) {
-        throw new \RuntimeException('The profile_switcher module must be installed in order to uninstall Lightning.');
-      }
-
       if (count($data->input()->getArgument('modules')) > 1) {
         throw new \LogicException('You cannot uninstall Lightning and other extensions at the same time.');
       }
@@ -135,28 +132,53 @@ final class Uninstaller extends DrushCommands {
         throw new ModuleUninstallValidatorException($error);
       }
 
-      if ($this->decoupleProfiles() == FALSE) {
-        throw new ModuleUninstallValidatorException('These profiles must be decoupled from Lightning before uninstallation can continue.');
+      $children = $this->getChildren();
+      if ($children) {
+        $warning = sprintf('The following install profiles use Lightning as a base profile. They must stand alone, or use a different base profile, before Lightning can be uninstalled: %s', implode(', ', $children));
+        $this->io()->warning($warning);
+
+        $fix_it = $this->confirm('These profiles can be automatically decoupled from Lightning. Should I do that now?', TRUE);
+        if ($fix_it) {
+          array_walk($children, [$this, 'decoupleProfile']);
+        }
+        else {
+          throw new ModuleUninstallValidatorException('These profiles must be decoupled from Lightning before uninstallation can continue.');
+        }
       }
     }
   }
 
   /**
-   * Performs required actions before the Lightning is uninstalled.
+   * Performs required actions before Lightning is uninstalled.
    *
    * @hook pre-command pm:uninstall
    */
   public function preCommand() : void {
     if ($this->isActive()) {
-      $target = $this->locateProjectFile();
-      $this->say("Modifying $target...");
-      $this->alterProject($target);
+      $this->alterProject();
 
       if ($this->installProfile === 'lightning') {
         $profile = 'minimal';
-        $this->say("Switching to $profile profile...");
-        $this->profileSwitcher->switchProfile($profile);
+        $this->sayBoldly("Switching to $profile profile...");
+        $this->drush('pm:enable', ['profile_switcher']);
+        $this->drush('switch:profile', [$profile]);
       }
+    }
+  }
+
+  /**
+   * Performs required actions after Lightning is uninstalled.
+   *
+   * @hook post-command pm:uninstall
+   */
+  public function postCommand() : void {
+    if ($this->isActive()) {
+      $this->drush('pm:uninstall', ['profile_switcher']);
+
+      $this->io()->success([
+        "Congrats, Lightning has been uninstalled!",
+        "You should now commit code and configuration changes, and deploy them to your hosting environment.",
+      ]);
     }
   }
 
@@ -177,50 +199,20 @@ final class Uninstaller extends DrushCommands {
   }
 
   /**
-   * Uncouples all Lightning sub-profile from Lightning.
+   * Returns a list of all profiles that have Lightning as their parent.
    *
-   * @param array $options
-   *   (optional) An array of command options.
-   *
-   * @command lightning:decouple-profiles
-   *
-   * @option dry-run
-   *   If passed, the modified sub-profile info will be outputted directly,
-   *   not written to the profile info file.
-   *
-   * @return bool
-   *   TRUE if all sub-profiles are, or have been, decoupled from Lightning.
-   *   FALSE otherwise.
+   * @return string[]
+   *   The machine names of all profiles, installed or not, that have Lightning
+   *   as their immediate parent.
    */
-  public function decoupleProfiles(array $options = ['dry-run' => FALSE]) : bool {
-    // Find all profiles, installed or not, that have Lightning as their
-    // immediate parent. All of them need to be modified before Lightning can
-    // be uninstalled.
+  private function getChildren() : array {
     $children = [];
     foreach ($this->profileList->getAllAvailableInfo() as $name => $info) {
       if (isset($info['base profile']) && $info['base profile'] === 'lightning') {
         $children[] = $name;
       }
     }
-
-    if ($children) {
-      $warning = sprintf('The following install profiles use Lightning as a base profile. They must stand alone, or use a different base profile, before Lightning can be uninstalled: %s', implode(', ', $children));
-      $this->io()->warning($warning);
-
-      $fix_it = $this->confirm('These profiles can be automatically decoupled from Lightning. Should I do that now?', TRUE);
-      if ($fix_it) {
-        foreach ($children as $name) {
-          $this->decoupleProfile($name, $options);
-        }
-        return TRUE;
-      }
-      else {
-        return FALSE;
-      }
-    }
-    else {
-      return TRUE;
-    }
+    return $children;
   }
 
   /**
@@ -228,16 +220,11 @@ final class Uninstaller extends DrushCommands {
    *
    * @param string $name
    *   The machine name of the sub-profile.
-   * @param array $options
-   *   (optional) An array of command options.
-   *
-   * @command lightning:decouple-profile
-   *
-   * @option dry-run
-   *   If passed, the modified sub-profile info will be outputted directly,
-   *   not written to the profile info file.
    */
-  public function decoupleProfile(string $name, array $options = ['dry-run' => FALSE]) : void {
+  private function decoupleProfile(string $name) : void {
+    $io = $this->io();
+    $io->section("Decoupling $name from Lightning");
+
     $parent = $this->readInfo('lightning');
     $target = $this->readInfo($name);
 
@@ -268,23 +255,17 @@ final class Uninstaller extends DrushCommands {
       $target['dependencies'] = $this->arrayDiff($target['dependencies'], ['lightning']);
     }
 
-    $target = Yaml::encode($target);
-
-    if ($options['dry-run']) {
-      $this->output()->write($target);
+    $destination = $this->profileList->getPathname($name);
+    $success = file_put_contents($destination, Yaml::encode($target));
+    if ($success) {
+      $this->say("Updated $destination.");
     }
     else {
-      $destination = $this->profileList->getPathname($name);
-      $success = file_put_contents($destination, $target);
-      if ($success) {
-        $this->io()->success("Updated $destination.");
-      }
-      else {
-        throw new IOException("Unable to write to $destination.");
-      }
+      throw new IOException("Unable to write to $destination.");
     }
 
-    $this->copyConfiguration($name, $options['dry-run']);
+    $this->copyConfiguration($name);
+    $io->success("$name has been decoupled from Lightning.");
   }
 
   /**
@@ -325,26 +306,16 @@ final class Uninstaller extends DrushCommands {
    *
    * @param string $name
    *   The profile into which the config should be copied.
-   * @param bool $dry_run
-   *   (optional) If TRUE, the files to be copied will be written to the
-   *   console, but not actually copied. Defaults to FALSE.
    */
-  private function copyConfiguration(string $name, bool $dry_run = FALSE) : void {
+  private function copyConfiguration(string $name) : void {
     $destination_dir = $this->profileList->getPath($name) . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
     $this->fileSystem->prepareDirectory($destination_dir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
 
-    $this->io()->note("Copying Lightning configuration to $destination_dir...");
+    $this->sayBoldly("Copying Lightning configuration to $name...");
 
     foreach ($this->getConfigurationToCopy() as $name => $source) {
       $destination = sprintf('%s/%s.%s', $destination_dir, $name, FileStorage::getFileExtension());
-
-      if ($this->output()->isVerbose()) {
-        $this->say("$name --> $destination");
-      }
-
-      if ($dry_run) {
-        continue;
-      }
+      $this->say($destination);
 
       try {
         $this->fileSystem->copy($source, $destination, FileSystemInterface::EXISTS_ERROR);
@@ -399,11 +370,21 @@ final class Uninstaller extends DrushCommands {
 
   /**
    * Alters the project-level composer.json to uninstall Lightning.
-   *
-   * @param string $target
-   *   The path of the project-level composer.json.
    */
-  private function alterProject(string $target) : void {
+  private function alterProject() : void {
+    $target = $this->locateProjectFile();
+
+    $this->sayBoldly("Modifying $target...");
+    $this->io()->listing([
+      'Ensuring direct Lightning dependencies are required',
+      'Checking patcher plugin configuration',
+      'Adding required patches',
+      'Ensuring required repositories are present',
+      'Checking installer plugin configuration',
+      'Checking installer plugin paths configuration',
+      'Checking scaffold plugin configuration',
+    ]);
+
     $file = new JsonFile($target);
     $target = $file->read();
 
@@ -450,7 +431,11 @@ final class Uninstaller extends DrushCommands {
       return $label{0} !== '*';
     };
 
-    return array_filter($source['extra']['patches'] ?? [], $filter, ARRAY_FILTER_USE_KEY);
+    $configuration = $source['extra']['patches'] ?? [];
+    foreach ($configuration as $package => $patches) {
+      $configuration[$package] = array_filter($patches, $filter, ARRAY_FILTER_USE_KEY);
+    }
+    return $configuration;
   }
 
   /**
@@ -649,6 +634,10 @@ final class Uninstaller extends DrushCommands {
       }
     }
     return $a;
+  }
+
+  private function sayBoldly($text) {
+    $this->writeln("<options=bold>$text</options=bold>");
   }
 
 }
