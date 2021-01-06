@@ -6,10 +6,14 @@ services:
     tags:
       - { name: drush.generator }
 
-  subprofile.decoupler:
-      class: 'Drupal\lightning\Commands\SubProfileDecoupler'
-      arguments:
-        - '@extension.list.profile'
-        - '@file_system'
-      tags:
-        - { name: drush.command }
+  lightning.uninstaller:
+    class: 'Drupal\lightning\Commands\Uninstaller'
+    arguments:
+      - '@module_handler'
+      - '@theme_handler'
+      - '@extension.list.profile'
+      - '@file_system'
+      - '%app.root%'
+      - '%install_profile%'
+    tags:
+      - { name: drush.command }
