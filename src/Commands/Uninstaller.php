@@ -67,6 +67,11 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
    */
   private $appRoot;
 
+  /**
+   * The current installation profile.
+   *
+   * @var string
+   */
   private $installProfile;
 
   /**
@@ -80,6 +85,10 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
    *   The profile extension list.
    * @param \Drupal\Core\File\FileSystemInterface $file_system
    *   The file system service.
+   * @param string $app_root
+   *   The Drupal root.
+   * @param string $install_profile
+   *   The current installation profile.
    */
   public function __construct(ModuleHandlerInterface $module_handler, ThemeHandlerInterface $theme_handler, ProfileExtensionList $profile_list, FileSystemInterface $file_system, $app_root, $install_profile) {
     $this->moduleHandler = $module_handler;
@@ -90,6 +99,14 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
     $this->installProfile = $install_profile;
   }
 
+  /**
+   * Runs a Drush command, with the --yes option.
+   *
+   * @param string $command
+   *   The command name (e.g., 'status').
+   * @param array $arguments
+   *   (optional) Arguments to pass to the command.
+   */
   private function drush(string $command, array $arguments = []) : void {
     $alias = $this->siteAliasManager()->getSelf();
 
@@ -98,6 +115,12 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
       ->mustRun();
   }
 
+  /**
+   * Determines if the current command is uninstalling Lightning.
+   *
+   * @return bool
+   *   TRUE if a Lightning uninstallation is being attempted, otherwise FALSE.
+   */
   private function isActive() {
     return in_array('lightning', $this->input()->getArgument('modules'), TRUE);
   }
@@ -107,14 +130,8 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
    *
    * @hook validate pm:uninstall
    *
-   * @throws \LogicException
-   *   Thrown if the user attempts to uninstall any other extension(s) at the
-   *   same time as Lightning.
-   * @throws \Drupal\Core\Extension\ModuleUninstallValidatorException
-   *   Thrown if the Lightning directory contains any installed extensions.
-   * @throws \Drupal\Core\Extension\ModuleUninstallValidatorException
-   *   Thrown if any install profiles exist that are direct children of
-   *   Lightning, and the user decides not to automatically rebuild them.
+   * @param \Consolidation\AnnotatedCommand\CommandData $data
+   *   The current command data.
    */
   public function validate(CommandData $data) : void {
     if ($this->isActive()) {
@@ -132,6 +149,9 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
         throw new ModuleUninstallValidatorException($error);
       }
 
+      // Ensure that there are no other profiles available that use Lightning
+      // as a parent. If there are, offer to automatically fix them, and error
+      // out if the user declines.
       $children = $this->getChildren();
       if ($children) {
         $warning = sprintf('The following install profiles use Lightning as a base profile. They must stand alone, or use a different base profile, before Lightning can be uninstalled: %s', implode(', ', $children));
@@ -155,14 +175,13 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
    */
   public function preCommand() : void {
     if ($this->isActive()) {
-      $this->alterProject();
-
       if ($this->installProfile === 'lightning') {
         $profile = 'minimal';
-        $this->sayBoldly("Switching to $profile profile...");
+        $this->boldlySay("Switching to $profile profile...");
         $this->drush('pm:enable', ['profile_switcher']);
         $this->drush('switch:profile', [$profile]);
       }
+      $this->alterProject();
     }
   }
 
@@ -182,6 +201,16 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
     }
   }
 
+  /**
+   * Returns installed extensions in the Lightning profile directory.
+   *
+   * @return string[]
+   *   The names of installed extensions in the Lightning profile directory.
+   *   If there are any, Lightning cannot be uninstalled. There shouldn't
+   *   normally be any -- Lightning doesn't ship with any runtime modules --
+   *   but it's wise to check anyway in case the current site has an exotic
+   *   set-up.
+   */
   private function getExtensionsInProfileDirectory() : array {
     $extensions = array_merge(
       $this->moduleHandler->getModuleList(),
@@ -217,6 +246,11 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
 
   /**
    * Uncouples a Lightning sub-profile from Lightning.
+   *
+   * This will modify the profile's info file to remove the dependency on
+   * Lightning, then copy all of Lightning's default configuration into the
+   * profile's optional config directory. Existing config is preserved, as are
+   * any info file customizations.
    *
    * @param string $name
    *   The machine name of the sub-profile.
@@ -311,7 +345,7 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
     $destination_dir = $this->profileList->getPath($name) . '/' . InstallStorage::CONFIG_OPTIONAL_DIRECTORY;
     $this->fileSystem->prepareDirectory($destination_dir, FileSystemInterface::CREATE_DIRECTORY | FileSystemInterface::MODIFY_PERMISSIONS);
 
-    $this->sayBoldly("Copying Lightning configuration to $name...");
+    $this->boldlySay("Copying Lightning configuration to $name...");
 
     foreach ($this->getConfigurationToCopy() as $name => $source) {
       $destination = sprintf('%s/%s.%s', $destination_dir, $name, FileStorage::getFileExtension());
@@ -356,6 +390,12 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
     return $list;
   }
 
+  /**
+   * Returns the location of the project-level composer.json.
+   *
+   * @return string
+   *   The path of the project-level composer.json.
+   */
   private function locateProjectFile() : string {
     $finder = new DrupalFinder();
     if ($finder->locateRoot($this->appRoot) == FALSE) {
@@ -374,7 +414,7 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
   private function alterProject() : void {
     $target = $this->locateProjectFile();
 
-    $this->sayBoldly("Modifying $target...");
+    $this->boldlySay("Modifying $target...");
     $this->io()->listing([
       'Ensuring direct Lightning dependencies are required',
       'Checking patcher plugin configuration',
@@ -419,6 +459,7 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
 
     // Delete any empty arrays, since they will be encoded as empty arrays and
     // may therefore break the composer.json schema.
+    // @todo Handle this recursively.
     $data = array_filter($data, function ($item) {
       return is_array($item) ? (bool) $item : TRUE;
     });
@@ -426,6 +467,16 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
     $file->write($data);
   }
 
+  /**
+   * Returns the patches to apply in the project-level composer.json.
+   *
+   * @param array $source
+   *   The source package's configuration.
+   *
+   * @return array
+   *   The patches to apply in the project-level composer.json, segmented by
+   *   the package to which they apply.
+   */
   private function getPatches(array $source) : array {
     $filter = function (string $label) : bool {
       return $label{0} !== '*';
@@ -636,7 +687,13 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
     return $a;
   }
 
-  private function sayBoldly($text) {
+  /**
+   * Wrapper around ::say() which displays the text in bold.
+   *
+   * @param $text
+   *   The text to display.
+   */
+  private function boldlySay($text) {
     $this->writeln("<options=bold>$text</options=bold>");
   }
 
