@@ -128,10 +128,10 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
   /**
    * Validates the pm:uninstall command if Lightning is being uninstalled.
    *
-   * @hook validate pm:uninstall
-   *
    * @param \Consolidation\AnnotatedCommand\CommandData $data
    *   The current command data.
+   *
+   * @hook validate pm:uninstall
    */
   public function validate(CommandData $data) : void {
     if ($this->isActive()) {
@@ -417,12 +417,11 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
     $this->boldlySay("Modifying $target...");
     $this->io()->listing([
       'Ensuring direct Lightning dependencies are required',
-      'Checking patcher plugin configuration',
-      'Adding required patches',
       'Ensuring required repositories are present',
-      'Checking installer plugin configuration',
-      'Checking installer plugin paths configuration',
-      'Checking scaffold plugin configuration',
+      'Adding required patches',
+      'Checking patcher configuration',
+      'Checking installer configuration',
+      'Checking scaffold configuration',
     ]);
 
     $file = new JsonFile($target);
@@ -479,7 +478,7 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
    */
   private function getPatches(array $source) : array {
     $filter = function (string $label) : bool {
-      return $label{0} !== '*';
+      return $label[0] !== '*';
     };
 
     $configuration = $source['extra']['patches'] ?? [];
@@ -690,10 +689,10 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
   /**
    * Wrapper around ::say() which displays the text in bold.
    *
-   * @param $text
+   * @param string $text
    *   The text to display.
    */
-  private function boldlySay($text) {
+  private function boldlySay(string $text) : void {
     $this->writeln("<options=bold>$text</options=bold>");
   }
 
