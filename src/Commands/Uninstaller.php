@@ -450,7 +450,7 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
         'installer-paths' => $this->getPaths($target, $source),
         'installer-types' => $this->getPackageTypes($target),
         'patchLevel' => $source['extra']['patchLevel'] ?? [],
-        'patches' => $this->getPatches($source),
+        'patches' => $source['extra']['patches'] ?? [],
         'patches-ignore' => $source['extra']['patches-ignore'] ?? [],
       ],
       'repositories' => $this->getRepositories($target),
@@ -464,28 +464,6 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
     });
 
     $file->write($data);
-  }
-
-  /**
-   * Returns the patches to apply in the project-level composer.json.
-   *
-   * @param array $source
-   *   The source package's configuration.
-   *
-   * @return array
-   *   The patches to apply in the project-level composer.json, segmented by
-   *   the package to which they apply.
-   */
-  private function getPatches(array $source) : array {
-    $filter = function (string $label) : bool {
-      return $label[0] !== '*';
-    };
-
-    $configuration = $source['extra']['patches'] ?? [];
-    foreach ($configuration as $package => $patches) {
-      $configuration[$package] = array_filter($patches, $filter, ARRAY_FILTER_USE_KEY);
-    }
-    return $configuration;
   }
 
   /**
