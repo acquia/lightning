@@ -5,7 +5,6 @@
  * Prepares a code base to update to Drupal 9.
  */
 
-use Drupal\Component\Utility\Random;
 use Drupal\views\Entity\View;
 
 Drupal::configFactory()
@@ -35,8 +34,4 @@ $display = &$view->getDisplay('default');
 $display['display_options']['fields']['media_bulk_form']['plugin_id'] = 'bulk_form';
 $view->save();
 
-// Prevent a "missing file" warning when running drush updatedb.
-$resolution = '16x16';
-$random = new Random();
-$random->image('public://star.png', $resolution, $resolution);
-$random->image('public://star_2.png', $resolution, $resolution);
+Drupal::service('extension.list.profile')->reset();

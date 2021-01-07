@@ -480,6 +480,10 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
    */
   private function getRequirements(array $target, array $source) : array {
     $requirements = [];
+    // Lightning requires composer/composer in order for this uninstaller to
+    // alter composer.json correctly. When that's done, we don't need it
+    // anymore.
+    unset($source['require']['composer/composer']);
     // The target package's existing dependencies should supersede any
     // dependencies defined by the source package (Lightning).
     $requirements += ($target['require'] ?? []);

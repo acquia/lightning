@@ -5,6 +5,7 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "ext-dom": "*",
+        "composer/composer": "^1 || ^2",
         "cweagans/composer-patches": "^1.7",
         "drupal/acquia_connector": "^2.0-rc1",
         "drupal/core": "~9.1.0",
@@ -40,21 +41,21 @@
         },
         "composer-exit-on-patch-failure": "true",
         "drupal-scaffold": {
-            "locations": {
-                "web-root": "docroot/"
-            },
             "file-mapping": {
-                "[project-root]/.gitattributes": false,
                 "[project-root]/.editorconfig": false,
-                "[web-root]/example.gitignore": false,
+                "[project-root]/.gitattributes": false,
                 "[web-root]/.csslintrc": false,
+                "[web-root]/INSTALL.txt": false,
+                "[web-root]/example.gitignore": false,
                 "[web-root]/modules/README.txt": false,
                 "[web-root]/profiles/README.txt": false,
+                "[web-root]/robots.txt": false,
                 "[web-root]/sites/README.txt": false,
                 "[web-root]/themes/README.txt": false,
-                "[web-root]/INSTALL.txt": false,
-                "[web-root]/robots.txt": false,
                 "[web-root]/web.config": false
+            },
+            "locations": {
+                "web-root": "docroot/"
             }
         },
         "drush": {
@@ -93,8 +94,8 @@
             "drupal/core": {
                 "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2020-02-07/2869592-remove-update-warning-34.patch",
                 "[subprofile support] 1356276 - Allow profiles to define a base/parent profile and load them in the correct order / 2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2020-12-15/3143958-6-subprofile-support-9.1.x.patch",
-                "OPTIONAL: 2031261 - Fix SQLite variable limit": "https://www.drupal.org/files/issues/2020-04-01/2031261-118.patch",
-                "OPTIONAL: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-05/3143958-8-change-profile-config-sync-9.1.x.patch"
+                "REMOVE: 2031261 - Fix SQLite variable limit": "https://www.drupal.org/files/issues/2020-04-01/2031261-118.patch",
+                "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-07/3143958-9-change-profile-config-sync-9.1.x.patch"
             }
         },
         "patches-ignore": {
