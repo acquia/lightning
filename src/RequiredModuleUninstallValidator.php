@@ -19,7 +19,7 @@ final class RequiredModuleUninstallValidator extends BaseValidator {
    */
   protected function getModuleInfoByModule($module) {
     $info = parent::getModuleInfoByModule($module);
-    if ($module === 'lightning') {
+    if ($module === 'lightning' || $module === 'headless_lightning') {
       $info['required'] = FALSE;
     }
     return $info;
