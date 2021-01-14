@@ -5,6 +5,7 @@
     "license": "GPL-2.0-or-later",
     "require": {
         "ext-dom": "*",
+        "composer/composer": "^1 || ^2",
         "cweagans/composer-patches": "^1.6.4",
         "drupal/acquia_connector": "*",
         "drupal/core": "~8.9.10",
@@ -13,7 +14,8 @@
         "drupal/lightning_core": "^5.2",
         "drupal/lightning_layout": "^1.8",
         "drupal/lightning_media": "^3.8 || ^4.1",
-        "drupal/lightning_workflow": "^3.6"
+        "drupal/lightning_workflow": "^3.6",
+        "drupal/profile_switcher": "^1.0-alpha5"
     },
     "require-dev": {
         "drupal/core-composer-scaffold": "^8",
@@ -23,7 +25,6 @@
         "drupal/media_entity_generic": "1.x-dev",
         "drupal/schema_metatag": "^1.3",
         "drush/drush": ">=9.7",
-        "oomphinc/composer-installers-extender": "^1.1 || ^2",
         "weitzman/drupal-test-traits": "dev-master"
     },
     "config": {
@@ -35,22 +36,23 @@
         "branch-alias": {
             "dev-8.x-3.x": "3.x-dev"
         },
+        "composer-exit-on-patch-failure": true,
         "drupal-scaffold": {
-            "locations": {
-                "web-root": "docroot/"
-            },
             "file-mapping": {
-                "[project-root]/.gitattributes": false,
                 "[project-root]/.editorconfig": false,
-                "[web-root]/example.gitignore": false,
+                "[project-root]/.gitattributes": false,
                 "[web-root]/.csslintrc": false,
+                "[web-root]/INSTALL.txt": false,
+                "[web-root]/example.gitignore": false,
                 "[web-root]/modules/README.txt": false,
                 "[web-root]/profiles/README.txt": false,
+                "[web-root]/robots.txt": false,
                 "[web-root]/sites/README.txt": false,
                 "[web-root]/themes/README.txt": false,
-                "[web-root]/INSTALL.txt": false,
-                "[web-root]/robots.txt": false,
                 "[web-root]/web.config": false
+            },
+            "locations": {
+                "web-root": "docroot/"
             }
         },
         "drush": {
@@ -87,9 +89,9 @@
         },
         "patches": {
             "drupal/core": {
-                "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2869592-remove-update-warning-7.patch",
-                "1356276 - Allow profiles to define a base/parent profile and load them in the correct order": "https://www.drupal.org/files/issues/2019-11-05/1356276-531-8.8.x-4.patch",
-                "2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2018-07-09/2914389-8-do-not-test.patch"
+                "2869592 - Disabled update module shouldn't produce a status report warning": "https://www.drupal.org/files/issues/2020-02-07/2869592-remove-update-warning-34.patch",
+                "[subprofile support] 1356276 - Allow profiles to define a base/parent profile and load them in the correct order / 2914389 - Allow profiles to exclude dependencies of their parent": "https://www.drupal.org/files/issues/2021-01-14/3143958-11-subprofile-support-8.9.x.patch",
+                "REMOVE: Allow installation profile to be changed from Lightning during config sync": "https://www.drupal.org/files/issues/2021-01-08/3143958-10-change-profile-config-sync-9.1.x.patch"
             }
         },
         "patches-ignore": {
@@ -128,24 +130,22 @@
     ],
     "scripts": {
         "post-install-cmd": [
-            "@composer push",
-            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit"
-        ],
-        "post-update-cmd": [
-            "@composer push",
-            "ln -s -f git-hooks/pre-commit .git/hooks/pre-commit"
+            "@putenv DIR=./docroot/profiles/lightning",
+            "mkdir -p $DIR",
+            "ln -s -f $PWD/config $DIR",
+            "ln -s -f $PWD/drush.services.yml $DIR",
+            "ln -s -f $PWD/favicon.ico $DIR",
+            "ln -s -f $PWD/help $DIR",
+            "ln -s -f $PWD/lightning-logo.png $DIR",
+            "ln -s -f $PWD/modules $DIR",
+            "ln -s -f $PWD/src $DIR",
+            "ln -s -f $PWD/tests $DIR",
+            "find $PWD -name 'lightning.*' -depth 1 -exec ln -s -f {} $DIR ';'",
+            "cp -f phpunit.xml ./docroot/core"
         ],
         "configure-tarball": "Acquia\\Lightning\\Composer\\ConfigureLegacyProject::execute",
         "enable-asset-packagist": "Acquia\\Lightning\\Composer\\AssetPackagist::execute",
         "nuke": "rm -r -f docroot vendor",
-        "pull": "cp -R -f ./docroot/profiles/contrib/lightning/* .",
-        "push": [
-            "rm -r -f ./docroot/profiles/contrib/lightning",
-            "mkdir -p ./docroot/profiles/contrib/lightning",
-            "@composer archive --file lightning",
-            "tar -x -f lightning.tar -C ./docroot/profiles/contrib/lightning",
-            "rm lightning.tar"
-        ],
         "verify-patched-constraints": "Acquia\\Lightning\\Composer\\PatchedConstraint::execute"
     }
 }
