@@ -3,6 +3,7 @@
 namespace Drupal\Tests\lightning\Functional;
 
 use Drupal\Tests\BrowserTestBase;
+use Drupal\user\UserInterface;
 
 /**
  * Tests integrated functionality of the Lightning profile.
@@ -76,6 +77,8 @@ class LightningTest extends BrowserTestBase {
   public function testLightning() {
     // Test that the sub-profile was installed...
     $this->assertSame('lightning_extender', $this->container->getParameter('install_profile'));
+
+    $this->assertSame(UserInterface::REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
 
     $module_list = $this->container->get('extension.list.module')->getAllInstalledInfo();
     // ...and that the changes it makes are reflected in the system.

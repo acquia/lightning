@@ -29,15 +29,6 @@ class ConfigIntegrityTest extends ExistingSiteBase {
   public function testConfig() {
     $assert_session = $this->assertSession();
 
-    // Assert that all install tasks have done what they should do.
-    // @see lightning_install_tasks()
-    $account = \Drupal::entityTypeManager()
-      ->getStorage('user')
-      ->load(1);
-    $this->assertInstanceOf(UserInterface::class, $account);
-    /** @var \Drupal\user\UserInterface $account */
-    $this->assertTrue($account->hasRole('administrator'));
-
     $this->assertSame('/node', $this->config('system.site')->get('page.front'));
     $this->assertSame(UserInterface::REGISTER_ADMINISTRATORS_ONLY, $this->config('user.settings')->get('register'));
     $this->assertTrue(Role::load(Role::AUTHENTICATED_ID)->hasPermission('access shortcuts'));
