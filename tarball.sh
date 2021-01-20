@@ -14,9 +14,12 @@ composer remove --no-update composer/installers
 composer require --no-update "ext-dom:*" "acquia/lightning:~4.1.0" cweagans/composer-patches
 composer update
 
+# Add the version number to the info file.
+echo "version: 8.x-$1" >> ./profiles/contrib/lightning/lightning.info.yml
+
 # Wrap it all up in a nice compressed tarball.
 cd ..
 tar --exclude='.DS_Store' --exclude='._*' -c -z -f $ARCHIVE.tar.gz $ARCHIVE
 
 # Clean up.
-rm -r -f $ARCHIVE.tar $ARCHIVE
+rm -r -f $ARCHIVE
