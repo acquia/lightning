@@ -78,7 +78,10 @@ final class SubProfileGenerator extends BaseGenerator {
     $questions['name'] = new Question('Profile Name');
     $questions['name']->setValidator([Utils::class, 'validateRequired']);
     $questions['machine_name'] = new Question('Profile Machine Name (enter for default)');
-    $questions['machine_name']->setValidator([Utils::class, 'validateMachineName']);
+    $questions['machine_name']->setValidator([
+      Utils::class,
+      'validateMachineName',
+    ]);
     $questions['description'] = new Question('Enter the description (optional)');
     $questions['install'] = new Question('Additional modules to include (optional), separated by commas (e.g. context, rules, file_entity)', NULL);
     $questions['install']->setNormalizer([static::class, 'toArray']);
