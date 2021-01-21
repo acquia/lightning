@@ -22,4 +22,4 @@ cd ..
 tar --exclude='.DS_Store' --exclude='._*' -c -z -f $ARCHIVE.tar.gz $ARCHIVE
 
 # Clean up.
-rm -r -f $ARCHIVE.tar $ARCHIVE
+rm -r -f $ARCHIVE
