@@ -10,15 +10,18 @@ use Drupal\user\RoleInterface;
 /**
  * Implements hook_install_tasks().
  */
-function lightning_install_tasks() {
+function lightning_install_tasks(array &$install_state) {
   $tasks = [];
 
-  $tasks['lightning_set_front_page'] = [];
-  $tasks['lightning_grant_shortcut_access'] = [];
-  $tasks['lightning_set_default_theme'] = [];
-  $tasks['lightning_set_logo'] = [];
-  $tasks['lightning_alter_frontpage_view'] = [];
-
+  // All of these tasks modify configuration, so don't do any of them if
+  // we're installing from existing config.
+  if (empty($install_state['config_install_path'])) {
+    $tasks['lightning_set_front_page'] = [];
+    $tasks['lightning_grant_shortcut_access'] = [];
+    $tasks['lightning_set_default_theme'] = [];
+    $tasks['lightning_set_logo'] = [];
+    $tasks['lightning_alter_frontpage_view'] = [];
+  }
   return $tasks;
 }
 
