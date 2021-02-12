@@ -37,6 +37,7 @@ matrix:
     - env: ORCA_JOB=INTEGRATED_DEV
 
 before_install:
+  - composer self-update 1.10.16
   - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
   - ../orca/bin/travis/before_install.sh
 
