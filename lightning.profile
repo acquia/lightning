@@ -199,6 +199,8 @@ function lightning_alter_frontpage_view() {
               ],
               'required' => FALSE,
               'use_operator' => FALSE,
+              'operator_limit_selection' => FALSE,
+              'operator_list' => [],
             ],
             'exposed' => FALSE,
             'field' => 'promote',
@@ -229,6 +231,8 @@ function lightning_alter_frontpage_view() {
           'status' => [
             'expose' => [
               'operator' => '',
+              'operator_limit_selection' => FALSE,
+              'operator_list' => [],
             ],
             'field' => 'status',
             'group' => 1,
@@ -266,6 +270,8 @@ function lightning_alter_frontpage_view() {
                 'authenticated' => 'authenticated',
               ],
               'reduce' => FALSE,
+              'operator_limit_selection' => FALSE,
+              'operator_list' => [],
             ],
             'is_grouped' => FALSE,
             'group_info' => [
