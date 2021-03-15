@@ -16,7 +16,7 @@ env:
   global:
     - ORCA_SUT_NAME=acquia/lightning
     - ORCA_SUT_BRANCH=8.x-3.x
-    - ORCA_VERSION=v2.11.5
+    - ORCA_VERSION=^2
     - ORCA_PACKAGES_CONFIG_ALTER=../lightning/tests/packages_alter.yml
     - ORCA_FIXTURE_PROFILE=lightning
     - ORCA_TELEMETRY_ENABLE=TRUE
@@ -38,7 +38,7 @@ matrix:
 
 before_install:
   - composer self-update 1.10.16
-  - git clone --branch ${ORCA_VERSION} --depth 1 https://github.com/acquia/orca.git ../orca
+  - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - ../orca/bin/travis/before_install.sh
 
 install: ./tests/travis/install.sh
