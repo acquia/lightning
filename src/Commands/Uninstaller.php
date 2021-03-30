@@ -507,6 +507,13 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
       'repositories' => $this->getRepositories($target),
     ]);
 
+    // If the project requires Headless Lightning, we need to switch it to
+    // Headless Lightning 2 to ensure that the modules which are part of
+    // Headless Lightning will continue to be present after uninstall.
+    if (isset($data['require']['acquia/headless_lightning'])) {
+      $data['require']['acquia/headless_lightning'] = 'dev-eol';
+    }
+
     // Delete any empty arrays, since they will be encoded as empty arrays and
     // may therefore break the composer.json schema.
     // @todo Handle this recursively.
