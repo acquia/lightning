@@ -3,6 +3,11 @@
 
 [![Build Status](https://travis-ci.org/acquia/lightning.svg?branch=5.0.x)](https://travis-ci.org/acquia/lightning)
 
+## November 2021: So long and thanks for all the fish!
+Acquia is **ending support for the Lightning distribution in November 2021**, simultaneously with Drupal 8. At that time, Lightning 3, 4, and 5 will cease receiving any security updates or bug fixes. It is possible to safely uninstall Lightning from your site; please see [the official announcement](https://www.acquia.com/blog/acquia-lightning-eol-2021-acquia-cms-future), [FAQ for site owners](https://support.acquia.com/hc/en-us/articles/1500006393601-Frequently-Asked-Questions-FAQ-regarding-End-of-Support-for-Acquia-Lightning), and [developer instructions](https://github.com/acquia/lightning/wiki/Uninstalling-Lightning) for more information.
+
+---
+
 Lightning's mission is to enable developers to create great authoring
 experiences and empower editorial teams.
 
