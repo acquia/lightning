@@ -81,6 +81,9 @@ matrix:
 before_install:
   - composer create-project --no-dev acquia/orca ../orca "$ORCA_VERSION"
   - ../orca/bin/travis/before_install.sh
+  # Loosen the core constraint to allow testing against the next
+  # minor version.
+  - composer require --no-update "drupal/core:^9.1"
 
 install: ./tests/travis/install.sh
 
