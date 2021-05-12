@@ -160,39 +160,6 @@ Each Lightning component also has a drupal.org issue queue:
 
 For more information on local development, see CONTRIBUTING.md.
 
-### How to uninstall Lightning
-Lightning is an installation profile, so there's no "officially" sanctioned way
-to remove it. The procedure outlined here is one that you do **at your own
-risk**, and in the worst case scenario **it has the potential to break your
-site**, so proceed with caution! It _highly_ recommended to first attempt this
-in a development environment before doing it in production.
-
-That said:
-1. Change the current installation profile from Lightning to Standard, or
-   another installation profile of your choice: `drush config:set core.extension profile standard`.
-2. Uninstall any Lightning modules you are not actively using.
-3. If needed, export your configuration to account for changes made by outgoing
-   modules.
-4. You may be using modules that ship with Lightning -- ensure that all of them
-   are explicitly listed as requirements in your project's composer.json file,
-   in at least the same version you were already using. For example, if you are
-   using Panelizer 4.2 or later, you should run `composer require --no-update drupal/panelizer:^4.2`.
-   This is **very important**, because your site is likely to break if you
-   remove Lightning before ensuring that all the modules you need are being
-   required by Composer. If you need to continue using a particular Lightning
-   module, you can require it just as you would any other Drupal module; for
-   example, `composer require --no-update drupal/lightning_api:^4.1`. (Note
-   that this "à la carte" style only works with Lightning 3 or later.)
-5. Remove `acquia/lightning` from your composer.json file: `composer remove --no-update acquia/lightning`.
-6. Explicitly require Drupal core in your composer.json file: `composer require --no-update drupal/core:~8.7.0`.
-   You should specify the same minor version of core that you were using when
-   Lightning was installed.
-7. Run `composer update`.
-8. You should now be all set. If you ever reinstall the site, you will need to
-   specify the installation profile (probably Standard), either in the web
-   installer, `drush site:install PROFILENAME`, or as a configuration parameter
-   for BLT.
-
 [issue_queue]: https://www.drupal.org/project/issues/lightning "Lightning Issue Queue"
 [meta_release]: https://www.drupal.org/node/2670686 "Lightning Meta Releases Issue"
 [template]: https://github.com/acquia/lightning-project "Composer-based project template"
