@@ -108,10 +108,6 @@ they present themselves.
 If you have PHP's OpenSSL extension enabled, Lightning can automatically create
 an asymmetric key pair for use with OAuth.
 
-## Project Roadmap
-We publish sprint plans for each patch release. You can find a link to the
-current one in [this meta-issue][meta_releases] on Drupal.org.
-
 ## Resources
 Demonstration videos for each of our user stories can be found [here][demo_videos].
 
@@ -198,4 +194,3 @@ That said:
 [demo_videos]: http://lightning.acquia.com/blog/lightning-user-stories-demonstrations "Lightning user story demonstration videos"
 [sub-profile documentation]: https://github.com/acquia/lightning/wiki/Lightning-as-a-Base-Profile "Lightning sub-profile documentation"
 [github]: https://github.com/acquia/lightning "GitHub clone"
-[lightning_dev]: https://github.com/acquia/lightning-dev "Lightning Dev repository"
