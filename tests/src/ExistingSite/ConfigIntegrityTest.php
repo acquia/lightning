@@ -2,6 +2,7 @@
 
 namespace Drupal\Tests\lightning\ExistingSite;
 
+use Drupal\Component\Serialization\Yaml;
 use Drupal\Core\Entity\Entity\EntityViewMode;
 use Drupal\user\Entity\Role;
 use Drupal\user\UserInterface;
@@ -18,10 +19,24 @@ class ConfigIntegrityTest extends ExistingSiteBase {
   /**
    * {@inheritdoc}
    */
-  protected static $configSchemaCheckerExclusions = [
-    // @todo Remove this when depending on slick_entityreference 1.2 or later.
-    'core.entity_view_display.block_content.media_slideshow.default',
-  ];
+  protected function setUp() {
+    parent::setUp();
+
+    // If the samlauth module is installed, ensure that it is configured (in
+    // this case, using its own test data) to avoid errors when creating user
+    // accounts in this test.
+    if ($this->container->get('module_handler')->moduleExists('samlauth')) {
+      $path = $this->container->get('extension.list.module')
+        ->getPath('samlauth');
+      $data = file_get_contents("$path/test_resources/samlauth.authentication.yml");
+      $data = Yaml::decode($data);
+
+      $this->container->get('config.factory')
+        ->getEditable('samlauth.authentication')
+        ->setData($data)
+        ->save();
+    }
+  }
 
   /**
    * Tests config set during install.
