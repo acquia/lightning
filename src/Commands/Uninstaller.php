@@ -221,6 +221,11 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
   public function preCommand() : void {
     if ($this->getUninstall()) {
       if ($this->installProfile === 'lightning' || $this->installProfile === 'headless_lightning') {
+        // The lightning_install module was created to prevent broken builds of
+        // Lightning (created by drupal.org's legacy packaging system) from
+        // being installed.
+        $this->drush('pm:uninstall', ['lightning_install']);
+
         $profile = $this->input()->getOption('profile');
         $this->boldlySay("Switching to $profile profile...");
         $this->drush('pm:enable', ['profile_switcher']);
@@ -266,6 +271,11 @@ final class Uninstaller extends DrushCommands implements SiteAliasManagerAwareIn
 
     $profile_path = $extensions['lightning']->getPath();
     unset($extensions['lightning']);
+    // The lightning_install module is a special module that was created to
+    // prevent installation of broken builds of Lightning created by the legacy
+    // drupal.org packaging system. This utility uninstalls it along with the
+    // profile.
+    unset($extensions['lightning_install']);
 
     $filter = function (Extension $extension) use ($profile_path) : bool {
       return strpos($extension->getPath(), $profile_path) !== FALSE;
