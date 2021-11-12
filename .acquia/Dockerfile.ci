@@ -1,0 +1,155 @@
+# Example Acquia CI configuration.
+#
+  # The configuration files in the .acquia directory will cover ORCA integration for most packages almost
+  # without modification. Use as follows:
+  #
+  # 1. Copy the .acquia directory to your package root:
+  #
+  #    $ cp -R example/.acquia ../my_package/.acquia
+  #
+  # 2. Change the ENV values for your package. No other changes are
+  #    strictly necessary for a basic integration.
+  #
+  # 3. Review the other comments in the file for additional configuration options.
+  #
+  # 4. Strip the (now unnecessary) comments:
+  #
+  #    $ sed -i'.bak' -e '/^[[:blank:]]*#/d;s/#.*//' Dockerfile.ci && rm Dockerfile.ci.bak
+  #
+  # 5. Make necessary changes in /my_package/.acquia/pipeline.yaml
+  #
+  # For advanced needs,
+  # @see https://github.com/acquia/orca/blob/main/docs/advanced-usage.md
+
+  ARG BASE_IMAGE=php:7.4-cli-buster
+
+  # Jfrog is used by default in REPO_LOCATION
+  # Solving dockerhub rate limiting
+  # and improving security scanning
+  ARG REPO_LOCATION
+  FROM ${REPO_LOCATION}composer:latest as composer
+  FROM ${REPO_LOCATION}${BASE_IMAGE}
+
+  ENV CHROMEDRIVER_VERSION 93.0.4577.63
+  ENV CHROMEDRIVER_DIR /chromedriver
+  ENV DEBIAN_FRONTEND=noninteractive
+  #Set the working directory, usually acquia/project_name
+  ENV ORCA_WORKSPACE=/acquia/lightning
+  # Provide your package's name.
+  ENV ORCA_SUT_NAME=acquia/lightning
+  # Provide your package's root directory.
+  ENV ORCA_SUT_DIR=/acquia/lightning
+  # Specify the name of the nearest Git version branch, e.g., 1.x or 8.x-1.x.
+  # This may be the destination branch of a pull request or the nearest
+  # ancestor of a topic branch.
+  ENV ORCA_SUT_BRANCH=5.1.x
+  ENV ORCA_FIXTURE_PROFILE=lightning
+  ENV ORCA_TELEMETRY_ENABLE=TRUE
+  # Specify the version of ORCA to use. Use dev-master to track the latest
+  # release, dev-develop to track Dev/HEAD, or any other Composer version
+  # string.
+  # @see https://getcomposer.org/doc/articles/versions.md
+  ENV ORCA_VERSION=^3
+  # If your package isn't in in ORCA's packages.yml or conflicts with details
+  # that are, you can modify the active packages configuration at runtime by
+  # uncommenting the following line and specifying your own alter file.
+  # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_PACKAGES_CONFIG_ALTER
+  # If your package is a Drupal installation profile, uncomment the following
+  # line and specify its machine name.
+  # @see https://github.com/acquia/orca/blob/master/docs/advanced-usage.md#ORCA_FIXTURE_PROFILE
+  #ENV ORCA_FIXTURE_PROFILE=example
+  # If your package is a Composer project template or requires a different
+  # one to test with, uncomment the following line and specify its Packagist
+  # name. This is recommended if your package is not meant to support Acquia
+  # CMS, which is included in acquia/drupal-recommended-project.
+  # @see https://github.com/acquia/orca/blob/main/docs/advanced-usage.md#ORCA_FIXTURE_PROJECT_TEMPLATE
+  # @see https://github.com/acquia/orca/blob/main/docs/faq.md#why-do-i-get-version-conflicts-with-drupalacquia_cms
+  # - ORCA_FIXTURE_PROJECT_TEMPLATE=acquia/drupal-minimal-project
+  #
+  # Change the PHP Code Sniffer standard used for static analysis. Acceptable
+  # values are "AcquiaPHP", "AcquiaDrupalStrict", and
+  # "AcquiaDrupalTransitional". Defaults to "AcquiaDrupalTransitional".
+  # @see https://github.com/acquia/orca/blob/main/docs/advanced-usage.md#ORCA_PHPCS_STANDARD
+  #ENV ORCA_PHPCS_STANDARD=AcquiaDrupalTransitional
+
+  # Dependencies for configuring (mysql) apt repo.
+  RUN apt-get update && apt-get upgrade -y \
+  && apt-get install -y \
+  lsb-release \
+  wget \
+  unzip \
+  gnupg \
+  sendmail \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+  # Configure apt repository nodejs to be node12.
+  RUN curl -fsSL https://deb.nodesource.com/setup_12.x | bash -
+
+  # Configure apt repository mysql-server to be mysql5.7. debconf configuration
+  # was discovered using debconf-get-selections before and after package
+  # configuration.
+  RUN echo "mysql-apt-config mysql-apt-config/select-server select mysql-5.7" | debconf-set-selections \
+  && echo "mysql-apt-config mysql-apt-config/select-product select Apply" | debconf-set-selections \
+  && curl -L https://dev.mysql.com/get/mysql-apt-config_0.8.18-1_all.deb -o mysql-apt-config.deb \
+  && dpkg -i mysql-apt-config.deb \
+  && rm mysql-apt-config.deb
+
+
+  RUN apt-get update && apt-get install -y \
+  git \
+  libzip-dev \
+  mysql-client \
+  mysql-server \
+  libsqlite3-dev \
+  libssl-dev libreadline-dev \
+  libyaml-dev \
+  nodejs \
+  yarn \
+  libfreetype6-dev \
+  libjpeg62-turbo-dev \
+  libpng-dev \
+  libicu-dev \
+  && docker-php-ext-install zip pdo_mysql \
+  && docker-php-ext-configure gd --with-freetype --with-jpeg \
+  && docker-php-ext-install gd \
+  && docker-php-ext-configure intl \
+  && docker-php-ext-install intl \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+  # Increase PHP memory limit to avoid memory exhausted issue during site install.
+  RUN echo 'memory_limit = 1024M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini
+
+  # Provide PHP the default mysql socket location. (This fixes issue: Can't connect to local MySQL server through socket).
+  RUN echo "pdo_mysql.default_socket=/var/run/mysqld/mysqld.sock" >> /usr/local/etc/php/conf.d/pdo_mysql.ini
+
+  # Configure PHP sendmailpath
+  RUN echo "sendmail_path=/usr/sbin/sendmail -t -i" >> /usr/local/etc/php/conf.d/sendmail.ini
+
+  #
+  # Set Working Directory.
+  #
+  WORKDIR $ORCA_WORKSPACE
+
+  COPY composer.* ./
+
+  #install Chromedriver
+  RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+  RUN echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+  RUN apt-get update && apt-get install -y google-chrome-stable \
+  && apt-get clean && rm -rf /var/lib/apt/lists/*
+  RUN mkdir $CHROMEDRIVER_DIR
+  RUN wget -q --continue -P $CHROMEDRIVER_DIR "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
+  RUN unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
+  ENV PATH $CHROMEDRIVER_DIR:$PATH
+
+  # Install Composer
+  COPY --from=composer /usr/bin/composer /usr/bin/composer
+
+  #RUN composer create-project --no-dev --ignore-platform-req=php acquia/orca ../orca "$ORCA_VERSION"
+  RUN composer self-update
+
+  RUN git clone https://github.com/kdruckman/orca.git ../orca
+  RUN git -C ../orca checkout ORCA-201
+  RUN composer install -d ../orca --no-dev --ignore-platform-req=php
+
+  COPY . ./

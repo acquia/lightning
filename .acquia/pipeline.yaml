@@ -1,0 +1,58 @@
+---
+type: default
+team: DIT
+service: acquia_connector
+
+# The environment container image is used to prepare code versions
+# and tooling for tests during pre, post and build stages.
+environment_image:
+  file: ".acquia/Dockerfile.ci"
+  context: "."
+  # The build_matrix is only required for testing multiple versions.
+  build_matrix:
+    base_images:
+      - php:7.4-cli-buster # First image is the default.
+
+_orca_steps: &orca_steps
+  - steps:
+      - |
+        cd $ORCA_WORKSPACE
+        ../orca/bin/ci/before_install.sh
+        # Create the test fixture and place the SUT.
+        ../orca/bin/ci/install.sh
+        ./bin/travis/install.sh
+        # Display details about the fixture.
+        ../orca/bin/ci/before_script.sh
+        # Run the test script.
+        ../orca/bin/ci/script.sh
+        ./bin/travis/script.sh
+        ../orca/bin/ci/before_cache.sh
+
+# -- Continuous Integration --
+# Pre-build runs after building the environment image, and relies on it to
+# run its sub-stages' steps inside of the environment container.
+pre_build:
+  integrated_test_on_prev_minor:
+    - args: --env ORCA_JOB=INTEGRATED_TEST_ON_PREVIOUS_MINOR
+      <<: *orca_steps
+  integrated_upgrade_test_from_prev_minor:
+    - args: --env ORCA_JOB=INTEGRATED_UPGRADE_TEST_FROM_PREVIOUS_MINOR
+      <<: *orca_steps
+  strict_deprecated_code_scan:
+    - args: --env ORCA_JOB=STRICT_DEPRECATED_CODE_SCAN
+      <<: *orca_steps
+
+  security_composition_analysis:
+    required: false
+
+after_success:
+  - steps:
+      - cd $ORCA_WORKSPACE && ../orca/bin/travis/after_success.sh
+
+after_failure:
+  - steps:
+      - cd $ORCA_WORKSPACE && ../orca/bin/travis/after_failure.sh
+
+# -- Slack Bot Integration --
+notify:
+  channel: drupal-integration-eng
